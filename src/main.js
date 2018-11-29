@@ -20,7 +20,8 @@ import {
   CellGroup,
   GoodsAction,
   GoodsActionBigBtn,
-  GoodsActionMiniBtn
+  GoodsActionMiniBtn,
+  Sku
 } from 'vant';
 
 Vue.use(Button)
@@ -32,7 +33,8 @@ Vue.use(Button)
   .use(CellGroup)
   .use(GoodsAction)
   .use(GoodsActionBigBtn)
-  .use(GoodsActionMiniBtn);
+  .use(GoodsActionMiniBtn)
+  .use(Sku);
 
 
 Vue.config.productionTip = false

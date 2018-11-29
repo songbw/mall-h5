@@ -57,7 +57,7 @@
 
         }
         let comtentUrls = this.goods.introductionUrl;
-        if (comtentUrls.length > 0) {
+        if (comtentUrls!= null && comtentUrls.length > 0) {
           let ulsArray = comtentUrls.split(":");
           if (ulsArray.length > 0) {
             ulsArray.forEach(items => {
