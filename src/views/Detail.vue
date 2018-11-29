@@ -5,8 +5,8 @@
     </v-header>
     <v-swiper :swiperData=swiperUrls></v-swiper>
     <div>
-      <h1>￥{{this.goods.price}}</h1>
-      <p>{{this.goods.brand}} {{this.goods.name}}</p>
+      <p class="price-title">￥{{this.goods.price}}</p>
+      <p class="goods-disciption">{{this.goods.brand}} {{this.goods.name}}</p>
     </div>
     <v-content :contentData=contentUrls></v-content>
     <v-baseline/>
@@ -86,8 +86,30 @@
 </script>
 
 <style lang="less" scoped>
+  @import "../assets/fz.less";
+  @import "../assets/index/style.css";
+
   .detail {
     width: 100%;
     padding-bottom: 14vw;
+
+    .price-title {
+      text-align: left;
+      color: #f44336;
+      .fz(font-size, 40);
+      font-weight: bold;
+      padding: 2vw;
+      position: relative;
+      background-color: #ffffff;
+    }
+
+    .goods-disciption {
+      text-align: left;
+      .fz(font-size, 30);
+      color: #888888;
+      padding: 2vw;
+      position: relative;
+      background-color: #ffffff;
+    }
   }
 </style>
