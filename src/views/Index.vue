@@ -57,8 +57,7 @@
         url: '/index'
       }).then((response) => {
         this.datas = response.data;
-        console.log("datas:" + JSON.stringify(this.datas))
-
+       // console.log("datas:" + JSON.stringify(this.datas))
       }).catch(function (error) {
         alert(error)
       })

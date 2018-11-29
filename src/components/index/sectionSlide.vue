@@ -6,6 +6,9 @@
       </h1>
       <i class="icon-right" v-show="datas.headMore === 1"></i>
     </mt-cell>
+    <router-link :to="{name:'分类页'}" class="sectionSlide-banner">
+      <img v-lazy="datas.banner">
+    </router-link>
     <div class="sectionSlide-list">
       <ul>
         <li v-for="k in datas.list" :key="k.id">
@@ -105,6 +108,15 @@
           color: #b4282d;
         }
       }
+    }
+  }
+
+  .sectionSlide-banner {
+    display:block;
+    width:100%;
+    img {
+      display:block;
+      width:100%
     }
   }
 
