@@ -10,7 +10,7 @@
     </div>
     <v-content :contentData=contentUrls></v-content>
     <v-baseline/>
-    <v-action/>
+    <v-action :datas="this.goods"/>
     <!--
     <v-chose/>
     <v-content/>

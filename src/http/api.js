@@ -3,7 +3,7 @@ import store from '@/vuex/store.js'
 import router from '../router'
 
 const GOODS_URL_PREFIX = "http://aoyiprod-1252099010.cossh.myqcloud.com/"
-const TEST_BASE_URL = "http://172.23.127.4:8000/api/mall"
+const TEST_BASE_URL = "http://172.23.127.120:8000/api/mall"
 const SERVER_BASE_URL = "http://42.121.121.128:8080"
 
 const tapi = axios.create();

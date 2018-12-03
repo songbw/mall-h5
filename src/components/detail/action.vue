@@ -15,6 +15,14 @@
   import {Toast} from 'mint-ui';
 
   export default {
+    props: {
+      datas: {
+        type: Object,
+        default: function () {
+          return {}
+        }
+      }
+    },
     data() {
       return {
 
@@ -29,11 +37,33 @@
         console.log("add goods car Enter")
         let method = "send";//js调用的android方法名
         let action = "getUserInfo";//打电话动作
-        let params = {"msg":"10086", "callback":"cb_getUserInfo", "action":action};//android接收参数，json格式
-        window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+        let params = {"callback":"cb_getUserInfo", "action":action};//android接收参数，json格式
+         window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
       },
+
+
       cb_getUserInfo(str) {
-        console.log("UserInfo:"+JSON.stringify(str));
+        console.log("cb_getUserInfo enter UserInfo:"+JSON.stringify(str));
+        let userId = str.userId.toString();
+        let skuId = this.datas.skuid;
+        let addtoCar = {
+          "openId": userId,
+          "skuId": skuId
+        }
+        console.log("addtoCar:"+JSON.stringify(addtoCar));
+        if(str.code === 200) {
+          this.$api.xapi({
+            method: 'post',
+            url: '/cart',
+            data: addtoCar,
+          }).then((response) => {
+            this.result = response.data.data.result;
+          }).catch(function (error) {
+            console.log(error)
+          })
+        } else {
+          //nothing to do
+        }
       }
     }
   }
