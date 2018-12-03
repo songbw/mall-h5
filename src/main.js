@@ -8,6 +8,7 @@ import less from 'less'
 import Mint from 'mint-ui';    //移动端UI
 import 'mint-ui/lib/style.css'
 
+
 Vue.use(Mint);
 
 import {

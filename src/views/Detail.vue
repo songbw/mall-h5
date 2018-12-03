@@ -7,6 +7,7 @@
     <div>
       <p class="price-title">￥{{this.goods.price}}</p>
       <p class="goods-disciption">{{this.goods.brand}} {{this.goods.name}}</p>
+      <div id="map-container"></div>
     </div>
     <v-content :contentData=contentUrls></v-content>
     <v-baseline/>
@@ -30,6 +31,12 @@
   import Action from '@/components/detail/action.vue'
 
   import detail from '@/http/mock.js' //模拟数据
+
+  //import AMap from 'AMap'
+  //import AMapUI from 'AMapUI'
+
+  let mapObj
+  let pro
   export default {
     components: {
       'v-swiper': Swiper,
@@ -81,8 +88,22 @@
         swiperUrls: [],
         contentUrls: []
       }
+    },
+
+    mounted() {
+        this.init()
+    },
+    methods:{
+      init() {
+        /*eslint-disable no-undef*/
+        mapObj = new AMap.Map('map-container', {
+          center: [117.000923, 36.675807],
+          zoom: 6
+        })
+      }
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -110,6 +131,10 @@
       padding: 2vw;
       position: relative;
       background-color: #ffffff;
+    }
+    #map-container{
+      width: 300px;
+      height: 300px;
     }
   }
 </style>
