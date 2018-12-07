@@ -57,10 +57,37 @@
         url: '/index'
       }).then((response) => {
         this.datas = response.data;
-       // console.log("datas:" + JSON.stringify(this.datas))
       }).catch(function (error) {
         alert(error)
       })
+      this.updateLocation()
+    },
+
+    created() {
+      console.log("index created Enter")
+      window.onLocationUpdate = this.onLocationUpdate;
+    },
+
+    mounted() {
+      console.log("index mounted Enter")
+      setTimeout(() =>{
+        this.updateLocation()
+      },1000);
+    },
+
+    methods: {
+      updateLocation() {
+        console.log("update Location Enter")
+        let method = "send";//js调用的android方法名
+        let action = "getLocation";//打电话动作
+        let params = {"callback": "onLocationUpdate", "action": action};//android接收参数，json格式
+        window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+      },
+
+      onLocationUpdate(locationInfo) {
+        console.log("onLocationUpdate enter Location:" + JSON.stringify(locationInfo));
+      }
+
     }
 
 

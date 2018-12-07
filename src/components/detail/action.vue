@@ -39,7 +39,6 @@
         window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
       },
 
-
       cb_getUserInfo(str) {
         console.log("cb_getUserInfo enter UserInfo:" + JSON.stringify(str));
         let userId = str.userId.toString();

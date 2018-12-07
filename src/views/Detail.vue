@@ -7,7 +7,6 @@
     <div>
       <p class="price-title">￥{{this.goods.price}}</p>
       <p class="goods-disciption">{{this.goods.brand}} {{this.goods.name}}</p>
-      <div id="map-container"></div>
     </div>
     <v-content :contentData=contentUrls></v-content>
     <v-baseline/>
@@ -37,6 +36,8 @@
 
   let mapObj
   let pro
+  let geolocation
+
   export default {
     components: {
       'v-swiper': Swiper,
@@ -53,7 +54,7 @@
       if (!(JSON.stringify(this.goods) == "{}")) {
         console.log("goods :" + JSON.stringify(this.goods));
         let imagesUrls = this.goods.imagesUrl;
-        if (imagesUrls!=null && imagesUrls.length > 0) {
+        if (imagesUrls != null && imagesUrls.length > 0) {
           let ulsArray = imagesUrls.split(":");
           if (ulsArray.length > 0) {
             ulsArray.forEach(items => {
@@ -64,7 +65,7 @@
 
         }
         let comtentUrls = this.goods.introductionUrl;
-        if (comtentUrls!= null && comtentUrls.length > 0) {
+        if (comtentUrls != null && comtentUrls.length > 0) {
           let ulsArray = comtentUrls.split(":");
           if (ulsArray.length > 0) {
             ulsArray.forEach(items => {
@@ -77,9 +78,6 @@
 
 
       }
-
-      // this.swiperUrls = this.goods.imagesUrl;
-
     },
 
     data() {
@@ -90,18 +88,7 @@
       }
     },
 
-    mounted() {
-        this.init()
-    },
-    methods:{
-      init() {
-        /*eslint-disable no-undef*/
-        mapObj = new AMap.Map('map-container', {
-          center: [117.000923, 36.675807],
-          zoom: 6
-        })
-      }
-    }
+    methods: {}
   }
 
 </script>
@@ -132,7 +119,8 @@
       position: relative;
       background-color: #ffffff;
     }
-    #map-container{
+
+    #map-container {
       width: 300px;
       height: 300px;
     }
