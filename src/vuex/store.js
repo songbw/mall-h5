@@ -6,12 +6,13 @@ import Vuex from 'vuex'
 import detail from './modules/detail'
 import category from './modules/category'
 import login from './modules/login'
-
+import appconf from './modules/appconf'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
+    appconf,
     detail,
     category,
     login

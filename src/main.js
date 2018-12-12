@@ -22,7 +22,15 @@ import {
   GoodsAction,
   GoodsActionBigBtn,
   GoodsActionMiniBtn,
-  Sku
+  Sku,
+  Stepper,
+  Row,
+  Col,
+  RadioGroup,
+  Radio,
+  Checkbox,
+  CheckboxGroup,
+  SwipeCell
 } from 'vant';
 
 Vue.use(Button)
@@ -35,7 +43,15 @@ Vue.use(Button)
   .use(GoodsAction)
   .use(GoodsActionBigBtn)
   .use(GoodsActionMiniBtn)
-  .use(Sku);
+  .use(Sku)
+  .use(Stepper)
+  .use(Row)
+  .use(Col)
+  .use(RadioGroup)
+  .use(Radio)
+  .use(Checkbox)
+  .use(CheckboxGroup)
+  .use(SwipeCell);
 
 
 Vue.config.productionTip = false

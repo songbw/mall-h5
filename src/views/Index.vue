@@ -28,7 +28,8 @@
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
-  import index from '@/http/mock.js' //模拟数据
+
+  import { Toast } from 'mint-ui'
   export default {
     components: {
       'v-section1': Section1,
@@ -74,7 +75,11 @@
         this.updateLocation()
       },1000);
     },
-
+    computed: {
+      mlocation() {
+        return this.$store.state.appconf.location;
+      }
+    },
     methods: {
       updateLocation() {
         console.log("update Location Enter")
@@ -86,11 +91,9 @@
 
       onLocationUpdate(locationInfo) {
         console.log("onLocationUpdate enter Location:" + JSON.stringify(locationInfo));
+        this.$store.commit('SET_LOCATION',JSON.stringify(locationInfo));
       }
-
     }
-
-
   }
 </script>
 

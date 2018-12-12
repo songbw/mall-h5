@@ -50,9 +50,9 @@
     },
 
     created() {
-      this.goods = this.$route.query.goods;
+      this.goods = JSON.parse(this.$store.state.appconf.currentGoods);
+      console.log("created goods :" + JSON.stringify(this.goods));
       if (!(JSON.stringify(this.goods) == "{}")) {
-        console.log("goods :" + JSON.stringify(this.goods));
         let imagesUrls = this.goods.imagesUrl;
         if (imagesUrls != null && imagesUrls.length > 0) {
           let ulsArray = imagesUrls.split(":");
@@ -62,7 +62,6 @@
             })
           }
           console.log("swiperUrls:" + JSON.stringify(this.swiperUrls))
-
         }
         let comtentUrls = this.goods.introductionUrl;
         if (comtentUrls != null && comtentUrls.length > 0) {
@@ -73,10 +72,7 @@
             })
           }
           console.log("contentUrls:" + JSON.stringify(this.contentUrls))
-
         }
-
-
       }
     },
 
@@ -87,8 +83,8 @@
         contentUrls: []
       }
     },
-
-    methods: {}
+    methods: {
+    }
   }
 
 </script>

@@ -2,7 +2,7 @@ import Util from '../../util/common'
 import * as types from '../types'
 
 const state = {
-  tabIndex: 0
+  tabIndex: 0,
 }
 
 const mutations = {

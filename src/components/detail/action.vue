@@ -2,7 +2,7 @@
   <section class="goodsAction">
     <van-goods-action>
       <van-goods-action-mini-btn icon="chat" text="客服"/>
-      <van-goods-action-mini-btn icon="cart" text="购物车"/>
+      <van-goods-action-mini-btn icon="cart" text="购物车" @click="gotoCar"/>
       <van-goods-action-big-btn text="加入购物车" @click="addGoodsCar"/>
       <van-goods-action-big-btn text="立即购买" primary/>
     </van-goods-action>
@@ -27,28 +27,38 @@
       return {}
     },
     created() {
-      window.cb_getUserInfo = this.cb_getUserInfo;
+      window.onAdd2Car = this.onAdd2Car;
+      window.onGotoCar = this.onGotoCar;
     },
 
     methods: {
+      updateUserInfo(user) {
+        console.log("UserInfo:" + JSON.stringify(user));
+        this.$store.commit('SET_USER',JSON.stringify(user));
+      },
+
       addGoodsCar() {
         console.log("add goods car Enter")
         let method = "send";//js调用的android方法名
         let action = "getUserInfo";//打电话动作
-        let params = {"callback": "cb_getUserInfo", "action": action};//android接收参数，json格式
+        let params = {"callback": "onAdd2Car", "action": action};//android接收参数，json格式
         window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
       },
 
-      cb_getUserInfo(str) {
-        console.log("cb_getUserInfo enter UserInfo:" + JSON.stringify(str));
-        let userId = str.userId.toString();
+      onAdd2Car(str) {
+        this.updateUserInfo(str);
+        this.add2Car(str);
+      },
+
+      add2Car(user) {
+        let userId = user.userId.toString();
         let skuId = this.datas.skuid;
         let addtoCar = {
           "openId": userId,
           "skuId": skuId
         }
         console.log("addtoCar:" + JSON.stringify(addtoCar));
-        if (str.code === 200) {
+        if (user.code === 200) {
           this.$api.xapi({
             method: 'post',
             url: '/cart',
@@ -61,7 +71,24 @@
         } else {
           //nothing to do
         }
-      }
+      },
+      gotoCar() {
+        console.log("goto car Enter")
+        let method = "send";//js调用的android方法名
+        let action = "getUserInfo";//打电话动作
+        let params = {"callback": "onGotoCar", "action": action};//android接收参数，json格式
+        window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+        //this.$router.push("/car");
+      },
+
+      onGotoCar(str) {
+        console.log("onAdd2Car enter UserInfo:" + JSON.stringify(str));
+        this.updateUserInfo(str);
+        this.$router.push("/car");
+      },
+
+
+
     }
   }
 </script>

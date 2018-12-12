@@ -44,3 +44,11 @@ export const CHANGE_TOKEN = 'CHANGE_TOKEN'
 
 // 分类页的aside index
 export const CHANGE_TABINDEX = 'CHANGE_TABINDEX'
+
+//configure
+
+export const SET_LOCATION = 'SET_LOCATION'
+
+export const SET_USER = 'SET_USER'
+
+export const SET_CURRENT_GOODS = 'SET_CURRENT_GOODS'

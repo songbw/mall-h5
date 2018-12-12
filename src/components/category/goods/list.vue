@@ -6,8 +6,10 @@
     <van-list v-model="loading"
               :finished="finished"
               @load="onLoad">
-      <li v-for="k in list" :key="k.id" style="list-style: none">
+      <li v-for="k in list" :key="k.id" style="list-style: none" @click="onListClick(k)">
+        <!--
         <router-link :to="{name:'详情页',query: {'goods': k}}">
+        -->
           <van-card
             :price="k.price"
             desc=""
@@ -15,7 +17,9 @@
             :thumb="k.image"
             centered>
           </van-card>
+          <!--
         </router-link>
+        -->
       </li>
     </van-list>
   </div>
@@ -38,6 +42,11 @@
       }
     },
 
+    computed: {
+      mlocation() {
+        return this.$store.state.appconf.location;
+      }
+    },
 
     components: {
       'v-header': Header
@@ -47,6 +56,7 @@
       onLoad() {
         this.category = this.$route.query.category;
         //category= options.category;
+        console.log("location:"+this.mlocation);
         console.log("category :" + this.category);
         console.log("onLoad Enter，this.list.length:" + this.list.length + "this.total:" + this.total)
         if (this.total == -1 || this.total > this.list.length) {
@@ -74,8 +84,17 @@
             this.finished = true;
           })
         }
+      },
+      updateCurrentGoods(goods) {
+        console.log("goods :" + JSON.stringify(goods));
+        this.$store.commit('SET_CURRENT_GOODS',JSON.stringify(goods));
+      },
+      onListClick(goods) {
+        this.updateCurrentGoods(goods);
+        this.$router.push("/detail");
       }
     },
+
   }
 </script>
 
