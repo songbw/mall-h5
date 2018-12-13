@@ -8,7 +8,8 @@
     <van-list v-model="loading" :finished="finished" @load="onLoad">
         <mt-cell-swipe
           v-for="k in productList"
-          :right="[{content: '删除',style: { background: 'red', color: '#fff'},handler: () => this.$messagebox('delete') }]">
+          :right="[{content: '删除',style: { background: 'red', color: '#fff'},
+                handler: function(){ onDeleteBtnClick(k.id) }}]">
           <div slot="title" class="swipecell-left">
             <van-checkbox
               v-model="k.choose"
@@ -21,7 +22,7 @@
             :title="k.product.brand+ ' '+ k.product.name + ' '+ k.product.model"
             :thumb="k.product.image">
             <div slot="footer">
-              <van-stepper v-model="k.count"/>
+              <van-stepper v-model="k.count" @change="onCountChange(k.id,k.product.skuid,k.count)"/>
             </div>
           </van-card>
         </mt-cell-swipe>
@@ -54,6 +55,34 @@
       }
     },
     methods: {
+      onDeleteBtnClick(id) {
+        console.log("onDeleteBtnClick id:"+id)
+      },
+      onCountChange(id,skuid,count) {
+        console.log("onCountChange id:"+id+",skuid:"+skuid+",count:"+count)
+        //change carlist
+        let options = {
+          "id": id,
+          "count": count
+        }
+        console.log("options:" + JSON.stringify(options));
+        this.$api.xapi({
+          method: 'put',
+          url: '/cart/num',
+          data: options,
+        }).then((response) => {
+          console.log("response is:" + JSON.stringify(response));
+          if(response.data.code == 200) {
+            console.log("change goods count success!")
+          } else {
+            console.log("network issue when change goods count!")
+          }
+        }).catch(function (error) {
+          console.log(error)
+          this.finished = true;
+        })
+
+      },
       onLoad() {
         let userInfo = JSON.parse(this.$store.state.appconf.userInfo);
         if (this.total == -1 || this.total > this.list.length) {
@@ -97,6 +126,7 @@
             {
               "product": product,
               "count": item.count,
+              "id":item.id,
               "choose": true
             })
         }).catch((error) => {
@@ -117,7 +147,7 @@
       'v-nothing': Nothing,
       'v-something': Something,
       'v-footer': Footer
-    }
+    },
   }
 
 </script>
