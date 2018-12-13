@@ -7,9 +7,9 @@
     </v-header>
     <van-list v-model="loading" :finished="finished" @load="onLoad">
         <mt-cell-swipe
-          v-for="k in productList"
+          v-for="(k,index) in productList"
           :right="[{content: '删除',style: { background: 'red', color: '#fff'},
-                handler: function(){ onDeleteBtnClick(k.id) }}]">
+           handler: function(){ onDeleteBtnClick(k.id,index) }}]">
           <div slot="title" class="swipecell-left">
             <van-checkbox
               v-model="k.choose"
@@ -55,8 +55,20 @@
       }
     },
     methods: {
-      onDeleteBtnClick(id) {
-        console.log("onDeleteBtnClick id:"+id)
+      onDeleteBtnClick(id,index) {
+        console.log("onDeleteBtnClick id:"+id+",index:"+index)
+        this.productList.splice(index,1);
+        this.$api.xapi({
+          method: 'delete',
+          url: '/cart',
+          params: {
+            id: id,
+          }
+        }).then((response) => {
+          console.log("response is:" + JSON.stringify(response));
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
       onCountChange(id,skuid,count) {
         console.log("onCountChange id:"+id+",skuid:"+skuid+",count:"+count)
@@ -167,10 +179,9 @@
 
     }
 
-    .swipecell-left {
+    .swipe-cell-rightbtn {
 
     }
-
     .van-card__footer > div {
       display: flex !important;
       align-items: center;
