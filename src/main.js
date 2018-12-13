@@ -30,7 +30,8 @@ import {
   Radio,
   Checkbox,
   CheckboxGroup,
-  SwipeCell
+  SwipeCell,
+  Icon
 } from 'vant';
 
 Vue.use(Button)
@@ -51,7 +52,8 @@ Vue.use(Button)
   .use(Radio)
   .use(Checkbox)
   .use(CheckboxGroup)
-  .use(SwipeCell);
+  .use(SwipeCell)
+  .use(Icon);
 
 
 Vue.config.productionTip = false

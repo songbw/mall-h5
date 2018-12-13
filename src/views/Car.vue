@@ -54,6 +54,10 @@
         finished: false
       }
     },
+
+    created() {
+      window.onUserInfoLoaded = this.onUserInfoLoaded;
+    },
     methods: {
       onDeleteBtnClick(id,index) {
         console.log("onDeleteBtnClick id:"+id+",index:"+index)
@@ -93,10 +97,9 @@
           console.log(error)
           this.finished = true;
         })
-
       },
-      onLoad() {
-        let userInfo = JSON.parse(this.$store.state.appconf.userInfo);
+      loadCartListBy(user) {
+        let userInfo = JSON.parse(user);
         if (this.total == -1 || this.total > this.list.length) {
           let options = {
             "openId": userInfo.userId,
@@ -124,6 +127,32 @@
           })
         }
       },
+      onLoad() {
+        let user = this.$store.state.appconf.userInfo;
+        console.log("user:" + user);
+        if(user != null && user.length > 0) {
+          this.loadCartListBy(user);
+        }
+        else {
+          this.getUserInfo();
+        }
+      },
+      getUserInfo() {
+        let method = "send";//js调用的android方法名
+        let action = "getUserInfo";//打电话动作
+        let params = {"callback": "onUserInfoLoaded", "action": action};//android接收参数，json格式
+        window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+      },
+
+      onUserInfoLoaded(userInfo) {
+        console.log("UserInfo:" + JSON.stringify(userInfo));
+        this.$store.commit('SET_USER',JSON.stringify(userInfo));
+        let user = JSON.stringify(userInfo);
+        if(user != null || user.length > 0) {
+          this.loadCartListBy(user);
+        }
+      },
+
       getSkuIynfoBy(item) {
         this.$api.xapi({
           method: 'get',

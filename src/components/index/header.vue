@@ -1,8 +1,10 @@
 <template lang="html">
-
   <mt-header title="商城">
     <router-link :to="{name:''}" slot="left">
-      <mt-button icon="search"></mt-button>
+    <mt-button icon="search"></mt-button>
+  </router-link>
+    <router-link :to="{name:'购物车页'}" slot="right">
+      <van-icon name="cart"  color="red" size="1em"/>
     </router-link>
   </mt-header>
 </template>
