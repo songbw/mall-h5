@@ -4,8 +4,9 @@ import * as types from '../types'
 const state = {
   location: '',
   currentGoods:'',
-  userInfo:'',
-  carList:'',
+  userInfo:'',//
+  carList:'',//
+  selStateInCarList:[], //'[{"userId":1,"id":2,"choose":true,"isDel":0}]' //userId:用户ID "id":商品ID，"choose":购物车选中状态，“idDel":是否删除
 }
 
 const mutations = {
@@ -19,7 +20,11 @@ const mutations = {
 
   [types.SET_USER](state, res) {
     state.userInfo = res
-  }
+  },
+
+  [types.SET_SELECTED_CARLIST](state, res) {
+    state.selStateInCarList = res
+  },
 }
 
 
