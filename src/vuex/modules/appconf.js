@@ -2,7 +2,8 @@ import Util from '../../util/common'
 import * as types from '../types'
 
 const state = {
-  location: '',
+  location: {},
+  locationCode:{},
   currentGoods:'',
   userInfo:'',//
   carList:'',//
@@ -25,6 +26,12 @@ const mutations = {
   [types.SET_SELECTED_CARLIST](state, res) {
     state.selStateInCarList = res
   },
+
+  [types.SET_LOCATION_CODE](state, res) {
+    state.locationCode = res
+  }
+
+
 }
 
 

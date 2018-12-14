@@ -90,8 +90,25 @@
       },
 
       onLocationUpdate(locationInfo) {
-        console.log("onLocationUpdate enter Location:" + JSON.stringify(locationInfo));
-        this.$store.commit('SET_LOCATION',JSON.stringify(locationInfo));
+        this.$store.commit('SET_LOCATION',locationInfo);
+        //try to get Location Code
+        this.getLocationCode(locationInfo)
+      },
+
+      getLocationCode(location) {
+        console.log("getLocationCode location:" + JSON.stringify(location));
+        this.$api.xapi({
+          method: 'post',
+          url: '/address/code',
+          data: location,
+        }).then((response) => {
+          let code = response.data.data.code;
+          console.log("location code:"+JSON.stringify(code));
+          this.$store.commit('SET_LOCATION_CODE',code);
+        }).catch(function (error) {
+          console.log(error)
+          this.finished = true;
+        })
       }
     }
   }
