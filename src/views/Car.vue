@@ -1,5 +1,4 @@
 <template lang="html">
-
   <div class="car">
     <!-- slot分发内容 让子组件混合父组件的内容 -->
     <v-header>
@@ -120,7 +119,7 @@
             //console.log("list is:" + JSON.stringify(this.result.list));
             this.result.list.forEach(item => {
               this.list.push(item);
-              this.getSkuIynfoBy(item,userInfo);
+              this.getSkuIynfoBy(item, userInfo);
             })
             this.loading = false;
             if (this.list.length >= this.total)
@@ -157,26 +156,25 @@
         }
       },
 
-      isInSelectedCarlist(id,user) {
-        this.selStateInCarList =  this.$store.state.appconf.selStateInCarList
+      isInSelectedCarlist(id, user) {
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         let choose = true;
         let found = false;
         for (let i = 0; i < this.selStateInCarList.length; i++) {
-          if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == user.userId)
-          {
-             choose = this.selStateInCarList[i].choose;
-             found = true;
-             break;
+          if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == user.userId) {
+            choose = this.selStateInCarList[i].choose;
+            found = true;
+            break;
           }
         }
         if (!found) {
-          this.selStateInCarList.push({"userId":user.userId,"id":id,"choose":true,"isDel":0});
+          this.selStateInCarList.push({"userId": user.userId, "id": id, "choose": true, "isDel": 0});
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         }
         return choose;
       },
 
-      getSkuIynfoBy(item,user) {
+      getSkuIynfoBy(item, user) {
         this.$api.xapi({
           method: 'get',
           url: '/prod',
@@ -186,10 +184,10 @@
         }).then((res) => {
           //console.log("product info:"+JSON.stringify( res.data.data.result));
           let product = res.data.data.result;
-          let choose = this.isInSelectedCarlist(item.id,user)
+          let choose = this.isInSelectedCarlist(item.id, user)
           this.carList.push(
             {
-              "userId":user.userId,
+              "userId": user.userId,
               "product": product,
               "count": item.count,
               "id": item.id,
@@ -207,19 +205,18 @@
         }
       },
 
-      singleChecked(index,k) {
-        console.log("index:"+index+",k.choose:"+k.choose)
+      singleChecked(index, k) {
+        console.log("index:" + index + ",k.choose:" + k.choose)
         //update selStateInCarList
-        this.selStateInCarList =  this.$store.state.appconf.selStateInCarList
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         for (let i = 0; i < this.selStateInCarList.length; i++) {
-          if (this.selStateInCarList[i].id == k.id && this.selStateInCarList[i].userId == k.userId)
-          {
+          if (this.selStateInCarList[i].id == k.id && this.selStateInCarList[i].userId == k.userId) {
             this.selStateInCarList[i].choose = k.choose;
             break;
           }
         }
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-        console.log("selStateInCarList:"+JSON.stringify(this.selStateInCarList))
+        console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
       }
 
     },
@@ -240,6 +237,20 @@
     width: 100%;
     padding-bottom: 14vw;
 
+    .van-swipe-cell {
+      .van-swipe-cell_right {
+        color: white;
+        font-size: 15px;
+        width: 65px;
+        height: 100%;
+        display: inline-block;
+        text-align: center;
+        line-height: 44px;
+        background-color: red;
+      }
+    }
+
+
     .checkBox-con {
       padding: 0.6rem;
     }
@@ -257,6 +268,5 @@
       align-items: center;
       justify-content: space-around;
     }
-
   }
 </style>
