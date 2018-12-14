@@ -61,12 +61,12 @@
       }).catch(function (error) {
         alert(error)
       })
-      this.updateLocation()
     },
 
     created() {
       console.log("index created Enter")
       window.onLocationUpdate = this.onLocationUpdate;
+      this.updateLocation()
     },
 
     mounted() {
