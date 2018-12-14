@@ -22,25 +22,36 @@ export default {
     // 勾选的商品数量
     count () {
       // 如果已选择列表为空 就返回0
-      if (this.$store.getters.selectedList == undefined) {
+      if (this.$store.state.appconf.selStateInCarList == undefined) {
         return 0
       } else {
-        return this.$store.getters.selectedList.length
+        let selCount = 0;
+        let userInfo =  this.$store.state.appconf.userInfo;
+        if(userInfo != undefined) {
+          let user = JSON.parse(userInfo)
+          let selStateInCarList = this.$store.state.appconf.selStateInCarList;
+          selStateInCarList.forEach(item => {
+             if(item.userId == user.userId && item.choose ) {
+               selCount += item.count;
+             }
+          })
+        }
+        return selCount;
       }
     },
 
     //勾选的商品的价格总和
     allpay () {
       let all = 0;
-      // 如果有勾选商品,计算总价格
-      if (this.$store.getters.selectedList != undefined) {
-
-        for (let i = 0; i < this.$store.getters.selectedList.length; i++) {
-
-          all += this.$store.getters.selectedList[i].price;
-
-        }
-
+      let userInfo =  this.$store.state.appconf.userInfo;
+      if(userInfo != undefined) {
+        let user = JSON.parse(userInfo)
+        let selStateInCarList = this.$store.state.appconf.selStateInCarList;
+        selStateInCarList.forEach(item => {
+          if(item.userId == user.userId && item.choose ) {
+            all += item.price * item.count
+          }
+        })
       }
       // 没有勾选 即为0
       return all

@@ -63,6 +63,20 @@
       onDeleteBtnClick(k, index) {
         console.log("onDeleteBtnClick id:" + k.id + ",index:" + index)
         this.carList.splice(index, 1);
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        let iFound = -1;
+        for (let i = 0; i < this.selStateInCarList.length; i++) {
+          if (this.selStateInCarList[i].id == k.id && this.selStateInCarList[i].userId == k.userId) {
+            iFound = i;
+            break;
+          }
+        }
+        if(iFound != -1) {
+          this.selStateInCarList.splice(iFound,1);
+        }
+        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+        console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
+
         this.$api.xapi({
           method: 'delete',
           url: '/cart',
@@ -70,34 +84,40 @@
             id: k.id,
           }
         }).then((response) => {
-          console.log("response is:" + JSON.stringify(response))
+          //console.log("response is:" + JSON.stringify(response))
+          console.log("onDeleteBtnClick success")
         }).catch(function (error) {
           console.log(error)
         })
       },
 
       onCountChange(id, skuid, count) {
+        //update select carlist count
+        let user = JSON.parse(this.$store.state.appconf.userInfo);
+        if(user != undefined) {
+          this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
+          for (let i = 0; i < this.selStateInCarList.length; i++) {
+            if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == user.userId) {
+              this.selStateInCarList[i].count = count;
+              break;
+            }
+          }
+          this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+          console.log("onCountChange selStateInCarList:" + JSON.stringify(this.selStateInCarList))
+        }
         console.log("onCountChange id:" + id + ",skuid:" + skuid + ",count:" + count)
-        //change carlist
         let options = {
           "id": id,
           "count": count
         }
-        //console.log("options:" + JSON.stringify(options));
         this.$api.xapi({
           method: 'put',
           url: '/cart/num',
           data: options,
         }).then((response) => {
-          console.log("response is:" + JSON.stringify(response));
-          if (response.data.code == 200) {
-            console.log("change goods count success!")
-          } else {
-            console.log("network issue when change goods count!")
-          }
+          console.log("change goods count success!")
         }).catch(function (error) {
           console.log(error)
-          this.finished = true;
         })
       },
 
@@ -156,25 +176,39 @@
         }
       },
 
-      isInSelectedCarlist(id, user) {
+      isInSelectedCarlist(item,product, user) {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         let choose = true;
         let found = false;
         for (let i = 0; i < this.selStateInCarList.length; i++) {
-          if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == user.userId) {
+          if (this.selStateInCarList[i].id == item.id && this.selStateInCarList[i].userId == user.userId) {
             choose = this.selStateInCarList[i].choose;
+            //sync data
+            this.selStateInCarList[i].count = item.count
+            this.selStateInCarList[i].skuId = item.skuId
+            this.selStateInCarList[i].price = product.price
             found = true;
             break;
           }
         }
         if (!found) {
-          this.selStateInCarList.push({"userId": user.userId, "id": id, "choose": true, "isDel": 0});
+          this.selStateInCarList.push({
+            "userId": user.userId,
+            "id": item.id,
+            "skuId":item.skuId,
+            "count":item.count,
+            "price":product.price,
+            "choose": true,
+            "isDel": 0
+          });
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         }
+        console.log("selStateInCarList:"+JSON.stringify(this.selStateInCarList))
         return choose;
       },
 
       getSkuIynfoBy(item, user) {
+       // console.log("item:"+JSON.stringify(item))
         this.$api.xapi({
           method: 'get',
           url: '/prod',
@@ -184,7 +218,8 @@
         }).then((res) => {
           //console.log("product info:"+JSON.stringify( res.data.data.result));
           let product = res.data.data.result;
-          let choose = this.isInSelectedCarlist(item.id, user)
+          //console.log("product:"+JSON.stringify(product))
+          let choose = this.isInSelectedCarlist(item, product, user)
           this.carList.push(
             {
               "userId": user.userId,
@@ -206,7 +241,7 @@
       },
 
       singleChecked(index, k) {
-        console.log("index:" + index + ",k.choose:" + k.choose)
+       // console.log("index:" + index + ",k.choose:" + k.choose)
         //update selStateInCarList
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         for (let i = 0; i < this.selStateInCarList.length; i++) {
