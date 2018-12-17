@@ -68,21 +68,52 @@ export default {
   },
 
   methods: {
+/*    getLocationCode() {
+       let code ={"provinceId":"10","cityId":"010","district":"08"}
+       if(/!*送货地址*!/) {
+         code = this.$store.state.appconf.userInfo;
+       } else if(this.this.$store.state.appconf.locationCode != undefined) {
+         code = this.$store.state.appconf.locationCode;
+       }
+       return  code
+    },
+
+    checkStorage() {
+
+      let skus =  [{"skuId":"20000579"},{"skuId":"20001234"},{"skuId":"20000028"}]
+      let options = {
+        "provinceId":"10",
+        "cityId":"010",
+        "district":"08",
+        "skus": skus
+      }
+      console.log("options:" + JSON.stringify(options));
+      this.$api.xapi({
+        method: 'post',
+        url: '/prod/inventory',
+        data: options,
+      }).then((response) => {
+        let result = response.data.data.result;
+        console.log("result is:" + JSON.stringify(result));
+      }).catch(function (error) {
+        console.log(error)
+      })
+    },*/
     //点击跳转到支付页
     goPay () {
-
       // 如果有选择商品才能跳转
-      if (this.$store.getters.selectedList.length) {
+      if (this.allpay) {
+        //查询库存
+        //this.checkStorage()
         // 保存+缓存选择的商品 ,在支付页能用到
-        this.$store.dispatch('setSelectedList')
         this.$router.push({ name: '支付页' })
 
       } else {
-
-        alert('你还没选择商品')
-
+        this.$dialog.alert({
+          title: '您还没有选择商品'
+        }).then(() => {
+        });
       }
-
     }
   }
 }

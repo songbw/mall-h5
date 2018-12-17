@@ -31,7 +31,8 @@ import {
   Checkbox,
   CheckboxGroup,
   SwipeCell,
-  Icon
+  Icon,
+  Dialog
 } from 'vant';
 
 Vue.use(Button)
@@ -53,7 +54,8 @@ Vue.use(Button)
   .use(Checkbox)
   .use(CheckboxGroup)
   .use(SwipeCell)
-  .use(Icon);
+  .use(Icon)
+  .use(Dialog);
 
 
 Vue.config.productionTip = false

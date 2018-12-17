@@ -2,7 +2,7 @@
 
   <div class="pay">
     <v-header>
-      <h1 slot="title">支付订单</h1>
+      <h1 slot="title">确认订单</h1>
     </v-header>
 
     <div class="pay-address">
@@ -43,191 +43,274 @@
 </template>
 
 <script>
-import Util from '../../../util/common'
-import Header from '@/common/_header.vue'
-import {
-  MessageBox
-} from 'mint-ui';
-export default {
-  components: {
-    'v-header': Header
-  },
-  data () {
-    return {
-      confirm: ''
-    }
-  },
+  import Util from '../../../util/common'
+  import Header from '@/common/_header.vue'
+  import {
+    MessageBox
+  } from 'mint-ui';
 
-  computed: {
-
-    //所有商品列表
-    carList () {
-
-      return this.$store.state.detail.selectedList
+  export default {
+    components: {
+      'v-header': Header
+    },
+    data() {
+      return {
+        confirm: ''
+      }
     },
 
-    // 商品价格总和
-    allpay () {
-      let allpay = 0, selectedList = this.carList
-      for (let i = 0; i < selectedList.length; i++) {
-        allpay += selectedList[i].price
-      }
-      return allpay
-    }
-  },
-  mounted () {
-    // 防止页面刷新后数据丢失
-    if (this.$store.state.detail.selectedList == '') {
-      this.$store.commit('SET_SELECTEDLIST')
-    }
-  },
+    computed: {
+      //所有商品列表
+      carList() {
+        return this.$store.state.detail.selectedList
+      },
 
-  methods: {
-    payConfirm () {
-      if (this.carList) { //还未提交了订单,数据还未清空
-        MessageBox
-          .confirm(
-            `确定支付${this.allpay}元`
-          )
-          .then(action => { //点击成功执行这里的函数
-            this.confirm = false;
-            this.$store.commit('SET_LOADING', true);
-            this.$store.dispatch('resetCarList'); //重置购物车（用unSelectedList替换）
-            this.$store.dispatch('resetCount'); //重置购物车数量
-            setTimeout(() => {
-              this.$store.commit('SET_LOADING', false); //关闭loading
-              this.confirm = true; //支付完成后切换视图
-            }, 300)
-          }, function (err) {
-            //点击取消执行这里的函数
-          });
-      } else { //提交了订单,数据清空
-        alert('请勿重复提交订单')
+      // 商品价格总和
+      allpay() {
+        let allpay = 0, selectedList = this.carList
+        for (let i = 0; i < selectedList.length; i++) {
+          allpay += selectedList[i].price
+        }
+        return allpay
       }
+    },
+    mounted() {
+      // 防止页面刷新后数据丢失
+      /*    if (this.$store.state.detail.selectedList == '') {
+            this.$store.commit('SET_SELECTEDLIST')
+          }*/
+    },
 
+    beforeCreate() {
+      console.log("pay page mounted Enter")
+      try {
+        if (this.$store.state.appconf.addressCode == undefined ||
+          JSON.stringify(this.$store.state.appconf.addressCode) == "{}") {
+          let userInfo = this.$store.state.appconf.userInfo;
+          console.log("userInfo:"+userInfo)
+          if (userInfo != undefined) {
+            let user = JSON.parse(userInfo)
+            let options = {
+              "openId": user.userId,
+              "pageNo": 1,
+              "pageSize": "20",
+            }
+            console.log("options:" + JSON.stringify(options));
+            this.$api.xapi({
+              method: 'post',
+              url: '/receiver/all',
+              data: options,
+            }).then((response) => {
+              let result = response.data.data.result;
+              console.log("result is:" + JSON.stringify(result));
+              if(result.total == 0) {
+                this.$dialog.confirm({
+                  title: '您还没有收货地址，请新增一个吧',
+                  confirmButtonText:'新增地址'
+                }).then(() => {
+                  //on confirm
+                  this.$router.push({ name: '地址页' })
+                }).catch(() => {
+                  // on cancel
+
+                });
+              }
+            }).catch(function (error) {
+              console.log(error)
+            })
+          } else {
+            console.log("ERROR!!, not get UserInfo in Pay page")
+          }
+        } else {
+          console.log("pay page mounted:"+ JSON.stringify(this.$store.state.appconf.addressCode))
+        }
+      } catch (e) {
+         console.log(e)
+      }
+    },
+
+    methods: {
+      getLocationCode() {
+        let code = {"provinceId": "10", "cityId": "010", "district": "08"}
+        if (/*送货地址*/this.this.$store.state.appconf.addressCode != undefined) {
+          code = this.this.$store.state.appconf.addressCode;
+        } else if (this.this.$store.state.appconf.locationCode != undefined) {
+          code = this.$store.state.appconf.locationCode;
+        }
+        return code
+      },
+      /*    checkStorage() {
+
+            let skus =  [{"skuId":"20000579"},{"skuId":"20001234"},{"skuId":"20000028"}]
+            let options = {
+              "provinceId":"10",
+              "cityId":"010",
+              "district":"08",
+              "skus": skus
+            }
+            console.log("options:" + JSON.stringify(options));
+            this.$api.xapi({
+              method: 'post',
+              url: '/prod/inventory',
+              data: options,
+            }).then((response) => {
+              let result = response.data.data.result;
+              console.log("result is:" + JSON.stringify(result));
+            }).catch(function (error) {
+              console.log(error)
+            })
+          },*/
+      payConfirm() {
+        /*      if (this.carList) { //还未提交了订单,数据还未清空
+                MessageBox
+                  .confirm(
+                    `确定支付${this.allpay}元`
+                  )
+                  .then(action => { //点击成功执行这里的函数
+                    this.confirm = false;
+                    this.$store.commit('SET_LOADING', true);
+                    this.$store.dispatch('resetCarList'); //重置购物车（用unSelectedList替换）
+                    this.$store.dispatch('resetCount'); //重置购物车数量
+                    setTimeout(() => {
+                      this.$store.commit('SET_LOADING', false); //关闭loading
+                      this.confirm = true; //支付完成后切换视图
+                    }, 300)
+                  }, function (err) {
+                    //点击取消执行这里的函数
+                  });
+              } else { //提交了订单,数据清空
+                alert('请勿重复提交订单')
+              }*/
+
+      }
     }
+
   }
-
-}
 </script>
 
 <style lang="less" scoped>
-@import "../../../assets/fz.less";
-.pay {
-  width: 100%;
-  background-color: #f7f7f7;
+  @import "../../../assets/fz.less";
 
-  .pay-address {
-    background-color: #fff;
-    border-bottom: 1 * 10vw/75 solid #dedede;
-    padding: 30 * 10vw/75;
+  .pay {
+    width: 100%;
+    background-color: #f7f7f7;
 
-    > div {
-      display: -webkit-flex;
-      display: -ms-flex;
-      display: flex;
-      justify-content: space-between;
+    .pay-address {
+      background-color: #fff;
+      border-bottom: 1 * 10vw/75 solid #dedede;
+      padding: 30 * 10vw/75;
 
-      p {
-        color: #868686;
-        .fz(font-size,32px);
-      }
-    }
-
-    > p {
-      .fz(font-size,28px);
-      color: #868686;
-      padding-top: 30 * 10vw/75;
-      letter-spacing: 3 * 10vw/75;
-      line-height: 45 * 10vw/75;
-    }
-  }
-  .pay-product {
-    background-color: #fff;
-    height: 60vw;
-    overflow: auto;
-
-    li {
-      a {
+      > div {
         display: -webkit-flex;
         display: -ms-flex;
         display: flex;
-        box-sizing: border-box;
-        padding: 20 * 10vw/75 30 * 10vw/75;
-        color: #4d4d4d;
-        .fz(font-size,30px);
-        border-bottom: 1 * 10vw/75 solid #dedede;
+        justify-content: space-between;
 
-        > img {
-          display: block;
-          width: 2.5 * 10vw;
-          height: 2.5 * 10vw;
+        p {
+          color: #868686;
+          .fz(font-size, 32px);
         }
+      }
 
-        > div {
+      > p {
+        .fz(font-size, 28px);
+        color: #868686;
+        padding-top: 30 * 10vw/75;
+        letter-spacing: 3 * 10vw/75;
+        line-height: 45 * 10vw/75;
+      }
+    }
+
+    .pay-product {
+      background-color: #fff;
+      height: 60vw;
+      overflow: auto;
+
+      li {
+        a {
+          display: -webkit-flex;
+          display: -ms-flex;
+          display: flex;
           box-sizing: border-box;
-          padding-left: 50 * 10vw/75;
-          width: 70%;
-          h2 {
-            padding-top: 0.09 * 10vw;
-            overflow: hidden;
-            word-break: keep-all;
-            white-space: nowrap;
-            text-overflow: ellipsis;
+          padding: 20 * 10vw/75 30 * 10vw/75;
+          color: #4d4d4d;
+          .fz(font-size, 30px);
+          border-bottom: 1 * 10vw/75 solid #dedede;
+
+          > img {
+            display: block;
+            width: 2.5 * 10vw;
+            height: 2.5 * 10vw;
           }
 
-          p {
-            text-align: right;
-            .fz(font-size,24px);
-            padding-top: 1.4 * 10vw;
+          > div {
+            box-sizing: border-box;
+            padding-left: 50 * 10vw/75;
+            width: 70%;
+
+            h2 {
+              padding-top: 0.09 * 10vw;
+              overflow: hidden;
+              word-break: keep-all;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
+
+            p {
+              text-align: right;
+              .fz(font-size, 24px);
+              padding-top: 1.4 * 10vw;
+            }
           }
         }
       }
     }
-  }
 
-  .pay-allpay {
-    text-align: right;
-    margin-top: 6vw;
-    padding: 4vw 5vw;
-    .fz(font-size,32px);
-    color: #999999;
-    background-color: #fff;
-    i,
-    span {
-      color: @cl;
-    }
-  }
+    .pay-allpay {
+      text-align: right;
+      margin-top: 6vw;
+      padding: 4vw 5vw;
+      .fz(font-size, 32px);
+      color: #999999;
+      background-color: #fff;
 
-  .pay-footer {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    padding-bottom: 4vw;
-    span {
-      display: block;
-      width: 85%;
-      background-color: #fd729c;
-      border-radius: 1.3vw;
-      color: #fff;
-      font-size: 17px;
-      padding: 4vw;
-      margin: 0 auto;
-      text-align: center;
-      &:active {
-        background-color: @cl;
+      i,
+      span {
+        color: @cl;
       }
     }
-  }
 
-  .pay-confirm {
-    padding: 20px 0;
-    background-color: @cl;
-    text-align: center;
-    color: #fff;
-    line-height: 30px;
-    .fz(font-size,40);
+    .pay-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding-bottom: 4vw;
+
+      span {
+        display: block;
+        width: 85%;
+        background-color: #fd729c;
+        border-radius: 1.3vw;
+        color: #fff;
+        font-size: 17px;
+        padding: 4vw;
+        margin: 0 auto;
+        text-align: center;
+
+        &:active {
+          background-color: @cl;
+        }
+      }
+    }
+
+    .pay-confirm {
+      padding: 20px 0;
+      background-color: @cl;
+      text-align: center;
+      color: #fff;
+      line-height: 30px;
+      .fz(font-size, 40);
+    }
   }
-}
 </style>

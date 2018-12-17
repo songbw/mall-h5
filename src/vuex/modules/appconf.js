@@ -4,6 +4,8 @@ import * as types from '../types'
 const state = {
   location: {},
   locationCode:{},
+  address:{},
+  addressCode:{},
   currentGoods:'',
   userInfo:'',//
   carList:'',//
@@ -29,6 +31,14 @@ const mutations = {
 
   [types.SET_LOCATION_CODE](state, res) {
     state.locationCode = res
+  },
+
+  [types.SET_ADDRESS](state, res) {
+    state.address = res
+  },
+
+  [types.SET_ADDRESS_CODE](state, res) {
+    state.addressCode = res
   }
 
 
