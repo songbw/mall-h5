@@ -32,7 +32,10 @@ import {
   CheckboxGroup,
   SwipeCell,
   Icon,
-  Dialog
+  Dialog,
+  ContactCard,
+  ContactList,
+  ContactEdit
 } from 'vant';
 
 Vue.use(Button)
@@ -55,7 +58,10 @@ Vue.use(Button)
   .use(CheckboxGroup)
   .use(SwipeCell)
   .use(Icon)
-  .use(Dialog);
+  .use(Dialog)
+  .use(ContactCard)
+  .use(ContactList)
+  .use(ContactEdit);
 
 
 Vue.config.productionTip = false

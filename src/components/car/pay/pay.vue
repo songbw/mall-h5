@@ -4,6 +4,15 @@
     <v-header>
       <h1 slot="title">确认订单</h1>
     </v-header>
+    <div class = "contact-address-card">
+      <van-cell
+        title="周俊"
+        value="13810864380"
+        label="顺义牡丹苑13号楼1门1101"
+        size="large"
+        is-link/>
+    </div>
+
 
     <div class="pay-address">
       <div>
@@ -45,13 +54,14 @@
 <script>
   import Util from '../../../util/common'
   import Header from '@/common/_header.vue'
+
   import {
     MessageBox
   } from 'mint-ui';
 
   export default {
     components: {
-      'v-header': Header
+      'v-header': Header,
     },
     data() {
       return {
@@ -219,6 +229,8 @@
         letter-spacing: 3 * 10vw/75;
         line-height: 45 * 10vw/75;
       }
+
+
     }
 
     .pay-product {
@@ -311,6 +323,74 @@
       color: #fff;
       line-height: 30px;
       .fz(font-size, 40);
+    }
+
+/*    .van-contact-card {
+      padding: 15px;
+
+      .van-cell__value {
+        margin-left: 5px;
+        line-height: 20px;
+        display: inline-block;
+        vertical-align: middle;
+      }
+
+      &--add {
+        .van-cell__value {
+          line-height: 40px;
+        }
+
+        .van-cell__left-icon {
+          color: blue;
+          font-size: 40px;
+        }
+      }
+
+      &::before {
+        content: '';
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        position: absolute;
+        background: repeating-linear-gradient(
+          -45deg,
+          #ff6c6c 0,
+          #ff6c6c 20%,
+          transparent 0,
+          transparent 25%,
+          blue 0,
+          blue 45%,
+          transparent 0,
+          transparent 50%
+        );
+        background-size: 80px;
+      }
+    }*/
+
+    .contact-address-card {
+      .van-cell {
+        &::before {
+          content: '';
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 2px;
+          position: absolute;
+          background: repeating-linear-gradient(
+            -45deg,
+            #ff6c6c 0,
+            #ff6c6c 20%,
+            transparent 0,
+            transparent 25%,
+            blue 0,
+            blue 45%,
+            transparent 0,
+            transparent 50%
+          );
+          background-size: 80px;
+        }
+      }
     }
   }
 </style>
