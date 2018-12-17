@@ -22,19 +22,23 @@ export default {
     // 勾选的商品数量
     count () {
       // 如果已选择列表为空 就返回0
+      let selCount = 0;
       if (this.$store.state.appconf.selStateInCarList == undefined) {
-        return 0
+        return selCount
       } else {
-        let selCount = 0;
         let userInfo =  this.$store.state.appconf.userInfo;
-        if(userInfo != undefined) {
-          let user = JSON.parse(userInfo)
-          let selStateInCarList = this.$store.state.appconf.selStateInCarList;
-          selStateInCarList.forEach(item => {
-             if(item.userId == user.userId && item.choose ) {
-               selCount += item.count;
-             }
-          })
+        console.log("user:"+userInfo)
+        try {
+          if(userInfo != undefined) {
+            let user = JSON.parse(userInfo)
+            let selStateInCarList = this.$store.state.appconf.selStateInCarList;
+            selStateInCarList.forEach(item => {
+              if(item.userId == user.userId && item.choose ) {
+                selCount += item.count;
+              }
+            })
+          }
+        } catch (e) {
         }
         return selCount;
       }
@@ -44,15 +48,20 @@ export default {
     allpay () {
       let all = 0;
       let userInfo =  this.$store.state.appconf.userInfo;
-      if(userInfo != undefined) {
-        let user = JSON.parse(userInfo)
-        let selStateInCarList = this.$store.state.appconf.selStateInCarList;
-        selStateInCarList.forEach(item => {
-          if(item.userId == user.userId && item.choose ) {
-            all += item.price * item.count
-          }
-        })
+      console.log("user:"+userInfo)
+      try {
+        if(userInfo != undefined) {
+          let user = JSON.parse(userInfo)
+          let selStateInCarList = this.$store.state.appconf.selStateInCarList;
+          selStateInCarList.forEach(item => {
+            if(item.userId == user.userId && item.choose ) {
+              all += item.price * item.count
+            }
+          })
+        }
+      } catch (e) {
       }
+
       // 没有勾选 即为0
       return all
     }
