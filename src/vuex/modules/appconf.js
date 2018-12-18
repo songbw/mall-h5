@@ -2,12 +2,12 @@ import Util from '../../util/common'
 import * as types from '../types'
 
 const state = {
-  location: {},
-  locationCode:{},
+  location: {},//{"latitude":"40.072267","longitude":"116.246324","locTime":"2018-12-18 08:51:05","country":"中国","province":"北京市","city":"北京市","district":"海淀区"}
+  locationCode:{},//{"provinceId":"10","cityId":"010","district":"08"}
   address:{},
   addressCode:{},
   currentGoods:'',
-  userInfo:'',//
+  userInfo:'',//{"code":200,"token":"ed6f4fc9a99949649be1e075c3eca075","userId":2,"username":"13810864380"}
   carList:'',//
   selStateInCarList:[], //'[{"userId":1,"id":2,"choose":true,"isDel":0}]' //userId:用户ID "id":商品ID，"choose":购物车选中状态，“idDel":是否删除
 }
@@ -40,8 +40,6 @@ const mutations = {
   [types.SET_ADDRESS_CODE](state, res) {
     state.addressCode = res
   }
-
-
 }
 
 

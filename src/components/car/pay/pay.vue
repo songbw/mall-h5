@@ -4,23 +4,21 @@
     <v-header>
       <h1 slot="title">确认订单</h1>
     </v-header>
+
     <div class = "contact-address-card">
       <van-cell
-        title="周俊"
+        title="收货人: 周俊 "
         value="13810864380"
-        label="顺义牡丹苑13号楼1门1101"
-        size="large"
-        is-link/>
+        label="地址: 顺义牡丹苑13号楼1门1101"
+        is-link
+        @click="editAddressOrList">
+      </van-cell>>
     </div>
 
+    <div class = "">
 
-    <div class="pay-address">
-      <div>
-        <p class="main-address-per">收货人:<span>王先生</span></p>
-        <p class="main-address-tel">15985698749</p>
-      </div>
-      <p>收货地址:<span>河南省郑州市中原区秦岭路8号院59号单元28层15号东户第三家</span></p>
     </div>
+
 
     <div class="pay-product">
       <ul v-if="!confirm">
@@ -65,7 +63,7 @@
     },
     data() {
       return {
-        confirm: ''
+        addressCount : 0
       }
     },
 
@@ -113,7 +111,8 @@
             }).then((response) => {
               let result = response.data.data.result;
               console.log("result is:" + JSON.stringify(result));
-              if(result.total == 0) {
+              this.addressCount = result.total;
+              if(this.addressCount == 0) {
                 this.$dialog.confirm({
                   title: '您还没有收货地址，请新增一个吧',
                   confirmButtonText:'新增地址'
@@ -140,6 +139,13 @@
     },
 
     methods: {
+      editAddressOrList() {
+          if(this.addressCount) { //go to Address List
+          } else { //没有Address //go to Address edit
+            this.$router.push({ name: '地址页' })
+          }
+      },
+
       getLocationCode() {
         let code = {"provinceId": "10", "cityId": "010", "district": "08"}
         if (/*送货地址*/this.this.$store.state.appconf.addressCode != undefined) {
