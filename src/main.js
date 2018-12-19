@@ -36,7 +36,8 @@ import {
   ContactCard,
   ContactList,
   ContactEdit,
-  SubmitBar
+  SubmitBar,
+  AddressEdit
 } from 'vant';
 
 Vue.use(Button)
@@ -63,7 +64,8 @@ Vue.use(Button)
   .use(ContactCard)
   .use(ContactList)
   .use(ContactEdit)
-  .use(SubmitBar);
+  .use(SubmitBar)
+  .use(AddressEdit);
 
 
 Vue.config.productionTip = false

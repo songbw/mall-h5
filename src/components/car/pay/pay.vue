@@ -5,8 +5,8 @@
       <h1 slot="title">确认订单</h1>
     </v-header>
 
-    <div class="contact-address-card">
-      <van-row type="flex">
+    <div class="contact-address-card" @click="editAddressOrList">
+      <van-row type="flex" >
         <van-col span="22">
           <van-row type="flex">
             <van-cell
@@ -20,7 +20,7 @@
           </van-row>
         </van-col>
         <van-col span="2">
-          <van-icon class="contact-edit" name="arrow" size="20px" @click="editAddressOrList"/>
+          <van-icon class="contact-edit" name="arrow" size="20px" />
         </van-col>
       </van-row>
     </div>
@@ -46,7 +46,6 @@
             <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
           </div>
         </van-card>
-
       </li>
     </div>
 
@@ -62,12 +61,6 @@
       :tip=tip
     />
 
-    <!--
-    <h3 class="pay-allpay">总需要支付 : <i>￥</i><span>{{allpay}}</span></h3>
-    <footer class="pay-footer" ontouchstrat="" @click="payConfirm">
-      <span>立即支付</span>
-    </footer>
-    -->
   </div>
 </template>
 
@@ -293,27 +286,6 @@
         }
         return code
       },
-      /*    checkStorage() {
-
-            let skus =  [{"skuId":"20000579"},{"skuId":"20001234"},{"skuId":"20000028"}]
-            let options = {
-              "provinceId":"10",
-              "cityId":"010",
-              "district":"08",
-              "skus": skus
-            }
-            console.log("options:" + JSON.stringify(options));
-            this.$api.xapi({
-              method: 'post',
-              url: '/prod/inventory',
-              data: options,
-            }).then((response) => {
-              let result = response.data.data.result;
-              console.log("result is:" + JSON.stringify(result));
-            }).catch(function (error) {
-              console.log(error)
-            })
-          },*/
       payConfirm() {
         /*      if (this.carList) { //还未提交了订单,数据还未清空
                 MessageBox
