@@ -6,16 +6,32 @@
     </v-header>
 
     <div class="contact-address-card">
-      <van-cell
-        title="收货人: 周俊 "
-        value="13810864380"
-        label="地址: 顺义牡丹苑13号楼1门1101"
-        is-link
-        @click="editAddressOrList">
-      </van-cell>
+      <van-row type="flex">
+        <van-col span="22">
+          <van-row type="flex">
+            <van-cell
+              title="收货人: 周俊  13810864380">
+            </van-cell>
+          </van-row>
+          <van-row type="flex">
+            <van-cell
+              title="地址:北京顺义牡丹苑13号楼1门1101室">
+            </van-cell>
+          </van-row>
+        </van-col>
+        <van-col span="2">
+          <van-icon class="contact-edit" name="arrow" size="20px" @click="editAddressOrList"/>
+        </van-col>
+      </van-row>
     </div>
-    <div class="pay-method">
-
+    <div class="address-line"></div>
+    <div class="pay-info">
+      <van-cell title="支付方式:" value="现金支付">
+        <van-icon slot="right-icon" name="edit" style="margin-left: 24px" size="20px"/>
+      </van-cell>
+      <van-cell title="发票:" value="普票(商品明细-个人)">
+        <van-icon slot="right-icon" name="edit" style="margin-left: 24px" size="20px"/>
+      </van-cell>
     </div>
 
     <div class="pay-product">
@@ -85,12 +101,12 @@
         let user = JSON.parse(this.$store.state.appconf.userInfo);
         if (user != undefined) {
           this.$store.state.appconf.selStateInCarList.forEach(item => {
-            if(item.userId == user.userId && item.choose) {
+            if (item.userId == user.userId && item.choose) {
               selectCarList.push(item);
             }
           })
         }
-        console.log("selectedCarList is:"+JSON.stringify(selectCarList));
+        console.log("selectedCarList is:" + JSON.stringify(selectCarList));
         return selectCarList;
       },
 
@@ -99,8 +115,8 @@
         let all = 0;
         try {
           this.payCarList.forEach(item => {
-            if(item.valid) {
-              all += item.checkedPrice * item.product.count*100 //分
+            if (item.valid) {
+              all += item.checkedPrice * item.product.count * 100 //分
             }
 
           })
@@ -179,7 +195,7 @@
         this.payCarList = [];
         this.selectedCarList.forEach(item => {
           skus.push({"skuId": item.skuId})
-          this.payCarList.push({"product":item,"valid":false,"checkedPrice":0})
+          this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.price})
         })
         //////////////////////查询库存//////////////////
         let options = {
@@ -195,7 +211,7 @@
           let result = response.data.data.result;
           result.forEach(item => {
             for (let i = 0; i < this.payCarList.length; i++) {
-              if (this.payCarList[i].product.skuId == item.skuId && 0 ===  parseInt(item.state)) {
+              if (this.payCarList[i].product.skuId == item.skuId && 0 === parseInt(item.state)) {
                 this.payCarList[i].valid = true
               }
             }
@@ -218,7 +234,7 @@
           console.log("价格 result is:" + JSON.stringify(result));
           result.forEach(item => {
             for (let i = 0; i < this.payCarList.length; i++) {
-              console.log("价格:"+ JSON.stringify(item) +",i:"+i+",this.payCarList[i].skuId:"+this.payCarList[i].product.skuId)
+              console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
               if (this.payCarList[i].product.skuId == item.skuId) {
                 console.log("价格 change true");
                 this.payCarList[i].checkedPrice = item.price
@@ -319,10 +335,17 @@
     width: 100%;
     padding-bottom: 2vw;
 
+    .pay-info {
+      background-color: #fff;
+      padding-Top: 2vw;
+      padding-bottom: 2vw;
+    }
+
     .pay-product {
       background-color: #fff;
       overflow: auto;
       padding-bottom: 14vw;
+
       li {
         list-style: none;
       }
@@ -348,6 +371,7 @@
       left: 0;
       width: 100%;
       padding-bottom: 14vw;
+
       span {
         display: block;
         width: 85%;
@@ -363,6 +387,14 @@
           background-color: @cl;
         }
       }
+    }
+
+    .contact-edit {
+      padding: 20px 0;
+      text-align: center;
+      color: #000000;
+      line-height: 30px;
+      .fz(font-size, 40);
     }
 
     .pay-confirm {
@@ -417,29 +449,27 @@
           }
         }*/
 
+    .address-line {
+      content: '';
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: 2px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #ff6c6c 0,
+        #ff6c6c 20%,
+        transparent 0,
+        transparent 25%,
+        blue 0,
+        blue 45%,
+        transparent 0,
+        transparent 50%
+      );
+      background-size: 80px;
+    }
+
     .contact-address-card {
-      .van-cell {
-        &::before {
-          content: '';
-          left: 0;
-          right: 0;
-          bottom: 0;
-          height: 2px;
-          position: absolute;
-          background: repeating-linear-gradient(
-            -45deg,
-            #ff6c6c 0,
-            #ff6c6c 20%,
-            transparent 0,
-            transparent 25%,
-            blue 0,
-            blue 45%,
-            transparent 0,
-            transparent 50%
-          );
-          background-size: 80px;
-        }
-      }
     }
   }
 </style>
