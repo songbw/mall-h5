@@ -71,8 +71,8 @@
             break;
           }
         }
-        if(iFound != -1) {
-          this.selStateInCarList.splice(iFound,1);
+        if (iFound != -1) {
+          this.selStateInCarList.splice(iFound, 1);
         }
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
@@ -94,7 +94,7 @@
       onCountChange(id, skuid, count) {
         //update select carlist count
         let user = JSON.parse(this.$store.state.appconf.userInfo);
-        if(user != undefined) {
+        if (user != undefined) {
           this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
           for (let i = 0; i < this.selStateInCarList.length; i++) {
             if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == user.userId) {
@@ -176,7 +176,7 @@
         }
       },
 
-      isInSelectedCarlist(item,product, user) {
+      isInSelectedCarlist(item, product, user) {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         let choose = true;
         let found = false;
@@ -195,20 +195,25 @@
           this.selStateInCarList.push({
             "userId": user.userId,
             "id": item.id,
-            "skuId":item.skuId,
-            "count":item.count,
-            "price":product.price,
+            "image": product.image,
+            "desc": product.brand+ ' '+ product.name + ' '+ product.model,
+            "skuId": item.skuId,
+            "count": item.count,
+            "price": product.price,
             "choose": true,
+           // "valid": true,//库存
+           // "freight": 0,//运费
+           // "checkedPrice": product.price,//实际价格
             "isDel": 0
           });
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         }
-        console.log("selStateInCarList:"+JSON.stringify(this.selStateInCarList))
+        console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
         return choose;
       },
 
       getSkuIynfoBy(item, user) {
-       // console.log("item:"+JSON.stringify(item))
+        // console.log("item:"+JSON.stringify(item))
         this.$api.xapi({
           method: 'get',
           url: '/prod',
@@ -241,7 +246,7 @@
       },
 
       singleChecked(index, k) {
-       // console.log("index:" + index + ",k.choose:" + k.choose)
+        // console.log("index:" + index + ",k.choose:" + k.choose)
         //update selStateInCarList
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         for (let i = 0; i < this.selStateInCarList.length; i++) {
