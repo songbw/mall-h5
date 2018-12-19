@@ -27,13 +27,13 @@
     <div class="address-line"></div>
     <div class="pay-info">
       <van-cell title="支付方式:" value="现金支付">
-        <van-icon slot="right-icon" name="edit" style="margin-left: 24px" size="20px"/>
+        <van-icon slot="right-icon" name="arrow" style="margin-left: 24px" size="20px"/>
       </van-cell>
       <van-cell title="发票:" value="普票(商品明细-个人)">
-        <van-icon slot="right-icon" name="edit" style="margin-left: 24px" size="20px"/>
+        <van-icon slot="right-icon" name="arrow" style="margin-left: 24px" size="20px"/>
       </van-cell>
     </div>
-
+    <div class="address-line"></div>
     <div class="pay-product">
       <li v-for="k in payCarList">
         <van-card
@@ -59,6 +59,7 @@
       :price="allpay"
       button-text="提交订单"
       @submit="onSubmit"
+      :tip=tip
     />
 
     <!--
@@ -80,6 +81,7 @@
     data() {
       return {
         addressCount: 0,
+        freight: 0,
         payCarList: []
       }
     },
@@ -109,27 +111,29 @@
         console.log("selectedCarList is:" + JSON.stringify(selectCarList));
         return selectCarList;
       },
-
       // 商品价格总和
-      allpay() {
+      productPay() {
         let all = 0;
         try {
           this.payCarList.forEach(item => {
             if (item.valid) {
               all += item.checkedPrice * item.product.count * 100 //分
             }
-
           })
         } catch (e) {
         }
         return all
+      },
+
+      tip() {
+        return  '商品价格:￥' + parseFloat(this.productPay / 100) + ' 运费:￥' + this.freight
+      },
+
+      allpay() {
+        return this.productPay + this.freight*100;
       }
     },
     mounted() {
-      // 防止页面刷新后数据丢失
-      /*    if (this.$store.state.detail.selectedList == '') {
-            this.$store.commit('SET_SELECTEDLIST')
-          }*/
     },
 
     beforeCreate() {
@@ -189,6 +193,31 @@
       onSubmit() {
         console.log("onSubmit Enter!!!")
       },
+      getfreightPay() {
+        /////////////查询运费////////////////////////
+        let all = 0;
+        let freightSkus = []
+        this.payCarList.forEach(item => {
+          if(item.valid)
+              freightSkus.push({"skuId": item.skuId, "piece": item.count})
+        })
+        let options = {
+          "cityId": this.locationCode.cityId,
+          "skus": freightSkus,
+        }
+        console.log("options:" + JSON.stringify(options));
+        this.$api.xapi({
+          method: 'post',
+          url: '/prod/carriage',
+          data: options,
+        }).then((response) => {
+          let  result  = response.data.data.result;
+          console.log("运费 result is:" + JSON.stringify(result));
+          this.freight = result
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
       getCarList() {
         console.log("carList Enter !!!!!!!!!")
         let skus = [];
@@ -216,52 +245,37 @@
               }
             }
           })
-        }).catch(function (error) {
-          console.log(error)
-        })
-        //////////////////////查询价格//////////////////
-        options = {
-          "cityId": this.locationCode.cityId,
-          "skus": skus,
-        }
-        console.log("options:" + JSON.stringify(options));
-        this.$api.xapi({
-          method: 'post',
-          url: '/prod/price',
-          data: options,
-        }).then((response) => {
-          let result = response.data.data.result;
-          console.log("价格 result is:" + JSON.stringify(result));
-          result.forEach(item => {
-            for (let i = 0; i < this.payCarList.length; i++) {
-              console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
-              if (this.payCarList[i].product.skuId == item.skuId) {
-                console.log("价格 change true");
-                this.payCarList[i].checkedPrice = item.price
+          //////////////////////查询价格//////////////////
+          options = {
+            "cityId": this.locationCode.cityId,
+            "skus": skus,
+          }
+          console.log("options:" + JSON.stringify(options));
+          this.$api.xapi({
+            method: 'post',
+            url: '/prod/price',
+            data: options,
+          }).then((response) => {
+            let result = response.data.data.result;
+            console.log("价格 result is:" + JSON.stringify(result));
+            result.forEach(item => {
+              for (let i = 0; i < this.payCarList.length; i++) {
+                console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
+                if (this.payCarList[i].product.skuId == item.skuId) {
+                  console.log("价格 change true");
+                  this.payCarList[i].checkedPrice = item.price
+                }
               }
-            }
+            })
+            console.log("this.payCarList:" + JSON.stringify(this.payCarList));
+            this.getfreightPay();
+          }).catch(function (error) {
+            console.log(error)
           })
-          console.log("this.payCarList:" + JSON.stringify(this.payCarList));
         }).catch(function (error) {
           console.log(error)
         })
 
-        /////////////查询运费////////////////////////
-        /* options = {
-           "cityId": this.locationCode.cityId,
-           "skus": freightSkus,
-         }
-         console.log("options:" + JSON.stringify(options));
-         this.$api.xapi({
-           method: 'post',
-           url: '/prod/carriage',
-           data: options,
-         }).then((response) => {
-           let result = response.data.data.result;
-           console.log("运费 result is:" + JSON.stringify(result));
-         }).catch(function (error) {
-           console.log(error)
-         })*/
       },
       editAddressOrList() {
         if (this.addressCount) { //go to Address List
