@@ -7,7 +7,6 @@
     <van-address-edit
       :area-list="areaList"
       show-postal
-      show-delete
       show-set-default
       show-search-result
       :search-result="searchResult"
@@ -19,8 +18,8 @@
 </template>
 
 <script>
-  import Util from '../../../util/common'
   import Header from '@/common/_header.vue'
+  import areaList from '@/assets/area.js'
 
   export default {
     components: {
