@@ -24,11 +24,22 @@
     data() {
       return {
         areaList,
-        addressInfo: '',
+        addressInfo: {},
         //searchResult: []
       }
     },
+    created() {
+      let id = this.$route.params.id
+      if (id != "new") {
+        console.log ("id:"+id)
+        //获取id 相关的地址数据
+        try {
 
+        } catch (e) {
+
+        }
+      }
+    },
     methods: {
       saveReceiverAddress(receiverInfo, addressCode) {
         try {

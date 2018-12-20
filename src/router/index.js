@@ -52,7 +52,12 @@ export default new Router({
     {
       path: '/car/address',
       name: '地址页',
-      component: Address
+      redirect: '/car/address/new',
+      component: Address,
+      children: [{
+        path: '/car/address/:id',
+        component: Address
+      },]
     },
     {
       path: '/car/addressList',
