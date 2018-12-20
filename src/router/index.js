@@ -13,6 +13,7 @@ const Detail = resolve => require(['@/views/Detail.vue'], resolve)
 const Search = resolve => require(['@/views/Search.vue'], resolve)
 const Pay = resolve => require(['@/components/car/pay/pay.vue'], resolve)
 const Address = resolve => require(['@/components/car/pay/address.vue'], resolve)
+const AddressList = resolve => require(['@/components/car/pay/addressList.vue'], resolve)
 const Login = resolve => require(['@/views/login.vue'], resolve)
 
 
@@ -29,7 +30,7 @@ export default new Router({
       redirect: '/category/all',
       component: Category,
       children: [{
-        path: '/category/:tab',
+          path: '/category/:tab',
         component: CategoryMain
       },]
     },
@@ -52,6 +53,11 @@ export default new Router({
       path: '/car/address',
       name: '地址页',
       component: Address
+    },
+    {
+      path: '/car/addressList',
+      name: '地址列表页',
+      component: AddressList
     },
     {
       path: '/user',

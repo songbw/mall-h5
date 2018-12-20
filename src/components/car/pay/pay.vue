@@ -150,7 +150,6 @@
               data: options,
             }).then((response) => {
               let result = response.data.data.result;
-              console.log("result is:" + JSON.stringify(result));
               this.addressCount = result.total;
               if (this.addressCount == 0) {
                 this.$dialog.confirm({
@@ -161,8 +160,10 @@
                   this.$router.push({name: '地址页'})
                 }).catch(() => {
                   // on cancel
-
                 });
+              } else {
+                console.log("ADDRESS LIST is:"+JSON.stringify(result.list))
+                this.$store.commit('SET_ADDRESS_LIST', result.list);
               }
             }).catch(function (error) {
               console.log(error)
@@ -271,9 +272,11 @@
 
       },
       editAddressOrList() {
+        console.log("addressCount:"+this.addressCount)
         if (this.addressCount) { //go to Address List
+         this.$router.push({name: '地址列表页'})
         } else { //没有Address //go to Address edit
-          this.$router.push({name: '地址页'})
+         // this.$router.push({name: '地址页'})
         }
       },
 

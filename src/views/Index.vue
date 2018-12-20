@@ -97,10 +97,19 @@
 
       getLocationCode(location) {
         console.log("getLocationCode location:" + JSON.stringify(location));
+        let options = {
+          "latitude":location.latitude,
+          "longitude":location.longitude,
+          "locTime":location.locTime,
+          "country":location.country,
+          "province":location.province,
+          "city":location.city,
+          "county":location.district
+        }
         this.$api.xapi({
           method: 'post',
           url: '/address/code',
-          data: location,
+          data: options,
         }).then((response) => {
           let code = response.data.data.code;
           console.log("location code:"+JSON.stringify(code));
