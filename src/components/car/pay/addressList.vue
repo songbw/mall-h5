@@ -75,7 +75,7 @@
       onEdit(item, index) {
         console.log("item:" + JSON.stringify(item) + ",index:" + index+"path:"+"/car/addressList/${item.id}")
         //this.$router.push({path: '/car/pay'})
-        this.$router.push({path: '/car/addressList/'+item.id})
+        this.$router.push({path: '/car/address'})
       }
     }
   }
