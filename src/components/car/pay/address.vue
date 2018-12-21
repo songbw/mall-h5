@@ -8,6 +8,7 @@
       :area-list="areaList"
       :address-info="addressInfo"
       show-set-default
+      save-button-text = "保存并使用"
       @save="onSave"
     />
   </div>
@@ -62,6 +63,7 @@
           }).then((response) => {
             let result = response.data.data.result;
             console.log("saved id is:" + JSON.stringify(result));
+            this.$store.commit('SET_USED_ADDRESS_ID', result);
           }).catch(function (error) {
             console.log(error)
           })
@@ -72,7 +74,7 @@
       },
       onSave(recerverInfo) {
         console.log("recerverInfo:" + JSON.stringify(recerverInfo));
-        this.$store.commit('SET_ADDRESS', recerverInfo);
+       // this.$store.commit('SET_ADDRESS', recerverInfo);
         //首先获取地址编码
         let options = {
           "country": recerverInfo.country,
@@ -88,7 +90,7 @@
         }).then((response) => {
           let code = response.data.data.code;
           console.log("AddressCode result is:" + JSON.stringify(code));
-          this.$store.commit('SET_ADDRESS_CODE', code);
+         // this.$store.commit('SET_ADDRESS_CODE', code);
           //保存接收者地址到网络
           this.saveReceiverAddress(recerverInfo, code);
         }).catch(function (error) {

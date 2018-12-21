@@ -6,21 +6,25 @@
     </v-header>
 
     <div class="contact-address-card" @click="editAddressOrList">
-      <van-row type="flex" >
+      <van-row type="flex">
         <van-col span="22">
-          <van-row type="flex">
-            <van-cell
-              title="收货人: 周俊  13810864380">
+          <div v-if="addressCount == 0" class="contact-edit">
+            {{addressEmptyInfo}}
+          </div>
+          <div v-else>
+            <van-cell>
+              <template slot="title">
+                <span class="custom-text">{{receiverInfo}}</span>
+                <p>
+                  <van-icon name="location"></van-icon>
+                  <span class="custom-text">{{receiverAddress}}</span>
+                </p>
+              </template>
             </van-cell>
-          </van-row>
-          <van-row type="flex">
-            <van-cell
-              title="地址:北京顺义牡丹苑13号楼1门1101室">
-            </van-cell>
-          </van-row>
+          </div>
         </van-col>
         <van-col span="2">
-          <van-icon class="contact-edit" name="arrow" size="20px" />
+          <van-icon class="contact-edit" name="arrow" size="20px"/>
         </van-col>
       </van-row>
     </div>
@@ -75,22 +79,15 @@
       return {
         addressCount: 0,
         freight: 0,
-        payCarList: []
+        payCarList: [],
+        receiverInfo: '',
+        receiverAddress: '',
+        addressEmptyInfo: ''
+
       }
     },
 
     computed: {
-      //
-      locationCode() {
-        let code = {"provinceId": "10", "cityId": "010", "district": "00"}
-        if (/*送货地址*/this.$store.state.appconf.addressCode != undefined) {
-          code = this.$store.state.appconf.addressCode;
-        } else if (this.$store.state.appconf.locationCode != undefined) {
-          code = this.$store.state.appconf.locationCode;
-        }
-        return code
-      },
-
       selectedCarList() {
         let selectCarList = [];
         let user = JSON.parse(this.$store.state.appconf.userInfo);
@@ -119,11 +116,11 @@
       },
 
       tip() {
-        return  '商品价格:￥' + parseFloat(this.productPay / 100) + ' 运费:￥' + this.freight
+        return '商品价格:￥' + parseFloat(this.productPay / 100) + ' 运费:￥' + this.freight
       },
 
       allpay() {
-        return this.productPay + this.freight*100;
+        return this.productPay + this.freight * 100;
       }
     },
     mounted() {
@@ -132,47 +129,45 @@
     beforeCreate() {
       console.log("pay page mounted Enter")
       try {
-        if (this.$store.state.appconf.addressCode == undefined ||
-          JSON.stringify(this.$store.state.appconf.addressCode) == "{}") {
-          let userInfo = this.$store.state.appconf.userInfo;
-          console.log("userInfo:" + userInfo)
-          if (userInfo != undefined) {
-            let user = JSON.parse(userInfo)
-            let options = {
-              "openId": user.userId,
-              "pageNo": 1,
-              "pageSize": "20",
-            }
-            console.log("options:" + JSON.stringify(options));
-            this.$api.xapi({
-              method: 'post',
-              url: '/receiver/all',
-              data: options,
-            }).then((response) => {
-              let result = response.data.data.result;
-              this.addressCount = result.total;
-              if (this.addressCount == 0) {
-                this.$dialog.confirm({
-                  title: '您还没有收货地址，请新增一个吧',
-                  confirmButtonText: '新增地址'
-                }).then(() => {
-                  //on confirm
-                  this.$router.push({name: '地址页'})
-                }).catch(() => {
-                  // on cancel
-                });
-              } else {
-                console.log("ADDRESS LIST is:"+JSON.stringify(result.list))
-                this.$store.commit('SET_ADDRESS_LIST', result.list);
-              }
-            }).catch(function (error) {
-              console.log(error)
-            })
-          } else {
-            console.log("ERROR!!, not get UserInfo in Pay page")
+        let userInfo = this.$store.state.appconf.userInfo;
+        console.log("userInfo:" + userInfo)
+        if (userInfo != undefined) {
+          let user = JSON.parse(userInfo)
+          let options = {
+            "openId": user.userId,
+            "pageNo": 1,
+            "pageSize": "20",
           }
+          console.log("options:" + JSON.stringify(options));
+          this.$api.xapi({
+            method: 'post',
+            url: '/receiver/all',
+            data: options,
+          }).then((response) => {
+            let result = response.data.data.result;
+            this.addressCount = result.total;
+            if (this.addressCount == 0) {
+              this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
+              this.$dialog.confirm({
+                title: '您还没有收货地址，请新增一个吧',
+                confirmButtonText: '新增地址'
+              }).then(() => {
+                //on confirm
+                this.$router.push({name: '地址页'})
+              }).catch(() => {
+                // on cancel
+              });
+            } else {
+              console.log("ADDRESS LIST is:" + JSON.stringify(result.list))
+              this.$store.commit('SET_ADDRESS_LIST', result.list);
+              this.updateUsedAddress();
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
         } else {
-          console.log("pay page mounted:" + JSON.stringify(this.$store.state.appconf.addressCode))
+          console.log("ERROR!!, not get UserInfo in Pay page")
+          this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
         }
       } catch (e) {
         console.log(e)
@@ -184,6 +179,52 @@
     },
 
     methods: {
+      updateUsedAddress() {
+        console.log("updateUsedAddress Enter!")
+        let address = {};
+        let list = this.$store.state.appconf.addressList;
+        let id = this.$store.state.appconf.usedAddressId;
+        console.log("updateUsedAddress id:" + id)
+        try {
+          if (id == undefined || id == -1) {
+            if (this.addressCount > 0) {
+              for (let i = 0; i < list.length; i++) {
+                if (list[i].state == 1) {
+                  id = i;
+                  address = list[i]
+                  break;
+                }
+              }
+              if (id == undefined || id == -1) {
+                id = list[0].id;
+                address = list[0]
+              }
+            }
+          } else {
+            if (this.addressCount > 0) {
+              for (let i = 0; i < list.length; i++) {
+                if (id == list[i].id) {
+                  address = list[i]
+                  break;
+                }
+              }
+            }
+          }
+        } catch (e) {
+        }
+        if (JSON.stringify(address) != "{}") {
+          this.receiverInfo = "收货人:" + address.receiverName + "  " + address.mobile
+          this.receiverAddress = (address.provinceName != null ? address.provinceName : "") +
+            (address.cityName != null ? address.cityName : "") +
+            (address.countyName != null ? address.countyName : "") +
+            (address.address != null ? address.address : "")
+        } else {
+          this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
+        }
+        this.$store.commit('SET_USED_ADDRESS_ID', id);
+        return address;
+      },
+
       onSubmit() {
         console.log("onSubmit Enter!!!")
       },
@@ -192,11 +233,12 @@
         let all = 0;
         let freightSkus = []
         this.payCarList.forEach(item => {
-          if(item.valid)
-              freightSkus.push({"skuId": item.skuId, "piece": item.count})
+          if (item.valid)
+            freightSkus.push({"skuId": item.skuId, "piece": item.count})
         })
+        let locationCode = this.getLocationCode();
         let options = {
-          "cityId": this.locationCode.cityId,
+          "cityId": locationCode.cityId,
           "skus": freightSkus,
         }
         console.log("options:" + JSON.stringify(options));
@@ -205,7 +247,7 @@
           url: '/prod/carriage',
           data: options,
         }).then((response) => {
-          let  result  = response.data.data.result;
+          let result = response.data.data.result;
           console.log("运费 result is:" + JSON.stringify(result));
           this.freight = result
         }).catch(function (error) {
@@ -220,9 +262,10 @@
           skus.push({"skuId": item.skuId})
           this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.price})
         })
+        let locationCode = this.getLocationCode()
         //////////////////////查询库存//////////////////
         let options = {
-          "cityId": this.locationCode.cityId,
+          "cityId": locationCode.cityId,
           "skus": skus,
         }
         console.log("options:" + JSON.stringify(options));
@@ -241,7 +284,7 @@
           })
           //////////////////////查询价格//////////////////
           options = {
-            "cityId": this.locationCode.cityId,
+            "cityId": locationCode.cityId,
             "skus": skus,
           }
           console.log("options:" + JSON.stringify(options));
@@ -272,19 +315,19 @@
 
       },
       editAddressOrList() {
-        console.log("addressCount:"+this.addressCount)
+        console.log("addressCount:" + this.addressCount)
         if (this.addressCount) { //go to Address List
-         this.$router.push({name: '地址列表页'})
+          this.$router.push({name: '地址列表页'})
         } else { //没有Address //go to Address edit
-         // this.$router.push({name: '地址页'})
+          // this.$router.push({name: '地址页'})
         }
       },
 
       getLocationCode() {
-        let code = {"provinceId": "10", "cityId": "010", "district": "08"}
-        if (/*送货地址*/this.this.$store.state.appconf.addressCode != undefined) {
-          code = this.this.$store.state.appconf.addressCode;
-        } else if (this.this.$store.state.appconf.locationCode != undefined) {
+        let code = {"provinceId": "10", "cityId": "010", "district": "00"}
+        if (/*送货地址*/JSON.stringify(this.usedAddress) != "{}") {
+          code = this.usedAddress;
+        } else if (this.$store.state.appconf.locationCode != undefined) {
           code = this.$store.state.appconf.locationCode;
         }
         return code
@@ -395,49 +438,6 @@
       .fz(font-size, 40);
     }
 
-    /*    .van-contact-card {
-          padding: 15px;
-
-          .van-cell__value {
-            margin-left: 5px;
-            line-height: 20px;
-            display: inline-block;
-            vertical-align: middle;
-          }
-
-          &--add {
-            .van-cell__value {
-              line-height: 40px;
-            }
-
-            .van-cell__left-icon {
-              color: blue;
-              font-size: 40px;
-            }
-          }
-
-          &::before {
-            content: '';
-            left: 0;
-            right: 0;
-            bottom: 0;
-            height: 2px;
-            position: absolute;
-            background: repeating-linear-gradient(
-              -45deg,
-              #ff6c6c 0,
-              #ff6c6c 20%,
-              transparent 0,
-              transparent 25%,
-              blue 0,
-              blue 45%,
-              transparent 0,
-              transparent 50%
-            );
-            background-size: 80px;
-          }
-        }*/
-
     .address-line {
       content: '';
       left: 0;
@@ -456,9 +456,6 @@
         transparent 50%
       );
       background-size: 80px;
-    }
-
-    .contact-address-card {
     }
   }
 </style>

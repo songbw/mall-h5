@@ -8,6 +8,7 @@
       :list="addresslist"
       @add="onAdd"
       @edit="onEdit"
+      @select="onSelect"
     />
   </div>
 </template>
@@ -36,7 +37,7 @@
                 id: item.id,
                 name: item.receiverName,
                 tel: item.mobile,
-                address: (item.receiverName != null ? item.receiverName : "") +
+                address: (item.proviceName != null ? item.proviceName : "") +
                   (item.cityName != null ? item.cityName : "") +
                   (item.countyName != null ? item.countyName : "") +
                   (item.address != null? item.address:"")
@@ -74,6 +75,19 @@
 
       onEdit(item, index) {
         this.$router.push({path: '/car/address/'+item.id})
+      },
+
+      onSelect(item,index) {
+        try {
+          this.$store.state.appconf.addressList.forEach(address => {
+            if (item.id == address.id) {
+              this.$store.commit('SET_USED_ADDRESS_ID', address.id);
+              this.$router.push({name:"支付页"});
+            }
+          })
+        } catch (e) {
+
+        }
       }
     }
   }
