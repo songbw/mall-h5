@@ -29,37 +29,66 @@
     computed: {
       addresslist() {
         let list = []
+        let id = this.$store.state.appconf.usedAddressId;
         try {
-          this.$store.state.appconf.addressList.forEach(item => {
-            console.log("my address:" + JSON.stringify(item))
-            if (item.state != 1) {
-              list.push({
-                id: item.id,
-                name: item.receiverName,
-                tel: item.mobile,
-                address: (item.proviceName != null ? item.proviceName : "") +
-                  (item.cityName != null ? item.cityName : "") +
-                  (item.countyName != null ? item.countyName : "") +
-                  (item.address != null? item.address:"")
-              })
-            } else {
-              this.chosenAddressId = item.id
-              list.unshift({
-                id: item.id,
-                name: item.receiverName,
-                tel: item.mobile,
-                address: (item.receiverName != null ? item.receiverName : "") +
-                  (item.cityName != null ? item.cityName : "") +
-                  (item.countyName != null ? item.countyName : "") +
-                  (item.address != null? item.address:"")
-              })
+          if(id != undefined || id != -1) {
+            this.$store.state.appconf.addressList.forEach(item => {
+              console.log("my address:" + JSON.stringify(item))
+              if (item.id != id) {
+                list.push({
+                  id: item.id,
+                  name: item.receiverName,
+                  tel: item.mobile,
+                  address: (item.proviceName != null ? item.proviceName : "") +
+                    (item.cityName != null ? item.cityName : "") +
+                    (item.countyName != null ? item.countyName : "") +
+                    (item.address != null ? item.address : "")
+                })
+              } else {
+                this.chosenAddressId = item.id
+                list.unshift({
+                  id: item.id,
+                  name: item.receiverName,
+                  tel: item.mobile,
+                  address: (item.receiverName != null ? item.receiverName : "") +
+                    (item.cityName != null ? item.cityName : "") +
+                    (item.countyName != null ? item.countyName : "") +
+                    (item.address != null ? item.address : "")
+                })
+              }
+            })
+          } else {
+            this.$store.state.appconf.addressList.forEach(item => {
+              console.log("my address:" + JSON.stringify(item))
+              if (item.state != 1) {
+                list.push({
+                  id: item.id,
+                  name: item.receiverName,
+                  tel: item.mobile,
+                  address: (item.proviceName != null ? item.proviceName : "") +
+                    (item.cityName != null ? item.cityName : "") +
+                    (item.countyName != null ? item.countyName : "") +
+                    (item.address != null? item.address:"")
+                })
+              } else {
+                this.chosenAddressId = item.id
+                list.unshift({
+                  id: item.id,
+                  name: item.receiverName,
+                  tel: item.mobile,
+                  address: (item.receiverName != null ? item.receiverName : "") +
+                    (item.cityName != null ? item.cityName : "") +
+                    (item.countyName != null ? item.countyName : "") +
+                    (item.address != null? item.address:"")
+                })
+              }
+            })
+            console.log("list.length:" + list.length + ",this.chooseAddressId:" + this.chosenAddressId)
+            if (list.length > 0 && this.chosenAddressId == -1) {
+              this.chosenAddressId = list[0].id
             }
-          })
-          console.log("list.length:" + list.length + ",this.chooseAddressId:" + this.chosenAddressId)
-          if (list.length > 0 && this.chosenAddressId == -1) {
-            this.chosenAddressId = list[0].id
+            console.log("chosenAddressId:" + this.chosenAddressId)
           }
-          console.log("chosenAddressId:" + this.chosenAddressId)
         } catch (e) {
         }
         return list;
