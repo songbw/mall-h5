@@ -9,7 +9,7 @@
       <van-row type="flex">
         <van-col span="22">
           <div v-if="addressCount == 0" class="contact-edit">
-            {{addressEmptyInfo}}
+            您的收获地址为空，点此添加收货地址
           </div>
           <div v-else>
             <van-cell>
@@ -82,7 +82,8 @@
         payCarList: [],
         receiverInfo: '',
         receiverAddress: '',
-        addressEmptyInfo: ''
+        addressEmptyInfo: '',
+        usedAddress:{},
 
       }
     },
@@ -157,17 +158,19 @@
               }).catch(() => {
                 // on cancel
               });
+              this.updateUsedAddress();
+              this.getCarList();
             } else {
               console.log("ADDRESS LIST is:" + JSON.stringify(result.list))
               this.$store.commit('SET_ADDRESS_LIST', result.list);
               this.updateUsedAddress();
+              this.getCarList();
             }
           }).catch(function (error) {
             console.log(error)
           })
         } else {
           console.log("ERROR!!, not get UserInfo in Pay page")
-          this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
         }
       } catch (e) {
         console.log(e)
@@ -175,7 +178,7 @@
     },
 
     created() {
-      this.getCarList()
+     // this.getCarList()
     },
 
     methods: {
@@ -219,10 +222,10 @@
             (address.countyName != null ? address.countyName : "") +
             (address.address != null ? address.address : "")
         } else {
-          this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
+          //this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
         }
         this.$store.commit('SET_USED_ADDRESS_ID', id);
-        return address;
+        this.usedAddress = address
       },
 
       onSubmit() {
@@ -319,7 +322,7 @@
         if (this.addressCount) { //go to Address List
           this.$router.push({name: '地址列表页'})
         } else { //没有Address //go to Address edit
-          // this.$router.push({name: '地址页'})
+          this.$router.push({name: '地址页'})
         }
       },
 
@@ -366,6 +369,11 @@
   .pay {
     width: 100%;
     padding-bottom: 2vw;
+
+    .custom-text {
+      text-align: left;
+      .fz(font-size, 30px);
+    }
 
     .pay-info {
       background-color: #fff;
@@ -426,7 +434,7 @@
       text-align: center;
       color: #000000;
       line-height: 30px;
-      .fz(font-size, 40);
+      .fz(font-size, 30);
     }
 
     .pay-confirm {

@@ -8,8 +8,10 @@
       :area-list="areaList"
       :address-info="addressInfo"
       show-set-default
-      save-button-text = "保存并使用"
+      :show-delete="this.$route.params.id != 'new'"
+      save-button-text="保存并使用"
       @save="onSave"
+      @delete="onDelete"
     />
   </div>
 </template>
@@ -31,9 +33,30 @@
     },
     created() {
       let id = this.$route.params.id
+      console.log("id:" + id)
       if (id != "new") {
-        console.log ("id:"+id)
+        console.log("id:" + id)
         //获取id 相关的地址数据
+        let list = this.$store.state.appconf.addressList;
+
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].id == id) {
+            let addressCode = this.getAddressCode(list[i].provinceName,list[i].cityName,list[i].countyName)
+            this.addressInfo = {
+              "name": list[i].receiverName,
+              "tel": list[i].mobile,
+              "country": "",
+       //       "province": "北京",
+       //       "city": "北京市",
+       //       "county": "朝阳区",
+              "areaCode": "110105",
+              "postalCode": list[i].zip,
+              "addressDetail": list[i].address,
+              "isDefault": (list[i].state == 1)
+            }
+            break;
+          }
+        }
         try {
 
         } catch (e) {
@@ -42,6 +65,12 @@
       }
     },
     methods: {
+      getAddressCode(province,city,county) {
+        console.log("province:"+province+",city:"+city+",county:"+county)
+
+        return ""
+      },
+
       saveReceiverAddress(receiverInfo, addressCode) {
         try {
           let user = JSON.parse(this.$store.state.appconf.userInfo);
@@ -64,6 +93,7 @@
             let result = response.data.data.result;
             console.log("saved id is:" + JSON.stringify(result));
             this.$store.commit('SET_USED_ADDRESS_ID', result);
+            this.$router.go(-1)
           }).catch(function (error) {
             console.log(error)
           })
@@ -72,9 +102,38 @@
         }
 
       },
+      onDelete(info){info
+        let id = this.$route.params.id
+        console.log("info:" + JSON.stringify(info)+",id:"+id);
+        let list = this.$store.state.appconf.addressList;
+        let found = -1;
+        for (let i = 0; i < list.length; i++) {
+          if (list[i].id == id) {
+            found = i;
+            break;
+          }
+        }
+        if(found != -1) {
+          console.log("list:"+JSON.stringify(list))
+          list.splice(found, 1);//如果是删除选中地址，怎么办？
+          this.$store.commit('SET_ADDRESS_LIST', list);
+          this.$api.xapi({
+            method: 'delete',
+            url: '/receiver',
+            params: {
+              id: id,
+            }
+          }).then((response) => {
+            //console.log("response is:" + JSON.stringify(response))
+            console.log("delete success")
+            this.$router.go(-1)
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }
+      },
       onSave(recerverInfo) {
         console.log("recerverInfo:" + JSON.stringify(recerverInfo));
-       // this.$store.commit('SET_ADDRESS', recerverInfo);
         //首先获取地址编码
         let options = {
           "country": recerverInfo.country,
@@ -90,7 +149,6 @@
         }).then((response) => {
           let code = response.data.data.code;
           console.log("AddressCode result is:" + JSON.stringify(code));
-         // this.$store.commit('SET_ADDRESS_CODE', code);
           //保存接收者地址到网络
           this.saveReceiverAddress(recerverInfo, code);
         }).catch(function (error) {
@@ -98,7 +156,6 @@
         })
       },
     }
-
   }
 </script>
 
