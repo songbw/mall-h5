@@ -9,6 +9,7 @@ const state = {
   currentGoods:'',
   userInfo:'',//{"code":200,"token":"ed6f4fc9a99949649be1e075c3eca075","userId":2,"username":"13810864380"}
   selStateInCarList:[], //'[{"userId":1,"id":2,"choose":true,"isDel":0}]' //userId:用户ID "id":商品ID，"choose":购物车选中状态，“idDel":是否删除
+  pageLoading:false
 }
 
 const mutations = {
@@ -38,8 +39,11 @@ const mutations = {
 
   [types.SET_ADDRESS_LIST](state, res) {
     state.addressList = res
-  }
+  },
 
+  [types.SET_PAGE_LOADING](state, res) {
+    state.pageLoading = res
+  }
 
 }
 

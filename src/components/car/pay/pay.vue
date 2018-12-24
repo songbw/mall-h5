@@ -1,10 +1,8 @@
 <template lang="html">
-
   <div class="pay">
     <v-header>
       <h1 slot="title">确认订单</h1>
     </v-header>
-
     <div class="contact-address-card" @click="editAddressOrList">
       <van-row type="flex">
         <van-col span="22">
@@ -186,6 +184,7 @@
         console.log("updateUsedAddress Enter!")
         let address = {};
         let list = this.$store.state.appconf.addressList;
+        console.log("list:"+JSON.stringify(list))
         let id = this.$store.state.appconf.usedAddressId;
         console.log("updateUsedAddress id:" + id)
         try {

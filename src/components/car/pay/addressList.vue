@@ -28,6 +28,7 @@
     },
     computed: {
       addresslist() {
+        console.log("addresslist Enter")
         let list = []
         let id = this.$store.state.appconf.usedAddressId;
         try {
