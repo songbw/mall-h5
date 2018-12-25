@@ -97,7 +97,7 @@
             }
           })
         }
-        console.log("selectedCarList is:" + JSON.stringify(selectCarList));
+       // console.log("selectedCarList is:" + JSON.stringify(selectCarList));
         return selectCarList;
       },
       // 商品价格总和
@@ -137,7 +137,7 @@
             "pageNo": 1,
             "pageSize": "20",
           }
-          console.log("options:" + JSON.stringify(options));
+         // console.log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             url: '/receiver/all',
@@ -214,14 +214,16 @@
           }
         } catch (e) {
         }
+        if (list.length > 0 &&  id == -1) {
+          id = list[0].id
+          address = list[0]
+        }
         if (JSON.stringify(address) != "{}") {
           this.receiverInfo = "收货人:" + address.receiverName + "  " + address.mobile
           this.receiverAddress = (address.provinceName != null ? address.provinceName : "") +
             (address.cityName != null ? address.cityName : "") +
             (address.countyName != null ? address.countyName : "") +
             (address.address != null ? address.address : "")
-        } else {
-          //this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
         }
         this.$store.commit('SET_USED_ADDRESS_ID', id);
         this.usedAddress = address
@@ -243,7 +245,7 @@
           "cityId": locationCode.cityId,
           "skus": freightSkus,
         }
-        console.log("options:" + JSON.stringify(options));
+        //console.log("options:" + JSON.stringify(options));
         this.$api.xapi({
           method: 'post',
           url: '/prod/carriage',
@@ -270,7 +272,7 @@
           "cityId": locationCode.cityId,
           "skus": skus,
         }
-        console.log("options:" + JSON.stringify(options));
+        //console.log("options:" + JSON.stringify(options));
         this.$api.xapi({
           method: 'post',
           url: '/prod/inventory',
@@ -289,7 +291,7 @@
             "cityId": locationCode.cityId,
             "skus": skus,
           }
-          console.log("options:" + JSON.stringify(options));
+         // console.log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             url: '/prod/price',
@@ -299,14 +301,14 @@
             console.log("价格 result is:" + JSON.stringify(result));
             result.forEach(item => {
               for (let i = 0; i < this.payCarList.length; i++) {
-                console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
+              //  console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
                 if (this.payCarList[i].product.skuId == item.skuId) {
-                  console.log("价格 change true");
+               //   console.log("价格 change true");
                   this.payCarList[i].checkedPrice = item.price
                 }
               }
             })
-            console.log("this.payCarList:" + JSON.stringify(this.payCarList));
+           // console.log("this.payCarList:" + JSON.stringify(this.payCarList));
             this.getfreightPay();
           }).catch(function (error) {
             console.log(error)

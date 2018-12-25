@@ -144,7 +144,7 @@
               list.push(address)
               this.$store.commit('SET_ADDRESS_LIST', list);
 
-              this.$router.go(-1)
+              this.$router.push({ name: '支付页' })
             }).catch(function (error) {
               console.log(error)
             })
@@ -210,7 +210,7 @@
                 this.$store.commit('SET_ADDRESS_LIST', list);
               }
 
-              this.$router.go(-1)
+              this.$router.push({ name: '支付页' })
             }).catch(function (error) {
               console.log(error)
             })

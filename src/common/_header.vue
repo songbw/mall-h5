@@ -5,6 +5,11 @@
       :to="{ name: '首页'}"
       v-if="$route.matched[0].path=='/category'">
     </router-link>
+    <router-link
+      class="icon-go"
+      :to="{ name: '购物车页'}"
+      v-else-if="$route.matched[0].path=='/car/pay'">
+    </router-link>
     <span class="icon-go" @click="$router.go(-1)" v-else></span>
     <slot name="title"></slot>
   </header>

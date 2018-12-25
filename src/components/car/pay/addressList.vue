@@ -31,6 +31,7 @@
         console.log("addresslist Enter")
         let list = []
         let id = this.$store.state.appconf.usedAddressId;
+        this.chosenAddressId = -1;
         try {
           if(id != undefined || id != -1) {
             this.$store.state.appconf.addressList.forEach(item => {
@@ -84,14 +85,15 @@
                 })
               }
             })
-            console.log("list.length:" + list.length + ",this.chooseAddressId:" + this.chosenAddressId)
-            if (list.length > 0 && this.chosenAddressId == -1) {
-              this.chosenAddressId = list[0].id
-            }
-            console.log("chosenAddressId:" + this.chosenAddressId)
           }
         } catch (e) {
         }
+        console.log("list.length:" + list.length + ",this.chooseAddressId:" + this.chosenAddressId)
+        if (list.length > 0 && this.chosenAddressId == -1) {
+          this.chosenAddressId = list[0].id
+          this.$store.commit('SET_USED_ADDRESS_ID', this.chosenAddressId);
+        }
+        console.log("chosenAddressId:" + this.chosenAddressId)
         return list;
       },
 
