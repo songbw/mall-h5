@@ -231,6 +231,7 @@
 
       onSubmit() {
         console.log("onSubmit Enter!!!")
+        this.$router.push({name:"收银台页"})
       },
       getfreightPay() {
         /////////////查询运费////////////////////////
@@ -357,6 +358,7 @@
               } else { //提交了订单,数据清空
                 alert('请勿重复提交订单')
               }*/
+
 
       }
     }

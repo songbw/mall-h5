@@ -15,7 +15,7 @@ const Pay = resolve => require(['@/components/car/pay/pay.vue'], resolve)
 const Address = resolve => require(['@/components/car/pay/address.vue'], resolve)
 const AddressList = resolve => require(['@/components/car/pay/addressList.vue'], resolve)
 const Login = resolve => require(['@/views/login.vue'], resolve)
-
+const Casher = resolve => require(['@/components/car/pay/casher.vue'], resolve)
 
 export default new Router({
   routes: [
@@ -38,6 +38,11 @@ export default new Router({
       path: '/category/goods/list',
       name: '商品列表页',
       component: CategoryList
+    },
+    {
+      path: '/car/casher',
+      name: '收银台页',
+      component: Casher
     },
     {
       path: '/car',
