@@ -4,7 +4,10 @@
     <v-header>
       <h1 slot="title">收银台</h1>
     </v-header>
-    <mt-cell title="应付金额:" value="￥59"></mt-cell>
+    <van-row>
+      <van-col span="18" style="text-align: left;padding-left:1em;font-size: 18px;color: #000000">应付金额:</van-col>
+      <van-col span="6" style="text-align: center;color: #f44336;font-size: 20px">￥100</van-col>
+    </van-row>
     <h1 class="section-title">
       支付方式
     </h1>
