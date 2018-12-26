@@ -11,9 +11,6 @@
 </template>
 
 <script>
-  import {MessageBox} from 'mint-ui';
-  import {Toast} from 'mint-ui';
-
   export default {
     props: {
       datas: {

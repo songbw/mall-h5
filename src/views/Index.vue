@@ -29,7 +29,7 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
 
-  import { Toast } from 'mint-ui'
+  //import { Toast } from 'mint-ui'
   export default {
     components: {
       'v-section1': Section1,

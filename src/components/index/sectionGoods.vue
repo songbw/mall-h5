@@ -24,12 +24,8 @@
 
 <script>
   import {Lazyload} from 'mint-ui';
-  import Toast from "mint-ui/packages/toast/src/toast";
 
   export default {
-    components: {
-      Toast,
-    },
     props: {
       datas: {
         type: Object,

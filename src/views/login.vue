@@ -38,7 +38,7 @@
 
 <script>
 import Header from '@/common/_header.vue'
-import { Toast } from 'mint-ui'
+//import { Toast } from 'mint-ui'
 export default {
   components:{
     'v-header':Header
@@ -54,11 +54,11 @@ export default {
     // 登录按钮
     login(){
       if(this.account!=="" && this.password!=="") {
-        Toast('登录成功,存储token,跳转网页');
+        //Toast('登录成功,存储token,跳转网页');
         this.toggle = false;
         this.$store.commit('CHANGE_TOKEN',1);
       }else {
-        Toast('账号密码不能为空');
+        //Toast('账号密码不能为空');
       }
 
       setTimeout(()=>{
@@ -71,7 +71,7 @@ export default {
 
     //退出登录按钮
     logout(){
-      Toast('退出登录成功,清除token');
+     // Toast('退出登录成功,清除token');
       this.$store.commit('CHANGE_TOKEN',0);
       this.toggle = true;
       this.account = '';
