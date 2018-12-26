@@ -58,7 +58,9 @@
           let ulsArray = imagesUrls.split(":");
           if (ulsArray.length > 0) {
             ulsArray.forEach(items => {
-              this.swiperUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+              if(items != null && items.length >0) {
+                this.swiperUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+              }
             })
           }
           console.log("swiperUrls:" + JSON.stringify(this.swiperUrls))
@@ -68,7 +70,9 @@
           let ulsArray = comtentUrls.split(":");
           if (ulsArray.length > 0) {
             ulsArray.forEach(items => {
-              this.contentUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+              if(items != null && items.length >0) {
+                this.contentUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+              }
             })
           }
           console.log("contentUrls:" + JSON.stringify(this.contentUrls))
