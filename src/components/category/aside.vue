@@ -2,12 +2,11 @@
   <aside class="aside">
     <ul>
       <li v-for="(k,i) in datas" @click='changeTabIndex(i)'>
-        <router-link :to="{path:'/category/'+k.categoryName}" :class='{active:i==tabIndex}'>
+        <router-link :to="{path:'/category/'+k.categoryName.replace(/\//g, '-')}" :class='{active:i==tabIndex}'>
           {{k.categoryName}}
         </router-link>
       </li>
     </ul>
-
   </aside>
 </template>
 
