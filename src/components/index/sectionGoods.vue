@@ -6,6 +6,22 @@
           <h1 class="sectionGoods-title">
             {{ category.title }}
           </h1>  
+          <van-list v-model="loading"
+                    :finished="finished"
+                    offset="0"
+                    @load="onLoad">
+            <ul class="sectionGoods-list">
+              <li v-for="k in category.goods" :key='k.id'>
+                <router-link :to="{name:'详情页'}">
+                  <img v-lazy="k.imgPath">
+                </router-link>
+                <p>{{k.intro}}</p>
+                <h3>{{k.title}}</h3>
+                <span>$ {{k.price}}</span>
+              </li>
+            </ul>
+          </van-list>
+          <!--
           <ul class="sectionGoods-list">
             <li v-for="k in category.goods" :key='k.id'>
               <router-link :to="{name:'详情页'}">
@@ -15,7 +31,9 @@
               <h3>{{k.title}}</h3>
               <span>$ {{k.price}}</span>
             </li>
+
           </ul>
+          -->
         </van-tab>
       </van-tabs>
     </div>
@@ -37,9 +55,20 @@
     data() {
       return {
         active: 0,
+        loading: false,
+        finished: false,
       };
     },
-
+    methods: {
+      onLoad() {
+        this.loading = false;
+        let i = this.active;
+        if (this.active < this.datas.list.length) {
+          this.active = i+1;
+        }
+        console.log("onLoad this.active:"+this.active)
+      }
+    }
   }
 </script>
 
