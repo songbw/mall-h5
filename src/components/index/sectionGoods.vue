@@ -66,7 +66,9 @@
         if (this.active < this.datas.list.length) {
           this.active = i+1;
         }
-        console.log("onLoad this.active:"+this.active)
+        if(this.active >= this.datas.list.length)
+          this.active = 0;
+        console.log("onLoad this.active:"+this.active )
       }
     }
   }
