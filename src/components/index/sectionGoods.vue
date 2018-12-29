@@ -16,24 +16,13 @@
                   <img v-lazy="k.imgPath">
                 </router-link>
                 <p>{{k.intro}}</p>
+                <!--
                 <h3>{{k.title}}</h3>
-                <span>$ {{k.price}}</span>
+                -->
+                <span>￥{{k.price}}</span>
               </li>
             </ul>
           </van-list>
-          <!--
-          <ul class="sectionGoods-list">
-            <li v-for="k in category.goods" :key='k.id'>
-              <router-link :to="{name:'详情页'}">
-                <img v-lazy="k.imgPath">
-              </router-link>
-              <p>{{k.intro}}</p>
-              <h3>{{k.title}}</h3>
-              <span>$ {{k.price}}</span>
-            </li>
-
-          </ul>
-          -->
         </van-tab>
       </van-tabs>
     </div>
@@ -109,13 +98,11 @@
           display: block;
           width: 100%;
           position: relative;
-
           img {
             display: block;
             width: 100%;
           }
-
-          p {
+          > p {
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
@@ -129,30 +116,32 @@
             padding: 1.2vw 2vw;
           }
         }
-
+        > p {
+          overflow:hidden;
+          text-overflow:ellipsis;
+          display:-webkit-box;
+          -webkit-box-orient:vertical;
+          -webkit-line-clamp:2;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          padding: 1.2vw 2vw;
+        }
         > h3 {
           padding-top: 3vw;
           .fz(font-size, 40);
         }
-
         > span {
           display: inline-block;
-          padding-bottom: 3vw;
+          align-content: center;
           color: #b4282d;
+          padding: 1.2vw 2vw;
+          .fz(font-size, 30);
         }
       }
     }
-
-    /*    .goodsNavbar {
-
-          .isFixed{
-            position: fixed;
-          //  background-color: #Fff;
-            top: 0;
-            z-index: 999;
-            width: 100%;
-          }
-        }*/
 
     .sectionGoods-title {
       .bt();
