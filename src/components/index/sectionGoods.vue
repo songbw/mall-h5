@@ -1,7 +1,7 @@
 <template lang="html">
   <section class="sectionGoods">
     <div>
-      <van-tabs v-model="active" sticky swipeable>
+      <van-tabs v-model="active" sticky swipeable @click="onClick">
         <van-tab v-for="category in datas.list" :title=category.title>
           <h1 class="sectionGoods-title">
             {{ category.title }}
@@ -49,18 +49,22 @@
       };
     },
     methods: {
+      onClick(index, title) {
+        console.log("onClick Enter")
+        this.finished = false;
+      },
       onLoad() {
         setTimeout(() => {
-
           this.loading = false;
           let i = this.active;
-          if (this.active < this.datas.list.length) {
+          if (this.active < this.datas.list.length-1) {
             this.active = i + 1;
+            if(this.active == this.datas.list.length-1)
+              this.finished = true;
+          } else {
+            this.finished = true;
           }
-          if (this.active >= this.datas.list.length)
-            this.active = 0;
-          console.log("onLoad this.active:" + this.active)
-        }, 500);
+        }, 200);
       }
     }
   }
