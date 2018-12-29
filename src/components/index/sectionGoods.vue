@@ -1,7 +1,7 @@
 <template lang="html">
   <section class="sectionGoods">
     <div>
-      <van-tabs v-model="active" sticky swipeable @click="onClick">
+      <van-tabs v-model="active" sticky  @click="onClick">
         <van-tab v-for="category in datas.list" :title=category.title>
           <h1 class="sectionGoods-title">
             {{ category.title }}
