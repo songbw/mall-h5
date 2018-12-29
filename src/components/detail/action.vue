@@ -36,10 +36,17 @@
 
       addGoodsCar() {
         console.log("add goods car Enter")
-        let method = "send";//js调用的android方法名
-        let action = "getUserInfo";//打电话动作
-        let params = {"callback": "onAdd2Car", "action": action};//android接收参数，json格式
-        window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+        try {
+          let method = "send";//js调用的android方法名
+          let action = "getUserInfo";//打电话动作
+          let params = {"callback": "onAdd2Car", "action": action};//android接收参数，json格式
+          if( window.jsInterface != undefined)
+              window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+        } catch (e) {
+           //ignore
+          console.log("addGoodsCar error:"+e)
+        }
+
       },
 
       onAdd2Car(str) {
@@ -71,11 +78,15 @@
       },
       gotoCar() {
         console.log("goto car Enter")
-        let method = "send";//js调用的android方法名
-        let action = "getUserInfo";//打电话动作
-        let params = {"callback": "onGotoCar", "action": action};//android接收参数，json格式
-        window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
-        //this.$router.push("/car");
+        try {
+          let method = "send";//js调用的android方法名
+          let action = "getUserInfo";//打电话动作
+          let params = {"callback": "onGotoCar", "action": action};//android接收参数，json格式
+          if ( window.jsInterface != undefined)
+            window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+        } catch (e) {
+           console.log("gotoCar error:"+e)
+        }
       },
 
       onGotoCar(str) {

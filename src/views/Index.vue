@@ -83,10 +83,17 @@
     methods: {
       updateLocation() {
         console.log("update Location Enter")
-        let method = "send";//js调用的android方法名
-        let action = "getLocation";//打电话动作
-        let params = {"callback": "onLocationUpdate", "action": action};//android接收参数，json格式
-        window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+        try {
+          let method = "send";//js调用的android方法名
+          let action = "getLocation";//打电话动作
+          let params = {"callback": "onLocationUpdate", "action": action};//android接收参数，json格式
+          if(window.jsInterface != undefined) {
+            window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+          }
+        } catch  (e) {
+          //ignore
+          console.log("updateLocation:"+e)
+        }
       },
 
       onLocationUpdate(locationInfo) {

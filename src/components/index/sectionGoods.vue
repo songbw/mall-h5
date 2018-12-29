@@ -8,7 +8,7 @@
           </h1>  
           <van-list v-model="loading"
                     :finished="finished"
-                    offset="-100"
+                    :offset="offset"
                     @load="onLoad">
             <ul class="sectionGoods-list">
               <li v-for="k in category.goods" :key='k.id'>
@@ -46,6 +46,7 @@
         active: 0,
         loading: false,
         finished: false,
+        offset:-100
       };
     },
     methods: {
