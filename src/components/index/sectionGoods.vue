@@ -8,7 +8,7 @@
           </h1>  
           <van-list v-model="loading"
                     :finished="finished"
-                    offset="0"
+                    offset="-100"
                     @load="onLoad">
             <ul class="sectionGoods-list">
               <li v-for="k in category.goods" :key='k.id'>
@@ -61,14 +61,17 @@
     },
     methods: {
       onLoad() {
-        this.loading = false;
-        let i = this.active;
-        if (this.active < this.datas.list.length) {
-          this.active = i+1;
-        }
-        if(this.active >= this.datas.list.length)
-          this.active = 0;
-        console.log("onLoad this.active:"+this.active )
+        setTimeout(() => {
+
+          this.loading = false;
+          let i = this.active;
+          if (this.active < this.datas.list.length) {
+            this.active = i + 1;
+          }
+          if (this.active >= this.datas.list.length)
+            this.active = 0;
+          console.log("onLoad this.active:" + this.active)
+        }, 500);
       }
     }
   }
