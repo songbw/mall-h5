@@ -1,12 +1,9 @@
 <template lang="html">
   <mt-swipe :auto="4000">
-    <mt-swipe-item v-for="k in datas.list" :key="k.id">
-      <router-link :to="{ name: '详情页'}">
-        <img :src="k.imgPath">
-      </router-link>
+    <mt-swipe-item v-for="k in datas.list">
+        <img :src="k.imageUrl" @click="onClick(k.targetUrl)">
     </mt-swipe-item>
   </mt-swipe>
-
 </template>
 
 <script>
@@ -19,6 +16,19 @@
         }
       }
     },
+    methods: {
+      onClick(targetId) {
+        console.log("onClick:"+targetId);
+        if(targetId.startsWith("aggregation://")) {
+          let id = targetId.substr(14);
+          console.log("id:"+id);
+          this.$router.push({ path: '/index/'+id});
+         // this.$router.push({ path: '/index/23'});
+        } else {
+
+        }
+      }
+    }
   }
 </script>
 

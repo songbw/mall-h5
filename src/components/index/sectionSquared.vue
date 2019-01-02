@@ -1,17 +1,15 @@
 <template lang="html">
   <section class="sectionSquared">
-    <mt-cell>
-      <h1 slot="title" class="sectionSquared-title">
-        {{datas.headTitle}}
+    <mt-cell v-if="datas.settings.title.show">
+      <h1 slot="title" class="sectionSquared-title" >
+        {{datas.settings.title.text.value}}
       </h1>
-      <i class="icon-right" v-show="datas.headMore===1" @click="See('http://www.baidu.com')"></i>
+      <i class="icon-right" v-if="(datas.settings.title.text.hasLink===true)" @click="See(datas.settings.title.text.linkUrl)"></i>
     </mt-cell>
     <li v-for="item in datas.list" style="list-style: none">
       <ul class="sectionSquared-list">
-        <li v-for="k in item" :key="k.id">
-          <router-link :to="{name:'详情页'}">
-            <img v-lazy="k.imgPath" alt="">
-          </router-link>
+        <li v-for="k in item.grids">
+            <img v-lazy="k.imageUrl" @click="onClick(k.targetUrl)">
         </li>
       </ul>
     </li>
@@ -33,6 +31,16 @@
     methods: {
       See(e) {
         window.location.href = e
+      },
+      onClick(targetId) {
+        console.log("onClick:"+targetId);
+        if(targetId.startsWith("aggregation://")) {
+          let id = targetId.substr(14);
+          console.log("id:"+id);
+          this.$router.push({ path: '/index/'+id});
+        } else {
+
+        }
       }
     }
   }

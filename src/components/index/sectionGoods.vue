@@ -11,14 +11,11 @@
                     :offset="offset"
                     @load="onLoad">
             <ul class="sectionGoods-list">
-              <li v-for="k in category.goods" :key='k.id'>
+              <li v-for="k in category.skus" @click="onGoodsClick(k)">
                 <router-link :to="{name:'详情页'}">
-                  <img v-lazy="k.imgPath">
+                  <img v-lazy="k.imagePath">
                 </router-link>
                 <p>{{k.intro}}</p>
-                <!--
-                <h3>{{k.title}}</h3>
-                -->
                 <span>￥{{k.price}}</span>
               </li>
             </ul>
@@ -50,6 +47,31 @@
       };
     },
     methods: {
+      updateCurrentGoods(goods) {
+        console.log("goods :" + JSON.stringify(goods));
+        this.$store.commit('SET_CURRENT_GOODS',JSON.stringify(goods));
+      },
+      onGoodsClick(goods) {
+        console.log("goods is:"+JSON.stringify(goods))
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            url: '/prod',
+            params: {
+              id: goods.skuid,
+            }
+          }).then((res) => {
+                console.log("current Goods:"+JSON.stringify(res.data.data.result));
+                this.updateCurrentGoods(res.data.data.result);
+                this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
+      },
       onClick(index, title) {
         if (this.active < this.datas.list.length - 1)
           this.finished = false;

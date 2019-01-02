@@ -3,11 +3,11 @@
   <div class="index">
     <v-header/>
     <li v-for="item in datas" style="list-style: none">
-      <v-swiper v-show="item.name==='swiper'" :datas="item.data"/>
-      <v-service v-show="item.name==='service'" :datas="item.data"/>
-      <v-sectionSquared v-show="item.name==='squared'" :datas="item.data"/>
-      <v-sectionSlide v-show="item.name==='slideGoods'" :datas="item.data"/>
-      <v-sectionGoods v-show="item.name==='navGoods'" :datas="item.data"/>
+      <v-swiper v-if="item.type==='0'" :datas="item.data"/>
+      <v-service v-else-if="item.type==='1'" :datas="item.data"/>
+      <v-sectionSquared  v-else-if="item.type==='2'" :datas="item.data"/>
+      <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
+      <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
     </li>
     <v-baseline/>
     <v-footer/>
@@ -53,24 +53,25 @@
     },
 
     beforeCreate() {
-      this.$api.tapi({
-        method: 'post',
-        url: '/index'
+      this.$api.xapi({
+        method: 'get',
+        url: '/aggregation/findHomePage'
       }).then((response) => {
-        this.datas = response.data;
+        const pako = require('pako');
+        const jsonString = pako.inflate(response.data.data.result.content, { to: 'string' })
+        console.log("data:"+jsonString);
+        this.datas = JSON.parse(jsonString);
       }).catch(function (error) {
         alert(error)
       })
     },
 
     created() {
-      console.log("index created Enter")
       window.onLocationUpdate = this.onLocationUpdate;
       this.updateLocation()
     },
 
     mounted() {
-      console.log("index mounted Enter")
       setTimeout(() =>{
         this.updateLocation()
       },1000);
