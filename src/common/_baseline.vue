@@ -1,5 +1,5 @@
 <template lang="html">
-  <div>人家是有底线的 -.-</div>
+  <div></div>
 
 </template>
 
