@@ -12,9 +12,7 @@
                     @load="onLoad">
             <ul class="sectionGoods-list">
               <li v-for="k in category.skus" @click="onGoodsClick(k)">
-                <router-link :to="{name:'详情页'}">
-                  <img v-lazy="k.imagePath">
-                </router-link>
+                <img v-lazy="k.imagePath">
                 <p>{{k.intro}}</p>
                 <span>￥{{k.price}}</span>
               </li>
@@ -124,29 +122,9 @@
         box-sizing: border-box;
         padding: 0 3vw;
 
-        > a {
+        img {
           display: block;
           width: 100%;
-          position: relative;
-
-          img {
-            display: block;
-            width: 100%;
-          }
-
-          > p {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: gold;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            padding: 1.2vw 2vw;
-          }
         }
 
         > p {
