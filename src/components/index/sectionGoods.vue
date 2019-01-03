@@ -88,7 +88,7 @@
           } else {
             this.finished = true;
           }
-        }, 200);
+        }, 1000);
       }
     }
   }

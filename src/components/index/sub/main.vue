@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="index">
     <v-header>
-      <h1 slot="title">商城活动页</h1>
+      <h1 slot="title">{{title}}</h1>
     </v-header>
     <li v-for="item in datas" style="list-style: none">
       <v-swiper v-if="item.type==='0'" :datas="item.data"/>
@@ -40,7 +40,8 @@
     data() {
       return {
         datas: {},
-        loading: true
+        loading: true,
+        title:''
       }
     },
 
@@ -54,6 +55,7 @@
           id:id
         },
       }).then((response) => {
+        this.title = response.data.data.result.name;
         const pako = require('pako');
         const jsonString = pako.inflate(response.data.data.result.content, { to: 'string' })
         console.log("data:"+jsonString);
