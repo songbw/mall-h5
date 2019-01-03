@@ -4,11 +4,11 @@
       <h1 slot="title">商城活动页</h1>
     </v-header>
     <li v-for="item in datas" style="list-style: none">
-      <v-swiper v-show="item.type==='0'" :datas="item.data"/>
-      <v-service v-show="item.type==='1'" :datas="item.data"/>
-      <v-sectionSquared v-show="item.type==='2'" :datas="item.data"/>
-      <v-sectionSlide v-show="item.type==='3'" :datas="item.data"/>
-      <v-sectionGoods v-show="item.type==='4'" :datas="item.data"/>
+      <v-swiper v-if="item.type==='0'" :datas="item.data"/>
+      <v-service v-else-if="item.type==='1'" :datas="item.data"/>
+      <v-sectionSquared  v-else-if="item.type==='2'" :datas="item.data"/>
+      <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
+      <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
     </li>
     <v-baseline/>
     <v-footer/>
@@ -46,6 +46,21 @@
 
     beforeCreate() {
       console.log("beforeCreate Enter")
+      let id = this.$route.params.id;
+      this.$api.xapi({
+        method: 'get',
+        url: '/aggregation/findById',
+        params: {
+          id:id
+        },
+      }).then((response) => {
+        const pako = require('pako');
+        const jsonString = pako.inflate(response.data.data.result.content, { to: 'string' })
+        console.log("data:"+jsonString);
+        this.datas = JSON.parse(jsonString);
+      }).catch(function (error) {
+        alert(error)
+      })
     },
 
     methods: {
