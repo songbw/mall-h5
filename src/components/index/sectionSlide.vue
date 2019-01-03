@@ -1,23 +1,22 @@
 <template>
   <section class="sectionSlide">
-    <mt-cell>
+    <mt-cell  v-if="datas.settings.title.show">
       <h1 slot="title" class="sectionSlide-title">
-        {{datas.headTitle}}
+        {{datas.settings.title.textValue}}
       </h1>
-      <i class="icon-right" v-show="datas.headMore === 1"></i>
     </mt-cell>
+    <div class="sectionSlide-banner">
+      <img v-lazy="datas.settings.title.imageUrl" v-if="datas.settings.title.hasImage" @click="onBannerClick(datas.settings.title.targetUrl)">
+    </div>
+     <!--
     <router-link :to="{name:'分类页'}" class="sectionSlide-banner">
       <img v-lazy="datas.banner">
     </router-link>
+    -->
     <div class="sectionSlide-list">
       <ul>
-        <li v-for="k in datas.list" :key="k.id">
-          <router-link :to="{name:'详情页'}">
-            <img v-lazy="k.imgPath">
-          </router-link>
-          <h2 class="sectionSlide-list-title ac">
-            {{k.title}}
-          </h2>
+        <li v-for="(k,index) in datas.list"  @click="onGoodsClick(k)" :key="index">
+          <img v-lazy="k.imagePath">
           <p class="sectionSlide-list-intro">
             {{k.intro}}
           </p>
@@ -41,6 +40,45 @@
           return {}
         }
       }
+    },
+    methods: {
+      updateCurrentGoods(goods) {
+        //console.log("goods :" + JSON.stringify(goods));
+        this.$store.commit('SET_CURRENT_GOODS',JSON.stringify(goods));
+      },
+      See(e) {
+        window.location.href = e
+      },
+      onBannerClick(targetId) {
+        console.log("onBannerClick:"+targetId);
+        if(targetId.startsWith("aggregation://")) {
+          let id = targetId.substr(14);
+          console.log("id:"+id);
+          this.$router.push({ path: '/index/'+id});
+        } else {
+          this.See(targetId);
+        }
+      },
+      onGoodsClick(goods) {
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            url: '/prod',
+            params: {
+              id: goods.skuid,
+            }
+          }).then((res) => {
+            //console.log("current Goods:"+JSON.stringify(res.data.data.result));
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
+      },
     }
   }
 </script>
@@ -54,7 +92,6 @@
     text-align: left;
     .fz(font-size, 40);
     font-weight: bold;
-    padding: 2vw;
     position: relative;
     background-color: #ffffff;
   }
@@ -113,7 +150,8 @@
 
   .sectionSlide-banner {
     display:block;
-    width:100%;
+    width: 100%;
+
     img {
       display:block;
       width:100%

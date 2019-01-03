@@ -56,7 +56,6 @@
     text-align: left;
     .fz(font-size, 40);
     font-weight: bold;
-    padding: 2vw;
     position: relative;
     background-color: #ffffff;
   }
@@ -106,5 +105,4 @@
       }
     }
   }
-
 </style>
