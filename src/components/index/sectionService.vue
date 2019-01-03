@@ -1,16 +1,26 @@
 <template>
-  <div class="section0-list">
-    <ul>
-      <li v-for="k in datas.list" :key="k.id">
-        <router-link :to="{name: k.urlPathName}">
-          <img v-lazy="k.imgPath">
-        </router-link>
-        <h2 class="ac">
-          {{k.title}}
-        </h2>
-      </li>
-    </ul>
-  </div>
+  <section>
+    <div class="section0-list">
+      <ul>
+        <li v-for="k in datas.list.slice(0,5)"  @click="onClick(k.targetUrl)">
+          <img v-lazy="k.imageUrl">
+          <h2>
+            {{k.name}}
+          </h2>
+        </li>
+      </ul>
+    </div>
+    <div class="section1-list" v-if="datas.list.length > 5">
+      <ul class="ul_left">
+        <li v-for="k in datas.list.slice(5,10)" @click="onClick(k.targetUrl)">
+          <img v-lazy="k.imageUrl">
+          <h2>
+            {{k.name}}
+          </h2>
+        </li>
+      </ul>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -24,6 +34,24 @@
           return {}
         }
       }
+    },
+    methods: {
+      onClick(targetId) {
+        console.log("onClick:"+targetId);
+        if(targetId.startsWith("aggregation://")) {
+          let id = targetId.substr(14);
+          console.log("id:"+id);
+          this.$router.push({ path: '/index/'+id});
+          // this.$router.push({ path: '/index/23'});
+        } else if(targetId.startsWith("route://")){
+          let target = targetId.substr(8);
+          if(target==='category') {
+            this.$router.push({path: '/category' })
+          }
+        } else {
+          this.See(targetId);
+        }
+      }
     }
   }
 </script>
@@ -33,30 +61,17 @@
   @import "../../assets/index/style.css";
 
   .section0-list {
-    overflow-x: auto;
-    display: -ms-flex;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -ms-flex-pack: distribute;
-    justify-content: space-around;
-    padding: 0 2vw 0 2vw;
-
     ul {
       display: -webkit-flex;
       display: -ms-flex;
       display: flex;
-      justify-content: space-around;
       padding-top: 3vw;
 
       li {
-        width: 50%;
         padding: 1vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-
+        width: 20vw;
         a,
         img {
           width: 100%;
@@ -66,6 +81,32 @@
         h2 {
           .fz(font-size, 30);
           color: #333;
+          padding: 2vw 1.2vw;
+        }
+      }
+    }
+  }
+  .section1-list {
+    ul {
+      display: -webkit-flex;
+      display: -ms-flex;
+      display: flex;
+      padding-top: 3vw;
+      li {
+        padding: 1vw;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        width: 20vw;
+        a,
+        img {
+          width: 100%;
+          display: block;
+        }
+
+        h2 {
+          .fz(font-size, 30);
+          color: #333;
+          padding: 2vw 1.2vw;
         }
       }
     }

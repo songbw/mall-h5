@@ -39,7 +39,7 @@
           console.log("id:"+id);
           this.$router.push({ path: '/index/'+id});
         } else {
-
+          this.See(targetId);
         }
       }
     }

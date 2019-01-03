@@ -17,6 +17,9 @@
       }
     },
     methods: {
+      See(e) {
+        window.location.href = e
+      },
       onClick(targetId) {
         console.log("onClick:"+targetId);
         if(targetId.startsWith("aggregation://")) {
@@ -25,7 +28,7 @@
           this.$router.push({ path: '/index/'+id});
          // this.$router.push({ path: '/index/23'});
         } else {
-
+          this.See(targetId);
         }
       }
     }
