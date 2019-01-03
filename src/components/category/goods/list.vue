@@ -86,7 +86,7 @@
         }
       },
       updateCurrentGoods(goods) {
-        console.log("goods :" + JSON.stringify(goods));
+       // console.log("goods :" + JSON.stringify(goods));
         this.$store.commit('SET_CURRENT_GOODS',JSON.stringify(goods));
       },
       onListClick(goods) {

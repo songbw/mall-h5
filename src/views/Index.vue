@@ -59,7 +59,7 @@
       }).then((response) => {
         const pako = require('pako');
         const jsonString = pako.inflate(response.data.data.result.content, { to: 'string' })
-        console.log("data:"+jsonString);
+        //console.log("data:"+jsonString);
         this.datas = JSON.parse(jsonString);
       }).catch(function (error) {
         alert(error)

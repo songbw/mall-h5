@@ -2,7 +2,7 @@
   <section class="sectionGoods">
     <div>
       <van-tabs v-model="active" sticky  @click="onClick">
-        <van-tab v-for="category in datas.list" :title=category.title>
+        <van-tab v-for="(category,index) in datas.list" :title=category.title :key="index">
           <h1 class="sectionGoods-title">
             {{ category.title }}
           </h1>  
@@ -11,7 +11,7 @@
                     :offset="offset"
                     @load="onLoad">
             <ul class="sectionGoods-list">
-              <li v-for="k in category.skus" @click="onGoodsClick(k)">
+              <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
                 <img v-lazy="k.imagePath">
                 <p>{{k.intro}}</p>
                 <span>￥{{k.price}}</span>
@@ -46,11 +46,11 @@
     },
     methods: {
       updateCurrentGoods(goods) {
-        console.log("goods :" + JSON.stringify(goods));
+        //console.log("goods :" + JSON.stringify(goods));
         this.$store.commit('SET_CURRENT_GOODS',JSON.stringify(goods));
       },
       onGoodsClick(goods) {
-        console.log("goods is:"+JSON.stringify(goods))
+       // console.log("goods is:"+JSON.stringify(goods))
         try {
           //获取goods信息，update current googds
           this.$api.xapi({
@@ -60,7 +60,7 @@
               id: goods.skuid,
             }
           }).then((res) => {
-                console.log("current Goods:"+JSON.stringify(res.data.data.result));
+                //console.log("current Goods:"+JSON.stringify(res.data.data.result));
                 this.updateCurrentGoods(res.data.data.result);
                 this.$router.push("/detail");
           }).catch((error) => {

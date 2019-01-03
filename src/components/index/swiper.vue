@@ -1,6 +1,6 @@
 <template lang="html">
   <mt-swipe :auto="4000">
-    <mt-swipe-item v-for="k in datas.list">
+    <mt-swipe-item v-for="(k,index) in datas.list" :key="index">
         <img :src="k.imageUrl" @click="onClick(k.targetUrl)">
     </mt-swipe-item>
   </mt-swipe>

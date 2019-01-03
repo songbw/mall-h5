@@ -79,7 +79,7 @@
         }
 
         h2 {
-          .fz(font-size, 30);
+          .fz(font-size, 28);
           color: #333;
           padding: 2vw 1.2vw;
         }
@@ -104,7 +104,7 @@
         }
 
         h2 {
-          .fz(font-size, 30);
+          .fz(font-size, 28);
           color: #333;
           padding: 2vw 1.2vw;
         }

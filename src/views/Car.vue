@@ -7,8 +7,9 @@
     <van-list v-model="loading" :finished="finished" @load="onLoad">
       <mt-cell-swipe
         v-for="(k,index) in carList"
+        :key="k.id"
         :right="[{content: '删除',style: { background: 'red', color: '#fff'},
-           handler: function(){ onDeleteBtnClick(k,index) }}]">
+        handler: function(){ onDeleteBtnClick(k,index) }}]">
         <div slot="title">
           <van-checkbox
             v-model="k.choose"
@@ -26,11 +27,6 @@
         </van-card>
       </mt-cell-swipe>
     </van-list>
-    <!-- 根据购物车是否有商品加载不同的组件 -->
-    <!--
-    <v-something v-if="list.length > 0"/>
-    <v-nothing v-else/>
-    -->
     <v-footer/>
   </div>
 </template>
@@ -196,14 +192,14 @@
             "userId": user.userId,
             "id": item.id,
             "image": product.image,
-            "desc": product.brand+ ' '+ product.name + ' '+ product.model,
+            "desc": product.brand + ' ' + product.name + ' ' + product.model,
             "skuId": item.skuId,
             "count": item.count,
             "price": product.price,
             "choose": true,
-           // "valid": true,//库存
-           // "freight": 0,//运费
-           // "checkedPrice": product.price,//实际价格
+            // "valid": true,//库存
+            // "freight": 0,//运费
+            // "checkedPrice": product.price,//实际价格
             "isDel": 0
           });
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);

@@ -2,7 +2,7 @@
   <div class="swiper">
     <span></span>
     <mt-swipe :auto="4000">
-      <mt-swipe-item v-for="k in swiperData">
+      <mt-swipe-item v-for="(k,index) in swiperData" :key="index">
         <img :src="k.imgPath">
       </mt-swipe-item>
     </mt-swipe>
