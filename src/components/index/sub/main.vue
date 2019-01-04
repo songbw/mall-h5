@@ -11,7 +11,6 @@
       <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
     </li>
     <v-baseline/>
-    <v-footer/>
   </div>
 </template>
 

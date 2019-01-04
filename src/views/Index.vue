@@ -10,7 +10,6 @@
       <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
     </li>
     <v-baseline/>
-    <v-footer/>
   </div>
 </template>
 
@@ -52,20 +51,19 @@
       }
     },
 
-    beforeCreate() {
+ beforeCreate() {
       this.$api.xapi({
         method: 'get',
         url: '/aggregation/findHomePage'
       }).then((response) => {
         const pako = require('pako');
         const jsonString = pako.inflate(response.data.data.result.content, { to: 'string' })
-        //console.log("data:"+jsonString);
         this.datas = JSON.parse(jsonString);
       }).catch(function (error) {
         alert(error)
       })
     },
-
+    /*
     created() {
       window.onLocationUpdate = this.onLocationUpdate;
       this.updateLocation()
@@ -127,7 +125,7 @@
           this.finished = true;
         })
       }
-    }
+    }*/
   }
 </script>
 

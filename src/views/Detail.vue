@@ -11,12 +11,6 @@
     <v-content :contentData=contentUrls></v-content>
     <v-baseline/>
     <v-action :datas="this.goods"/>
-    <!--
-    <v-chose/>
-    <v-content/>
-    <v-baseline/>
-    <v-footer/>
-    -->
   </div>
 </template>
 
