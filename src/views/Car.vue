@@ -157,10 +157,15 @@
       },
 
       getUserInfo() {
-        let method = "send";
-        let action = "getUserInfo";
-        let params = {"callback": "onUserInfoLoaded", "action": action};//android接收参数，json格式
-        window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+        try {
+          let method = "send";
+          let action = "getUserInfo";
+          let params = {"callback": "onUserInfoLoaded", "action": action};//android接收参数，json格式
+          if(window.jsInterface != undefined)
+            window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+        } catch (e) {
+
+        }
       },
 
       onUserInfoLoaded(userInfo) {

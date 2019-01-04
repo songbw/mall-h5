@@ -63,7 +63,7 @@
         alert(error)
       })
     },
-    /*
+
     created() {
       window.onLocationUpdate = this.onLocationUpdate;
       this.updateLocation()
@@ -125,7 +125,7 @@
           this.finished = true;
         })
       }
-    }*/
+    }
   }
 </script>
 
