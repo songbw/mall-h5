@@ -246,9 +246,10 @@
         })
         let locationCode = this.getLocationCode();
         let options = {
-          "cityId": locationCode.cityId,
+        //  "cityId": locationCode.cityId,
           //"countyId": locationCode.countyId,
-          "skus": freightSkus,
+          //"skus": freightSkus,
+          "amount": this.productPay/100,
         }
         //console.log("options:" + JSON.stringify(options));
         this.$api.xapi({

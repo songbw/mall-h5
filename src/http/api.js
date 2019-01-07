@@ -4,8 +4,8 @@ import router from '../router'
 
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.cos.ap-beijing.myqcloud.com"
 const TEST_BASE_URL = "http://148.70.12.185:8000/api/mall"
-const SERVER_BASE_URL = "http://42.121.121.128:8080"
-//const SERVER_BASE_URL = "http://172.21.6.244:8080"
+//const SERVER_BASE_URL = "http://42.121.121.128:8080"
+const SERVER_BASE_URL = "http://172.21.12.179:8080"
 
 
 

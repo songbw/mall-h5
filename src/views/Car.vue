@@ -5,8 +5,9 @@
       <h1 slot="title">购物车</h1>
     </v-header>
     <van-list v-model="loading" :finished="finished" @load="onLoad">
+      <van-cell>xxx</van-cell>
       <mt-cell-swipe
-        v-for="(k,index) in this.selStateInCarList"
+        v-for="(k,index) in SuningList"
         :key="k.id"
         :right="[{content: '删除',style: { background: 'red', color: '#fff'},
         handler: function(){ onDeleteBtnClick(k,index) }}]">
@@ -38,6 +39,47 @@
   import Footer from '@/components/car/footer.vue'
 
   export default {
+    computed: {
+      SelfList() {
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        return this.selStateInCarList.filter(function (item) {
+          return item.skuId.startsWith("10");
+        });
+      },
+
+      SuningList() {
+        // `this` points to the vm instance
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        return this.selStateInCarList.filter(function (item) {
+          return item.skuId.startsWith("20");
+        });
+      },
+
+      VIPsList() {
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        return this.selStateInCarList.filter(function (item) {
+          return item.skuId.startsWith("30");
+        });
+      },
+
+      TMallList() {
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        return this.selStateInCarList.filter(function (item) {
+          return item.skuId.startsWith("50");
+        });
+      },
+
+      JDList() {
+        // `this` points to the vm instance
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        return this.selStateInCarList.filter(function (item) {
+          return item.skuId.startsWith("60");
+        });
+      },
+
+    },
+
+
     data() {
       return {
         pageNo: 1,
@@ -56,7 +98,7 @@
 
     methods: {
       isUserEmpty(userInfo) {
-        return ( userInfo == undefined || JSON.stringify(userInfo) == "{}")
+        return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
       },
       onDeleteBtnClick(k, index) {
         console.log("onDeleteBtnClick id:" + k.id + ",index:" + index)
@@ -110,7 +152,7 @@
           // no user
           this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
           for (let i = 0; i < this.selStateInCarList.length; i++) {
-            if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == -1 ) {
+            if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == -1) {
               this.selStateInCarList[i].count = count;
               break;
             }
@@ -163,10 +205,9 @@
           let method = "send";
           let action = "getUserInfo";
           let params = {"callback": "onUserInfoLoaded", "action": action};//android接收参数，json格式
-          if(window.jsInterface != undefined) {
+          if (window.jsInterface != undefined) {
             window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
-          }
-          else {
+          } else {
             //not mobile App
             this.getCarListWithoutUser();
 
@@ -222,7 +263,7 @@
           this.selStateInCarList.push(goods);
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         }
-       // console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
+        // console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
         return goods;
       },
 
@@ -237,10 +278,10 @@
         }).then((res) => {
           //console.log("product info:"+JSON.stringify( res.data.data.result));
           let product = res.data.data.result;
-          if(product != null) {
+          if (product != null) {
             this.updateSelectedCarlist(item, product, user)
           } else {
-            console.log("product:"+JSON.stringify(product)+",skuId:"+item.skuId)
+            console.log("product:" + JSON.stringify(product) + ",skuId:" + item.skuId)
           }
         }).catch((error) => {
           console.log(error)
