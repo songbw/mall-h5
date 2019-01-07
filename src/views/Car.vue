@@ -5,7 +5,6 @@
       <h1 slot="title">购物车</h1>
     </v-header>
     <van-list v-model="loading" :finished="finished" @load="onLoad">
-      <van-cell>xxx</van-cell>
       <mt-cell-swipe
         v-for="(k,index) in SuningList"
         :key="k.id"
