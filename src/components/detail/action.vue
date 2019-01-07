@@ -21,7 +21,9 @@
       }
     },
     data() {
-      return {}
+      return {
+        selStateInCarList: []
+      }
     },
     created() {
       window.onAdd2Car = this.onAdd2Car;
@@ -34,6 +36,35 @@
         this.$store.commit('SET_USER',JSON.stringify(user));
       },
 
+      add2SelectedCarlistWithoutUser () {//
+        console.log("add2SelectedCarlistNoUser Enter");
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
+        let choose = true;
+        let found = -1;
+        for (let i = 0; i < this.selStateInCarList.length; i++) {
+          if (this.selStateInCarList[i].id == this.datas.id && this.selStateInCarList[i].userId == -1) {
+            found = i;
+            break;
+          }
+        }
+        if(found != -1) {
+          this.selStateInCarList[found].count++;
+        } else {
+          this.selStateInCarList.push({
+            "userId": -1,
+            "id": this.datas.id,
+            "image": this.datas.image,
+            "desc": this.datas.brand + ' ' + this.datas.name + ' ' + this.datas.model,
+            "skuId": this.datas.skuId,
+            "count": 1,
+            "price": this.datas.price,
+            "choose": true,
+            "isDel": 0
+          });
+        }
+        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+      },
+
       addGoodsCar() {
         console.log("add goods car Enter")
         try {
@@ -42,6 +73,10 @@
           let params = {"callback": "onAdd2Car", "action": action};//android接收参数，json格式
           if( window.jsInterface != undefined)
               window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+          else {
+            //not mobile App，can not get user info
+            this.add2SelectedCarlistWithoutUser();
+          }
         } catch (e) {
            //ignore
           console.log("addGoodsCar error:"+e)
@@ -84,6 +119,11 @@
           let params = {"callback": "onGotoCar", "action": action};//android接收参数，json格式
           if ( window.jsInterface != undefined)
             window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+          else {
+            //not mobile App，can not get user info ，goto car directly
+            console.log("gotoCar  UserInfo" );
+            this.$router.push("/car");
+          }
         } catch (e) {
            console.log("gotoCar error:"+e)
         }

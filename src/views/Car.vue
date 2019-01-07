@@ -6,7 +6,7 @@
     </v-header>
     <van-list v-model="loading" :finished="finished" @load="onLoad">
       <mt-cell-swipe
-        v-for="(k,index) in carList"
+        v-for="(k,index) in this.selStateInCarList"
         :key="k.id"
         :right="[{content: '删除',style: { background: 'red', color: '#fff'},
         handler: function(){ onDeleteBtnClick(k,index) }}]">
@@ -18,11 +18,11 @@
           </van-checkbox>
         </div>
         <van-card
-          :price="k.product.price"
-          :title="k.product.brand+ ' '+ k.product.name + ' '+ k.product.model"
-          :thumb="k.product.image">
+          :price="k.price"
+          :title="k.desc"
+          :thumb="k.image">
           <div slot="footer">
-            <van-stepper v-model="k.count" @change="onCountChange(k.id,k.product.skuid,k.count)"/>
+            <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
           </div>
         </van-card>
       </mt-cell-swipe>
@@ -44,7 +44,6 @@
         total: -1,
         result: {},
         list: [],
-        carList: [],
         loading: false,
         finished: false,
         selStateInCarList: []
@@ -58,18 +57,8 @@
     methods: {
       onDeleteBtnClick(k, index) {
         console.log("onDeleteBtnClick id:" + k.id + ",index:" + index)
-        this.carList.splice(index, 1);
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        let iFound = -1;
-        for (let i = 0; i < this.selStateInCarList.length; i++) {
-          if (this.selStateInCarList[i].id == k.id && this.selStateInCarList[i].userId == k.userId) {
-            iFound = i;
-            break;
-          }
-        }
-        if (iFound != -1) {
-          this.selStateInCarList.splice(iFound, 1);
-        }
+        this.selStateInCarList.splice(index, 1);
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
 
@@ -135,7 +124,7 @@
             //console.log("list is:" + JSON.stringify(this.result.list));
             this.result.list.forEach(item => {
               this.list.push(item);
-              this.getSkuIynfoBy(item, userInfo);
+              this.getSkuInfoBy(item, userInfo);
             })
             this.loading = false;
             if (this.list.length >= this.total)
@@ -161,11 +150,23 @@
           let method = "send";
           let action = "getUserInfo";
           let params = {"callback": "onUserInfoLoaded", "action": action};//android接收参数，json格式
-          if(window.jsInterface != undefined)
+          if(window.jsInterface != undefined) {
             window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
+          }
+          else {
+            //not mobile App
+            this.getCarListWithoutUser();
+
+          }
         } catch (e) {
 
         }
+      },
+
+      getCarListWithoutUser() {
+        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        this.loading = false;
+        this.finished = true;
       },
 
       onUserInfoLoaded(userInfo) {
@@ -181,19 +182,20 @@
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         let choose = true;
         let found = false;
+        let goods = Object();
         for (let i = 0; i < this.selStateInCarList.length; i++) {
           if (this.selStateInCarList[i].id == item.id && this.selStateInCarList[i].userId == user.userId) {
-            choose = this.selStateInCarList[i].choose;
             //sync data
             this.selStateInCarList[i].count = item.count
             this.selStateInCarList[i].skuId = item.skuId
             this.selStateInCarList[i].price = product.price
+            goods = this.selStateInCarList[i];
             found = true;
             break;
           }
         }
         if (!found) {
-          this.selStateInCarList.push({
+          goods = {
             "userId": user.userId,
             "id": item.id,
             "image": product.image,
@@ -202,18 +204,16 @@
             "count": item.count,
             "price": product.price,
             "choose": true,
-            // "valid": true,//库存
-            // "freight": 0,//运费
-            // "checkedPrice": product.price,//实际价格
             "isDel": 0
-          });
+          }
+          this.selStateInCarList.push(goods);
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         }
         console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
-        return choose;
+        return goods;
       },
 
-      getSkuIynfoBy(item, user) {
+      getSkuInfoBy(item, user) {
         // console.log("item:"+JSON.stringify(item))
         this.$api.xapi({
           method: 'get',
@@ -225,15 +225,8 @@
           //console.log("product info:"+JSON.stringify( res.data.data.result));
           let product = res.data.data.result;
           //console.log("product:"+JSON.stringify(product))
-          let choose = this.isInSelectedCarlist(item, product, user)
-          this.carList.push(
-            {
-              "userId": user.userId,
-              "product": product,
-              "count": item.count,
-              "id": item.id,
-              "choose": choose
-            })
+          let goods = this.isInSelectedCarlist(item, product, user)
+          //this.carList.push(goods);
         }).catch((error) => {
           console.log(error)
         })
