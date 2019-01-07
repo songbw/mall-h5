@@ -247,6 +247,7 @@
         let locationCode = this.getLocationCode();
         let options = {
           "cityId": locationCode.cityId,
+          //"countyId": locationCode.countyId,
           "skus": freightSkus,
         }
         //console.log("options:" + JSON.stringify(options));
@@ -264,9 +265,11 @@
       },
       getCarList() {
         console.log("carList Enter !!!!!!!!!")
+        let inventorySkus = [];
         let skus = [];
         this.payCarList = [];
         this.selectedCarList.forEach(item => {
+          inventorySkus.push({"skuId": item.skuId,"remainNum":item.count})
           skus.push({"skuId": item.skuId})
           this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.price})
         })
@@ -274,7 +277,8 @@
         //////////////////////查询库存//////////////////
         let options = {
           "cityId": locationCode.cityId,
-          "skus": skus,
+          "countyId": locationCode.countyId,
+          "skus": inventorySkus,
         }
         //console.log("options:" + JSON.stringify(options));
         this.$api.xapi({
@@ -283,6 +287,7 @@
           data: options,
         }).then((response) => {
           let result = response.data.data.result;
+          console.log("库存 result is:" + JSON.stringify(result));
           result.forEach(item => {
             for (let i = 0; i < this.payCarList.length; i++) {
               if (this.payCarList[i].product.skuId == item.skuId && 0 === parseInt(item.state)) {
@@ -305,9 +310,9 @@
             console.log("价格 result is:" + JSON.stringify(result));
             result.forEach(item => {
               for (let i = 0; i < this.payCarList.length; i++) {
-                //  console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
-                if (this.payCarList[i].product.skuId == item.skuId) {
-                  //   console.log("价格 change true");
+                 // console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
+                if ( item != null && this.payCarList[i].product.skuId == item.skuId) {
+                  //console.log("价格 change true");
                   this.payCarList[i].checkedPrice = item.price
                 }
               }
