@@ -81,7 +81,7 @@
         receiverInfo: '',
         receiverAddress: '',
         addressEmptyInfo: '',
-        usedAddress:{},
+        usedAddress: {},
 
       }
     },
@@ -89,15 +89,15 @@
     computed: {
       selectedCarList() {
         let selectCarList = [];
-        let user = JSON.parse(this.$store.state.appconf.userInfo);
-        if (user != undefined) {
+        let userInfo = this.$store.state.appconf.userInfo
+        if (!this.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
           this.$store.state.appconf.selStateInCarList.forEach(item => {
             if (item.userId == user.userId && item.choose) {
               selectCarList.push(item);
             }
           })
         }
-       // console.log("selectedCarList is:" + JSON.stringify(selectCarList));
         return selectCarList;
       },
       // 商品价格总和
@@ -130,14 +130,14 @@
       try {
         let userInfo = this.$store.state.appconf.userInfo;
         console.log("userInfo:" + userInfo)
-        if (userInfo != undefined) {
+        if (!(userInfo == undefined || JSON.stringify(userInfo) == "{}")) {
           let user = JSON.parse(userInfo)
           let options = {
             "openId": user.userId,
             "pageNo": 1,
             "pageSize": "20",
           }
-         // console.log("options:" + JSON.stringify(options));
+          // console.log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             url: '/receiver/all',
@@ -176,15 +176,18 @@
     },
 
     created() {
-     // this.getCarList()
+      // this.getCarList()
     },
 
     methods: {
+      isUserEmpty(userInfo) {
+        return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
+      },
       updateUsedAddress() {
         console.log("updateUsedAddress Enter!")
         let address = {};
         let list = this.$store.state.appconf.addressList;
-        console.log("list:"+JSON.stringify(list))
+        console.log("list:" + JSON.stringify(list))
         let id = this.$store.state.appconf.usedAddressId;
         console.log("updateUsedAddress id:" + id)
         try {
@@ -214,7 +217,7 @@
           }
         } catch (e) {
         }
-        if (list.length > 0 &&  id == -1) {
+        if (list.length > 0 && id == -1) {
           id = list[0].id
           address = list[0]
         }
@@ -231,7 +234,7 @@
 
       onSubmit() {
         console.log("onSubmit Enter!!!")
-        this.$router.push({name:"收银台页"})
+        this.$router.push({name: "收银台页"})
       },
       getfreightPay() {
         /////////////查询运费////////////////////////
@@ -292,7 +295,7 @@
             "cityId": locationCode.cityId,
             "skus": skus,
           }
-         // console.log("options:" + JSON.stringify(options));
+          // console.log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             url: '/prod/price',
@@ -302,14 +305,14 @@
             console.log("价格 result is:" + JSON.stringify(result));
             result.forEach(item => {
               for (let i = 0; i < this.payCarList.length; i++) {
-              //  console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
+                //  console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
                 if (this.payCarList[i].product.skuId == item.skuId) {
-               //   console.log("价格 change true");
+                  //   console.log("价格 change true");
                   this.payCarList[i].checkedPrice = item.price
                 }
               }
             })
-           // console.log("this.payCarList:" + JSON.stringify(this.payCarList));
+            // console.log("this.payCarList:" + JSON.stringify(this.payCarList));
             this.getfreightPay();
           }).catch(function (error) {
             console.log(error)

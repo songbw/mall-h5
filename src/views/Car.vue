@@ -55,6 +55,9 @@
     },
 
     methods: {
+      isUserEmpty(userInfo) {
+        return ( userInfo == undefined || JSON.stringify(userInfo) == "{}")
+      },
       onDeleteBtnClick(k, index) {
         console.log("onDeleteBtnClick id:" + k.id + ",index:" + index)
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
@@ -78,8 +81,9 @@
 
       onCountChange(id, skuid, count) {
         //update select carlist count
-        let user = JSON.parse(this.$store.state.appconf.userInfo);
-        if (user != undefined) {
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!this.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
           this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
           for (let i = 0; i < this.selStateInCarList.length; i++) {
             if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == user.userId) {
@@ -88,22 +92,31 @@
             }
           }
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-          console.log("onCountChange selStateInCarList:" + JSON.stringify(this.selStateInCarList))
+          console.log("onCountChange id:" + id + ",skuid:" + skuid + ",count:" + count)
+          let options = {
+            "id": id,
+            "count": count
+          }
+          this.$api.xapi({
+            method: 'put',
+            url: '/cart/num',
+            data: options,
+          }).then((response) => {
+            console.log("change goods count success!")
+          }).catch(function (error) {
+            console.log(error)
+          })
+        } else {
+          // no user
+          this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
+          for (let i = 0; i < this.selStateInCarList.length; i++) {
+            if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == -1 ) {
+              this.selStateInCarList[i].count = count;
+              break;
+            }
+          }
+          this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         }
-        console.log("onCountChange id:" + id + ",skuid:" + skuid + ",count:" + count)
-        let options = {
-          "id": id,
-          "count": count
-        }
-        this.$api.xapi({
-          method: 'put',
-          url: '/cart/num',
-          data: options,
-        }).then((response) => {
-          console.log("change goods count success!")
-        }).catch(function (error) {
-          console.log(error)
-        })
       },
 
       loadCartListBy(user) {
@@ -138,7 +151,7 @@
 
       onLoad() {
         let user = this.$store.state.appconf.userInfo;
-        if (user != null && user.length > 0) {
+        if (!this.isUserEmpty(user)) {
           this.loadCartListBy(user);
         } else {
           this.getUserInfo();
@@ -178,7 +191,7 @@
         }
       },
 
-      isInSelectedCarlist(item, product, user) {
+      updateSelectedCarlist(item, product, user) {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         let choose = true;
         let found = false;
@@ -209,7 +222,7 @@
           this.selStateInCarList.push(goods);
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         }
-        console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
+       // console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
         return goods;
       },
 
@@ -224,9 +237,11 @@
         }).then((res) => {
           //console.log("product info:"+JSON.stringify( res.data.data.result));
           let product = res.data.data.result;
-          //console.log("product:"+JSON.stringify(product))
-          let goods = this.isInSelectedCarlist(item, product, user)
-          //this.carList.push(goods);
+          if(product != null) {
+            this.updateSelectedCarlist(item, product, user)
+          } else {
+            console.log("product:"+JSON.stringify(product)+",skuId:"+item.skuId)
+          }
         }).catch((error) => {
           console.log(error)
         })
