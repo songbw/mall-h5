@@ -31,11 +31,6 @@
     },
 
     methods: {
-      updateUserInfo(user) {
-        console.log("UserInfo:" + JSON.stringify(user));
-        this.$store.commit('SET_USER',JSON.stringify(user));
-      },
-
       add2SelectedCarlistWithoutUser () {//
         console.log("add2SelectedCarlistNoUser Enter");
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
@@ -67,30 +62,20 @@
 
       addGoodsCar() {
         console.log("add goods car Enter")
-        try {
-          let method = "send";//js调用的android方法名
-          let action = "getUserInfo";//打电话动作
-          let params = {"callback": "onAdd2Car", "action": action};//android接收参数，json格式
-          if( window.jsInterface != undefined)
-              window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
-          else {
-            //not mobile App，can not get user info
-            this.add2SelectedCarlistWithoutUser();
-          }
-        } catch (e) {
-           //ignore
-          console.log("addGoodsCar error:"+e)
+        let userInfo=this.$jsbridge.call("getUserInfo");
+        if( userInfo != null && userInfo.length > 0) {
+          console.log("addGoodsCar getUserInfo ret is:"+userInfo);
+          this.$store.commit('SET_USER',userInfo);
+          this.add2Car(userInfo);
+        } else {
+          //not mobile App，can not get user info
+          this.add2SelectedCarlistWithoutUser();
         }
-
       },
 
-      onAdd2Car(str) {
-        this.updateUserInfo(str);
-        this.add2Car(str);
-      },
-
-      add2Car(user) {
-        let userId = user.userId.toString();
+      add2Car(userInfo) {
+        let user = JSON.parse(userInfo);
+        let userId = user.userId;
         let skuId = this.datas.skuid;
         let addtoCar = {
           "openId": userId,
@@ -111,32 +96,10 @@
           //nothing to do
         }
       },
+
       gotoCar() {
-        console.log("goto car Enter")
-        try {
-          let method = "send";//js调用的android方法名
-          let action = "getUserInfo";//打电话动作
-          let params = {"callback": "onGotoCar", "action": action};//android接收参数，json格式
-          if ( window.jsInterface != undefined)
-            window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
-          else {
-            //not mobile App，can not get user info ，goto car directly
-            console.log("gotoCar  UserInfo" );
-            this.$router.push("/car");
-          }
-        } catch (e) {
-           console.log("gotoCar error:"+e)
-        }
-      },
-
-      onGotoCar(str) {
-        console.log("onAdd2Car enter UserInfo:" + JSON.stringify(str));
-        this.updateUserInfo(str);
         this.$router.push("/car");
-      },
-
-
-
+      }
     }
   }
 </script>

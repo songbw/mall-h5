@@ -50,12 +50,6 @@
         </van-card>
       </li>
     </div>
-
-    <!--
-    <footer class="pay-footer" ontouchstrat="" @click="payConfirm">
-      <span>立即支付</span>
-    </footer>
-    -->
     <van-submit-bar
       :price="allpay"
       button-text="提交订单"
@@ -346,30 +340,6 @@
         }
         return code
       },
-      payConfirm() {
-        /*      if (this.carList) { //还未提交了订单,数据还未清空
-                MessageBox
-                  .confirm(
-                    `确定支付${this.allpay}元`
-                  )
-                  .then(action => { //点击成功执行这里的函数
-                    this.confirm = false;
-                    this.$store.commit('SET_LOADING', true);
-                    this.$store.dispatch('resetCarList'); //重置购物车（用unSelectedList替换）
-                    this.$store.dispatch('resetCount'); //重置购物车数量
-                    setTimeout(() => {
-                      this.$store.commit('SET_LOADING', false); //关闭loading
-                      this.confirm = true; //支付完成后切换视图
-                    }, 300)
-                  }, function (err) {
-                    //点击取消执行这里的函数
-                  });
-              } else { //提交了订单,数据清空
-                alert('请勿重复提交订单')
-              }*/
-
-
-      }
     }
 
   }

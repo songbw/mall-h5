@@ -75,16 +75,6 @@
       }
     },
     methods: {
-      testDSBridge() {
-        let str=this.$jsbridge.call("getUserInfo");
-        console.log("testDSBridge getUserInfo ret is:"+str);
-        let location=this.$jsbridge.call("getLocation");
-        console.log("testDSBridge getLocation ret is:"+location);
-        this.$jsbridge.call("testNoArgAsyn",function (v) {
-          console.log("testDSBridge testAsyn ret is:"+v);
-        })
-      },
-
       updateLocation() {
         let locationInfo=this.$jsbridge.call("getLocation");
         console.log("testDSBridge getLocation ret is:"+locationInfo);

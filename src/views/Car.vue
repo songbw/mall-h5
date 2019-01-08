@@ -6,7 +6,7 @@
     </v-header>
     <van-list v-model="loading" :finished="finished" @load="onLoad">
       <mt-cell-swipe
-        v-for="(k,index) in SuningList"
+        v-for="(k,index) in this.selStateInCarList"
         :key="k.id"
         :right="[{content: '删除',style: { background: 'red', color: '#fff'},
         handler: function(){ onDeleteBtnClick(k,index) }}]">
@@ -42,7 +42,7 @@
       SelfList() {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         return this.selStateInCarList.filter(function (item) {
-          return item.skuId.startsWith("10");
+          return String(item.skuId).startsWith("10")
         });
       },
 
@@ -50,21 +50,21 @@
         // `this` points to the vm instance
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         return this.selStateInCarList.filter(function (item) {
-          return item.skuId.startsWith("20");
+          return  String(item.skuId).startsWith("20")
         });
       },
 
       VIPsList() {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         return this.selStateInCarList.filter(function (item) {
-          return item.skuId.startsWith("30");
+          return String(item.skuId).startsWith("30")
         });
       },
 
       TMallList() {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         return this.selStateInCarList.filter(function (item) {
-          return item.skuId.startsWith("50");
+          return String(item.skuId).startsWith("50")
         });
       },
 
@@ -72,7 +72,7 @@
         // `this` points to the vm instance
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         return this.selStateInCarList.filter(function (item) {
-          return item.skuId.startsWith("60");
+          return String(item.skuId).startsWith("60")
         });
       },
 
@@ -91,13 +91,9 @@
       }
     },
 
-    created() {
-      window.onUserInfoLoaded = this.onUserInfoLoaded;
-    },
-
     methods: {
       isUserEmpty(userInfo) {
-        return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
+        return (userInfo == null ||userInfo == undefined || JSON.stringify(userInfo) == "{}")
       },
       onDeleteBtnClick(k, index) {
         console.log("onDeleteBtnClick id:" + k.id + ",index:" + index)
@@ -121,7 +117,6 @@
       },
 
       onCountChange(id, skuid, count) {
-        //update select carlist count
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
@@ -191,28 +186,13 @@
       },
 
       onLoad() {
-        let user = this.$store.state.appconf.userInfo;
-        if (!this.isUserEmpty(user)) {
-          this.loadCartListBy(user);
+        let userInfo=this.$jsbridge.call("getUserInfo");
+        if( userInfo != null && userInfo.length > 0) {
+          console.log("Car onLoad getUserInfo ret is:"+userInfo);
+          this.$store.commit('SET_USER',userInfo);
+          this.loadCartListBy(userInfo);
         } else {
-          this.getUserInfo();
-        }
-      },
-
-      getUserInfo() {
-        try {
-          let method = "send";
-          let action = "getUserInfo";
-          let params = {"callback": "onUserInfoLoaded", "action": action};//android接收参数，json格式
-          if (window.jsInterface != undefined) {
-            window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
-          } else {
-            //not mobile App
-            this.getCarListWithoutUser();
-
-          }
-        } catch (e) {
-
+          this.getCarListWithoutUser();
         }
       },
 
@@ -220,15 +200,6 @@
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         this.loading = false;
         this.finished = true;
-      },
-
-      onUserInfoLoaded(userInfo) {
-        console.log("UserInfo:" + JSON.stringify(userInfo));
-        this.$store.commit('SET_USER', JSON.stringify(userInfo));
-        let user = JSON.stringify(userInfo);
-        if (user != null || user.length > 0) {
-          this.loadCartListBy(user);
-        }
       },
 
       updateSelectedCarlist(item, product, user) {
@@ -262,12 +233,10 @@
           this.selStateInCarList.push(goods);
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         }
-        // console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
         return goods;
       },
 
       getSkuInfoBy(item, user) {
-        // console.log("item:"+JSON.stringify(item))
         this.$api.xapi({
           method: 'get',
           url: '/prod',
@@ -275,7 +244,6 @@
             id: item.skuId,
           }
         }).then((res) => {
-          //console.log("product info:"+JSON.stringify( res.data.data.result));
           let product = res.data.data.result;
           if (product != null) {
             this.updateSelectedCarlist(item, product, user)
@@ -285,13 +253,6 @@
         }).catch((error) => {
           console.log(error)
         })
-      },
-
-      onClose(clickPosition, instance) {
-        switch (clickPosition) {
-          case 'right':
-            break;
-        }
       },
 
       singleChecked(index, k) {

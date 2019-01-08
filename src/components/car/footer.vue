@@ -27,7 +27,7 @@
           return selCount
         } else {
           let userInfo = this.$store.state.appconf.userInfo;
-          console.log("count userInfo:" + userInfo)
+         // console.log("count userInfo:" + userInfo)
           try {
             if (!this.isUserEmpty(userInfo)) {
               console.log("count has UserInfo")
@@ -57,7 +57,7 @@
       allpay() {
         let all = 0;
         let userInfo = this.$store.state.appconf.userInfo;
-        console.log("allpay userInfo:" + userInfo)
+       // console.log("allpay userInfo:" + userInfo)
         try {
           if (!this.isUserEmpty(userInfo)) {
             console.log("allpay has UserInfo")
@@ -89,7 +89,7 @@
 
     methods: {
       isUserEmpty(userInfo) {
-        return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
+        return (userInfo == null || userInfo == undefined || JSON.stringify(userInfo) == "{}")
       },
       goPay() {
         // 如果有选择商品才能跳转
