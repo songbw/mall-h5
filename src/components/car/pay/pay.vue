@@ -1,71 +1,77 @@
 <template lang="html">
-  <div class="pay">
-    <v-header>
-      <h1 slot="title">确认订单</h1>
-    </v-header>
-    <div class="contact-address-card" @click="editAddressOrList">
-      <van-row type="flex">
-        <van-col span="22">
-          <div v-if="addressCount == 0" class="contact-edit">
-            您的收获地址为空，点此添加收货地址
-          </div>
-          <div v-else>
-            <van-cell>
-              <template slot="title">
-                <span class="custom-text">{{receiverInfo}}</span>
-                <p>
-                  <van-icon name="location"></van-icon>
-                  <span class="custom-text">{{receiverAddress}}</span>
-                </p>
-              </template>
-            </van-cell>
-          </div>
-        </van-col>
-        <van-col span="2">
-          <van-icon class="contact-edit" name="arrow" size="20px"/>
-        </van-col>
-      </van-row>
-    </div>
-    <div class="address-line"></div>
-    <div class="pay-info">
-      <van-cell title="支付方式:" value="现金支付">
-        <van-icon slot="right-icon" name="arrow" style="margin-left: 24px" size="20px"/>
-      </van-cell>
-      <van-cell title="发票:" value="普票(商品明细-个人)">
-        <van-icon slot="right-icon" name="arrow" style="margin-left: 24px" size="20px"/>
-      </van-cell>
-    </div>
-    <div class="address-line"></div>
-    <div class="pay-product">
-      <li v-for="k in payCarList">
-        <van-card
-          :tag="k.valid?'':'无货'"
-          :price="k.checkedPrice"
-          :title="k.product.desc"
-          :num="k.product.count"
-          :thumb="k.product.image">
-          <div slot="footer">
-            <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
-          </div>
-        </van-card>
-      </li>
-    </div>
-    <van-submit-bar
-      :price="allpay"
-      button-text="提交订单"
-      @submit="onSubmit"
-      :tip=tip
-    />
+  <section>
+    <v-loading v-if="pageloading"></v-loading>
+    <div class="pay" v-else>
+      <v-header>
+        <h1 slot="title">确认订单</h1>
+      </v-header>
+      <div class="contact-address-card" @click="editAddressOrList">
+        <van-row type="flex">
+          <van-col span="22">
+            <div v-if="addressCount == 0" class="contact-edit">
+              您的收获地址为空，点此添加收货地址
+            </div>
+            <div v-else>
+              <van-cell>
+                <template slot="title">
+                  <span class="custom-text">{{receiverInfo}}</span>
+                  <p>
+                    <van-icon name="location"></van-icon>
+                    <span class="custom-text">{{receiverAddress}}</span>
+                  </p>
+                </template>
+              </van-cell>
+            </div>
+          </van-col>
+          <van-col span="2">
+            <van-icon class="contact-edit" name="arrow" size="20px"/>
+          </van-col>
+        </van-row>
+      </div>
+      <div class="address-line"></div>
+      <div class="pay-info">
+        <van-cell title="支付方式:" value="现金支付">
+          <van-icon slot="right-icon" name="arrow" style="margin-left: 24px" size="20px"/>
+        </van-cell>
+        <van-cell title="发票:" value="普票(商品明细-个人)">
+          <van-icon slot="right-icon" name="arrow" style="margin-left: 24px" size="20px"/>
+        </van-cell>
+      </div>
+      <div class="address-line"></div>
+      <div class="pay-product">
+        <li v-for="k in payCarList">
+          <van-card
+            :tag="k.valid?'':'无货'"
+            :price="k.checkedPrice"
+            :title="k.product.desc"
+            :num="k.product.count"
+            :thumb="k.product.image">
+            <div slot="footer">
+              <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
+            </div>
+          </van-card>
+        </li>
+      </div>
+      <van-submit-bar
+        :price="allpay"
+        button-text="提交订单"
+        @submit="onSubmit"
+        :tip=tip
+      />
 
-  </div>
+    </div>
+  </section>
+
 </template>
 
 <script>
   import Header from '@/common/_header.vue'
+  import Loading from '@/common/_loading.vue'
 
   export default {
     components: {
       'v-header': Header,
+      'v-loading': Loading
     },
     data() {
       return {
@@ -81,6 +87,24 @@
     },
 
     computed: {
+
+      pageloading() {
+        let loading = this.$store.state.appconf.pageLoading;
+        if (!loading) {
+          if (this.addressCount == 0)
+            this.$dialog.confirm({
+              title: '您还没有收货地址，请新增一个吧',
+              confirmButtonText: '新增地址'
+            }).then(() => {
+              //on confirm
+              this.$router.push({name: '地址页'})
+            }).catch(() => {
+              // on cancel
+            });
+        }
+        return loading;
+      },
+
       selectedCarList() {
         let selectCarList = [];
         let userInfo = this.$store.state.appconf.userInfo
@@ -116,7 +140,14 @@
         return this.productPay + this.freight * 100;
       }
     },
-    mounted() {
+
+    created() {
+      this.$store.commit('SET_PAGE_LOADING', true);
+      console.log("pageLoading:  start" + this.$store.state.appconf.pageLoading)
+      setTimeout(() => {
+        this.$store.commit('SET_PAGE_LOADING', false);
+        console.log("pageLoading:  3s end")
+      }, 10000);
     },
 
     beforeCreate() {
@@ -141,15 +172,7 @@
             this.addressCount = result.total;
             if (this.addressCount == 0) {
               this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
-              this.$dialog.confirm({
-                title: '您还没有收货地址，请新增一个吧',
-                confirmButtonText: '新增地址'
-              }).then(() => {
-                //on confirm
-                this.$router.push({name: '地址页'})
-              }).catch(() => {
-                // on cancel
-              });
+
               this.updateUsedAddress();
               this.getCarList();
             } else {
@@ -169,8 +192,8 @@
       }
     },
 
-    created() {
-      // this.getCarList()
+    beforeDestroy() {
+      this.$dialog.close();
     },
 
     methods: {
@@ -238,14 +261,11 @@
           if (item.valid)
             freightSkus.push({"skuId": item.skuId, "piece": item.count})
         })
-        let locationCode = this.getLocationCode();
+
         let options = {
-        //  "cityId": locationCode.cityId,
-          //"countyId": locationCode.countyId,
-          //"skus": freightSkus,
-          "amount": this.productPay/100,
+          "amount": this.productPay / 100,
         }
-        //console.log("options:" + JSON.stringify(options));
+
         this.$api.xapi({
           method: 'post',
           url: '/prod/carriage',
@@ -254,8 +274,12 @@
           let result = response.data.data.result;
           console.log("运费 result is:" + JSON.stringify(result));
           this.freight = result
+          this.$store.commit('SET_PAGE_LOADING', false);
+          console.log("page loading end");
         }).catch(function (error) {
           console.log(error)
+          this.$store.commit('SET_PAGE_LOADING', false);
+          console.log("page loading error");
         })
       },
       getCarList() {
@@ -264,7 +288,7 @@
         let skus = [];
         this.payCarList = [];
         this.selectedCarList.forEach(item => {
-          inventorySkus.push({"skuId": item.skuId,"remainNum":item.count})
+          inventorySkus.push({"skuId": item.skuId, "remainNum": item.count})
           skus.push({"skuId": item.skuId})
           this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.price})
         })
@@ -305,8 +329,8 @@
             console.log("价格 result is:" + JSON.stringify(result));
             result.forEach(item => {
               for (let i = 0; i < this.payCarList.length; i++) {
-                 // console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
-                if ( item != null && this.payCarList[i].product.skuId == item.skuId) {
+                // console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
+                if (item != null && this.payCarList[i].product.skuId == item.skuId) {
                   //console.log("价格 change true");
                   this.payCarList[i].checkedPrice = item.price
                 }

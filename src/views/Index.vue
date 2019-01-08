@@ -1,22 +1,24 @@
 <template lang="html">
   <!-- 在首页父组件发送http请求,后将数据通过props传递给子组件,可减少请求次数,减少服务器压力 -->
-  <div class="index">
-    <v-header/>
-    <li v-for="item in datas" style="list-style: none">
-      <v-swiper v-if="item.type==='0'" :datas="item.data"/>
-      <v-service v-else-if="item.type==='1'" :datas="item.data"/>
-      <v-sectionSquared  v-else-if="item.type==='2'" :datas="item.data"/>
-      <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
-      <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
-    </li>
-    <v-baseline/>
-  </div>
+  <section>
+    <div class="index">
+      <v-header/>
+      <li v-for="item in datas" style="list-style: none">
+        <v-swiper v-if="item.type==='0'" :datas="item.data"/>
+        <v-service v-else-if="item.type==='1'" :datas="item.data"/>
+        <v-sectionSquared  v-else-if="item.type==='2'" :datas="item.data"/>
+        <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
+        <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
+      </li>
+      <v-baseline/>
+    </div>
+  </section>
+
 </template>
 
 <script>
   import Header from '@/components/index/header.vue'
   import Swiper from '@/components/index/swiper.vue'
-
   import Section1 from '@/components/index/section1.vue'
   import Section2 from '@/components/index/section2.vue'
   import Section3 from '@/components/index/section3.vue'
@@ -26,7 +28,7 @@
   import sectionSlide from '@/components/index/sectionSlide.vue'
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import Baseline from '@/common/_baseline.vue'
-  import Footer from '@/common/_footer.vue'
+
 
   //import { Toast } from 'mint-ui'
   export default {
@@ -41,8 +43,7 @@
       'v-sectionSquared': sectionSquared,
       'v-sectionSlide': sectionSlide,
       'v-sectionGoods': sectionGoods,
-      'v-baseline': Baseline,
-      'v-footer': Footer
+      'v-baseline': Baseline
     },
     data() {
       return {
