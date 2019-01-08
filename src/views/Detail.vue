@@ -23,15 +23,6 @@
   import Header from '@/common/_header.vue'
   import Action from '@/components/detail/action.vue'
 
-  import detail from '@/http/mock.js' //模拟数据
-
-  //import AMap from 'AMap'
-  //import AMapUI from 'AMapUI'
-
-  let mapObj
-  let pro
-  let geolocation
-
   export default {
     components: {
       'v-swiper': Swiper,

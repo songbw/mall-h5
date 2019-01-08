@@ -65,11 +65,6 @@
     },
 
     created() {
-      window.onLocationUpdate = this.onLocationUpdate;
-      this.updateLocation()
-    },
-
-    mounted() {
       setTimeout(() =>{
         this.updateLocation()
       },1000);
@@ -80,29 +75,27 @@
       }
     },
     methods: {
+      testDSBridge() {
+        let str=this.$jsbridge.call("getUserInfo");
+        console.log("testDSBridge getUserInfo ret is:"+str);
+        let location=this.$jsbridge.call("getLocation");
+        console.log("testDSBridge getLocation ret is:"+location);
+        this.$jsbridge.call("testNoArgAsyn",function (v) {
+          console.log("testDSBridge testAsyn ret is:"+v);
+        })
+      },
+
       updateLocation() {
-        console.log("update Location Enter")
-        try {
-          let method = "send";//js调用的android方法名
-          let action = "getLocation";//打电话动作
-          let params = {"callback": "onLocationUpdate", "action": action};//android接收参数，json格式
-          if(window.jsInterface != undefined) {
-            window.jsInterface.invokeMethod(method, [JSON.stringify(params)]);
-          }
-        } catch  (e) {
-          //ignore
-          console.log("updateLocation:"+e)
+        let locationInfo=this.$jsbridge.call("getLocation");
+        console.log("testDSBridge getLocation ret is:"+locationInfo);
+        if (locationInfo !=null && locationInfo.length > 0) {
+          this.$store.commit('SET_LOCATION',locationInfo);
+          this.getLocationCode(locationInfo)
         }
       },
 
-      onLocationUpdate(locationInfo) {
-        this.$store.commit('SET_LOCATION',locationInfo);
-        //try to get Location Code
-        this.getLocationCode(locationInfo)
-      },
-
-      getLocationCode(location) {
-        console.log("getLocationCode location:" + JSON.stringify(location));
+      getLocationCode(locationInfo) {
+        let location = JSON.parse(locationInfo);
         let options = {
           "latitude":location.latitude,
           "longitude":location.longitude,
@@ -112,6 +105,7 @@
           "city":location.city,
           "county":location.district
         }
+        console.log("options:"+JSON.stringify(options))
         this.$api.xapi({
           method: 'post',
           url: '/address/code',
