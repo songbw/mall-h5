@@ -305,14 +305,6 @@
       padding: 0.6rem;
     }
 
-    .checkedBox {
-
-    }
-
-    .swipe-cell-rightbtn {
-
-    }
-
     .van-card__footer > div {
       display: flex !important;
       align-items: center;
