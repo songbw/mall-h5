@@ -38,7 +38,8 @@ import {
   ContactEdit,
   SubmitBar,
   AddressEdit,
-  AddressList
+  AddressList,
+  Search
 } from 'vant';
 
 Vue.use(Button)
@@ -67,7 +68,8 @@ Vue.use(Button)
   .use(ContactEdit)
   .use(SubmitBar)
   .use(AddressEdit)
-  .use(AddressList);
+  .use(AddressList)
+  .use(Search);
 
 
 Vue.config.productionTip = false

@@ -32,7 +32,6 @@
   export default {
     data() {
       return {
-        category: "",
         pageNo: 1,
         total: -1,
         result: {},
@@ -42,35 +41,57 @@
       }
     },
 
-    computed: {
-      mlocation() {
-        return this.$store.state.appconf.location;
-      }
-    },
-
     components: {
       'v-header': Header
     },
 
     methods: {
       onLoad() {
-        this.category = this.$route.query.category;
-        //category= options.category;
-        console.log("location:"+this.mlocation);
-        console.log("category :" + this.category);
-        console.log("onLoad Enter，this.list.length:" + this.list.length + "this.total:" + this.total)
-        if (this.total == -1 || this.total > this.list.length) {
+        let category = this.$route.query.category;
+        let search = this.$route.query.search;
+
+        //console.log("category:"+category+",search:"+search);
+        if(category != null && category.length > 0) {
+          console.log("category :" + category);
+          console.log("onLoad Enter，this.list.length:" + this.list.length + "this.total:" + this.total)
+          if (this.total == -1 || this.total > this.list.length) {
+            let options = {
+              "category": category,
+              "pageNo": this.pageNo++
+            }
+            console.log("options:" + JSON.stringify(options));
+            this.$api.xapi({
+              method: 'post',
+              url: '/prod/all',
+              data: options,
+            }).then((response) => {
+              this.result = response.data.data.result;
+              this.total = this.result.total;
+              console.log("total is:" + this.total);
+              this.result.list.forEach(item => {
+                this.list.push(item);
+              })
+              this.loading = false;
+              if (this.list.length >= this.total)
+                this.finished = true;
+            }).catch(function (error) {
+              console.log(error)
+              this.finished = true;
+            })
+          }
+        } else if(search != undefined && search.length >0 ){
           let options = {
-            "category": this.category,
+            "keyword": search,
             "pageNo": this.pageNo++
           }
           console.log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
-            url: '/prod/all',
+            url: '/es/prod',
             data: options,
           }).then((response) => {
             this.result = response.data.data.result;
+            console.log("result:"+JSON.stringify(this.result));
             this.total = this.result.total;
             console.log("total is:" + this.total);
             this.result.list.forEach(item => {
@@ -83,6 +104,9 @@
             console.log(error)
             this.finished = true;
           })
+        } else {
+          //error
+          this.finished = true;
         }
       },
       updateCurrentGoods(goods) {

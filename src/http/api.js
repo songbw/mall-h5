@@ -2,9 +2,10 @@ import axios from 'axios'
 import store from '@/vuex/store.js'
 import router from '../router'
 
-const GOODS_URL_PREFIX = "https://iwallet-1258175138.cos.ap-beijing.myqcloud.com"
+//const GOODS_URL_PREFIX = "https://iwallet-1258175138.cos.ap-beijing.myqcloud.com"
+const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 const SERVER_BASE_URL = "http://42.121.121.128:8080"
-//const SERVER_BASE_URL = "http://172.21.12.179:8080"
+//const SERVER_BASE_URL = "http://172.21.12.179:8080"  //local debug
 
 
 const xapi = axios.create();

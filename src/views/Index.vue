@@ -78,7 +78,7 @@
     methods: {
       updateLocation() {
         let locationInfo=this.$jsbridge.call("getLocation");
-        console.log("testDSBridge getLocation ret is:"+locationInfo);
+        console.log("updateLocation getLocation ret is:"+locationInfo);
         if (locationInfo !=null && locationInfo.length > 0) {
           this.$store.commit('SET_LOCATION',locationInfo);
           this.getLocationCode(locationInfo)
