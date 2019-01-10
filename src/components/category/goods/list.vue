@@ -91,7 +91,7 @@
             data: options,
           }).then((response) => {
             this.result = response.data.data.result;
-            console.log("result:"+JSON.stringify(this.result));
+            //console.log("result:"+JSON.stringify(this.result));
             this.total = this.result.total;
             console.log("total is:" + this.total);
             this.result.list.forEach(item => {

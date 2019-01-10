@@ -142,7 +142,8 @@
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         padding: 0 3vw;
-
+        display: flex;
+        flex-flow: column;
         > a {
           display: block;
           width: 100%;
