@@ -67,17 +67,16 @@
           font-weight: bold;
           color: #f44336;
           background: #ffffff;
-
-          &::before {
-            width: 3px;
-            height: 28px;
-            content: "";
-            position: absolute;
-            left: 0px;
-            top: 50%;
-            margin-top: -14px;
-            background-color: firebrick;
-          }
+        }
+        .active::before {
+          display:flex;
+          content: '';
+          width: 4px;
+          height: 100%;
+          position: absolute;
+          left: 0px;
+          top:0px;
+          background-color: firebrick;
         }
       }
     }

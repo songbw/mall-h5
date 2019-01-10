@@ -182,7 +182,7 @@
     .class1-title {
       .bt();
       text-align: center;
-      .fz(font-size, 30);
+      .fz(font-size, 35);
       font-weight: bold;
       padding: 2vw;
       position: relative;
@@ -192,10 +192,11 @@
     .class2-title {
       .bt();
       text-align: left;
-      .fz(font-size, 26);
+      .fz(font-size, 30);
       padding: 2vw;
       position: relative;
       background-color: #ffffff;
+      font-weight: bold;
     }
   }
 
