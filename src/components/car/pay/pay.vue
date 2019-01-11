@@ -23,7 +23,7 @@
               </van-cell>
             </div>
           </van-col>
-          <van-col span="2">
+          <van-col span="2" style="background: white">
             <van-icon class="contact-edit" name="arrow" size="20px"/>
           </van-col>
         </van-row>
@@ -37,21 +37,31 @@
           <van-icon slot="right-icon" name="arrow" style="margin-left: 24px" size="20px"/>
         </van-cell>
       </div>
-      <div class="address-line"></div>
+
       <div class="pay-product">
-        <li v-for="k in payCarList">
-          <van-card
-            :tag="k.valid?'':'无货'"
-            :price="k.checkedPrice"
-            :title="k.product.desc"
-            :num="k.product.count"
-            :thumb="k.product.image">
-            <div slot="footer">
-              <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
-            </div>
-          </van-card>
+        <li v-for="item in arregationList" style="list-style: none">
+          <div v-if="item.goods.length > 0" class="supplyer">
+            <van-cell :title=item.supplyerName icon="shop"/>
+            <ul>
+              <li v-for="(k,i) in item.goods" :key='i'>
+                <van-card
+                  :tag="k.valid?'':'无货'"
+                  :price="k.checkedPrice"
+                  :title="k.product.desc"
+                  :num="k.product.count"
+                  :thumb="k.product.image">
+                  <div slot="footer">
+                    <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
+                  </div>
+                </van-card>
+              </li>
+            </ul>
+            <span>合计价格: {{item.price}}元</span>
+            <span> 运费: {{item.freight}}元</span>
+          </div>
         </li>
       </div>
+      <div class="pay-footer"></div>
       <van-submit-bar
         :price="allpay"
         button-text="提交订单"
@@ -87,7 +97,6 @@
     },
 
     computed: {
-
       pageloading() {
         let loading = this.$store.state.appconf.pageLoading;
         if (!loading) {
@@ -118,6 +127,68 @@
         }
         return selectCarList;
       },
+
+      arregationList() {
+        let payList = [
+          {
+            "supplyer": "20",
+            "supplyerName": "苏宁易购",
+            goods: [],
+            price: 0,
+            freight: 0
+          },
+          {
+            "supplyer": "30",
+            "supplyerName": "唯品会",
+            goods: [],
+            price: 0,
+            freight: 0
+          },
+          {
+            "supplyer": "50",
+            "supplyerName": "天猫精选",
+            goods: [],
+            price:0,
+            freight: 0
+          },
+          {
+            "supplyer": "60",
+            "supplyerName": "京东",
+            goods: [],
+            price:0,
+            freight: 0
+          },
+          {
+            "supplyer": "10",
+            "supplyerName": "商城自营",
+            goods: [],
+            price:0,
+            freight: 0
+          },
+
+        ]
+        let allPayList = this.$store.state.appconf.payList;
+
+        try {
+          allPayList.forEach(item => {
+            if (item.product.skuId.startsWith("20")) {//苏宁易购
+              payList[0].goods.push(item);
+            } else if (item.product.skuId.startsWith("30")) {//唯品会
+              payList[1].goods.push(item);
+            } else if (item.product.skuId.startsWith("50")) {//天猫精选
+              payList[2].goods.push(item);
+            } else if (item.product.skuId.startsWith("60")) {//京东
+              payList[3].goods.push(item);
+            } else { //商城自营
+              payList[4].goods.push(item);
+            }
+          })
+        } catch (e) {
+        }
+        //console.log("payList:"+JSON.stringify(payList))
+        return payList;
+      },
+
       // 商品价格总和
       productPay() {
         let all = 0;
@@ -133,7 +204,7 @@
       },
 
       tip() {
-        return '商品价格:￥' + parseFloat(this.productPay / 100) + ' 运费:￥' + this.freight
+        return '商品总价:' + parseFloat(this.productPay / 100)+ '元   合计运费:' + this.freight + '元'
       },
 
       allpay() {
@@ -146,7 +217,7 @@
       console.log("pageLoading:  start" + this.$store.state.appconf.pageLoading)
       setTimeout(() => {
         this.$store.commit('SET_PAGE_LOADING', false);
-        console.log("pageLoading:  3s end")
+        console.log("pageLoading:  10s end")
       }, 10000);
     },
 
@@ -197,6 +268,9 @@
     },
 
     methods: {
+      aggregationPayList() {
+        this.$store.commit('SET_PAY_LIST', this.payCarList);
+      },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
       },
@@ -274,10 +348,12 @@
           let result = response.data.data.result;
           console.log("运费 result is:" + JSON.stringify(result));
           this.freight = result
+          this.aggregationPayList();
           this.$store.commit('SET_PAGE_LOADING', false);
           console.log("page loading end");
         }).catch(function (error) {
           console.log(error)
+          this.aggregationPayList();
           this.$store.commit('SET_PAGE_LOADING', false);
           console.log("page loading error");
         })
@@ -337,6 +413,8 @@
               }
             })
             // console.log("this.payCarList:" + JSON.stringify(this.payCarList));
+            //开始聚合不同商家
+            this.aggregationPayList();
             this.getfreightPay();
           }).catch(function (error) {
             console.log(error)
@@ -373,6 +451,7 @@
   @import "../../../assets/fz.less";
 
   .pay {
+    background-color: #dddddd;
     width: 100%;
     padding-bottom: 2vw;
 
@@ -382,15 +461,16 @@
     }
 
     .pay-info {
+      margin-top: 15px;
       background-color: #fff;
       padding-Top: 2vw;
       padding-bottom: 2vw;
     }
 
     .pay-product {
-      background-color: #fff;
       overflow: auto;
       padding-bottom: 14vw;
+      margin-top: 5px;
 
       li {
         list-style: none;
@@ -410,66 +490,62 @@
         color: @cl;
       }
     }
+  }
 
-    .pay-footer {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      padding-bottom: 14vw;
+  .contact-edit {
+    padding: 20px 0;
+    text-align: center;
+    color: #000000;
+    line-height: 30px;
+    .fz(font-size, 30);
+  }
 
-      span {
-        display: block;
-        width: 85%;
-        background-color: #fd729c;
-        border-radius: 1.3vw;
-        color: #fff;
-        font-size: 17px;
-        padding: 4vw;
-        margin: 0 auto;
-        text-align: center;
+  .pay-confirm {
+    padding: 20px 0;
+    background-color: @cl;
+    text-align: center;
+    color: #fff;
+    line-height: 30px;
+    .fz(font-size, 40);
+  }
 
-        &:active {
-          background-color: @cl;
-        }
-      }
-    }
+  .address-line {
+    content: '';
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: repeating-linear-gradient(
+      -45deg,
+      #ff6c6c 0,
+      #ff6c6c 20%,
+      transparent 0,
+      transparent 25%,
+      blue 0,
+      blue 45%,
+      transparent 0,
+      transparent 50%
+    );
+    background-size: 80px;
+  }
 
-    .contact-edit {
+  .pay-footer {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+  }
+
+  .supplyer {
+    margin-top: 10px;
+    background-color: white;
+    span {
       padding: 20px 0;
-      text-align: center;
-      color: #000000;
-      line-height: 30px;
+      margin-left: 10px;
+      line-height: 40px;
+      font-weight: bold;
       .fz(font-size, 30);
     }
 
-    .pay-confirm {
-      padding: 20px 0;
-      background-color: @cl;
-      text-align: center;
-      color: #fff;
-      line-height: 30px;
-      .fz(font-size, 40);
-    }
-
-    .address-line {
-      content: '';
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: 2px;
-      background: repeating-linear-gradient(
-        -45deg,
-        #ff6c6c 0,
-        #ff6c6c 20%,
-        transparent 0,
-        transparent 25%,
-        blue 0,
-        blue 45%,
-        transparent 0,
-        transparent 50%
-      );
-      background-size: 80px;
-    }
   }
 </style>
