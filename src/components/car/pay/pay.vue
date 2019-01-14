@@ -183,9 +183,18 @@
               payList[4].goods.push(item);
             }
           })
+          payList.forEach (supplyer => {
+            let all = 0;
+            supplyer.goods.forEach(item =>{
+              console.log("item:"+JSON.stringify(item))
+              if (item.valid) {
+                all += item.checkedPrice * item.product.count
+              }
+            })
+            supplyer.price = all;
+          })
         } catch (e) {
         }
-        //console.log("payList:"+JSON.stringify(payList))
         return payList;
       },
 
