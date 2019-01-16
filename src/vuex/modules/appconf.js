@@ -10,7 +10,8 @@ const state = {
   userInfo:{},//{"code":200,"token":"ed6f4fc9a99949649be1e075c3eca075","userId":2,"username":"13810864380"}
   selStateInCarList:[], //'[{"userId":1,"id":2,"choose":true,"isDel":0}]' //userId:用户ID "id":商品ID，"choose":购物车选中状态，“idDel":是否删除
   pageLoading:false,//全局加载状态的Loading
-  payList:[]
+  payList:[],
+  token:''
 }
 
 const mutations = {
@@ -49,12 +50,16 @@ const mutations = {
   [types.SET_PAY_LIST](state, res) {
     state.payList = res
   },
+
+  [types.SET_TOKEN](state, res) {
+    state.token = res
+  },
 }
 
 const actions = {
   setAddress({commit}, res) {
     // Util.setLocal(res, 'address', true);
-    // commit(types.SET_ADDRESS)
+    // commit(types.SET_ADDRESS
   },
 }
 

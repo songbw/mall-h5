@@ -68,7 +68,9 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() =>{
+        this.getAccessTokenInfo();
         this.startLocation();
+
         //this.updateLocation();
       },1000);
     },
@@ -91,7 +93,18 @@
         });
       },
 
-      startLocation() {
+      getAccessTokenInfo() {
+        this.$jsbridge.call("fetchInitCode",function (initCode) {
+          console.log("initCode is:"+initCode);
+         // this.$jsbridge.fetchUserInfoWithAccessToken("fetchUserInfoWithAccessToken")
+        })
+        /*        return new Promise((resolve, reject) => {
+                  //登录成功后获取token
+                  this.$jsbridge.call("fetchInitCode",())
+                });*/
+      },
+
+        startLocation() {
         this.$jsbridge.call("startLoaction");
       },
 
