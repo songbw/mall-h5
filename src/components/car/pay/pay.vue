@@ -23,18 +23,17 @@
               </van-cell>
             </div>
           </van-col>
-          <van-col span="2" style="background: white">
-            <van-icon class="contact-edit" name="arrow" size="20px"/>
+          <van-col span="2" style="background: white;display: flex;">
+            <van-icon class="contact-edit" name="arrow" size="12px"/>
           </van-col>
         </van-row>
       </div>
       <div class="address-line"></div>
       <div class="pay-info">
         <van-cell title="支付方式:" value="现金支付">
-          <van-icon slot="right-icon" name="arrow" style="margin-left: 24px" size="20px"/>
         </van-cell>
-        <van-cell title="发票:" value="普票(商品明细-个人)">
-          <van-icon slot="right-icon" name="arrow" style="margin-left: 24px" size="20px"/>
+        <van-cell title="发票:" value="普票(商品明细-个人)" is-link to="/car/invoice">
+
         </van-cell>
       </div>
 
