@@ -26,8 +26,6 @@
       }
     },
     created() {
-      window.onAdd2Car = this.onAdd2Car;
-      window.onGotoCar = this.onGotoCar;
     },
 
     methods: {

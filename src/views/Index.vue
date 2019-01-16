@@ -66,8 +66,10 @@
     },
 
     created() {
+      this.initJsNativeCb();
       setTimeout(() =>{
-        this.updateLocation()
+        this.startLocation();
+        //this.updateLocation();
       },1000);
     },
     computed: {
@@ -76,6 +78,23 @@
       }
     },
     methods: {
+      initJsNativeCb() {
+        this.$jsbridge.register('locationResult', (data) => {
+          console.log("locationResult:"+data);
+          var responseData = JSON.parse(data);
+         // this.getLocationCode(data);
+          if (data !=null && data.length > 0) {
+            this.$store.commit('SET_LOCATION',data);
+            this.getLocationCode(data)
+          }
+          return "ok";
+        });
+      },
+
+      startLocation() {
+        this.$jsbridge.call("startLoaction");
+      },
+
       updateLocation() {
         let locationInfo=this.$jsbridge.call("getLocation");
         console.log("updateLocation getLocation ret is:"+locationInfo);
@@ -96,6 +115,7 @@
           "city":location.city,
           "county":location.district
         }
+
         console.log("options:"+JSON.stringify(options))
         this.$api.xapi({
           method: 'post',

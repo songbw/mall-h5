@@ -77,6 +77,7 @@ Vue.config.productionTip = false
 //增加全局Service变量
 Vue.prototype.$api = services;
 
+
 //增加Android/ios bridge 全局变量
 let dsBridge = require("dsbridge");
 Vue.prototype.$jsbridge = dsBridge;
