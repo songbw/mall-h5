@@ -98,6 +98,16 @@
           console.log("initCode is:"+initCode);
          // this.$jsbridge.fetchUserInfoWithAccessToken("fetchUserInfoWithAccessToken")
         })
+       /* let json = {
+          "appId":"FENGCAO12345678",
+          "timestamp":"20190101120012",
+          "randomSeries":"ABCDEFGHIJ",
+          "sign":"",
+          "initCode":"TEST"
+        }
+
+        let jsStr = this.$getordedstr(json,false);
+        let sign = this.$getsign(jsStr);*/
         /*        return new Promise((resolve, reject) => {
                   //登录成功后获取token
                   this.$jsbridge.call("fetchInitCode",())
