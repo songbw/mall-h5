@@ -4,7 +4,6 @@
       <h1 slot="title">发票信息</h1>
     </v-header>
     <div class="main_layout">
-      <span>{{hideClass}}</span>
       <h1 class="section-title">
         发票类型
       </h1>
@@ -19,18 +18,18 @@
         <input type="radio" id="personalInvoice" value="personal" v-model="invoiceTitleType">
         <label for="personalInvoice">个人</label>
         <input type="radio" id="enterpriseInvoice" value="enterprise" v-model="invoiceTitleType">
-        <label for="enterpriseInvoice">单位</label>
+        <label for="enterpriseInvoice">企业</label>
       </div>
       <div class="enterpriseInfo" v-if="invoiceTitleType==='enterprise'">
         <van-cell-group>
           <van-field
-            v-model="enterprise_name"
+            v-model="invoiceEnterpriseName"
             required
             placeholder="请填写单位名称"
           />
 
           <van-field
-            v-model="enterprise_number"
+            v-model="invoiceEnterpriseNumber"
             required
             placeholder="请填写纳税人识别号"
           />
@@ -42,8 +41,8 @@
           订单签收后可在订单详情下载您的电子普通发票。
         </p>
       </div>
-      <div :class="hideClass?'footer_layout_hide':'footer_layout'">
-        <van-button type="primary" size="large">确定</van-button>
+      <div class="footer_layout">
+        <van-button type="primary" size="large" @click="onClick">确定</van-button>
       </div>
     </div>
   </section>
@@ -61,55 +60,81 @@
         radio: '1',
         invoiceType: 'eInvoice',
         invoiceTitleType: 'personal',
-        enterprise_number: '',
-        enterprise_name: '',
-        // 默认屏幕高度
-        docmHeight: document.documentElement.clientHeight,  //一开始的屏幕高度
-        showHeight: document.documentElement.clientHeight,   //一开始的屏幕高度
-        hideClass: false,
+        invoiceEnterpriseName:'',
+        invoiceEnterpriseNumber: '',
+        /*        // 默认屏幕高度
+                docmHeight: document.documentElement.clientHeight,  //一开始的屏幕高度
+                showHeight: document.documentElement.clientHeight,   //一开始的屏幕高度
+                hideClass: false,*/
       }
     },
-    watch:{
-      showHeight: 'inputType'
+    /*    watch:{
+          showHeight: 'inputType'
+        },*/
+
+    /*    mounted() {
+    // window.onresize监听页面高度的变化
+          window.onresize = () => {
+            return (() => {
+              window.screenHeight = document.body.clientHeight;
+              this.showHeight = window.screenHeight;
+            })()
+          }
+        },*/
+
+    created() {
+      const invoiceInfo = this.$store.state.appconf.invoice;
+      console.log("created:" + invoiceInfo )
+      if (invoiceInfo != undefined && invoiceInfo.length > 0) {
+        try {
+          const invoice = JSON.parse(invoiceInfo);
+          this.invoiceType = invoice.invoiceType;
+          this.invoiceTitleType = invoice.invoiceTitleType;
+          this.invoiceEnterpriseName = invoice.invoiceEnterpriseName;
+          this.invoiceEnterpriseNumber = invoice.invoiceEnterpriseNumber;
+        } catch (e) {
+          console.log("invoice:"+e);
+        }
+      }
     },
 
-    mounted() {
-// window.onresize监听页面高度的变化
-      window.onresize = () => {
-        return (() => {
-          window.screenHeight = document.body.clientHeight;
-          this.showHeight = window.screenHeight;
-        })()
-      }
+    computed: {
     },
 
     methods: {
-      inputType() {
-        if (!this.timer) {
-          this.timer = true
-          let that = this
-          setTimeout(() => {
-            if (that.docmHeight > that.showHeight) {
-              //显示class
-              this.hideClass = true;
-            } else if (that.docmHeight <= that.showHeight) {
-              //显示隐藏
-              this.hideClass = false;
-            }
-            that.timer = false;
-          }, 500)
+      onClick() {
+        console.log("onClick Enter");
+        const invoice = {
+          "invoiceType":this.invoiceType,
+          "invoiceTitleType":this.invoiceTitleType,
+          "invoiceEnterpriseName":this.invoiceEnterpriseName,
+          "invoiceEnterpriseNumber":this.invoiceEnterpriseNumber
         }
-      },
-
-      onChange() {
-
-      },
-
-      confirm() {
-
+        console.log("invoice:" + JSON.stringify(invoice));
+        this.$store.dispatch('setInvoicdInfo', JSON.stringify(invoice));//JSON.stringify(invoice)"");
+        this.$router.go(-1);
+        /*        let invoceInfo = {
+                  "invoiceType":this.invoiceType,
+                  "invoiceTitleType":this.invoiceTitleType,
+                }*/
       }
 
-
+      /*      inputType() {
+              if (!this.timer) {
+                this.timer = true
+                let that = this
+                setTimeout(() => {
+                  if (that.docmHeight > that.showHeight) {
+                    //显示class
+                    this.hideClass = true;
+                  } else if (that.docmHeight <= that.showHeight) {
+                    //显示隐藏
+                    this.hideClass = false;
+                  }
+                  that.timer = false;
+                }, 500)
+              }
+            },*/
     }
   }
 </script>
@@ -121,15 +146,19 @@
   .invoice {
     width: 100%;
     text-align: left;
+
     .main_layout {
       width: 100%;
       text-align: center;
+
       .enterpriseInfo {
         margin: 1.2em;
       }
+
       .tip {
         margin: 1.2em;
         .fz(font-size, 25);
+        text-align: left;
       }
 
       .RadioStyle {
@@ -168,19 +197,8 @@
       }
 
       .footer_layout {
-        position:absolute;
-        left: 0px;
-        right:0px;
-        bottom: 0px;
-        margin: 1em;
-      }
-
-      .footer_layout_hide {
-        position:static;
         margin: 1em;
       }
     }
-
-
   }
 </style>

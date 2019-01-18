@@ -66,3 +66,5 @@ export const SET_PAGE_LOADING = 'SET_PAGE_LOADING'
 export const SET_PAY_LIST = 'SET_PAY_LIST'
 
 export const SET_TOKEN = 'SET_TOKEN'
+
+export const SET_INVOICE_INFO = 'SET_INVOICE_INFO'

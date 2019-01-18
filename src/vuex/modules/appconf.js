@@ -11,7 +11,8 @@ const state = {
   selStateInCarList:[], //'[{"userId":1,"id":2,"choose":true,"isDel":0}]' //userId:用户ID "id":商品ID，"choose":购物车选中状态，“idDel":是否删除
   pageLoading:false,//全局加载状态的Loading
   payList:[],
-  token:''
+  token:'',
+  invoice:''
 }
 
 const mutations = {
@@ -54,6 +55,11 @@ const mutations = {
   [types.SET_TOKEN](state, res) {
     state.token = res
   },
+
+  //获取当前发票信息
+  [types.SET_INVOICE_INFO](state) {
+    state.invoice = Util.getLocal('invoice')
+  },
 }
 
 const actions = {
@@ -61,6 +67,13 @@ const actions = {
     // Util.setLocal(res, 'address', true);
     // commit(types.SET_ADDRESS
   },
+
+  setInvoicdInfo({commit}, res) {
+    console.log("setInvoicdInfo Enter");
+     Util.setLocal(res, 'invoice', false);
+     commit(types.SET_INVOICE_INFO);
+  },
+
 }
 
 

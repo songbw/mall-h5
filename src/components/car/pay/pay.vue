@@ -32,8 +32,7 @@
       <div class="pay-info">
         <van-cell title="支付方式:" value="现金支付">
         </van-cell>
-        <van-cell title="发票:" value="普票(商品明细-个人)" is-link to="/car/invoice">
-
+        <van-cell title="发票:" :value="invoiceDetail" is-link to="/car/invoice">
         </van-cell>
       </div>
 
@@ -91,6 +90,7 @@
         receiverAddress: '',
         addressEmptyInfo: '',
         usedAddress: {},
+        invoiceDetail:''
 
       }
     },
@@ -221,8 +221,33 @@
     },
 
     created() {
-      this.$store.commit('SET_PAGE_LOADING', true);
-      console.log("pageLoading:  start" + this.$store.state.appconf.pageLoading)
+      const invoiceInfo = this.$store.state.appconf.invoice;
+      console.log("created:" + invoiceInfo )
+      if (invoiceInfo != undefined && invoiceInfo.length > 0) {
+        try {
+          const invoice = JSON.parse(invoiceInfo);
+          if(invoice.invoiceType === "eInvoice") {
+            this.invoiceDetail += "电子普票";
+          }
+          if (invoice.invoiceTitleType === "personal") {
+            this.invoiceDetail += "(个人)";
+          } else {
+            this.invoiceDetail += "(企业)";
+          }
+
+        } catch (e) {
+          console.log("invoice:"+e);
+        }
+      } else {
+        const invoice = {
+          "invoiceType":"eInvoice",
+          "invoiceTitleType":"personal",
+          "invoiceEnterpriseName":"",
+          "invoiceEnterpriseNumber":""
+        }
+        this.$store.dispatch('setInvoicdInfo', JSON.stringify(invoice));
+        this.invoiceDetail = "电子普票-个人";
+      }
       setTimeout(() => {
         this.$store.commit('SET_PAGE_LOADING', false);
         console.log("pageLoading:  10s end")
@@ -231,6 +256,8 @@
 
     beforeCreate() {
       console.log("pay page mounted Enter")
+      this.$store.commit('SET_PAGE_LOADING', true);
+      console.log("pageLoading:  start" + this.$store.state.appconf.pageLoading)
       try {
         let userInfo = this.$store.state.appconf.userInfo;
         console.log("userInfo:" + userInfo)
