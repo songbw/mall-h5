@@ -40,7 +40,8 @@ import {
   SubmitBar,
   AddressEdit,
   AddressList,
-  Search
+  Search,
+  Field
 } from 'vant';
 
 Vue.use(Button)
@@ -70,7 +71,8 @@ Vue.use(Button)
   .use(SubmitBar)
   .use(AddressEdit)
   .use(AddressList)
-  .use(Search);
+  .use(Search)
+  .use(Field);
 
 
 /*function jsonURLParams(json,reverse){

@@ -33,8 +33,6 @@
 
 <script>
   import Header from '@/common/_header.vue'
-  import Nothing from '@/components/car/nothing.vue'
-  import Something from '@/components/car/something.vue'
   import Footer from '@/components/car/footer.vue'
 
   export default {
@@ -272,8 +270,6 @@
     },
     components: {
       'v-header': Header,
-      'v-nothing': Nothing,
-      'v-something': Something,
       'v-footer': Footer
     },
   }
