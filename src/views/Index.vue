@@ -48,11 +48,12 @@
     data() {
       return {
         datas: {},
-        loading: true
+        loading: true,
       }
     },
 
  beforeCreate() {
+      let that = this;
       this.$api.xapi({
         method: 'get',
         url: '/aggregation/findHomePage'
@@ -61,7 +62,8 @@
         const jsonString = pako.inflate(response.data.data.result.content, { to: 'string' })
         this.datas = JSON.parse(jsonString);
       }).catch(function (error) {
-        alert(error)
+        //alert(error)
+        that.$log(error)
       })
     },
 
@@ -70,7 +72,6 @@
       setTimeout(() =>{
         this.getAccessTokenInfo();
         this.startLocation();
-
         //this.updateLocation();
       },1000);
     },
@@ -82,7 +83,7 @@
     methods: {
       initJsNativeCb() {
         this.$jsbridge.register('locationResult', (data) => {
-          console.log("locationResult:"+data);
+          this.$log("locationResult:"+data);
           var responseData = JSON.parse(data);
          // this.getLocationCode(data);
           if (data !=null && data.length > 0) {
@@ -94,8 +95,9 @@
       },
 
       getAccessTokenInfo() {
-        this.$jsbridge.call("fetchInitCode",function (initCode) {
-          console.log("initCode is:"+initCode);
+        let that = this;
+        that.$jsbridge.call("fetchInitCode",function (initCode) {
+          that.$log("initCode is:"+initCode);
          // this.$jsbridge.fetchUserInfoWithAccessToken("fetchUserInfoWithAccessToken")
         })
        /* let json = {
@@ -120,7 +122,7 @@
 
       updateLocation() {
         let locationInfo=this.$jsbridge.call("getLocation");
-        console.log("updateLocation getLocation ret is:"+locationInfo);
+        this.$log("updateLocation getLocation ret is:"+locationInfo);
         if (locationInfo !=null && locationInfo.length > 0) {
           this.$store.commit('SET_LOCATION',locationInfo);
           this.getLocationCode(locationInfo)
@@ -128,6 +130,7 @@
       },
 
       getLocationCode(locationInfo) {
+        let that = this;
         let location = JSON.parse(locationInfo);
         let options = {
           "latitude":location.latitude,
@@ -138,19 +141,18 @@
           "city":location.city,
           "county":location.district
         }
-
-        console.log("options:"+JSON.stringify(options))
+        //this.$log("options:"+JSON.stringify(options))
         this.$api.xapi({
           method: 'post',
           url: '/address/code',
           data: options,
         }).then((response) => {
           let code = response.data.data.code;
-          console.log("location code:"+JSON.stringify(code));
+          this.$log("location code:"+JSON.stringify(code));
           this.$store.commit('SET_LOCATION_CODE',code);
         }).catch(function (error) {
-          console.log(error)
-          this.finished = true;
+          that.$log(error)
+          that.finished = true;
         })
       }
     }

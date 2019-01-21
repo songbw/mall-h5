@@ -185,7 +185,7 @@
           payList.forEach (supplyer => {
             let all = 0;
             supplyer.goods.forEach(item =>{
-              console.log("item:"+JSON.stringify(item))
+              this.$log("item:"+JSON.stringify(item))
               if (item.valid) {
                 all += item.checkedPrice * item.product.count
               }
@@ -222,7 +222,7 @@
 
     created() {
       const invoiceInfo = this.$store.state.appconf.invoice;
-      console.log("created:" + invoiceInfo )
+      this.$log("created:" + invoiceInfo )
       if (invoiceInfo != undefined && invoiceInfo.length > 0) {
         try {
           const invoice = JSON.parse(invoiceInfo);
@@ -236,7 +236,7 @@
           }
 
         } catch (e) {
-          console.log("invoice:"+e);
+          this.$log("invoice:"+e);
         }
       } else {
         const invoice = {
@@ -250,17 +250,17 @@
       }
       setTimeout(() => {
         this.$store.commit('SET_PAGE_LOADING', false);
-        console.log("pageLoading:  10s end")
+        this.$log("pageLoading:  10s end")
       }, 10000);
     },
 
     beforeCreate() {
-      console.log("pay page mounted Enter")
+      this.$log("pay page mounted Enter")
       this.$store.commit('SET_PAGE_LOADING', true);
-      console.log("pageLoading:  start" + this.$store.state.appconf.pageLoading)
+      this.$log("pageLoading start,loading is: " + this.$store.state.appconf.pageLoading)
       try {
         let userInfo = this.$store.state.appconf.userInfo;
-        console.log("userInfo:" + userInfo)
+        this.$log("userInfo:" + userInfo)
         if (!(userInfo == undefined || JSON.stringify(userInfo) == "{}")) {
           let user = JSON.parse(userInfo)
           let options = {
@@ -268,7 +268,7 @@
             "pageNo": 1,
             "pageSize": "20",
           }
-          // console.log("options:" + JSON.stringify(options));
+          // this.$log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             url: '/receiver/all',
@@ -282,19 +282,19 @@
               this.updateUsedAddress();
               this.getCarList();
             } else {
-              console.log("ADDRESS LIST is:" + JSON.stringify(result.list))
+              this.$log("ADDRESS LIST is:" + JSON.stringify(result.list))
               this.$store.commit('SET_ADDRESS_LIST', result.list);
               this.updateUsedAddress();
               this.getCarList();
             }
           }).catch(function (error) {
-            console.log(error)
+            this.$log(error)
           })
         } else {
-          console.log("ERROR!!, not get UserInfo in Pay page")
+          this.$log("ERROR!!, not get UserInfo in Pay page")
         }
       } catch (e) {
-        console.log(e)
+        this.$log(e)
       }
     },
 
@@ -310,12 +310,12 @@
         return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
       },
       updateUsedAddress() {
-        console.log("updateUsedAddress Enter!")
+        this.$log("updateUsedAddress Enter!")
         let address = {};
         let list = this.$store.state.appconf.addressList;
-        console.log("list:" + JSON.stringify(list))
+        this.$log("list:" + JSON.stringify(list))
         let id = this.$store.state.appconf.usedAddressId;
-        console.log("updateUsedAddress id:" + id)
+        this.$log("updateUsedAddress id:" + id)
         try {
           if (id == undefined || id == -1) {
             if (this.addressCount > 0) {
@@ -359,11 +359,12 @@
       },
 
       onSubmit() {
-        console.log("onSubmit Enter!!!")
+        this.$log("onSubmit Enter!!!")
         this.$router.push({name: "收银台页"})
       },
       getfreightPay() {
         /////////////查询运费////////////////////////
+        let that = this;
         let all = 0;
         let freightSkus = []
         this.payCarList.forEach(item => {
@@ -381,20 +382,20 @@
           data: options,
         }).then((response) => {
           let result = response.data.data.result;
-          console.log("运费 result is:" + JSON.stringify(result));
+          this.$log("运费 result is:" + JSON.stringify(result));
           this.freight = result
           this.aggregationPayList();
           this.$store.commit('SET_PAGE_LOADING', false);
-          console.log("page loading end");
+          this.$log("page loading end");
         }).catch(function (error) {
-          console.log(error)
-          this.aggregationPayList();
-          this.$store.commit('SET_PAGE_LOADING', false);
-          console.log("page loading error");
+          that.$log(error)
+          that.aggregationPayList();
+          that.$store.commit('SET_PAGE_LOADING', false);
+          that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
         })
       },
       getCarList() {
-        console.log("carList Enter !!!!!!!!!")
+        this.$log("carList Enter !!!!!!!!!")
         let inventorySkus = [];
         let skus = [];
         this.payCarList = [];
@@ -410,14 +411,14 @@
           "countyId": locationCode.countyId,
           "skus": inventorySkus,
         }
-        //console.log("options:" + JSON.stringify(options));
+        //this.$log("options:" + JSON.stringify(options));
         this.$api.xapi({
           method: 'post',
           url: '/prod/inventory',
           data: options,
         }).then((response) => {
           let result = response.data.data.result;
-          console.log("库存 result is:" + JSON.stringify(result));
+          this.$log("库存 result is:" + JSON.stringify(result));
           result.forEach(item => {
             for (let i = 0; i < this.payCarList.length; i++) {
               if (this.payCarList[i].product.skuId == item.skuId && 0 === parseInt(item.state)) {
@@ -430,37 +431,37 @@
             "cityId": locationCode.cityId,
             "skus": skus,
           }
-          // console.log("options:" + JSON.stringify(options));
+          // this.$log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             url: '/prod/price',
             data: options,
           }).then((response) => {
             let result = response.data.data.result;
-            console.log("价格 result is:" + JSON.stringify(result));
+            this.$log("价格 result is:" + JSON.stringify(result));
             result.forEach(item => {
               for (let i = 0; i < this.payCarList.length; i++) {
-                // console.log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
+                // this.$log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
                 if (item != null && this.payCarList[i].product.skuId == item.skuId) {
-                  //console.log("价格 change true");
+                  //this.$log("价格 change true");
                   this.payCarList[i].checkedPrice = item.price
                 }
               }
             })
-            // console.log("this.payCarList:" + JSON.stringify(this.payCarList));
+            // this.$log("this.payCarList:" + JSON.stringify(this.payCarList));
             //开始聚合不同商家
             this.aggregationPayList();
             this.getfreightPay();
           }).catch(function (error) {
-            console.log(error)
+            this.$log(error)
           })
         }).catch(function (error) {
-          console.log(error)
+          this.$log(error)
         })
 
       },
       editAddressOrList() {
-        console.log("addressCount:" + this.addressCount)
+        this.$log("addressCount:" + this.addressCount)
         if (this.addressCount) { //go to Address List
           this.$router.push({name: '地址列表页'})
         } else { //没有Address //go to Address edit
