@@ -198,25 +198,31 @@
       },
 
       // 商品价格总和
-      productPay() {
-        let all = 0;
+
+      tip() {
+        let productPay = 0;
+        let freightPay = 0;
         try {
-          this.payCarList.forEach(item => {
-            if (item.valid) {
-              all += item.checkedPrice * item.product.count * 100 //分
-            }
+          this.arregationList.forEach(item => {
+            this.$log("allPay item:"+JSON.stringify(item))
+            productPay += item.price
+            freightPay += item.freight;
           })
         } catch (e) {
         }
-        return all
-      },
-
-      tip() {
-        return '商品总价:' + parseFloat(this.productPay / 100) + '元   合计运费:' + this.freight + '元'
+        return '商品总价:' + productPay + '元   合计运费:' + freightPay + '元'
       },
 
       allpay() {
-        return this.productPay + this.freight * 100;
+        let all = 0;
+        try {
+          this.arregationList.forEach(item => {
+            this.$log("allPay item:"+JSON.stringify(item))
+            all += item.price + item.freight;
+          })
+        } catch (e) {
+        }
+        return all*100;
       }
     },
 
