@@ -72,6 +72,7 @@
       setTimeout(() =>{
         this.getAccessTokenInfo();
         this.startLocation();
+        this.getUserInfo();
         //this.updateLocation();
       },1000);
     },
@@ -92,6 +93,14 @@
           }
           return "ok";
         });
+      },
+
+      getUserInfo() {
+        let userInfo=this.$jsbridge.call("getUserInfo");
+        if( userInfo != null && userInfo.length > 0) {
+          console.log("getUserInfo  ret is:"+userInfo);
+          this.$store.commit('SET_USER',userInfo);
+        }
       },
 
       getAccessTokenInfo() {
