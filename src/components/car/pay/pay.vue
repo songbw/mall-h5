@@ -90,7 +90,7 @@
         receiverAddress: '',
         addressEmptyInfo: '',
         usedAddress: {},
-        invoiceDetail:''
+        invoiceDetail: ''
 
       }
     },
@@ -147,21 +147,21 @@
             "supplyer": "50",
             "supplyerName": "天猫精选",
             goods: [],
-            price:0,
+            price: 0,
             freight: 0
           },
           {
             "supplyer": "60",
             "supplyerName": "京东",
             goods: [],
-            price:0,
+            price: 0,
             freight: 0
           },
           {
             "supplyer": "10",
             "supplyerName": "商城自营",
             goods: [],
-            price:0,
+            price: 0,
             freight: 0
           },
 
@@ -182,10 +182,10 @@
               payList[4].goods.push(item);
             }
           })
-          payList.forEach (supplyer => {
+          payList.forEach(supplyer => {
             let all = 0;
-            supplyer.goods.forEach(item =>{
-              this.$log("item:"+JSON.stringify(item))
+            supplyer.goods.forEach(item => {
+              // this.$log("item:" + JSON.stringify(item))
               if (item.valid) {
                 all += item.checkedPrice * item.product.count
               }
@@ -212,7 +212,7 @@
       },
 
       tip() {
-        return '商品总价:' + parseFloat(this.productPay / 100)+ '元   合计运费:' + this.freight + '元'
+        return '商品总价:' + parseFloat(this.productPay / 100) + '元   合计运费:' + this.freight + '元'
       },
 
       allpay() {
@@ -222,11 +222,11 @@
 
     created() {
       const invoiceInfo = this.$store.state.appconf.invoice;
-      this.$log("created:" + invoiceInfo )
+      this.$log("created:" + invoiceInfo)
       if (invoiceInfo != undefined && invoiceInfo.length > 0) {
         try {
           const invoice = JSON.parse(invoiceInfo);
-          if(invoice.invoiceType === "eInvoice") {
+          if (invoice.invoiceType === "eInvoice") {
             this.invoiceDetail += "电子普票";
           }
           if (invoice.invoiceTitleType === "personal") {
@@ -236,17 +236,17 @@
           }
 
         } catch (e) {
-          this.$log("invoice:"+e);
+          this.$log("invoice:" + e);
         }
       } else {
         const invoice = {
-          "invoiceType":"eInvoice",
-          "invoiceTitleType":"personal",
-          "invoiceEnterpriseName":"",
-          "invoiceEnterpriseNumber":""
+          "invoiceType": "eInvoice",
+          "invoiceTitleType": "personal",
+          "invoiceEnterpriseName": "",
+          "invoiceEnterpriseNumber": ""
         }
         this.$store.dispatch('setInvoicdInfo', JSON.stringify(invoice));
-        this.invoiceDetail = "电子普票-个人";
+        this.invoiceDetail = "电子普票(个人)";
       }
       setTimeout(() => {
         this.$store.commit('SET_PAGE_LOADING', false);
@@ -255,6 +255,7 @@
     },
 
     beforeCreate() {
+      let that = this;
       this.$log("pay page mounted Enter")
       this.$store.commit('SET_PAGE_LOADING', true);
       this.$log("pageLoading start,loading is: " + this.$store.state.appconf.pageLoading)
@@ -288,13 +289,13 @@
               this.getCarList();
             }
           }).catch(function (error) {
-            this.$log(error)
+            that.$log(error)
           })
         } else {
           this.$log("ERROR!!, not get UserInfo in Pay page")
         }
       } catch (e) {
-        this.$log(e)
+        that.$log(e)
       }
     },
 
@@ -303,12 +304,13 @@
     },
 
     methods: {
-      aggregationPayList() {
+      savePayList() {
         this.$store.commit('SET_PAY_LIST', this.payCarList);
       },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
       },
+
       updateUsedAddress() {
         this.$log("updateUsedAddress Enter!")
         let address = {};
@@ -358,24 +360,131 @@
         this.usedAddress = address
       },
 
+      prefixInteger(num, length) {
+        return (Array(length).join('0') + num).slice(-length);
+      },
+
+      getComposedOderOption(userInfo, receiverId) {
+        let user = JSON.parse(userInfo)
+        let invoiceType = "eInvoice"
+        let invoiceTitleType = "personal"
+        let invoicePersonalName = ""
+        let invoiceEnterpriseName = ""
+        let invoiceEnterpriseNumber = ""
+        let merchants = []
+
+        let locationCode = this.getLocationCode()
+
+        const invoiceInfo = this.$store.state.appconf.invoice;
+        if (invoiceInfo != undefined && invoiceInfo.length > 0) {
+          try {
+            const invoice = JSON.parse(invoiceInfo);
+            invoiceType = invoice.invoiceType
+            invoiceTitleType = invoice.invoiceTitleType
+            invoiceEnterpriseName = invoice.invoiceEnterpriseName
+            invoiceEnterpriseNumber = invoice.invoiceEnterpriseNumber
+          } catch (e) {
+
+          }
+        }
+        this.arregationList.forEach(item => {
+          if (item.goods.length > 0) {
+            let skus = []
+            item.goods.forEach(sku => {
+              skus.push({
+                "skuId": sku.product.skuId,
+                "num": sku.product.count,
+                "unitPrice": sku.product.price,
+              })
+            })
+            //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
+            let usrId = this.prefixInteger(user.userId,8);
+            let tradeNo = "10" + locationCode.cityId + item.supplyer + usrId
+            merchants.push({
+              "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
+              "merchantNo": item.supplyer, //商户号
+              "payment": "01", //支付方式， 现金支付
+              "servFee": item.freight, //运费
+              "amount": item.price + item.freight,//总价
+              "type": 1,//订单类型 0: 实时式订单  1: 预占型订单
+              "skus": skus
+            })
+          }
+        })
+        let options = {
+          "openId": user.userId,
+          "companyCustNo": "11",
+          "receiverId": receiverId,//接收地址ID
+          "remark": "",//用户自填字段，比如周末不配送
+          "invoiceType": invoiceType,
+          "invoiceTitleType": invoiceTitleType,
+          "invoicePersonalName": invoicePersonalName,
+          "invoiceEnterpriseName": invoiceEnterpriseName,
+          "invoiceEnterpriseNumber": invoiceEnterpriseNumber,
+          "merchants": merchants
+        }
+        this.$log("Order options:"+JSON.stringify(options))
+        return options;
+      },
+
       onSubmit() {
-        this.$log("onSubmit Enter!!!")
-        this.$router.push({name: "收银台页"})
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!this.isUserEmpty(userInfo)) {
+          let receiverId = this.$store.state.appconf.usedAddressId;
+          if (receiverId == undefined || receiverId == -1) {
+            this.$dialog.alert({
+              title: '请检查收件人信息是否已经填写',
+            }).then(() => {
+            })
+          } else {
+            try {
+              let options = this.getComposedOderOption(userInfo, receiverId);
+              if (options != null) {
+                that.$api.xapi({
+                  method: 'post',
+                  url: '/order',
+                  data: options,
+                }).then((response) => {
+                  that.$log("onSubmit:" + JSON.stringify(response.data));
+                }).catch(function (error) {
+                  that.$log(error)
+                })
+              }
+            } catch (e) {
+
+            }
+          }
+        } else {
+          this.$dialog.alert({
+            title: '未获取到用户信息，请检查用户是否已经登录',
+          }).then(() => {
+          })
+        }
+
+
+        that.$log("onSubmit Enter!!!")
+
+
+        //that.$router.push({name: "收银台页"})
       },
       getfreightPay() {
         /////////////查询运费////////////////////////
         let that = this;
         let all = 0;
-        let freightSkus = []
-        this.payCarList.forEach(item => {
-          if (item.valid)
-            freightSkus.push({"skuId": item.skuId, "piece": item.count})
-        })
-
+        let carriges = [];
         let options = {
-          "amount": this.productPay / 100,
+          "carriages": carriges,
         }
-
+        this.arregationList.forEach(item => {
+          if (item.price > 0) {
+            carriges.push({
+              "amount": item.price,
+              "merchantNo": item.supplyer
+            })
+          }
+        })
+        that.$log("options is:" + JSON.stringify(options))
         this.$api.xapi({
           method: 'post',
           url: '/prod/carriage',
@@ -384,18 +493,21 @@
           let result = response.data.data.result;
           this.$log("运费 result is:" + JSON.stringify(result));
           this.freight = result
-          this.aggregationPayList();
           this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
         }).catch(function (error) {
           that.$log(error)
-          that.aggregationPayList();
           that.$store.commit('SET_PAGE_LOADING', false);
           that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
+          this.$dialog.alert({
+            title: '无法获取到运费',
+          }).then(() => {
+          })
         })
       },
       getCarList() {
         this.$log("carList Enter !!!!!!!!!")
+        let that = this;
         let inventorySkus = [];
         let skus = [];
         this.payCarList = [];
@@ -450,13 +562,13 @@
             })
             // this.$log("this.payCarList:" + JSON.stringify(this.payCarList));
             //开始聚合不同商家
-            this.aggregationPayList();
+            this.savePayList();
             this.getfreightPay();
           }).catch(function (error) {
-            this.$log(error)
+            that.$log(error)
           })
         }).catch(function (error) {
-          this.$log(error)
+          that.$log(error)
         })
 
       },
@@ -575,6 +687,7 @@
   .supplyer {
     margin-top: 10px;
     background-color: white;
+
     span {
       padding: 20px 0;
       margin-left: 10px;
