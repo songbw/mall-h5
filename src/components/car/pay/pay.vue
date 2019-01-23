@@ -467,10 +467,10 @@
           }).then(() => {
           })
         }
-
+        this.$store.commit('SET_SELECTED_CARLIST', []);
 
         that.$log("onSubmit Enter!!!")
-
+        //this.
 
         //that.$router.push({name: "收银台页"})
       },

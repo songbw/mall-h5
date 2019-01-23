@@ -6,11 +6,11 @@
     </v-header>
     <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable>
       <van-tab v-for="(item,index) in orderTypes" :title=item.title :key="index">
-        <van-list v-model="item.loading"
-                  :finished="item.finished"
+        <van-list v-model="mLoading"
+                  :finished="mFinished"
                   @load="onLoad(active)">
         </van-list>
-        <li v-for="k in item.list" :key="k.id" style="list-style: none" @click="onListClick(k)">
+        <li v-for="k in mOrderList" :key="k.id" style="list-style: none" @click="onListClick(k)">
           {{k.tradeNo}}
         </li>
       </van-tab>
@@ -30,9 +30,11 @@
       return {
         active: 0,
         swipeThreshold: 5,
-        mOrderList: [],
-        pageNo: 1,
-        total: -1,
+        mLoading: false,
+        mFinished: false,
+        mOrderList:[],
+        mTotal: -1,
+        mPageNo: 1,
         orderTypes: [
           {
             "title": "全部",
@@ -99,18 +101,18 @@
         let that = this;
         let userInfo = this.$store.state.appconf.userInfo;
         if (that.isUserEmpty(userInfo)) {
-          that.loading = false;
-          that.finished = true;
+          that.mLoading = false;
+          that.mFinished = true;
           return;
         }
-        if (that.orderTypes[index].total == -1 || that.orderTypes[index].total > that.orderTypes[index].list.length) {
-          that.orderTypes[index].loading = true;
+        if (that.mTotal == -1 || that.mTotal > that.mOrderList.length) {
+          that.mLoading = true;
           let user = JSON.parse(userInfo);
           let options = {
-            "pageNo": that.orderTypes[index].pageNo++,
-            "pageSize": 10,
+            "pageNo": that.mPageNo++,
+            "pageSize": 2,
             "openId": user.userId,
-            "status":  that.orderTypes[index].status
+            "status":  -1,
           }
           this.$api.xapi({
             method: 'post',
@@ -118,14 +120,14 @@
             data: options,
           }).then((response) => {
             let result = response.data.data.result
-            that.orderTypes[index].total = result.total;
+            that.mTotal = result.total;
             result.list.forEach(item => {
-              that.orderTypes[index].list.push(item);
+              that.mOrderList.push(item);
             })
-            that.orderTypes[index].loading = false;
-            if (that.orderTypes[index].list.length >= that.orderTypes[index].total)
-              that.orderTypes[index].finished = true;
-            that.$log(that.orderTypes[index])
+            that.mLoading = false;
+            if (that.mOrderList.length >= that.mTotal)
+              that.mFinished = true;
+            that.$log(that.mOrderList)
           }).catch(function (error) {
             that.$log(error)
           })

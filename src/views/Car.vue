@@ -168,7 +168,7 @@
           }).then((response) => {
             this.result = response.data.data.result;
             this.total = this.result.total;
-            //console.log("list is:" + JSON.stringify(this.result.list));
+            console.log("list is:" + JSON.stringify(this.result.list));
             this.result.list.forEach(item => {
               this.list.push(item);
               this.getSkuInfoBy(item, userInfo);
@@ -202,7 +202,7 @@
 
       updateSelectedCarlist(item, product, user) {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        let choose = true;
+        let choose = false;
         let found = false;
         let goods = Object();
         for (let i = 0; i < this.selStateInCarList.length; i++) {
@@ -225,7 +225,7 @@
             "skuId": item.skuId,
             "count": item.count,
             "price": product.price,
-            "choose": true,
+            "choose": false,
             "isDel": 0
           }
           this.selStateInCarList.push(goods);
@@ -243,6 +243,7 @@
           }
         }).then((res) => {
           let product = res.data.data.result;
+          //this.$log(product);
           if (product != null) {
             this.updateSelectedCarlist(item, product, user)
           } else {
@@ -254,8 +255,6 @@
       },
 
       singleChecked(index, k) {
-        // console.log("index:" + index + ",k.choose:" + k.choose)
-        //update selStateInCarList
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         for (let i = 0; i < this.selStateInCarList.length; i++) {
           if (this.selStateInCarList[i].id == k.id && this.selStateInCarList[i].userId == k.userId) {
