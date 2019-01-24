@@ -91,7 +91,9 @@
 
     methods: {
       isUserEmpty(userInfo) {
-        return (userInfo == null ||userInfo == undefined || JSON.stringify(userInfo) == "{}")
+        if(userInfo == undefined || userInfo.length == 0)
+          return true;
+        return false;
       },
       onDeleteBtnClick(k, index) {
         console.log("onDeleteBtnClick id:" + k.id + ",index:" + index)
@@ -184,10 +186,9 @@
       },
 
       onLoad() {
-        let userInfo=this.$jsbridge.call("getUserInfo");
-        if( userInfo != null && userInfo.length > 0) {
-          console.log("Car onLoad getUserInfo ret is:"+userInfo);
-          this.$store.commit('SET_USER',userInfo);
+       // let userInfo=this.$jsbridge.call("getUserInfo");
+        let userInfo = this.$store.state.appconf.userInfo;
+        if( !this.isUserEmpty(userInfo)) {
           this.loadCartListBy(userInfo);
         } else {
           this.getCarListWithoutUser();

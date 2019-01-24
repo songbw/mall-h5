@@ -30,7 +30,12 @@
     },
 
     methods: {
-      add2SelectedCarlistWithoutUser () {//
+      isUserEmpty(userInfo) {
+        if (userInfo == undefined || userInfo.length == 0)
+          return true;
+        return false;
+      },
+      add2SelectedCarlistWithoutUser() {//
         console.log("add2SelectedCarlistNoUser Enter");
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
         let choose = true;
@@ -41,7 +46,7 @@
             break;
           }
         }
-        if(found != -1) {
+        if (found != -1) {
           this.selStateInCarList[found].count++;
         } else {
           this.selStateInCarList.push({
@@ -61,15 +66,20 @@
 
       addGoodsCar() {
         console.log("add goods car Enter")
-        let userInfo=this.$jsbridge.call("getUserInfo");
-        if( userInfo != null && userInfo.length > 0) {
-          console.log("addGoodsCar getUserInfo ret is:"+userInfo);
-          this.$store.commit('SET_USER',userInfo);
+        let userInfo = this.$store.state.appconf.userInfo;
+        this.$log("userInfo:" + userInfo);
+        if (!this.isUserEmpty(userInfo)) {
           this.add2Car(userInfo);
-        } else {
-          //not mobile App，can not get user info
-          this.add2SelectedCarlistWithoutUser();
         }
+        /* let userInfo=this.$jsbridge.call("getUserInfo");
+         if( userInfo != null && userInfo.length > 0) {
+           console.log("addGoodsCar getUserInfo ret is:"+userInfo);
+           this.$store.commit('SET_USER',userInfo);
+           this.add2Car(userInfo);
+         } else {
+           //not mobile App，can not get user info
+           this.add2SelectedCarlistWithoutUser();
+         }*/
       },
 
       add2Car(userInfo) {
@@ -81,19 +91,15 @@
           "skuId": skuId
         }
         console.log("addtoCar:" + JSON.stringify(addtoCar));
-        if (user.code === 200) {
-          this.$api.xapi({
-            method: 'post',
-            url: '/cart',
-            data: addtoCar,
-          }).then((response) => {
-            this.result = response.data.data.result;
-          }).catch(function (error) {
-            console.log(error)
-          })
-        } else {
-          //nothing to do
-        }
+        this.$api.xapi({
+          method: 'post',
+          url: '/cart',
+          data: addtoCar,
+        }).then((response) => {
+          this.result = response.data.data.result;
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
 
       gotoCar() {

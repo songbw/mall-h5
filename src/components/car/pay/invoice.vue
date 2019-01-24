@@ -104,6 +104,11 @@
     methods: {
       onClick() {
         console.log("onClick Enter");
+
+        if(this.invoiceTitleType != "personal" && (this.invoiceEnterpriseName.length == 0 || this.invoiceEnterpriseNumber == 0)) {
+            this.$toast("请正确填写企业名称与纳税人识别号!")
+            return
+        }
         const invoice = {
           "invoiceType":this.invoiceType,
           "invoiceTitleType":this.invoiceTitleType,

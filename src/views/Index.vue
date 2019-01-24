@@ -6,7 +6,7 @@
       <li v-for="item in datas" style="list-style: none">
         <v-swiper v-if="item.type==='0'" :datas="item.data"/>
         <v-service v-else-if="item.type==='1'" :datas="item.data"/>
-        <v-sectionSquared  v-else-if="item.type==='2'" :datas="item.data"/>
+        <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data"/>
         <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
         <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
       </li>
@@ -52,14 +52,14 @@
       }
     },
 
- beforeCreate() {
+    beforeCreate() {
       let that = this;
       this.$api.xapi({
         method: 'get',
         url: '/aggregation/findHomePage'
       }).then((response) => {
         const pako = require('pako');
-        const jsonString = pako.inflate(response.data.data.result.content, { to: 'string' })
+        const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         this.datas = JSON.parse(jsonString);
       }).catch(function (error) {
         //alert(error)
@@ -69,12 +69,12 @@
 
     created() {
       this.initJsNativeCb();
-      setTimeout(() =>{
+      setTimeout(() => {
         this.getAccessTokenInfo();
         this.startLocation();
-        this.getUserInfo();
+        //this.getUserInfo();
         //this.updateLocation();
-      },1000);
+      }, 1000);
     },
     computed: {
       mlocation() {
@@ -84,56 +84,96 @@
     methods: {
       initJsNativeCb() {
         this.$jsbridge.register('locationResult', (data) => {
-          this.$log("locationResult:"+data);
+          this.$log("locationResult:" + data);
           var responseData = JSON.parse(data);
-         // this.getLocationCode(data);
-          if (data !=null && data.length > 0) {
-            this.$store.commit('SET_LOCATION',data);
+          // this.getLocationCode(data);
+          if (data != null && data.length > 0) {
+            this.$store.commit('SET_LOCATION', data);
             this.getLocationCode(data)
           }
           return "ok";
         });
       },
 
-      getUserInfo() {
-        let userInfo=this.$jsbridge.call("getUserInfo");
-        if( userInfo != null && userInfo.length > 0) {
-          console.log("getUserInfo  ret is:"+userInfo);
-          this.$store.commit('SET_USER',userInfo);
+/*      getUserInfo() {
+        let userInfo = this.$jsbridge.call("getUserInfo");
+        if (userInfo != null && userInfo.length > 0) {
+          console.log("getUserInfo  ret is:" + userInfo);
+          this.$store.commit('SET_USER', userInfo);
         }
+      },*/
+
+      getUserInfo(accessToken) {
+        let that = this;
+        let paramets = {
+          appId:"fengcao",
+          accessToken:accessToken
+        }
+        that.$jsbridge.call("fetchUserInfoWithAccessToken", paramets, function (userToken) {
+          that.$log("userToken is:" + userToken);
+          that.$api.xapi({
+            method: 'get',
+            url: '/zhcs/user',
+            params: {
+              userToken: userToken,
+            }
+          }).then((response) => {
+            let rt = response.data.data.result
+            let openId = rt.openId;
+            that.$log("openId:" + openId);
+            if( openId != undefined) {
+              let userInfo = {
+                openId:openId,
+                accessToken: accessToken,
+                userId:that.$api.APP_ID + openId
+              }
+              that.$store.commit('SET_USER', JSON.stringify(userInfo));
+            } else {
+              that.$log(response.data.msg);
+            }
+          }).catch(function (error) {
+            //alert(error)
+            that.$log(error)
+          })
+        })
       },
 
       getAccessTokenInfo() {
         let that = this;
-        that.$jsbridge.call("fetchInitCode",function (initCode) {
-          that.$log("initCode is:"+initCode);
-         // this.$jsbridge.fetchUserInfoWithAccessToken("fetchUserInfoWithAccessToken")
+        that.$jsbridge.call("fetchInitCode", function (initCode) {
+          that.$log("initCode is:" + initCode);
+          that.$api.xapi({
+            method: 'get',
+            url: '/zhcs/token',
+            params: {
+              initCode: initCode,
+            }
+          }).then((response) => {
+            let rt = response.data.data.result
+            console.log("rt:" + JSON.stringify(rt))
+            that.$log("rt:" + JSON.stringify(rt));
+            if(rt != undefined) {
+              let accessToken = rt.accessToken;
+              that.$log("accessToken:" + accessToken);
+              that.getUserInfo(accessToken);
+            } else {
+              that.$log(response.data.msg);
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
         })
-       /* let json = {
-          "appId":"FENGCAO12345678",
-          "timestamp":"20190101120012",
-          "randomSeries":"ABCDEFGHIJ",
-          "sign":"",
-          "initCode":"TEST"
-        }
-
-        let jsStr = this.$getordedstr(json,false);
-        let sign = this.$getsign(jsStr);*/
-        /*        return new Promise((resolve, reject) => {
-                  //登录成功后获取token
-                  this.$jsbridge.call("fetchInitCode",())
-                });*/
       },
 
-        startLocation() {
+      startLocation() {
         this.$jsbridge.call("startLoaction");
       },
 
       updateLocation() {
-        let locationInfo=this.$jsbridge.call("getLocation");
-        this.$log("updateLocation getLocation ret is:"+locationInfo);
-        if (locationInfo !=null && locationInfo.length > 0) {
-          this.$store.commit('SET_LOCATION',locationInfo);
+        let locationInfo = this.$jsbridge.call("getLocation");
+        this.$log("updateLocation getLocation ret is:" + locationInfo);
+        if (locationInfo != null && locationInfo.length > 0) {
+          this.$store.commit('SET_LOCATION', locationInfo);
           this.getLocationCode(locationInfo)
         }
       },
@@ -142,13 +182,13 @@
         let that = this;
         let location = JSON.parse(locationInfo);
         let options = {
-          "latitude":location.latitude,
-          "longitude":location.longitude,
-          "locTime":location.locTime,
-          "country":location.country,
-          "province":location.province,
-          "city":location.city,
-          "county":location.district
+          "latitude": location.latitude,
+          "longitude": location.longitude,
+          "locTime": location.locTime,
+          "country": location.country,
+          "province": location.province,
+          "city": location.city,
+          "county": location.district
         }
         //this.$log("options:"+JSON.stringify(options))
         this.$api.xapi({
@@ -157,8 +197,8 @@
           data: options,
         }).then((response) => {
           let code = response.data.data.code;
-          this.$log("location code:"+JSON.stringify(code));
-          this.$store.commit('SET_LOCATION_CODE',code);
+          this.$log("location code:" + JSON.stringify(code));
+          this.$store.commit('SET_LOCATION_CODE', code);
         }).catch(function (error) {
           that.$log(error)
           that.finished = true;

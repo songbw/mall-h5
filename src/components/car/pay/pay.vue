@@ -8,7 +8,7 @@
       <div class="contact-address-card" @click="editAddressOrList">
         <van-row type="flex">
           <van-col span="22">
-            <div v-if="addressCount == 0" class="contact-edit">
+            <div v-if="addressCount == 0" class="contact-edit" style="background-color: white">
               您的收获地址为空，点此添加收货地址
             </div>
             <div v-else>

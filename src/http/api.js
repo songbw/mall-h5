@@ -6,6 +6,7 @@ import router from '../router'
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 const SERVER_BASE_URL = "http://42.121.121.128:8080"
 //const SERVER_BASE_URL = "http://172.21.4.66:8080"  //local debug
+const APP_ID = "10" //无锡市民卡
 
 
 const xapi = axios.create();
@@ -67,5 +68,6 @@ xapi.interceptors.response.use(function (response) {
 
 export default {
   xapi,
-  GOODS_URL_PREFIX
+  GOODS_URL_PREFIX,
+  APP_ID
 }
