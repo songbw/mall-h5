@@ -11,7 +11,11 @@
                   @load="onLoad(active)">
         </van-list>
         <li v-for="k in item.list" :key="k.id" style="list-style: none" @click="onListClick(k)">
-          {{k}}
+          {{k.tradeNo}}
+          <van-button plain round size="small" type="primary" @click="onDelBtnClick(k)">
+            删 除
+          </van-button>
+
         </li>
       </van-tab>
     </van-tabs>
@@ -81,6 +85,25 @@
     },
 
     methods: {
+      onDelBtnClick(listItem) {
+ //       this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+ //       this.selStateInCarList.splice(index, 1);
+ //       this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+ //       console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
+
+        this.$api.xapi({
+          method: 'delete',
+          url: '/order',
+          params: {
+            id: listItem.id,
+          }
+        }).then((response) => {
+          console.log("onDelBtnClick success")
+        }).catch(function (error) {
+          console.log(error)
+        })
+
+      },
       onListClick(listItem) {
 
       },

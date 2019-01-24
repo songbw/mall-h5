@@ -5,7 +5,7 @@
       <p>共{{count}}件 金额：</p>
       <p><span>{{allpay}} </span>元</p>
     </div>
-    <router-link :to="{ name: '分类页'}" class="footer-goon">
+    <router-link  :to="{ name: '分类页'}" class="footer-goon"  replace>
       继续购物
     </router-link>
     <a class="footer-pay" @click="goPay">
