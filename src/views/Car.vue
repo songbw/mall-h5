@@ -168,7 +168,7 @@
           }).then((response) => {
             this.result = response.data.data.result;
             this.total = this.result.total;
-            console.log("list is:" + JSON.stringify(this.result.list));
+            console.log("load from network car list is:" + JSON.stringify(this.result.list));
             this.result.list.forEach(item => {
               this.list.push(item);
               this.getSkuInfoBy(item, userInfo);
@@ -202,7 +202,7 @@
 
       updateSelectedCarlist(item, product, user) {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        let choose = false;
+        let choose = true;
         let found = false;
         let goods = Object();
         for (let i = 0; i < this.selStateInCarList.length; i++) {
@@ -225,7 +225,7 @@
             "skuId": item.skuId,
             "count": item.count,
             "price": product.price,
-            "choose": false,
+            "choose": true,
             "isDel": 0
           }
           this.selStateInCarList.push(goods);

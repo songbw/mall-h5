@@ -204,12 +204,13 @@
         let freightPay = 0;
         try {
           this.arregationList.forEach(item => {
-            this.$log("allPay item:"+JSON.stringify(item))
+           // this.$log("allPay item:" + JSON.stringify(item))
             productPay += item.price
             freightPay += item.freight;
           })
         } catch (e) {
         }
+
         return '商品总价:' + productPay + '元   合计运费:' + freightPay + '元'
       },
 
@@ -217,12 +218,12 @@
         let all = 0;
         try {
           this.arregationList.forEach(item => {
-            this.$log("allPay item:"+JSON.stringify(item))
+           // this.$log("allPay item:" + JSON.stringify(item))
             all += item.price + item.freight;
           })
         } catch (e) {
         }
-        return all*100;
+        return all * 100;
       }
     },
 
@@ -373,9 +374,7 @@
       getComposedOderOption(userInfo, receiverId) {
         let user = JSON.parse(userInfo)
         let invoiceType = "eInvoice"
-        let invoiceTitleType = "personal"
-        let invoicePersonalName = ""
-        let invoiceEnterpriseName = ""
+        let invoiceTitleName = ""
         let invoiceEnterpriseNumber = ""
         let merchants = []
 
@@ -386,13 +385,18 @@
           try {
             const invoice = JSON.parse(invoiceInfo);
             invoiceType = invoice.invoiceType
-            invoiceTitleType = invoice.invoiceTitleType
-            invoiceEnterpriseName = invoice.invoiceEnterpriseName
-            invoiceEnterpriseNumber = invoice.invoiceEnterpriseNumber
+            if (invoice.invoiceTitleType === "personal") {
+              invoiceTitleName = ""
+              invoiceEnterpriseNumber = ""
+            } else {
+              invoiceTitleName = invoice.invoiceEnterpriseName
+              invoiceEnterpriseNumber = invoice.invoiceEnterpriseNumber
+            }
           } catch (e) {
 
           }
         }
+        let selStateInCarList = this.$store.state.appconf.selStateInCarList
         this.arregationList.forEach(item => {
           if (item.goods.length > 0) {
             let skus = []
@@ -402,9 +406,19 @@
                 "num": sku.product.count,
                 "unitPrice": sku.product.price,
               })
+              let found = -1;
+              for(let i = 0; i < selStateInCarList.length; i++) { //从CarList中删除订单中的货物
+                  if(selStateInCarList[i].skuId === sku.product.skuId) {
+                    found = i;
+                    break;
+                  }
+              }
+              if(found != -1) {
+                selStateInCarList.splice(found,1);
+              }
             })
             //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
-            let usrId = this.prefixInteger(user.userId,8);
+            let usrId = this.prefixInteger(user.userId, 8);
             let tradeNo = "10" + locationCode.cityId + item.supplyer + usrId
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
@@ -417,24 +431,24 @@
             })
           }
         })
+        this.$store.commit('SET_SELECTED_CARLIST', selStateInCarList);
         let options = {
           "openId": user.userId,
           "companyCustNo": "11",
           "receiverId": receiverId,//接收地址ID
           "remark": "",//用户自填字段，比如周末不配送
           "invoiceType": invoiceType,
-          "invoiceTitleType": invoiceTitleType,
-          "invoicePersonalName": invoicePersonalName,
-          "invoiceEnterpriseName": invoiceEnterpriseName,
-          "invoiceEnterpriseNumber": invoiceEnterpriseNumber,
+          "invoiceTitleName": invoiceTitleName,
+          "invoiceEnterpriseNumber ": invoiceEnterpriseNumber,
           "merchants": merchants
         }
-        this.$log("Order options:"+JSON.stringify(options))
+        this.$log("Order options:" + JSON.stringify(options))
         return options;
       },
 
       onSubmit() {
         let that = this
+        that.$log("onSubmit Enter!!!")
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
           let receiverId = this.$store.state.appconf.usedAddressId;
@@ -453,9 +467,11 @@
                   data: options,
                 }).then((response) => {
                   that.$log("onSubmit:" + JSON.stringify(response.data));
+                  //that.$router.push({name: "收银台页"})
                 }).catch(function (error) {
                   that.$log(error)
                 })
+
               }
             } catch (e) {
 
@@ -467,12 +483,7 @@
           }).then(() => {
           })
         }
-        this.$store.commit('SET_SELECTED_CARLIST', []);
 
-        that.$log("onSubmit Enter!!!")
-        //this.
-
-        //that.$router.push({name: "收银台页"})
       },
       getfreightPay() {
         /////////////查询运费////////////////////////
@@ -497,18 +508,26 @@
           data: options,
         }).then((response) => {
           let result = response.data.data.result;
-          this.$log("运费 result is:" + JSON.stringify(result));
-          this.freight = result
+          this.$log("运费  result is:" + JSON.stringify(result));
+          result.forEach(iFreight => {
+            this.arregationList.forEach(item => {
+              if(iFreight.merchantNo === item.supplyer) {
+                item.freight = parseFloat(iFreight.freightFare);
+              }
+            })
+          });
+         // this.$log("this.arregationList is:" + JSON.stringify(this.arregationList));
           this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
         }).catch(function (error) {
           that.$log(error)
           that.$store.commit('SET_PAGE_LOADING', false);
           that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
-          this.$dialog.alert({
-            title: '无法获取到运费',
-          }).then(() => {
-          })
+          this.$toast("无法获取到运费")
+          /*         this.$dialog.alert({
+                     title: '无法获取到运费',
+                   }).then(() => {
+                   })*/
         })
       },
       getCarList() {

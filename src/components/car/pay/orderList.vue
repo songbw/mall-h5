@@ -6,12 +6,12 @@
     </v-header>
     <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable>
       <van-tab v-for="(item,index) in orderTypes" :title=item.title :key="index">
-        <van-list v-model="mLoading"
-                  :finished="mFinished"
+        <van-list v-model="item.loading"
+                  :finished="item.finished"
                   @load="onLoad(active)">
         </van-list>
-        <li v-for="k in mOrderList" :key="k.id" style="list-style: none" @click="onListClick(k)">
-          {{k.tradeNo}}
+        <li v-for="k in item.list" :key="k.id" style="list-style: none" @click="onListClick(k)">
+          {{k}}
         </li>
       </van-tab>
     </van-tabs>
@@ -30,11 +30,6 @@
       return {
         active: 0,
         swipeThreshold: 5,
-        mLoading: false,
-        mFinished: false,
-        mOrderList:[],
-        mTotal: -1,
-        mPageNo: 1,
         orderTypes: [
           {
             "title": "全部",
@@ -42,8 +37,8 @@
             "total": -1,
             "pageNo": 1,
             "status": -1,
-            loading: false,
-            finished: false,
+            "loading": false,
+            "finished": false,
           },
           {
             "title": "待支付",
@@ -51,8 +46,8 @@
             "total": -1,
             "pageNo": 1,
             "status": 0,
-            loading: false,
-            finished: false,
+            "loading": false,
+            "finished": false,
           },
           {
             "title": "待收货",
@@ -60,8 +55,8 @@
             "total": -1,
             "pageNo": 1,
             "status": 1,
-            loading: false,
-            finished: false,
+            "loading": false,
+            "finished": false,
           },
           {
             "title": "已完成",
@@ -69,8 +64,8 @@
             "total": -1,
             "pageNo": 1,
             "status": 2,
-            loading: false,
-            finished: false,
+            "loading": false,
+            "finished": false,
           },
           {
             "title": "已取消",
@@ -78,8 +73,8 @@
             "total": -1,
             "pageNo": 1,
             "status": 3,
-            loading: false,
-            finished: false,
+            "loading": false,
+            "finished": false,
           },
         ]
       }
@@ -101,18 +96,16 @@
         let that = this;
         let userInfo = this.$store.state.appconf.userInfo;
         if (that.isUserEmpty(userInfo)) {
-          that.mLoading = false;
-          that.mFinished = true;
           return;
         }
-        if (that.mTotal == -1 || that.mTotal > that.mOrderList.length) {
-          that.mLoading = true;
+        if (that.orderTypes[index].total == -1 || that.orderTypes[index].total > that.orderTypes[index].list.length) {
+          that.orderTypes[index].loading = true;
           let user = JSON.parse(userInfo);
           let options = {
-            "pageNo": that.mPageNo++,
-            "pageSize": 2,
+            "pageNo": that.orderTypes[index].pageNo++,
+            "pageSize": 10,
             "openId": user.userId,
-            "status":  -1,
+            "status": that.orderTypes[index].status,
           }
           this.$api.xapi({
             method: 'post',
@@ -120,14 +113,14 @@
             data: options,
           }).then((response) => {
             let result = response.data.data.result
-            that.mTotal = result.total;
+            that.orderTypes[index].total = result.total;
             result.list.forEach(item => {
-              that.mOrderList.push(item);
+              that.orderTypes[index].list.push(item);
             })
-            that.mLoading = false;
-            if (that.mOrderList.length >= that.mTotal)
-              that.mFinished = true;
-            that.$log(that.mOrderList)
+            that.orderTypes[index].loading = false;
+            if (that.orderTypes[index].list.length >= that.orderTypes[index].total)
+              that.orderTypes[index].finished = true;
+            that.$log(that.orderTypes[index])
           }).catch(function (error) {
             that.$log(error)
           })
