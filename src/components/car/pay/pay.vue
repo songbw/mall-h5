@@ -204,7 +204,7 @@
         let freightPay = 0;
         try {
           this.arregationList.forEach(item => {
-           // this.$log("allPay item:" + JSON.stringify(item))
+            // this.$log("allPay item:" + JSON.stringify(item))
             productPay += item.price
             freightPay += item.freight;
           })
@@ -218,7 +218,7 @@
         let all = 0;
         try {
           this.arregationList.forEach(item => {
-           // this.$log("allPay item:" + JSON.stringify(item))
+            // this.$log("allPay item:" + JSON.stringify(item))
             all += item.price + item.freight;
           })
         } catch (e) {
@@ -407,14 +407,14 @@
                 "unitPrice": sku.product.price,
               })
               let found = -1;
-              for(let i = 0; i < selStateInCarList.length; i++) { //从CarList中删除订单中的货物
-                  if(selStateInCarList[i].skuId === sku.product.skuId) {
-                    found = i;
-                    break;
-                  }
+              for (let i = 0; i < selStateInCarList.length; i++) { //从CarList中删除订单中的货物
+                if (selStateInCarList[i].skuId === sku.product.skuId) {
+                  found = i;
+                  break;
+                }
               }
-              if(found != -1) {
-                selStateInCarList.splice(found,1);
+              if (found != -1) {
+                selStateInCarList.splice(found, 1);
               }
             })
             //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
@@ -446,11 +446,17 @@
         return options;
       },
 
+      openCashPage(orderInfo) {
+        this.$log("openCashPage:" + JSON.stringify(orderInfo))
+        this.$jsbridge.call("openCashPage", orderInfo);
+      },
+
       onSubmit() {
         let that = this
         that.$log("onSubmit Enter!!!")
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
           let receiverId = this.$store.state.appconf.usedAddressId;
           if (receiverId == undefined || receiverId == -1) {
             this.$dialog.alert({
@@ -467,7 +473,32 @@
                   data: options,
                 }).then((response) => {
                   that.$log("onSubmit:" + JSON.stringify(response.data));
-                  //that.$router.push({name: "收银台页"})
+                  let result = response.data.data.result;
+                  that.$log("result:"+ JSON.stringify(result))
+                  let orderNo = ""
+                  let amount = 0;
+                  if(result != undefined  && result.length > 0 && result[0].orderId.length > 8) {
+                    let  len = result[0].orderId.length;
+                    orderNo =user.userId + JSON.stringify(result[0].orderId.substr(len-8)).replace(/\"/g, "")
+                  }
+                  //amount = result.
+                  if(orderNo.length > 0) {
+                    that.$log("orderNo is:"+orderNo)
+                    options.merchants.forEach(item => {
+                        amount += item.amount;
+                    })
+                    let orderInfo = {
+                      "accessToken": user.accessToken,
+                      "orderNo": orderNo,
+                      "orderAmount":  amount*100,//分
+                      "openId": user.openId,
+                      "businessType": "11"
+                    }
+                    that.openCashPage(orderInfo)
+                  } else {
+                    that.log("can not get correct orderNo");
+                  }
+
                 }).catch(function (error) {
                   that.$log(error)
                 })
@@ -493,6 +524,7 @@
         let options = {
           "carriages": carriges,
         }
+
         this.arregationList.forEach(item => {
           if (item.price > 0) {
             carriges.push({
@@ -511,12 +543,12 @@
           this.$log("运费  result is:" + JSON.stringify(result));
           result.forEach(iFreight => {
             this.arregationList.forEach(item => {
-              if(iFreight.merchantNo === item.supplyer) {
+              if (iFreight.merchantNo === item.supplyer) {
                 item.freight = parseFloat(iFreight.freightFare);
               }
             })
           });
-         // this.$log("this.arregationList is:" + JSON.stringify(this.arregationList));
+          // this.$log("this.arregationList is:" + JSON.stringify(this.arregationList));
           this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
         }).catch(function (error) {

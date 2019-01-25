@@ -12,6 +12,12 @@
       v-else-if="$route.matched[0].path=='/car/pay'"
       replace>
     </router-link>
+    <router-link
+      class="icon-go"
+      :to="{ name: '首页'}"
+      v-else-if="$route.matched[0].path=='/car/oderList'"
+      replace>
+    </router-link>
     <span class="icon-go" @click="$router.go(-1)" v-else></span>
     <slot name="title"></slot>
   </header>

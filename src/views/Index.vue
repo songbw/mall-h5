@@ -72,6 +72,7 @@
       setTimeout(() => {
         this.getAccessTokenInfo();
         this.startLocation();
+        this.test();
         //this.getUserInfo();
         //this.updateLocation();
       }, 1000);
@@ -86,15 +87,29 @@
         this.$jsbridge.register('locationResult', (data) => {
           this.$log("locationResult:" + data);
           var responseData = JSON.parse(data);
-          // this.getLocationCode(data);
           if (data != null && data.length > 0) {
             this.$store.commit('SET_LOCATION', data);
             this.getLocationCode(data)
           }
           return "ok";
         });
-      },
 
+        this.$jsbridge.register('payResult', (data) => {
+          this.$log("payResult:" + data);
+          var responseData = JSON.parse(data);
+          this.onPayResult(data);
+          return "ok";
+        });
+
+      },
+      test() {
+        let user = {
+          "openId":"0001",
+          "userId":"100001",
+          "accessToken":"xxxxxxxxxx"
+        }
+        this.$store.commit('SET_USER', JSON.stringify(user));
+      },
 /*      getUserInfo() {
         let userInfo = this.$jsbridge.call("getUserInfo");
         if (userInfo != null && userInfo.length > 0) {
@@ -102,7 +117,9 @@
           this.$store.commit('SET_USER', userInfo);
         }
       },*/
-
+      onPayResult(payResult) {
+        this.$router.replace({path: '/car/oderList'})
+      },
       getUserInfo(accessToken) {
         let that = this;
         let paramets = {
@@ -169,14 +186,14 @@
         this.$jsbridge.call("startLoaction");
       },
 
-      updateLocation() {
+/*      updateLocation() {
         let locationInfo = this.$jsbridge.call("getLocation");
         this.$log("updateLocation getLocation ret is:" + locationInfo);
         if (locationInfo != null && locationInfo.length > 0) {
           this.$store.commit('SET_LOCATION', locationInfo);
           this.getLocationCode(locationInfo)
         }
-      },
+      },*/
 
       getLocationCode(locationInfo) {
         let that = this;
