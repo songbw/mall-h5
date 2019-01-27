@@ -11,9 +11,13 @@
                   @load="onLoad(active)">
         </van-list>
         <div class="orderlist-body">
-          <li v-for="(k,i) in item.list" :key="i" style="list-style: none" @click="onListClick(k,i)">
+          <div v-if="item.total === 0" class="no-oderlist">
+            <img :src=no_orderList_bg>
+            <span>您还没有相关订单</span>
+          </div>
+          <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none" @click="onListClick(k,i)">
             <div class="orderDetail">
-              <van-cell title="商户" icon="shop"/>
+              <van-cell :title=getMerchantName(k.merchantNo) icon="shop"/>
               <ul>
                 <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
                   <van-card
@@ -27,7 +31,7 @@
               <div class="orderDetailSummery">
                 <span>合计: ￥{{k.amount.toFixed(2)}}元 (含运费￥{{k.servFee.toFixed(2)}}元) </span>
               </div>
-              <div class="orderDetailAction" >
+              <div class="orderDetailAction">
                 <van-button plain round size="small" type="danger" @click="onDelBtnClick(k,i)">
                   删 除
                 </van-button>
@@ -43,6 +47,7 @@
 <script>
   import Header from '@/common/_header.vue'
 
+
   export default {
     components: {
       'v-header': Header,
@@ -51,6 +56,7 @@
       return {
         active: 0,
         swipeThreshold: 5,
+        no_orderList_bg: require('@/assets/images/emptyBox.png'),
         orderTypes: [
           {
             "title": "全部",
@@ -102,7 +108,20 @@
     },
 
     methods: {
-      onDelBtnClick(listItem,i) {
+      getMerchantName(merchantNo) {
+        if (merchantNo == 20) {
+          return "苏宁易购"
+        } else if (merchantNo == 30) {
+          return "唯品会"
+        } else if (merchantNo == 50) {
+          return "天猫精选"
+        } else if (merchantNo == 60) {
+          return "京东"
+        } else {
+          return "商城自营"
+        }
+      },
+      onDelBtnClick(listItem, i) {
         //       this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         //       this.selStateInCarList.splice(index, 1);
         //       this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
@@ -111,16 +130,16 @@
         that.orderTypes.forEach(orderTypeItem => {
           let found = -1;
           that.$log(orderTypeItem)
-          for (let i = 0 ; i < orderTypeItem.list.length; i++) {
-             if(listItem.id === orderTypeItem.list[i].id){
-               found = i;
-               break;
-             }
+          for (let i = 0; i < orderTypeItem.list.length; i++) {
+            if (listItem.id === orderTypeItem.list[i].id) {
+              found = i;
+              break;
+            }
           }
-          that.$log("title is:"+orderTypeItem.title+",found is:"+found);
-          if(found != -1)
-            orderTypeItem.list.splice(found,1)
-            orderTypeItem.total--;
+          that.$log("title is:" + orderTypeItem.title + ",found is:" + found);
+          if (found != -1)
+            orderTypeItem.list.splice(found, 1)
+          orderTypeItem.total--;
         })
         that.$api.xapi({
           method: 'delete',
@@ -135,9 +154,11 @@
         })
 
       },
-      onListClick(listItem,i) {
 
+      onListClick(listItem, i) {
+        this.$log("onListClick Enter")
       },
+
       onClick(index, title) {
         this.$log("onClick Enter, index is:" + index + ",title is:" + title)
         this.onLoad(index)
@@ -149,7 +170,7 @@
         this.$log("onLoad is:" + index);
         let that = this;
         let userInfo = this.$store.state.appconf.userInfo;
-      //  that.$log("userInfo:"+userInfo)
+        //  that.$log("userInfo:"+userInfo)
         if (that.isUserEmpty(userInfo)) {
           that.orderTypes[index].loading = false;
           return;
@@ -213,6 +234,19 @@
     .orderlist-body {
       background-color: #f0f0f0;
 
+      .no-oderlist {
+        width: 100%;
+        display: flex;
+        background-color: white;
+        flex-flow: column;
+        text-align: center;
+
+        img {
+          display: block;
+          padding: 0em 2em 0em 2em;
+        }
+      }
+
       .orderDetail {
         margin-top: 10px;
         background-color: white;
@@ -225,6 +259,7 @@
           .fz(font-size, 30);
           color: #000000;
         }
+
         .orderDetailAction {
           text-align: right;
           margin-right: 1em;

@@ -4,7 +4,7 @@
       <van-goods-action-mini-btn icon="chat" text="客服"/>
       <van-goods-action-mini-btn icon="cart" text="购物车" @click="gotoCar"/>
       <van-goods-action-big-btn text="加入购物车" @click="addGoodsCar"/>
-      <van-goods-action-big-btn text="立即购买" primary/>
+      <van-goods-action-big-btn text="立即购买" primary @click="gotoPay"/>
     </van-goods-action>
   </section>
 
@@ -68,16 +68,9 @@
         this.$log("userInfo:" + userInfo);
         if (!this.isUserEmpty(userInfo)) {
           this.add2Car(userInfo);
+        } else {
+          this.$toast("没有用户信息，请先登录,再添加购物车")
         }
-        /* let userInfo=this.$jsbridge.call("getUserInfo");
-         if( userInfo != null && userInfo.length > 0) {
-           console.log("addGoodsCar getUserInfo ret is:"+userInfo);
-           this.$store.commit('SET_USER',userInfo);
-           this.add2Car(userInfo);
-         } else {
-           //not mobile App，can not get user info
-           this.add2SelectedCarlistWithoutUser();
-         }*/
       },
 
       add2Car(userInfo) {
@@ -98,6 +91,10 @@
         }).catch(function (error) {
           console.log(error)
         })
+      },
+
+      gotoPay() {
+        this.$log("gotoPay Enter")
       },
 
       gotoCar() {

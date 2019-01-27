@@ -270,7 +270,7 @@
       try {
         let userInfo = this.$store.state.appconf.userInfo;
         this.$log("userInfo:" + userInfo)
-        if (!(userInfo == undefined || userInfo.length > 0)) {
+        if (!(userInfo == undefined || userInfo.length == 0)) {
           let user = JSON.parse(userInfo)
           let options = {
             "openId": user.userId,
