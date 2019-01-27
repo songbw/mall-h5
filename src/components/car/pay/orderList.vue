@@ -5,13 +5,13 @@
       <h1 slot="title">我的订单</h1>
     </v-header>
     <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable>
-      <van-tab v-for="(item,index) in orderTypes" :title=item.title :key="index">
+      <van-tab v-for="(item,type) in orderTypes" :title=item.title :key="type">
         <van-list v-model="item.loading"
                   :finished="item.finished"
                   @load="onLoad(active)">
         </van-list>
         <div class="orderlist-body">
-          <li v-for="k in item.list" :key="k.id" style="list-style: none" @click="onListClick(k)">
+          <li v-for="(k,i) in item.list" :key="i" style="list-style: none" @click="onListClick(k,i)">
             <div class="orderDetail">
               <van-cell title="商户" icon="shop"/>
               <ul>
@@ -28,14 +28,13 @@
                 <span>合计: ￥{{k.amount.toFixed(2)}}元 (含运费￥{{k.servFee.toFixed(2)}}元) </span>
               </div>
               <div class="orderDetailAction" >
-                <van-button plain round size="small" type="primary" @click="onDelBtnClick(k)">
+                <van-button plain round size="small" type="danger" @click="onDelBtnClick(k,i)">
                   删 除
                 </van-button>
               </div>
             </div>
           </li>
         </div>
-
       </van-tab>
     </van-tabs>
   </div>
@@ -103,12 +102,26 @@
     },
 
     methods: {
-      onDelBtnClick(listItem) {
+      onDelBtnClick(listItem,i) {
         //       this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         //       this.selStateInCarList.splice(index, 1);
         //       this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
         //       console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
         let that = this;
+        that.orderTypes.forEach(orderTypeItem => {
+          let found = -1;
+          that.$log(orderTypeItem)
+          for (let i = 0 ; i < orderTypeItem.list.length; i++) {
+             if(listItem.id === orderTypeItem.list[i].id){
+               found = i;
+               break;
+             }
+          }
+          that.$log("title is:"+orderTypeItem.title+",found is:"+found);
+          if(found != -1)
+            orderTypeItem.list.splice(found,1)
+            orderTypeItem.total--;
+        })
         that.$api.xapi({
           method: 'delete',
           url: '/order',
@@ -122,7 +135,7 @@
         })
 
       },
-      onListClick(listItem) {
+      onListClick(listItem,i) {
 
       },
       onClick(index, title) {
@@ -130,13 +143,15 @@
         this.onLoad(index)
       },
       isUserEmpty(userInfo) {
-        return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
+        return (userInfo == undefined || userInfo.length === 0)
       },
       onLoad(index) {
         this.$log("onLoad is:" + index);
         let that = this;
         let userInfo = this.$store.state.appconf.userInfo;
+      //  that.$log("userInfo:"+userInfo)
         if (that.isUserEmpty(userInfo)) {
+          that.orderTypes[index].loading = false;
           return;
         }
         if (that.orderTypes[index].total == -1 || that.orderTypes[index].total > that.orderTypes[index].list.length) {

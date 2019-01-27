@@ -31,9 +31,7 @@
 
     methods: {
       isUserEmpty(userInfo) {
-        if (userInfo == undefined || userInfo.length == 0)
-          return true;
-        return false;
+        return (userInfo == undefined || userInfo.length == 0)
       },
       add2SelectedCarlistWithoutUser() {//
         console.log("add2SelectedCarlistNoUser Enter");

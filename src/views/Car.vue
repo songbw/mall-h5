@@ -91,9 +91,7 @@
 
     methods: {
       isUserEmpty(userInfo) {
-        if(userInfo == undefined || userInfo.length == 0)
-          return true;
-        return false;
+        return (userInfo == undefined || userInfo.length === 0)
       },
       onDeleteBtnClick(k, index) {
         console.log("onDeleteBtnClick id:" + k.id + ",index:" + index)
