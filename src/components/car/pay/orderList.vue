@@ -33,7 +33,7 @@
               </div>
               <div class="orderDetailAction">
                 <van-button plain round size="small" type="danger" @click="onDelBtnClick(k,i)">
-                  删 除
+                  删除订单
                 </van-button>
               </div>
             </div>
@@ -157,7 +157,12 @@
 
       onListClick(listItem, i) {
         this.$log("onListClick Enter")
-        this.$router.push({"path": "/car/oderDetail"})
+        this.$router.push({
+          name: "订单详情页",
+          params: {
+            detail: listItem
+          }
+        })
       },
 
       onClick(index, title) {

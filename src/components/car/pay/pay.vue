@@ -5,69 +5,72 @@
       <v-header>
         <h1 slot="title">确认订单</h1>
       </v-header>
-      <div class="contact-address-card" @click="editAddressOrList">
-        <van-row type="flex">
-          <van-col span="22">
-            <div v-if="addressCount == 0" class="contact-edit" style="background-color: white">
-              您的收获地址为空，点此添加收货地址
-            </div>
-            <div v-else>
-              <van-cell>
-                <template slot="title">
-                  <span class="custom-text">{{receiverInfo}}</span>
-                  <p>
-                    <van-icon name="location"></van-icon>
-                    <span class="custom-text">{{receiverAddress}}</span>
-                  </p>
-                </template>
-              </van-cell>
-            </div>
-          </van-col>
-          <van-col span="2" style="background: white;display: flex;">
-            <van-icon class="contact-edit" name="arrow" size="12px"/>
-          </van-col>
-        </van-row>
-      </div>
-      <div class="address-line"></div>
-      <div class="pay-info">
-        <van-cell title="支付方式:" value="现金支付">
-        </van-cell>
-        <van-cell title="发票:" :value="invoiceDetail" is-link to="/car/invoice">
-        </van-cell>
+      <div class="pay-body">
+        <div class="contact-address-card" @click="editAddressOrList">
+          <van-row type="flex">
+            <van-col span="22">
+              <div v-if="addressCount == 0" class="contact-edit" style="background-color: white">
+                您的收获地址为空，点此添加收货地址
+              </div>
+              <div v-else>
+                <van-cell>
+                  <template slot="title">
+                    <span class="custom-text">{{receiverInfo}}</span>
+                    <p>
+                      <van-icon name="location"></van-icon>
+                      <span class="custom-text">{{receiverAddress}}</span>
+                    </p>
+                  </template>
+                </van-cell>
+              </div>
+            </van-col>
+            <van-col span="2" style="background: white;display: flex;">
+              <van-icon class="contact-edit" name="arrow" size="12px"/>
+            </van-col>
+          </van-row>
+        </div>
+        <div class="address-line"></div>
+        <div class="pay-info">
+          <van-cell title="支付方式:" value="现金支付">
+          </van-cell>
+          <van-cell title="发票:" :value="invoiceDetail" is-link to="/car/invoice">
+          </van-cell>
+        </div>
       </div>
 
-      <div class="pay-product">
-        <li v-for="item in arregationList" style="list-style: none">
-          <div v-if="item.goods.length > 0" class="supplyer">
-            <van-cell :title=item.supplyerName icon="shop"/>
-            <ul>
-              <li v-for="(k,i) in item.goods" :key='i'>
-                <van-card
-                  :tag="k.valid?'':'无货'"
-                  :price="k.checkedPrice"
-                  :title="k.product.desc"
-                  :num="k.product.count"
-                  :thumb="k.product.image">
-                  <div slot="footer">
-                    <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
-                  </div>
-                </van-card>
-              </li>
-            </ul>
-            <div class="supplyerSummery">
-              <span>合计: ￥{{item.price.toFixed(2)}}元 (含运费￥{{item.freight.toFixed(2)}}元) </span>
+      <div class="pay-list">
+        <div class="pay-product">
+          <li v-for="item in arregationList" style="list-style: none">
+            <div v-if="item.goods.length > 0" class="supplyer">
+              <van-cell :title=item.supplyerName icon="shop"/>
+              <ul>
+                <li v-for="(k,i) in item.goods" :key='i'>
+                  <van-card
+                    :tag="k.valid?'':'无货'"
+                    :price="k.checkedPrice"
+                    :title="k.product.desc"
+                    :num="k.product.count"
+                    :thumb="k.product.image">
+                    <div slot="footer">
+                      <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
+                    </div>
+                  </van-card>
+                </li>
+              </ul>
+              <div class="supplyerSummery">
+                <span>合计: ￥{{item.price.toFixed(2)}}元 (含运费￥{{item.freight.toFixed(2)}}元) </span>
+              </div>
             </div>
-          </div>
-        </li>
+          </li>
+        </div>
+        <div class="pay-footer"></div>
+        <van-submit-bar
+          :price="allpay"
+          button-text="提交订单"
+          @submit="onSubmit"
+          :tip=tip
+        />
       </div>
-      <div class="pay-footer"></div>
-      <van-submit-bar
-        :price="allpay"
-        button-text="提交订单"
-        @submit="onSubmit"
-        :tip=tip
-      />
-
     </div>
   </section>
 
@@ -657,102 +660,89 @@
   @import "../../../assets/fz.less";
 
   .pay {
-    background-color: #f0f0f0;
     width: 100%;
     padding-bottom: 2vw;
-
+    //
+  //  background-color: #f44336;
     .custom-text {
       text-align: left;
       .fz(font-size, 30px);
     }
-
-    .pay-info {
-      margin-top: 15px;
-      background-color: #fff;
-      padding-Top: 2vw;
-      padding-bottom: 2vw;
+    .pay-body {
+      background-color: #f0f0f0;
+      .pay-info {
+        background-color: white;
+        margin-top: 1em;
+        .van-cell{
+          background-color: white;
+          margin-top: -1px;
+        }
+      }
+      .contact-edit {
+        padding: 20px 0;
+        text-align: center;
+        color: #000000;
+        line-height: 30px;
+        .fz(font-size, 30);
+      }
+      .address-line {
+        content: '';
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 2px;
+        background: repeating-linear-gradient(
+          -45deg,
+          #ff6c6c 0,
+          #ff6c6c 20%,
+          transparent 0,
+          transparent 25%,
+          blue 0,
+          blue 45%,
+          transparent 0,
+          transparent 50%
+        );
+        background-size: 80px;
+      }
     }
 
-    .pay-product {
+    .pay-list {
+      background-color: #f0f0f0;
       overflow: auto;
-      padding-bottom: 14vw;
-      margin-top: 5px;
-
-      li {
-        list-style: none;
+      .pay-product {
+        li {
+          list-style: none;
+        }
       }
     }
+    .pay-footer {
+      background-color: white;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+    }
+    .supplyer {
+      margin-top: 10px;
+      background-color: white;
 
-    .pay-allpay {
-      text-align: right;
-      margin-top: 6vw;
-      padding: 4vw 5vw;
-      .fz(font-size, 32px);
-      color: #999999;
-      background-color: #fff;
-
-      i,
       span {
-        color: @cl;
+        padding: 20px 0;
+        margin-left: 10px;
+        line-height: 40px;
+        font-weight: bold;
+        .fz(font-size, 30);
       }
-    }
+
   }
 
-  .contact-edit {
-    padding: 20px 0;
-    text-align: center;
-    color: #000000;
-    line-height: 30px;
-    .fz(font-size, 30);
-  }
 
-  .pay-confirm {
-    padding: 20px 0;
-    background-color: @cl;
-    text-align: center;
-    color: #fff;
-    line-height: 30px;
-    .fz(font-size, 40);
-  }
 
-  .address-line {
-    content: '';
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 2px;
-    background: repeating-linear-gradient(
-      -45deg,
-      #ff6c6c 0,
-      #ff6c6c 20%,
-      transparent 0,
-      transparent 25%,
-      blue 0,
-      blue 45%,
-      transparent 0,
-      transparent 50%
-    );
-    background-size: 80px;
-  }
 
-  .pay-footer {
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 40px;
-  }
 
-  .supplyer {
-    margin-top: 10px;
-    background-color: white;
 
-    span {
-      padding: 20px 0;
-      margin-left: 10px;
-      line-height: 40px;
-      font-weight: bold;
-      .fz(font-size, 30);
-    }
+
+
 
   }
 </style>
