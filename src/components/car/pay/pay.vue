@@ -478,23 +478,23 @@
                 }).then((response) => {
                   that.$log("onSubmit:" + JSON.stringify(response.data));
                   let result = response.data.data.result;
-                  that.$log("result:"+ JSON.stringify(result))
+                  that.$log("result:" + JSON.stringify(result))
                   let orderNo = ""
                   let amount = 0;
-                  if(result != undefined  && result.length > 0 && result[0].orderId.length > 8) {
-                    let  len = result[0].orderId.length;
-                    orderNo =user.userId + JSON.stringify(result[0].orderId.substr(len-8)).replace(/\"/g, "")
+                  if (result != undefined && result.length > 0 && result[0].orderId.length > 8) {
+                    let len = result[0].orderId.length;
+                    orderNo = user.userId + JSON.stringify(result[0].orderId.substr(len - 8)).replace(/\"/g, "")
                   }
                   //amount = result.
-                  if(orderNo.length > 0) {
-                    that.$log("orderNo is:"+orderNo)
+                  if (orderNo.length > 0) {
+                    that.$log("orderNo is:" + orderNo)
                     options.merchants.forEach(item => {
-                        amount += item.amount;
+                      amount += item.amount;
                     })
                     let orderInfo = {
                       "accessToken": user.accessToken,
                       "orderNo": orderNo,
-                      "orderAmount":  amount*100,//分
+                      "orderAmount": amount * 100,//分
                       "openId": user.openId,
                       "businessType": "11"
                     }
@@ -663,21 +663,25 @@
     width: 100%;
     padding-bottom: 2vw;
     //
-  //  background-color: #f44336;
+    //  background-color: #f44336;
     .custom-text {
       text-align: left;
       .fz(font-size, 30px);
     }
+
     .pay-body {
       background-color: #f0f0f0;
+
       .pay-info {
         background-color: white;
         margin-top: 1em;
-        .van-cell{
+
+        .van-cell {
           background-color: white;
           margin-top: -1px;
         }
       }
+
       .contact-edit {
         padding: 20px 0;
         text-align: center;
@@ -685,6 +689,7 @@
         line-height: 30px;
         .fz(font-size, 30);
       }
+
       .address-line {
         content: '';
         left: 0;
@@ -709,12 +714,14 @@
     .pay-list {
       background-color: #f0f0f0;
       overflow: auto;
+
       .pay-product {
         li {
           list-style: none;
         }
       }
     }
+
     .pay-footer {
       background-color: white;
       bottom: 0;
@@ -722,6 +729,7 @@
       width: 100%;
       height: 70px;
     }
+
     .supplyer {
       margin-top: 10px;
       background-color: white;
@@ -733,16 +741,6 @@
         font-weight: bold;
         .fz(font-size, 30);
       }
-
-  }
-
-
-
-
-
-
-
-
-
+    }
   }
 </style>

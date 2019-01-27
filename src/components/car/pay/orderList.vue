@@ -137,9 +137,10 @@
             }
           }
           that.$log("title is:" + orderTypeItem.title + ",found is:" + found);
-          if (found != -1)
+          if (found != -1) {
             orderTypeItem.list.splice(found, 1)
-          orderTypeItem.total--;
+            orderTypeItem.total--;
+          }
         })
         that.$api.xapi({
           method: 'delete',
