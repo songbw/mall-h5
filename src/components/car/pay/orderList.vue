@@ -15,10 +15,10 @@
             <img :src=no_orderList_bg>
             <span>您还没有相关订单</span>
           </div>
-          <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none" @click="onListClick(k,i)">
+          <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none">
             <div class="orderDetail">
               <van-cell :title=getMerchantName(k.merchantNo) icon="shop"/>
-              <ul>
+              <ul @click="onListClick(k,i)">
                 <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
                   <van-card
                     :price="sku.unitPrice"
