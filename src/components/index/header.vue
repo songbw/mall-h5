@@ -3,9 +3,16 @@
     <router-link :to="{name:'搜索页'}" slot="left">
       <van-icon name="search"  size="1em"/>
     </router-link>
-    <router-link :to="{name:'购物车页'}" slot="right">
-      <van-icon name="cart"  size="1em"/>
+    <div  slot="right">
+      <router-link :to="{name:'购物车页'}">
+        <van-icon name="cart"  size="1em"/>
+      </router-link>
+      <router-link :to="{name:'订单列表页'}">
+      <van-icon name="records"  size="1em"/>
     </router-link>
+    </div>
+
+
   </mt-header>
 </template>
 

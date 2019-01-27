@@ -54,8 +54,9 @@
                 </van-card>
               </li>
             </ul>
-            <span>合计价格: {{item.price}}元</span>
-            <span> 运费: {{item.freight}}元</span>
+            <div class="supplyerSummery">
+              <span>合计: ￥{{item.price.toFixed(2)}}元 (含运费￥{{item.freight.toFixed(2)}}元) </span>
+            </div>
           </div>
         </li>
       </div>
@@ -656,7 +657,7 @@
   @import "../../../assets/fz.less";
 
   .pay {
-    background-color: #dddddd;
+    background-color: #f0f0f0;
     width: 100%;
     padding-bottom: 2vw;
 

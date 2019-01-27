@@ -10,17 +10,35 @@
                   :finished="item.finished"
                   @load="onLoad(active)">
         </van-list>
-        <li v-for="k in item.list" :key="k.id" style="list-style: none" @click="onListClick(k)">
-          {{k.tradeNo}}
-          <van-button plain round size="small" type="primary" @click="onDelBtnClick(k)">
-            删 除
-          </van-button>
+        <div class="orderlist-body">
+          <li v-for="k in item.list" :key="k.id" style="list-style: none" @click="onListClick(k)">
+            <div class="orderDetail">
+              <van-cell title="商户" icon="shop"/>
+              <ul>
+                <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
+                  <van-card
+                    :price="sku.unitPrice"
+                    :title="sku.name"
+                    :num="sku.num"
+                    :thumb="sku.image">
+                  </van-card>
+                </li>
+              </ul>
+              <div class="orderDetailSummery">
+                <span>合计: ￥{{k.amount.toFixed(2)}}元 (含运费￥{{k.servFee.toFixed(2)}}元) </span>
+              </div>
+              <div class="orderDetailAction" >
+                <van-button plain round size="small" type="primary" @click="onDelBtnClick(k)">
+                  删 除
+                </van-button>
+              </div>
+            </div>
+          </li>
+        </div>
 
-        </li>
       </van-tab>
     </van-tabs>
   </div>
-
 </template>
 
 <script>
@@ -86,21 +104,21 @@
 
     methods: {
       onDelBtnClick(listItem) {
- //       this.selStateInCarList = this.$store.state.appconf.selStateInCarList
- //       this.selStateInCarList.splice(index, 1);
- //       this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
- //       console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
-
-        this.$api.xapi({
+        //       this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        //       this.selStateInCarList.splice(index, 1);
+        //       this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+        //       console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
+        let that = this;
+        that.$api.xapi({
           method: 'delete',
           url: '/order',
           params: {
             id: listItem.id,
           }
         }).then((response) => {
-          console.log("onDelBtnClick success")
+          that.$log("onDelBtnClick success, response is:" + JSON.stringify(response.data))
         }).catch(function (error) {
-          console.log(error)
+          that.$log(error)
         })
 
       },
@@ -114,8 +132,8 @@
       isUserEmpty(userInfo) {
         return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
       },
-      onLoad( index ) {
-        this.$log("index is:"+index);
+      onLoad(index) {
+        this.$log("onLoad is:" + index);
         let that = this;
         let userInfo = this.$store.state.appconf.userInfo;
         if (that.isUserEmpty(userInfo)) {
@@ -126,7 +144,7 @@
           let user = JSON.parse(userInfo);
           let options = {
             "pageNo": that.orderTypes[index].pageNo++,
-            "pageSize": 10,
+            "pageSize": 100,
             "openId": user.userId,
             "status": that.orderTypes[index].status,
           }
@@ -137,16 +155,24 @@
           }).then((response) => {
             let result = response.data.data.result
             that.orderTypes[index].total = result.total;
+            let count = 0;
             result.list.forEach(item => {
+              count++;
               that.orderTypes[index].list.push(item);
             })
+            that.$log("count:" + count);
             that.orderTypes[index].loading = false;
-            if (that.orderTypes[index].list.length >= that.orderTypes[index].total)
+            if (that.orderTypes[index].list.length >= that.orderTypes[index].total) {
               that.orderTypes[index].finished = true;
-            that.$log(that.orderTypes[index])
+              that.$log("index:" + index);
+              that.$log(that.orderTypes[index]);
+            }
           }).catch(function (error) {
             that.$log(error)
           })
+        } else {
+          if (that.orderTypes[index].list.length >= that.orderTypes[index].total)
+            that.orderTypes[index].finished = true;
         }
       }
     }
@@ -162,12 +188,44 @@
     text-align: left;
 
     .section-title {
-      .bt();
       background-color: #ffffff;
       text-align: left;
       margin: 1em;
       .fz(font-size, 30);
       color: #000000;
     }
+
+    .orderlist-body {
+      background-color: #f0f0f0;
+
+      .orderDetail {
+        margin-top: 10px;
+        background-color: white;
+        margin-top: 1em;
+
+        .orderDetailSummery {
+          background-color: #ffffff;
+          text-align: right;
+          margin-right: 1em;
+          .fz(font-size, 30);
+          color: #000000;
+        }
+        .orderDetailAction {
+          text-align: right;
+          margin-right: 1em;
+          padding-bottom: 1em;
+        }
+
+        span {
+          padding: 20px 0;
+          margin-left: 10px;
+          line-height: 40px;
+          font-weight: bold;
+          .fz(font-size, 30);
+        }
+      }
+    }
+
+
   }
 </style>
