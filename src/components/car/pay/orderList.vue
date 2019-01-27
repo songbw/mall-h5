@@ -157,6 +157,7 @@
 
       onListClick(listItem, i) {
         this.$log("onListClick Enter")
+        this.$router.push({"path": "/car/oderDetail"})
       },
 
       onClick(index, title) {
