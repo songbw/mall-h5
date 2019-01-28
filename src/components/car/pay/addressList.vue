@@ -114,7 +114,8 @@
           this.$store.state.appconf.addressList.forEach(address => {
             if (item.id == address.id) {
               this.$store.commit('SET_USED_ADDRESS_ID', address.id);
-              this.$router.replace({name:"支付页"});
+              //this.$router.replace({name:"支付页"});
+              this.$router.go(-1);
             }
           })
         } catch (e) {

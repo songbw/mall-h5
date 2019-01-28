@@ -149,7 +149,8 @@
                 list.push(address)
                 this.$store.commit('SET_ADDRESS_LIST', list);
                 //this.$router.replace({ name: '支付页' })
-                this.$router.replace({path: '/car/pay'})
+                //this.$router.replace({path: '/car/pay'})
+                this.$router.go(-1);
               }).catch(function (error) {
                 console.log(error)
               })
@@ -217,7 +218,8 @@
                   list.push(address);
                   this.$store.commit('SET_ADDRESS_LIST', list);
                 }
-                this.$router.replace({path: '/car/pay'})
+                //this.$router.replace({path: '/car/pay'})
+                this.$router.go(-1);
               }).catch(function (error) {
                 console.log(error)
               })
