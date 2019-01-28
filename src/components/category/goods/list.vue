@@ -20,7 +20,7 @@
           </van-card>
         </div>
         <div class="goods-action">
-          <img :src=iconAdd2car @click="onAdd2carBtnClick(k)">
+          <van-button size="mini" @click="onAdd2carBtnClick(k)" ></van-button>
         </div>
       </li>
     </van-list>
@@ -148,6 +148,7 @@
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
+          this.$toast("添加购物车成功")
         }).catch(function (error) {
           console.log(error)
         })
@@ -199,6 +200,16 @@
       .fz(font-size, 30);
       color: #000000;
       padding-top: 0.5em;
+      .van-button {
+        background: url('../../../assets/images/addtoCar.png') no-repeat center;
+        background-size: 30px 25px;
+        border: none;
+        opacity: 100;
+      }
+      .van-button:active {
+        opacity: 0;
+      }
+
       img {
         width: 30px;
         height: 25px;

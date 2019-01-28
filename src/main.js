@@ -162,7 +162,7 @@ Vue.use(vueLogger, {
 router.beforeEach((to, from, next) => {
   document.body.scrollTop = 0;
   console.log("route:"+from.fullPath+"-->"+to.fullPath)
-  
+
   next();
 })
 
