@@ -299,6 +299,10 @@
       padding: 0.6rem;
     }
 
+    .van-card{
+      background-color: #ffffff;
+    }
+
     .van-card__footer > div {
       display: flex !important;
       align-items: center;

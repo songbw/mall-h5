@@ -190,7 +190,6 @@
     }
 
     .class2-title {
-      .bt();
       text-align: left;
       .fz(font-size, 30);
       padding: 2vw;

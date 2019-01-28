@@ -9,36 +9,37 @@
         <van-list v-model="item.loading"
                   :finished="item.finished"
                   @load="onLoad(active)">
-        </van-list>
-        <div class="orderlist-body">
-          <div v-if="item.total === 0" class="no-oderlist">
-            <img :src=no_orderList_bg>
-            <span>您还没有相关订单</span>
-          </div>
-          <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none">
-            <div class="orderDetail">
-              <van-cell :title=getMerchantName(k.merchantNo) icon="shop"/>
-              <ul @click="onListClick(k,i)">
-                <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
-                  <van-card
-                    :price="sku.unitPrice"
-                    :title="sku.name"
-                    :num="sku.num"
-                    :thumb="sku.image">
-                  </van-card>
-                </li>
-              </ul>
-              <div class="orderDetailSummery">
-                <span>合计: ￥{{k.amount.toFixed(2)}}元 (含运费￥{{k.servFee.toFixed(2)}}元) </span>
-              </div>
-              <div class="orderDetailAction">
-                <van-button plain round size="small" type="danger" @click="onDelBtnClick(k,i)">
-                  删除订单
-                </van-button>
-              </div>
+          <div class="orderlist-body">
+            <div v-if="item.total === 0" class="no-oderlist">
+              <img :src=no_orderList_bg>
+              <span>您还没有相关订单</span>
             </div>
-          </li>
-        </div>
+            <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none">
+              <div class="orderDetail">
+                <van-cell :title=getMerchantName(k.merchantNo) icon="shop"/>
+                <ul @click="onListClick(k,i)">
+                  <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
+                    <van-card
+                      :price="sku.unitPrice"
+                      :title="sku.name"
+                      :num="sku.num"
+                      :thumb="sku.image">
+                    </van-card>
+                  </li>
+                </ul>
+                <div class="orderDetailSummery">
+                  <span>合计: ￥{{k.amount.toFixed(2)}}元 (含运费￥{{k.servFee.toFixed(2)}}元) </span>
+                </div>
+                <div class="orderDetailAction">
+                  <van-button plain round size="small" type="danger" @click="onDelBtnClick(k,i)">
+                    删除订单
+                  </van-button>
+                </div>
+              </div>
+            </li>
+          </div>
+        </van-list>
+
       </van-tab>
     </van-tabs>
   </div>

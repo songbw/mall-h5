@@ -719,6 +719,11 @@
         li {
           list-style: none;
         }
+
+        .van-card{
+          background-color: #ffffff;
+          margin-top: -1px;
+        }
       }
     }
 

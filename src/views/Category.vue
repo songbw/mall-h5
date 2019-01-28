@@ -2,6 +2,9 @@
   <div class="wrap">
     <v-header class="header">
       <h1 slot="title">商品分类</h1>
+      <router-link :to="{name:'购物车页'}" slot="right">
+        <van-icon name="cart"  size="1em"/>
+      </router-link>
     </v-header>
     <section class="view">
       <v-aside :datas="class1Data.list"/>

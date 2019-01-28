@@ -157,7 +157,7 @@
 
       getAccessTokenInfo() {
         let that = this;
-        that.$jsbridge.call("fetchInitCode", function (initCode) {
+        that.$jsbridge.call("fetchInitCode", "fengcao",function (initCode) {
           that.$log("initCode is:" + initCode);
           that.$api.xapi({
             method: 'get',

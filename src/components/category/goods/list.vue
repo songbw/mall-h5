@@ -2,14 +2,15 @@
   <div class="detaillist">
     <v-header>
       <h1 slot="title">商品列表</h1>
+      <router-link :to="{name:'购物车页'}" slot="right">
+        <van-icon name="cart"  size="1em"/>
+      </router-link>
     </v-header>
     <van-list v-model="loading"
               :finished="finished"
               @load="onLoad">
-      <li v-for="k in list" :key="k.id" style="list-style: none" @click="onListClick(k)">
-        <!--
-        <router-link :to="{name:'详情页',query: {'goods': k}}">
-        -->
+      <li v-for="k in list" :key="k.id" style="list-style: none">
+        <div class="goods-detail"  @click="onListClick(k)">
           <van-card
             :price="k.price"
             desc=""
@@ -17,9 +18,10 @@
             :thumb="k.image"
             centered>
           </van-card>
-          <!--
-        </router-link>
-        -->
+        </div>
+        <div class="goods-action">
+          <img :src=iconAdd2car @click="onAdd2carBtnClick(k)">
+        </div>
       </li>
     </van-list>
   </div>
@@ -37,7 +39,8 @@
         result: {},
         list: [],
         loading: false,
-        finished: false
+        finished: false,
+        iconAdd2car: require('@/assets/images/addtoCar.png'),
       }
     },
 
@@ -116,7 +119,39 @@
       onListClick(goods) {
         this.updateCurrentGoods(goods);
         this.$router.push("/detail");
-      }
+      },
+      onAdd2carBtnClick(goods) {
+        this.$log("onAdd2carBtnClick Enter",goods)
+        let userInfo = this.$store.state.appconf.userInfo;
+        this.$log("userInfo:" + userInfo);
+        if (!this.isUserEmpty(userInfo)) {
+          this.add2Car(userInfo,goods);
+        } else {
+          this.$toast("没有用户信息，请先登录,再添加购物车")
+        }
+      },
+      isUserEmpty(userInfo) {
+        return (userInfo == undefined || userInfo.length == 0)
+      },
+
+      add2Car(userInfo,goods) {
+        let user = JSON.parse(userInfo);
+        let userId = user.userId;
+        let skuId = goods.skuid;
+        let addtoCar = {
+          "openId": userId,
+          "skuId": skuId
+        }
+        this.$api.xapi({
+          method: 'post',
+          url: '/cart',
+          data: addtoCar,
+        }).then((response) => {
+          this.result = response.data.data.result;
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
     },
 
   }
@@ -152,6 +187,21 @@
         padding-top: 30 * 10vw/75;
         letter-spacing: 3 * 10vw/75;
         line-height: 45 * 10vw/75;
+      }
+    }
+    .van-card{
+      background-color: #ffffff;
+    }
+    .goods-action {
+      background-color: #ffffff;
+      text-align: right;
+      margin-right: 1em;
+      .fz(font-size, 30);
+      color: #000000;
+      padding-top: 0.5em;
+      img {
+        width: 30px;
+        height: 25px;
       }
     }
   }
