@@ -163,57 +163,32 @@
 
   .detaillist {
     width: 100%;
-    background-color: #f7f7f7;
+    background-color: #f0f0f0;
+    .van-list{
+      .van-card{
+        background-color: #ffffff;
+        margin-top: 1em;
+      }
+      .goods-action {
+        background-color: #ffffff;
+        text-align: right;
+        margin-right: 1em;
+        color: #000000;
+        .van-button {
+          background: url('../../../assets/images/addtoCar.png') no-repeat center;
+          background-size: 30px 25px;
+          border: none;
+        }
+        .van-button:active {
+          opacity: 0;
+        }
 
-    .pay-address {
-      background-color: #fff;
-      border-bottom: 1 * 10vw/75 solid #dedede;
-      padding: 30 * 10vw/75;
-
-      > div {
-        display: -webkit-flex;
-        display: -ms-flex;
-        display: flex;
-        justify-content: space-between;
-
-        p {
-          color: #868686;
-          .fz(font-size, 32px);
+        img {
+          width: 30px;
+          height: 25px;
         }
       }
+    }
 
-      > p {
-        .fz(font-size, 28px);
-        color: #868686;
-        padding-top: 30 * 10vw/75;
-        letter-spacing: 3 * 10vw/75;
-        line-height: 45 * 10vw/75;
-      }
-    }
-    .van-card{
-      background-color: #ffffff;
-    }
-    .goods-action {
-      background-color: #ffffff;
-      text-align: right;
-      margin-right: 1em;
-      .fz(font-size, 30);
-      color: #000000;
-      padding-top: 0.5em;
-      .van-button {
-        background: url('../../../assets/images/addtoCar.png') no-repeat center;
-        background-size: 30px 25px;
-        border: none;
-        opacity: 100;
-      }
-      .van-button:active {
-        opacity: 0;
-      }
-
-      img {
-        width: 30px;
-        height: 25px;
-      }
-    }
   }
 </style>
