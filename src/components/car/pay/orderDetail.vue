@@ -30,12 +30,15 @@
         </div>
       </div>
       <div class="order-detail">
-
-        <van-cell title="订单信息" icon="info-o"/>
-        <van-cell title="订单编号:" :value=detail.tradeNo />
-        <van-cell title="交易单号:" value="xxxx"/>
-        <van-cell title="创建时间:" :value=formatTime(detail.createdAt) />
-        <van-cell title="成交时间:" value="xxxx"/>
+        <van-cell title="订单信息" icon="info-o" />
+        <span>订单编号:</span>
+        <p>{{getDisplayOderNo(detail.tradeNo)}}</p>
+        <span>交易单号:</span>
+        <p>xxxx</p>
+        <span>创建时间:</span>
+        <p>{{formatTime(detail.createdAt)}}</p>
+        <span>成交时间:</span>
+        <p>xxxx</p>
 
       </div>
     </div>
@@ -71,6 +74,15 @@
         let dateee = new Date(timeString).toJSON();
         return new Date(+new Date(dateee)+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
       },
+
+      getDisplayOderNo(orderNo) {
+        if(orderNo.length > 8)
+          return orderNo.substr(orderNo.length  - 8).replace(/\"/g, "")
+        else
+          return orderNo;
+      },
+
+
       getMerchantName(merchantNo) {
         if (merchantNo == 20) {
           return "苏宁易购"
@@ -132,6 +144,17 @@
         .van-cell{
           background-color: white;
           margin-top: -1px;
+          color: #000000;
+        }
+        >span{
+          .fz(font-size, 25);
+          margin: 1em;
+          color: #000000;
+        }
+        >p{
+          .fz(font-size, 20);
+          margin: 1em 1em 1em 2em;
+          color: #000000;
         }
       }
     }
