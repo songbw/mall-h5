@@ -52,7 +52,6 @@
   @import "../../assets/index/style.css";
 
   .sectionSquared-title {
-    .bt();
     text-align: left;
     .fz(font-size, 40);
     font-weight: bold;

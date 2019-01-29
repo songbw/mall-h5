@@ -59,6 +59,8 @@
         const jsonString = pako.inflate(response.data.data.result.content, { to: 'string' })
        // console.log("data:"+jsonString);
         this.datas = JSON.parse(jsonString);
+        this.$log(response.data.data.result)
+        this.$log(jsonString)
       }).catch(function (error) {
         alert(error)
       })

@@ -88,7 +88,6 @@
   @import "../../assets/index/style.css";
 
   .sectionSlide-title {
-    .bt();
     text-align: left;
     .fz(font-size, 40);
     font-weight: bold;
@@ -104,7 +103,6 @@
     -webkit-overflow-scrolling: touch;
 
     > ul {
-      .bt();
       display: -ms-flex;
       display: -webkit-box;
       display: -ms-flexbox;

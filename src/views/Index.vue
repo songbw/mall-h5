@@ -72,7 +72,7 @@
       setTimeout(() => {
         this.getAccessTokenInfo();
         this.startLocation();
-        this.test();
+       // this.test();
         //this.getUserInfo();
         //this.updateLocation();
       }, 1000);
@@ -103,12 +103,23 @@
 
       },
       test() {
-        let user = {
+        let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
+        this.$log("openId:" + openId);
+        if( openId != undefined) {
+          let userInfo = {
+            openId: openId,
+            accessToken: "xxxxxxxxxxxxx",
+            userId: this.$api.APP_ID + openId
+          }
+          this.$log(userInfo)
+          this.$store.commit('SET_USER', JSON.stringify(userInfo));
+        }
+/*        let user = {
           "openId":"0001",
           "userId":"100001",
           "accessToken":"xxxxxxxxxx"
         }
-        this.$store.commit('SET_USER', JSON.stringify(user));
+        this.$store.commit('SET_USER', JSON.stringify(user));*/
       },
 /*      getUserInfo() {
         let userInfo = this.$jsbridge.call("getUserInfo");

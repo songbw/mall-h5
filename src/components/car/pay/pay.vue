@@ -584,7 +584,7 @@
           "countyId": locationCode.countyId,
           "skus": inventorySkus,
         }
-        //this.$log("options:" + JSON.stringify(options));
+        this.$log("options:" + JSON.stringify(options));
         this.$api.xapi({
           method: 'post',
           url: '/prod/inventory',
@@ -643,10 +643,12 @@
       },
 
       getLocationCode() {
-        let code = {"provinceId": "10", "cityId": "010", "district": "00"}
+        let code = {"provinceId": "100", "cityId": "510", "countyId": "06"}//江苏无锡市滨湖区
         if (/*送货地址*/JSON.stringify(this.usedAddress) != "{}") {
           code = this.usedAddress;
-        } else if (this.$store.state.appconf.locationCode != undefined) {
+        } else if (this.$store.state.appconf.locationCode != undefined &&
+          this.$store.state.appconf.locationCode.length > 0) {
+          this.$log("code:"+this.$store.state.appconf.locationCode)
           code = this.$store.state.appconf.locationCode;
         }
         return code

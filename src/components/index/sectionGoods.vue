@@ -157,7 +157,6 @@
     }
 
     .sectionGoods-title {
-      .bt();
       text-align: center;
       .fz(font-size, 25);
       font-weight: bold;
