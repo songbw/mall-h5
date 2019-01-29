@@ -72,7 +72,7 @@
       setTimeout(() => {
         this.getAccessTokenInfo();
         this.startLocation();
-       // this.test();
+        this.test();
         //this.getUserInfo();
         //this.updateLocation();
       }, 1000);

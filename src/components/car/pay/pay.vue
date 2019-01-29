@@ -290,7 +290,7 @@
             this.addressCount = result.total;
             if (this.addressCount == 0) {
               this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
-
+              this.$store.commit('SET_USED_ADDRESS_ID', -1);
               this.updateUsedAddress();
               this.getCarList();
             } else {
@@ -462,6 +462,7 @@
         if (!this.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let receiverId = this.$store.state.appconf.usedAddressId;
+          that.$log("onSubmit receiverId is:"+receiverId)
           if (receiverId == undefined || receiverId == -1) {
             this.$dialog.alert({
               title: '请检查收件人信息是否已经填写',
