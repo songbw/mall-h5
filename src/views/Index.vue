@@ -108,26 +108,14 @@
         if( openId != undefined) {
           let userInfo = {
             openId: openId,
-            accessToken: "xxxxxxxxxxxxx",
+            userToken: "xxxxxxxxxxxxx",
             userId: this.$api.APP_ID + openId
           }
           this.$log(userInfo)
           this.$store.commit('SET_USER', JSON.stringify(userInfo));
         }
-/*        let user = {
-          "openId":"0001",
-          "userId":"100001",
-          "accessToken":"xxxxxxxxxx"
-        }
-        this.$store.commit('SET_USER', JSON.stringify(user));*/
       },
-/*      getUserInfo() {
-        let userInfo = this.$jsbridge.call("getUserInfo");
-        if (userInfo != null && userInfo.length > 0) {
-          console.log("getUserInfo  ret is:" + userInfo);
-          this.$store.commit('SET_USER', userInfo);
-        }
-      },*/
+
       onPayResult(payResult) {
         this.$router.replace({path: '/car/oderList'})
       },
@@ -137,32 +125,37 @@
           appId:"fengcao",
           accessToken:accessToken
         }
-        that.$jsbridge.call("fetchUserInfoWithAccessToken", paramets, function (userToken) {
-          that.$log("userToken is:" + userToken);
-          that.$api.xapi({
-            method: 'get',
-            url: '/zhcs/user',
-            params: {
-              userToken: userToken,
-            }
-          }).then((response) => {
-            let rt = response.data.data.result
-            let openId = rt.openId;
-            that.$log("openId:" + openId);
+        that.$jsbridge.call("fetchUserInfoWithAccessToken", paramets, function (jsonString) {
+          that.$log("fetchUserInfoWithAccessToken  is:" + jsonString);
+          try {
+            let jsonObj = JSON.parse(jsonString);
+            let openId = jsonObj.openId;
+            let userToken = jsonObj.userToken;
             if( openId != undefined) {
               let userInfo = {
                 openId:openId,
-                accessToken: accessToken,
+                userToken:userToken,
                 userId:that.$api.APP_ID + openId
               }
+              that.$log("userInfo  is:" + JSON.stringify(userInfo));
               that.$store.commit('SET_USER', JSON.stringify(userInfo));
-            } else {
-              that.$log(response.data.msg);
             }
-          }).catch(function (error) {
-            //alert(error)
-            that.$log(error)
-          })
+            that.$api.xapi({
+              method: 'get',
+              url: '/zhcs/user',
+              params: {
+                userToken: userToken,
+                openId:openId,
+              }
+            }).then((response) => {
+              let rt = response.data.data.result
+              that.$log("user information:" + JSON.stringify(rt));
+            }).catch(function (error) {
+              that.$log(error)
+            })
+          } catch (e) {
+            that.$log(e)
+          }
         })
       },
 
