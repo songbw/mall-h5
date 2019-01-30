@@ -375,6 +375,26 @@
         return (Array(length).join('0') + num).slice(-length);
       },
 
+      deleteOrderedGoodsInCar() {
+         let selStateInCarList = this.$store.state.appconf.selStateInCarList
+         this.arregationList.forEach(item => {
+           if (item.goods.length > 0) {
+             item.goods.forEach(sku => {
+               let found = -1;
+               for (let i = 0; i < selStateInCarList.length; i++) { //从CarList中删除订单中的货物
+                 if (selStateInCarList[i].skuId === sku.product.skuId) {
+                   found = i;
+                   break;
+                 }
+               }
+               if (found != -1) {
+                 selStateInCarList.splice(found, 1);
+               }
+             })
+           }
+         })
+      },
+
       getComposedOderOption(userInfo, receiverId) {
         let user = JSON.parse(userInfo)
         let invoiceType = "eInvoice"
@@ -410,19 +430,9 @@
                 "num": sku.product.count,
                 "unitPrice": sku.product.price,
               })
-              let found = -1;
-              for (let i = 0; i < selStateInCarList.length; i++) { //从CarList中删除订单中的货物
-                if (selStateInCarList[i].skuId === sku.product.skuId) {
-                  found = i;
-                  break;
-                }
-              }
-              if (found != -1) {
-                selStateInCarList.splice(found, 1);
-              }
             })
             //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
-           // let usrId = this.prefixInteger(user.userId, 8);
+            // let usrId = this.prefixInteger(user.userId, 8);
             let tradeNo = "10" + locationCode.cityId + item.supplyer + user.userId
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
@@ -450,8 +460,8 @@
         return options;
       },
 
-      openCashPage(orderInfo) {
-        let that = this ;
+      openCashPage(user, orderInfo) {
+        let that = this;
         let options = {
           "openId": orderInfo.openId,
           "orderNos": orderInfo.orderNo,
@@ -464,10 +474,23 @@
           url: '/zhcs/payment',
           data: options,
         }).then((response) => {
-          that.$log(response)
-          that.$log("openCashPage:" + JSON.stringify(orderInfo))
-          that.$jsbridge.call("openCashPage", orderInfo);
-        }).catch (function (error) {
+          that.$log("预下单返回 :" + JSON.stringify(response.data))
+          if (response.data.msg === "会员不存在") {
+            //未开通钱包
+            let walletInfo = {
+              accessToken: user.accessToken,
+              openId: user.openId,
+            }
+            that.$log("walletInfo:" + JSON.stringify(walletInfo))
+            that.$jsbridge.call("dredgeWallet", walletInfo);
+          } else {
+            if (response.data.data.result != undefined) {
+              that.deleteOrderedGoodsInCar();
+              that.$log("openCashPage:" + JSON.stringify(orderInfo))
+              that.$jsbridge.call("openCashPage", orderInfo);
+            }
+          }
+        }).catch(function (error) {
           that.$log(error)
         })
       },
@@ -479,7 +502,7 @@
         if (!this.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let receiverId = this.$store.state.appconf.usedAddressId;
-          that.$log("onSubmit receiverId is:"+receiverId)
+          that.$log("onSubmit receiverId is:" + receiverId)
           if (receiverId == undefined || receiverId == -1) {
             this.$dialog.alert({
               title: '请检查收件人信息是否已经填写',
@@ -512,11 +535,11 @@
                     let orderInfo = {
                       "accessToken": user.accessToken,
                       "orderNo": orderNo,
-                      "orderAmount": amount * 100,//分
+                      "orderAmount": 1,//for test// amount * 100,//分
                       "openId": user.openId,
                       "businessType": "11"
                     }
-                    that.openCashPage(orderInfo)
+                    that.openCashPage(user, orderInfo)
                   } else {
                     that.log("can not get correct orderNo");
                   }
@@ -666,7 +689,7 @@
           code = this.usedAddress;
         } else if (this.$store.state.appconf.locationCode != undefined &&
           this.$store.state.appconf.locationCode.length > 0) {
-          this.$log("code:"+this.$store.state.appconf.locationCode)
+          this.$log("code:" + this.$store.state.appconf.locationCode)
           code = this.$store.state.appconf.locationCode;
         }
         return code
@@ -740,7 +763,7 @@
           list-style: none;
         }
 
-        .van-card{
+        .van-card {
           background-color: #ffffff;
           margin-top: -1px;
         }
