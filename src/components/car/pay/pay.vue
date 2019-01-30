@@ -460,13 +460,15 @@
         return options;
       },
 
-      openCashPage(user, orderInfo) {
+      openCashPage(user, merchantNo, orderNos,  pAnOrderInfo) {
         let that = this;
         let options = {
-          "openId": orderInfo.openId,
-          "orderNos": orderInfo.orderNo,
+          "openId": pAnOrderInfo.openId,
+          "appId":this.$api.APP_ID,
+          "merchantNo":merchantNo,
+          "orderNos": orderNos,
           "goodsName": "商品支付订单",
-          "amount": orderInfo.orderAmount
+          "amount": pAnOrderInfo.orderAmount
         }
         that.$log("预下单:" + JSON.stringify(options))
         that.$api.xapi({
@@ -486,8 +488,8 @@
           } else {
             if (response.data.data.result != undefined) {
               that.deleteOrderedGoodsInCar();
-              that.$log("openCashPage:" + JSON.stringify(orderInfo))
-              that.$jsbridge.call("openCashPage", orderInfo);
+              that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
+              that.$jsbridge.call("openCashPage", pAnOrderInfo);
             }
           }
         }).catch(function (error) {
@@ -522,9 +524,15 @@
                   that.$log("result:" + JSON.stringify(result))
                   let orderNo = ""
                   let amount = 0;
+                  let merchantNo = ""
+                  let orderNos = ""
                   if (result != undefined && result.length > 0 && result[0].orderId.length > 8) {
                     let len = result[0].orderId.length;
-                    orderNo = user.userId + JSON.stringify(result[0].orderId.substr(len - 8)).replace(/\"/g, "")
+                    orderNos = JSON.stringify(result[0].orderId.substr(len - 8)).replace(/\"/g, "");
+                    if(options.merchants.length == 1) {//单商户
+                      merchantNo = options.merchants[0].merchantNo;
+                    }
+                    orderNo = this.$api.APP_ID + merchantNo + user.openId + orderNos
                   }
                   //amount = result.
                   if (orderNo.length > 0) {
@@ -532,14 +540,14 @@
                     options.merchants.forEach(item => {
                       amount += item.amount;
                     })
-                    let orderInfo = {
+                    let pAnOrderInfo = {
                       "accessToken": user.accessToken,
                       "orderNo": orderNo,
                       "orderAmount": 1,//for test// amount * 100,//分
                       "openId": user.openId,
                       "businessType": "11"
                     }
-                    that.openCashPage(user, orderInfo)
+                    that.openCashPage(user,merchantNo, orderNos, pAnOrderInfo)
                   } else {
                     that.log("can not get correct orderNo");
                   }
