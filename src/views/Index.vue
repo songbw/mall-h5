@@ -29,8 +29,6 @@
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import Baseline from '@/common/_baseline.vue'
 
-
-  //import { Toast } from 'mint-ui'
   export default {
     components: {
       'v-section1': Section1,
@@ -109,6 +107,7 @@
           let userInfo = {
             openId: openId,
             userToken: "xxxxxxxxxxxxx",
+            accessToken:"TTTTTTTTTTTT",
             userId: this.$api.APP_ID + openId
           }
           this.$log(userInfo)
@@ -134,6 +133,7 @@
             if( openId != undefined) {
               let userInfo = {
                 openId:openId,
+                accessToken:accessToken,
                 userToken:userToken,
                 userId:that.$api.APP_ID + openId
               }

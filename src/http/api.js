@@ -5,7 +5,7 @@ import router from '../router'
 //const GOODS_URL_PREFIX = "https://iwallet-1258175138.cos.ap-beijing.myqcloud.com"
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 const SERVER_BASE_URL = "http://42.121.121.128:8080"
-//const SERVER_BASE_URL = "http://172.21.4.66:8080"  //local debug
+//const SERVER_BASE_URL = "http://172.21.14.195:8080"  //local debug
 const APP_ID = "10" //无锡市民卡
 
 
@@ -36,16 +36,16 @@ xapi.interceptors.request.use(function (config) {
 xapi.interceptors.response.use(function (response) {
   // 对响应数据做点什么
   // 加到时器主要是为了 展示Loading效果 项目中应去除
-  setTimeout(() => {
+  //setTimeout(() => {
    // store.commit('SET_LOADING', false);
-  }, 300)
+  //}, 300)
 
   return response;
 
 }, function (error) {
   // 对响应错误做点什么
  // store.commit('SET_LOADING', false);
-
+  console.log("receive network response error:"+ error)
   if (errore.response) {
 
     if (error.response.status == 401) {

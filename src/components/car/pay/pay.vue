@@ -215,7 +215,7 @@
         } catch (e) {
         }
 
-        return '商品总价:' + productPay + '元   合计运费:' + freightPay + '元'
+        return '商品总价:' + productPay.toFixed(2) + '元   合计运费:' + freightPay.toFixed(2) + '元'
       },
 
       allpay() {
@@ -451,8 +451,25 @@
       },
 
       openCashPage(orderInfo) {
-        this.$log("openCashPage:" + JSON.stringify(orderInfo))
-        this.$jsbridge.call("openCashPage", orderInfo);
+        let that = this ;
+        let options = {
+          "openId": orderInfo.openId,
+          "orderNos": orderInfo.orderNo,
+          "goodsName": "商品支付订单",
+          "amount": orderInfo.orderAmount
+        }
+        that.$log("预下单:" + JSON.stringify(options))
+        that.$api.xapi({
+          method: 'post',
+          url: '/zhcs/payment',
+          data: options,
+        }).then((response) => {
+          that.$log(response)
+          that.$log("openCashPage:" + JSON.stringify(orderInfo))
+          that.$jsbridge.call("openCashPage", orderInfo);
+        }).catch (function (error) {
+          that.$log(error)
+        })
       },
 
       onSubmit() {
