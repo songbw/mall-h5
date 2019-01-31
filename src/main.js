@@ -10,6 +10,9 @@ import 'mint-ui/lib/style.css'
 //import { JSEncrypt } from 'jsencrypt'
 import jsrsasign from 'jsrsasign'
 import vueLogger from "vue-logger";
+import infiniteScroll from 'vue-infinite-scroll'
+
+Vue.use(infiniteScroll)
 
 Vue.use(Mint);
 

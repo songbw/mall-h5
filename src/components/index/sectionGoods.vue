@@ -6,21 +6,20 @@
           <h1 class="sectionGoods-title">
             {{ category.title }}
           </h1>  
-          <van-list v-model="loading"
-                    :finished="finished"
-                    :offset="offset"
-                    @load="onLoad">
-            <ul class="sectionGoods-list">
-              <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
-                <img v-lazy="k.imagePath">
-                <p>{{k.intro}}</p>
-                <span>￥{{k.price}}</span>
-              </li>
-            </ul>
-          </van-list>
         </van-tab>
+        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+          <ul class="sectionGoods-list">
+            <li v-for="(k,index) in goodsList" @click="onGoodsClick(k)" :key="index">
+              <img v-lazy="k.imagePath">
+              <p>{{k.intro}}</p>
+              <span>￥{{k.price}}</span>
+            </li>
+          </ul>
+        </div>
       </van-tabs>
     </div>
+
+
   </section>
 </template>
 
@@ -41,12 +40,29 @@
         active: 0,
         loading: false,
         finished: false,
-        offset:-100
+        offset:-100,
+        goodsList: [],
+        busy: false,
+      //  count: -1 //消抖
       };
     },
     methods: {
+      loadMore: function() {
+        this.$log("loadMore Enter");
+        this.busy = true;
+        if(this.goodsList.length > 0 && this.active < this.datas.list.length-1) {
+          this.active++;
+        }
+        this.goodsList = this.datas.list[this.active].skus;
+ /*       if(this.active < this.datas.list.length-1) {
+          this.datas.list[this.active].skus.forEach(item => {
+            this.goodsList.push(item);
+          });
+        }*/
+
+        this.busy = false;
+      },
       updateCurrentGoods(goods) {
-        //console.log("goods :" + JSON.stringify(goods));
         this.$store.commit('SET_CURRENT_GOODS',JSON.stringify(goods));
       },
       onGoodsClick(goods) {
@@ -71,25 +87,8 @@
         }
       },
       onClick(index, title) {
-        if (this.active < this.datas.list.length - 1)
-          this.finished = false;
-        else
-          this.finished = true;
+        this.goodsList = this.datas.list[this.active].skus;
       },
-      onLoad() {
-        setTimeout(() => {
-          this.loading = false;
-          let i = this.active;
-          if (this.active < this.datas.list.length - 1) {
-            this.active = i + 1;
-            if (this.active == this.datas.list.length - 1) {
-              this.finished = true;
-            }
-          } else {
-            this.finished = true;
-          }
-        }, 1000);
-      }
     }
   }
 </script>
