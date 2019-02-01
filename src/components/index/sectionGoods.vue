@@ -48,6 +48,7 @@
           // 可在这里指定labelKey为你数据里文字对应的字段
         },
         isFixed: false,
+        isTabChanging: false,
         tabsOffsetTop: 0,
         marginTop: 0,
       };
@@ -60,57 +61,41 @@
     },
 
     mounted() {
-      this.tabsOffsetTop = document.querySelector('#fixedBar').offsetTop;
-      this.$log("tabsOffsetTop is:"+this.tabsOffsetTop)
       window.addEventListener('scroll', this.handleScroll);
-      let  container = document.querySelector('.container')
-      this.$log("container is:"+container.offsetTop)
-     /* this.container = document.querySelector('.container')
-      //   this.goodsTabs = document.querySelector('.goodsTabs')
-      //   this.goodsTab = document.querySelector('.goodsTab')
-      this.content = document.querySelector('.content')
       this.goodsLists = document.querySelectorAll('.sectionGoods-list')
+    },
 
-      this.$log(
-        "container:" + this.container.offsetTop +
-        ",content:" + this.content.offsetTop);
-
-      let i = 0;
-      let log = ""
-      this.goodsLists.forEach(item => {
-        log += " i:" + i + ",list:" + item.offsetTop
-        i++;
-      });
-      log += "\n"
-      this.$log(log)*/
+    destroyed() {
+      window.removeEventListener('scroll', this.handleScroll)
     },
 
     methods: {
       onTabChanged(item, index) {
-        this.$log(index)
-        this.$log(item.label)
+     //   this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
+        if (this.isTabChanging) {
+          this.isTabChanging = false;
+        } else {
+          let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#fixedBar').offsetHeight) + 1;
+     //     this.$log("offsetTop is:" + movePos)
+          this.isTabChanging = true;
+          setTimeout(() => {
+            this.isTabChanging = false;
+          }, 500);
+          window.scroll(0, movePos)
 
+        }
       },
       handleScroll() {
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
-        if(!this.isFixed) {
+        if (!this.isFixed) {
           this.tabsOffsetTop = document.querySelector('#fixedBar').offsetTop;
         }
-        this.$log("tabsOffsetTop is:"+this.tabsOffsetTop)
+        //this.$log("tabsOffsetTop is:" + this.tabsOffsetTop)
         if (scrollTop >= this.tabsOffsetTop) {
           this.isFixed = true;
           this.marginTop = document.querySelector('#fixedBar').offsetHeight + 'px';
-        } else {
-          this.isFixed = false;
-          this.marginTop = 0;
-        }
-
-       /* let distanceOfContainer = scrollTop - this.container.offsetTop
-        if (distanceOfContainer > 0) {
-          this.inGoodsListField = true;
           let found = -1;
           for (let i = 0; i < this.goodsLists.length; i++) {
-            //   this.$log("i:"+i+", offsetTop: " + this.goodsLists[i].offsetTop)
             if (i == this.goodsLists.length - 1) {
               if (scrollTop >= this.goodsLists[i].offsetTop) {
                 found = i;
@@ -120,26 +105,19 @@
                 found = i;
               }
             }
-
           }
           // this.active = found;
           if (found != -1) {
-            this.$log("found is:" + found);
-            //          this.active = found
-            /!*          this.$nextTick(() => {
-                        this.$log("$nextTick Enter");
-
-                        //this.active = found
-                      }
-                     );*!/
-
-
+           // this.$log("found is:" + found);
+            if (this.selectedId != found && !this.isTabChanging) {
+              this.isTabChanging = true;
+              this.selectedId = found;
+            }
           }
-
         } else {
-          this.inGoodsListField = false;
-        }*/
-
+          this.isFixed = false;
+          this.marginTop = 0;
+        }
       },
 
       updateCurrentGoods(goods) {
