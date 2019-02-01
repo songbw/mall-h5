@@ -1,25 +1,21 @@
 <template lang="html">
   <section class="sectionGoods">
-    <div>
-      <van-tabs v-model="active" sticky  @click="onClick">
-        <van-tab v-for="(category,index) in datas.list" :title=category.title :key="index">
-          <h1 class="sectionGoods-title">
-            {{ category.title }}
-          </h1>  
-        </van-tab>
-        <div v-infinite-scroll="loadMore" infinite-scroll-disabled="busy" infinite-scroll-distance="10">
+    <div class="container" ref="container">
+      <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
+              @change="onTabChanged">
+      </ly-tab>
+      <div :style="{ marginTop: marginTop }">
+        <div v-for="(category,index) in datas.list" :title=category.title :key="index" class="content">
           <ul class="sectionGoods-list">
-            <li v-for="(k,index) in goodsList" @click="onGoodsClick(k)" :key="index">
+            <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath">
               <p>{{k.intro}}</p>
               <span>￥{{k.price}}</span>
             </li>
           </ul>
         </div>
-      </van-tabs>
+      </div>
     </div>
-
-
   </section>
 </template>
 
@@ -40,33 +36,117 @@
         active: 0,
         loading: false,
         finished: false,
-        offset:-100,
+        offset: -100,
         goodsList: [],
         busy: false,
-      //  count: -1 //消抖
+        inGoodsListField: false,
+        goodsLists: null,
+        selectedId: 0,
+        items: [],
+        options: {
+          activeColor: '#f44336'
+          // 可在这里指定labelKey为你数据里文字对应的字段
+        },
+        isFixed: false,
+        tabsOffsetTop: 0,
+        marginTop: 0,
       };
     },
+
+    created() {
+      this.datas.list.forEach(item => {
+        this.items.push({label: item.title})
+      });
+    },
+
+    mounted() {
+      this.tabsOffsetTop = document.querySelector('#fixedBar').offsetTop;
+      this.$log("tabsOffsetTop is:"+this.tabsOffsetTop)
+      window.addEventListener('scroll', this.handleScroll);
+      let  container = document.querySelector('.container')
+      this.$log("container is:"+container.offsetTop)
+     /* this.container = document.querySelector('.container')
+      //   this.goodsTabs = document.querySelector('.goodsTabs')
+      //   this.goodsTab = document.querySelector('.goodsTab')
+      this.content = document.querySelector('.content')
+      this.goodsLists = document.querySelectorAll('.sectionGoods-list')
+
+      this.$log(
+        "container:" + this.container.offsetTop +
+        ",content:" + this.content.offsetTop);
+
+      let i = 0;
+      let log = ""
+      this.goodsLists.forEach(item => {
+        log += " i:" + i + ",list:" + item.offsetTop
+        i++;
+      });
+      log += "\n"
+      this.$log(log)*/
+    },
+
     methods: {
-      loadMore: function() {
-        this.$log("loadMore Enter");
-        this.busy = true;
-        if(this.goodsList.length > 0 && this.active < this.datas.list.length-1) {
-          this.active++;
+      onTabChanged(item, index) {
+        this.$log(index)
+        this.$log(item.label)
+
+      },
+      handleScroll() {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
+        if(!this.isFixed) {
+          this.tabsOffsetTop = document.querySelector('#fixedBar').offsetTop;
         }
-        this.goodsList = this.datas.list[this.active].skus;
- /*       if(this.active < this.datas.list.length-1) {
-          this.datas.list[this.active].skus.forEach(item => {
-            this.goodsList.push(item);
-          });
+        this.$log("tabsOffsetTop is:"+this.tabsOffsetTop)
+        if (scrollTop >= this.tabsOffsetTop) {
+          this.isFixed = true;
+          this.marginTop = document.querySelector('#fixedBar').offsetHeight + 'px';
+        } else {
+          this.isFixed = false;
+          this.marginTop = 0;
+        }
+
+       /* let distanceOfContainer = scrollTop - this.container.offsetTop
+        if (distanceOfContainer > 0) {
+          this.inGoodsListField = true;
+          let found = -1;
+          for (let i = 0; i < this.goodsLists.length; i++) {
+            //   this.$log("i:"+i+", offsetTop: " + this.goodsLists[i].offsetTop)
+            if (i == this.goodsLists.length - 1) {
+              if (scrollTop >= this.goodsLists[i].offsetTop) {
+                found = i;
+              }
+            } else {
+              if (scrollTop >= this.goodsLists[i].offsetTop && scrollTop < this.goodsLists[i + 1].offsetTop) {
+                found = i;
+              }
+            }
+
+          }
+          // this.active = found;
+          if (found != -1) {
+            this.$log("found is:" + found);
+            //          this.active = found
+            /!*          this.$nextTick(() => {
+                        this.$log("$nextTick Enter");
+
+                        //this.active = found
+                      }
+                     );*!/
+
+
+          }
+
+        } else {
+          this.inGoodsListField = false;
         }*/
 
-        this.busy = false;
       },
+
       updateCurrentGoods(goods) {
-        this.$store.commit('SET_CURRENT_GOODS',JSON.stringify(goods));
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
       onGoodsClick(goods) {
-       // console.log("goods is:"+JSON.stringify(goods))
+        // console.log("goods is:"+JSON.stringify(goods))
         try {
           //获取goods信息，update current googds
           this.$api.xapi({
@@ -76,9 +156,9 @@
               id: goods.skuid,
             }
           }).then((res) => {
-                //console.log("current Goods:"+JSON.stringify(res.data.data.result));
-                this.updateCurrentGoods(res.data.data.result);
-                this.$router.push("/detail");
+            //console.log("current Goods:"+JSON.stringify(res.data.data.result));
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
           }).catch((error) => {
             console.log(error)
           })
@@ -87,7 +167,7 @@
         }
       },
       onClick(index, title) {
-        this.goodsList = this.datas.list[this.active].skus;
+
       },
     }
   }
@@ -114,6 +194,7 @@
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
       overflow: hidden;
+
 
       li {
         width: 50%;
@@ -177,5 +258,14 @@
       padding: 20px;
       display: block;
     }
+
+    .fixedBar {
+      position: fixed;
+      top: 0;
+      z-index: 999;
+      width: 100%;
+      background-color: white;
+    }
+
   }
 </style>

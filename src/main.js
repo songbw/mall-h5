@@ -11,6 +11,9 @@ import 'mint-ui/lib/style.css'
 import jsrsasign from 'jsrsasign'
 import vueLogger from "vue-logger";
 import infiniteScroll from 'vue-infinite-scroll'
+import LyTab from 'ly-tab'
+
+Vue.use(LyTab)
 
 Vue.use(infiniteScroll)
 
