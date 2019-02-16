@@ -42,6 +42,7 @@
         <span>配送方式: {{getDisplayLogisticsInfo()}}</span>
         <p></p>
       </div>
+      <van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>
     </div>
   </section>
 </template>
@@ -64,12 +65,14 @@
       this.$log("oderDetail created Enter")
       this.detail = this.$route.params.detail;
       this.$log(this.detail)
-
     },
 
     computed: {},
 
     methods: {
+      getOrderServicePhone() {
+        return "138xxxxxxxx"
+      },
       getDisplayLogisticsInfo() {
         this.$log("getDisplayLogisticsInfo:"+this.detail.status)
         if(this.detail.status != 1)
@@ -84,9 +87,9 @@
       },
 
       getDisplayOderNo(orderNo) {
-        if(orderNo.length > 8)
-          return orderNo.substr(orderNo.length  - 8).replace(/\"/g, "")
-        else
+       // if(orderNo.length > 8)
+       //   return orderNo.substr(orderNo.length  - 8).replace(/\"/g, "")
+       // else
           return orderNo;
       },
 
