@@ -58,7 +58,7 @@
                 </li>
               </ul>
               <div class="supplyerSummery">
-                <span>合计: ￥{{item.price.toFixed(2)}}元 (含运费￥{{item.freight.toFixed(2)}}元) </span>
+                <span>商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
               </div>
             </div>
           </li>
