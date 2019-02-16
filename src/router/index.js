@@ -27,6 +27,9 @@ export default new Router({
       path: '/',
       name: '首页',
       component: Index,
+      meta: {
+        keepAlive: true, //此组件需要被缓存
+      }
     },
     {
       path: '/index/:id',
