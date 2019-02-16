@@ -68,8 +68,8 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-     //   this.getAccessTokenInfo();
         this.test();
+        this.getAccessTokenInfo();
         this.startLocation();
 
         //this.getUserInfo();

@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="order-detail">
-        <van-cell title="订单信息" icon="info-o" />
+        <van-cell title="订单信息" icon="info-o"/>
         <span>订单编号:</span>
         <p>{{getDisplayOderNo(detail.tradeNo)}}</p>
         <span>交易单号:</span>
@@ -40,6 +40,8 @@
         <span>成交时间:</span>
         <p>xxxx</p>
         <span>配送方式: {{getDisplayLogisticsInfo()}}</span>
+        <p></p>
+        <span>订单状态: {{getOrderStatus()}}</span>
         <p></p>
       </div>
       <van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>
@@ -70,12 +72,27 @@
     computed: {},
 
     methods: {
+      getOrderStatus() {
+        let status = this.detail.status;
+        switch (status) {
+          case 0:
+            return "待支付";
+          case 1:
+            return "待收货";
+          case 2:
+            return "已完成";
+          case 3:
+            return "已取消";
+          default:
+            return ""
+        }
+      },
       getOrderServicePhone() {
         return "138xxxxxxxx"
       },
       getDisplayLogisticsInfo() {
-        this.$log("getDisplayLogisticsInfo:"+this.detail.status)
-        if(this.detail.status != 1)
+        this.$log("getDisplayLogisticsInfo:" + this.detail.status)
+        if (this.detail.status != 1)
           return "普通快递"
         else
           return 0;
@@ -83,14 +100,14 @@
       formatTime(timeString) {
         //2019-01-27T07:56:27.000+0000
         let dateee = new Date(timeString).toJSON();
-        return new Date(+new Date(dateee)+8*3600*1000).toISOString().replace(/T/g,' ').replace(/\.[\d]{3}Z/,'')
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
       },
 
       getDisplayOderNo(orderNo) {
-       // if(orderNo.length > 8)
-       //   return orderNo.substr(orderNo.length  - 8).replace(/\"/g, "")
-       // else
-          return orderNo;
+        // if(orderNo.length > 8)
+        //   return orderNo.substr(orderNo.length  - 8).replace(/\"/g, "")
+        // else
+        return orderNo;
       },
 
 
@@ -119,15 +136,18 @@
   .orderDetail {
     width: 100%;
     text-align: left;
+
     .oder-body {
       background-color: #f0f0f0;
 
       .user-info {
         background-color: white;
         padding: 1em;
+
         .van-icon {
           margin-right: 0.5em;
         }
+
         .custom-text {
           .fz(font-size, 30);
           font-weight: bold;
@@ -139,6 +159,7 @@
         background-color: white;
         margin-top: 1em;
         padding-bottom: 0.5em;
+
         .orderSummery {
           background-color: #ffffff;
           text-align: right;
@@ -148,29 +169,35 @@
           padding-top: 0.5em;
         }
       }
+
       .order-logistics {
         background-color: white;
         margin-top: 1em;
-        >span{
+
+        > span {
           .fz(font-size, 30);
           margin: 1em;
           color: #000000;
         }
       }
+
       .order-detail {
         background-color: white;
         margin-top: 1em;
-        .van-cell{
+
+        .van-cell {
           background-color: white;
           margin-top: -1px;
           color: #000000;
         }
-        >span{
+
+        > span {
           .fz(font-size, 25);
           margin: 1em;
           color: #000000;
         }
-        >p{
+
+        > p {
           .fz(font-size, 20);
           margin: 1em 1em 1em 2em;
           color: #000000;
