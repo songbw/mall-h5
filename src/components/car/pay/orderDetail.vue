@@ -39,7 +39,8 @@
         <p>{{formatTime(detail.createdAt)}}</p>
         <span>成交时间:</span>
         <p>xxxx</p>
-
+        <span>配送方式: {{getDisplayLogisticsInfo()}}</span>
+        <p></p>
       </div>
     </div>
   </section>
@@ -69,6 +70,13 @@
     computed: {},
 
     methods: {
+      getDisplayLogisticsInfo() {
+        this.$log("getDisplayLogisticsInfo:"+this.detail.status)
+        if(this.detail.status != 1)
+          return "普通快递"
+        else
+          return 0;
+      },
       formatTime(timeString) {
         //2019-01-27T07:56:27.000+0000
         let dateee = new Date(timeString).toJSON();
@@ -137,7 +145,15 @@
           padding-top: 0.5em;
         }
       }
-
+      .order-logistics {
+        background-color: white;
+        margin-top: 1em;
+        >span{
+          .fz(font-size, 30);
+          margin: 1em;
+          color: #000000;
+        }
+      }
       .order-detail {
         background-color: white;
         margin-top: 1em;

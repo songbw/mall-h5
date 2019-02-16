@@ -68,9 +68,10 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        this.getAccessTokenInfo();
-        this.startLocation();
+     //   this.getAccessTokenInfo();
         this.test();
+        this.startLocation();
+
         //this.getUserInfo();
         //this.updateLocation();
       }, 1000);

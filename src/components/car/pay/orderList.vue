@@ -16,7 +16,7 @@
             </div>
             <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none">
               <div class="orderDetail">
-                <van-cell :title=getMerchantName(k.merchantNo) icon="shop"/>
+                <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)"/>
                 <ul @click="onListClick(k,i)">
                   <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
                     <van-card
@@ -109,6 +109,22 @@
     },
 
     methods: {
+      getOrderStatus(status) {
+        this.$log("status is:"+status);
+        switch (status)
+        {
+          case 0:
+            return "待支付";
+          case 1:
+            return "待收货";
+          case 2:
+            return "已完成";
+          case 3:
+            return "已取消";
+          default:
+            return ""
+        }
+      },
       getMerchantName(merchantNo) {
         if (merchantNo == 20) {
           return "苏宁易购"
