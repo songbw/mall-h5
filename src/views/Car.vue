@@ -8,7 +8,7 @@
       <mt-cell-swipe
         v-for="(k,index) in this.selStateInCarList"
         :key="k.id"
-        :right="[{content: '删除',style: { background: 'red', color: '#fff'},
+        :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'1.5em'},
         handler: function(){ onDeleteBtnClick(k,index) }}]">
         <div slot="title">
           <van-checkbox

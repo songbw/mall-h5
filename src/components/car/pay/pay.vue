@@ -543,7 +543,7 @@
                     let pAnOrderInfo = {
                       "accessToken": user.accessToken,
                       "orderNo": orderNo,
-                      "orderAmount": 1,//for test// amount * 100,//分
+                      "orderAmount": amount * 100,//分
                       "openId": user.openId,
                       "businessType": "11"
                     }
