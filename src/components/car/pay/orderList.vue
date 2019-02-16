@@ -264,10 +264,12 @@
         background-color: white;
         flex-flow: column;
         text-align: center;
+        justify-content: center;
 
         img {
-          display: block;
-          padding: 0em 2em 0em 2em;
+          margin: 0 auto;
+          height: 150px;
+          width: 150px;
         }
       }
 
