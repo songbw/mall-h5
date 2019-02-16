@@ -11,13 +11,13 @@
     <h1 class="section-title">
       支付方式
     </h1>
-    <van-radio-group v-model="radio"  @change="onChange">
+    <van-radio-group v-model="radio" @change="onChange">
       <van-cell-group>
         <van-cell title="微信" icon="wechat" clickable @click="radio = '1'">
-          <van-radio name="1" checked-color="#4b0" />
+          <van-radio name="1" checked-color="#4b0"/>
         </van-cell>
         <van-cell title="支付宝" icon="alipay" clickable @click="radio = '2'">
-          <van-radio name="2" checked-color="#4b0" />
+          <van-radio name="2" checked-color="#4b0"/>
         </van-cell>
       </van-cell-group>
     </van-radio-group>
@@ -37,7 +37,7 @@
     },
     data() {
       return {
-        radio:'1'
+        radio: '1'
       }
     },
     methods: {
@@ -53,9 +53,11 @@
 <style lang="less" scoped>
   @import "../../../assets/fz.less";
   @import "../../../assets/index/style.css";
+
   .casher {
     width: 100%;
     text-align: left;
+
     .section-title {
       .bt();
       background-color: #ffffff;

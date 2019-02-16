@@ -183,6 +183,7 @@
           color: #000000;
         }
       }
+
       .oder-ServerInfo {
         background-color: white;
         margin-top: 1em;

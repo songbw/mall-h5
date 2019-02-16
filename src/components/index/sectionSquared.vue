@@ -1,15 +1,16 @@
 <template lang="html">
   <section class="sectionSquared">
     <mt-cell v-if="datas.settings.title.show">
-      <h1 slot="title" class="sectionSquared-title" >
+      <h1 slot="title" class="sectionSquared-title">
         {{datas.settings.title.text.value}}
       </h1>
-      <i class="icon-right" v-if="(datas.settings.title.text.hasLink===true)" @click="See(datas.settings.title.text.linkUrl)"></i>
+      <i class="icon-right" v-if="(datas.settings.title.text.hasLink===true)"
+         @click="See(datas.settings.title.text.linkUrl)"></i>
     </mt-cell>
     <li v-for="item in datas.list" style="list-style: none">
       <ul class="sectionSquared-list">
         <li v-for="k in item.grids">
-            <img v-lazy="k.imageUrl" @click="onClick(k.targetUrl)">
+          <img v-lazy="k.imageUrl" @click="onClick(k.targetUrl)">
         </li>
       </ul>
     </li>
@@ -33,11 +34,9 @@
         window.location.href = e
       },
       onClick(targetId) {
-        console.log("onClick:"+targetId);
-        if(targetId.startsWith("aggregation://")) {
+        if (targetId.startsWith("aggregation://")) {
           let id = targetId.substr(14);
-          console.log("id:"+id);
-          this.$router.push({ path: '/index/'+id});
+          this.$router.push({path: '/index/' + id});
         } else {
           this.See(targetId);
         }

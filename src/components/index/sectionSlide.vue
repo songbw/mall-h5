@@ -1,21 +1,22 @@
 <template>
   <section class="sectionSlide">
-    <mt-cell  v-if="datas.settings.title.show">
+    <mt-cell v-if="datas.settings.title.show">
       <h1 slot="title" class="sectionSlide-title">
         {{datas.settings.title.textValue}}
       </h1>
     </mt-cell>
     <div class="sectionSlide-banner">
-      <img v-lazy="datas.settings.title.imageUrl" v-if="datas.settings.title.hasImage" @click="onBannerClick(datas.settings.title.targetUrl)">
+      <img v-lazy="datas.settings.title.imageUrl" v-if="datas.settings.title.hasImage"
+           @click="onBannerClick(datas.settings.title.targetUrl)">
     </div>
-     <!--
-    <router-link :to="{name:'分类页'}" class="sectionSlide-banner">
-      <img v-lazy="datas.banner">
-    </router-link>
-    -->
+    <!--
+   <router-link :to="{name:'分类页'}" class="sectionSlide-banner">
+     <img v-lazy="datas.banner">
+   </router-link>
+   -->
     <div class="sectionSlide-list">
       <ul>
-        <li v-for="(k,index) in datas.list"  @click="onGoodsClick(k)" :key="index">
+        <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
           <img v-lazy="k.imagePath">
           <p class="sectionSlide-list-intro">
             {{k.intro}}
@@ -43,18 +44,15 @@
     },
     methods: {
       updateCurrentGoods(goods) {
-        //console.log("goods :" + JSON.stringify(goods));
-        this.$store.commit('SET_CURRENT_GOODS',JSON.stringify(goods));
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
       See(e) {
         window.location.href = e
       },
       onBannerClick(targetId) {
-        console.log("onBannerClick:"+targetId);
-        if(targetId.startsWith("aggregation://")) {
+        if (targetId.startsWith("aggregation://")) {
           let id = targetId.substr(14);
-          console.log("id:"+id);
-          this.$router.push({ path: '/index/'+id});
+          this.$router.push({path: '/index/' + id});
         } else {
           this.See(targetId);
         }
@@ -69,7 +67,6 @@
               id: goods.skuid,
             }
           }).then((res) => {
-            //console.log("current Goods:"+JSON.stringify(res.data.data.result));
             this.updateCurrentGoods(res.data.data.result);
             this.$router.push("/detail");
           }).catch((error) => {
@@ -147,12 +144,12 @@
   }
 
   .sectionSlide-banner {
-    display:block;
+    display: block;
     width: 100%;
 
     img {
-      display:block;
-      width:100%
+      display: block;
+      width: 100%
     }
   }
 

@@ -5,7 +5,7 @@
       <p>共{{count}}件 金额：</p>
       <p><span>{{allpay}} </span>元</p>
     </div>
-    <router-link  :to="{ name: '分类页'}" class="footer-goon"  replace>
+    <router-link :to="{ name: '分类页'}" class="footer-goon" replace>
       继续购物
     </router-link>
     <a class="footer-pay" @click="goPay">
@@ -27,10 +27,8 @@
           return selCount
         } else {
           let userInfo = this.$store.state.appconf.userInfo;
-          console.log("count userInfo:" + userInfo)
           try {
             if (!this.isUserEmpty(userInfo)) {
-              console.log("count has UserInfo")
               let user = JSON.parse(userInfo)
               let selStateInCarList = this.$store.state.appconf.selStateInCarList;
               selStateInCarList.forEach(item => {
@@ -39,7 +37,6 @@
                 }
               })
             } else {
-              console.log("count no UserInfo")
               let selStateInCarList = this.$store.state.appconf.selStateInCarList;
               selStateInCarList.forEach(item => {
                 if (item.userId == -1 && item.choose) {
@@ -57,10 +54,8 @@
       allpay() {
         let all = 0;
         let userInfo = this.$store.state.appconf.userInfo;
-        console.log("allpay userInfo:" + userInfo)
         try {
           if (!this.isUserEmpty(userInfo)) {
-            console.log("allpay has UserInfo")
             let user = JSON.parse(userInfo)
             let selStateInCarList = this.$store.state.appconf.selStateInCarList;
             selStateInCarList.forEach(item => {
@@ -70,9 +65,7 @@
             })
           } else {
             //no mobile App
-            console.log("allpay no UserInfo")
             let selStateInCarList = this.$store.state.appconf.selStateInCarList;
-            console.log("selStateInCarList:" + JSON.stringify(selStateInCarList))
             selStateInCarList.forEach(item => {
               if (item.userId == -1 && item.choose) {
                 all += item.price * item.count

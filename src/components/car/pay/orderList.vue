@@ -110,9 +110,8 @@
 
     methods: {
       getOrderStatus(status) {
-        this.$log("status is:"+status);
-        switch (status)
-        {
+        this.$log("status is:" + status);
+        switch (status) {
           case 0:
             return "待支付";
           case 1:
@@ -139,10 +138,6 @@
         }
       },
       onDelBtnClick(listItem, i) {
-        //       this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        //       this.selStateInCarList.splice(index, 1);
-        //       this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-        //       console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
         let that = this;
         that.orderTypes.forEach(orderTypeItem => {
           let found = -1;

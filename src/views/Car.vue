@@ -48,7 +48,7 @@
         // `this` points to the vm instance
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         return this.selStateInCarList.filter(function (item) {
-          return  String(item.skuId).startsWith("20")
+          return String(item.skuId).startsWith("20")
         });
       },
 
@@ -94,11 +94,10 @@
         return (userInfo == undefined || userInfo.length === 0)
       },
       onDeleteBtnClick(k, index) {
-        console.log("onDeleteBtnClick id:" + k.id + ",index:" + index)
+        let that = this;
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         this.selStateInCarList.splice(index, 1);
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-        console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
 
         this.$api.xapi({
           method: 'delete',
@@ -107,10 +106,9 @@
             id: k.id,
           }
         }).then((response) => {
-          //console.log("response is:" + JSON.stringify(response))
-          console.log("onDeleteBtnClick success")
+          that.$log("onDeleteBtnClick success")
         }).catch(function (error) {
-          console.log(error)
+          that.$log(error)
         })
       },
 
@@ -126,7 +124,6 @@
             }
           }
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-          console.log("onCountChange id:" + id + ",skuid:" + skuid + ",count:" + count)
           let options = {
             "id": id,
             "count": count
@@ -136,7 +133,6 @@
             url: '/cart/num',
             data: options,
           }).then((response) => {
-            console.log("change goods count success!")
           }).catch(function (error) {
             console.log(error)
           })
@@ -160,7 +156,6 @@
             "openId": userInfo.userId,
             "pageNo": this.pageNo++
           }
-          console.log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             url: '/cart/all',
@@ -168,7 +163,7 @@
           }).then((response) => {
             this.result = response.data.data.result;
             this.total = this.result.total;
-            console.log("load from network car list is:" + JSON.stringify(this.result.list));
+            this.$log("load from network car list is:" + JSON.stringify(this.result.list));
             this.result.list.forEach(item => {
               this.list.push(item);
               this.getSkuInfoBy(item, userInfo);
@@ -184,9 +179,9 @@
       },
 
       onLoad() {
-       // let userInfo=this.$jsbridge.call("getUserInfo");
+        // let userInfo=this.$jsbridge.call("getUserInfo");
         let userInfo = this.$store.state.appconf.userInfo;
-        if( !this.isUserEmpty(userInfo)) {
+        if (!this.isUserEmpty(userInfo)) {
           this.loadCartListBy(userInfo);
         } else {
           this.getCarListWithoutUser();
@@ -246,7 +241,7 @@
           if (product != null) {
             this.updateSelectedCarlist(item, product, user)
           } else {
-            console.log("product:" + JSON.stringify(product) + ",skuId:" + item.skuId)
+            this.$log("product:" + JSON.stringify(product) + ",skuId:" + item.skuId)
           }
         }).catch((error) => {
           console.log(error)
@@ -262,7 +257,6 @@
           }
         }
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-        console.log("selStateInCarList:" + JSON.stringify(this.selStateInCarList))
       }
 
     },
@@ -299,7 +293,7 @@
       padding: 0.6rem;
     }
 
-    .van-card{
+    .van-card {
       background-color: #ffffff;
     }
 

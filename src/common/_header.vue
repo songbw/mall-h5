@@ -8,12 +8,6 @@
           v-if="$route.matched[0].path=='/category'"
           replace>
         </router-link>
-<!--        <router-link
-          class="icon-go"
-          :to="{ name: '购物车页'}"
-          v-else-if="$route.matched[0].path=='/car/pay'"
-          replace>
-        </router-link>-->
         <router-link
           class="icon-go"
           :to="{ name: '首页'}"
@@ -68,6 +62,5 @@
 
 
 <script>
-  export default {
-  }
+  export default {}
 </script>

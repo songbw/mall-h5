@@ -33,9 +33,7 @@
     },
     created() {
       let id = this.$route.params.id
-      console.log("id:" + id)
       if (id != "new") {
-        console.log("id:" + id)
         //获取id 相关的地址数据
         let list = this.$store.state.appconf.addressList;
 
@@ -66,29 +64,23 @@
         return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
       },
       getAddressCode(province, city, county) {
-        console.log("province:" + province + ",city:" + city + ",county:" + county)
-        // console.log("areaList:"+JSON.stringify(areaList))
         let code = ""
         for (var key in areaList.province_list) {
           if (areaList.province_list[key] == province) {
-            //  console.log("key:" + key + ",value:" + areaList.province_list[key])
             code = key
             break;
           }
         }
-        // console.log("code:"+code)
+
         for (var key in areaList.city_list) {
           if (key.substr(0, 2) == code.substr(0, 2) && areaList.city_list[key] == city) {
-            //  console.log("key:" + key + ",value:" + areaList.city_list[key])
             code = key
             break;
           }
         }
-        //console.log("code:"+code)
 
         for (var key in areaList.county_list) {
           if (key.substr(0, 4) == code.substr(0, 4) && areaList.county_list[key] == county) {
-            //  console.log("key:" + key + ",value:" + areaList.county_list[key])
             code = key
             break;
           }
@@ -97,7 +89,6 @@
       },
 
       saveReceiverAddress(receiverInfo, addressCode) {
-        console.log("saveReceiverAddress Enter")
         let id = this.$route.params.id
         if (id == 'new') {
           try {
@@ -115,14 +106,12 @@
                 "zip": addressCode.zipCode,
                 "status": receiverInfo.isDefault ? 1 : 0
               }
-              console.log("options:" + JSON.stringify(options));
               this.$api.xapi({
                 method: 'post',
                 url: '/receiver',
                 data: options,
               }).then((response) => {
                 let id = response.data.data.result;
-                console.log("saved id is:" + JSON.stringify(id));
                 this.$store.commit('SET_USED_ADDRESS_ID', id);
                 let list = this.$store.state.appconf.addressList;
                 let address = {
@@ -174,15 +163,13 @@
                 "zip": addressCode.zipCode,
                 "status": receiverInfo.isDefault ? 1 : 0
               }
-              console.log("saveReceiverAddress 3")
-              console.log("options:" + JSON.stringify(options));
+
               this.$api.xapi({
                 method: 'put',
                 url: '/receiver',
                 data: options,
               }).then((response) => {
                 let result = response.data.data.result;
-                console.log("update result id is:" + JSON.stringify(result));
                 this.$store.commit('SET_USED_ADDRESS_ID', id);
                 let list = this.$store.state.appconf.addressList;
                 let address = {
@@ -231,7 +218,6 @@
       },
       onDelete(info) {
         let id = this.$route.params.id
-        console.log("info:" + JSON.stringify(info) + ",id:" + id);
         let list = this.$store.state.appconf.addressList;
         let found = -1;
         for (let i = 0; i < list.length; i++) {
@@ -241,7 +227,6 @@
           }
         }
         if (found != -1) {
-          console.log("list:" + JSON.stringify(list))
           list.splice(found, 1);//如果是删除选中地址，怎么办？
           this.$store.commit('SET_ADDRESS_LIST', list);
           this.$api.xapi({
@@ -251,8 +236,6 @@
               id: id,
             }
           }).then((response) => {
-            //console.log("response is:" + JSON.stringify(response))
-            console.log("delete success")
             this.$router.go(-1)
           }).catch(function (error) {
             console.log(error)
@@ -260,8 +243,6 @@
         }
       },
       onSave(recerverInfo) {
-        console.log("recerverInfo:" + JSON.stringify(recerverInfo));
-        console.log("addressInfo" + JSON.stringify(this.addressInfo));
         //首先获取地址编码
         let options = {
           "country": recerverInfo.country,
@@ -269,14 +250,13 @@
           "city": recerverInfo.city,
           "county": recerverInfo.county
         }
-        console.log("options:" + JSON.stringify(options));
+
         this.$api.xapi({
           method: 'post',
           url: '/address/code',
           data: options,
         }).then((response) => {
           let code = response.data.data.code;
-          console.log("AddressCode result is:" + JSON.stringify(code));
           //保存接收者地址到网络
           this.saveReceiverAddress(recerverInfo, code);
         }).catch(function (error) {

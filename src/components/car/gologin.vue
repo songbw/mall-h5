@@ -1,16 +1,15 @@
 <template lang="html">
 
   <router-link :to="{ name: '用户页', params: {} }" class="gologin">
-      <span>登录后享受更多优惠</span>
-      <span>去登陆</span>
+    <span>登录后享受更多优惠</span>
+    <span>去登陆</span>
   </router-link>
-
-
 </template>
 
 
 <style lang="less" scoped>
   @import '../../assets/fz.less';
+
   .gologin {
     display: -webkit-flex;
     display: -ms-flex;
@@ -20,14 +19,17 @@
     padding: 4vw 6vw;
     color: #333;
     .bd();
+
     span {
       letter-spacing: .2vw;
     }
+
     span:last-of-type {
       color: rgba(0, 0, 0, .54);
       position: relative;
-      .fz(font-size,26);
+      .fz(font-size, 26);
       padding-right: 2vw;
+
       &::after {
         content: "";
         position: absolute;

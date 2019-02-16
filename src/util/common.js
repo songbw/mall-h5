@@ -5,7 +5,6 @@ const STORAGE_USER_KEY = 'STORAGE_USER_KEY'
 export default {
   // 获取
   getLocal(key = STORAGE_USER_KEY) {
-    // console.log('get local operation')
     return JSON.parse(window.localStorage.getItem(key))
   },
   // 设置用

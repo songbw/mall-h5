@@ -151,14 +151,14 @@ Vue.use(vueLogger, {
     let d = date.getDate();
     d = d < 10 ? ('0' + d) : d;
     let h = date.getHours();
-    h=h < 10 ? ('0' + h) : h;
+    h = h < 10 ? ('0' + h) : h;
     let minute = date.getMinutes();
     minute = minute < 10 ? ('0' + minute) : minute;
-    let second=date.getSeconds();
-    second=second < 10 ? ('0' + second) : second;
-    return y + '-' + m + '-' + d+' '+h+':'+minute+':'+second;
+    let second = date.getSeconds();
+    second = second < 10 ? ('0' + second) : second;
+    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
   },
-  dev: true,
+  dev: false,
   levels: ["log", "warn", "debug", "error", "dir"],
   forceLevels: []
 });
@@ -167,7 +167,7 @@ Vue.use(vueLogger, {
 
 router.beforeEach((to, from, next) => {
   document.body.scrollTop = 0;
-  console.log("route:"+from.fullPath+"-->"+to.fullPath)
+  console.log("route:" + from.fullPath + "-->" + to.fullPath)
 
   next();
 })

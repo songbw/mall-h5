@@ -34,7 +34,6 @@
         return (userInfo == undefined || userInfo.length == 0)
       },
       add2SelectedCarlistWithoutUser() {//
-        console.log("add2SelectedCarlistNoUser Enter");
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
         let choose = true;
         let found = -1;
@@ -63,9 +62,7 @@
       },
 
       addGoodsCar() {
-        console.log("add goods car Enter")
         let userInfo = this.$store.state.appconf.userInfo;
-        this.$log("userInfo:" + userInfo);
         if (!this.isUserEmpty(userInfo)) {
           this.add2Car(userInfo);
         } else {
@@ -81,7 +78,6 @@
           "openId": userId,
           "skuId": skuId
         }
-        console.log("addtoCar:" + JSON.stringify(addtoCar));
         this.$api.xapi({
           method: 'post',
           url: '/cart',

@@ -35,33 +35,30 @@
     },
 
     created() {
-      if(this.$store.state.appconf.currentGoods != undefined &&  this.$store.state.appconf.currentGoods.length > 0) {
+      if (this.$store.state.appconf.currentGoods != undefined && this.$store.state.appconf.currentGoods.length > 0) {
         this.goods = JSON.parse(this.$store.state.appconf.currentGoods);
         if (!(JSON.stringify(this.goods) == "{}")) {
-          //console.log("created goods :" + JSON.stringify(this.goods));
           let imagesUrls = this.goods.imagesUrl;
           if (imagesUrls != null && imagesUrls.length > 0) {
             let ulsArray = imagesUrls.split(":");
             if (ulsArray.length > 0) {
               ulsArray.forEach(items => {
-                if(items != null && items.length >0) {
+                if (items != null && items.length > 0) {
                   this.swiperUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
                 }
               })
             }
-            //console.log("swiperUrls:" + JSON.stringify(this.swiperUrls))
           }
           let comtentUrls = this.goods.introductionUrl;
           if (comtentUrls != null && comtentUrls.length > 0) {
             let ulsArray = comtentUrls.split(":");
             if (ulsArray.length > 0) {
               ulsArray.forEach(items => {
-                if(items != null && items.length >0) {
+                if (items != null && items.length > 0) {
                   this.contentUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
                 }
               })
             }
-            //console.log("contentUrls:" + JSON.stringify(this.contentUrls))
           }
         }
       }
@@ -74,8 +71,7 @@
         contentUrls: []
       }
     },
-    methods: {
-    }
+    methods: {}
   }
 
 </script>

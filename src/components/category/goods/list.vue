@@ -3,14 +3,14 @@
     <v-header>
       <h1 slot="title">商品列表</h1>
       <router-link :to="{name:'购物车页'}" slot="right">
-        <van-icon name="cart"  size="1em"/>
+        <van-icon name="cart" size="1em"/>
       </router-link>
     </v-header>
     <van-list v-model="loading"
               :finished="finished"
               @load="onLoad">
       <li v-for="k in list" :key="k.id" style="list-style: none">
-        <div class="goods-detail"  @click="onListClick(k)">
+        <div class="goods-detail" @click="onListClick(k)">
           <van-card
             :price="k.price"
             desc=""
@@ -20,7 +20,7 @@
           </van-card>
         </div>
         <div class="goods-action">
-          <van-button size="mini" @click="onAdd2carBtnClick(k)" ></van-button>
+          <van-button size="mini" @click="onAdd2carBtnClick(k)"></van-button>
         </div>
       </li>
     </van-list>
@@ -53,16 +53,12 @@
         let category = this.$route.query.category;
         let search = this.$route.query.search;
 
-        //console.log("category:"+category+",search:"+search);
-        if(category != null && category.length > 0) {
-          console.log("category :" + category);
-          console.log("onLoad Enter，this.list.length:" + this.list.length + "this.total:" + this.total)
+        if (category != null && category.length > 0) {
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
               "category": category,
               "pageNo": this.pageNo++
             }
-            console.log("options:" + JSON.stringify(options));
             this.$api.xapi({
               method: 'post',
               url: '/prod/all',
@@ -70,7 +66,6 @@
             }).then((response) => {
               this.result = response.data.data.result;
               this.total = this.result.total;
-              console.log("total is:" + this.total);
               this.result.list.forEach(item => {
                 this.list.push(item);
               })
@@ -82,21 +77,18 @@
               this.finished = true;
             })
           }
-        } else if(search != undefined && search.length >0 ){
+        } else if (search != undefined && search.length > 0) {
           let options = {
             "keyword": search,
             "pageNo": this.pageNo++
           }
-          console.log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             url: '/es/prod',
             data: options,
           }).then((response) => {
             this.result = response.data.data.result;
-            //console.log("result:"+JSON.stringify(this.result));
             this.total = this.result.total;
-            console.log("total is:" + this.total);
             this.result.list.forEach(item => {
               this.list.push(item);
             })
@@ -113,19 +105,18 @@
         }
       },
       updateCurrentGoods(goods) {
-       // console.log("goods :" + JSON.stringify(goods));
-        this.$store.commit('SET_CURRENT_GOODS',JSON.stringify(goods));
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
       onListClick(goods) {
         this.updateCurrentGoods(goods);
         this.$router.push("/detail");
       },
       onAdd2carBtnClick(goods) {
-        this.$log("onAdd2carBtnClick Enter",goods)
+        //this.$log("onAdd2carBtnClick Enter",goods)
         let userInfo = this.$store.state.appconf.userInfo;
-        this.$log("userInfo:" + userInfo);
+        //this.$log("userInfo:" + userInfo);
         if (!this.isUserEmpty(userInfo)) {
-          this.add2Car(userInfo,goods);
+          this.add2Car(userInfo, goods);
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
         }
@@ -134,7 +125,7 @@
         return (userInfo == undefined || userInfo.length == 0)
       },
 
-      add2Car(userInfo,goods) {
+      add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
         let skuId = goods.skuid;
@@ -164,21 +155,25 @@
   .detaillist {
     width: 100%;
     background-color: #f0f0f0;
-    .van-list{
-      .van-card{
+
+    .van-list {
+      .van-card {
         background-color: #ffffff;
         margin-top: 1em;
       }
+
       .goods-action {
         background-color: #ffffff;
         text-align: right;
         margin-right: 1em;
         color: #000000;
+
         .van-button {
           background: url('../../../assets/images/addtoCar.png') no-repeat center;
           background-size: 30px 25px;
           border: none;
         }
+
         .van-button:active {
           opacity: 0;
         }

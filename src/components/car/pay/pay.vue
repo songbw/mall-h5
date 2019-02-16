@@ -94,7 +94,8 @@
         receiverAddress: '',
         addressEmptyInfo: '',
         usedAddress: {},
-        invoiceDetail: ''
+        invoiceDetail: '',
+        pageLoadTimerId: -1,
 
       }
     },
@@ -259,7 +260,7 @@
         this.$store.dispatch('setInvoicdInfo', JSON.stringify(invoice));
         this.invoiceDetail = "电子普票(个人)";
       }
-      setTimeout(() => {
+      this.pageLoadTimerId = setTimeout(() => {
         this.$store.commit('SET_PAGE_LOADING', false);
         this.$log("pageLoading:  10s end")
       }, 10000);
@@ -376,23 +377,23 @@
       },
 
       deleteOrderedGoodsInCar() {
-         let selStateInCarList = this.$store.state.appconf.selStateInCarList
-         this.arregationList.forEach(item => {
-           if (item.goods.length > 0) {
-             item.goods.forEach(sku => {
-               let found = -1;
-               for (let i = 0; i < selStateInCarList.length; i++) { //从CarList中删除订单中的货物
-                 if (selStateInCarList[i].skuId === sku.product.skuId) {
-                   found = i;
-                   break;
-                 }
-               }
-               if (found != -1) {
-                 selStateInCarList.splice(found, 1);
-               }
-             })
-           }
-         })
+        let selStateInCarList = this.$store.state.appconf.selStateInCarList
+        this.arregationList.forEach(item => {
+          if (item.goods.length > 0) {
+            item.goods.forEach(sku => {
+              let found = -1;
+              for (let i = 0; i < selStateInCarList.length; i++) { //从CarList中删除订单中的货物
+                if (selStateInCarList[i].skuId === sku.product.skuId) {
+                  found = i;
+                  break;
+                }
+              }
+              if (found != -1) {
+                selStateInCarList.splice(found, 1);
+              }
+            })
+          }
+        })
       },
 
       getComposedOderOption(userInfo, receiverId) {
@@ -460,12 +461,12 @@
         return options;
       },
 
-      openCashPage(user, merchantNo, orderNos,  pAnOrderInfo) {
+      openCashPage(user, merchantNo, orderNos, pAnOrderInfo) {
         let that = this;
         let options = {
           "openId": pAnOrderInfo.openId,
-          "appId":this.$api.APP_ID,
-          "merchantNo":merchantNo,
+          "appId": this.$api.APP_ID,
+          "merchantNo": merchantNo,
           "orderNos": orderNos,
           "goodsName": "商品支付订单",
           "amount": pAnOrderInfo.orderAmount
@@ -529,7 +530,7 @@
                   if (result != undefined && result.length > 0 && result[0].orderId.length > 8) {
                     let len = result[0].orderId.length;
                     orderNos = JSON.stringify(result[0].orderId.substr(len - 8)).replace(/\"/g, "");
-                    if(options.merchants.length == 1) {//单商户
+                    if (options.merchants.length == 1) {//单商户
                       merchantNo = options.merchants[0].merchantNo;
                     }
                     orderNo = this.$api.APP_ID + merchantNo + user.openId + orderNos
@@ -547,7 +548,7 @@
                       "openId": user.openId,
                       "businessType": "11"
                     }
-                    that.openCashPage(user,merchantNo, orderNos, pAnOrderInfo)
+                    that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
                   } else {
                     that.log("can not get correct orderNo");
                   }
@@ -604,15 +605,17 @@
           // this.$log("this.arregationList is:" + JSON.stringify(this.arregationList));
           this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
+          if (this.pageLoadTimerId != -1) {
+            clearTimeout(this.pageLoadTimerId)
+          }
         }).catch(function (error) {
           that.$log(error)
           that.$store.commit('SET_PAGE_LOADING', false);
           that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
           this.$toast("无法获取到运费")
-          /*         this.$dialog.alert({
-                     title: '无法获取到运费',
-                   }).then(() => {
-                   })*/
+          if (this.pageLoadTimerId != -1) {
+            clearTimeout(this.pageLoadTimerId)
+          }
         })
       },
       getCarList() {

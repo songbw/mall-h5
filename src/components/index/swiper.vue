@@ -1,7 +1,7 @@
 <template lang="html">
   <mt-swipe :auto="4000">
     <mt-swipe-item v-for="(k,index) in datas.list" :key="index">
-        <img :src="k.imageUrl" @click="onClick(k.targetUrl)">
+      <img :src="k.imageUrl" @click="onClick(k.targetUrl)">
     </mt-swipe-item>
   </mt-swipe>
 </template>
@@ -21,12 +21,9 @@
         window.location.href = e
       },
       onClick(targetId) {
-        console.log("onClick:"+targetId);
-        if(targetId.startsWith("aggregation://")) {
+        if (targetId.startsWith("aggregation://")) {
           let id = targetId.substr(14);
-          console.log("id:"+id);
-          this.$router.push({ path: '/index/'+id});
-         // this.$router.push({ path: '/index/23'});
+          this.$router.push({path: '/index/' + id});
         } else {
           this.See(targetId);
         }

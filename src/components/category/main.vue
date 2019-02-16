@@ -50,7 +50,6 @@
         }
         if (this.datas.length > 0) {
           let categoryId = this.datas[this.tabIndex]["categoryId"];
-          // console.log("categoryId:", categoryId);
           this.$api.xapi({
             method: 'get',
             url: 'category/allsub',
@@ -144,6 +143,7 @@
         padding: 0 3vw;
         display: flex;
         flex-flow: column;
+
         > a {
           display: block;
           width: 100%;

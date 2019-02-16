@@ -3,7 +3,7 @@
     <v-header class="header">
       <h1 slot="title">商品分类</h1>
       <router-link :to="{name:'购物车页'}" slot="right">
-        <van-icon name="cart"  size="1em"/>
+        <van-icon name="cart" size="1em"/>
       </router-link>
     </v-header>
     <section class="view">
@@ -37,9 +37,7 @@
         url: '/category/ones'
       }).then((res) => {
         this.class1Data = res.data.data;
-        console.log("class1Data:", this.class1Data);
       }).catch((error) => {
-        console.log(error)
       })
     }
   }

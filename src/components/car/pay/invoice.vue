@@ -60,31 +60,14 @@
         radio: '1',
         invoiceType: 'eInvoice',
         invoiceTitleType: 'personal',
-        invoiceEnterpriseName:'',
+        invoiceEnterpriseName: '',
         invoiceEnterpriseNumber: '',
-        /*        // 默认屏幕高度
-                docmHeight: document.documentElement.clientHeight,  //一开始的屏幕高度
-                showHeight: document.documentElement.clientHeight,   //一开始的屏幕高度
-                hideClass: false,*/
       }
     },
-    /*    watch:{
-          showHeight: 'inputType'
-        },*/
 
-    /*    mounted() {
-    // window.onresize监听页面高度的变化
-          window.onresize = () => {
-            return (() => {
-              window.screenHeight = document.body.clientHeight;
-              this.showHeight = window.screenHeight;
-            })()
-          }
-        },*/
 
     created() {
       const invoiceInfo = this.$store.state.appconf.invoice;
-      console.log("created:" + invoiceInfo )
       if (invoiceInfo != undefined && invoiceInfo.length > 0) {
         try {
           const invoice = JSON.parse(invoiceInfo);
@@ -93,53 +76,28 @@
           this.invoiceEnterpriseName = invoice.invoiceEnterpriseName;
           this.invoiceEnterpriseNumber = invoice.invoiceEnterpriseNumber;
         } catch (e) {
-          console.log("invoice:"+e);
+          console.log("invoice:" + e);
         }
       }
     },
 
-    computed: {
-    },
+    computed: {},
 
     methods: {
       onClick() {
-        console.log("onClick Enter");
-
-        if(this.invoiceTitleType != "personal" && (this.invoiceEnterpriseName.length == 0 || this.invoiceEnterpriseNumber == 0)) {
-            this.$toast("请正确填写企业名称与纳税人识别号!")
-            return
+        if (this.invoiceTitleType != "personal" && (this.invoiceEnterpriseName.length == 0 || this.invoiceEnterpriseNumber == 0)) {
+          this.$toast("请正确填写企业名称与纳税人识别号!")
+          return
         }
         const invoice = {
-          "invoiceType":this.invoiceType,
-          "invoiceTitleType":this.invoiceTitleType,
-          "invoiceEnterpriseName":this.invoiceEnterpriseName,
-          "invoiceEnterpriseNumber":this.invoiceEnterpriseNumber
+          "invoiceType": this.invoiceType,
+          "invoiceTitleType": this.invoiceTitleType,
+          "invoiceEnterpriseName": this.invoiceEnterpriseName,
+          "invoiceEnterpriseNumber": this.invoiceEnterpriseNumber
         }
-        console.log("invoice:" + JSON.stringify(invoice));
         this.$store.dispatch('setInvoicdInfo', JSON.stringify(invoice));//JSON.stringify(invoice)"");
         this.$router.go(-1);
-        /*        let invoceInfo = {
-                  "invoiceType":this.invoiceType,
-                  "invoiceTitleType":this.invoiceTitleType,
-                }*/
       }
-
-      /*      inputType() {
-              if (!this.timer) {
-                this.timer = true
-                let that = this
-                setTimeout(() => {
-                  if (that.docmHeight > that.showHeight) {
-                    //显示class
-                    this.hideClass = true;
-                  } else if (that.docmHeight <= that.showHeight) {
-                    //显示隐藏
-                    this.hideClass = false;
-                  }
-                  that.timer = false;
-                }, 500)
-              }
-            },*/
     }
   }
 </script>

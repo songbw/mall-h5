@@ -19,10 +19,6 @@
 <script>
   import Header from '@/components/index/header.vue'
   import Swiper from '@/components/index/swiper.vue'
-  import Section1 from '@/components/index/section1.vue'
-  import Section2 from '@/components/index/section2.vue'
-  import Section3 from '@/components/index/section3.vue'
-  import Section4 from '@/components/index/section4.vue'
   import sectionService from '@/components/index/sectionService.vue'
   import sectionSquared from '@/components/index/sectionSquared.vue'
   import sectionSlide from '@/components/index/sectionSlide.vue'
@@ -31,10 +27,6 @@
 
   export default {
     components: {
-      'v-section1': Section1,
-      'v-section2': Section2,
-      'v-section3': Section3,
-      'v-section4': Section4,
       'v-header': Header,
       'v-swiper': Swiper,
       'v-service': sectionService,
@@ -104,11 +96,11 @@
       test() {
         let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
         this.$log("openId:" + openId);
-        if( openId != undefined) {
+        if (openId != undefined) {
           let userInfo = {
             openId: openId,
             userToken: "xxxxxxxxxxxxx",
-            accessToken:"TTTTTTTTTTTT",
+            accessToken: "TTTTTTTTTTTT",
             userId: this.$api.APP_ID + openId
           }
           this.$log(userInfo)
@@ -122,8 +114,8 @@
       getUserInfo(accessToken) {
         let that = this;
         let paramets = {
-          appId:"fengcao",
-          accessToken:accessToken
+          appId: "fengcao",
+          accessToken: accessToken
         }
         that.$jsbridge.call("fetchUserInfoWithAccessToken", paramets, function (jsonString) {
           that.$log("fetchUserInfoWithAccessToken  is:" + jsonString);
@@ -131,12 +123,12 @@
             let jsonObj = JSON.parse(jsonString);
             let openId = jsonObj.openId;
             let userToken = jsonObj.userToken;
-            if( openId != undefined) {
+            if (openId != undefined) {
               let userInfo = {
-                openId:openId,
-                accessToken:accessToken,
-                userToken:userToken,
-                userId:that.$api.APP_ID + openId
+                openId: openId,
+                accessToken: accessToken,
+                userToken: userToken,
+                userId: that.$api.APP_ID + openId
               }
               that.$log("userInfo  is:" + JSON.stringify(userInfo));
               that.$store.commit('SET_USER', JSON.stringify(userInfo));
@@ -146,7 +138,7 @@
               url: '/zhcs/user',
               params: {
                 userToken: userToken,
-                openId:openId,
+                openId: openId,
               }
             }).then((response) => {
               let rt = response.data.data.result
@@ -162,7 +154,7 @@
 
       getAccessTokenInfo() {
         let that = this;
-        that.$jsbridge.call("fetchInitCode", "fengcao",function (initCode) {
+        that.$jsbridge.call("fetchInitCode", "fengcao", function (initCode) {
           that.$log("initCode is:" + initCode);
           that.$api.xapi({
             method: 'get',
@@ -172,9 +164,8 @@
             }
           }).then((response) => {
             let rt = response.data.data.result
-            console.log("rt:" + JSON.stringify(rt))
             that.$log("rt:" + JSON.stringify(rt));
-            if(rt != undefined) {
+            if (rt != undefined) {
               let accessToken = rt.accessToken;
               that.$log("accessToken:" + accessToken);
               that.getUserInfo(accessToken);
@@ -191,14 +182,14 @@
         this.$jsbridge.call("startLoaction");
       },
 
-/*      updateLocation() {
-        let locationInfo = this.$jsbridge.call("getLocation");
-        this.$log("updateLocation getLocation ret is:" + locationInfo);
-        if (locationInfo != null && locationInfo.length > 0) {
-          this.$store.commit('SET_LOCATION', locationInfo);
-          this.getLocationCode(locationInfo)
-        }
-      },*/
+      /*      updateLocation() {
+              let locationInfo = this.$jsbridge.call("getLocation");
+              this.$log("updateLocation getLocation ret is:" + locationInfo);
+              if (locationInfo != null && locationInfo.length > 0) {
+                this.$store.commit('SET_LOCATION', locationInfo);
+                this.getLocationCode(locationInfo)
+              }
+            },*/
 
       getLocationCode(locationInfo) {
         let that = this;

@@ -71,12 +71,12 @@
 
     methods: {
       onTabChanged(item, index) {
-     //   this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
+        //   this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
         if (this.isTabChanging) {
           this.isTabChanging = false;
         } else {
           let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#fixedBar').offsetHeight) + 1;
-     //     this.$log("offsetTop is:" + movePos)
+          //     this.$log("offsetTop is:" + movePos)
           this.isTabChanging = true;
           setTimeout(() => {
             this.isTabChanging = false;
@@ -108,7 +108,7 @@
           }
           // this.active = found;
           if (found != -1) {
-           // this.$log("found is:" + found);
+            // this.$log("found is:" + found);
             if (this.selectedId != found && !this.isTabChanging) {
               this.isTabChanging = true;
               this.selectedId = found;
@@ -124,7 +124,6 @@
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
       onGoodsClick(goods) {
-        // console.log("goods is:"+JSON.stringify(goods))
         try {
           //获取goods信息，update current googds
           this.$api.xapi({
@@ -134,7 +133,6 @@
               id: goods.skuid,
             }
           }).then((res) => {
-            //console.log("current Goods:"+JSON.stringify(res.data.data.result));
             this.updateCurrentGoods(res.data.data.result);
             this.$router.push("/detail");
           }).catch((error) => {

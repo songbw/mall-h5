@@ -2,7 +2,7 @@
   <aside class="aside">
     <ul>
       <li v-for="(k,i) in datas" @click='changeTabIndex(i)'>
-        <router-link :to="{path:'/category/'+k.categoryName.replace(/\//g, '-')}"  :class='{active:i==tabIndex}' replace>
+        <router-link :to="{path:'/category/'+k.categoryName.replace(/\//g, '-')}" :class='{active:i==tabIndex}' replace>
           {{k.categoryName}}
         </router-link>
       </li>
@@ -68,14 +68,15 @@
           color: #f44336;
           background: #ffffff;
         }
+
         .active::before {
-          display:flex;
+          display: flex;
           content: '';
           width: 4px;
           height: 100%;
           position: absolute;
           left: 0px;
-          top:0px;
+          top: 0px;
           background-color: firebrick;
         }
       }
