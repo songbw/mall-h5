@@ -44,7 +44,10 @@
         <span>订单状态: {{getOrderStatus()}}</span>
         <p></p>
       </div>
-      <van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>
+      <div class="oder-ServerInfo">
+        <van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>
+      </div>
+
     </div>
   </section>
 </template>
@@ -180,10 +183,16 @@
           color: #000000;
         }
       }
+      .oder-ServerInfo {
+        background-color: white;
+        margin-top: 1em;
+        padding-bottom: 0.1em;
+      }
 
       .order-detail {
         background-color: white;
         margin-top: 1em;
+        padding-bottom: 0.1em;
 
         .van-cell {
           background-color: white;
