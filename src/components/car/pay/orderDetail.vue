@@ -95,7 +95,7 @@
         if (this.detail.status != 1)
           return "普通快递"
         else
-          return 0;
+          return this.detail.taxNo;
       },
       formatTime(timeString) {
         //2019-01-27T07:56:27.000+0000
