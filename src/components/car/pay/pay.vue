@@ -190,7 +190,7 @@
           payList.forEach(supplyer => {
             let all = 0;
             supplyer.goods.forEach(item => {
-              // this.$log("item:" + JSON.stringify(item))
+              this.$log("item:" + JSON.stringify(item))
               if (item.valid) {
                 all += item.checkedPrice * item.product.count
               }
@@ -421,15 +421,16 @@
 
           }
         }
-        let selStateInCarList = this.$store.state.appconf.selStateInCarList
+        //let selStateInCarList = this.$store.state.appconf.selStateInCarList
         this.arregationList.forEach(item => {
           if (item.goods.length > 0) {
             let skus = []
             item.goods.forEach(sku => {
+              //this.$log("onSubmit，sku is:"+JSON.stringify(sku))
               skus.push({
                 "skuId": sku.product.skuId,
                 "num": sku.product.count,
-                "unitPrice": sku.product.price,
+                "unitPrice": sku.checkedPrice,
               })
             })
             //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
@@ -446,7 +447,7 @@
             })
           }
         })
-        this.$store.commit('SET_SELECTED_CARLIST', selStateInCarList);
+       // this.$store.commit('SET_SELECTED_CARLIST', selStateInCarList);
         let options = {
           "openId": user.userId,
           "companyCustNo": "11",
