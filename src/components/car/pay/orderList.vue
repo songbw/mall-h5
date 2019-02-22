@@ -34,6 +34,9 @@
                   <van-button plain round size="small" type="danger" @click="onDelBtnClick(k,i)">
                     删除订单
                   </van-button>
+                  <van-button plain round size="small" type="primary" @click="onPayBtnClick(k,i)" v-show="k.status==0">
+                    继续支付
+                  </van-button>
                 </div>
               </div>
             </li>
@@ -136,6 +139,61 @@
         } else {
           return "商城自营"
         }
+      },
+      openCashPage(user, merchantNo, orderNos, pAnOrderInfo) {
+        let that = this;
+        let options = {
+          "openId": pAnOrderInfo.openId,
+          "appId": this.$api.APP_ID,
+          "merchantNo": merchantNo,
+          "orderNos": orderNos,
+          "goodsName": "商品支付订单",
+          "amount": pAnOrderInfo.orderAmount
+        }
+        that.$log("预下单:" + JSON.stringify(options))
+        that.$api.xapi({
+          method: 'post',
+          url: '/zhcs/payment',
+          data: options,
+        }).then((response) => {
+          that.$log("预下单返回 :" + JSON.stringify(response.data))
+          if (response.data.msg === "会员不存在") {
+            //未开通钱包
+            let walletInfo = {
+              accessToken: user.accessToken,
+              openId: user.openId,
+            }
+            that.$log("walletInfo:" + JSON.stringify(walletInfo))
+            that.$jsbridge.call("dredgeWallet", walletInfo);
+          } else {
+            if (response.data.data.result != undefined) {
+              that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
+              that.$jsbridge.call("openCashPage", pAnOrderInfo);
+            }
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+
+      onPayBtnClick(listItem,i) {
+        this.$log(listItem);
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (this.isUserEmpty(userInfo)) {
+          return;
+        }
+        let user = JSON.parse(userInfo);
+        let len = listItem.tradeNo.length;
+        let orderNos = JSON.stringify(listItem.tradeNo.substr(len - 8)).replace(/\"/g, "");
+        let orderNo = this.$api.APP_ID + listItem.merchantNo + user.openId + orderNos
+        let pAnOrderInfo = {
+          "accessToken": user.accessToken,
+          "orderNo": orderNo,
+          "orderAmount": listItem.amount * 100,//分
+          "openId":user.openId,
+          "businessType": "11"
+        }
+        this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo)
       },
       onDelBtnClick(listItem, i) {
         let that = this;
