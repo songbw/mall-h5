@@ -284,6 +284,10 @@
 
     .van-card {
       background-color: #ffffff;
+      &__price {
+        margin-top: 0.5em;
+        .fz(font-size, 40);
+      }
     }
 
     .van-card__footer > div {

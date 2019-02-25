@@ -207,9 +207,10 @@
         > span {
           display: inline-block;
           align-content: center;
-          color: #b4282d;
-          padding: 1.2vw 2vw;
-          .fz(font-size, 30);
+          color: #ff4444;
+          padding: 2vw 1.2vw;
+          .fz(font-size, 40);
+          font-weight: bold;
         }
       }
     }

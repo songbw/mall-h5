@@ -19,7 +19,7 @@
               <div class="orderDetail">
                 <div>
                   <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
-                    <van-icon slot="right-icon" name="delete" style="" @click="onCancelBtnClick(k,i)" style="margin: 0.25em 0em 0.3em 0.3em "
+                    <van-icon slot="right-icon" name="delete" style="" @click="onDelBtnClick(k,i)" style="margin: 0.25em 0em 0.3em 0.3em "
                               v-show="k.status==2||k.status==3"/>
                   </van-cell>
                 </div>
@@ -205,24 +205,7 @@
         }
         this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo)
       },
-      onCancelBtnClick(listItem, i) {
-        let that = this;
-        that.orderTypes.forEach(orderTypeItem => {
-          let found = -1;
-          that.$log(orderTypeItem)
-          for (let i = 0; i < orderTypeItem.list.length; i++) {
-            if (listItem.id === orderTypeItem.list[i].id) {
-              found = i;
-              break;
-            }
-          }
-          that.$log("title is:" + orderTypeItem.title + ",found is:" + found);
-          if (found != -1) {
-            orderTypeItem.list.splice(found, 1)
-            orderTypeItem.total--;
-          }
-        })
-      },
+
       onDelBtnClick(listItem, i) {
         let that = this;
         that.orderTypes.forEach(orderTypeItem => {
@@ -389,8 +372,11 @@
 
         .van-card {
           background-color: #ffffff;
+          &__price {
+            margin-top: 0.5em;
+            .fz(font-size, 40);
+          }
         }
-
 
       }
     }

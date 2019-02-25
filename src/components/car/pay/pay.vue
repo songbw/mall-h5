@@ -717,8 +717,7 @@
   .pay {
     width: 100%;
     padding-bottom: 5vw;
-    //
-    //  background-color: #f44336;
+
     .custom-text {
       text-align: left;
       .fz(font-size, 30px);
@@ -778,6 +777,10 @@
         .van-card {
           background-color: #ffffff;
           margin-top: -1px;
+          &__price {
+            margin-top: 0.5em;
+            .fz(font-size, 40);
+          }
         }
       }
     }

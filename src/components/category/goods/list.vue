@@ -161,6 +161,10 @@
       .van-card {
         background-color: #ffffff;
         margin-top: 1em;
+        &__price {
+          margin-top: 0.5em;
+          .fz(font-size, 40);
+        }
       }
 
       .goods-action {

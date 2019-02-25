@@ -137,7 +137,9 @@
         }
 
         p.sectionSlide-list-price {
-          color: #b4282d;
+          color: #ff4444;
+          .fz(font-size, 40);
+          font-weight: bold;
         }
       }
     }
