@@ -4,6 +4,12 @@
       <h1 slot="title">订单详情</h1>
     </v-header>
     <div class="oder-body">
+      <div class="order-status">
+        <div class="statusInfo">
+          <img  :src=orderIcon />
+          {{getOrderStatus()}}
+        </div>
+      </div>
       <div class="user-info">
         <div class="custom-text">
           <van-icon name="location"/>
@@ -28,6 +34,23 @@
         <div class="orderSummery">
           <span>合计: ￥{{detail.amount.toFixed(2)}}元 (含运费￥{{detail.servFee.toFixed(2)}}元) </span>
         </div>
+        <div class="orderDetailAction">
+          <van-button plain round size="small" type="primary"
+                      style="background-color: #f44336;color: white;border-color: #f44336"
+                      @click="onCancelBtnClick(detail)" v-show="detail.status==0">
+            取消订单
+          </van-button>
+          <van-button plain round size="small" type="primary"
+                      style="background-color: #26a2ff;color: white;border-color: #26a2ff"
+                      @click="onPayBtnClick(detail)" v-show="detail.status==0">
+            去支付
+          </van-button>
+          <van-button plain round size="small" type="primary"
+                      style="background-color: #26a2ff;color: white;border-color: #26a2ff "
+                      @click="onLogisticsBtnClick(detail)" v-show="detail.status==1">
+            查询物流
+          </van-button>
+        </div>
       </div>
       <div class="order-detail">
         <van-cell title="订单信息" icon="info-o"/>
@@ -39,10 +62,6 @@
         <p>{{formatTime(detail.createdAt)}}</p>
         <span>成交时间:</span>
         <p>xxxx</p>
-        <span>配送方式: {{getDisplayLogisticsInfo()}}</span>
-        <p></p>
-        <span>订单状态: {{getOrderStatus()}}</span>
-        <p></p>
       </div>
       <div class="oder-ServerInfo">
         <van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>
@@ -54,14 +73,15 @@
 
 <script>
   import Header from '@/common/_header.vue'
-
   export default {
     components: {
       'v-header': Header,
     },
     data() {
       return {
-        detail: {}
+        detail: {},
+        status: -1,
+        orderIcon: require('@/assets/images/order.png')
       }
     },
 
@@ -69,14 +89,56 @@
     created() {
       this.$log("oderDetail created Enter")
       this.detail = this.$route.params.detail;
+      this.status = this.detail.status;
       this.$log(this.detail)
     },
 
     computed: {},
 
     methods: {
+      onLogisticsBtnClick(listItem) {
+
+      },
+      onPayBtnClick(listItem) {
+        this.$log(listItem);
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (this.isUserEmpty(userInfo)) {
+          return;
+        }
+        let user = JSON.parse(userInfo);
+        let len = listItem.tradeNo.length;
+        let orderNos = JSON.stringify(listItem.tradeNo.substr(len - 8)).replace(/\"/g, "");
+        let orderNo = this.$api.APP_ID + listItem.merchantNo + user.openId + orderNos
+        let pAnOrderInfo = {
+          "accessToken": user.accessToken,
+          "orderNo": orderNo,
+          "orderAmount": listItem.amount * 100,//分
+          "openId": user.openId,
+          "businessType": "11"
+        }
+        this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo)
+      },
+      onCancelBtnClick(detail) {
+        let id = detail.id
+        let options = {
+          "id": id,
+          "status": 3
+        }
+        this.$api.xapi({
+          method: 'put',
+          url: '/order/status',
+          data: options,
+        }).then((response) => {
+          if (response.data.code == 200) {
+            this.status = 3;
+          }
+          //已取消
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
       getOrderStatus() {
-        let status = this.detail.status;
+        let status = this.status;
         switch (status) {
           case 0:
             return "待支付";
@@ -127,7 +189,6 @@
           return "商城自营"
         }
       },
-
     }
   }
 </script>
@@ -139,6 +200,25 @@
   .orderDetail {
     width: 100%;
     text-align: left;
+
+    .order-status {
+      background: url('../../../assets/images/redbg.png') no-repeat;
+      background-size: 100% 100%;
+      -moz-background-size: 100% 100%;
+      color: white;
+      height: 5em;
+
+      .statusInfo {
+        padding: 1em;
+        .fz(font-size, 40);
+        font-weight: bold;
+        img {
+          height: 40px;
+          width: 40px;
+          margin-right: 2px;
+        }
+      }
+    }
 
     .oder-body {
       background-color: #f0f0f0;
@@ -156,6 +236,12 @@
           font-weight: bold;
           margin-top: 0.25em
         }
+      }
+
+      .orderDetailAction {
+        text-align: right;
+        margin-top: 1em;
+        margin-right: 1em;
       }
 
       .order-list {

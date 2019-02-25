@@ -86,6 +86,8 @@
         }
       },
       handleScroll() {
+        if(document.querySelector('#fixedBar') == null)
+          return;
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         if (!this.isFixed) {
           this.tabsOffsetTop = document.querySelector('#fixedBar').offsetTop;

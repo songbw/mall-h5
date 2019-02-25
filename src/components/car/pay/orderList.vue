@@ -16,7 +16,11 @@
             </div>
             <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none">
               <div class="orderDetail">
-                <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)"/>
+                <div>
+                  <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
+                    <van-icon slot="right-icon" name="delete" @click="onCancelBtnClick(k,i)"  style="margin: 0.3em" v-show="k.status==2||k.status==3" />
+                  </van-cell>
+                </div>
                 <ul @click="onListClick(k,i)">
                   <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
                     <van-card
@@ -31,11 +35,11 @@
                   <span>合计: ￥{{k.amount.toFixed(2)}}元 (含运费￥{{k.servFee.toFixed(2)}}元) </span>
                 </div>
                 <div class="orderDetailAction">
-                  <van-button plain round size="small" type="danger" @click="onDelBtnClick(k,i)">
-                    删除订单
+                  <van-button plain round size="small" type="primary" style="background-color: #26a2ff;color: white;border-color: #26a2ff " @click="onPayBtnClick(k,i)" v-show="k.status==0">
+                    去支付
                   </van-button>
-                  <van-button plain round size="small" type="primary" @click="onPayBtnClick(k,i)" v-show="k.status==0">
-                    继续支付
+                  <van-button plain round size="small" type="primary" style="background-color: #26a2ff;color: white;border-color: #26a2ff " @click="onPayBtnClick(k,i)" v-show="k.status==1">
+                    查看物流
                   </van-button>
                 </div>
               </div>
@@ -194,6 +198,24 @@
           "businessType": "11"
         }
         this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo)
+      },
+      onCancelBtnClick(listItem, i) {
+        let that = this;
+        that.orderTypes.forEach(orderTypeItem => {
+          let found = -1;
+          that.$log(orderTypeItem)
+          for (let i = 0; i < orderTypeItem.list.length; i++) {
+            if (listItem.id === orderTypeItem.list[i].id) {
+              found = i;
+              break;
+            }
+          }
+          that.$log("title is:" + orderTypeItem.title + ",found is:" + found);
+          if (found != -1) {
+            orderTypeItem.list.splice(found, 1)
+            orderTypeItem.total--;
+          }
+        })
       },
       onDelBtnClick(listItem, i) {
         let that = this;
