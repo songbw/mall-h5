@@ -6,9 +6,10 @@
     </v-header>
     <van-list v-model="loading" :finished="finished" @load="onLoad">
       <mt-cell-swipe
+        style="margin-top: 1em"
         v-for="(k,index) in this.selStateInCarList"
         :key="k.id"
-        :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'1.5em'},
+        :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'2.5em'},
         handler: function(){ onDeleteBtnClick(k,index) }}]">
         <div slot="title">
           <van-checkbox
@@ -21,8 +22,8 @@
           :price="k.price"
           :title="k.desc"
           :thumb="k.image">
-          <div slot="footer" style="float:right;">
-              <van-stepper   v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+          <div slot="footer">
+            <van-stepper   v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
           </div>
         </van-card>
       </mt-cell-swipe>
@@ -274,21 +275,8 @@
 
   .car {
     width: 100%;
-    padding-bottom: 14vw;
-
-    .van-swipe-cell {
-      .van-swipe-cell_right {
-        color: white;
-        font-size: 15px;
-        width: 65px;
-        height: 100%;
-        display: inline-block;
-        text-align: center;
-        line-height: 44px;
-        background-color: red;
-      }
-    }
-
+    margin-bottom: 18vw;
+    background-color: #f0f0f0;
 
     .checkBox-con {
       padding: 0.6rem;
@@ -301,6 +289,7 @@
     .van-card__footer > div {
       display: flex !important;
       align-items: center;
+      float:right;
       justify-content: space-around;
     }
   }

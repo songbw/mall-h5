@@ -716,7 +716,7 @@
 
   .pay {
     width: 100%;
-    padding-bottom: 2vw;
+    padding-bottom: 5vw;
     //
     //  background-color: #f44336;
     .custom-text {
