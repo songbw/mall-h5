@@ -366,6 +366,9 @@
           margin-right: 1em;
           padding-bottom: 1em;
         }
+        .van-card {
+          background-color: #ffffff;
+        }
 
         span {
           padding: 20px 0;

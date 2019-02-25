@@ -257,6 +257,9 @@
           color: #000000;
           padding-top: 0.5em;
         }
+        .van-card {
+          background-color: #ffffff;
+        }
       }
 
       .order-logistics {
