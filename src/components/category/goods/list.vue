@@ -3,9 +3,10 @@
     <v-header>
       <h1 slot="title">商品列表</h1>
       <router-link :to="{name:'购物车页'}" slot="right">
-        <van-icon name="cart" size="1em"/>
+        <van-icon name="shopping-cart-o" size="1.2em"/>
       </router-link>
     </v-header>
+
     <van-list v-model="loading"
               :finished="finished"
               @load="onLoad">

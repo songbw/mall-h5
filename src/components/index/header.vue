@@ -5,10 +5,10 @@
     </router-link>
     <div slot="right">
       <router-link :to="{name:'购物车页'}">
-        <van-icon name="cart" size="1em"/>
+        <van-icon name="shopping-cart-o" />
       </router-link>
       <router-link :to="{name:'订单列表页'}">
-        <van-icon name="records" size="1em"/>
+        <van-icon name="notes-o" />
       </router-link>
     </div>
 

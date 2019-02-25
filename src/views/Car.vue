@@ -21,12 +21,13 @@
           :price="k.price"
           :title="k.desc"
           :thumb="k.image">
-          <div slot="footer">
-            <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+          <div slot="footer" style="float:right;">
+              <van-stepper   v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
           </div>
         </van-card>
       </mt-cell-swipe>
     </van-list>
+
     <v-footer/>
   </div>
 </template>

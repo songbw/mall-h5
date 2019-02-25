@@ -58,7 +58,7 @@
                 </li>
               </ul>
               <div class="supplyerSummery">
-                <span>商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
+                <span style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
               </div>
             </div>
           </li>
@@ -791,14 +791,10 @@
     }
 
     .supplyer {
-      margin-top: 10px;
+      margin-top: 1em;
       background-color: white;
 
       span {
-        padding: 20px 0;
-        margin-left: 10px;
-        line-height: 40px;
-        font-weight: bold;
         .fz(font-size, 30);
       }
     }

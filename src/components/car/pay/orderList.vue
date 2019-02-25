@@ -15,6 +15,7 @@
               <span>您还没有相关订单</span>
             </div>
             <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none">
+
               <div class="orderDetail">
                 <div>
                   <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
@@ -347,7 +348,9 @@
 
     .orderlist-body {
       background-color: #f0f0f0;
-
+      span {
+        .fz(font-size, 30);
+      }
       .no-oderlist {
         width: 100%;
         display: flex;
@@ -364,7 +367,6 @@
       }
 
       .orderDetail {
-        margin-top: 10px;
         background-color: white;
         margin-top: 1em;
 
@@ -378,21 +380,18 @@
 
         .orderDetailAction {
           text-align: right;
-          margin-right: 1em;
+          margin: 1em;
           padding-bottom: 1em;
+          span {
+            .fz(font-size, 22);
+          }
         }
 
         .van-card {
           background-color: #ffffff;
         }
 
-        span {
-          padding: 20px 0;
-          margin-left: 10px;
-          line-height: 40px;
-          font-weight: bold;
-          .fz(font-size, 30);
-        }
+
       }
     }
 
