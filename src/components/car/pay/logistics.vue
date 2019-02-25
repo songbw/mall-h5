@@ -3,7 +3,7 @@
     <v-header>
       <h1 slot="title">物流信息</h1>
     </v-header>
-    <div class = "noneInfo">
+    <div class="noneInfo">
       <img :src="no_logistics_bg">
       <span>没有查询到物流信息</span>
     </div>
@@ -12,6 +12,7 @@
 
 <script>
   import Header from '@/common/_header.vue'
+
   export default {
     components: {
       'v-header': Header,
@@ -32,28 +33,27 @@
 
     computed: {},
 
-    methods: {
-
-    }
+    methods: {}
   }
 </script>
 
 <style lang="less" scoped>
   @import "../../../assets/fz.less";
   @import "../../../assets/index/style.css";
-
   @import "../../../assets/fz.less";
   @import "../../../assets/index/style.css";
 
   .logisticsDetail {
-    .noneInfo{
+    .noneInfo {
       display: flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:Center;
+      flex-direction: column;
+      justify-content: center;
+      align-items: Center;
+
       img {
         margin: 4vw;
       }
+
       span {
         margin: 2vw;
       }

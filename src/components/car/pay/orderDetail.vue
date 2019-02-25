@@ -6,7 +6,7 @@
     <div class="oder-body">
       <div class="order-status">
         <div class="statusInfo">
-          <img  :src=orderIcon />
+          <img :src=orderIcon/>
           {{getOrderStatus()}}
         </div>
       </div>
@@ -73,6 +73,7 @@
 
 <script>
   import Header from '@/common/_header.vue'
+
   export default {
     components: {
       'v-header': Header,
@@ -212,6 +213,7 @@
         padding: 1em;
         .fz(font-size, 40);
         font-weight: bold;
+
         img {
           height: 40px;
           width: 40px;
@@ -257,6 +259,7 @@
           color: #000000;
           padding-top: 0.5em;
         }
+
         .van-card {
           background-color: #ffffff;
         }
