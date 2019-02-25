@@ -38,7 +38,7 @@
                   <van-button plain round size="small" type="primary" style="background-color: #26a2ff;color: white;border-color: #26a2ff " @click="onPayBtnClick(k,i)" v-show="k.status==0">
                     去支付
                   </van-button>
-                  <van-button plain round size="small" type="primary" style="background-color: #26a2ff;color: white;border-color: #26a2ff " @click="onPayBtnClick(k,i)" v-show="k.status==1">
+                  <van-button plain round size="small" type="primary" style="background-color: #26a2ff;color: white;border-color: #26a2ff " @click="onLogisticsBtnClick(k,i)" v-show="k.status==1">
                     查看物流
                   </van-button>
                 </div>
@@ -252,6 +252,16 @@
         this.$log("onListClick Enter")
         this.$router.push({
           name: "订单详情页",
+          params: {
+            detail: listItem
+          }
+        })
+      },
+
+      onLogisticsBtnClick(listItem, i) {
+        this.$log("onLogisticsBtnClick Enter")
+        this.$router.push({
+          name: "物流信息页",
           params: {
             detail: listItem
           }

@@ -16,6 +16,7 @@ const Pay = resolve => require(['@/components/car/pay/pay.vue'], resolve)
 const Invoice = resolve => require(['@/components/car/pay/invoice.vue'], resolve)
 const OrderList = resolve => require(['@/components/car/pay/orderList.vue'], resolve)
 const OrderDetail = resolve => require(['@/components/car/pay/orderDetail.vue'], resolve)
+const Logistics = resolve => require(['@/components/car/pay/logistics.vue'], resolve)
 const Address = resolve => require(['@/components/car/pay/address.vue'], resolve)
 const AddressList = resolve => require(['@/components/car/pay/addressList.vue'], resolve)
 const Login = resolve => require(['@/views/login.vue'], resolve)
@@ -76,6 +77,11 @@ export default new Router({
       path: '/car/oderDetail',
       name: '订单详情页',
       component: OrderDetail
+    },
+    {
+      path: '/car/Logistics',
+      name: '物流信息页',
+      component: Logistics
     },
     {
       path: '/car/invoice',
