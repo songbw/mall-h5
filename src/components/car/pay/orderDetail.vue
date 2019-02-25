@@ -6,7 +6,7 @@
     <div class="oder-body">
       <div class="order-status">
         <div class="statusInfo">
-          <img :src=orderIcon/>
+          <img :src=orderIcon />
           {{getOrderStatus()}}
         </div>
       </div>
@@ -50,18 +50,27 @@
                       @click="onLogisticsBtnClick(detail)" v-show="detail.status==1">
             查询物流
           </van-button>
+          <van-button plain round size="small" type="primary"
+                      style="background-color: #f44336;color: white;border-color: #f44336 "
+                      @click="onConfirmBtnClick(detail)" v-show="detail.status==1">
+            确认收货
+          </van-button>
         </div>
       </div>
       <div class="order-detail">
         <van-cell title="订单信息" icon="info-o"/>
-        <span>订单编号:</span>
-        <p>{{getDisplayOderNo(detail.tradeNo)}}</p>
-        <span>交易单号:</span>
-        <p>xxxx</p>
-        <span>创建时间:</span>
-        <p>{{formatTime(detail.createdAt)}}</p>
-        <span>成交时间:</span>
-        <p>xxxx</p>
+        <span>
+          订单编号:
+          <p>{{getDisplayOderNo(detail.tradeNo)}}</p>
+        </span>
+        <span>
+          创建时间:
+          <p>{{formatTime(detail.createdAt)}}</p>
+        </span>
+        <span v-if="detail.paymentAt != null">
+          成交时间:
+          <p>{{formatTime(detail.paymentAt)}}</p>
+        </span>
       </div>
       <div class="oder-ServerInfo">
         <van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>
@@ -99,6 +108,25 @@
     methods: {
       onLogisticsBtnClick(listItem) {
 
+      },
+      onConfirmBtnClick(detail) {
+        let id = detail.id
+        let options = {
+          "id": id,
+          "status": 2
+        }
+        this.$api.xapi({
+          method: 'put',
+          url: '/order/status',
+          data: options,
+        }).then((response) => {
+          if (response.data.code == 200) {
+            this.status = 2;
+          }
+          //已取消
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
       onPayBtnClick(listItem) {
         this.$log(listItem);
@@ -165,15 +193,17 @@
       },
       formatTime(timeString) {
         //2019-01-27T07:56:27.000+0000
+        if(timeString == null)
+          return null
         let dateee = new Date(timeString).toJSON();
         return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
       },
 
       getDisplayOderNo(orderNo) {
-        // if(orderNo.length > 8)
-        //   return orderNo.substr(orderNo.length  - 8).replace(/\"/g, "")
-        // else
-        return orderNo;
+        if(orderNo.length > 8)
+           return orderNo.substr(orderNo.length  - 8).replace(/\"/g, "")
+         else
+           return orderNo;
       },
 
 
@@ -295,15 +325,16 @@
 
         > span {
           .fz(font-size, 25);
-          margin: 1em;
+          margin-left: 1em;
           color: #000000;
+          > p {
+            .fz(font-size, 25);
+            margin: 0em 0em 0.5em 1em;
+            color: #000000;
+          }
         }
 
-        > p {
-          .fz(font-size, 20);
-          margin: 1em 1em 1em 2em;
-          color: #000000;
-        }
+
       }
     }
   }

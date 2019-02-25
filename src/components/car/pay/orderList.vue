@@ -18,7 +18,7 @@
               <div class="orderDetail">
                 <div>
                   <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
-                    <van-icon slot="right-icon" name="delete" @click="onCancelBtnClick(k,i)" style="margin: 0.3em"
+                    <van-icon slot="right-icon" name="delete" style="" @click="onCancelBtnClick(k,i)" style="margin: 0.25em 0em 0.3em 0.3em "
                               v-show="k.status==2||k.status==3"/>
                   </van-cell>
                 </div>
