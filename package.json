@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.16.2",
+    "babel-preset-es2015": "^6.24.1",
     "dsbridge": "^3.1.3",
     "jsencrypt": "^3.0.0-rc.1",
     "jsrsasign": "^8.0.12",
