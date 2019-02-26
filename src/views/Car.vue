@@ -4,20 +4,21 @@
     <v-header>
       <h1 slot="title">购物车</h1>
     </v-header>
-    <van-list v-model="loading" :finished="finished" @load="onLoad">
-      <mt-cell-swipe
-        style="margin-top: 1em"
-        v-for="(k,index) in this.selStateInCarList"
-        :key="k.id"
-        :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'2.5em'},
-        handler: function(){ onDeleteBtnClick(k,index) }}]">
-        <div slot="title">
-          <van-checkbox
-            v-model="k.choose"
-            class="checkedBox"
-            @change="singleChecked(index,k)">
-          </van-checkbox>
-        </div>
+    <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
+         <mt-cell-swipe
+          class = "goods-cell"
+          v-for="(k,index) in this.selStateInCarList"
+          :key="k.id"
+          :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'2.5em'},
+          handler: function(){ onDeleteBtnClick(k,index) }}]">
+
+         <div slot="title">
+            <van-checkbox
+              v-model="k.choose"
+              class="checkedBox"
+              @change="singleChecked(index,k)">
+            </van-checkbox>
+          </div>
         <van-card
           :price="k.price"
           :title="k.desc"
@@ -296,5 +297,10 @@
       float:right;
       justify-content: space-around;
     }
+    .goods-cell{
+      border:5px solid #5a5a5a;
+
+    }
+
   }
 </style>
