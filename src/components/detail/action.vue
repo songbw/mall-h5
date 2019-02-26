@@ -1,7 +1,7 @@
 <template lang="html">
   <section class="goodsAction">
     <van-goods-action>
-      <van-goods-action-mini-btn icon="cart" text="购物车" @click="gotoCar"/>
+      <van-goods-action-mini-btn icon="cart-o" text="购物车" @click="gotoCar"/>
       <van-goods-action-big-btn text="加入购物车" @click="addGoodsCar"/>
       <van-goods-action-big-btn text="立即购买" primary @click="gotoPay"/>
     </van-goods-action>
