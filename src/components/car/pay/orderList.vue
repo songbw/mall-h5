@@ -241,10 +241,15 @@
         this.$log("onListClick Enter")
         this.$router.push({
           name: "订单详情页",
-          params: {
-            detail: listItem
-          }
         })
+        this.$store.commit('SET_CURRENT_ORDER_INFO', JSON.stringify(listItem));
+
+/*        this.$router.push({
+          path: "/car/oderDetail",
+          query: {
+            detail: encodeURIComponent(JSON.stringify(listItem))
+          }
+        })*/
       },
 
       onLogisticsBtnClick(listItem, i) {

@@ -97,11 +97,13 @@
 
 
     created() {
-      this.$log("oderDetail created Enter")
-      this.detail = this.$route.params.detail;
-      this.$log(this.detail)
-      this.status = this.detail.status;
+       this.$log("oderDetail created Enter");
+       //this.detail = this.$route.params.detail;
+       this.detail = JSON.parse( this.$store.state.appconf.currentOrderInfo);
+       this.$log(this.detail)
+       this.status = this.detail.status;
     },
+
 
     computed: {},
 

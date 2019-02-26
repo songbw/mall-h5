@@ -14,6 +14,7 @@ const state = {
   token: '',
   invoice: '',
   payDirectProduct:'',
+  currentOrderInfo:'',
 }
 
 const mutations = {
@@ -64,6 +65,10 @@ const mutations = {
 
   [types.SET_PAY_DIRECT_PRODUCT](state, res) {
     state.payDirectProduct = res
+  },
+
+  [types.SET_CURRENT_ORDER_INFO](state, res) {
+    state.currentOrderInfo = res
   },
 }
 
