@@ -182,7 +182,7 @@
         }
       },
       getOrderServicePhone() {
-        return "138xxxxxxxx"
+        return this.$api.SERVR_PHONE_NUM;
       },
       getDisplayLogisticsInfo() {
         this.$log("getDisplayLogisticsInfo:" + this.detail.status)
