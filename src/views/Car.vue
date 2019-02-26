@@ -298,8 +298,7 @@
       justify-content: space-around;
     }
     .goods-cell{
-      border:5px solid #5a5a5a;
-
+      border-bottom:10px solid #888888;
     }
 
   }
