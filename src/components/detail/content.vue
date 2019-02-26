@@ -27,9 +27,7 @@
     border-top: 20px solid #F8FCFF;
 
     li {
-      padding: 1vw;
       list-style: none;
-      display: inline-block; //使li对象显示为一行
       img {
         width: 100%;
         display: block;
