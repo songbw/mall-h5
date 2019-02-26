@@ -11,7 +11,6 @@
           :key="k.id"
           :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'2.5em'},
           handler: function(){ onDeleteBtnClick(k,index) }}]">
-
          <div slot="title">
             <van-checkbox
               v-model="k.choose"
@@ -297,8 +296,17 @@
       float:right;
       justify-content: space-around;
     }
+
+
+    .mint-cell:last-child {
+      background-image:linear-gradient(0deg, #ffffff, #ffffff 50%, transparent 50%);
+    }
+
+
+
+
     .goods-cell{
-      border-bottom:10px solid #888888;
+      border-bottom:10px solid #f0f0f0;
     }
 
   }
