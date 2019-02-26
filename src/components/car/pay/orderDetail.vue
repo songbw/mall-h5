@@ -6,7 +6,7 @@
     <div class="oder-body">
       <div class="order-status">
         <div class="statusInfo">
-          <img :src=orderIcon />
+          <img :src="orderIcon"/>
           {{getOrderStatus()}}
         </div>
       </div>
@@ -99,15 +99,21 @@
     created() {
       this.$log("oderDetail created Enter")
       this.detail = this.$route.params.detail;
-      this.status = this.detail.status;
       this.$log(this.detail)
+      this.status = this.detail.status;
     },
 
     computed: {},
 
     methods: {
-      onLogisticsBtnClick(listItem) {
-
+      onLogisticsBtnClick(detail) {
+        this.$log("onLogisticsBtnClick Enter")
+        this.$router.push({
+          name: "物流信息页",
+          params: {
+            detail: detail
+          }
+        })
       },
       onConfirmBtnClick(detail) {
         let id = detail.id
@@ -127,7 +133,8 @@
         }).catch(function (error) {
           console.log(error)
         })
-      },
+      }
+      ,
       onPayBtnClick(listItem) {
         this.$log(listItem);
         let userInfo = this.$store.state.appconf.userInfo;
@@ -146,7 +153,8 @@
           "businessType": "11"
         }
         this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo)
-      },
+      }
+      ,
       onCancelBtnClick(detail) {
         let id = detail.id
         let options = {
@@ -165,7 +173,8 @@
         }).catch(function (error) {
           console.log(error)
         })
-      },
+      }
+      ,
       getOrderStatus() {
         let status = this.status;
         switch (status) {
@@ -184,26 +193,20 @@
       getOrderServicePhone() {
         return this.$api.SERVR_PHONE_NUM;
       },
-      getDisplayLogisticsInfo() {
-        this.$log("getDisplayLogisticsInfo:" + this.detail.status)
-        if (this.detail.status != 1)
-          return "普通快递"
-        else
-          return this.detail.taxNo;
-      },
+
       formatTime(timeString) {
         //2019-01-27T07:56:27.000+0000
-        if(timeString == null)
+        if (timeString == null)
           return null
         let dateee = new Date(timeString).toJSON();
         return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
       },
 
       getDisplayOderNo(orderNo) {
-        if(orderNo.length > 8)
-           return orderNo.substr(orderNo.length  - 8).replace(/\"/g, "")
-         else
-           return orderNo;
+        if (orderNo.length > 8)
+          return orderNo.substr(orderNo.length - 8).replace(/\"/g, "")
+        else
+          return orderNo;
       },
 
 
@@ -327,6 +330,7 @@
           .fz(font-size, 25);
           margin-left: 1em;
           color: #000000;
+
           > p {
             .fz(font-size, 25);
             margin: 0em 0em 0.5em 1em;

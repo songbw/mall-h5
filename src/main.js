@@ -48,7 +48,9 @@ import {
   AddressEdit,
   AddressList,
   Search,
-  Field
+  Field,
+  Step,
+  Steps
 } from 'vant';
 
 Vue.use(Button)
@@ -79,7 +81,9 @@ Vue.use(Button)
   .use(AddressEdit)
   .use(AddressList)
   .use(Search)
-  .use(Field);
+  .use(Field)
+  .use(Step)
+  .use(Steps);
 
 
 /*function jsonURLParams(json,reverse){

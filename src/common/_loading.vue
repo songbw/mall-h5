@@ -16,7 +16,7 @@
   .wrap {
     width: 100vw;
     height: 100vh;
-    background-color: rgba(255, 255, 255, .8);
+    background-color: white;
     border-radius: 2vw;
     position: fixed;
     left: 0;
@@ -41,7 +41,9 @@
     width: 100%;
     height: 100%;
     border-radius: 50%;
-    background-color: #facd2d;
+    //background-color: #facd2d;
+    //background-color: #c8c8cd;
+    background-color: #26a2ff;
     opacity: 0.6;
     position: absolute;
     top: 0;
