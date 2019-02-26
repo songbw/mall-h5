@@ -58,7 +58,8 @@
                 </li>
               </ul>
               <div class="supplyerSummery">
-                <span style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
+                <span
+                  style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
               </div>
             </div>
           </li>
@@ -96,7 +97,7 @@
         usedAddress: {},
         invoiceDetail: '',
         pageLoadTimerId: -1,
-
+        pageAction: "common",
       }
     },
 
@@ -233,6 +234,10 @@
     },
 
     created() {
+      let action = this.$route.params.action;
+      if (action == "direct") {
+        this.pageAction = "direct";
+      }
       const invoiceInfo = this.$store.state.appconf.invoice;
       this.$log("created:" + invoiceInfo)
       if (invoiceInfo != undefined && invoiceInfo.length > 0) {
@@ -295,7 +300,7 @@
               this.updateUsedAddress();
               this.getCarList();
             } else {
-              this.$log("ADDRESS LIST is:" + JSON.stringify(result.list))
+             // this.$log("ADDRESS LIST is:" + JSON.stringify(result.list))
               this.$store.commit('SET_ADDRESS_LIST', result.list);
               this.updateUsedAddress();
               this.getCarList();
@@ -489,7 +494,11 @@
             that.$jsbridge.call("dredgeWallet", walletInfo);
           } else {
             if (response.data.data.result != undefined) {
-              that.deleteOrderedGoodsInCar();
+              if(that.pageAction == "direct") {
+                this.$store.commit('SET_PAY_DIRECT_PRODUCT', '');
+              } else {
+                that.deleteOrderedGoodsInCar();
+              }
               that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
               that.$jsbridge.call("openCashPage", pAnOrderInfo);
             }
@@ -625,11 +634,25 @@
         let inventorySkus = [];
         let skus = [];
         this.payCarList = [];
-        this.selectedCarList.forEach(item => {
-          inventorySkus.push({"skuId": item.skuId, "remainNum": item.count})
-          skus.push({"skuId": item.skuId})
-          this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.price})
-        })
+        if (this.pageAction == "direct") {
+          let payDirectProduct  = this.$store.state.appconf.payDirectProduct;
+          this.$log("+++++++++++++++++++++");
+          this.$log(payDirectProduct);
+          if (payDirectProduct.length > 0) {
+            let item = JSON.parse(payDirectProduct);
+            inventorySkus.push({"skuId": item.skuId, "remainNum": item.count})
+            skus.push({"skuId": item.skuId})
+            this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.price})
+          }
+        } else {
+          this.selectedCarList.forEach(item => {
+            inventorySkus.push({"skuId": item.skuId, "remainNum": item.count})
+            skus.push({"skuId": item.skuId})
+            this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.price})
+          })
+        }
+        this.$log("paylist:")
+        this.$log(this.payCarList)
         let locationCode = this.getLocationCode()
         //////////////////////查询库存//////////////////
         let options = {
@@ -777,6 +800,7 @@
         .van-card {
           background-color: #ffffff;
           margin-top: -1px;
+
           &__price {
             margin-top: 0.5em;
             .fz(font-size, 40);

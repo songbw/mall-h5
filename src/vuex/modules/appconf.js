@@ -12,7 +12,8 @@ const state = {
   pageLoading: false,//全局加载状态的Loading
   payList: [],
   token: '',
-  invoice: ''
+  invoice: '',
+  payDirectProduct:'',
 }
 
 const mutations = {
@@ -59,6 +60,10 @@ const mutations = {
   //获取当前发票信息
   [types.SET_INVOICE_INFO](state) {
     state.invoice = Util.getLocal('invoice')
+  },
+
+  [types.SET_PAY_DIRECT_PRODUCT](state, res) {
+    state.payDirectProduct = res
   },
 }
 

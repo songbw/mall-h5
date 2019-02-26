@@ -66,7 +66,11 @@ export default new Router({
     {
       path: '/car/pay',
       name: '支付页',
-      component: Pay
+      component: Pay,
+      children: [{
+        path: '/car/pay/:action',
+        component: Pay
+      },]
     },
     {
       path: '/car/oderList',

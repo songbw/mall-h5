@@ -68,3 +68,5 @@ export const SET_PAY_LIST = 'SET_PAY_LIST'
 export const SET_TOKEN = 'SET_TOKEN'
 
 export const SET_INVOICE_INFO = 'SET_INVOICE_INFO'
+
+export const SET_PAY_DIRECT_PRODUCT = 'SET_PAY_DIRECT_PRODUCT'

@@ -91,6 +91,32 @@
 
       gotoPay() {
         this.$log("gotoPay Enter")
+        this.$log(this.datas);
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!this.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
+          let product = {
+            count: 1,
+            desc: this.datas.brand + ' ' + this.datas.name + ' ' + this.datas.model,
+            id: this.datas.id,
+            image: this.datas.image,
+            isDel: 0,
+            price: this.datas.price,
+            skuId: this.datas.skuid,
+            userId: user.userId,
+          }
+          this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
+          this.$router.push({path: '/car/pay/direct'})
+/*          this.$router.push({
+            name: "支付页",
+            params: {
+              tryPayed: tryPayed
+            }
+          })*/
+
+        } else {
+          this.$toast("没有用户信息，请先登录再购买")
+        }
       },
 
       gotoCar() {
