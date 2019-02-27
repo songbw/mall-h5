@@ -1,16 +1,18 @@
 <template lang="html">
   <!-- 在首页父组件发送http请求,后将数据通过props传递给子组件,可减少请求次数,减少服务器压力 -->
   <section>
-    <div class="index">
-      <v-header/>
-      <li v-for="item in datas" style="list-style: none">
-        <v-swiper v-if="item.type==='0'" :datas="item.data"/>
-        <v-service v-else-if="item.type==='1'" :datas="item.data"/>
-        <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data"/>
-        <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
-        <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
-      </li>
-      <v-baseline/>
+    <div class="index" :style="{'background-color': mBackgroundColor}">
+        <v-header/>
+        <div style="padding: 5px">
+          <li v-for="item in datas" style="list-style: none">
+            <v-swiper v-if="item.type==='0'" :datas="item.data"/>
+            <v-service v-else-if="item.type==='1'" :datas="item.data"/>
+            <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data"/>
+            <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
+            <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
+          </li>
+        </div>
+        <v-baseline/>
     </div>
   </section>
 
@@ -39,6 +41,7 @@
       return {
         datas: {},
         loading: true,
+        mBackgroundColor: '#FFFFFF'
       }
     },
 
@@ -51,6 +54,7 @@
         const pako = require('pako');
         const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         this.datas = JSON.parse(jsonString);
+        this.mBackgroundColor = response.data.data.result.backgroundColor
       }).catch(function (error) {
         //alert(error)
         that.$log(error)
@@ -226,6 +230,6 @@
   .index {
     width: 100%;
     padding-bottom: 14vw;
-    background-color: #F8FCFF;
+    background-color: #ffffff;
   }
 </style>

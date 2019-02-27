@@ -1,15 +1,17 @@
 <template lang="html">
-  <div class="index">
+  <div class="index" :style="{'background-color': mBackgroundColor}">
     <v-header>
       <h1 slot="title">{{title}}</h1>
     </v-header>
-    <li v-for="item in datas" style="list-style: none">
-      <v-swiper v-if="item.type==='0'" :datas="item.data"/>
-      <v-service v-else-if="item.type==='1'" :datas="item.data"/>
-      <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data"/>
-      <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
-      <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
-    </li>
+    <div style="padding: 5px">
+      <li v-for="item in datas" style="list-style: none">
+        <v-swiper v-if="item.type==='0'" :datas="item.data"/>
+        <v-service v-else-if="item.type==='1'" :datas="item.data"/>
+        <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data"/>
+        <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
+        <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
+      </li>
+    </div>
     <v-baseline/>
   </div>
 </template>
@@ -40,7 +42,8 @@
       return {
         datas: {},
         loading: true,
-        title: ''
+        title: '',
+        mBackgroundColor: '#FFFFFF'
       }
     },
 
@@ -57,8 +60,9 @@
         const pako = require('pako');
         const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         this.datas = JSON.parse(jsonString);
-       // this.$log(response.data.data.result)
-       // this.$log(jsonString)
+        // this.$log(response.data.data.result)
+        // this.$log(jsonString)
+        this.mBackgroundColor = response.data.data.result.backgroundColor
       }).catch(function (error) {
         alert(error)
       })
