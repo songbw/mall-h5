@@ -36,6 +36,7 @@
         </mt-cell-swipe>
       </div>
     </van-list>
+    <v-footer/>
   </div>
 </template>
 
