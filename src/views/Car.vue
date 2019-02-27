@@ -11,6 +11,7 @@
         <img :src="nothingInCar_bg"/>
         <span>购物车是空的，美好的生活需要您的填充！</span>
       </div>
+
       <div v-else>
         <mt-cell-swipe
           class="goods-cell"
@@ -18,21 +19,25 @@
           :key="k.id"
           :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'2.5em'},
           handler: function(){ onDeleteBtnClick(k,index) }}]">
-          <div slot="title">
-            <van-checkbox
-              v-model="k.choose"
-              class="checkedBox"
-              @change="singleChecked(index,k)">
-            </van-checkbox>
-          </div>
-          <van-card
-            :price="k.price"
-            :title="k.desc"
-            :thumb="k.image">
-            <div slot="footer">
-              <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+          <div slot="title" style="display: flex;flex-direction: row;justify-content: left; border: #ffffff 2px solid">
+            <div style="width: 10%;display: flex;flex-direction: column;justify-content: center;">
+              <van-checkbox
+                v-model="k.choose"
+                class="checkedBox"
+                @change="singleChecked(index,k)">
+              </van-checkbox>
             </div>
-          </van-card>
+            <div style="width: 90%; display: flex;flex-direction: column;justify-content: center;">
+              <van-card
+                :price="k.price"
+                :title="k.desc"
+                :thumb="k.image">
+                <div slot="footer">
+                  <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+                </div>
+              </van-card>
+            </div>
+          </div>
         </mt-cell-swipe>
       </div>
     </van-list>
