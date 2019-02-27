@@ -13,30 +13,33 @@
       </div>
 
       <div v-else>
-        <van-swipe-cell :right-width="60"   v-for="(k,index) in this.selStateInCarList">
-          <div style="display: flex;flex-direction: row;justify-content: left; border: #ffffff 2px solid">
-            <div style="width: 10%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em">
-              <van-checkbox
-                v-model="k.choose"
-                class="checkedBox"
-                @change="singleChecked(index,k)">
-              </van-checkbox>
+        <div class="carlist">
+          <van-swipe-cell :right-width="60"   v-for="(k,index) in this.selStateInCarList">
+            <div style="display: flex;flex-direction: row;justify-content: left;background-color: #ffffff">
+              <div style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                <van-checkbox
+                  v-model="k.choose"
+                  class="checkedBox"
+                  @change="singleChecked(index,k)">
+                </van-checkbox>
+              </div>
+              <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
+                <van-card
+                  :price="k.price"
+                  :title="k.desc"
+                  :thumb="k.image">
+                  <div slot="footer">
+                    <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+                  </div>
+                </van-card>
+              </div>
             </div>
-            <div style="width: 90%; display: flex;flex-direction: column;justify-content: center;">
-              <van-card
-                :price="k.price"
-                :title="k.desc"
-                :thumb="k.image">
-                <div slot="footer">
-                  <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
-                </div>
-              </van-card>
+            <div slot="right" @click=onDeleteBtnClick(k,index)  class="rightSlot">
+              <span style="margin-left: 1em">删除</span>
             </div>
-          </div>
-          <div slot="right" @click=onDeleteBtnClick(k,index)  style="display: flex;flex-direction: column;justify-content: center;width:60px;height:100%;background-color: #ff4444;color: #ffffff">
-            <span style="margin-left: 1em">删除</span>
-          </div>
-        </van-swipe-cell>
+          </van-swipe-cell>
+        </div>
+
       </div>
     </van-list>
     <v-footer/>
@@ -334,6 +337,23 @@
 
     .van-list {
       background-color: #ffffff;
+    }
+
+    .carlist{
+      background-color: #f0f0f0;
+      .van-swipe-cell{
+        margin-bottom: 1px;
+      }
+
+      .rightSlot{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width:60px;
+        height:100%;
+        background-color: #ff4444;
+        color: #ffffff
+      }
     }
 
   }
