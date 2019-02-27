@@ -47,7 +47,7 @@
               "areaCode": addressCode,
               "postalCode": list[i].zip,
               "addressDetail": list[i].address,
-              "isDefault": (list[i].state == 1)
+              "isDefault": (list[i].status == 1)
             }
             break;
           }
