@@ -4,7 +4,7 @@
       <h1 slot="title">物流信息</h1>
     </v-header>
     <div class="noneInfo">
-      <img :src="no_logistics_bg">
+      <img :src="no_logistics_bg" />
       <span>没有查询到物流信息</span>
     </div>
     <div class="logisticsInfo">

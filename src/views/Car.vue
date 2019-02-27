@@ -4,31 +4,39 @@
     <v-header>
       <h1 slot="title">购物车</h1>
     </v-header>
-    <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
-         <mt-cell-swipe
+    <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none"   >
+      <div slot="loading">
+
+      </div>
+      <div class="nothingInCar" v-cloak v-if="this.$store.state.appconf.selStateInCarList.length === 0">
+        <img :src="nothingInCar_bg" />
+        <span>购物车是空的，美好的生活需要您的填充！</span>
+      </div>
+      <div v-else>
+        <mt-cell-swipe
           class = "goods-cell"
           v-for="(k,index) in this.selStateInCarList"
           :key="k.id"
           :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'2.5em'},
           handler: function(){ onDeleteBtnClick(k,index) }}]">
-         <div slot="title">
+          <div slot="title">
             <van-checkbox
               v-model="k.choose"
               class="checkedBox"
               @change="singleChecked(index,k)">
             </van-checkbox>
           </div>
-        <van-card
-          :price="k.price"
-          :title="k.desc"
-          :thumb="k.image">
-          <div slot="footer">
-            <van-stepper   v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
-          </div>
-        </van-card>
-      </mt-cell-swipe>
+          <van-card
+            :price="k.price"
+            :title="k.desc"
+            :thumb="k.image">
+            <div slot="footer">
+              <van-stepper   v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+            </div>
+          </van-card>
+        </mt-cell-swipe>
+      </div>
     </van-list>
-
     <v-footer/>
   </div>
 </template>
@@ -87,7 +95,8 @@
         list: [],
         loading: false,
         finished: false,
-        selStateInCarList: []
+        selStateInCarList: [],
+        nothingInCar_bg: require('@/assets/images/cart.svg'),
       }
     },
 
@@ -297,16 +306,36 @@
       justify-content: space-around;
     }
 
-
     .mint-cell:last-child {
       background-image:linear-gradient(0deg, #ffffff, #ffffff 50%, transparent 50%);
     }
 
-
-
-
     .goods-cell{
       border-bottom:10px solid #f0f0f0;
+    }
+
+    .nothingInCar {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: Center;
+      background-color: #ffffff;
+
+      img {
+        margin: 4vw;
+      }
+
+      span {
+        margin: 2vw;
+      }
+    }
+
+    [v-cloak] {
+      display: none !important;
+    }
+
+    .van-list{
+      background-color: #ffffff;
     }
 
   }
