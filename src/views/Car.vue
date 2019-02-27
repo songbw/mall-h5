@@ -342,7 +342,7 @@
     .carlist{
       background-color: #f0f0f0;
       .van-swipe-cell{
-        margin-bottom: 1px;
+        margin-bottom: 5px;
       }
 
       .rightSlot{
