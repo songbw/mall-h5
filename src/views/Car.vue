@@ -13,14 +13,9 @@
       </div>
 
       <div v-else>
-        <mt-cell-swipe
-          class="goods-cell"
-          v-for="(k,index) in this.selStateInCarList"
-          :key="k.id"
-          :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'2.5em'},
-          handler: function(){ onDeleteBtnClick(k,index) }}]">
-          <div slot="title" style="display: flex;flex-direction: row;justify-content: left; border: #ffffff 2px solid">
-            <div style="width: 10%;display: flex;flex-direction: column;justify-content: center;">
+        <van-swipe-cell :right-width="60"   v-for="(k,index) in this.selStateInCarList">
+          <div style="display: flex;flex-direction: row;justify-content: left; border: #ffffff 2px solid">
+            <div style="width: 10%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em">
               <van-checkbox
                 v-model="k.choose"
                 class="checkedBox"
@@ -38,7 +33,10 @@
               </van-card>
             </div>
           </div>
-        </mt-cell-swipe>
+          <div slot="right" @click=onDeleteBtnClick(k,index)  style="display: flex;flex-direction: column;justify-content: center;width:60px;height:100%;background-color: #ff4444;color: #ffffff">
+            <span style="margin-left: 1em">删除</span>
+          </div>
+        </van-swipe-cell>
       </div>
     </van-list>
     <v-footer/>
@@ -312,14 +310,6 @@
       align-items: center;
       float: right;
       justify-content: space-around;
-    }
-
-    .mint-cell:last-child {
-      background-image: linear-gradient(0deg, #ffffff, #ffffff 50%, transparent 50%);
-    }
-
-    .goods-cell {
-      border-bottom: 1px solid #f0f0f0;
     }
 
     .nothingInCar {
