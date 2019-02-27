@@ -83,7 +83,7 @@
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
-          this.$toast("商品已成功添加到购物车!")
+          this.$toast("添加到购物车成功！")
         }).catch(function (error) {
           console.log(error)
         })
