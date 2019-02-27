@@ -4,17 +4,16 @@
     <v-header>
       <h1 slot="title">购物车</h1>
     </v-header>
-    <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none"   >
+    <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
       <div slot="loading">
-
       </div>
-      <div class="nothingInCar" v-cloak v-if="this.$store.state.appconf.selStateInCarList.length === 0">
-        <img :src="nothingInCar_bg" />
+      <div class="nothingInCar" v-cloak v-if="finished && this.$store.state.appconf.selStateInCarList.length === 0">
+        <img :src="nothingInCar_bg"/>
         <span>购物车是空的，美好的生活需要您的填充！</span>
       </div>
       <div v-else>
         <mt-cell-swipe
-          class = "goods-cell"
+          class="goods-cell"
           v-for="(k,index) in this.selStateInCarList"
           :key="k.id"
           :right="[{content: '删除',style: { background: 'red', color: '#fff',paddingTop:'2.5em'},
@@ -31,7 +30,7 @@
             :title="k.desc"
             :thumb="k.image">
             <div slot="footer">
-              <van-stepper   v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+              <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
             </div>
           </van-card>
         </mt-cell-swipe>
@@ -180,8 +179,11 @@
               this.getSkuInfoBy(item, userInfo);
             })
             this.loading = false;
-            if (this.list.length >= this.total)
-              this.finished = true;
+            if (this.list.length >= this.total) {
+              setTimeout(() => {
+                this.finished = true;
+              }, 500);
+            }
           }).catch(function (error) {
             console.log(error)
             this.finished = true;
@@ -293,6 +295,7 @@
 
     .van-card {
       background-color: #ffffff;
+
       &__price {
         margin-top: 0.5em;
         .fz(font-size, 40);
@@ -302,16 +305,16 @@
     .van-card__footer > div {
       display: flex !important;
       align-items: center;
-      float:right;
+      float: right;
       justify-content: space-around;
     }
 
     .mint-cell:last-child {
-      background-image:linear-gradient(0deg, #ffffff, #ffffff 50%, transparent 50%);
+      background-image: linear-gradient(0deg, #ffffff, #ffffff 50%, transparent 50%);
     }
 
-    .goods-cell{
-      border-bottom:10px solid #f0f0f0;
+    .goods-cell {
+      border-bottom: 10px solid #f0f0f0;
     }
 
     .nothingInCar {
@@ -334,7 +337,7 @@
       display: none !important;
     }
 
-    .van-list{
+    .van-list {
       background-color: #ffffff;
     }
 
