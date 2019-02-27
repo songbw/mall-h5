@@ -36,7 +36,6 @@
         </mt-cell-swipe>
       </div>
     </van-list>
-    <v-footer/>
   </div>
 </template>
 
@@ -314,7 +313,7 @@
     }
 
     .goods-cell {
-      border-bottom: 10px solid #f0f0f0;
+      border-bottom: 1px solid #f0f0f0;
     }
 
     .nothingInCar {
