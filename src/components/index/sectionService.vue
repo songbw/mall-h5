@@ -1,5 +1,5 @@
 <template>
-  <section>
+  <section :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
     <div class="section0-list">
       <ul>
         <li v-for="k in datas.list.slice(0,5)" @click="onClick(k.targetUrl)">

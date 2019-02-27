@@ -1,5 +1,5 @@
 <template lang="html">
-  <section class="sectionSquared">
+  <section class="sectionSquared" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
     <mt-cell v-if="datas.settings.title.show">
       <h1 slot="title" class="sectionSquared-title">
         {{datas.settings.title.text.value}}

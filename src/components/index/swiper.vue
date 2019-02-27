@@ -1,5 +1,5 @@
 <template lang="html">
-  <mt-swipe :auto="4000">
+  <mt-swipe :auto="4000" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
     <mt-swipe-item v-for="(k,index) in datas.list" :key="index">
       <img :src="k.imageUrl" @click="onClick(k.targetUrl)">
     </mt-swipe-item>

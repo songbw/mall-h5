@@ -1,6 +1,6 @@
 <template>
-  <section class="sectionSlide">
-    <mt-cell v-if="datas.settings.title.show">
+  <section class="sectionSlide"  >
+    <mt-cell v-if="datas.settings.title.show" :style="{'margin-bottom': datas.settings.marginBottom+'px'}" >
       <h1 slot="title" class="sectionSlide-title">
         {{datas.settings.title.textValue}}
       </h1>

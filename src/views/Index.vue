@@ -55,6 +55,7 @@
         const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         this.datas = JSON.parse(jsonString);
         this.mBackgroundColor = response.data.data.result.backgroundColor
+        this.$log(this.datas)
       }).catch(function (error) {
         //alert(error)
         that.$log(error)

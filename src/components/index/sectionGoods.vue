@@ -1,5 +1,5 @@
 <template lang="html">
-  <section class="sectionGoods">
+  <section class="sectionGoods" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
     <div class="container" ref="container">
       <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
               @change="onTabChanged">
