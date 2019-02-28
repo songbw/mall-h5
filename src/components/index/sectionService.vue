@@ -70,7 +70,10 @@
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         width: 20vw;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
         a,
         img {
           width: 100%;
@@ -81,6 +84,9 @@
           .fz(font-size, 28);
           color: #333;
           padding: 2vw 1.2vw;
+          overflow: hidden;
+          word-break:keep-all;
+          white-space:nowrap;
         }
       }
     }
@@ -98,7 +104,10 @@
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         width: 20vw;
-
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
         a,
         img {
           width: 100%;
@@ -109,6 +118,8 @@
           .fz(font-size, 28);
           color: #333;
           padding: 2vw 1.2vw;
+          word-break:keep-all;
+          white-space:nowrap;
         }
       }
     }
