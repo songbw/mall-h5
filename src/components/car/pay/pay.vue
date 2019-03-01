@@ -1,10 +1,10 @@
 <template lang="html">
   <section>
+    <v-header>
+      <h1 slot="title">确认订单</h1>
+    </v-header>
     <v-loading v-if="pageloading"></v-loading>
     <div class="pay" v-else>
-      <v-header>
-        <h1 slot="title">确认订单</h1>
-      </v-header>
       <div class="pay-body">
         <div class="contact-address-card" @click="editAddressOrList">
           <van-row type="flex">
@@ -37,7 +37,6 @@
           </van-cell>
         </div>
       </div>
-
       <div class="pay-list">
         <div class="pay-product">
           <li v-for="item in arregationList" style="list-style: none">
@@ -110,6 +109,7 @@
               title: '您还没有收货地址，请新增一个吧',
               confirmButtonText: '新增地址'
             }).then(() => {
+              //on confirm
               //on confirm
               this.$router.push({name: '地址页'})
             }).catch(() => {

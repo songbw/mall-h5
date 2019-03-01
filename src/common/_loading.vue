@@ -18,7 +18,6 @@
     height: 100vh;
     background-color: white;
     border-radius: 2vw;
-    position: fixed;
     left: 0;
     top: 0;
     z-index: 99999;

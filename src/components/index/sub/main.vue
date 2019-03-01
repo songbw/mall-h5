@@ -12,7 +12,7 @@
         <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
       </li>
     </div>
-    <v-baseline/>
+<!--    <v-baseline/>-->
   </div>
 </template>
 
