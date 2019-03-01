@@ -3,35 +3,29 @@
     <v-header>
       <h1 slot="title">物流信息</h1>
     </v-header>
-    <div class="noneInfo">
+    <div class="noneInfo" v-if="loading && (logisticsList == null || logisticsList.length == 0)">
       <img :src="no_logistics_bg"/>
       <span>没有查询到物流信息</span>
     </div>
-    <div class="logisticsInfo">
- <!--     <ul>
-        <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
-          <van-card
-            :price="sku.unitPrice"
-            :title="sku.name"
-            :num="sku.num"
-            :thumb="sku.image">
-          </van-card>
+    <div class="logisticsInfo" v-else>
+      <ul>
+        <li v-for="(item,i)  in logisticsList" :key='i'>
+          <div class="logisticsBox" v-if="orderSku(item.skuId) != null">
+            <van-card
+              :price="orderSku(item.skuId).unitPrice"
+              :title="orderSku(item.skuId).name"
+              :num="orderSku(item.skuId).num"
+              :thumb="orderSku(item.skuId).image">
+            </van-card>
+            <van-steps direction="vertical" :active="0" active-color="#f44">
+              <van-step v-for="(info,k)  in getTimerFlowInfo(item.orderLogistics)" :key='k'>
+                <h3>{{info.operateState}}</h3>
+                <p>{{formatedTime(info.operateTime)}}</p>
+              </van-step>
+            </van-steps>
+          </div>
         </li>
-      </ul>-->
-      <van-steps direction="vertical" :active="0" active-color="#f44">
-        <van-step>
-          <h3>【城市】物流状态1</h3>
-          <p>2016-07-12 12:40</p>
-        </van-step>
-        <van-step>
-          <h3>【城市】物流状态2</h3>
-          <p>2016-07-11 10:00</p>
-        </van-step>
-        <van-step>
-          <h3>快件已发货</h3>
-          <p>2016-07-10 09:30</p>
-        </van-step>
-      </van-steps>
+      </ul>
     </div>
   </section>
 </template>
@@ -48,10 +42,11 @@
         detail: {},
         status: -1,
         no_logistics_bg: require('@/assets/images/truck.png'),
-        logisticsList:[],
+        logisticsList: [],
+        loading:false
       }
     },
-
+    computed: {},
 
     created() {
       let that = this;
@@ -63,32 +58,47 @@
         url: '/order/logistics',
         params: {
           merchantNo: this.detail.merchantNo,
-          orderId:"100102010DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD216246354"//this.detail.tradeNo,
+          orderId: this.detail.tradeNo,
         }
       }).then((response) => {
         that.logisticsList = response.data.data.result;
         that.$log(that.logisticsList);
+        that.loading = true;
       }).catch(function (error) {
         that.$log(error)
+        that.loading = true;
       })
     },
 
-    computed: {
-
-    },
+    computed: {},
 
     methods: {
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
-
-      getSku(skuId) {
-        for( let i = 0; i < this.detail.skus.length ; i++) {
-          if(skuId == this.detail.skus[i].skuId)
+      orderSku(skuId) {
+        for (let i = 0; i < this.detail.skus.length; i++) {
+          this.$log(this.detail.skus[i].skuId)
+          if (skuId == this.detail.skus[i].skuId)
             return this.detail.skus[i];
         }
         return null;
+      },
+      isUserEmpty(userInfo) {
+        return (userInfo == undefined || userInfo.length === 0)
+      },
+      formatedTime(timeStr) {
+        let year = timeStr.substr(0,4);
+        let month = timeStr.substr(4,2);
+        let day = timeStr.substr(6,2);
+        let h = timeStr.substr(8,2);
+        let m = timeStr.substr(10,2);
+        let s = timeStr.substr(12);
+        let timeFormated = year+"/"+month+"/"+day+" "+h+":"+m+":"+s
+        return timeFormated;
+      },
+
+      getTimerFlowInfo(orderLogistics) {
+        return orderLogistics.reverse();
       }
+
     }
   }
 </script>
@@ -115,5 +125,23 @@
       }
     }
 
+    .logisticsInfo {
+      .logisticsBox {
+        border: #f0f0f0 solid 10px;
+        > li {
+          list-style: none;
+        }
+      }
+
+    }
+
+    .van-card {
+      background-color: #ffffff;
+
+      &__price {
+        margin-top: 0.5em;
+        .fz(font-size, 40);
+      }
+    }
   }
 </style>
