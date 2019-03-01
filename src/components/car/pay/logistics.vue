@@ -50,9 +50,8 @@
 
     created() {
       let that = this;
-      that.$log("logistics beforeCreate Enter")
+      that.$log("logistics created Enter")
       that.detail = this.$route.params.detail;
-      that.$log(this.detail);
       that.$api.xapi({
         method: 'get',
         url: '/order/logistics',
@@ -62,7 +61,7 @@
         }
       }).then((response) => {
         that.logisticsList = response.data.data.result;
-        that.$log(that.logisticsList);
+        that.$log("logisticsList:"+JSON.stringify(that.logisticsList));
         that.loading = true;
       }).catch(function (error) {
         that.$log(error)
