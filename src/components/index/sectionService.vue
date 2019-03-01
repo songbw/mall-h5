@@ -59,6 +59,8 @@
   @import "../../assets/index/style.css";
 
   .section0-list {
+    width: 100%;
+    white-space: nowrap;
     ul {
       display: -webkit-flex;
       display: -ms-flex;
@@ -69,7 +71,7 @@
         padding: 1vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        width: 20vw;
+        width: 20%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -84,9 +86,11 @@
           .fz(font-size, 28);
           color: #333;
           padding: 2vw 1.2vw;
+          width: 100%;
           overflow: hidden;
-          word-break:keep-all;
-          white-space:nowrap;
+          text-overflow:ellipsis;
+          white-space: nowrap;
+          text-align: center;
         }
       }
     }
@@ -103,7 +107,7 @@
         padding: 1vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        width: 20vw;
+        width: 20%;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -118,8 +122,11 @@
           .fz(font-size, 28);
           color: #333;
           padding: 2vw 1.2vw;
-          word-break:keep-all;
-          white-space:nowrap;
+          width: 100%;
+          overflow: hidden;
+          text-overflow:ellipsis;
+          white-space: nowrap;
+          text-align: center;
         }
       }
     }
