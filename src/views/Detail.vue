@@ -33,7 +33,15 @@
       'v-header': Header,
       'v-action': Action
     },
-
+    beforeRouteEnter(to, from, next) {
+      // chrome
+      document.body.scrollTop = 0
+      // firefox
+      document.documentElement.scrollTop = 0
+      // safari
+      window.pageYOffset = 0
+      next()
+    },
     created() {
       if (this.$store.state.appconf.currentGoods != undefined && this.$store.state.appconf.currentGoods.length > 0) {
         this.goods = JSON.parse(this.$store.state.appconf.currentGoods);
