@@ -1,6 +1,7 @@
 import axios from 'axios'
 import store from '@/vuex/store.js'
 import router from '../router'
+import Util from '../util/common'
 
 //const GOODS_URL_PREFIX = "https://iwallet-1258175138.cos.ap-beijing.myqcloud.com"
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
@@ -22,6 +23,7 @@ xapi.interceptors.request.use(function (config) {
   if (store.state.login.token) {
     config.headers.Authorization = `token ${store.state.login.token}`;
   }
+ // Util.test();
   return config;
 
 }, function (error) {
