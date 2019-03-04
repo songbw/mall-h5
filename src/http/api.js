@@ -23,7 +23,7 @@ xapi.interceptors.request.use(function (config) {
   if (store.state.login.token) {
     config.headers.Authorization = `token ${store.state.login.token}`;
   }
- // Util.test();
+  Util.test();
   return config;
 
 }, function (error) {

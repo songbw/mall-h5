@@ -113,9 +113,25 @@ export default {
     for (let i in arr) {
       if (jsonObj[arr[i]] != null) {
         if (typeof jsonObj[arr[i]] == "object") {
-          str += arr[i] + '={'
-          str += this.formatSignString(jsonObj[arr[i]])
-          str += '}' + "&"
+          if(jsonObj[arr[i]]  instanceof Array) {
+            let len = jsonObj[arr[i]].length;
+
+            str += arr[i] + '=['
+            for (let k =0 ;k < len ; k++) {
+              str += '{'
+              str += this.formatSignString(jsonObj[arr[i]][k]);
+              str += '}'
+              if(k < len-1) {
+                str += ','
+              }
+            }
+            str += ']' + "&"
+          } else {
+            str += arr[i] + '={'
+            str += this.formatSignString(jsonObj[arr[i]])
+            str += '}' + "&"
+          }
+
         } else {
           if (typeof jsonObj[arr[i]] == "string" && jsonObj[arr[i]].length == 0)
             continue;
