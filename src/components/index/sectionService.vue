@@ -12,7 +12,7 @@
     </div>
     <div class="section1-list" v-if="datas.list.length > 5">
       <ul class="ul_left">
-        <li v-for="k in datas.list.slice(5,10)" @click="onClick(k.targetUrl)">
+        <li v-for="k in datas.list.slice(5,10)" @click="onClick(k.targetUrl)" >
           <img v-lazy="k.imageUrl">
           <h2>
             {{k.name}}

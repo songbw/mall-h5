@@ -1,15 +1,27 @@
 <template lang="html">
-  <section class="sectionSquared" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
-    <mt-cell v-if="datas.settings.title.show">
-      <h1 slot="title" class="sectionSquared-title">
-        {{datas.settings.title.text.value}}
-      </h1>
-      <i class="icon-right" v-if="(datas.settings.title.text.hasLink===true)"
-         @click="See(datas.settings.title.text.linkUrl)"></i>
-    </mt-cell>
-    <li v-for="item in datas.list" style="list-style: none">
-      <ul class="sectionSquared-list">
-        <li v-for="k in item.grids">
+  <section class="sectionSquared"
+           :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
+    <div v-if="datas.settings.title.show">
+      <div v-if="datas.settings.title.text.hasLink">
+        <van-cell :is-link="datas.settings.title.text.hasLink"
+                  :value="datas.settings.title.text.linkTitle"
+                  :url="datas.settings.title.text.linkUrl">
+          <h1 slot="title" class="sectionSquared-title" :style="{'text-align': datas.settings.title.text.align}">
+            {{datas.settings.title.text.value}}
+          </h1>
+        </van-cell>
+      </div>
+      <div v-else>
+        <van-cell>
+          <h1 slot="title" class="sectionSquared-title" :style="{'text-align': datas.settings.title.text.align}">
+            {{datas.settings.title.text.value}}
+          </h1>
+        </van-cell>
+      </div>
+    </div>
+    <li v-for="item in datas.list">
+      <ul class="sectionSquared-list" :style="{'background-color':mBackgroundColor}">
+        <li v-for="k in item.grids" :style="{'background-color':mBackgroundColor}">
           <img v-lazy="k.imageUrl" @click="onClick(k.targetUrl)">
         </li>
       </ul>
@@ -21,14 +33,7 @@
   import {Lazyload} from 'mint-ui';
 
   export default {
-    props: {
-      datas: {
-        type: Object,
-        default: function () {
-          return {}
-        }
-      }
-    },
+    props: ['datas', 'mBackgroundColor'],
     methods: {
       See(e) {
         window.location.href = e
@@ -51,11 +56,8 @@
   @import "../../assets/index/style.css";
 
   .sectionSquared-title {
-    text-align: left;
     .fz(font-size, 40);
     font-weight: bold;
-    position: relative;
-    background-color: #ffffff;
   }
 
   .sectionSquared-list {
@@ -65,10 +67,14 @@
     display: flex;
     -ms-flex-wrap: wrap;
     list-style: none;
-
+    margin-bottom: 1px;
     li:first-child:nth-last-child(1) {
       /* -或者可以使用- li:only-child { */
       width: 100%;
+      img {
+        width: 100%;
+        display: inline-block;
+      }
     }
 
     /* 两个元素时 */
@@ -94,12 +100,13 @@
 
     li {
       width: 25%;
-      padding: 1vw;
       list-style: none;
       display: inline-block; //使li对象显示为一行
+      //margin: 1.5px;
+      text-align: center;
       img {
-        width: 100%;
-        display: block;
+        width: 99%;
+        display: inline-block;
       }
     }
   }

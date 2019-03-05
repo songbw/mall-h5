@@ -3,11 +3,11 @@
   <section>
     <div class="index" :style="{'background-color': mBackgroundColor}">
         <v-header/>
-        <div style="padding: 5px">
+        <div style="padding-left: 5px;padding-right: 5px">
           <li v-for="item in datas" style="list-style: none">
             <v-swiper v-if="item.type==='0'" :datas="item.data"/>
             <v-service v-else-if="item.type==='1'" :datas="item.data"/>
-            <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data"/>
+            <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
             <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
             <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
           </li>
@@ -54,7 +54,9 @@
         const pako = require('pako');
         const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         this.datas = JSON.parse(jsonString);
+        this.$log(this.datas);
         this.mBackgroundColor = response.data.data.result.backgroundColor
+        this.mBackgroundColor = '#FF4444'
       }).catch(function (error) {
         //alert(error)
         that.$log(error)

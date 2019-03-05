@@ -1,19 +1,13 @@
 <template>
-  <section class="sectionSlide"  >
-    <mt-cell v-if="datas.settings.title.show" :style="{'margin-bottom': datas.settings.marginBottom+'px'}" >
-      <h1 slot="title" class="sectionSlide-title">
+  <section class="sectionSlide"  :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
+   <van-cell>
+      <h1 slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
         {{datas.settings.title.textValue}}
       </h1>
-    </mt-cell>
-    <div class="sectionSlide-banner">
-      <img v-lazy="datas.settings.title.imageUrl" v-if="datas.settings.title.hasImage"
-           @click="onBannerClick(datas.settings.title.targetUrl)">
+    </van-cell>
+    <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
+      <img v-lazy="datas.settings.title.imageUrl" @click="onClick(k.targetUrl)">
     </div>
-    <!--
-   <router-link :to="{name:'分类页'}" class="sectionSlide-banner">
-     <img v-lazy="datas.banner">
-   </router-link>
-   -->
     <div class="sectionSlide-list">
       <ul>
         <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">

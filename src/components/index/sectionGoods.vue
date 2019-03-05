@@ -2,7 +2,7 @@
   <section class="sectionGoods" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
     <div class="container" ref="container">
       <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
-              @change="onTabChanged">
+              @change="onTabChanged" style="margin-left: -10px">
       </ly-tab>
       <div :style="{ marginTop: marginTop }">
         <div v-for="(category,index) in datas.list" :title=category.title :key="index" class="content">
