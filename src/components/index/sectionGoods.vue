@@ -2,7 +2,7 @@
   <section class="sectionGoods" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
     <div class="container" ref="container">
       <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
-              @change="onTabChanged" style="margin-left: -10px">
+              @change="onTabChanged" style="margin-left: -5px;">
       </ly-tab>
       <div :style="{ marginTop: marginTop }">
         <div v-for="(category,index) in datas.list" :title=category.title :key="index" class="content">
@@ -172,17 +172,16 @@
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
       overflow: hidden;
-
-
+      background-color: #1989fa;
+      text-align: center;
       li {
         width: 50%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         padding: 0 3vw;
-
         img {
-          display: block;
-          width: 100%;
+          width: 99%;
+          display: inline-block;
         }
 
         > p {

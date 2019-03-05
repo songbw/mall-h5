@@ -6,7 +6,7 @@
       </h1>
     </van-cell>
     <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
-      <img v-lazy="datas.settings.title.imageUrl" @click="onClick(k.targetUrl)">
+      <img v-lazy="datas.settings.title.imageUrl" @click="onBannerClick(datas.settings.title.targetUrl)">
     </div>
     <div class="sectionSlide-list">
       <ul>
