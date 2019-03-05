@@ -50,7 +50,8 @@ import {
   Search,
   Field,
   Step,
-  Steps
+  Steps,
+  Lazyload
 } from 'vant';
 
 Vue.use(Button)
@@ -84,6 +85,13 @@ Vue.use(Button)
   .use(Field)
   .use(Step)
   .use(Steps);
+
+Vue.use(Lazyload, {
+  preLoad: 1,
+  error: 'static/error.jpg',
+  loading: '',
+  attempt: 3
+})
 
 
 /*function jsonURLParams(json,reverse){
