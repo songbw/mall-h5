@@ -105,8 +105,12 @@
       //margin: 1.5px;
       text-align: center;
       img {
-        width: 99%;
+        width: 100%;
         display: inline-block;
+      }
+
+      img:nth-child(1) {
+        margin-left: 1px;
       }
     }
   }

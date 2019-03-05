@@ -2,12 +2,12 @@
   <section class="sectionGoods" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
     <div class="container" ref="container">
       <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
-              @change="onTabChanged" style="margin-left: -5px;">
+              @change="onTabChanged"  :style="{'margin-left': '-5px','background-color': datas.settings.floorTitleColor}">
       </ly-tab>
       <div :style="{ marginTop: marginTop }">
         <div v-for="(category,index) in datas.list" :title=category.title :key="index" class="content">
           <ul class="sectionGoods-list">
-            <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
+            <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index" :style="datas.settings.countPerLine==3?'width:33%':'width:50%'">
               <img v-lazy="k.imagePath">
               <p>{{k.intro}}</p>
               <span :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
@@ -70,6 +70,13 @@
     },
 
     methods: {
+/*      getCurrentGoodsWidth(countPerLine) {
+        this.$log("getCurrentGoodsWidth:"+countPerLine);
+        if(countPerLine == 3)
+          return '33.33%'
+        else
+          return '50%'
+      },*/
       onTabChanged(item, index) {
         //   this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
         if (this.isTabChanging) {
