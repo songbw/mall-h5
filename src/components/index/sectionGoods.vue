@@ -183,17 +183,21 @@
         }
 
         > p {
+          .fz(font-size,23);
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
+          word-break:break-all;
           bottom: 0;
           left: 0;
           width: 100%;
           -webkit-box-sizing: border-box;
           box-sizing: border-box;
-          padding: 1.2vw 2vw;
+          margin-top: 5px;
+          font-weight: bold;
+          color: #000000;
         }
 
         > h3 {

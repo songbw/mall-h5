@@ -126,8 +126,9 @@
 
         p.sectionSlide-list-intro {
           padding-top: 1vw;
-          .fz(font-size, 26);
-          color: rgb(0, 0, 0);
+          .fz(font-size, 23);
+          color: #000000;
+          font-weight: bold;
         }
 
         p.sectionSlide-list-price {
