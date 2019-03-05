@@ -172,8 +172,6 @@
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
       overflow: hidden;
-      background-color: #1989fa;
-      text-align: center;
       li {
         width: 50%;
         -webkit-box-sizing: border-box;

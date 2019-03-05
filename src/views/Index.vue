@@ -56,7 +56,7 @@
         this.datas = JSON.parse(jsonString);
         this.$log(this.datas);
         this.mBackgroundColor = response.data.data.result.backgroundColor
-        this.mBackgroundColor = '#FF4444'
+    //    this.mBackgroundColor = '#FF4444'
       }).catch(function (error) {
         //alert(error)
         that.$log(error)
