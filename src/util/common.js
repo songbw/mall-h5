@@ -1,7 +1,7 @@
-//import NodeRSA from 'node-rsa'
+import NodeRSA from 'node-rsa'
 
 const STORAGE_USER_KEY = 'STORAGE_USER_KEY'
-/*
+
 const RSA_PRIVATE_KEY = '-----BEGIN PRIVATE KEY-----\n' +
   'MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCldVUhunigZe4k\n' +
   'sx5hRt0jEgfNr2YqrEAZc97+/JI5l4OwtdspnuhcHQHBrMvzgHflE4YdadqYkQVm\n' +
@@ -52,7 +52,7 @@ const SRV_RSA_PUBLIC_KEY = '-----BEGIN PUBLIC KEY-----\n' +
 
 const prikey = new NodeRSA(RSA_PRIVATE_KEY,'pkcs8-private');
 const pubkey = new NodeRSA(RSA_PUBLIC_KEY, 'pkcs8-public');
-*/
+
 
 export default {
   // 获取
@@ -70,7 +70,7 @@ export default {
     }
     return window.localStorage.setItem(key, JSON.stringify(res))
   },
-/*
+
   test() {
     console.log("TEST ###########")
 
@@ -142,5 +142,5 @@ export default {
       }
     }
     return str.substr(0, str.length - 1)
-  }*/
+  }
 }
