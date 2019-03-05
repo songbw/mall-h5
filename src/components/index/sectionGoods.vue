@@ -10,7 +10,7 @@
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath">
               <p>{{k.intro}}</p>
-              <span>￥{{k.price}}</span>
+              <span :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
             </li>
           </ul>
         </div>
