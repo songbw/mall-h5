@@ -1,6 +1,9 @@
 import NodeRSA from 'node-rsa'
+import CryptoJS from 'crypto-js'
 
 const STORAGE_USER_KEY = 'STORAGE_USER_KEY'
+
+const AES_KEY = 'FengChao@123'
 
 const RSA_PRIVATE_KEY = '-----BEGIN PRIVATE KEY-----\n' +
   'MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCldVUhunigZe4k\n' +
@@ -50,7 +53,7 @@ const SRV_RSA_PUBLIC_KEY = '-----BEGIN PUBLIC KEY-----\n' +
   'uwIDAQAB\n' +
   '-----END PUBLIC KEY-----'
 
-const prikey = new NodeRSA(RSA_PRIVATE_KEY,'pkcs8-private');
+const prikey = new NodeRSA(RSA_PRIVATE_KEY, 'pkcs8-private');
 const pubkey = new NodeRSA(RSA_PUBLIC_KEY, 'pkcs8-public');
 
 
@@ -70,20 +73,18 @@ export default {
     }
     return window.localStorage.setItem(key, JSON.stringify(res))
   },
+  xxx() {
 
+  },
   test() {
     console.log("TEST ###########")
 
-  //  const prikey = new NodeRSA();
-  //  prikey.importKey(RSA_PRIVATE_KEY, 'pkcs8-private');
-  //  const pubkey = new NodeRSA();
-  //  pubkey.importKey(RSA_PUBLIC_KEY, 'pkcs8-public')
-    //console.log("KEY size:"+key.getKeySize())
-    const str = "Jon";
-    let signature = prikey.sign(str);
-    let flag = pubkey.verify(str, signature);
-    console.log("flag is:" + flag)
+    //const str = "Jon";
+    //let signature = prikey.sign(str);
+    //let flag = pubkey.verify(str, signature);
     let jsonObj = {
+      "openId": "10DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2",
+      "sign": "",
       "a": 123,
       "b": {
         "bb2": {
@@ -102,7 +103,23 @@ export default {
         "bb1": null
       }
     }
-    console.log('formatedStr:' + this.formatSignString(jsonObj))
+    console.log("before AES jsonObj is:" + JSON.stringify(jsonObj));
+    let str = this.encrypt(jsonObj.openId);
+    jsonObj.openId = str;
+    console.log("after AES encrypt jsonObj is:" + JSON.stringify(jsonObj));
+    let formatedStr = this.formatSignString(jsonObj);
+    console.log('formatedStr:' + formatedStr);
+    let signature = prikey.sign(Buffer.from(formatedStr), 'base64').toString('base64');
+    //let signature = prikey.sign(formatedStr);
+    console.log("RSA sign is:" + signature);
+    jsonObj.sign = signature;
+    console.log("after RSA sign jsonObj is:" + JSON.stringify(jsonObj));
+    //let flag = pubkey.verify(formatedStr, jsonObj.sign);
+    let flag = pubkey.verify(Buffer.from(formatedStr), jsonObj.sign, 'Buffer', 'base64');
+    console.log('verify sign is:' + flag);
+    str = this.decrypt(jsonObj.openId);
+    jsonObj.openId = str;
+    console.log("after AES decrypt jsonObj is:" + JSON.stringify(jsonObj));
   },
 
   formatSignString(jsonObj) {
@@ -115,15 +132,15 @@ export default {
     for (let i in arr) {
       if (jsonObj[arr[i]] != null) {
         if (typeof jsonObj[arr[i]] == "object") {
-          if(jsonObj[arr[i]]  instanceof Array) {
+          if (jsonObj[arr[i]] instanceof Array) {
             let len = jsonObj[arr[i]].length;
 
             str += arr[i] + '=['
-            for (let k =0 ;k < len ; k++) {
+            for (let k = 0; k < len; k++) {
               str += '{'
               str += this.formatSignString(jsonObj[arr[i]][k]);
               str += '}'
-              if(k < len-1) {
+              if (k < len - 1) {
                 str += ','
               }
             }
@@ -142,5 +159,20 @@ export default {
       }
     }
     return str.substr(0, str.length - 1)
+  },
+
+  encrypt(word, keyStr) {
+    keyStr = keyStr ? keyStr : AES_KEY;
+    let key = CryptoJS.enc.Utf8.parse(keyStr);//Latin1 w8m31+Yy/Nw6thPsMpO5fg==
+    let srcs = CryptoJS.enc.Utf8.parse(word);
+    let encrypted = CryptoJS.AES.encrypt(srcs, key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+    return encrypted.toString();
+  },
+  //解密
+  decrypt(word, keyStr) {
+    keyStr = keyStr ? keyStr : AES_KEY;
+    let key = CryptoJS.enc.Utf8.parse(keyStr);//Latin1 w8m31+Yy/Nw6thPsMpO5fg==
+    let decrypt = CryptoJS.AES.decrypt(word, key, {mode: CryptoJS.mode.ECB, padding: CryptoJS.pad.Pkcs7});
+    return CryptoJS.enc.Utf8.stringify(decrypt).toString();
   }
 }
