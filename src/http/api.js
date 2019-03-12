@@ -5,7 +5,8 @@ import Util from '../util/common'
 
 //const GOODS_URL_PREFIX = "https://iwallet-1258175138.cos.ap-beijing.myqcloud.com"
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
-const SERVER_BASE_URL = "http://42.121.121.128:8080"
+const SERVER_BASE_URL = "http://115.159.100.38:8080"
+//const SERVER_BASE_URL = "http://42.121.121.128:8080"
 //const SERVER_BASE_URL = "http://172.23.127.4:8080"  //local debug
 const APP_ID = "10" //无锡市民卡
 const SERVR_PHONE_NUM= "4000797717";

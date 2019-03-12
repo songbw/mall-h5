@@ -89,7 +89,7 @@ Vue.use(Button)
 Vue.use(Lazyload, {
   preLoad: 1,
   error: 'static/error.jpg',
-  loading: '',
+  loading: 'static/loading.jpg',
   attempt: 3
 })
 
