@@ -97,17 +97,55 @@
 
 
     created() {
-       this.$log("oderDetail created Enter");
-       //this.detail = this.$route.params.detail;
-       this.detail = JSON.parse( this.$store.state.appconf.currentOrderInfo);
-       //this.$log(this.detail)
-       this.status = this.detail.status;
+      this.$log("oderDetail created Enter");
+      //this.detail = this.$route.params.detail;
+      this.detail = JSON.parse(this.$store.state.appconf.currentOrderInfo);
+      //this.$log(this.detail)
+      this.status = this.detail.status;
     },
 
 
     computed: {},
 
     methods: {
+      openCashPage(user, merchantNo, orderNos, pAnOrderInfo) {
+        let that = this;
+        let options = {
+          "openId": pAnOrderInfo.openId,
+          "appId": this.$api.APP_ID,
+          "merchantNo": merchantNo,
+          "orderNos": orderNos,
+          "goodsName": "商品支付订单",
+          "amount": pAnOrderInfo.orderAmount
+        }
+        that.$log("预下单:" + JSON.stringify(options))
+        that.$api.xapi({
+          method: 'post',
+          url: '/zhcs/payment',
+          data: options,
+        }).then((response) => {
+          that.$log("预下单返回 :" + JSON.stringify(response.data))
+          if (response.data.msg === "会员不存在") {
+            //未开通钱包
+            let walletInfo = {
+              accessToken: user.accessToken,
+              openId: user.openId,
+            }
+            that.$log("walletInfo:" + JSON.stringify(walletInfo))
+            that.$jsbridge.call("dredgeWallet", walletInfo);
+          } else {
+            if (response.data.data.result != undefined) {
+              let orderNo = response.data.data.result.orderNo
+              pAnOrderInfo.orderNo = orderNo
+              that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
+              that.$jsbridge.call("openCashPage", pAnOrderInfo);
+            }
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+
       onLogisticsBtnClick(detail) {
         this.$log("onLogisticsBtnClick Enter")
         this.$router.push({
@@ -135,8 +173,7 @@
         }).catch(function (error) {
           console.log(error)
         })
-      }
-      ,
+      },
       onPayBtnClick(listItem) {
         this.$log(listItem);
         let userInfo = this.$store.state.appconf.userInfo;
@@ -155,8 +192,7 @@
           "businessType": "11"
         }
         this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo)
-      }
-      ,
+      },
       onCancelBtnClick(detail) {
         let id = detail.id
         let options = {

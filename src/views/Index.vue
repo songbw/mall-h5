@@ -66,7 +66,7 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        this.test();
+       // this.test();
         this.getAccessTokenInfo();
         this.startLocation();
 

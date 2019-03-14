@@ -14,7 +14,7 @@
 
       <div v-else>
         <div class="carlist">
-          <van-swipe-cell :right-width="60"   v-for="(k,index) in this.selStateInCarList">
+          <van-swipe-cell :right-width="60"   v-for="(k,index) in this.selStateInCarList" :key="index">
             <div style="display: flex;flex-direction: row;justify-content: left;background-color: #ffffff">
               <div style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
                 <van-checkbox

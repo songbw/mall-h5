@@ -494,11 +494,13 @@
             that.$jsbridge.call("dredgeWallet", walletInfo);
           } else {
             if (response.data.data.result != undefined) {
+              let orderNo = response.data.data.result.orderNo
               if(that.pageAction == "direct") {
-                this.$store.commit('SET_PAY_DIRECT_PRODUCT', '');
+                this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
               } else {
                 that.deleteOrderedGoodsInCar();
               }
+              pAnOrderInfo.orderNo = orderNo
               that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
               that.$jsbridge.call("openCashPage", pAnOrderInfo);
             }
@@ -553,7 +555,7 @@
                     })
                     let pAnOrderInfo = {
                       "accessToken": user.accessToken,
-                      "orderNo": orderNo,
+                      "orderNo": '',// orderNo,
                       "orderAmount": amount * 100,//分
                       "openId": user.openId,
                       "businessType": "11"

@@ -177,6 +177,8 @@
             that.$jsbridge.call("dredgeWallet", walletInfo);
           } else {
             if (response.data.data.result != undefined) {
+              let orderNo = response.data.data.result.orderNo
+              pAnOrderInfo.orderNo = orderNo
               that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
               that.$jsbridge.call("openCashPage", pAnOrderInfo);
             }
