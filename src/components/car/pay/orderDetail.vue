@@ -108,6 +108,9 @@
     computed: {},
 
     methods: {
+      isUserEmpty(userInfo) {
+        return (userInfo == undefined || userInfo.length === 0)
+      },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo) {
         let that = this;
         pAnOrderInfo.orderAmount = 1 //for test
