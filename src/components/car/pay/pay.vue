@@ -469,6 +469,7 @@
 
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo) {
         let that = this;
+        pAnOrderInfo.orderAmount = 1 //for test
         let options = {
           "openId": pAnOrderInfo.openId,
           "appId": this.$api.APP_ID,
@@ -501,6 +502,7 @@
                 that.deleteOrderedGoodsInCar();
               }
               pAnOrderInfo.orderNo = orderNo
+
               that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
               that.$jsbridge.call("openCashPage", pAnOrderInfo);
             }

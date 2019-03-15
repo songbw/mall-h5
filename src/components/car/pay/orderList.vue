@@ -152,6 +152,7 @@
       },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo) {
         let that = this;
+        pAnOrderInfo.orderAmount = 1 //for test
         let options = {
           "openId": pAnOrderInfo.openId,
           "appId": this.$api.APP_ID,
@@ -179,6 +180,7 @@
             if (response.data.data.result != undefined) {
               let orderNo = response.data.data.result.orderNo
               pAnOrderInfo.orderNo = orderNo
+
               that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
               that.$jsbridge.call("openCashPage", pAnOrderInfo);
             }
