@@ -176,6 +176,7 @@
           "amount": pAnOrderInfo.orderAmount
         }
         let savedOrderNo = this.getSavedPayOrderInfo(listItem);
+        this.$log("savedOrderNo:"+savedOrderNo)
         if (savedOrderNo != null) {
           pAnOrderInfo.orderNo = savedOrderNo
           that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))

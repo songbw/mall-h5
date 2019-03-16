@@ -2,17 +2,17 @@
   <!-- 在首页父组件发送http请求,后将数据通过props传递给子组件,可减少请求次数,减少服务器压力 -->
   <section>
     <div class="index" :style="{'background-color': mBackgroundColor}">
-        <v-header/>
-        <div style="padding-left: 5px;padding-right: 5px">
-          <li v-for="item in datas" style="list-style: none">
-            <v-swiper v-if="item.type==='0'" :datas="item.data"/>
-            <v-service v-else-if="item.type==='1'" :datas="item.data"/>
-            <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-            <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
-            <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
-          </li>
-        </div>
-<!--        <v-baseline/>-->
+      <v-header/>
+      <div style="padding-left: 5px;padding-right: 5px">
+        <li v-for="item in datas" style="list-style: none">
+          <v-swiper v-if="item.type==='0'" :datas="item.data"/>
+          <v-service v-else-if="item.type==='1'" :datas="item.data"/>
+          <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
+          <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
+        </li>
+      </div>
+      <!--        <v-baseline/>-->
     </div>
   </section>
 
@@ -56,7 +56,7 @@
         this.datas = JSON.parse(jsonString);
         this.$log(this.datas);
         this.mBackgroundColor = response.data.data.result.backgroundColor
-    //    this.mBackgroundColor = '#FF4444'
+        //    this.mBackgroundColor = '#FF4444'
       }).catch(function (error) {
         //alert(error)
         that.$log(error)
@@ -98,7 +98,7 @@
           */
           this.$log("payResult:" + data);
           var responseData = JSON.parse(data);
-          this.onPayResult(data);
+          this.onPayResult(responseData);
           return "ok";
         });
 
@@ -122,14 +122,23 @@
       onPayResult(payResult) {
         this.$store.dispatch('getPrePayOrderList');
         let list = this.$store.state.appconf.prePayOrderList
+        this.$log("##### before this.$store.state.appconf.prePayOrderList")
+        this.$log(this.$store.state.appconf.prePayOrderList)
         let found = -1;
-        for ( let i = 0; i < list.length ; i++) {
-          if(list[i].orderNo === payResult.orderNo)
+        for (let i = 0; i < list.length; i++) {
+         // this.$log("list["+i+"]:" + JSON.stringify(list[i]) )
+         // this.$log("payResult:" + JSON.stringify(payResult))
+          if (list[i].orderNo === payResult.orderNo) {
             found = i;
+            break;
+          }
         }
-        if(found != -1) {
-          list.splice(found,1);
+        //this.$log("found:" + found)
+        if (found != -1) {
+          list.splice(found, 1);
           this.$store.dispatch('setPrePayOrderList', list);
+          //this.$log("##### after this.$store.state.appconf.prePayOrderList")
+          //this.$log(this.$store.state.appconf.prePayOrderList)
         }
         this.$router.replace({path: '/car/oderList'})
       },
