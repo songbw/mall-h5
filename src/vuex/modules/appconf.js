@@ -15,6 +15,7 @@ const state = {
   invoice: '',
   payDirectProduct:'',
   currentOrderInfo:'',
+  prePayOrderList:[]
 }
 
 const mutations = {
@@ -70,6 +71,14 @@ const mutations = {
   [types.SET_CURRENT_ORDER_INFO](state, res) {
     state.currentOrderInfo = res
   },
+
+  [types.SET_PREPAYORDER_LIST](state) {
+    let list = Util.getLocal('prePayOrderList')
+    if(list != null || list != undefined)
+       state.prePayOrderList = list;
+    else
+      state.prePayOrderList = [];
+  },
 }
 
 const actions = {
@@ -82,6 +91,12 @@ const actions = {
     console.log("setInvoicdInfo Enter");
     Util.setLocal(res, 'invoice', false);
     commit(types.SET_INVOICE_INFO);
+  },
+
+  setPrePayOrderList({commit}, res) {
+    console.log("setPrePayOrderList Enter");
+    Util.setLocal(res, 'prePayOrderList', false);
+    commit(types.SET_PREPAYORDER_LIST);
   },
 
 }

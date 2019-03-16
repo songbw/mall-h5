@@ -300,7 +300,7 @@
               this.updateUsedAddress();
               this.getCarList();
             } else {
-             // this.$log("ADDRESS LIST is:" + JSON.stringify(result.list))
+              // this.$log("ADDRESS LIST is:" + JSON.stringify(result.list))
               this.$store.commit('SET_ADDRESS_LIST', result.list);
               this.updateUsedAddress();
               this.getCarList();
@@ -321,6 +321,18 @@
     },
 
     methods: {
+      addPreOrderList(item) {
+        //{"orderNo":"0011061693634fcdbd2a63b4f3b659321552704754506","outTradeNo":"102044391000fd194ab888b1aa81c03c371004411874","notifyUrl":"http://115.159.100.38:8080/zhcs/back","payType":"ALIPAY-ZL","payer":"600063674413","payee":"10000007","body":"商品支付订单","remark":"","totalFee":1,"actPayFee":1,"limitPay":"","orderCategory":1}
+        //for test
+        this.$log("addPreOrderList Enter" + JSON.stringify(item))
+        // item = {"orderNo":"0011061693634fcdbd2a63b4f3b659321552704754506","outTradeNo":"102044391000fd194ab888b1aa81c03c371004411874","notifyUrl":"http://115.159.100.38:8080/zhcs/back","payType":"ALIPAY-ZL","payer":"600063674413","payee":"10000007","body":"商品支付订单","remark":"","totalFee":1,"actPayFee":1,"limitPay":"","orderCategory":1};
+        let list = this.$store.state.appconf.prePayOrderList
+        this.$log(list);
+        list.push(item);
+        this.$store.dispatch('setPrePayOrderList', list);
+        list = this.$store.state.appconf.prePayOrderList
+        this.$log(JSON.stringify(list));
+      },
       savePayList() {
         this.$store.commit('SET_PAY_LIST', this.payCarList);
       },
@@ -496,13 +508,13 @@
           } else {
             if (response.data.data.result != undefined) {
               let orderNo = response.data.data.result.orderNo
-              if(that.pageAction == "direct") {
+              if (that.pageAction == "direct") {
                 this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
               } else {
                 that.deleteOrderedGoodsInCar();
               }
               pAnOrderInfo.orderNo = orderNo
-
+              this.addPreOrderList(response.data.data.result);
               that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
               that.$jsbridge.call("openCashPage", pAnOrderInfo);
             }
@@ -639,7 +651,7 @@
         let skus = [];
         this.payCarList = [];
         if (this.pageAction == "direct") {
-          let payDirectProduct  = this.$store.state.appconf.payDirectProduct;
+          let payDirectProduct = this.$store.state.appconf.payDirectProduct;
           this.$log("+++++++++++++++++++++");
           this.$log(payDirectProduct);
           if (payDirectProduct.length > 0) {

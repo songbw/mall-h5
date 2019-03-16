@@ -19,7 +19,8 @@
               <div class="orderDetail">
                 <div>
                   <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
-                    <van-icon slot="right-icon" name="delete" style="" @click="onDelBtnClick(k,i)" style="margin: 0.25em 0em 0.3em 0.3em "
+                    <van-icon slot="right-icon" name="delete" style="" @click="onDelBtnClick(k,i)"
+                              style="margin: 0.25em 0em 0.3em 0.3em "
                               v-show="k.status==2||k.status==3"/>
                   </van-cell>
                 </div>
@@ -122,6 +123,18 @@
     },
 
     methods: {
+      getSavedPayOrderInfo(listItem) {
+        this.$log("getSavedPayOrderInfo Enter##########################")
+        let savedPayOrderInfo = null;
+        let list = this.$store.state.appconf.prePayOrderList
+        list.forEach(item => {
+          //{"orderNo":"0011061693634fcdbd2a63b4f3b659321552704754506","outTradeNo":"102044391000fd194ab888b1aa81c03c371004411874","notifyUrl":"http://115.159.100.38:8080/zhcs/back","payType":"ALIPAY-ZL","payer":"600063674413","payee":"10000007","body":"商品支付订单","remark":"","totalFee":1,"actPayFee":1,"limitPay":"","orderCategory":1};
+          if (listItem.outTradeNo === item.outTradeNo)
+            savedPayOrderInfo = item.orderNo;
+        })
+        return savedPayOrderInfo;
+      },
+
       getOrderStatus(status) {
         this.$log("status is:" + status);
         switch (status) {
@@ -150,7 +163,7 @@
           return "商城自营"
         }
       },
-      openCashPage(user, merchantNo, orderNos, pAnOrderInfo) {
+      openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
         pAnOrderInfo.orderAmount = 1 //for test
         let options = {
@@ -161,33 +174,40 @@
           "goodsName": "商品支付订单",
           "amount": pAnOrderInfo.orderAmount
         }
-        that.$log("预下单:" + JSON.stringify(options))
-        that.$api.xapi({
-          method: 'post',
-          url: '/zhcs/payment',
-          data: options,
-        }).then((response) => {
-          that.$log("预下单返回 :" + JSON.stringify(response.data))
-          if (response.data.msg === "会员不存在") {
-            //未开通钱包
-            let walletInfo = {
-              accessToken: user.accessToken,
-              openId: user.openId,
-            }
-            that.$log("walletInfo:" + JSON.stringify(walletInfo))
-            that.$jsbridge.call("dredgeWallet", walletInfo);
-          } else {
-            if (response.data.data.result != undefined) {
-              let orderNo = response.data.data.result.orderNo
-              pAnOrderInfo.orderNo = orderNo
+        let savedOrderNo = this.getSavedPayOrderInfo(listItem);
+        if (savedOrderNo != null) {
+          pAnOrderInfo.orderNo = savedOrderNo
+          that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
+          that.$jsbridge.call("openCashPage", pAnOrderInfo);
+        } else {
+          that.$log("预下单:" + JSON.stringify(options))
+          that.$api.xapi({
+            method: 'post',
+            url: '/zhcs/payment',
+            data: options,
+          }).then((response) => {
+            that.$log("预下单返回 :" + JSON.stringify(response.data))
+            if (response.data.msg === "会员不存在") {
+              //未开通钱包
+              let walletInfo = {
+                accessToken: user.accessToken,
+                openId: user.openId,
+              }
+              that.$log("walletInfo:" + JSON.stringify(walletInfo))
+              that.$jsbridge.call("dredgeWallet", walletInfo);
+            } else {
+              if (response.data.data.result != undefined) {
+                let orderNo = response.data.data.result.orderNo
+                pAnOrderInfo.orderNo = orderNo
 
-              that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-              that.$jsbridge.call("openCashPage", pAnOrderInfo);
+                that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
+                that.$jsbridge.call("openCashPage", pAnOrderInfo);
+              }
             }
-          }
-        }).catch(function (error) {
-          that.$log(error)
-        })
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
       },
 
       onPayBtnClick(listItem, i) {
@@ -207,7 +227,7 @@
           "openId": user.openId,
           "businessType": "11"
         }
-        this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo)
+        this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo, listItem)
       },
 
       onDelBtnClick(listItem, i) {
@@ -248,12 +268,12 @@
         })
         this.$store.commit('SET_CURRENT_ORDER_INFO', JSON.stringify(listItem));
 
-/*        this.$router.push({
-          path: "/car/oderDetail",
-          query: {
-            detail: encodeURIComponent(JSON.stringify(listItem))
-          }
-        })*/
+        /*        this.$router.push({
+                  path: "/car/oderDetail",
+                  query: {
+                    detail: encodeURIComponent(JSON.stringify(listItem))
+                  }
+                })*/
       },
 
       onLogisticsBtnClick(listItem, i) {
@@ -340,9 +360,11 @@
 
     .orderlist-body {
       background-color: #f0f0f0;
+
       span {
         .fz(font-size, 30);
       }
+
       .no-oderlist {
         width: 100%;
         display: flex;
@@ -374,6 +396,7 @@
           text-align: right;
           margin: 1em;
           padding-bottom: 1em;
+
           span {
             .fz(font-size, 22);
           }
@@ -381,6 +404,7 @@
 
         .van-card {
           background-color: #ffffff;
+
           &__price {
             margin-top: 0.5em;
             .fz(font-size, 40);
