@@ -66,7 +66,7 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        this.test();
+        //this.test();
         this.getAccessTokenInfo();
         this.startLocation();
 
@@ -92,6 +92,10 @@
         });
 
         this.$jsbridge.register('payResult', (data) => {
+          /*
+          [2019-03-16 21:55:36 :: LOG]
+          payResult:{"code":1,"msg":"支付成功","orderNo":"5f786921c0944d389ab6514eb7406c491552744393140","orderAmount":1}
+          */
           this.$log("payResult:" + data);
           var responseData = JSON.parse(data);
           this.onPayResult(data);
@@ -116,6 +120,17 @@
       },
 
       onPayResult(payResult) {
+        this.$store.dispatch('getPrePayOrderList');
+        let list = this.$store.state.appconf.prePayOrderList
+        let found = -1;
+        for ( let i = 0; i < list.length ; i++) {
+          if(list[i].orderNo === payResult.orderNo)
+            found = i;
+        }
+        if(found != -1) {
+          list.splice(found,1);
+          this.$store.dispatch('setPrePayOrderList', list);
+        }
         this.$router.replace({path: '/car/oderList'})
       },
       getUserInfo(accessToken) {
