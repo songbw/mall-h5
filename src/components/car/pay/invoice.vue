@@ -67,6 +67,10 @@
 
 
     created() {
+      //const invoiceInfo = this.$store.state.appconf.invoice;
+      //const invoiceInfo =  this.$store.dispatch('getInvoiceInfo');//JSON.stringify(invoice)"");
+
+      this.$store.dispatch('getInvoiceInfo');
       const invoiceInfo = this.$store.state.appconf.invoice;
       if (invoiceInfo != undefined && invoiceInfo.length > 0) {
         try {

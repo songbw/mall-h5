@@ -99,6 +99,16 @@ const actions = {
     commit(types.SET_PREPAYORDER_LIST);
   },
 
+  getInvoiceInfo({commit}) {
+    console.log("getInvoiceInfo Enter");
+    commit(types.SET_INVOICE_INFO);
+  },
+
+  getPrePayOrderList({commit}) {
+    console.log("getPrePayOrderList Enter");
+    commit(types.SET_PREPAYORDER_LIST);
+  }
+
 }
 
 

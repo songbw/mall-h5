@@ -60,11 +60,13 @@ const pubkey = new NodeRSA(RSA_PUBLIC_KEY, 'pkcs8-public');
 export default {
   // 获取
   getLocal(key = STORAGE_USER_KEY) {
+    console.log("getLocal:"+key)
     return JSON.parse(window.localStorage.getItem(key))
   },
   // 设置用
   setLocal(res, key = STORAGE_USER_KEY, isSaveOldData = false) {
     //第三个参数是true的话,会增加数据而不是重新设置,res必须是数组
+    console.log("setLocal:"+key)
     if (isSaveOldData) {
       if (this.getLocal(key)) {
         let oldData = this.getLocal(key);

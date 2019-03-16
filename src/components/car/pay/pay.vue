@@ -238,6 +238,7 @@
       if (action == "direct") {
         this.pageAction = "direct";
       }
+      this.$store.dispatch('getInvoiceInfo');
       const invoiceInfo = this.$store.state.appconf.invoice;
       this.$log("created:" + invoiceInfo)
       if (invoiceInfo != undefined && invoiceInfo.length > 0) {
