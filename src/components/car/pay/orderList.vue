@@ -124,16 +124,14 @@
 
     methods: {
       getSavedPayOrderInfo(listItem) {
-        this.$log("getSavedPayOrderInfo Enter##########################")
-        let savedPayOrderInfo = null;
-        this.$store.dispatch('getPrePayOrderList');
-        let list = this.$store.state.appconf.prePayOrderList
-        list.forEach(item => {
-          //{"orderNo":"0011061693634fcdbd2a63b4f3b659321552704754506","outTradeNo":"102044391000fd194ab888b1aa81c03c371004411874","notifyUrl":"http://115.159.100.38:8080/zhcs/back","payType":"ALIPAY-ZL","payer":"600063674413","payee":"10000007","body":"商品支付订单","remark":"","totalFee":1,"actPayFee":1,"limitPay":"","orderCategory":1};
-          if (listItem.outTradeNo === item.outTradeNo)
-            savedPayOrderInfo = item.orderNo;
-        })
-        return savedPayOrderInfo;
+/*        this.$log("getSavedPayOrderInfo Enter #########################")
+        this.$log(listItem.outTradeNo)
+        this.$log(listItem.paymentNo)*/
+        if(listItem.openId === listItem.outTradeNo.substr(0,listItem.openId.length)) {
+          return  null
+        } else {
+          return listItem.paymentNo;
+        }
       },
 
       getOrderStatus(status) {
@@ -176,7 +174,7 @@
           "amount": pAnOrderInfo.orderAmount
         }
         let savedOrderNo = this.getSavedPayOrderInfo(listItem);
-        this.$log("savedOrderNo:"+savedOrderNo)
+        this.$log("savedOrderNo:" + savedOrderNo)
         if (savedOrderNo != null) {
           pAnOrderInfo.orderNo = savedOrderNo
           that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
