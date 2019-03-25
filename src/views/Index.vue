@@ -2,7 +2,13 @@
   <!-- 在首页父组件发送http请求,后将数据通过props传递给子组件,可减少请求次数,减少服务器压力 -->
   <section>
     <div class="index" :style="{'background-color': mBackgroundColor}">
-      <v-header/>
+<!--      <v-header/>-->
+      <v-header class="header">
+        <h1 slot="title">商城</h1>
+        <router-link :to="{name:'搜索页'}" slot="right">
+          <van-icon name="search" size="1.2em"/>
+        </router-link>
+      </v-header>
       <div style="padding-left: 5px;padding-right: 5px">
         <li v-for="item in datas" style="list-style: none">
           <v-swiper v-if="item.type==='0'" :datas="item.data"/>
@@ -14,12 +20,21 @@
       </div>
       <!--        <v-baseline/>-->
     </div>
+    <div class="float-button-group">
+      <div class="float-button"  @click="gotoShoppingCart">
+        <img style="height: 28px;width: 28px" :src="icon_shopCart">
+      </div>
+      <div class="float-button" @click="gotoOrderList">
+        <img style="height: 28px;width: 28px" :src="icon_orderList" >
+      </div>
+    </div>
   </section>
 
 </template>
 
 <script>
-  import Header from '@/components/index/header.vue'
+//  import Header from '@/components/index/header.vue'
+  import Header from '@/common/_header.vue'
   import Swiper from '@/components/index/swiper.vue'
   import sectionService from '@/components/index/sectionService.vue'
   import sectionSquared from '@/components/index/sectionSquared.vue'
@@ -41,7 +56,9 @@
       return {
         datas: {},
         loading: true,
-        mBackgroundColor: '#FFFFFF'
+        mBackgroundColor: '#FFFFFF',
+        icon_orderList: require('@/assets/images/icon_order.png'),
+        icon_shopCart: require('@/assets/images/icon_shopping_cart.png'),
       }
     },
 
@@ -80,6 +97,14 @@
       }
     },
     methods: {
+      gotoShoppingCart() {
+        this.$log("gotoShoppingCart Enter")
+        this.$router.push({name: '购物车页'})
+      },
+      gotoOrderList() {
+        this.$log("gotoOrderList Enter")
+        this.$router.push({name: '订单列表页'})
+      },
       initJsNativeCb() {
         this.$jsbridge.register('locationResult', (data) => {
           this.$log("locationResult:" + data);
@@ -126,8 +151,8 @@
         this.$log(this.$store.state.appconf.prePayOrderList)
         let found = -1;
         for (let i = 0; i < list.length; i++) {
-         // this.$log("list["+i+"]:" + JSON.stringify(list[i]) )
-         // this.$log("payResult:" + JSON.stringify(payResult))
+          // this.$log("list["+i+"]:" + JSON.stringify(list[i]) )
+          // this.$log("payResult:" + JSON.stringify(payResult))
           if (list[i].orderNo === payResult.orderNo) {
             found = i;
             break;
@@ -262,5 +287,25 @@
     width: 100%;
     padding-bottom: 14vw;
     background-color: #ffffff;
+  }
+
+  .float-button-group {
+    position: fixed;
+    bottom: 20px;
+    right: 10px;
+
+    .float-button {
+      opacity: 0.8;
+      background: #27282C;
+      margin: 2px;
+      height: 60px;
+      width: 60px;
+      text-align: center;
+      line-height: 60px;
+      border-radius: 50%;
+      -moz-border-radius: 50%;
+      -webkit-border-radius: 50%;
+
+    }
   }
 </style>

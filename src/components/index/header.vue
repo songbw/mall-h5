@@ -11,8 +11,6 @@
         <van-icon name="notes-o" />
       </router-link>
     </div>
-
-
   </mt-header>
 </template>
 
