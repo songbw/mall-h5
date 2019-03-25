@@ -1,6 +1,6 @@
 <template>
   <section class="sectionSlide" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
-    <van-cell>
+    <van-cell v-if="datas.settings.title.textValue.length">>
       <h1 slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
         {{datas.settings.title.textValue}}
       </h1>
@@ -165,7 +165,7 @@
 
         p.sectionSlide-list-price {
           color: #ff4444;
-          .fz(font-size, 40);
+          .fz(font-size, 30);
           font-weight: bold;
         }
       }

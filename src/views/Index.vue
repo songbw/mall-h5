@@ -6,7 +6,7 @@
       <div style="padding-left: 5px;padding-right: 5px">
         <li v-for="item in datas" style="list-style: none">
           <v-swiper v-if="item.type==='0'" :datas="item.data"/>
-          <v-service v-else-if="item.type==='1'" :datas="item.data"/>
+          <v-service v-else-if="item.type==='1'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
           <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
@@ -56,7 +56,6 @@
         this.datas = JSON.parse(jsonString);
         this.$log(this.datas);
         this.mBackgroundColor = response.data.data.result.backgroundColor
-        //    this.mBackgroundColor = '#FF4444'
       }).catch(function (error) {
         //alert(error)
         that.$log(error)
@@ -66,7 +65,8 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        //this.test();
+        this.test();
+        this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
 
@@ -181,6 +181,10 @@
             that.$log(e)
           }
         })
+      },
+
+      setStatusBarColor(color) {
+        this.$jsbridge.call("initStatusBarColor", color);
       },
 
       getAccessTokenInfo() {

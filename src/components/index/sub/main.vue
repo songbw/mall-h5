@@ -1,13 +1,13 @@
 <template lang="html">
-  <div class="index" :style="{'background-color': mBackgroundColor}">
+  <div class="index":style="{'background-color': mBackgroundColor}">
     <v-header>
       <h1 slot="title">{{title}}</h1>
     </v-header>
     <div style="padding: 5px">
       <li v-for="item in datas" style="list-style: none">
         <v-swiper v-if="item.type==='0'" :datas="item.data"/>
-        <v-service v-else-if="item.type==='1'" :datas="item.data"/>
-        <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data"/>
+        <v-service v-else-if="item.type==='1'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+        <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
         <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
         <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
       </li>

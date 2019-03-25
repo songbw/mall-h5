@@ -217,7 +217,7 @@
           align-content: center;
           color: #ff4444;
           padding: 2vw 1.2vw;
-          .fz(font-size, 40);
+          .fz(font-size, 30);
           font-weight: bold;
         }
       }

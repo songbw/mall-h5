@@ -26,7 +26,7 @@
 
   .mint-header {
     padding: 6.8vw 4.8vw;
-    background-color: #fff;
+    background-color: white;
     color: #333 !important;
     .fz(font-size, 40) !important;
   }

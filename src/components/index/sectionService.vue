@@ -1,20 +1,20 @@
 <template>
-  <section :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
+  <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
     <div class="section0-list">
-      <ul>
-        <li v-for="k in datas.list.slice(0,5)" @click="onClick(k.targetUrl)">
+      <ul :style="{'background-color':mBackgroundColor}">
+        <li v-for="k in datas.list.slice(0,5)" @click="onClick(k.targetUrl)" :style="{'background-color':mBackgroundColor}">
           <img v-lazy="k.imageUrl">
-          <h2>
+          <h2 :style="isDeepColor(mBackgroundColor)? 'color:white':'color:blank'">
             {{k.name}}
           </h2>
         </li>
       </ul>
     </div>
     <div class="section1-list" v-if="datas.list.length > 5">
-      <ul class="ul_left">
-        <li v-for="k in datas.list.slice(5,10)" @click="onClick(k.targetUrl)">
+      <ul :style="{'background-color':mBackgroundColor}">
+        <li v-for="k in datas.list.slice(5,10)" @click="onClick(k.targetUrl)" :style="{'background-color':mBackgroundColor}">
           <img v-lazy="k.imageUrl">
-          <h2>
+          <h2 :style="isDeepColor(mBackgroundColor)? 'color:white':'color:blank'">
             {{k.name}}
           </h2>
         </li>
@@ -27,20 +27,30 @@
   import {Lazyload} from 'mint-ui';
 
   export default {
-    props: {
-      datas: {
-        type: Object,
-        default: function () {
-          return {}
-        }
-      }
-    },
+    props: ['datas', 'mBackgroundColor'],
     methods: {
       See(e) {
         window.location.href = e
       },
-      updateCurrentGoods(goods) {
-        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
+      isDeepColor(hexColor) {
+        this.$log("isDeepColor:"+hexColor)
+/*        if(hexColor == undefined)
+          return false;*/
+        if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
+        hexColor = hexColor.toLowerCase();
+        let b = new Array();
+        for (let x = 0; x < 3; x++) {
+          b[0] = hexColor.substr(x * 2, 2)
+          b[3] = "0123456789abcdef";
+          b[1] = b[0].substr(0, 1)
+          b[2] = b[0].substr(1, 1)
+          b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
+        }
+        let grayLevel  =  b[20] * 0.299 +  b[21] * 0.587 +  b[22]* 0.114
+        if(grayLevel >= 192)
+          return false
+        else
+          return true;
       },
       gotoGoodsPage(skuid) {
         try {
@@ -97,10 +107,9 @@
       display: -webkit-flex;
       display: -ms-flex;
       display: flex;
-      padding-top: 3vw;
 
       li {
-        padding: 1vw;
+        padding: 1.2vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         width: 20%;
@@ -116,7 +125,7 @@
         }
 
         h2 {
-          .fz(font-size, 28);
+          .fz(font-size, 26);
           color: #333;
           padding: 2vw 1.2vw;
           width: 100%;
@@ -134,10 +143,9 @@
       display: -webkit-flex;
       display: -ms-flex;
       display: flex;
-      padding-top: 3vw;
 
       li {
-        padding: 1vw;
+        padding: 1.2vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         width: 20%;
@@ -153,7 +161,7 @@
         }
 
         h2 {
-          .fz(font-size, 28);
+          .fz(font-size, 26);
           color: #333;
           padding: 2vw 1.2vw;
           width: 100%;

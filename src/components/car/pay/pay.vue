@@ -322,6 +322,21 @@
     },
 
     methods: {
+      See(e) {
+        this.$log("jump to:"+e)
+        window.location.href = e
+        //window.location.replace(e)
+      },
+      gotoCasherPage(merchantNo,userId,orderNo,amount){
+        let url = this.$api.OPEN_CASHER_URL+
+          "?merchantNo="+merchantNo+
+          "&userId="+userId+
+          "&orderNo="+orderNo+
+          "&amount="+amount+
+          "&isOutlink="+false+
+          "&isPayDirect="+(this.pageAction == 'direct'?true:false)
+        this.See(url);
+      },
       addPreOrderList(item) {
         //{"orderNo":"0011061693634fcdbd2a63b4f3b659321552704754506","outTradeNo":"102044391000fd194ab888b1aa81c03c371004411874","notifyUrl":"http://115.159.100.38:8080/zhcs/back","payType":"ALIPAY-ZL","payer":"600063674413","payee":"10000007","body":"商品支付订单","remark":"","totalFee":1,"actPayFee":1,"limitPay":"","orderCategory":1}
         //for test
@@ -568,14 +583,25 @@
                     options.merchants.forEach(item => {
                       amount += item.amount;
                     })
-                    let pAnOrderInfo = {
-                      "accessToken": user.accessToken,
-                      "orderNo": '',// orderNo,
-                      "orderAmount": amount * 100,//分
-                      "openId": user.openId,
-                      "businessType": "11"
+                    if(true) {
+                      let pAnOrderInfo = {
+                        "accessToken": user.accessToken,
+                        "orderNo": '',// orderNo,
+                        "orderAmount": amount * 100,//分
+                        "openId": user.openId,
+                        "businessType": "11"
+                      }
+                      that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
+                    } else {
+                      if (that.pageAction == "direct") {
+                        that.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
+                      } else {
+                        that.deleteOrderedGoodsInCar();
+                        this.payCarList = []
+                        this.$store.commit('SET_PAY_LIST', this.payCarList);
+                      }
+                      that.gotoCasherPage(merchantNo,user.userId,orderNo,amount);
                     }
-                    that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
                   } else {
                     that.log("can not get correct orderNo");
                   }

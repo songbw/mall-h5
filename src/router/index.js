@@ -54,7 +54,7 @@ export default new Router({
       component: CategoryList
     },
     {
-      path: '/car/casher',
+      path: '/pay/casher',
       name: '收银台页',
       component: Casher
     },
