@@ -22,10 +22,10 @@
     </div>
     <div class="float-button-group">
       <div class="float-button"  @click="gotoShoppingCart">
-        <img style="height: 28px;width: 28px" :src="icon_shopCart">
+        <img style="height: 1.5em;width: 1.5em" :src="icon_shopCart">
       </div>
       <div class="float-button" @click="gotoOrderList">
-        <img style="height: 28px;width: 28px" :src="icon_orderList" >
+        <img style="height: 1.5em;width: 1.5em" :src="icon_orderList" >
       </div>
     </div>
   </section>
@@ -82,11 +82,10 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        this.test();
+        //this.test();
         this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
-
         //this.getUserInfo();
         //this.updateLocation();
       }, 1000);
@@ -298,10 +297,10 @@
       opacity: 0.8;
       background: #27282C;
       margin: 2px;
-      height: 60px;
-      width: 60px;
+      height: 3em;
+      width: 3em;
       text-align: center;
-      line-height: 60px;
+      line-height: 3em;
       border-radius: 50%;
       -moz-border-radius: 50%;
       -webkit-border-radius: 50%;

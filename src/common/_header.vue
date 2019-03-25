@@ -14,7 +14,10 @@
           v-else-if="$route.matched[0].path=='/car/oderList'"
           replace>
         </router-link>
-        <span class="icon-go" @click="$router.go(-1)" v-else></span>
+        <span  class="icon-go" @click="closeWindow"  v-else-if="$route.name==='首页'">
+        </span>
+        <span class="icon-go" @click="$router.go(-1)" v-else>
+        </span>
       </van-col>
       <van-col span="18">
         <slot name="title"></slot>
@@ -62,5 +65,11 @@
 
 
 <script>
-  export default {}
+  export default {
+    methods: {
+      closeWindow() {
+        this.$jsbridge.call("closeWindow");
+      },
+    }
+  }
 </script>
