@@ -48,6 +48,32 @@
       'v-baseline': Baseline,
       'v-footer': Footer
     },
+    watch: {
+      '$route' (to, from) {
+        if (to.name === '活动页') {
+          let id = this.$route.params.id;
+          console.log("活动页:"+id)
+          this.$api.xapi({
+            method: 'get',
+            url: '/aggregation/findById',
+            params: {
+              id: id
+            },
+          }).then((response) => {
+            this.title = response.data.data.result.name;
+            const pako = require('pako');
+            const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
+            this.datas = JSON.parse(jsonString);
+            // this.$log(response.data.data.result)
+            // this.$log(jsonString)
+            this.mBackgroundColor = response.data.data.result.backgroundColor
+          }).catch(function (error) {
+            alert(error)
+          })
+
+        }
+      }
+    },
     data() {
       return {
         datas: {},
@@ -60,6 +86,7 @@
     },
 
     beforeCreate() {
+      this.$log("beforeCreate Enter #################")
       let id = this.$route.params.id;
       this.$api.xapi({
         method: 'get',
