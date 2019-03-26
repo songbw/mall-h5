@@ -180,10 +180,14 @@
             this.result = response.data.data.result;
             this.total = this.result.total;
             this.$log("load from network car list is:" + JSON.stringify(this.result.list));
-            this.result.list.forEach(item => {
-              this.list.push(item);
-              this.getSkuInfoBy(item, userInfo);
-            })
+            if(this.result.list === undefined || this.result.list.length === 0) {
+               this.$store.commit('SET_SELECTED_CARLIST',[]);
+            } else {
+              this.result.list.forEach(item => {
+                this.list.push(item);
+                this.getSkuInfoBy(item, userInfo);
+              })
+            }
             this.loading = false;
             if (this.list.length >= this.total) {
               setTimeout(() => {
