@@ -10,7 +10,6 @@
           :end_callback="countDownE_cb(1)"
           :startTime="PromotionStartTime"
           :endTime="PromotionEndTime"
-          :dayTxt="'天'"
           :secondsTxt="''">
         </v-countdown>
       </div>

@@ -11,10 +11,23 @@
                      :end_callback="countDownE_cb(1)"
                      :startTime="PromotionStartTime"
                      :endTime="PromotionEndTime"
-                     :dayTxt="'天'"
                      :secondsTxt="''">
         </v-countdown>
       </van-cell>
+    </div>
+    <div class="promotionBody">
+      <ul>
+        <li v-for="(k,index) in detail.promotionSkus" :key="index">
+          <div class="goodsCard">
+              <van-col span="8" class="goodsImg">
+                <img v-lazy="k.image">
+              </van-col>
+              <van-col span="16">
+
+              </van-col>
+          </div>
+        </li>
+      </ul>
     </div>
   </section>
 </template>
@@ -50,10 +63,10 @@
       }).then((response) => {
         this.$log(response.data.data.result)
         this.detail = response.data.data.result
-        this.PromotionStartTime =  new Date(this.detail.startDate).getTime()
+        this.PromotionStartTime = new Date(this.detail.startDate).getTime()
         this.PromotionEndTime = new Date(this.detail.endDate).getTime()
-      //  this.$log(this.PromotionStartTime)
-       // this.$log(this.PromotionEndTime)
+        //  this.$log(this.PromotionStartTime)
+        // this.$log(this.PromotionEndTime)
       }).catch(function (error) {
         alert(error)
       })
@@ -79,15 +92,35 @@
   @import "../../../assets/index/style.css";
 
   .promotion {
-    color: black;
-    font-weight: bold;
     .promotionTitle {
+      color: black;
+      font-weight: bold;
       .promotionTag {
         float: left;
       }
+
       .promotionCountDown {
         float: right;
       }
+    }
+
+    .promotionBody {
+      li{
+        border-bottom: 1px solid #f0f0f0;
+        .goodsCard{
+          width: 100%;
+          height: 8em;
+          .goodsImg{
+            height: 100%;
+            text-align: center;
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+        }
+      }
+
     }
   }
 </style>
