@@ -1,9 +1,9 @@
 <template lang="html">
-  <mt-swipe :auto="4000" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
-    <mt-swipe-item v-for="(k,index) in datas.list" :key="index">
+  <van-swipe :autoplay="4000">
+    <van-swipe-item v-for="(k,index) in datas.list" :key="index">
       <img :src="k.imageUrl" @click="onClick(k.targetUrl)">
-    </mt-swipe-item>
-  </mt-swipe>
+    </van-swipe-item>
+  </van-swipe>
 </template>
 
 <script>
@@ -69,9 +69,8 @@
 
 <style lang="less" scoped>
 
-  .mint-swipe {
+  .van-swipe {
     width: 100%;
-    height: 50vw;
 
     a, img {
       display: block;

@@ -18,7 +18,6 @@
   import Swiper from '@/components/detail/swiper.vue'
   import Chose from '@/components/detail/chose.vue'
   import Content from '@/components/detail/content.vue'
-  import Footer from '@/components/detail/footer.vue'
   import Baseline from '@/common/_baseline.vue'
   import Header from '@/common/_header.vue'
   import Action from '@/components/detail/action.vue'
@@ -28,7 +27,6 @@
       'v-swiper': Swiper,
       'v-chose': Chose,
       'v-content': Content,
-      'v-footer': Footer,
       'v-baseline': Baseline,
       'v-header': Header,
       'v-action': Action

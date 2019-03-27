@@ -197,6 +197,7 @@
         img {
           display: block;
           width: 100%;
+          height: 6em;
         }
 
         h2,

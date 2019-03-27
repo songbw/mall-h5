@@ -5,10 +5,8 @@ import router from './router'
 import store from '@/vuex/store.js'   //vuex
 import services from '@/http/api.js'       //http请求
 import less from 'less'
-import Mint from 'mint-ui';    //移动端UI
-import 'mint-ui/lib/style.css'
-//import { JSEncrypt } from 'jsencrypt'
-import jsrsasign from 'jsrsasign'
+
+
 import vueLogger from "vue-logger";
 import infiniteScroll from 'vue-infinite-scroll'
 import LyTab from 'ly-tab'
@@ -17,7 +15,7 @@ Vue.use(LyTab)
 
 Vue.use(infiniteScroll)
 
-Vue.use(Mint);
+//Vue.use(Mint);
 
 import {
   Button,
@@ -51,7 +49,9 @@ import {
   Field,
   Step,
   Steps,
-  Lazyload
+  Lazyload,
+  Swipe,
+  SwipeItem
 } from 'vant';
 
 Vue.use(Button)
@@ -84,7 +84,9 @@ Vue.use(Button)
   .use(Search)
   .use(Field)
   .use(Step)
-  .use(Steps);
+  .use(Steps)
+  .use(Swipe)
+  .use(SwipeItem);
 
 Vue.use(Lazyload, {
   preLoad: 1,
@@ -94,57 +96,7 @@ Vue.use(Lazyload, {
 })
 
 
-/*function jsonURLParams(json,reverse){
-  // 创建一个空数组
-  let jsonArr = [];
-  // 往空数组里面导入json对象
-  for(let i in json){
-    let obj = {}
-    obj[i] = json[i];
-    jsonArr.push(obj);
-  }
-  // 数组长度小于2  或 不是json格式数据
-  if(jsonArr.length < 2 || typeof jsonArr[0] !== "object") return jsonArr;
-  // 数字类型排序
-  if(typeof getKey(jsonArr[0]) === "number") {
-    jsonArr.sort(function(x, y) { return getKey(x) - getKey(y)});
-  }
-  // 字符串类型排序
-  if(typeof getKey(jsonArr[0]) === "string") {
-    // 按字符编码的顺序来排序
-    jsonArr.sort(function(x, y) {
-      let lenX = getKey(x).length,lenY = getKey(y).length,len = (lenX <= lenY) ? lenX : lenY;
-      for (let i = 0; i < len; i++) {
-        if (getKey(x).charCodeAt(i) != getKey(y).charCodeAt(i)) {
-          return getKey(x).charCodeAt(i) - getKey(y).charCodeAt(i);
-        }
-        if (i == len - 1) {
-          return getKey(x).length - getKey(y).length;
-        }
-      }
-    }
-  }
-  // 倒序
-  if(reverse) {
-    jsonArr.reverse();
-  }
-  // 创建一个空字符串
-  let jsonString = "";
-  for(let i in jsonArr){
-    if(i < jsonArr.length - 1){
-      jsonString += getKey(jsonArr[i]) + "=" + jsonArr[i][getKey(jsonArr[i])] + "&"
-    }else{
-      jsonString += getKey(jsonArr[i]) + "=" + jsonArr[i][getKey(jsonArr[i])]
-    }
-  }
-  // 封装函数获取json的key
-  function getKey(json){
-    for(let i in json){
-      return i;
-    }
-  }
-  return jsonString;
-}*/
+
 ///////////////////////////////////////////////////////////////////////
 Vue.config.productionTip = false
 //增加全局Service变量

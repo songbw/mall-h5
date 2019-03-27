@@ -6,8 +6,8 @@
       </ly-tab>
       <div :style="{ marginTop: marginTop }">
         <div v-for="(category,index) in datas.list" :title=category.title :key="index" class="content">
-          <ul class="sectionGoods-list">
-            <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index" :style="datas.settings.countPerLine==3?'width:33%':'width:50%'">
+          <ul :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
+            <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath">
               <p>{{k.intro}}</p>
               <span :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
@@ -167,7 +167,7 @@
     overflow: hidden;
     .pt();
 
-    .sectionGoods-list {
+    .sectionGoods-list2 {
       width: 100%;
       display: -ms-flex;
       display: -webkit-box;
@@ -186,6 +186,63 @@
         padding: 0 3vw;
         img {
           width: 99%;
+          height: 10em;
+          display: inline-block;
+        }
+
+        > p {
+          .fz(font-size,23);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 2;
+          word-break:break-all;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          margin-top: 5px;
+          color: #323233;
+        }
+
+        > h3 {
+          padding-top: 3vw;
+          .fz(font-size, 40);
+        }
+
+        > span {
+          display: inline-block;
+          align-content: center;
+          color: #ff4444;
+          padding: 2vw 1.2vw;
+          .fz(font-size, 30);
+          font-weight: bold;
+        }
+      }
+    }
+
+    .sectionGoods-list3 {
+      width: 100%;
+      display: -ms-flex;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: flex-start;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      overflow: hidden;
+      li {
+        width: 33%;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        padding: 0 3vw;
+        img {
+          width: 99%;
+          height: 6.66em;
           display: inline-block;
         }
 

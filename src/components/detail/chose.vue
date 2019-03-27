@@ -36,9 +36,6 @@
 
 <script>
   import {
-    MessageBox
-  } from 'mint-ui';
-  import {
     mapState
   } from 'vuex'
 

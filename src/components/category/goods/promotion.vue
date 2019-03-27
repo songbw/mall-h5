@@ -19,11 +19,24 @@
       <ul>
         <li v-for="(k,index) in detail.promotionSkus" :key="index">
           <div class="goodsCard">
-              <van-col span="8" class="goodsImg">
+              <van-col span="8" class="cardImg">
                 <img v-lazy="k.image">
               </van-col>
-              <van-col span="16">
+              <van-col span="16" class="cardInfo">
+                <div class="cardTitle">
+                  <span></span>
+                </div>
+                <div class="cardTag">
+                  <span></span>
+                </div>
+                <div class="cardFooter">
+                  <div class="priceBox">
 
+                  </div>
+                  <div class="actionBox">
+
+                  </div>
+                </div>
               </van-col>
           </div>
         </li>
@@ -110,13 +123,18 @@
         .goodsCard{
           width: 100%;
           height: 8em;
-          .goodsImg{
+          .cardImg{
             height: 100%;
             text-align: center;
             img {
               width: 100%;
               height: 100%;
             }
+          }
+          .cardInfo{
+            background-color: #26a2ff;
+            height: 100%;
+
           }
         }
       }

@@ -1,11 +1,11 @@
 <template lang="html">
   <div class="swiper">
     <span></span>
-    <mt-swipe :auto="4000">
-      <mt-swipe-item v-for="(k,index) in swiperData" :key="index">
+    <van-swipe :autoplay="4000">
+      <van-swipe-item v-for="(k,index) in swiperData" :key="index">
         <img :src="k.imgPath">
-      </mt-swipe-item>
-    </mt-swipe>
+      </van-swipe-item>
+    </van-swipe>
   </div>
 </template>
 
@@ -30,9 +30,8 @@
     width: 100%;
     position: relative;
 
-    .mint-swipe {
+    .van-swipe {
       width: 100%;
-      height: 100vw;
 
       img {
         display: block;
