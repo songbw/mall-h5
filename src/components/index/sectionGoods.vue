@@ -203,8 +203,7 @@
           -webkit-box-sizing: border-box;
           box-sizing: border-box;
           margin-top: 5px;
-          font-weight: bold;
-          color: #000000;
+          color: #323233;
         }
 
         > h3 {

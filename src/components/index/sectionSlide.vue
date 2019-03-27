@@ -216,14 +216,12 @@
         p.sectionSlide-list-intro {
           padding-top: 1vw;
           .fz(font-size, 23);
-          color: #000000;
-          font-weight: bold;
+          color: #323233;
         }
 
         p.sectionSlide-list-origin-price {
           color: #707070;
           .fz(font-size, 25);
-          font-weight: bold;
           text-decoration:line-through
         }
         p.sectionSlide-list-sales-price {
