@@ -143,6 +143,7 @@
         padding: 0 3vw;
         display: flex;
         flex-flow: column;
+        height: 7em;
 
         > a {
           display: block;
@@ -152,6 +153,7 @@
           img {
             display: block;
             width: 100%;
+            height: 4em;
           }
 
           p {
