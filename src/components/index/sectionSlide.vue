@@ -1,6 +1,6 @@
 <template>
   <section class="sectionSlide" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
-    <van-cell v-if="datas.settings.title.textValue.length">
+    <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()">
       <h1 slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
         {{datas.settings.title.textValue}}
       </h1>
@@ -16,7 +16,7 @@
       </div>
     </van-cell>
     <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
-      <img v-lazy="datas.settings.title.imageUrl" @click="onBannerClick(datas.settings.title.targetUrl)">
+      <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
     </div>
     <div class="sectionSlide-list">
       <ul>
@@ -25,9 +25,19 @@
           <p class="sectionSlide-list-intro">
             {{k.intro}}
           </p>
-          <p class="sectionSlide-list-price">
-            ￥{{k.price}}
-          </p>
+          <div v-if="k.discount != undefined">
+            <p class="sectionSlide-list-sales-price">
+              ￥{{k.price-k.discount}}
+            </p>
+            <p class="sectionSlide-list-origin-price">
+              ￥{{k.price}}
+            </p>
+          </div>
+          <div v-else>
+            <p class="sectionSlide-list-sales-price">
+              ￥{{k.price}}
+            </p>
+          </div>
         </li>
       </ul>
     </div>
@@ -54,13 +64,14 @@
       return {
         PromotionStartTime: 0,
         PromotionEndTime: 0,
-        currentTime: 0
+        promotionActivityId: 0
       }
     },
     created() {
       if (this.datas.settings.title.hasPromotionActivity) {
         this.PromotionStartTime =new Date(this.datas.settings.title.promotionActivityStartDate).getTime() // new Date('2019/03/27 10:10:10').getTime()
         this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime() //new Date('2019/03/28 20:10:10').getTime()
+        this.promotionActivityId = this.datas.settings.title.promotionActivityId
       }
     },
     methods: {
@@ -75,6 +86,9 @@
       },
       See(e) {
         window.location.href = e
+      },
+      gotoPromotionPage(promotionId) {
+
       },
       gotoGoodsPage(skuid) {
         try {
@@ -95,7 +109,8 @@
 
         }
       },
-      onBannerClick(targetId) {
+      gotoTargetUrl() {
+        let targetId =  this.datas.settings.title.targetUrl
         if (targetId.startsWith("aggregation://")) {
           let id = targetId.substr(14);
           this.$router.push({path: '/index/' + id});
@@ -109,6 +124,15 @@
             try {
               if (paths[1] != null)
                 this.gotoGoodsPage(paths[1]);
+            } catch (e) {
+            }
+          } else if( paths[0] === 'promotion') {
+            try {
+              if (paths[1] != null) {
+                //this.gotoGoodsPage(paths[1]);
+                //this.$log("promotion:"+paths[1])
+                this.gotoPromotionPage(paths[1]);
+              }
             } catch (e) {
             }
           }
@@ -196,11 +220,18 @@
           font-weight: bold;
         }
 
-        p.sectionSlide-list-price {
+        p.sectionSlide-list-origin-price {
+          color: #707070;
+          .fz(font-size, 25);
+          font-weight: bold;
+          text-decoration:line-through
+        }
+        p.sectionSlide-list-sales-price {
           color: #ff4444;
           .fz(font-size, 30);
           font-weight: bold;
         }
+
       }
     }
   }
