@@ -21,6 +21,8 @@ const Address = resolve => require(['@/components/car/pay/address.vue'], resolve
 const AddressList = resolve => require(['@/components/car/pay/addressList.vue'], resolve)
 const Login = resolve => require(['@/views/login.vue'], resolve)
 const Casher = resolve => require(['@/components/car/pay/casher.vue'], resolve)
+const Promotion = resolve => require(['@/components/category/goods/promotion.vue'], resolve)
+
 
 export default new Router({
   routes: [
@@ -45,7 +47,10 @@ export default new Router({
       component: Category,
       children: [{
         path: '/category/:tab',
-        component: CategoryMain
+        component: CategoryMain,
+        meta: {
+          keepAlive: true, //此组件需要被缓存
+        }
       },]
     },
     {
@@ -126,6 +131,11 @@ export default new Router({
       path: '/login',
       name: '登录页',
       component: Login
-    }
+    },
+    {
+      path: '/category/goods/promotion/:id',
+      name: '商品促销列表',
+      component: Promotion,
+    },
   ]
 })

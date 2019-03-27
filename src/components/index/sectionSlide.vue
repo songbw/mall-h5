@@ -88,7 +88,7 @@
         window.location.href = e
       },
       gotoPromotionPage(promotionId) {
-
+        this.$router.push({path: '/category/goods/promotion/' + promotionId});
       },
       gotoGoodsPage(skuid) {
         try {
@@ -229,7 +229,6 @@
           .fz(font-size, 30);
           font-weight: bold;
         }
-
       }
     }
   }
