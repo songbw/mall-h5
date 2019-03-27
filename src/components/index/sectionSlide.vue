@@ -4,7 +4,7 @@
       <h1 slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
         {{datas.settings.title.textValue}}
       </h1>
-      <div v-if="datas.settings.title.hasPromotionActivity">
+      <div v-if="datas.settings.title.hasPromotionActivity" class="countdownBox">
         <v-countdown
           :start_callback="countDownS_cb(1)"
           :end_callback="countDownE_cb(1)"
@@ -38,8 +38,6 @@
   import {Lazyload} from 'mint-ui';
   import CountDown from 'vue2-countdown'
 
-
-
   export default {
     components: {
       "v-countdown": CountDown
@@ -61,14 +59,8 @@
     },
     created() {
       if (this.datas.settings.title.hasPromotionActivity) {
-        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate).getTime()
-        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime()
-        this.currentTime = new Date().getTime()
-       //this.PromotionEndTime = this.currentTime+1
-        this.$log(this.PromotionStartTime)
-        this.$log(this.PromotionEndTime)
-       // this.$log(this.currentTime)
-
+        this.PromotionStartTime =new Date(this.datas.settings.title.promotionActivityStartDate).getTime() // new Date('2019/03/27 10:10:10').getTime()
+        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime() //new Date('2019/03/28 20:10:10').getTime()
       }
     },
     methods: {
@@ -221,6 +213,17 @@
       display: block;
       width: 100%
     }
+  }
+  .countdownBox{
+    color: black;
+    font-weight: bold;
+    width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    word-break:break-all;
   }
 
 </style>
