@@ -86,7 +86,6 @@
     },
 
     beforeCreate() {
-      this.$log("beforeCreate Enter #################")
       let id = this.$route.params.id;
       this.$api.xapi({
         method: 'get',
@@ -100,7 +99,7 @@
         const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         this.datas = JSON.parse(jsonString);
         // this.$log(response.data.data.result)
-        // this.$log(jsonString)
+        this.$log(this.datas)
         this.mBackgroundColor = response.data.data.result.backgroundColor
       }).catch(function (error) {
         alert(error)

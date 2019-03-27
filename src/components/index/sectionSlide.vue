@@ -1,9 +1,19 @@
 <template>
   <section class="sectionSlide" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
-    <van-cell v-if="datas.settings.title.textValue.length">>
+    <van-cell v-if="datas.settings.title.textValue.length">
       <h1 slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
         {{datas.settings.title.textValue}}
       </h1>
+      <div v-if="datas.settings.title.hasPromotionActivity">
+        <v-countdown
+          :start_callback="countDownS_cb(1)"
+          :end_callback="countDownE_cb(1)"
+          :startTime="PromotionStartTime"
+          :endTime="PromotionEndTime"
+          :dayTxt="'天'"
+          :secondsTxt="''">
+        </v-countdown>
+      </div>
     </van-cell>
     <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
       <img v-lazy="datas.settings.title.imageUrl" @click="onBannerClick(datas.settings.title.targetUrl)">
@@ -26,8 +36,14 @@
 
 <script>
   import {Lazyload} from 'mint-ui';
+  import CountDown from 'vue2-countdown'
+
+
 
   export default {
+    components: {
+      "v-countdown": CountDown
+    },
     props: {
       datas: {
         type: Object,
@@ -36,7 +52,32 @@
         }
       }
     },
+    data() {
+      return {
+        PromotionStartTime: 0,
+        PromotionEndTime: 0,
+        currentTime: 0
+      }
+    },
+    created() {
+      if (this.datas.settings.title.hasPromotionActivity) {
+        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate).getTime()
+        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime()
+        this.currentTime = new Date().getTime()
+       //this.PromotionEndTime = this.currentTime+1
+        this.$log(this.PromotionStartTime)
+        this.$log(this.PromotionEndTime)
+       // this.$log(this.currentTime)
+
+      }
+    },
     methods: {
+      countDownS_cb: function (x) {
+        //console.log(x)
+      },
+      countDownE_cb: function (x) {
+        //console.log(x)
+      },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
