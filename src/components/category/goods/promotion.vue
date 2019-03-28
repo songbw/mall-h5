@@ -79,6 +79,8 @@
         this.detail = response.data.data.result
         this.PromotionStartTime = new Date(this.detail.startDate).getTime()
         this.PromotionEndTime = new Date(this.detail.endDate).getTime()
+       // this.PromotionStartTime = new Date('2019/03/28 10:10:10').getTime()
+        //this.PromotionEndTime = new Date('2019/03/28 20:10:10').getTime()
         //  this.$log(this.PromotionStartTime)
         // this.$log(this.PromotionEndTime)
       }).catch(function (error) {
