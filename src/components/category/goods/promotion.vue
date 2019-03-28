@@ -35,7 +35,7 @@
                     <div class="originPrice">￥{{k.price}}</div>
                   </van-col>
                   <van-col span="12" class="actionBox">
-                    <van-button type="primary" size="small">立即抢购</van-button>
+                    <van-button type="primary" size="small" @click="onBuyBtnClick(k)">立即抢购</van-button>
                   </van-col>
                 </div>
               </van-col>
@@ -79,10 +79,6 @@
         this.detail = response.data.data.result
         this.PromotionStartTime = new Date(this.detail.startDate).getTime()
         this.PromotionEndTime = new Date(this.detail.endDate).getTime()
-       // this.PromotionStartTime = new Date('2019/03/28 10:10:10').getTime()
-        //this.PromotionEndTime = new Date('2019/03/28 20:10:10').getTime()
-        //  this.$log(this.PromotionStartTime)
-        // this.$log(this.PromotionEndTime)
       }).catch(function (error) {
         alert(error)
       })
@@ -97,6 +93,29 @@
       countDownE_cb: function (x) {
         //console.log(x)
       },
+      updateCurrentGoods(goods) {
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
+      },
+      onBuyBtnClick(k) {
+        this.$log("onBuyBtnClick Enter")
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            url: '/prod',
+            params: {
+              id: k.skuid,
+            }
+          }).then((res) => {
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
+      }
     }
   }
 </script>
