@@ -11,6 +11,10 @@ import vueLogger from "vue-logger";
 import infiniteScroll from 'vue-infinite-scroll'
 import LyTab from 'ly-tab'
 
+import animated from 'animate.css'
+
+Vue.use(animated)
+
 Vue.use(LyTab)
 
 Vue.use(infiniteScroll)
