@@ -24,18 +24,19 @@
               </van-col>
               <van-col span="16" class="cardInfo">
                 <div class="cardTitle">
-                  <span></span>
+                  <span>{{k.name}}</span>
                 </div>
                 <div class="cardTag">
                   <span></span>
                 </div>
                 <div class="cardFooter">
-                  <div class="priceBox">
-
-                  </div>
-                  <div class="actionBox">
-
-                  </div>
+                  <van-col span="12" class="priceBox">
+                    <div class="salePrice">￥{{k.price-k.discount}} </div>
+                    <div class="originPrice">￥{{k.price}}</div>
+                  </van-col>
+                  <van-col span="12" class="actionBox">
+                    <van-button type="primary" size="small">立即抢购</van-button>
+                  </van-col>
                 </div>
               </van-col>
           </div>
@@ -132,8 +133,45 @@
             }
           }
           .cardInfo{
-            background-color: #26a2ff;
             height: 100%;
+            padding: 15px;
+            .cardTitle{
+              .fz(font-size,30);
+              font-weight: bold;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              word-break:break-all;
+            }
+            .cardTag{
+              height: 15%;
+            }
+            .cardFooter{
+              height: 50%;
+              .priceBox{
+                height: 100%;
+                text-align: left;
+                line-height: 1.5em;
+                padding: 10px;
+                .salePrice{
+                   color: #ff4444;
+                  .fz(font-size,32);
+                  font-weight: bold;
+                }
+                .originPrice{
+                  color: #707070;
+                  .fz(font-size, 25);
+                  text-decoration:line-through
+                }
+              }
+              .actionBox{
+                height: 100%;
+                text-align: center;
+                line-height: 3em;
+              }
+            }
 
           }
         }
