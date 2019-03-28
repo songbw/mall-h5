@@ -44,7 +44,6 @@
 </template>
 
 <script>
-  import {Lazyload} from 'mint-ui';
   import CountDown from '@/common/_vue2-countdown.vue'
 
   export default {

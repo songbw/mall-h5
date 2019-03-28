@@ -30,8 +30,6 @@
 </template>
 
 <script>
-  import {Lazyload} from 'mint-ui';
-
   export default {
     props: ['datas', 'mBackgroundColor'],
     methods: {

@@ -19,8 +19,6 @@ Vue.use(LyTab)
 
 Vue.use(infiniteScroll)
 
-//Vue.use(Mint);
-
 import {
   Button,
   Tab,
