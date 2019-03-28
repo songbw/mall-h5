@@ -43,7 +43,7 @@
       </van-list>
     </div>
 
-    <v-footer v-if="showFooter"/>
+    <v-footer />
   </div>
 </template>
 
@@ -104,14 +104,13 @@
         selStateInCarList: [],
         nothingInCar_bg: require('@/assets/images/cart.svg'),
         launchedLoading: false,
-        showFooter:false
       }
     },
 
-    mounted() {
+    created() {
       setTimeout(() => {
-        this.showFooter = true;
-        if(!this.launchedLoading) {
+        this.$log("setTimeout launchedLoading:"+this.launchedLoading)
+        if(!this.launchedLoading ) {
           this.onLoad()
         }
       }, 1000);
@@ -179,6 +178,7 @@
 
       loadCartListBy(user) {
         let userInfo = JSON.parse(user);
+
         if (this.total == -1 || this.total > this.list.length) {
           let options = {
             "openId": userInfo.userId,
@@ -210,12 +210,17 @@
             console.log(error)
             this.finished = true;
           })
+        } else{
+          //load finished
+          this.loading = false;
+          this.finished = true;
         }
       },
 
       onLoad() {
         this.$log("onLoad Enter ###############")
         this.launchedLoading = true;
+        this.$log("launchedLoading:"+this.launchedLoading)
         // let userInfo=this.$jsbridge.call("getUserInfo");
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
@@ -310,9 +315,8 @@
 
   .car {
     width: 100%;
-    margin-bottom: 18vw;
-    background-color: #f0f0f0;
-
+   // margin-bottom: 18vw;
+    height: 100%;
     .checkBox-con {
       padding: 0.6rem;
     }
@@ -354,6 +358,7 @@
     }
 
     .cartBody{
+      margin-bottom: 4.2em;
       .van-list {
         background-color: #ffffff;
       }
@@ -362,7 +367,6 @@
 
     .carlist {
       background-color: #f0f0f0;
-
       .van-swipe-cell {
         margin-bottom: 5px;
       }
@@ -377,6 +381,7 @@
         color: #ffffff
       }
     }
+
 
   }
 </style>
