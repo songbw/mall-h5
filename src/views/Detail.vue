@@ -89,6 +89,7 @@
   .detail {
     width: 100%;
     padding-bottom: 14vw;
+    height: 100%;
 
     .price-title {
       text-align: left;

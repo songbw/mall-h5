@@ -1,39 +1,40 @@
 <template lang="html">
   <!-- 在首页父组件发送http请求,后将数据通过props传递给子组件,可减少请求次数,减少服务器压力 -->
   <section>
-    <div class="index" :style="{'background-color': mBackgroundColor}">
-<!--      <v-header/>-->
-      <v-header class="header">
-        <h1 slot="title">商城</h1>
-        <router-link :to="{name:'搜索页'}" slot="right">
-          <van-icon name="search" size="1.2em"/>
-        </router-link>
-      </v-header>
-      <div style="padding-left: 5px;padding-right: 5px">
-        <li v-for="item in datas" style="list-style: none">
-          <v-swiper v-if="item.type==='0'" :datas="item.data"/>
-          <v-service v-else-if="item.type==='1'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
-          <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
-        </li>
+    <v-header class="header">
+      <h1 slot="title">商城</h1>
+      <router-link :to="{name:'搜索页'}" slot="right">
+        <van-icon name="search" size="1.2em"/>
+      </router-link>
+    </v-header>
+    <v-loading v-if="pageloading"></v-loading>
+    <div v-else>
+      <div class="index" :style="{'background-color': mBackgroundColor}">
+        <div style="padding-left: 5px;padding-right: 5px">
+          <li v-for="item in datas" style="list-style: none">
+            <v-swiper v-if="item.type==='0'" :datas="item.data"/>
+            <v-service v-else-if="item.type==='1'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
+            <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
+          </li>
+        </div>
+        <!--        <v-baseline/>-->
       </div>
-      <!--        <v-baseline/>-->
-    </div>
-    <div class="float-button-group" v-if="showFloatButton">
-      <div class="float-button"  @click="gotoShoppingCart">
-        <img style="height: 1.5em;width: 1.5em" :src="icon_shopCart">
-      </div>
-      <div class="float-button" @click="gotoOrderList">
-        <img style="height: 1.5em;width: 1.5em" :src="icon_orderList" >
+      <div class="float-button-group" v-if="showFloatButton">
+        <div class="float-button" @click="gotoShoppingCart">
+          <img style="height: 1.5em;width: 1.5em" :src="icon_shopCart">
+        </div>
+        <div class="float-button" @click="gotoOrderList">
+          <img style="height: 1.5em;width: 1.5em" :src="icon_orderList">
+        </div>
       </div>
     </div>
   </section>
-
 </template>
 
 <script>
-//  import Header from '@/components/index/header.vue'
+  //  import Header from '@/components/index/header.vue'
   import Header from '@/common/_header.vue'
   import Swiper from '@/components/index/swiper.vue'
   import sectionService from '@/components/index/sectionService.vue'
@@ -41,6 +42,7 @@
   import sectionSlide from '@/components/index/sectionSlide.vue'
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import Baseline from '@/common/_baseline.vue'
+  import Loading from '@/common/_loading.vue'
 
   export default {
     components: {
@@ -50,7 +52,8 @@
       'v-sectionSquared': sectionSquared,
       'v-sectionSlide': sectionSlide,
       'v-sectionGoods': sectionGoods,
-      'v-baseline': Baseline
+      'v-baseline': Baseline,
+      'v-loading': Loading
     },
     data() {
       return {
@@ -59,12 +62,14 @@
         mBackgroundColor: '#FFFFFF',
         icon_orderList: require('@/assets/images/icon_order.png'),
         icon_shopCart: require('@/assets/images/icon_shopping_cart.png'),
-        showFloatButton: false
+        showFloatButton: false,
+        pageloading: true
       }
     },
 
     beforeCreate() {
       let that = this;
+      this.pageloading = true;
       this.$api.xapi({
         method: 'get',
         url: '/aggregation/findHomePage'
@@ -74,9 +79,11 @@
         this.datas = JSON.parse(jsonString);
         this.$log(this.datas);
         this.mBackgroundColor = response.data.data.result.backgroundColor
+        this.pageloading = fase;
       }).catch(function (error) {
         //alert(error)
         that.$log(error)
+        that.pageloading = false;
       })
     },
 
