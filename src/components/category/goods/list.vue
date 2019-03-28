@@ -42,6 +42,7 @@
         loading: false,
         finished: false,
         iconAdd2car: require('@/assets/images/addtoCar.png'),
+        launchedLoading: false
       }
     },
 
@@ -49,11 +50,19 @@
       'v-header': Header
     },
 
+    mounted() {
+      setTimeout(() => {
+        if(!this.launchedLoading) {
+          this.onLoad()
+        }
+      }, 1000);
+    },
+
     methods: {
       onLoad() {
         let category = this.$route.query.category;
         let search = this.$route.query.search;
-
+        this.launchedLoading = true
         if (category != null && category.length > 0) {
           if (this.total == -1 || this.total > this.list.length) {
             let options = {

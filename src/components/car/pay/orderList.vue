@@ -53,7 +53,6 @@
             </li>
           </div>
         </van-list>
-
       </van-tab>
     </van-tabs>
   </div>
@@ -72,6 +71,7 @@
         active: 0,
         swipeThreshold: 5,
         no_orderList_bg: require('@/assets/images/emptyBox.png'),
+        launchedLoading: false,
         orderTypes: [
           {
             "title": "全部",
@@ -120,6 +120,14 @@
           },
         ]
       }
+    },
+
+    mounted() {
+      setTimeout(() => {
+        if(!this.launchedLoading) {
+          this.onLoad(this.active)
+        }
+      }, 1000);
     },
 
     methods: {
@@ -296,6 +304,7 @@
       onLoad(index) {
         this.$log("onLoad is:" + index);
         let that = this;
+        that.launchedLoading = true;
         let userInfo = this.$store.state.appconf.userInfo;
         //  that.$log("userInfo:"+userInfo)
         if (that.isUserEmpty(userInfo)) {

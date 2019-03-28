@@ -20,7 +20,7 @@
       </div>
       <!--        <v-baseline/>-->
     </div>
-    <div class="float-button-group">
+    <div class="float-button-group" v-if="showFloatButton">
       <div class="float-button"  @click="gotoShoppingCart">
         <img style="height: 1.5em;width: 1.5em" :src="icon_shopCart">
       </div>
@@ -59,6 +59,7 @@
         mBackgroundColor: '#FFFFFF',
         icon_orderList: require('@/assets/images/icon_order.png'),
         icon_shopCart: require('@/assets/images/icon_shopping_cart.png'),
+        showFloatButton: false
       }
     },
 
@@ -86,6 +87,7 @@
         this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
+        this.showFloatButton = true;
         //this.getUserInfo();
         //this.updateLocation();
       }, 1000);

@@ -4,45 +4,46 @@
     <v-header>
       <h1 slot="title">购物车</h1>
     </v-header>
-    <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
-      <div slot="loading">
-      </div>
-      <div class="nothingInCar" v-cloak v-if="finished && this.$store.state.appconf.selStateInCarList.length === 0">
-        <img :src="nothingInCar_bg"/>
-        <span>购物车是空的，美好的生活需要您的填充！</span>
-      </div>
-
-      <div v-else>
-        <div class="carlist">
-          <van-swipe-cell :right-width="60"   v-for="(k,index) in this.selStateInCarList" :key="index">
-            <div style="display: flex;flex-direction: row;justify-content: left;background-color: #ffffff">
-              <div style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
-                <van-checkbox
-                  v-model="k.choose"
-                  class="checkedBox"
-                  @change="singleChecked(index,k)">
-                </van-checkbox>
-              </div>
-              <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                <van-card
-                  :price="k.price"
-                  :title="k.desc"
-                  :thumb="k.image">
-                  <div slot="footer">
-                    <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
-                  </div>
-                </van-card>
-              </div>
-            </div>
-            <div slot="right" @click=onDeleteBtnClick(k,index)  class="rightSlot">
-              <span style="margin-left: 1em">删除</span>
-            </div>
-          </van-swipe-cell>
+    <div class="cartBody">
+      <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
+        <div class="nothingInCar" v-cloak v-if="finished && this.$store.state.appconf.selStateInCarList.length === 0">
+          <img :src="nothingInCar_bg"/>
+          <span>购物车是空的，美好的生活需要您的填充！</span>
         </div>
 
-      </div>
-    </van-list>
-    <v-footer/>
+        <div v-else>
+          <div class="carlist">
+            <van-swipe-cell :right-width="60" v-for="(k,index) in this.selStateInCarList" :key="index">
+              <div style="display: flex;flex-direction: row;justify-content: left;background-color: #ffffff">
+                <div style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                  <van-checkbox
+                    v-model="k.choose"
+                    class="checkedBox"
+                    @change="singleChecked(index,k)">
+                  </van-checkbox>
+                </div>
+                <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
+                  <van-card
+                    :price="k.price"
+                    :title="k.desc"
+                    :thumb="k.image">
+                    <div slot="footer">
+                      <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+                    </div>
+                  </van-card>
+                </div>
+              </div>
+              <div slot="right" @click=onDeleteBtnClick(k,index) class="rightSlot">
+                <span style="margin-left: 1em">删除</span>
+              </div>
+            </van-swipe-cell>
+          </div>
+
+        </div>
+      </van-list>
+    </div>
+
+    <v-footer v-if="showFooter"/>
   </div>
 </template>
 
@@ -102,7 +103,18 @@
         finished: false,
         selStateInCarList: [],
         nothingInCar_bg: require('@/assets/images/cart.svg'),
+        launchedLoading: false,
+        showFooter:false
       }
+    },
+
+    mounted() {
+      setTimeout(() => {
+        this.showFooter = true;
+        if(!this.launchedLoading) {
+          this.onLoad()
+        }
+      }, 1000);
     },
 
     methods: {
@@ -180,8 +192,8 @@
             this.result = response.data.data.result;
             this.total = this.result.total;
             this.$log("load from network car list is:" + JSON.stringify(this.result.list));
-            if(this.result.list === undefined || this.result.list.length === 0) {
-               this.$store.commit('SET_SELECTED_CARLIST',[]);
+            if (this.result.list === undefined || this.result.list.length === 0) {
+              this.$store.commit('SET_SELECTED_CARLIST', []);
             } else {
               this.result.list.forEach(item => {
                 this.list.push(item);
@@ -202,6 +214,8 @@
       },
 
       onLoad() {
+        this.$log("onLoad Enter ###############")
+        this.launchedLoading = true;
         // let userInfo=this.$jsbridge.call("getUserInfo");
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
@@ -339,22 +353,26 @@
       display: none !important;
     }
 
-    .van-list {
-      background-color: #ffffff;
+    .cartBody{
+      .van-list {
+        background-color: #ffffff;
+      }
     }
 
-    .carlist{
+
+    .carlist {
       background-color: #f0f0f0;
-      .van-swipe-cell{
+
+      .van-swipe-cell {
         margin-bottom: 5px;
       }
 
-      .rightSlot{
+      .rightSlot {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        width:60px;
-        height:100%;
+        width: 60px;
+        height: 100%;
         background-color: #ff4444;
         color: #ffffff
       }

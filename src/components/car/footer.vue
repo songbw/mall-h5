@@ -1,6 +1,5 @@
 <template lang="html">
   <footer class="footer">
-
     <div class="footer-result">
       <p>共{{count}}件 金额：</p>
       <p><span>{{allpay}} </span>元</p>
@@ -12,7 +11,6 @@
       去结算
     </a>
   </footer>
-
 </template>
 
 <script>

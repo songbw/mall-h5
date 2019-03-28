@@ -15,7 +15,7 @@
       </div>
       <!--    <v-baseline/>-->
     </div>
-    <div class="float-button-group">
+    <div class="float-button-group" v-if="showFloatButton">
       <div class="float-button" @click="gotoShoppingCart">
         <img style="height: 1.5em;width: 1.5em" :src="icon_shopCart">
       </div>
@@ -82,6 +82,7 @@
         mBackgroundColor: '#FFFFFF',
         icon_orderList: require('@/assets/images/icon_order.png'),
         icon_shopCart: require('@/assets/images/icon_shopping_cart.png'),
+        showFloatButton: false,
       }
     },
 
@@ -104,6 +105,12 @@
       }).catch(function (error) {
         alert(error)
       })
+    },
+
+    created() {
+      setTimeout(() => {
+        this.showFloatButton = true;
+      }, 1000);
     },
 
     methods: {

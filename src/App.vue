@@ -1,12 +1,14 @@
 <template>
   <div id="app">
     <!-- <v-loading v-show="fetchLoading"></v-loading> -->
-    <transition enter-active-class="animated fadeInRight" leave-active-class="animated fadeOutLeft">
+<!--    <transition enter-active-class="animated fadeInRight" leave-active-class="animated fadeOutLeft">-->
+    <transition enter-active-class="animated fadeInRight">
       <keep-alive>
         <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
     </transition>
-    <transition enter-active-class="animated fadeInRight" leave-active-class="animated fadeOutLeft">
+    <transition enter-active-class="animated fadeInRight">
+<!--      <transition enter-active-class="animated fadeInRight" leave-active-class="animated fadeOutLeft">-->
       <router-view v-if="!$route.meta.keepAlive"></router-view>
     </transition>
   </div>
