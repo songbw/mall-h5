@@ -1,6 +1,5 @@
 <template lang="html">
   <div class="car">
-    <!-- slot分发内容 让子组件混合父组件的内容 -->
     <v-header>
       <h1 slot="title">购物车</h1>
     </v-header>
