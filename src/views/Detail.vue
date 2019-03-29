@@ -5,7 +5,30 @@
     </v-header>
     <v-swiper :swiperData=swiperUrls></v-swiper>
     <div>
-      <p class="price-title">￥{{this.goods.price}}</p>
+      <div class="promotion-price" v-if="hasPromotion">
+        <van-col span="8" class="priceBox">
+          <span class="sales-price">
+            ￥{{this.goods.price}}
+          </span>
+          <div>
+            <span class="origin-price-title">原价</span>
+            <span class="origin-price">
+            ￥{{this.goods.price}}
+          </span>
+          </div>
+
+        </van-col>
+        <van-col span="16" class="promotionBox">
+          <v-countdown
+            :start_callback="countDownS_cb(1)"
+            :end_callback="countDownE_cb(1)"
+            :startTime="PromotionStartTime"
+            :endTime="PromotionEndTime"
+            :secondsTxt="''">
+          </v-countdown>
+        </van-col>
+      </div>
+      <p class="price-title" v-else>￥{{this.goods.price}}</p>
       <p class="goods-disciption">{{this.goods.brand}} {{this.goods.name}}</p>
     </div>
     <v-content :contentData=contentUrls></v-content>
@@ -21,6 +44,7 @@
   import Baseline from '@/common/_baseline.vue'
   import Header from '@/common/_header.vue'
   import Action from '@/components/detail/action.vue'
+  import CountDown from '@/common/_vue2-countdown.vue'
 
   export default {
     components: {
@@ -29,7 +53,8 @@
       'v-content': Content,
       'v-baseline': Baseline,
       'v-header': Header,
-      'v-action': Action
+      'v-action': Action,
+      'v-countdown': CountDown
     },
     beforeRouteEnter(to, from, next) {
       // chrome
@@ -68,16 +93,28 @@
           }
         }
       }
+      this.PromotionStartTime = new Date('2019/03/28 10:10:10').getTime()
+      this.PromotionEndTime = new Date('2019/04/28 20:10:10').getTime()
     },
 
     data() {
       return {
         goods: {},
         swiperUrls: [],
-        contentUrls: []
+        contentUrls: [],
+        hasPromotion: false,
+        PromotionStartTime: 0,
+        PromotionEndTime: 0
       }
     },
-    methods: {}
+    methods: {
+      countDownS_cb: function (x) {
+        //console.log(x)
+      },
+      countDownE_cb: function (x) {
+        //console.log(x)
+      },
+    }
   }
 
 </script>
@@ -99,6 +136,47 @@
       padding: 2vw;
       position: relative;
       background-color: #ffffff;
+    }
+
+    .promotion-price {
+      background-color: white;
+      padding-bottom: 0.1em;
+      height: 4em;
+
+      .priceBox {
+        height: 100%;
+        background-color: deeppink;
+        text-align: left;
+        color: white;
+        font-weight: bold;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+
+        .origin-price-title{
+          padding: 2px;
+          color: #c8c8cd;
+          .fz(font-size, 25);
+        }
+        .origin-price {
+          color: #c8c8cd;
+          .fz(font-size, 25);
+          text-decoration:line-through
+        }
+
+        .sales-price {
+          .fz(font-size, 40);
+          font-weight: bold;
+        }
+      }
+
+      .promotionBox {
+        height: 100%;
+        background-color: #ee892f;
+        text-align: center;
+        line-height: 4em;
+        color: white;
+      }
     }
 
     .goods-disciption {
