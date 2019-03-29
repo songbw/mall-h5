@@ -73,9 +73,14 @@
         </span>
       </div>
       <div class="oder-ServerInfo">
-        <van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>
+        <!--<van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>-->
+        <van-col span="12" class="chat"  href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
+          <van-icon name="service" size="1em"> 联系客服</van-icon>
+        </van-col>
+        <van-col span="12" class="phone">
+          <span>电话:{{getOrderServicePhone()}}</span>
+        </van-col>
       </div>
-
     </div>
   </section>
 </template>
@@ -109,11 +114,11 @@
 
     methods: {
       getSavedPayOrderInfo(listItem) {
-/*        this.$log("getSavedPayOrderInfo Enter #########################")
-        this.$log(listItem.outTradeNo)
-        this.$log(listItem.paymentNo)*/
-        if(listItem.openId === listItem.outTradeNo.substr(0,listItem.openId.length)) {
-          return  null
+        /*        this.$log("getSavedPayOrderInfo Enter #########################")
+                this.$log(listItem.outTradeNo)
+                this.$log(listItem.paymentNo)*/
+        if (listItem.openId === listItem.outTradeNo.substr(0, listItem.openId.length)) {
+          return null
         } else {
           return listItem.paymentNo;
         }
@@ -373,6 +378,24 @@
         background-color: white;
         margin-top: 1em;
         padding-bottom: 0.1em;
+        height: 3em;
+
+        .chat {
+          height: 100%;
+          background-color: white;
+          text-align: center;
+          line-height: 3em;
+          color: #ee892f;
+          font-weight: bold;
+        }
+
+        .phone {
+          height: 100%;
+          background-color: #ee892f;
+          text-align: center;
+          line-height: 3em;
+          color: white;
+        }
       }
 
       .order-detail {
