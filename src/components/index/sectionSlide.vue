@@ -199,7 +199,7 @@
         img {
           display: block;
           width: 100%;
-          height: 6em;
+          height:14.6vh;
         }
 
         h2,
@@ -245,6 +245,7 @@
     }
   }
   .countdownBox{
+    .fz(font-size, 22);
     color: black;
     font-weight: bold;
     width: 100%;

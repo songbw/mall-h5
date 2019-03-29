@@ -184,7 +184,7 @@
         padding: 0 3vw;
         img {
           width: 99%;
-          height: 10em;
+          height: 23vh;
           display: inline-block;
         }
 
