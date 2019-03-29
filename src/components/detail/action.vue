@@ -1,7 +1,8 @@
 <template lang="html">
   <section class="goodsAction">
     <van-goods-action>
-      <van-goods-action-mini-btn icon="cart-o" text="购物车" @click="gotoCar"/>
+      <van-goods-action-mini-btn style="color: #00a4ff" icon="chat-o"  href="javascript:void(0)" onclick="_MEIQIA('showPanel')">联系客服</van-goods-action-mini-btn>
+      <van-goods-action-mini-btn style="color: #ea545d" icon="cart-o" text="购物车" @click="gotoCar"/>
       <van-goods-action-big-btn text="加入购物车" @click="addGoodsCar"/>
       <van-goods-action-big-btn text="立即购买" primary @click="gotoPay"/>
     </van-goods-action>
@@ -29,6 +30,10 @@
     },
 
     methods: {
+      onCustomerSvBtnClick(){
+        this.$log("onCustomerSvBtnClick Enter")
+        _MEIQIA('showPanel');
+      },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length == 0)
       },
