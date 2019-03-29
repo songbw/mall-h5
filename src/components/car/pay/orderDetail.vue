@@ -78,7 +78,7 @@
           <van-icon name="service" size="1em"> 联系客服</van-icon>
         </van-col>
         <van-col span="12" class="phone">
-          <span>电话:{{getOrderServicePhone()}}</span>
+          <span>电话: {{getOrderServicePhone()}}</span>
         </van-col>
       </div>
     </div>
