@@ -29,7 +29,10 @@
         </van-col>
       </div>
       <p class="price-title" v-else>￥{{this.goods.price}}</p>
-      <p class="goods-disciption">{{this.goods.brand}} {{this.goods.name}}</p>
+      <div class="goods-detail">
+        <span class="goods-area">{{defaultLocation}}</span>
+        <span class="goods-disciption">{{this.goods.brand}} {{this.goods.name}}</span>
+      </div>
     </div>
     <v-content :contentData=contentUrls></v-content>
     <v-baseline/>
@@ -104,7 +107,8 @@
         contentUrls: [],
         hasPromotion: false,
         PromotionStartTime: 0,
-        PromotionEndTime: 0
+        PromotionEndTime: 0,
+        defaultLocation: '南京'
       }
     },
     methods: {
@@ -153,15 +157,16 @@
         flex-direction: column;
         padding: 10px;
 
-        .origin-price-title{
+        .origin-price-title {
           padding: 2px;
           color: #c8c8cd;
           .fz(font-size, 25);
         }
+
         .origin-price {
           color: #c8c8cd;
           .fz(font-size, 25);
-          text-decoration:line-through
+          text-decoration: line-through
         }
 
         .sales-price {
@@ -179,14 +184,26 @@
       }
     }
 
-    .goods-disciption {
-      text-align: left;
-      .fz(font-size, 30);
-      color: #888888;
-      padding: 2vw;
-      position: relative;
-      background-color: #ffffff;
+    .goods-detail {
+      padding-left: 10px;
+
+      .goods-area {
+        display: inline-block;
+        padding: 0.3em;
+        background-color: #ff4444;
+        border-radius: 3px;
+        word-spacing: 0;
+        .fz(font-size, 22);
+        color: white;
+      }
+
+      .goods-disciption {
+        .fz(font-size, 30);
+        color: #888888;
+        background-color: #ffffff;
+      }
     }
+
 
     #map-container {
       width: 300px;
