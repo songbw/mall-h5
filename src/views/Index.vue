@@ -34,7 +34,6 @@
 </template>
 
 <script>
-  //  import Header from '@/components/index/header.vue'
   import Header from '@/common/_header.vue'
   import Swiper from '@/components/index/swiper.vue'
   import sectionService from '@/components/index/sectionService.vue'

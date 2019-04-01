@@ -40,7 +40,7 @@
 
 <script>
   import Header from '@/common/_header.vue'
-  //import { Toast } from 'mint-ui'
+
   export default {
     components: {
       'v-header': Header

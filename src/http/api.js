@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '@/vuex/store.js'
 import router from '../router'
-import Util from '../util/common'
 
 //const GOODS_URL_PREFIX = "https://iwallet-1258175138.cos.ap-beijing.myqcloud.com"
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
