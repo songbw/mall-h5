@@ -77,10 +77,10 @@
     },
     methods: {
       countDownS_cb(data) {
-        this.$log("Start #################")
+       // this.$log("Start #################")
       },
       countDownE_cb (data) {
-        this.$log("End   #################")
+       // this.$log("End   #################")
       },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
