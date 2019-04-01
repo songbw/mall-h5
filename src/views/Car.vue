@@ -12,43 +12,71 @@
 
         <div v-else>
           <div class="carlist">
-            <van-swipe-cell :right-width="60" v-for="(k,index) in this.selStateInCarList" :key="index">
-              <div style="display: flex;flex-direction: row;justify-content: left;background-color: #ffffff">
-                <div style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
-                  <van-checkbox
-                    v-model="k.choose"
-                    class="checkedBox"
-                    @change="singleChecked(index,k)">
-                  </van-checkbox>
-                </div>
-                <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                  <van-card
-                    :price="k.price"
-                    :title="k.desc"
-                    :thumb="k.image">
-                    <div slot="footer">
-                      <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+            <div class="prodInCart" v-for="(k,index) in this.selStateInCarList" :key="index">
+              <van-swipe-cell :right-width="60">
+                <div style="display: flex;justify-content: left;background-color: #ffffff">
+                  <div
+                    style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                    <van-checkbox
+                      v-model="k.choose"
+                      class="checkedBox"
+                      @change="singleChecked(index,k)">
+                    </van-checkbox>
+                  </div>
+                  <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
+                    <div v-if="hasPromotion">
+                      <div class="promotionBox" >
+                        <span class="promotionTitle">促销活动</span>
+                        <v-countdown class="promotionCountDown"
+                                     :start_callback="countDownS_cb(k)"
+                                     :end_callback="countDownE_cb(k)"
+                                     :startTime="new Date('2019/03/27 10:10:10').getTime()"
+                                     :endTime="new Date('2019/04/27 10:10:10').getTime()"
+                                     :secondsTxt="''">
+                        </v-countdown>
+                      </div>
+                      <van-card
+                        :price="k.price"
+                        :title="k.desc"
+                        :thumb="k.image"
+                        :origin-price="10.00">
+                        <div slot="footer">
+                          <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+                        </div>
+                      </van-card>
                     </div>
-                  </van-card>
+                    <div v-else>
+                      <van-card
+                        :price="k.price"
+                        :title="k.desc"
+                        :thumb="k.image">
+                        <div slot="footer">
+                          <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+                        </div>
+                      </van-card>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div slot="right" @click=onDeleteBtnClick(k,index) class="rightSlot">
-                <span style="margin-left: 1em">删除</span>
-              </div>
-            </van-swipe-cell>
+                <div slot="right" @click=onDeleteBtnClick(k,index) class="rightSlot">
+                  <span style="margin-left: 1em">删除</span>
+                </div>
+              </van-swipe-cell>
+            </div>
+
           </div>
 
         </div>
       </van-list>
     </div>
 
-    <v-footer />
+    <v-footer/>
   </div>
 </template>
 
 <script>
   import Header from '@/common/_header.vue'
   import Footer from '@/components/car/footer.vue'
+  import CountDown from '@/common/_vue2-countdown.vue'
 
   export default {
     computed: {
@@ -103,19 +131,26 @@
         selStateInCarList: [],
         nothingInCar_bg: require('@/assets/images/cart.svg'),
         launchedLoading: false,
+        hasPromotion: false
       }
     },
 
     created() {
       setTimeout(() => {
-        this.$log("setTimeout launchedLoading:"+this.launchedLoading)
-        if(!this.launchedLoading ) {
+        this.$log("setTimeout launchedLoading:" + this.launchedLoading)
+        if (!this.launchedLoading) {
           this.onLoad()
         }
       }, 1000);
     },
 
     methods: {
+      countDownS_cb(k) {
+
+      },
+      countDownE_cb(k) {
+
+      },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
       },
@@ -209,7 +244,7 @@
             console.log(error)
             this.finished = true;
           })
-        } else{
+        } else {
           //load finished
           this.loading = false;
           this.finished = true;
@@ -219,7 +254,7 @@
       onLoad() {
         this.$log("onLoad Enter ###############")
         this.launchedLoading = true;
-        this.$log("launchedLoading:"+this.launchedLoading)
+        this.$log("launchedLoading:" + this.launchedLoading)
         // let userInfo=this.$jsbridge.call("getUserInfo");
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
@@ -303,7 +338,8 @@
     },
     components: {
       'v-header': Header,
-      'v-footer': Footer
+      'v-footer': Footer,
+      "v-countdown": CountDown
     },
   }
 
@@ -314,14 +350,16 @@
 
   .car {
     width: 100%;
-   // margin-bottom: 18vw;
+    // margin-bottom: 18vw;
     height: 100%;
+
     .checkBox-con {
       padding: 0.6rem;
     }
 
     .van-card {
       background-color: #ffffff;
+      margin-top: 5px;
 
       &__price {
         margin-top: 0.5em;
@@ -356,8 +394,9 @@
       display: none !important;
     }
 
-    .cartBody{
+    .cartBody {
       margin-bottom: 4.2em;
+
       .van-list {
         background-color: #ffffff;
       }
@@ -366,18 +405,36 @@
 
     .carlist {
       background-color: #f0f0f0;
-      .van-swipe-cell {
-        margin-bottom: 5px;
-      }
 
-      .rightSlot {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        width: 60px;
-        height: 100%;
-        background-color: #ff4444;
-        color: #ffffff
+      .prodInCart {
+        border-bottom: 1px solid #f0f0f0;
+
+        .promotionBox {
+          display: inline-flex;
+          margin: 10px;
+          .fz(font-size, 25);
+          .promotionTitle {
+            color: black;
+            font-weight: bold;
+          }
+          .promotionCountDown {
+            margin-left: 10px;
+            color: black;
+            .fz(font-size, 25);
+          }
+        }
+
+        .van-swipe-cell {
+          .rightSlot {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: 60px;
+            height: 100%;
+            background-color: #ff4444;
+            color: #ffffff
+          }
+        }
       }
     }
 
