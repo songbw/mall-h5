@@ -119,6 +119,7 @@
           /**
            * 结束时间小于当前时间 活动已结束
            */
+          console.log("活动已结束")
           this.msTime.show = false;
           this.end_message();
         }
@@ -126,6 +127,7 @@
           /**
            * 当前时间小于开始时间 活动尚未开始
            */
+          console.log("活动未开始")
           this.$set(this, 'tipShow', true);
           setTimeout(() => {
             this.runTime(this.star, this.current, this.start_message);
@@ -135,6 +137,7 @@
           /**
            * 结束时间大于当前并且开始时间小于当前时间，执行活动开始倒计时
            */
+          console.log("活动已开始")
           this.$set(this, 'tipShow', false);
           this.msTime.show = true;
           this.$emit('start_callback', this.msTime.show);

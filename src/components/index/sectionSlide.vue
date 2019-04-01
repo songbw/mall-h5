@@ -6,8 +6,8 @@
       </h1>
       <div v-if="datas.settings.title.hasPromotionActivity" class="countdownBox">
         <v-countdown
-          :start_callback="countDownS_cb(1)"
-          :end_callback="countDownE_cb(1)"
+          @start_callback="countDownS_cb"
+          @end_callback="countDownE_cb"
           :startTime="PromotionStartTime"
           :endTime="PromotionEndTime"
           :secondsTxt="''">
@@ -69,18 +69,18 @@
       if (this.datas.settings.title.hasPromotionActivity) {
         this.PromotionStartTime =new Date(this.datas.settings.title.promotionActivityStartDate).getTime() // new Date('2019/03/27 10:10:10').getTime()
         this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime() //new Date('2019/03/28 20:10:10').getTime()
-       // this.PromotionStartTime = new Date('2019/03/28 10:10:10').getTime()
-       // this.PromotionEndTime = new Date('2019/03/28 20:10:10').getTime()
+       // this.PromotionStartTime = new Date('2019/04/1 17:59:10').getTime()
+       // this.PromotionEndTime = new Date('2019/04/1 18:02:10').getTime()
 
         this.promotionActivityId = this.datas.settings.title.promotionActivityId
       }
     },
     methods: {
-      countDownS_cb: function (x) {
-        //console.log(x)
+      countDownS_cb(data) {
+        this.$log("Start #################")
       },
-      countDownE_cb: function (x) {
-        //console.log(x)
+      countDownE_cb (data) {
+        this.$log("End   #################")
       },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));

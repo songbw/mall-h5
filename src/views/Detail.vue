@@ -20,8 +20,8 @@
         </van-col>
         <van-col span="16" class="promotionBox">
           <v-countdown
-            :start_callback="countDownS_cb(1)"
-            :end_callback="countDownE_cb(1)"
+            @start_callback="countDownS_cb"
+            @end_callback="countDownE_cb"
             :startTime="PromotionStartTime"
             :endTime="PromotionEndTime"
             :secondsTxt="''">
@@ -98,8 +98,10 @@
             }
           }
           if(this.goods.promotion.length > 0) {
-            this.PromotionStartTime = new Date(this.goods.promotion[0].startDate).getTime()
-            this.PromotionEndTime = new Date(this.goods.promotion[0].endDate).getTime()
+          //  this.PromotionStartTime = new Date(this.goods.promotion[0].startDate).getTime()
+          //  this.PromotionEndTime = new Date(this.goods.promotion[0].endDate).getTime()
+            this.PromotionStartTime = new Date('2019/04/1 18:08:00').getTime()
+            this.PromotionEndTime = new Date('2019/04/1 18:08:20').getTime()
             this.promotionType = this.goods.promotion[0].promotionType
             this.discount = this.goods.promotion[0].discount
             this.promotionId = this.goods.promotion[0].id
@@ -124,11 +126,12 @@
       }
     },
     methods: {
-      countDownS_cb: function (x) {
-        //console.log(x)
+      countDownS_cb(data) {
+        //this.$log("Start #################")
       },
-      countDownE_cb: function (x) {
-        //console.log(x)
+      countDownE_cb (data) {
+       // this.$log("End   #################")
+        this.hasPromotion = false;
       },
     }
   }
