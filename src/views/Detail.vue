@@ -8,7 +8,7 @@
       <div class="promotion-price" v-if="hasPromotion">
         <van-col span="8" class="priceBox">
           <span class="sales-price">
-            ￥{{this.goods.price}}
+            ￥{{this.goods.price-this.discount}}
           </span>
           <div>
             <span class="origin-price-title">原价</span>
@@ -71,6 +71,7 @@
     created() {
       if (this.$store.state.appconf.currentGoods != undefined && this.$store.state.appconf.currentGoods.length > 0) {
         this.goods = JSON.parse(this.$store.state.appconf.currentGoods);
+        this.$log(this.goods)
         if (!(JSON.stringify(this.goods) == "{}")) {
           let imagesUrls = this.goods.imagesUrl;
           if (imagesUrls != null && imagesUrls.length > 0) {
@@ -94,10 +95,16 @@
               })
             }
           }
+          if(this.goods.promotion.length > 0) {
+            this.PromotionStartTime = new Date(this.goods.promotion[0].startDate).getTime()
+            this.PromotionEndTime = new Date(this.goods.promotion[0].endDate).getTime()
+            this.promotionType = this.goods.promotion[0].promotionType
+            this.discount = this.goods.promotion[0].discount
+            this.promotionId = this.goods.promotion[0].id
+            this.hasPromotion = true;
+          }
         }
       }
-      this.PromotionStartTime = new Date('2019/03/28 10:10:10').getTime()
-      this.PromotionEndTime = new Date('2019/04/28 20:10:10').getTime()
     },
 
     data() {
@@ -108,6 +115,9 @@
         hasPromotion: false,
         PromotionStartTime: 0,
         PromotionEndTime: 0,
+        promotionType: -1,
+        discount:0,
+        promotionId: -1,
         defaultLocation: '南京'
       }
     },
