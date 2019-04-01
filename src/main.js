@@ -1,23 +1,14 @@
 import Vue from 'vue'
-import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import store from '@/vuex/store.js'   //vuex
 import services from '@/http/api.js'       //http请求
-import less from 'less'
-
-
 import vueLogger from "vue-logger";
-import infiniteScroll from 'vue-infinite-scroll'
 import LyTab from 'ly-tab'
-
 import animated from 'animate.css'
 
 Vue.use(animated)
-
 Vue.use(LyTab)
-
-Vue.use(infiniteScroll)
 
 import {
   Button,
