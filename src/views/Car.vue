@@ -40,6 +40,9 @@
                         :title="k.desc"
                         :thumb="k.image"
                         :origin-price="10.00">
+                        <div class="prodDesc" slot="desc">
+                          <span>南京</span>
+                        </div>
                         <div slot="footer">
                           <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
                         </div>
@@ -49,7 +52,11 @@
                       <van-card
                         :price="k.price"
                         :title="k.desc"
-                        :thumb="k.image">
+                        :thumb="k.image"
+                        >
+                        <div class="prodDesc" slot="desc">
+                          <span>南京</span>
+                        </div>
                         <div slot="footer">
                           <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
                         </div>
@@ -435,6 +442,15 @@
             color: #ffffff
           }
         }
+      }
+
+      .prodDesc{
+        background-color: #ff4444;
+        padding: 0.2em;
+        margin-top: 5px;
+        border-radius: 4px;
+        color: white;
+        width: 2em;
       }
     }
 
