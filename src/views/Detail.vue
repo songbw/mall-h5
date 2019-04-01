@@ -30,8 +30,10 @@
       </div>
       <p class="price-title" v-else>￥{{this.goods.price}}</p>
       <div class="goods-detail">
-        <span class="goods-area">{{defaultLocation}}</span>
-        <span class="goods-disciption">{{this.goods.brand}} {{this.goods.name}}</span>
+        <span class="goods-disciption">
+          <i class="goods-area">南京</i>
+          {{this.goods.brand}} {{this.goods.name}}
+        </span>
       </div>
     </div>
     <v-content :contentData=contentUrls></v-content>
@@ -196,21 +198,19 @@
 
     .goods-detail {
       padding-left: 10px;
-
+      margin-top: 5px;
+      .fz(font-size, 30);
       .goods-area {
-        display: inline-block;
-        padding: 0.3em;
         background-color: #ff4444;
-        border-radius: 3px;
-        word-spacing: 0;
-        .fz(font-size, 22);
+        .fz(font-size, 25);
+        border-radius: 4px;
+        padding: 0.2em;
         color: white;
       }
 
       .goods-disciption {
-        .fz(font-size, 30);
         color: #888888;
-        background-color: #ffffff;
+        background-color: white;
       }
     }
 
