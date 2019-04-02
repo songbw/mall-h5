@@ -30,8 +30,8 @@
                         <v-countdown class="promotionCountDown"
                                      @start_callback="countDownS_cb(index,k)"
                                      @end_callback="countDownE_cb(index,k)"
-                                     :startTime="new Date('2019/4/2 10:00:00'/*k.promotion[0].startDate*/).getTime()"
-                                     :endTime="new Date('2019/4/2 14:52:00'/*k.promotion[0].endDate*/).getTime()"
+                                     :startTime="new Date(k.promotion[0].startDate).getTime()"
+                                     :endTime="new Date(k.promotion[0].endDate).getTime()"
                                      :secondsTxt="''">
                         </v-countdown>
                       </div>
@@ -151,7 +151,7 @@
     methods: {
       hasValidPromotion(k) {
           if(k.promotion != undefined && k.promotion.length > 0 &&
-          new Date('2019/4/2 14:52:00'/*k.promotion[0].endDate*/).getTime() > new Date().getTime())
+          new Date(k.promotion[0].endDate).getTime() > new Date().getTime())
           {
             return true;
           }
