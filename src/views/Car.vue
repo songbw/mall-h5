@@ -29,8 +29,8 @@
                         <v-countdown class="promotionCountDown"
                                      @start_callback="countDownS_cb(index,k)"
                                      @end_callback="countDownE_cb(index,k)"
-                                     :startTime="new Date(k.promotion[0].startDate).getTime()"
-                                     :endTime="new Date(k.promotion[0].endDate).getTime()"
+                                     :startTime="new Date('2019/4/2 18:03:10'/*k.promotion[0].startDate*/).getTime()"
+                                     :endTime="new Date('2019/4/2 18:03:40'/*k.promotion[0].endDate*/).getTime()"
                                      :secondsTxt="''">
                         </v-countdown>
                       </div>
@@ -72,7 +72,6 @@
         </div>
       </van-list>
     </div>
-
     <v-footer/>
   </div>
 </template>
@@ -149,8 +148,8 @@
     methods: {
       getPromotionState(k) {
         if(k.promotion != undefined && k.promotion.length > 0) {
-          let startTime = new Date(k.promotion[0].startDate).getTime()
-          let endTime = new Date(k.promotion[0].endDate).getTime()
+          let startTime = new Date('2019/4/2 18:03:10'/*k.promotion[0].startDate*/).getTime()
+          let endTime = new Date('2019/4/2 18:03:40'/*k.promotion[0].endDate*/).getTime()
           let current = new Date().getTime()
           if(current <  startTime) {
             return 0 //活动未开始
