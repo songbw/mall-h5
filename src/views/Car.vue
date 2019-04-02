@@ -24,22 +24,22 @@
                     </van-checkbox>
                   </div>
                   <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                    <div v-if="hasPromotion">
+                    <div v-if="hasValidPromotion(k)">
                       <div class="promotionBox" >
-                        <span class="promotionTitle">促销活动</span>
+                        <span class="promotionTitle">{{k.promotion[0].tag}}</span>
                         <v-countdown class="promotionCountDown"
-                                     :start_callback="countDownS_cb(k)"
-                                     :end_callback="countDownE_cb(k)"
-                                     :startTime="new Date('2019/03/27 10:10:10').getTime()"
-                                     :endTime="new Date('2019/04/27 10:10:10').getTime()"
+                                     @start_callback="countDownS_cb(index,k)"
+                                     @end_callback="countDownE_cb(index,k)"
+                                     :startTime="new Date('2019/4/2 10:00:00'/*k.promotion[0].startDate*/).getTime()"
+                                     :endTime="new Date('2019/4/2 14:52:00'/*k.promotion[0].endDate*/).getTime()"
                                      :secondsTxt="''">
                         </v-countdown>
                       </div>
                       <van-card
-                        :price="k.price"
+                        :price="k.price-k.promotion[0].discount"
                         :title="k.desc"
                         :thumb="k.image"
-                        :origin-price="10.00">
+                        :origin-price="k.price">
                         <div class="prodDesc" slot="desc">
                           <span>南京</span>
                         </div>
@@ -69,9 +69,7 @@
                 </div>
               </van-swipe-cell>
             </div>
-
           </div>
-
         </div>
       </van-list>
     </div>
@@ -126,7 +124,6 @@
 
     },
 
-
     data() {
       return {
         pageNo: 1,
@@ -138,7 +135,7 @@
         selStateInCarList: [],
         nothingInCar_bg: require('@/assets/images/cart.svg'),
         launchedLoading: false,
-        hasPromotion: false
+      //  hasPromotion: false
       }
     },
 
@@ -152,15 +149,29 @@
     },
 
     methods: {
-      countDownS_cb(k) {
+      hasValidPromotion(k) {
+          if(k.promotion != undefined && k.promotion.length > 0 &&
+          new Date('2019/4/2 14:52:00'/*k.promotion[0].endDate*/).getTime() > new Date().getTime())
+          {
+            return true;
+          }
+          else
+            return false;
+      },
+      countDownS_cb(index,k) {
 
       },
-      countDownE_cb(k) {
-
+      countDownE_cb(index,k) {
+        this.$log("####################")
+        let len = this.selStateInCarList[index].promotion.length;
+        this.selStateInCarList[index].promotion.splice(0,len);
+        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
       },
+
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
       },
+
       onDeleteBtnClick(k, index) {
         let that = this;
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
@@ -288,6 +299,7 @@
             this.selStateInCarList[i].count = item.count
             this.selStateInCarList[i].skuId = item.skuId
             this.selStateInCarList[i].price = product.price
+            this.selStateInCarList[i].promotion = product.promotion
             goods = this.selStateInCarList[i];
             found = true;
             break;
@@ -303,7 +315,8 @@
             "count": item.count,
             "price": product.price,
             "choose": true,
-            "isDel": 0
+            "isDel": 0,
+            "promotion": product.promotion
           }
           this.selStateInCarList.push(goods);
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
@@ -320,7 +333,8 @@
           }
         }).then((res) => {
           let product = res.data.data.result;
-          //this.$log(product);
+          this.$log("+++++++++++++++++++++++++++");
+          this.$log(product);
           if (product != null) {
             this.updateSelectedCarlist(item, product, user)
           } else {
@@ -417,11 +431,11 @@
         border-bottom: 1px solid #f0f0f0;
 
         .promotionBox {
-          display: inline-flex;
-          margin: 10px;
+          display: flex;
+          margin: 15px 5px 5px 15px;
           .fz(font-size, 25);
           .promotionTitle {
-            color: black;
+            color: #ff4444;
             font-weight: bold;
           }
           .promotionCountDown {
