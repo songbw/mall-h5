@@ -24,16 +24,13 @@
                     </van-checkbox>
                   </div>
                   <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                  <div>
-                    {{k.promotionState }}
-                  </div>
                       <div class="promotionBox" v-if="k.promotionState != -1">
                         <span class="promotionTitle">{{k.promotion[0].tag}}</span>
                         <v-countdown class="promotionCountDown"
                                      @start_callback="countDownS_cb(index,k)"
                                      @end_callback="countDownE_cb(index,k)"
-                                     :startTime="new Date('2019/4/2 17:22:00'/*k.promotion[0].startDate*/).getTime()"
-                                     :endTime="new Date('2019/4/2 17:23:00'/*k.promotion[0].endDate*/).getTime()"
+                                     :startTime="new Date(k.promotion[0].startDate).getTime()"
+                                     :endTime="new Date(k.promotion[0].endDate).getTime()"
                                      :secondsTxt="''">
                         </v-countdown>
                       </div>
@@ -137,7 +134,6 @@
         selStateInCarList: [],
         nothingInCar_bg: require('@/assets/images/cart.svg'),
         launchedLoading: false,
-      //  hasPromotion: false
       }
     },
 
@@ -153,17 +149,14 @@
     methods: {
       getPromotionState(k) {
         if(k.promotion != undefined && k.promotion.length > 0) {
-          let startTime = new Date('2019/4/2 17:22:00'/*k.promotion[0].startDate*/).getTime()
-          let endTime = new Date('2019/4/2 17:23:00'/*k.promotion[0].endDate*/).getTime()
+          let startTime = new Date(k.promotion[0].startDate).getTime()
+          let endTime = new Date(k.promotion[0].endDate).getTime()
           let current = new Date().getTime()
           if(current <  startTime) {
-            this.$log("0000")
             return 0 //活动未开始
           } else if(current <= endTime) {
-            this.$log("11111")
             return 1 //活动开始
           } else {
-            this.$log("------1")
             return -1 // 活动已经结束
           }
         } else {
@@ -172,13 +165,11 @@
 
       },
       countDownS_cb(index,k) {
-        this.$log("countDownS_cb +++++++++++++",this.selStateInCarList[index].promotionState )
         this.selStateInCarList[index].promotionState = this.getPromotionState(k)
-        this.$log("new:",this.selStateInCarList[index].promotionState )
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+       // this.$log("this.$store.state.appconf.selStateInCarList[index].promotionState:"+this.$store.state.appconf.selStateInCarList[index].promotionState )
       },
       countDownE_cb(index,k) {
-        this.$log("countDownE_cb -------------")
         this.selStateInCarList[index].promotionState = this.getPromotionState(k)
         let len = this.selStateInCarList[index].promotion.length;
         this.selStateInCarList[index].promotion.splice(0,len);
@@ -287,7 +278,6 @@
       },
 
       onLoad() {
-        this.$log("onLoad Enter ###############")
         this.launchedLoading = true;
         this.$log("launchedLoading:" + this.launchedLoading)
         // let userInfo=this.$jsbridge.call("getUserInfo");
@@ -352,8 +342,7 @@
           }
         }).then((res) => {
           let product = res.data.data.result;
-          this.$log("+++++++++++++++++++++++++++");
-          this.$log(product);
+         // this.$log(product);
           if (product != null) {
             this.updateSelectedCarlist(item, product, user)
           } else {
