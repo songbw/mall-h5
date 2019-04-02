@@ -50,6 +50,7 @@
 
       //勾选的商品的价格总和
       allpay() {
+        this.$log("all############################")
         let all = 0;
         let userInfo = this.$store.state.appconf.userInfo;
         try {
@@ -66,7 +67,19 @@
             let selStateInCarList = this.$store.state.appconf.selStateInCarList;
             selStateInCarList.forEach(item => {
               if (item.userId == -1 && item.choose) {
-                all += item.price * item.count
+                if(item.promotion != undefined && item.promotion.length > 0)
+                {
+                  let promotionStartTime = new Date(item.promotion[0].startDate).getTime();
+                  let promotionEndTime = new Date(item.promotion[0].endDate).getTime();
+                  let current = new Date().getTime();
+                  if(current >= promotionStartTime && current <= promotionEndTime)
+                      all += (item.price - item.promotion[0].discount)* item.count
+                  else
+                    all += item.price * item.count
+                } else {
+                  all += item.price * item.count
+                }
+
               }
             })
           }

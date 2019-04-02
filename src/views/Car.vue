@@ -24,44 +24,46 @@
                     </van-checkbox>
                   </div>
                   <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                    <div v-if="hasValidPromotion(k)">
-                      <div class="promotionBox" >
+                  <div>
+                    {{k.promotionState }}
+                  </div>
+                      <div class="promotionBox" v-if="k.promotionState != -1">
                         <span class="promotionTitle">{{k.promotion[0].tag}}</span>
                         <v-countdown class="promotionCountDown"
                                      @start_callback="countDownS_cb(index,k)"
                                      @end_callback="countDownE_cb(index,k)"
-                                     :startTime="new Date(k.promotion[0].startDate).getTime()"
-                                     :endTime="new Date(k.promotion[0].endDate).getTime()"
+                                     :startTime="new Date('2019/4/2 17:22:00'/*k.promotion[0].startDate*/).getTime()"
+                                     :endTime="new Date('2019/4/2 17:23:00'/*k.promotion[0].endDate*/).getTime()"
                                      :secondsTxt="''">
                         </v-countdown>
                       </div>
-                      <van-card
-                        :price="k.price-k.promotion[0].discount"
-                        :title="k.desc"
-                        :thumb="k.image"
-                        :origin-price="k.price">
-                        <div class="prodDesc" slot="desc">
-                          <span>南京</span>
-                        </div>
-                        <div slot="footer">
-                          <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
-                        </div>
-                      </van-card>
-                    </div>
-                    <div v-else>
-                      <van-card
-                        :price="k.price"
-                        :title="k.desc"
-                        :thumb="k.image"
-                        >
-                        <div class="prodDesc" slot="desc">
-                          <span>南京</span>
-                        </div>
-                        <div slot="footer">
-                          <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
-                        </div>
-                      </van-card>
-                    </div>
+                      <div v-if="k.promotionState === 1">
+                        <van-card
+                          :price="k.price-k.promotion[0].discount"
+                          :title="k.desc"
+                          :thumb="k.image"
+                          :origin-price="k.price">
+                          <div class="prodDesc" slot="desc">
+                            <span>南京</span>
+                          </div>
+                          <div slot="footer">
+                            <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+                          </div>
+                        </van-card>
+                      </div>
+                      <div v-else>
+                        <van-card
+                          :price="k.price"
+                          :title="k.desc"
+                          :thumb="k.image">
+                          <div class="prodDesc" slot="desc">
+                            <span>南京</span>
+                          </div>
+                          <div slot="footer">
+                            <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+                          </div>
+                        </van-card>
+                      </div>
                   </div>
                 </div>
                 <div slot="right" @click=onDeleteBtnClick(k,index) class="rightSlot">
@@ -149,20 +151,35 @@
     },
 
     methods: {
-      hasValidPromotion(k) {
-          if(k.promotion != undefined && k.promotion.length > 0 &&
-          new Date(k.promotion[0].endDate).getTime() > new Date().getTime())
-          {
-            return true;
+      getPromotionState(k) {
+        if(k.promotion != undefined && k.promotion.length > 0) {
+          let startTime = new Date('2019/4/2 17:22:00'/*k.promotion[0].startDate*/).getTime()
+          let endTime = new Date('2019/4/2 17:23:00'/*k.promotion[0].endDate*/).getTime()
+          let current = new Date().getTime()
+          if(current <  startTime) {
+            this.$log("0000")
+            return 0 //活动未开始
+          } else if(current <= endTime) {
+            this.$log("11111")
+            return 1 //活动开始
+          } else {
+            this.$log("------1")
+            return -1 // 活动已经结束
           }
-          else
-            return false;
-      },
-      countDownS_cb(index,k) {
+        } else {
+          return -1 // 无活动
+        }
 
       },
+      countDownS_cb(index,k) {
+        this.$log("countDownS_cb +++++++++++++",this.selStateInCarList[index].promotionState )
+        this.selStateInCarList[index].promotionState = this.getPromotionState(k)
+        this.$log("new:",this.selStateInCarList[index].promotionState )
+        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+      },
       countDownE_cb(index,k) {
-        this.$log("####################")
+        this.$log("countDownE_cb -------------")
+        this.selStateInCarList[index].promotionState = this.getPromotionState(k)
         let len = this.selStateInCarList[index].promotion.length;
         this.selStateInCarList[index].promotion.splice(0,len);
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
@@ -300,6 +317,7 @@
             this.selStateInCarList[i].skuId = item.skuId
             this.selStateInCarList[i].price = product.price
             this.selStateInCarList[i].promotion = product.promotion
+            this.selStateInCarList[i].promotionState = this.getPromotionState(product)
             goods = this.selStateInCarList[i];
             found = true;
             break;
@@ -316,7 +334,8 @@
             "price": product.price,
             "choose": true,
             "isDel": 0,
-            "promotion": product.promotion
+            "promotion": product.promotion,
+            "promotionState": this.getPromotionState(product)
           }
           this.selStateInCarList.push(goods);
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
