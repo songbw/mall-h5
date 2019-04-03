@@ -147,9 +147,10 @@
     },
 
     methods: {
+
       countDownS_cb(index,k) {
         this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
-        this.$store.commit('SET_SELECTED_CARLIST', Util.selStateInCarList);
+        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
        // this.$log("this.$store.state.appconf.selStateInCarList[index].promotionState:"+this.$store.state.appconf.selStateInCarList[index].promotionState )
       },
       countDownE_cb(index,k) {
@@ -221,6 +222,7 @@
 
       loadCartListBy(user) {
         let userInfo = JSON.parse(user);
+
         if (this.total == -1 || this.total > this.list.length) {
           let options = {
             "openId": userInfo.userId,
@@ -279,8 +281,6 @@
 
       updateSelectedCarlist(item, product, user) {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        if(this.selStateInCarList == undefined)
-          this.selStateInCarList = [];
         let choose = true;
         let found = false;
         let goods = Object();
