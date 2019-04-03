@@ -80,6 +80,7 @@
   import Header from '@/common/_header.vue'
   import Footer from '@/components/car/footer.vue'
   import CountDown from '@/common/_vue2-countdown.vue'
+  import Util from '@/util/common'
 
   export default {
     computed: {
@@ -146,30 +147,13 @@
     },
 
     methods: {
-      getPromotionState(k) {
-        if(k.promotion != undefined && k.promotion.length > 0) {
-          let startTime = new Date(k.promotion[0].startDate).getTime()
-          let endTime = new Date(k.promotion[0].endDate).getTime()
-          let current = new Date().getTime()
-          if(current <  startTime) {
-            return 0 //活动未开始
-          } else if(current <= endTime) {
-            return 1 //活动开始
-          } else {
-            return -1 // 活动已经结束
-          }
-        } else {
-          return -1 // 无活动
-        }
-
-      },
       countDownS_cb(index,k) {
-        this.selStateInCarList[index].promotionState = this.getPromotionState(k)
-        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+        this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
+        this.$store.commit('SET_SELECTED_CARLIST', Util.selStateInCarList);
        // this.$log("this.$store.state.appconf.selStateInCarList[index].promotionState:"+this.$store.state.appconf.selStateInCarList[index].promotionState )
       },
       countDownE_cb(index,k) {
-        this.selStateInCarList[index].promotionState = this.getPromotionState(k)
+        this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
         let len = this.selStateInCarList[index].promotion.length;
         this.selStateInCarList[index].promotion.splice(0,len);
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
@@ -237,7 +221,6 @@
 
       loadCartListBy(user) {
         let userInfo = JSON.parse(user);
-
         if (this.total == -1 || this.total > this.list.length) {
           let options = {
             "openId": userInfo.userId,
@@ -296,6 +279,8 @@
 
       updateSelectedCarlist(item, product, user) {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        if(this.selStateInCarList == undefined)
+          this.selStateInCarList = [];
         let choose = true;
         let found = false;
         let goods = Object();
@@ -306,7 +291,7 @@
             this.selStateInCarList[i].skuId = item.skuId
             this.selStateInCarList[i].price = product.price
             this.selStateInCarList[i].promotion = product.promotion
-            this.selStateInCarList[i].promotionState = this.getPromotionState(product)
+            this.selStateInCarList[i].promotionState = Util.getPromotionState(product)
             goods = this.selStateInCarList[i];
             found = true;
             break;
@@ -324,7 +309,7 @@
             "choose": true,
             "isDel": 0,
             "promotion": product.promotion,
-            "promotionState": this.getPromotionState(product)
+            "promotionState": Util.getPromotionState(product)
           }
           this.selStateInCarList.push(goods);
           this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);

@@ -11,6 +11,8 @@
 </template>
 
 <script>
+  import Util from '@/util/common'
+
   export default {
     props: {
       datas: {
@@ -109,6 +111,8 @@
             price: this.datas.price,
             skuId: this.datas.skuid,
             userId: user.userId,
+            promotion: this.datas.promotion,
+            promotionState: Util.getPromotionState(this.datas)
           }
           this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
           this.$router.push({path: '/car/pay/direct'})
