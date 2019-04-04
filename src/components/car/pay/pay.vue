@@ -43,17 +43,44 @@
             <div v-if="item.goods.length > 0" class="supplyer">
               <van-cell :title=item.supplyerName icon="shop"/>
               <ul>
-                <li v-for="(k,i) in item.goods" :key='i'>
-                  <van-card
-                    :tag="k.valid?'':'无货'"
-                    :price="k.checkedPrice"
-                    :title="k.product.desc"
-                    :num="k.product.count"
-                    :thumb="k.product.image">
-                    <div slot="footer">
-                      <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
-                    </div>
-                  </van-card>
+                <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f0f0f0;">
+                  <div class="promotionBox" v-if="k.product.promotionState != -1">
+                    <span class="promotionTitle">{{k.product.promotion[0].tag}}</span>
+                    <v-countdown class="promotionCountDown"
+                                 @start_callback="countDownS_cb(index,k)"
+                                 @end_callback="countDownE_cb(index,k)"
+                                 :startTime="new Date(k.product.promotion[0].startDate).getTime()"
+                                 :endTime="new Date(k.product.promotion[0].endDate).getTime()"
+                                 :secondsTxt="''">
+                    </v-countdown>
+                  </div>
+                  <div v-if="k.product.promotionState === 1">
+                    <van-card
+                      :price="k.product.price-k.product.promotion[0].discount"
+                      :title="k.product.desc"
+                      :thumb="k.product.image"
+                      :origin-price="k.product.price">
+                      <div  slot="desc">
+                        <span class="prodDesc">{{locationCity}}</span>
+                      </div>
+                      <div slot="footer">
+                        <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
+                      </div>
+                    </van-card>
+                  </div>
+                  <div v-else>
+                    <van-card
+                      :price="k.product.price"
+                      :title="k.product.desc"
+                      :thumb="k.product.image">
+                      <div slot="desc">
+                        <span class="prodDesc">{{locationCity}}</span>
+                      </div>
+                      <div slot="footer">
+                        <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
+                      </div>
+                    </van-card>
+                  </div>
                 </li>
               </ul>
               <div class="supplyerSummery">
@@ -79,11 +106,13 @@
 <script>
   import Header from '@/common/_header.vue'
   import Loading from '@/common/_loading.vue'
+  import CountDown from '@/common/_vue2-countdown.vue'
 
   export default {
     components: {
       'v-header': Header,
-      'v-loading': Loading
+      'v-loading': Loading,
+      "v-countdown": CountDown
     },
     data() {
       return {
@@ -97,6 +126,7 @@
         invoiceDetail: '',
         pageLoadTimerId: -1,
         pageAction: "common",
+        locationCity: "南京"
       }
     },
 
@@ -322,6 +352,11 @@
     },
 
     methods: {
+      countDownS_cb(index,k) {
+      },
+      countDownE_cb(index,k) {
+      },
+
       See(e) {
         this.$log("jump to:" + e)
         window.location.href = e
@@ -741,10 +776,12 @@
         let code = {"provinceId": "100", "cityId": "510", "countyId": "06"}//江苏无锡市滨湖区
         if (/*送货地址*/JSON.stringify(this.usedAddress) != "{}") {
           code = this.usedAddress;
+          this.locationCity = this.usedAddress.cityName;
         } else if (this.$store.state.appconf.locationCode != undefined &&
           this.$store.state.appconf.locationCode.length > 0) {
           this.$log("code:" + this.$store.state.appconf.locationCode)
           code = this.$store.state.appconf.locationCode;
+          this.locationCity = JSON.parse(this.$store.state.appconf.location).city;
         }
         return code
       },
@@ -819,7 +856,17 @@
         .van-card {
           background-color: #ffffff;
           margin-top: -1px;
-
+          .prodDesc{
+            background-color: #ff4444;
+            padding: 2px;
+            margin-top: 5px;
+            border-radius: 4px;
+            color: white;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+          }
           &__price {
             margin-top: 0.5em;
             .fz(font-size, 40);
@@ -839,7 +886,26 @@
     .supplyer {
       margin-top: 1em;
       background-color: white;
-
+      .promotionBox {
+        display: flex;
+        margin: 15px 5px 5px 15px;
+        .fz(font-size, 25);
+        .promotionTitle {
+          color: #ff4444;
+          font-weight: bold;
+        }
+        .promotionCountDown {
+          margin-left: 10px;
+          margin-top: 2px;
+          color: black;
+          .fz(font-size, 25);
+        }
+      }
+      .supplyerSummery{
+        margin-top: 5px;
+        font-weight: bold;
+        color: #2c3e50;
+      }
       span {
         .fz(font-size, 30);
       }

@@ -40,8 +40,8 @@
                           :title="k.desc"
                           :thumb="k.image"
                           :origin-price="k.price">
-                          <div class="prodDesc" slot="desc">
-                            <span>南京</span>
+                          <div slot="desc">
+                            <span class="prodDesc">南京</span>
                           </div>
                           <div slot="footer">
                             <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
@@ -53,8 +53,8 @@
                           :price="k.price"
                           :title="k.desc"
                           :thumb="k.image">
-                          <div class="prodDesc" slot="desc">
-                            <span>南京</span>
+                          <div slot="desc">
+                            <span class="prodDesc">南京</span>
                           </div>
                           <div slot="footer">
                             <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
@@ -452,11 +452,14 @@
 
       .prodDesc{
         background-color: #ff4444;
-        padding: 0.2em;
-        margin-top: 5px;
+        padding: 2px;
+        margin-top: 2px;
         border-radius: 4px;
         color: white;
-        width: 2em;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: center;
       }
     }
 
