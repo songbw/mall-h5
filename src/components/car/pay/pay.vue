@@ -47,8 +47,8 @@
                   <div class="promotionBox" v-if="k.product.promotionState != -1">
                     <span class="promotionTitle">{{k.product.promotion[0].tag}}</span>
                     <v-countdown class="promotionCountDown"
-                                 @start_callback="countDownS_cb(index,k)"
-                                 @end_callback="countDownE_cb(index,k)"
+                                 @start_callback="countDownS_cb(index,k.product)"
+                                 @end_callback="countDownE_cb(index,k.product)"
                                  :startTime="new Date(k.product.promotion[0].startDate).getTime()"
                                  :endTime="new Date(k.product.promotion[0].endDate).getTime()"
                                  :secondsTxt="''">
@@ -734,6 +734,10 @@
           this.selectedCarList.forEach(item => {
             inventorySkus.push({"skuId": item.skuId, "remainNum": item.count})
             skus.push({"skuId": item.skuId})
+            if(item.promotion.length > 0) {
+              item.promotionState = Util.getPromotionState(item);
+            }
+            //////////////////
             this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.price})
           })
         }
