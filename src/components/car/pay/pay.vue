@@ -56,7 +56,7 @@
                   </div>
                   <div v-if="k.product.promotionState === 1">
                     <van-card
-                      :price="k.product.price-k.product.promotion[0].discount"
+                      :price="k.checkedPrice-k.product.promotion[0].discount"
                       :title="k.product.desc"
                       :thumb="k.product.image"
                       :origin-price="k.product.price">
@@ -515,10 +515,20 @@
             let skus = []
             item.goods.forEach(sku => {
               //this.$log("onSubmit，sku is:"+JSON.stringify(sku))
+              let unitPrice = sku.checkedPrice;
+              let promotionId = "";
+              let couponId = "";
+              if(sku.product.promotionState == 1) {
+                unitPrice = sku.checkedPrice - sku.product.promotion[0].discount
+                promotionId = sku.product.promotion[0].id
+              }
+
               skus.push({
                 "skuId": sku.product.skuId,
                 "num": sku.product.count,
-                "unitPrice": sku.checkedPrice,
+                "unitPrice": unitPrice,
+                "promotionId": promotionId,
+                "couponId": couponId
               })
             })
             //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
@@ -610,6 +620,7 @@
           } else {
             try {
               let options = this.getComposedOderOption(userInfo, receiverId);
+              this.$log("下单:" + JSON.stringify(options))
               if (options != null) {
                 that.$api.xapi({
                   method: 'post',
