@@ -6,7 +6,7 @@
       </ly-tab>
       <div :style="{ marginTop: marginTop }">
         <div v-for="(category,index) in datas.list" :title=category.title :key="index" class="content">
-          <ul :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
+          <ul id="sectionGoods-list" :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath">
               <p>{{k.intro}}</p>
@@ -60,7 +60,7 @@
 
     mounted() {
       window.addEventListener('scroll', this.handleScroll);
-      this.goodsLists = document.querySelectorAll('.sectionGoods-list')
+      this.goodsLists = document.querySelectorAll('#sectionGoods-list')
     },
 
     destroyed() {
@@ -76,7 +76,7 @@
           return '50%'
       },*/
       onTabChanged(item, index) {
-        //   this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
+        this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
         if (this.isTabChanging) {
           this.isTabChanging = false;
         } else {
