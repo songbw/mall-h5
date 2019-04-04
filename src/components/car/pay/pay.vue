@@ -107,6 +107,7 @@
   import Header from '@/common/_header.vue'
   import Loading from '@/common/_loading.vue'
   import CountDown from '@/common/_vue2-countdown.vue'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -223,7 +224,16 @@
             supplyer.goods.forEach(item => {
               this.$log("item:" + JSON.stringify(item))
               if (item.valid) {
-                all += item.checkedPrice * item.product.count
+                //change for promotion
+                if(item.product.promotionState === 1) {
+                  try {
+                    all += (item.checkedPrice - item.product.promotion[0].discount) * item.product.count
+                  } catch (e) {
+                    all += item.checkedPrice * item.product.count
+                  }
+                } else {
+                  all += item.checkedPrice * item.product.count
+                }
               }
             })
             supplyer.price = all;
@@ -353,8 +363,30 @@
 
     methods: {
       countDownS_cb(index,k) {
+        let found = -1;
+        for (let i = 0; i < this.payCarList.length; i++) {
+          if (this.payCarList[i].product.skuId == k.skuId) {
+            found = i;
+          }
+        }
+        if(found != -1) {
+          this.payCarList[found].product.promotionState = Util.getPromotionState(k)
+          this.savePayList()
+        }
       },
       countDownE_cb(index,k) {
+        let found = -1;
+        for (let i = 0; i < this.payCarList.length; i++) {
+          if (this.payCarList[i].product.skuId == k.skuId) {
+            found = i;
+          }
+        }
+        if(found != -1) {
+          this.payCarList[found].product.promotionState = Util.getPromotionState(k)
+          let len = this.payCarList[found].product.promotion.length;
+          this.payCarList[found].product.promotion.splice(0,len);
+          this.savePayList()
+        }
       },
 
       See(e) {
