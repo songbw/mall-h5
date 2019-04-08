@@ -148,16 +148,14 @@
     width: 100%;
     padding-bottom: 14vw;
     height: 100%;
-    .header {
+    .header{
       width:100%;
-      line-height:10vw;
       position:fixed;
-      z-index:1;
+      z-index:5;
       top:0;
-      text-align:center;
     }
     .detail-body{
-      padding-top: 11vw;
+      padding-top: 2.3em;
       .price-title {
         text-align: left;
         color: #f44336;

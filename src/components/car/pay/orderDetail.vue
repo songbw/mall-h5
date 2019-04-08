@@ -302,16 +302,14 @@
 
     .header{
       width:100%;
-      line-height:10vw;
       position:fixed;
-      z-index:1;
+      z-index:5;
       top:0;
-      text-align:center;
     }
 
     .order-body {
       background-color: #f0f0f0;
-      padding-top: 11vw;
+      padding-top: 2.3em;
       .order-status {
         background: url('../../../assets/images/redbg.png') no-repeat;
         background-size: 100% 100%;

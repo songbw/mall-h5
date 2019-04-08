@@ -113,14 +113,12 @@
   .logisticsDetail {
     .header{
       width:100%;
-      line-height:10vw;
       position:fixed;
-      z-index:1;
+      z-index:5;
       top:0;
-      text-align:center;
     }
     .logistics-body{
-      padding-top: 11vw;
+      padding-top: 2.3em;
       .noneInfo {
         display: flex;
         flex-direction: column;

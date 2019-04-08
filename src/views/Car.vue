@@ -370,14 +370,12 @@
     height: 100%;
     .header{
       width:100%;
-      line-height:10vw;
       position:fixed;
-      z-index:1;
+      z-index:5;
       top:0;
-      text-align:center;
     }
     .cartBody {
-      padding-top: 11vw;
+      padding-top: 2.3em;
       margin-bottom: 4.2em;
       .nothingInCar {
         display: flex;

@@ -39,8 +39,8 @@
     align-items: center;
     text-align: center;
     justify-content: space-between;
-    padding: 4vw 1vw 0vw 1vw;
-    height: 10vw;
+    padding: 0.8em 0.15em 0em 0.15em;
+    height: 2.2em;
 
     h1 {
       .fz(font-size, 34);
