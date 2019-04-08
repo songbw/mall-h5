@@ -124,7 +124,7 @@
 
     mounted() {
       setTimeout(() => {
-        if(!this.launchedLoading) {
+        if (!this.launchedLoading) {
           this.onLoad(this.active)
         }
       }, 1000);
@@ -132,11 +132,11 @@
 
     methods: {
       getSavedPayOrderInfo(listItem) {
-/*        this.$log("getSavedPayOrderInfo Enter #########################")
-        this.$log(listItem.outTradeNo)
-        this.$log(listItem.paymentNo)*/
-        if(listItem.openId === listItem.outTradeNo.substr(0,listItem.openId.length)) {
-          return  null
+        /*        this.$log("getSavedPayOrderInfo Enter #########################")
+                this.$log(listItem.outTradeNo)
+                this.$log(listItem.paymentNo)*/
+        if (listItem.openId === listItem.outTradeNo.substr(0, listItem.openId.length)) {
+          return null
         } else {
           return listItem.paymentNo;
         }
@@ -327,24 +327,30 @@
           }).then((response) => {
             let result = response.data.data.result
             that.orderTypes[index].total = result.total;
-            let count = 0;
-            result.list.forEach(item => {
-              count++;
-              that.orderTypes[index].list.push(item);
-            })
-            that.$log("count:" + count);
-            that.orderTypes[index].loading = false;
-            if (that.orderTypes[index].list.length >= that.orderTypes[index].total) {
+            if (result.list == undefined || result.list.length == 0) {
+              that.orderTypes[index].loading = false;
               that.orderTypes[index].finished = true;
-              that.$log("index:" + index);
-              that.$log(that.orderTypes[index]);
+            } else {
+              result.list.forEach(item => {
+                that.orderTypes[index].list.push(item);
+              })
+              that.orderTypes[index].loading = false;
+              if (that.orderTypes[index].list.length >= that.orderTypes[index].total) {
+                that.orderTypes[index].finished = true;
+                that.$log("index:" + index);
+                that.$log(that.orderTypes[index]);
+              }
             }
           }).catch(function (error) {
             that.$log(error)
+            that.orderTypes[index].loading = false;
+            that.orderTypes[index].finished = true;
           })
         } else {
-          if (that.orderTypes[index].list.length >= that.orderTypes[index].total)
+          if (that.orderTypes[index].list.length >= that.orderTypes[index].total) {
+            that.orderTypes[index].loading = false;
             that.orderTypes[index].finished = true;
+          }
         }
       }
     }

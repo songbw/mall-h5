@@ -93,6 +93,11 @@
                 if (this.list.length >= this.total)
                   this.finished = true;
               }
+/*              this.$log("--- this.finished:"+this.finished);
+              this.$log("--- this.loading:"+this.loading);
+              this.$log("--- this.total:"+this.total);
+              this.$log("--- this.list.length:"+this.list.length);
+              this.$log("--- category.length:"+category.length);*/
             }).catch(function (error) {
               console.log(error)
               that.finished = true;
@@ -110,7 +115,7 @@
           }).then((response) => {
             this.result = response.data.data.result;
             this.total = this.result.total;
-            if(this.result.list.length == 0) {
+            if(this.result.list == undefined || this.result.list.length == 0) {
               this.loading = false;
               this.finished = true;
             } else {
@@ -121,6 +126,11 @@
               if (this.list.length >= this.total)
                 this.finished = true;
             }
+/*            this.$log("--- this.finished:"+this.finished);
+            this.$log("--- this.loading:"+this.loading);
+            this.$log("--- this.total:"+this.total);
+            this.$log("--- this.list.length:"+this.list.length);
+            this.$log("--- category.length:"+category.length);*/
           }).catch(function (error) {
             console.log(error)
             that.finished = true;
@@ -129,12 +139,6 @@
           //error
           this.finished = true;
         }
-
-        this.$log("--- this.finished:"+this.finished);
-        this.$log("--- this.loading:"+this.loading);
-        this.$log("--- this.total:"+this.total);
-        this.$log("--- this.list.length:"+this.list.length);
-        this.$log("--- category.length:"+category.length);
       },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));

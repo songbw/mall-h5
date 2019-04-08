@@ -222,7 +222,7 @@
 
       loadCartListBy(user) {
         let userInfo = JSON.parse(user);
-
+        let that = this
         if (this.total == -1 || this.total > this.list.length) {
           let options = {
             "openId": userInfo.userId,
@@ -238,6 +238,8 @@
             this.$log("load from network car list is:" + JSON.stringify(this.result.list));
             if (this.result.list === undefined || this.result.list.length === 0) {
               this.$store.commit('SET_SELECTED_CARLIST', []);
+              this.loading = false;
+              this.finished = true;
             } else {
               this.result.list.forEach(item => {
                 this.list.push(item);
@@ -252,7 +254,8 @@
             }
           }).catch(function (error) {
             console.log(error)
-            this.finished = true;
+            that.loading = false;
+            that.finished = true;
           })
         } else {
           //load finished
