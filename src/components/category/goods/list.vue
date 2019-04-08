@@ -1,12 +1,11 @@
 <template lang="html">
   <div class="detaillist">
-    <v-header>
+    <v-header class="header">
       <h1 slot="title">商品列表</h1>
       <router-link :to="{name:'购物车页'}" slot="right">
         <van-icon name="shopping-cart-o" size="1.2em"/>
       </router-link>
     </v-header>
-
     <van-list v-model="loading"
               :finished="finished"
               @load="onLoad">
@@ -165,8 +164,16 @@
   .detaillist {
     width: 100%;
     background-color: #f0f0f0;
-
+    .header{
+      width:100%;
+      line-height:10vw;
+      position:fixed;
+      z-index:1;
+      top:0;
+      text-align:center;
+    }
     .van-list {
+      margin-top: 11vw;
       .van-card {
         background-color: #ffffff;
         margin-top: 1em;

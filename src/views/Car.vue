@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="car">
-    <v-header>
+    <v-header class="header">
       <h1 slot="title">购物车</h1>
     </v-header>
     <div class="cartBody">
@@ -365,105 +365,102 @@
     width: 100%;
     // margin-bottom: 18vw;
     height: 100%;
-
-    .checkBox-con {
-      padding: 0.6rem;
+    .header{
+      width:100%;
+      line-height:10vw;
+      position:fixed;
+      z-index:1;
+      top:0;
+      text-align:center;
     }
-
-    .van-card {
-      background-color: #ffffff;
-      margin-top: 5px;
-
-      &__price {
-        margin-top: 0.5em;
-        .fz(font-size, 40);
-      }
-    }
-
-    .van-card__footer > div {
-      display: flex !important;
-      align-items: center;
-      float: right;
-      justify-content: space-around;
-    }
-
-    .nothingInCar {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: Center;
-      background-color: #ffffff;
-
-      img {
-        margin: 4vw;
-      }
-
-      span {
-        margin: 2vw;
-      }
-    }
-
-    [v-cloak] {
-      display: none !important;
-    }
-
     .cartBody {
+      margin-top: 11vw;
       margin-bottom: 4.2em;
+      .nothingInCar {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
+        background-color: #ffffff;
 
+        img {
+          margin: 4vw;
+        }
+
+        span {
+          margin: 2vw;
+        }
+      }
+
+      [v-cloak] {
+        display: none !important;
+      }
       .van-list {
         background-color: #ffffff;
       }
-    }
+      .carlist {
+        background-color: #f0f0f0;
 
+        .prodInCart {
+          border-bottom: 1px solid #f0f0f0;
+          .van-card {
+            background-color: #ffffff;
+            margin-top: 5px;
 
-    .carlist {
-      background-color: #f0f0f0;
-
-      .prodInCart {
-        border-bottom: 1px solid #f0f0f0;
-
-        .promotionBox {
-          display: flex;
-          margin: 15px 5px 5px 15px;
-          .fz(font-size, 25);
-          .promotionTitle {
-            color: #ff4444;
-            font-weight: bold;
+            &__price {
+              margin-top: 0.5em;
+              .fz(font-size, 40);
+            }
           }
-          .promotionCountDown {
-            margin-left: 10px;
-            color: black;
-            .fz(font-size, 25);
-          }
-        }
 
-        .van-swipe-cell {
-          .rightSlot {
+          .van-card__footer > div {
+            display: flex !important;
+            align-items: center;
+            float: right;
+            justify-content: space-around;
+          }
+
+          .promotionBox {
             display: flex;
-            flex-direction: column;
-            justify-content: center;
-            width: 60px;
-            height: 100%;
-            background-color: #ff4444;
-            color: #ffffff
+            margin: 15px 5px 5px 15px;
+            .fz(font-size, 25);
+            .promotionTitle {
+              color: #ff4444;
+              font-weight: bold;
+            }
+            .promotionCountDown {
+              margin-left: 10px;
+              color: black;
+              .fz(font-size, 25);
+            }
+          }
+
+          .van-swipe-cell {
+            .rightSlot {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              width: 60px;
+              height: 100%;
+              background-color: #ff4444;
+              color: #ffffff
+            }
           }
         }
-      }
 
-      .prodDesc{
-        .fz(font-size, 20);
-        background-color: #ff4444;
-        padding: 2px;
-        margin-top: 5px;
-        border-radius: 4px;
-        color: white;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        text-align: center;
+        .prodDesc{
+          .fz(font-size, 20);
+          background-color: #ff4444;
+          padding: 2px;
+          margin-top: 5px;
+          border-radius: 4px;
+          color: white;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          text-align: center;
+        }
       }
     }
-
-
   }
 </style>

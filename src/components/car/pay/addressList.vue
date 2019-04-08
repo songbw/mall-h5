@@ -1,15 +1,17 @@
 <template lang="html">
   <div class="addressList">
-    <v-header>
+    <v-header class="header">
       <h1 slot="title">用户地址</h1>
     </v-header>
-    <van-address-list
-      v-model="chosenAddressId"
-      :list="addresslist"
-      @add="onAdd"
-      @edit="onEdit"
-      @select="onSelect"
-    />
+    <div class="list-body">
+      <van-address-list
+        v-model="chosenAddressId"
+        :list="addresslist"
+        @add="onAdd"
+        @edit="onEdit"
+        @select="onSelect"
+      />
+    </div>
   </div>
 </template>
 
@@ -125,5 +127,16 @@
   .addressList {
     width: 100%;
     height: 100%;
+    .header{
+      width:100%;
+      line-height:10vw;
+      position:fixed;
+      z-index:1;
+      top:0;
+      text-align:center;
+    }
+    .list-body{
+      margin-top: 11vw;
+    }
   }
 </style>

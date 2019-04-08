@@ -1,6 +1,6 @@
 <template lang="html">
   <section>
-    <v-header>
+    <v-header class="header">
       <h1 slot="title">确认订单</h1>
     </v-header>
     <v-loading v-if="pageloading"></v-loading>
@@ -839,11 +839,18 @@
 
 <style lang="less" scoped>
   @import "../../../assets/fz.less";
-
+  .header{
+    width:100%;
+    line-height:10vw;
+    position:fixed;
+    z-index:1;
+    top:0;
+    text-align:center;
+  }
   .pay {
     width: 100%;
     padding-bottom: 5vw;
-
+    margin-top: 11vw;
     .custom-text {
       text-align: left;
       .fz(font-size, 30px);

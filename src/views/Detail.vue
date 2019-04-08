@@ -3,41 +3,43 @@
     <v-header class="header">
       <h1 slot="title">商品详情</h1>
     </v-header>
-    <v-swiper :swiperData=swiperUrls></v-swiper>
-    <div>
-      <div class="promotion-price" v-if="hasPromotion">
-        <van-col span="8" class="priceBox">
+    <div class="detail-body">
+      <v-swiper :swiperData=swiperUrls></v-swiper>
+      <div>
+        <div class="promotion-price" v-if="hasPromotion">
+          <van-col span="8" class="priceBox">
           <span class="sales-price">
             ￥{{this.goods.price-this.discount}}
           </span>
-          <div>
-            <span class="origin-price-title">原价</span>
-            <span class="origin-price">
+            <div>
+              <span class="origin-price-title">原价</span>
+              <span class="origin-price">
             ￥{{this.goods.price}}
           </span>
-          </div>
+            </div>
 
-        </van-col>
-        <van-col span="16" class="promotionBox">
-          <v-countdown
-            @start_callback="countDownS_cb"
-            @end_callback="countDownE_cb"
-            :startTime="PromotionStartTime"
-            :endTime="PromotionEndTime"
-            :secondsTxt="''">
-          </v-countdown>
-        </van-col>
-      </div>
-      <p class="price-title" v-else>￥{{this.goods.price}}</p>
-      <div class="goods-detail">
+          </van-col>
+          <van-col span="16" class="promotionBox">
+            <v-countdown
+              @start_callback="countDownS_cb"
+              @end_callback="countDownE_cb"
+              :startTime="PromotionStartTime"
+              :endTime="PromotionEndTime"
+              :secondsTxt="''">
+            </v-countdown>
+          </van-col>
+        </div>
+        <p class="price-title" v-else>￥{{this.goods.price}}</p>
+        <div class="goods-detail">
         <span class="goods-disciption">
           <i class="goods-area">南京</i>
           {{this.goods.brand}} {{this.goods.name}}
         </span>
+        </div>
       </div>
+      <v-content :contentData=contentUrls></v-content>
+      <v-baseline/>
     </div>
-    <v-content :contentData=contentUrls></v-content>
-    <v-baseline/>
     <v-action :datas="this.goods"/>
   </div>
 </template>
@@ -146,81 +148,87 @@
     width: 100%;
     padding-bottom: 14vw;
     height: 100%;
-
-    .price-title {
-      text-align: left;
-      color: #f44336;
-      .fz(font-size, 40);
-      font-weight: bold;
-      padding: 2vw;
-      position: relative;
-      background-color: #ffffff;
+    .header {
+      width:100%;
+      line-height:10vw;
+      position:fixed;
+      z-index:1;
+      top:0;
+      text-align:center;
     }
-
-    .promotion-price {
-      background-color: white;
-      padding-bottom: 0.1em;
-      height: 4em;
-
-      .priceBox {
-        height: 100%;
-        background-color: deeppink;
+    .detail-body{
+      margin-top: 11vw;
+      .price-title {
         text-align: left;
-        color: white;
+        color: #f44336;
+        .fz(font-size, 40);
         font-weight: bold;
-        display: flex;
-        flex-direction: column;
-        padding: 10px;
-
-        .origin-price-title {
-          padding: 2px;
-          color: #c8c8cd;
-          .fz(font-size, 25);
-        }
-
-        .origin-price {
-          color: #c8c8cd;
-          .fz(font-size, 25);
-          text-decoration: line-through
-        }
-
-        .sales-price {
-          .fz(font-size, 40);
-          font-weight: bold;
-        }
+        padding: 2vw;
+        position: relative;
+        background-color: #ffffff;
       }
-
-      .promotionBox {
-        height: 100%;
-        background-color: #ee892f;
-        text-align: center;
-        line-height: 4em;
-        color: white;
-      }
-    }
-
-    .goods-detail {
-      padding-left: 10px;
-      margin-top: 5px;
-      .fz(font-size, 30);
-      .goods-area {
-        background-color: #ff4444;
-        .fz(font-size, 25);
-        border-radius: 4px;
-        padding: 0.2em;
-        color: white;
-      }
-
-      .goods-disciption {
-        color: #888888;
+      .promotion-price {
         background-color: white;
+        padding-bottom: 0.1em;
+        height: 4em;
+
+        .priceBox {
+          height: 100%;
+          background-color: deeppink;
+          text-align: left;
+          color: white;
+          font-weight: bold;
+          display: flex;
+          flex-direction: column;
+          padding: 10px;
+
+          .origin-price-title {
+            padding: 2px;
+            color: #c8c8cd;
+            .fz(font-size, 25);
+          }
+
+          .origin-price {
+            color: #c8c8cd;
+            .fz(font-size, 25);
+            text-decoration: line-through
+          }
+
+          .sales-price {
+            .fz(font-size, 40);
+            font-weight: bold;
+          }
+        }
+
+        .promotionBox {
+          height: 100%;
+          background-color: #ee892f;
+          text-align: center;
+          line-height: 4em;
+          color: white;
+        }
       }
-    }
+      .goods-detail {
+        padding-left: 10px;
+        margin-top: 5px;
+        .fz(font-size, 30);
+        .goods-area {
+          background-color: #ff4444;
+          .fz(font-size, 25);
+          border-radius: 4px;
+          padding: 0.2em;
+          color: white;
+        }
 
-
-    #map-container {
-      width: 300px;
-      height: 300px;
+        .goods-disciption {
+          color: #888888;
+          background-color: white;
+        }
+      }
+      #map-container {
+        width: 300px;
+        height: 300px;
+      }
     }
   }
 </style>
