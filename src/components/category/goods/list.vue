@@ -63,11 +63,6 @@
         let search = this.$route.query.search;
         let that = this
         this.launchedLoading = true
-        this.$log("this.finished:"+this.finished);
-        this.$log("this.loading:"+this.loading);
-        this.$log("this.total:"+this.total);
-        this.$log("this.list.length:"+this.list.length);
-        this.$log("category.length:"+category.length);
         if (category != null && category.length > 0) {
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
