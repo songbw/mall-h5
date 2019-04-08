@@ -1,4 +1,4 @@
-import Vue from 'vue'
+//import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from '@/vuex/store.js'   //vuex
@@ -83,7 +83,7 @@ Vue.use(Button)
 
 Vue.use(Lazyload, {
   preLoad: 1,
-  error: 'static/error.jpg',
+  error: 'static/error.png',
   loading: 'static/loading.png',
   attempt: 3
 })

@@ -1,7 +1,7 @@
-import Vue from 'vue'
-import Router from 'vue-router'
+//import Vue from 'vue'
+//import Router from 'vue-router'
 
-Vue.use(Router);
+//Vue.use(Router);
 //按需加载,当渲染其他页面时才加载其组件,并缓存,减少首屏加载时间
 const Index = resolve => require(['@/views/Index.vue'], resolve)
 const IndexSub = resolve => require(['@/components/index/sub/main.vue'], resolve)
@@ -24,7 +24,7 @@ const Casher = resolve => require(['@/components/car/pay/casher.vue'], resolve)
 const Promotion = resolve => require(['@/components/category/goods/promotion.vue'], resolve)
 
 
-export default new Router({
+export default new VueRouter({
   routes: [
     {
       path: '/',
