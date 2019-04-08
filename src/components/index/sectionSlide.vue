@@ -199,7 +199,7 @@
         img {
           display: block;
           width: 100%;
-          height:14.6vh;
+          height: 6.1em;
         }
 
         h2,
