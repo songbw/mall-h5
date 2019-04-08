@@ -904,6 +904,7 @@
           background-color: #ffffff;
           margin-top: -1px;
           .prodDesc{
+            .fz(font-size, 20);
             background-color: #ff4444;
             padding: 2px;
             margin-top: 5px;

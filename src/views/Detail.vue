@@ -97,7 +97,7 @@
               })
             }
           }
-          if(this.goods.promotion.length > 0) {
+          if(this.goods.promotion != undefined && this.goods.promotion.length > 0) {
             this.PromotionStartTime = new Date(this.goods.promotion[0].startDate).getTime()
             this.PromotionEndTime = new Date(this.goods.promotion[0].endDate).getTime()
            // this.PromotionStartTime = new Date('2019/04/1 18:08:00').getTime()
