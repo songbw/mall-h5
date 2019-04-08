@@ -374,7 +374,7 @@
       text-align:center;
     }
     .cartBody {
-      margin-top: 11vw;
+      padding-top: 11vw;
       margin-bottom: 4.2em;
       .nothingInCar {
         display: flex;

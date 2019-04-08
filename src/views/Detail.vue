@@ -157,7 +157,7 @@
       text-align:center;
     }
     .detail-body{
-      margin-top: 11vw;
+      padding-top: 11vw;
       .price-title {
         text-align: left;
         color: #f44336;

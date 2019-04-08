@@ -1,9 +1,9 @@
 <template lang="html">
   <section class="orderDetail">
-    <v-header>
+    <v-header class="header">
       <h1 slot="title">订单详情</h1>
     </v-header>
-    <div class="oder-body">
+    <div class="order-body">
       <div class="order-status">
         <div class="statusInfo">
           <img :src="orderIcon"/>
@@ -300,29 +300,37 @@
     width: 100%;
     text-align: left;
 
-    .order-status {
-      background: url('../../../assets/images/redbg.png') no-repeat;
-      background-size: 100% 100%;
-      -moz-background-size: 100% 100%;
-      color: white;
-      height: 5em;
-
-      .statusInfo {
-        padding: 1em;
-        .fz(font-size, 40);
-        font-weight: bold;
-
-        img {
-          height: 40px;
-          width: 40px;
-          margin-right: 2px;
-        }
-      }
+    .header{
+      width:100%;
+      line-height:10vw;
+      position:fixed;
+      z-index:1;
+      top:0;
+      text-align:center;
     }
 
-    .oder-body {
+    .order-body {
       background-color: #f0f0f0;
+      padding-top: 11vw;
+      .order-status {
+        background: url('../../../assets/images/redbg.png') no-repeat;
+        background-size: 100% 100%;
+        -moz-background-size: 100% 100%;
+        color: white;
+        height: 5em;
 
+        .statusInfo {
+          padding: 1em;
+          .fz(font-size, 40);
+          font-weight: bold;
+
+          img {
+            height: 40px;
+            width: 40px;
+            margin-right: 2px;
+          }
+        }
+      }
       .user-info {
         background-color: white;
         padding: 1em;

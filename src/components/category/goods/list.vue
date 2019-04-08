@@ -61,7 +61,13 @@
       onLoad() {
         let category = this.$route.query.category;
         let search = this.$route.query.search;
+        let that = this
         this.launchedLoading = true
+        this.$log("this.finished:"+this.finished);
+        this.$log("this.loading:"+this.loading);
+        this.$log("this.total:"+this.total);
+        this.$log("this.list.length:"+this.list.length);
+        this.$log("category.length:"+category.length);
         if (category != null && category.length > 0) {
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
@@ -74,16 +80,22 @@
               data: options,
             }).then((response) => {
               this.result = response.data.data.result;
+              this.$log(this.result)
               this.total = this.result.total;
-              this.result.list.forEach(item => {
-                this.list.push(item);
-              })
-              this.loading = false;
-              if (this.list.length >= this.total)
+              if(this.result.list.length == 0) {
+                this.loading = false;
                 this.finished = true;
+              } else {
+                this.result.list.forEach(item => {
+                  this.list.push(item);
+                })
+                this.loading = false;
+                if (this.list.length >= this.total)
+                  this.finished = true;
+              }
             }).catch(function (error) {
               console.log(error)
-              this.finished = true;
+              that.finished = true;
             })
           }
         } else if (search != undefined && search.length > 0) {
@@ -98,20 +110,31 @@
           }).then((response) => {
             this.result = response.data.data.result;
             this.total = this.result.total;
-            this.result.list.forEach(item => {
-              this.list.push(item);
-            })
-            this.loading = false;
-            if (this.list.length >= this.total)
+            if(this.result.list.length == 0) {
+              this.loading = false;
               this.finished = true;
+            } else {
+              this.result.list.forEach(item => {
+                this.list.push(item);
+              })
+              this.loading = false;
+              if (this.list.length >= this.total)
+                this.finished = true;
+            }
           }).catch(function (error) {
             console.log(error)
-            this.finished = true;
+            that.finished = true;
           })
         } else {
           //error
           this.finished = true;
         }
+
+        this.$log("--- this.finished:"+this.finished);
+        this.$log("--- this.loading:"+this.loading);
+        this.$log("--- this.total:"+this.total);
+        this.$log("--- this.list.length:"+this.list.length);
+        this.$log("--- category.length:"+category.length);
       },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
@@ -173,7 +196,7 @@
       text-align:center;
     }
     .van-list {
-      margin-top: 11vw;
+      padding-top: 11vw;
       .van-card {
         background-color: #ffffff;
         margin-top: 1em;

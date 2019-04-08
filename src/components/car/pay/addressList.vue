@@ -136,7 +136,7 @@
       text-align:center;
     }
     .list-body{
-      margin-top: 11vw;
+      padding-top: 11vw;
     }
   }
 </style>

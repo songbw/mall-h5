@@ -850,7 +850,7 @@
   .pay {
     width: 100%;
     padding-bottom: 5vw;
-    margin-top: 11vw;
+    padding-top: 11vw;
     .custom-text {
       text-align: left;
       .fz(font-size, 30px);
