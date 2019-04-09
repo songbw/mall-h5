@@ -1,7 +1,7 @@
 <template lang="html">
   <section class="content">
     <li v-for="k in contentData">
-      <img :src="k.imgPath">
+      <img v-lazy="k.imgPath">
     </li>
   </section>
 
