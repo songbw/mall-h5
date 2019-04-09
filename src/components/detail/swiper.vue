@@ -28,7 +28,7 @@
 
   .swiper {
     width: 100%;
-    position: relative;
+    min-height: 20em;
 
     .van-swipe {
       width: 100%;
