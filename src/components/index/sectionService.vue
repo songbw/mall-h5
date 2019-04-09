@@ -107,7 +107,6 @@
       display: flex;
 
       li {
-        padding: 1.2vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         width: 20%;
@@ -120,7 +119,6 @@
         img {
           width: 100%;
           display: block;
-          height: 3.73em;
         }
 
         h2 {
@@ -144,7 +142,6 @@
       display: flex;
 
       li {
-        padding: 1.2vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         width: 20%;
@@ -157,7 +154,7 @@
         img {
           width: 100%;
           display: block;
-          height: 3.73em;
+         // height: 3.73em;
         }
 
         h2 {
