@@ -3,7 +3,9 @@
     <v-header class="header">
       <h1 slot="title">确认订单</h1>
     </v-header>
-    <v-loading v-if="pageloading"></v-loading>
+    <div v-if="pageloading" style="padding-top: 2.3em">
+      <v-loading></v-loading>
+    </div>
     <div class="pay" v-else>
       <div class="pay-body">
         <div class="contact-address-card" @click="editAddressOrList">

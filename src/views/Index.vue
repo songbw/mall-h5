@@ -7,7 +7,9 @@
         <van-icon name="search" size="1.2em"/>
       </router-link>
     </v-header>
-    <v-loading v-if="pageloading"></v-loading>
+    <div v-if="pageloading" style="padding-top: 2.3em">
+      <v-loading></v-loading>
+    </div>
     <div v-else>
       <div class="index" :style="{'background-color': mBackgroundColor}">
         <div style="padding-left: 5px;padding-right: 5px">

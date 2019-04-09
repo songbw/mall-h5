@@ -3,7 +3,10 @@
     <v-header class="header">
       <h1 slot="title">商品详情</h1>
     </v-header>
-    <div class="detail-body">
+    <div v-if="pageloading" style="padding-top: 2.3em">
+      <v-loading></v-loading>
+    </div>
+    <div class="detail-body" v-else>
       <v-swiper :swiperData=swiperUrls></v-swiper>
       <div>
         <div class="promotion-price" v-if="hasPromotion">
@@ -52,6 +55,7 @@
   import Header from '@/common/_header.vue'
   import Action from '@/components/detail/action.vue'
   import CountDown from '@/common/_vue2-countdown.vue'
+  import Loading from '@/common/_loading.vue'
 
   export default {
     components: {
@@ -61,7 +65,8 @@
       'v-baseline': Baseline,
       'v-header': Header,
       'v-action': Action,
-      'v-countdown': CountDown
+      'v-countdown': CountDown,
+      'v-loading':Loading
     },
     beforeRouteEnter(to, from, next) {
       // chrome
@@ -72,7 +77,9 @@
       window.pageYOffset = 0
       next()
     },
-    created() {
+
+    mounted() {
+      this.pageloading = true;
       if (this.$store.state.appconf.currentGoods != undefined && this.$store.state.appconf.currentGoods.length > 0) {
         this.goods = JSON.parse(this.$store.state.appconf.currentGoods);
         this.$log(this.goods)
@@ -102,15 +109,15 @@
           if(this.goods.promotion != undefined && this.goods.promotion.length > 0) {
             this.PromotionStartTime = new Date(this.goods.promotion[0].startDate).getTime()
             this.PromotionEndTime = new Date(this.goods.promotion[0].endDate).getTime()
-           // this.PromotionStartTime = new Date('2019/04/1 18:08:00').getTime()
-           // this.PromotionEndTime = new Date('2019/04/1 18:08:20').getTime()
             this.promotionType = this.goods.promotion[0].promotionType
             this.discount = this.goods.promotion[0].discount
             this.promotionId = this.goods.promotion[0].id
             this.hasPromotion = true;
           }
         }
+
       }
+      this.pageloading = false;
     },
 
     data() {
@@ -124,7 +131,8 @@
         promotionType: -1,
         discount:0,
         promotionId: -1,
-        defaultLocation: '南京'
+        defaultLocation: '南京',
+        pageloading: true
       }
     },
     methods: {
