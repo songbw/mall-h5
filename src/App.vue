@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <transition enter-active-class="animated fadeIn">
+    <transition enter-active-class="animated fadeInRight">
       <keep-alive>
         <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
     </transition>
-    <transition enter-active-class="animated fadeIn" >
+    <transition enter-active-class="animated fadeInRight" >
       <router-view v-if="!$route.meta.keepAlive"></router-view>
     </transition>
   </div>
@@ -13,7 +13,21 @@
 
 <script>
   import Loading from '@/common/_loading'
+  import {
+    Lazyload
+  } from 'vant';
 
+  Vue.use(Lazyload, {
+    preLoad: 1.3,
+    error: 'static/error.png',
+    loading: 'static/loading.png',
+    attempt: 3,
+    adapter: {
+      loaded ({ bindType, el, naturalHeight, naturalWidth, $parent, src, loading, error, Init }) {
+        el.setAttribute("class","fadeIn")
+      }
+    }
+  })
   export default {
     components: {
       'v-loading': Loading
@@ -141,6 +155,29 @@
 
   .ac {
     text-align: center;
+  }
+
+  @-webkit-keyframes fadeIn {
+    0% {
+      opacity: 0
+    }
+    100% {
+      opacity: 1
+    }
+  }
+
+  @keyframes fadeIn {
+    0% {
+      opacity: 0
+    }
+    100% {
+      opacity: 1
+    }
+  }
+
+  .fadeIn {
+    animation: fadeIn 1s linear;
+    -webkit-animation: fadeIn 1s linear;
   }
 
 

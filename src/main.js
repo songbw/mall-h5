@@ -42,7 +42,6 @@ import {
   Field,
   Step,
   Steps,
-  Lazyload,
   Swipe,
   SwipeItem
 } from 'vant';
@@ -80,14 +79,6 @@ Vue.use(Button)
   .use(Steps)
   .use(Swipe)
   .use(SwipeItem);
-
-Vue.use(Lazyload, {
-  preLoad: 1,
-  error: 'static/error.png',
-  loading: 'static/loading.png',
-  attempt: 3
-})
-
 
 
 ///////////////////////////////////////////////////////////////////////
