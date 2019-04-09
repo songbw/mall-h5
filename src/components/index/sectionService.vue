@@ -120,7 +120,7 @@
         img {
           width: 100%;
           display: block;
-          height: 4em;
+          height: 3.73em;
         }
 
         h2 {
@@ -157,7 +157,7 @@
         img {
           width: 100%;
           display: block;
-          height: 4em;
+          height: 3.73em;
         }
 
         h2 {
