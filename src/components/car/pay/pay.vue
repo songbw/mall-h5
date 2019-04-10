@@ -503,7 +503,7 @@
             const invoice = JSON.parse(invoiceInfo);
             invoiceType = invoice.invoiceType
             if (invoice.invoiceTitleType === "personal") {
-              invoiceTitleName = ""
+              invoiceTitleName = "个人"
               invoiceEnterpriseNumber = ""
             } else {
               invoiceTitleName = invoice.invoiceEnterpriseName
@@ -638,15 +638,14 @@
                   let amount = 0;
                   let merchantNo = ""
                   let orderNos = ""
-                  if (result != undefined && result.length > 0 && result[0].orderId.length > 8) {
-                    let len = result[0].orderId.length;
-                    orderNos = JSON.stringify(result[0].orderId.substr(len - 8)).replace(/\"/g, "");
+                  if (result != undefined && result.length > 0 && result[0].orderNo.length > 8) {
+                    let len = result[0].orderNo.length;
+                    orderNos = JSON.stringify(result[0].orderNo.substr(len - 8)).replace(/\"/g, "");
                     if (options.merchants.length == 1) {//单商户
                       merchantNo = options.merchants[0].merchantNo;
                     }
                     orderNo = this.$api.APP_ID + merchantNo + user.openId + orderNos
                   }
-                  //amount = result.
                   if (orderNo.length > 0) {
                     that.$log("orderNo is:" + orderNo)
                     options.merchants.forEach(item => {
