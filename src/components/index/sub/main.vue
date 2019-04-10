@@ -61,8 +61,9 @@
             },
           }).then((response) => {
             this.title = response.data.data.result.name;
-            const pako = require('pako');
-            const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
+            //const pako = require('pako');
+           // const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
+            let jsonString = response.data.data.result.content
             this.datas = JSON.parse(jsonString);
             // this.$log(response.data.data.result)
             // this.$log(jsonString)
@@ -96,8 +97,9 @@
         },
       }).then((response) => {
         this.title = response.data.data.result.name;
-        const pako = require('pako');
-        const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
+       // const pako = require('pako');
+        //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
+        let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
         // this.$log(response.data.data.result)
         this.$log(this.datas)
