@@ -58,6 +58,7 @@
                   </div>
                   <div v-if="k.product.promotionState === 1">
                     <van-card
+                      :num="k.product.count"
                       :price="k.checkedPrice-k.product.promotion[0].discount"
                       :title="k.product.desc"
                       :thumb="k.product.image"
@@ -72,6 +73,7 @@
                   </div>
                   <div v-else>
                     <van-card
+                      :num="k.product.count"
                       :price="k.product.price"
                       :title="k.product.desc"
                       :thumb="k.product.image">
@@ -659,7 +661,8 @@
                     }
                     that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
                   } else {
-                    that.log("can not get correct orderNo");
+                    that.$log("can not get correct orderNo");
+                    that.$toast("服务器失败")
                   }
 
                 }).catch(function (error) {
@@ -721,7 +724,7 @@
           that.$log(error)
           that.$store.commit('SET_PAGE_LOADING', false);
           that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
-          this.$toast("无法获取到运费")
+          this.$log("无法获取到运费")
           if (this.pageLoadTimerId != -1) {
             clearTimeout(this.pageLoadTimerId)
           }
