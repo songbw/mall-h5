@@ -75,8 +75,9 @@
         method: 'get',
         url: '/aggregation/findHomePage'
       }).then((response) => {
-        const pako = require('pako');
-        const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
+       // const pako = require('pako');
+        //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
+        let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
         this.$log(this.datas);
         this.mBackgroundColor = response.data.data.result.backgroundColor
@@ -91,7 +92,7 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        this.test();
+        //this.test();
         this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
