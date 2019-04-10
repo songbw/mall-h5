@@ -106,7 +106,7 @@
     li:first-child:nth-last-child(1) {
       /* -或者可以使用- li:only-child { */
       width: 100%;
-
+      max-height: 20em;
       img {
         width: 100%;
         display: inline-block;
