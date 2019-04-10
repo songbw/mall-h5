@@ -56,6 +56,23 @@
       'v-baseline': Baseline,
       'v-loading': Loading
     },
+
+    beforeRouteLeave(to, from, next) {
+      console.log("beforeRouteLeave Enter")
+      console.log(from)
+      from.meta.savedPosition = document.body.scrollTop || document.documentElement.scrollTop || window.pageYOffset
+      next()
+    },
+
+    beforeRouteEnter(to, from, next) {
+      console.log("beforeRouteEnter Enter")
+      next(vm => {
+        setTimeout(() => {
+          window.scroll(0, to.meta.savedPosition)
+        }, 200);
+      })
+    },
+
     data() {
       return {
         datas: {},
@@ -75,7 +92,7 @@
         method: 'get',
         url: '/aggregation/findHomePage'
       }).then((response) => {
-       // const pako = require('pako');
+        // const pako = require('pako');
         //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
