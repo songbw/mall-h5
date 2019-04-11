@@ -64,6 +64,14 @@
       next()
     },
 
+    beforeRouteEnter(to, from, next) {
+      console.log("beforeRouteEnter Enter")
+      next(vm => {
+        setTimeout(() => {
+          window.scroll(0, to.meta.savedPosition)
+        }, 200);
+      })
+    },
 
     data() {
       return {

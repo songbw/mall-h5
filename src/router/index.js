@@ -25,7 +25,6 @@ const Promotion = resolve => require(['@/components/category/goods/promotion.vue
 
 
 export default new VueRouter({
-  mode:'history',
   routes: [
     {
       path: '/',
@@ -143,12 +142,5 @@ export default new VueRouter({
       name: '商品促销列表',
       component: Promotion,
     },
-  ],
-  scrollBehavior (to, from, savedPosition) {
-     return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        resolve({ x: 0, y: to.meta.savedPosition===undefined? 0 : to.meta.savedPosition })
-      }, 10)
-    })
-  }
+  ]
 })
