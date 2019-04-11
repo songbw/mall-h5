@@ -92,7 +92,7 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        //this.test();
+        this.test();
         this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
@@ -140,7 +140,7 @@
       },
       test() {
         //let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
-        let openId = "44391000fd194ab888b1aa81c03c3710"
+        let openId = "1044391000fd194ab888b1aa81c03c3710"
         this.$log("openId:" + openId);
         if (openId != undefined) {
           let userInfo = {

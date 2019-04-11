@@ -8,7 +8,7 @@
         <div v-for="(category,index) in datas.list" :title=category.title :key="index" class="content">
           <ul id="sectionGoods-list" :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
-              <img v-lazy="k.imagePath">
+              <img v-lazy="k.imagePath || k.image">
               <p>{{k.intro}}</p>
               <span :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
             </li>
