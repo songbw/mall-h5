@@ -32,17 +32,12 @@ export default new VueRouter({
       component: Index,
       meta: {
         keepAlive: true, //此组件需要被缓存
-        savedPosition: 0
       }
     },
     {
       path: '/index/:id',
       name: '活动页',
       component: IndexSub,
-      meta: {
-        keepAlive: true, //此组件需要被缓存
-        savedPosition: 0
-      }
     },
 
     {
