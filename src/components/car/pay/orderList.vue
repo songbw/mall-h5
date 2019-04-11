@@ -19,9 +19,9 @@
               <div class="orderDetail">
                 <div>
                   <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
-                    <van-icon slot="right-icon" name="delete" style="" @click="onDelBtnClick(k,i)"
+ <!--                   <van-icon slot="right-icon" name="delete" style="" @click="onDelBtnClick(k,i)"
                               style="margin: 0.25em 0em 0.3em 0.3em "
-                              v-show="k.status==2||k.status==3"/>
+                              v-show="k.status==2||k.status==3"/>-->
                   </van-cell>
                 </div>
                 <ul @click="onListClick(k,i)">
@@ -39,12 +39,28 @@
                 </div>
                 <div class="orderDetailAction">
                   <van-button plain round size="small" type="primary"
-                              style="background-color: #26a2ff;color: white;border-color: #26a2ff "
+                              style="background-color: #ff4444;color: white ;border-color: #ff4444"
+                              @click="onDelBtnClick(k,i)" v-show="k.status==2||k.status==3">
+                    删除订单
+                  </van-button>
+                  <van-button plain round size="small" type="primary"
+                              style="background-color: white;color: black ;border-color: #dedede"
+                              @click="onCancelBtnClick(k,i)" v-show="k.status==0">
+                    取消订单
+                  </van-button>
+                  <van-button plain round size="small" type="primary"
+                              style="background-color: white;color: #1989fa ;border-color: #dedede"
+                              href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
+                    联系客服
+                  </van-button>
+                  <van-button plain round size="small" type="primary"
+                              style="background-color: white;color: #ff4444;border-color: #dedede "
                               @click="onPayBtnClick(k,i)" v-show="k.status==0">
                     去支付
                   </van-button>
+
                   <van-button plain round size="small" type="primary"
-                              style="background-color: #26a2ff;color: white;border-color: #26a2ff "
+                              style="background-color: white;color: #ff4444;border-color: #dedede "
                               @click="onLogisticsBtnClick(k,i)" v-show="k.status==1">
                     查看物流
                   </van-button>
@@ -216,6 +232,25 @@
             that.$log(error)
           })
         }
+      },
+      onCancelBtnClick(listItem, i) {
+        this.$log("onCancelBtnClick Enter")
+        let id = listItem.id
+        let options = {
+          "id": id,
+          "status": 3
+        }
+        this.$api.xapi({
+          method: 'put',
+          url: '/order/status',
+          data: options,
+        }).then((response) => {
+          if (response.data.code == 200) {
+            listItem.status = 3;
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
 
       onPayBtnClick(listItem, i) {
