@@ -32,6 +32,7 @@
         </div>
       </div>
     </div>
+<!--    <v-footer></v-footer>-->
   </section>
 </template>
 
@@ -44,6 +45,7 @@
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import Baseline from '@/common/_baseline.vue'
   import Loading from '@/common/_loading.vue'
+/*  import Footer from '@/common/_footer.vue'*/
 
   export default {
     components: {
@@ -55,6 +57,7 @@
       'v-sectionGoods': sectionGoods,
       'v-baseline': Baseline,
       'v-loading': Loading
+/*      'v-footer':Footer*/
     },
     data() {
       return {
@@ -92,7 +95,7 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        this.test();
+   //     this.test();
         this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
@@ -140,7 +143,8 @@
       },
       test() {
         //  let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
-        let openId = "44391000fd194ab888b1aa81c03c3710"
+        //let openId = "44391000fd194ab888b1aa81c03c3710"
+        let openId = "46e794551c9144be82cc86c25703b936" //贺总
         this.$log("openId:" + openId);
         if (openId != undefined) {
           let userInfo = {

@@ -1,99 +1,75 @@
-<template lang="html">
-  <!-- gotoRouter:点击后路由跳转到与id名相同的route.name所对应的路径 -->
-  <footer class="footer" @click.stop='gotoRouter'>
-    <mt-tabbar v-model="selected" fixed>
-      <mt-tab-item id="首页">
-        <i slot="icon" class="icon-index"></i>
-        首页
-      </mt-tab-item>
-      <mt-tab-item id="分类页">
-        <i slot="icon" class="icon-category"></i>
-        分类
-      </mt-tab-item>
-      <mt-tab-item id="购物车页">
-        <i slot="icon" class="icon-car"></i>
-        购物车
-      </mt-tab-item>
-      <mt-tab-item id="用户页">
-        <i slot="icon" class="icon-user"></i>
-        我的
-      </mt-tab-item>
-    </mt-tabbar>
-  </footer>
+<!--<template>
+&lt;!&ndash;  <van-tabbar v-model="active" class="active_tab">
+    <van-tabbar-item
+      v-for="(item,index) in tabbars"
+      :key="index"
+      @click="tab(index,item.name)"
+    >
+      <span :class="currIndex == index ? active:''">{{item.title}}</span>
+      <template slot="icon" slot-scope="props">
+        <img :src="props.active ? item.active : item.normal">
+      </template>
+    </van-tabbar-item>
+  </van-tabbar>&ndash;&gt;
 </template>
 
 <script>
   export default {
-    methods: {
-      gotoRouter() {
-        this.$router.push({
-          name: this.selected
-        })
-      }
-    },
+    name: "tabbar",
     data() {
       return {
-        //对应mt-tab-item 的id值
-        selected: ''
-      }
+        currIndex: 0,
+        active: 0,
+        tabbars: [
+          {
+            name: "home",
+            title: "首页",
+            normal: require("../common/icon/home.png"),
+            active: require("../common/icon/home_ac.png")
+          },
+          {
+            name: "category",
+            title: "分类",
+            normal: require("../common/icon/category.png"),
+            active: require("../common/icon/category_ac.png")
+          },
+          {
+            name: "message",
+            title: "消息",
+            normal: require("../common/icon/message.png"),
+            active: require("../common/icon/message.png")
+          },
+          {
+            name: "cart",
+            title: "购物车",
+            normal: require("../common/icon/cart.png"),
+            active: require("../common/icon/cart_ac.png")
+          },
+          {
+            name: "mine",
+            title: "我的",
+            normal: require("../common/icon/mine.png"),
+            active: require("../common/icon/mine_ac.png")
+          }
+        ]
+      };
     },
-    mounted() {
-
-      //获取当前路由名称，根据该名称给当前footer添加is-selected
-      let Rname = this.$route.name;
-      switch (Rname) {
-        case '首页':
-          this.selected = '首页';
-          break;
-        case '分类页':
-          this.selected = '分类页';
-
-          break;
-        case '购物车页':
-          this.selected = '购物车页';
-
-          break;
-        case '用户页':
-          this.selected = '用户页';
-          break;
+    methods: {
+      tab(index, val) {
+        this.currIndex = index;
+        this.$router.push(val);
       }
     }
-
-  }
+  };
 </script>
 
 <style lang="less" scoped>
-  @import '../assets/fz.less';
-  @import '../assets/index/style.css';
-
-  .mint-tab-item-label:hover {
-    color: #333;
-
+  .active_tab img {
+    width: 26px;
+    height: 26px;
   }
 
-  .footer {
-
-
-    .mint-tabbar {
-      background-color: #fff;
-      background-image: none;
-      box-shadow: 0 0 2.2vw 0 hsla(0, 6%, 50%, .13);
-      -webkit-box-shadow: 0 0 2.2vw 0 hsla(0, 6%, 50%, .13);
-
-      .is-selected {
-        color: @cl;
-        background-color: #fff;
-
-        i {
-          &::before {
-            color: @cl;
-          }
-        }
-      }
-
-      i {
-        .fz(font-size, 42);
-      }
-    }
+  .van-tabbar-item&#45;&#45;active {
+    color: #e10f02;
   }
-</style>
+</style>-->

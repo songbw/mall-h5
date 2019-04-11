@@ -98,9 +98,6 @@
   @import "../../assets/index/style.css";
 
   .section0-list {
-    width: 100%;
-    white-space: nowrap;
-
     ul {
       display: -webkit-flex;
       display: -ms-flex;
@@ -119,6 +116,7 @@
         img {
           width: 100%;
           display: block;
+          height: 4.2em;
         }
 
         h2 {
@@ -154,7 +152,7 @@
         img {
           width: 100%;
           display: block;
-         // height: 3.73em;
+          height: 4.2em;
         }
 
         h2 {

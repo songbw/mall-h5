@@ -43,7 +43,9 @@ import {
   Step,
   Steps,
   Swipe,
-  SwipeItem
+  SwipeItem,
+  Tabbar,
+  TabbarItem
 } from 'vant';
 
 Vue.use(Button)
@@ -78,7 +80,9 @@ Vue.use(Button)
   .use(Step)
   .use(Steps)
   .use(Swipe)
-  .use(SwipeItem);
+  .use(SwipeItem)
+  .use(Tabbar)
+  .use(TabbarItem);
 
 
 ///////////////////////////////////////////////////////////////////////
