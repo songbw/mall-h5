@@ -6,12 +6,12 @@
         <van-icon name="shopping-cart-o" size="1.2em"/>
       </router-link>
     </v-header>
-    <section class="view">
+    <div class="view">
       <v-aside :datas="class1Data.list"/>
       <router-view
         :datas="class1Data.list"
       />
-    </section>
+    </div>
     <v-footer></v-footer>
   </div>
 </template>
@@ -61,6 +61,7 @@
     .view {
       width: 100%;
       height: 100%;
+      margin-bottom: 3em;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;

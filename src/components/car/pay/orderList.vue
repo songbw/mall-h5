@@ -4,73 +4,75 @@
     <v-header>
       <h1 slot="title">我的订单</h1>
     </v-header>
-    <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable>
-      <van-tab v-for="(item,type) in orderTypes" :title=item.title :key="type">
-        <van-list v-model="item.loading"
-                  :finished="item.finished"
-                  @load="onLoad(active)">
-          <div class="orderlist-body">
-            <div v-if="item.total === 0" class="no-oderlist">
-              <img :src=no_orderList_bg>
-              <span>您还没有相关订单</span>
-            </div>
-            <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none">
-
-              <div class="orderDetail">
-                <div>
-                  <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
- <!--                   <van-icon slot="right-icon" name="delete" style="" @click="onDelBtnClick(k,i)"
-                              style="margin: 0.25em 0em 0.3em 0.3em "
-                              v-show="k.status==2||k.status==3"/>-->
-                  </van-cell>
-                </div>
-                <ul @click="onListClick(k,i)">
-                  <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
-                    <van-card
-                      :price="sku.unitPrice"
-                      :title="sku.name"
-                      :num="sku.num"
-                      :thumb="sku.image">
-                    </van-card>
-                  </li>
-                </ul>
-                <div class="orderDetailSummery">
-                  <span>合计: ￥{{k.amount.toFixed(2)}}元 (含运费￥{{k.servFee.toFixed(2)}}元) </span>
-                </div>
-                <div class="orderDetailAction">
-                  <van-button plain round size="small" type="primary"
-                              style="background-color: #ff4444;color: white ;border-color: #ff4444"
-                              @click="onDelBtnClick(k,i)" v-show="k.status==2||k.status==3">
-                    删除订单
-                  </van-button>
-                  <van-button plain round size="small" type="primary"
-                              style="background-color: white;color: black ;border-color: #dedede"
-                              @click="onCancelBtnClick(k,i)" v-show="k.status==0">
-                    取消订单
-                  </van-button>
-                  <van-button plain round size="small" type="primary"
-                              style="background-color: white;color: #1989fa ;border-color: #dedede"
-                              href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
-                    联系客服
-                  </van-button>
-                  <van-button plain round size="small" type="primary"
-                              style="background-color: white;color: #ff4444;border-color: #dedede "
-                              @click="onPayBtnClick(k,i)" v-show="k.status==0">
-                    去支付
-                  </van-button>
-
-                  <van-button plain round size="small" type="primary"
-                              style="background-color: white;color: #ff4444;border-color: #dedede "
-                              @click="onLogisticsBtnClick(k,i)" v-show="k.status==1">
-                    查看物流
-                  </van-button>
-                </div>
+    <div class="orderlist-layout">
+      <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable>
+        <van-tab v-for="(item,type) in orderTypes" :title=item.title :key="type">
+          <van-list v-model="item.loading"
+                    :finished="item.finished"
+                    @load="onLoad(active)">
+            <div class="orderlist-body">
+              <div v-if="item.total === 0" class="no-oderlist">
+                <img :src=no_orderList_bg>
+                <span>您还没有相关订单</span>
               </div>
-            </li>
-          </div>
-        </van-list>
-      </van-tab>
-    </van-tabs>
+              <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none">
+
+                <div class="orderDetail">
+                  <div>
+                    <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
+                      <!--                   <van-icon slot="right-icon" name="delete" style="" @click="onDelBtnClick(k,i)"
+                                                   style="margin: 0.25em 0em 0.3em 0.3em "
+                                                   v-show="k.status==2||k.status==3"/>-->
+                    </van-cell>
+                  </div>
+                  <ul @click="onListClick(k,i)">
+                    <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
+                      <van-card
+                        :price="sku.unitPrice"
+                        :title="sku.name"
+                        :num="sku.num"
+                        :thumb="sku.image">
+                      </van-card>
+                    </li>
+                  </ul>
+                  <div class="orderDetailSummery">
+                    <span>合计: ￥{{k.amount.toFixed(2)}}元 (含运费￥{{k.servFee.toFixed(2)}}元) </span>
+                  </div>
+                  <div class="orderDetailAction">
+                    <van-button plain round size="small" type="primary"
+                                style="background-color: #ff4444;color: white ;border-color: #ff4444"
+                                @click="onDelBtnClick(k,i)" v-show="k.status==2||k.status==3">
+                      删除订单
+                    </van-button>
+                    <van-button plain round size="small" type="primary"
+                                style="background-color: white;color: black ;border-color: #dedede"
+                                @click="onCancelBtnClick(k,i)" v-show="k.status==0">
+                      取消订单
+                    </van-button>
+                    <van-button plain round size="small" type="primary"
+                                style="background-color: white;color: #1989fa ;border-color: #dedede"
+                                href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
+                      联系客服
+                    </van-button>
+                    <van-button plain round size="small" type="primary"
+                                style="background-color: white;color: #ff4444;border-color: #dedede "
+                                @click="onPayBtnClick(k,i)" v-show="k.status==0">
+                      去支付
+                    </van-button>
+
+                    <van-button plain round size="small" type="primary"
+                                style="background-color: white;color: #ff4444;border-color: #dedede "
+                                @click="onLogisticsBtnClick(k,i)" v-show="k.status==1">
+                      查看物流
+                    </van-button>
+                  </div>
+                </div>
+              </li>
+            </div>
+          </van-list>
+        </van-tab>
+      </van-tabs>
+    </div>
     <v-footer></v-footer>
   </div>
 </template>
@@ -402,69 +404,73 @@
     width: 100%;
     text-align: left;
 
-    .section-title {
-      background-color: #ffffff;
-      text-align: left;
-      margin: 1em;
-      .fz(font-size, 30);
-      color: #000000;
-    }
-
-    .orderlist-body {
-      background-color: #f0f0f0;
-
-      span {
+    .orderlist-layout{
+      margin-bottom: 3em;
+      .section-title {
+        background-color: #ffffff;
+        text-align: left;
+        margin: 1em;
         .fz(font-size, 30);
+        color: #000000;
       }
 
-      .no-oderlist {
-        width: 100%;
-        display: flex;
-        background-color: white;
-        flex-flow: column;
-        text-align: center;
-        justify-content: center;
+      .orderlist-body {
+        background-color: #f0f0f0;
 
-        img {
-          margin: 0 auto;
-          height: 150px;
-          width: 150px;
-        }
-      }
-
-      .orderDetail {
-        background-color: white;
-        margin-top: 1em;
-
-        .orderDetailSummery {
-          background-color: #ffffff;
-          text-align: right;
-          margin-right: 1em;
+        span {
           .fz(font-size, 30);
-          color: #000000;
         }
 
-        .orderDetailAction {
-          text-align: right;
-          margin: 1em;
-          padding-bottom: 1em;
+        .no-oderlist {
+          width: 100%;
+          display: flex;
+          background-color: white;
+          flex-flow: column;
+          text-align: center;
+          justify-content: center;
 
-          span {
-            .fz(font-size, 22);
+          img {
+            margin: 0 auto;
+            height: 150px;
+            width: 150px;
           }
         }
 
-        .van-card {
-          background-color: #ffffff;
+        .orderDetail {
+          background-color: white;
+          margin-top: 1em;
 
-          &__price {
-            margin-top: 0.5em;
-            .fz(font-size, 40);
+          .orderDetailSummery {
+            background-color: #ffffff;
+            text-align: right;
+            margin-right: 1em;
+            .fz(font-size, 30);
+            color: #000000;
           }
-        }
 
+          .orderDetailAction {
+            text-align: right;
+            margin: 1em;
+            padding-bottom: 1em;
+
+            span {
+              .fz(font-size, 22);
+            }
+          }
+
+          .van-card {
+            background-color: #ffffff;
+
+            &__price {
+              margin-top: 0.5em;
+              .fz(font-size, 40);
+            }
+          }
+
+        }
       }
     }
+
 
 
   }

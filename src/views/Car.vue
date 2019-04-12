@@ -72,7 +72,7 @@
         </div>
       </van-list>
     </div>
-    <v-cartfooter/>
+    <v-cartfooter class="cartfooter"/>
     <v-footer></v-footer>
   </div>
 </template>
@@ -465,6 +465,9 @@
           text-align: center;
         }
       }
+    }
+    .cartfooter{
+      margin-bottom: 3em;
     }
   }
 </style>

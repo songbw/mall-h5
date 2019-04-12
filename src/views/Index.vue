@@ -23,14 +23,6 @@
         </div>
         <!--        <v-baseline/>-->
       </div>
-      <div class="float-button-group" v-if="showFloatButton">
-        <div class="float-button" @click="gotoShoppingCart">
-          <img style="height: 1.5em;width: 1.5em" :src="icon_shopCart">
-        </div>
-        <div class="float-button" @click="gotoOrderList">
-          <img style="height: 1.5em;width: 1.5em" :src="icon_orderList">
-        </div>
-      </div>
       <v-footer></v-footer>
     </div>
   </section>
@@ -110,14 +102,6 @@
       }
     },
     methods: {
-      gotoShoppingCart() {
-        this.$log("gotoShoppingCart Enter")
-        this.$router.push({name: '购物车页'})
-      },
-      gotoOrderList() {
-        this.$log("gotoOrderList Enter")
-        this.$router.push({name: '订单列表页'})
-      },
       initJsNativeCb() {
         this.$jsbridge.register('locationResult', (data) => {
           this.$log("locationResult:" + data);
