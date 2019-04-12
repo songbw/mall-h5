@@ -82,6 +82,7 @@ const mutations = {
   },
 
   [types.SET_CURRENT_NAVI_INDEX](state, res) {
+    console.log("SET_CURRENT_NAVI_INDEX")
     state.currentNaviIndex = res
   },
 }

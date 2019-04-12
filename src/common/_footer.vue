@@ -6,9 +6,9 @@
         :key="index"
         @click="tab(index,item.name)"
       >
-        <span :class="currIndex == index ? active:''">{{item.title}}</span>
-        <template slot="icon" slot-scope="props">
-          <img :src="props.active ? item.active : item.normal">
+        <span :class="currIndex == index? 'title_active' : 'title_norm'">{{item.title}}</span>
+        <template slot="icon">
+          <img :src="currIndex == index ? item.active : item.normal">
         </template>
       </van-tabbar-item>
     </van-tabbar>
@@ -20,7 +20,6 @@
     name: "tabbar",
     data() {
       return {
-        currIndex: 0,
         active: 0,
         tabbars: [
           {
@@ -50,14 +49,16 @@
         ]
       };
     },
-    mounted() {
-      this.$log("active:" + this.active);
-      this.$log("currentIndex:"+this.currIndex)
+
+    computed: {
+      currIndex() {
+        return this.$store.state.appconf.currentNaviIndex
+      }
     },
+
     methods: {
       tab(index, val) {
-        this.currIndex = index;
-        this.$store.commit('SET_CURRENT_NAVI_INDEX', this.currIndex);
+        this.$store.commit('SET_CURRENT_NAVI_INDEX', index);
         this.$router.push(val);
       }
     }
@@ -65,14 +66,17 @@
 </script>
 
 <style lang="less" scoped>
-  .navigationBar{
+  .navigationBar {
     .active_tab img {
-      width: 26px;
-      height: 26px;
+      width: 1.2em;
+      height: 1.2em;
     }
 
-    .van-tabbar-item--active {
+    .title_active {
       color: #f0cb92;
+    }
+    .title_norm{
+      color: black;
     }
   }
 
