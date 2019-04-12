@@ -28,6 +28,13 @@
       'v-aside': Aside,
       'v-footer':Footer
     },
+
+    beforeRouteEnter(to, from, next) {
+      next(vm=>{
+        vm.$store.commit('SET_CURRENT_NAVI_INDEX', 1);
+      })
+    },
+
     data() {
       return {
         allData: {},

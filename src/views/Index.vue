@@ -51,6 +51,13 @@
       'v-loading': Loading,
       'v-footer':Footer
     },
+
+    beforeRouteEnter(to, from, next) {
+      next(vm=>{
+        vm.$store.commit('SET_CURRENT_NAVI_INDEX', 0);
+      })
+    },
+
     data() {
       return {
         datas: {},
@@ -85,6 +92,7 @@
     },
 
     created() {
+      this.$store.commit('SET_CURRENT_NAVI_INDEX', 0);
       this.initJsNativeCb();
       setTimeout(() => {
         this.test();

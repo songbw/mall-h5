@@ -91,6 +91,12 @@
       "v-countdown": CountDown,
       'v-footer': Footer,
     },
+    beforeRouteEnter(to, from, next) {
+      next(vm=>{
+        vm.$store.commit('SET_CURRENT_NAVI_INDEX', 2);
+      })
+    },
+
     computed: {
       SelfList() {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList

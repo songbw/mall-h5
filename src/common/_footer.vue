@@ -42,7 +42,7 @@
           },
           {
             name: "/car/oderList",
-            title: "我的订单",
+            title: "订单",
             normal: require('@/assets/icons/ico_my.png'),
             active: require('@/assets/icons/ico_my_active.png')
           }
