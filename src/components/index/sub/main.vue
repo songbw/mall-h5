@@ -15,14 +15,6 @@
       </div>
       <!--    <v-baseline/>-->
     </div>
-    <div class="float-button-group" v-if="showFloatButton">
-      <div class="float-button" @click="gotoShoppingCart">
-        <img style="height: 1.5em;width: 1.5em" :src="icon_shopCart">
-      </div>
-      <div class="float-button" @click="gotoOrderList">
-        <img style="height: 1.5em;width: 1.5em" :src="icon_orderList">
-      </div>
-    </div>
   </section>
 </template>
 
@@ -132,27 +124,7 @@
 <style lang="less" scoped>
   .index {
     width: 100%;
-    padding-bottom: 14vw;
+    padding-bottom: 4vw;
     background-color: #F8FCFF;
-  }
-
-  .float-button-group {
-    position: fixed;
-    bottom: 20px;
-    right: 10px;
-
-    .float-button {
-      opacity: 0.8;
-      background: #27282C;
-      margin: 2px;
-      height: 3em;
-      width: 3em;
-      text-align: center;
-      line-height: 3em;
-      border-radius: 50%;
-      -moz-border-radius: 50%;
-      -webkit-border-radius: 50%;
-
-    }
   }
 </style>
