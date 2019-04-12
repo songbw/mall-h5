@@ -92,10 +92,9 @@
     },
 
     created() {
-      this.$store.commit('SET_CURRENT_NAVI_INDEX', 0);
       this.initJsNativeCb();
       setTimeout(() => {
-        this.test();
+        //this.test();
         this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
