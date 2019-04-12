@@ -15,7 +15,8 @@ const state = {
   invoice: '',
   payDirectProduct:'',
   currentOrderInfo:'',
-  prePayOrderList:[]
+  prePayOrderList:[],
+  currentNaviIndex: 0
 }
 
 const mutations = {
@@ -78,6 +79,10 @@ const mutations = {
        state.prePayOrderList = list;
     else
       state.prePayOrderList = [];
+  },
+
+  [types.SET_CURRENT_NAVI_INDEX](state, res) {
+    state.currentNaviIndex = res
   },
 }
 

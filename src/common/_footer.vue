@@ -50,9 +50,14 @@
         ]
       };
     },
+    mounted() {
+      this.$log("active:" + this.active);
+      this.$log("currentIndex:"+this.currIndex)
+    },
     methods: {
       tab(index, val) {
         this.currIndex = index;
+        this.$store.commit('SET_CURRENT_NAVI_INDEX', this.currIndex);
         this.$router.push(val);
       }
     }
