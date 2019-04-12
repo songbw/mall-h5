@@ -57,21 +57,24 @@
                     </v-countdown>
                   </div>
                   <div v-if="k.product.promotionState === 1">
+                    <div v-if="!k.valid">
+                      <van-cell title="无效商品，不计入订单" icon="info" style="color: #ff4444" />
+                    </div>
                     <van-card
                       :num="k.product.count"
                       :price="k.checkedPrice-k.product.promotion[0].discount"
                       :title="k.product.desc"
                       :thumb="k.product.image"
                       :origin-price="k.product.price">
-                      <div  slot="desc">
+                      <div slot="desc">
                         <span class="prodDesc">{{locationCity}}</span>
-                      </div>
-                      <div slot="footer">
-                        <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
                       </div>
                     </van-card>
                   </div>
                   <div v-else>
+                    <div v-if="!k.valid">
+                      <van-cell title="无效商品，不计入订单" icon="info" style="color: #ff4444" />
+                    </div>
                     <van-card
                       :num="k.product.count"
                       :price="k.product.price"
@@ -79,9 +82,6 @@
                       :thumb="k.product.image">
                       <div slot="desc">
                         <span class="prodDesc">{{locationCity}}</span>
-                      </div>
-                      <div slot="footer">
-                        <span style="color: #f44336" v-if="!k.valid">无效商品，不记入订单</span>
                       </div>
                     </van-card>
                   </div>
@@ -229,7 +229,7 @@
               this.$log("item:" + JSON.stringify(item))
               if (item.valid) {
                 //change for promotion
-                if(item.product.promotionState === 1) {
+                if (item.product.promotionState === 1) {
                   try {
                     all += (item.checkedPrice - item.product.promotion[0].discount) * item.product.count
                   } catch (e) {
@@ -366,29 +366,29 @@
     },
 
     methods: {
-      countDownS_cb(index,k) {
+      countDownS_cb(index, k) {
         let found = -1;
         for (let i = 0; i < this.payCarList.length; i++) {
           if (this.payCarList[i].product.skuId == k.skuId) {
             found = i;
           }
         }
-        if(found != -1) {
+        if (found != -1) {
           this.payCarList[found].product.promotionState = Util.getPromotionState(k)
           this.savePayList()
         }
       },
-      countDownE_cb(index,k) {
+      countDownE_cb(index, k) {
         let found = -1;
         for (let i = 0; i < this.payCarList.length; i++) {
           if (this.payCarList[i].product.skuId == k.skuId) {
             found = i;
           }
         }
-        if(found != -1) {
+        if (found != -1) {
           this.payCarList[found].product.promotionState = Util.getPromotionState(k)
           let len = this.payCarList[found].product.promotion.length;
-          this.payCarList[found].product.promotion.splice(0,len);
+          this.payCarList[found].product.promotion.splice(0, len);
           this.savePayList()
         }
       },
@@ -522,18 +522,19 @@
               let unitPrice = sku.checkedPrice;
               let promotionId = "";
               let couponId = "";
-              if(sku.product.promotionState == 1) {
+              if (sku.product.promotionState == 1) {
                 unitPrice = sku.checkedPrice - sku.product.promotion[0].discount
                 promotionId = sku.product.promotion[0].id
               }
-
-              skus.push({
-                "skuId": sku.product.skuId,
-                "num": sku.product.count,
-                "unitPrice": unitPrice,
-                "promotionId": promotionId,
-                "couponId": couponId
-              })
+              if (sku.valid) {
+                skus.push({
+                  "skuId": sku.product.skuId,
+                  "num": sku.product.count,
+                  "unitPrice": unitPrice,
+                  "promotionId": promotionId,
+                  "couponId": couponId
+                })
+              }
             })
             //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
             // let usrId = this.prefixInteger(user.userId, 8);
@@ -608,6 +609,17 @@
         })
       },
 
+      isValidOrder(options) {
+        this.$log("isValidOrder:" + JSON.stringify(options))
+        let count = 0;
+        options.merchants.forEach(merchant => {
+             count += merchant.skus.length;
+          }
+        )
+        if(count > 0)
+          return true;
+        return false;
+      },
       onSubmit() {
         let that = this
         that.$log("onSubmit Enter!!!")
@@ -624,53 +636,56 @@
           } else {
             try {
               let options = this.getComposedOderOption(userInfo, receiverId);
-              this.$log("下单:" + JSON.stringify(options))
-              if (options != null) {
-                that.$api.xapi({
-                  method: 'post',
-                  url: '/order',
-                  data: options,
-                }).then((response) => {
-                  that.$log("onSubmit:" + JSON.stringify(response.data));
-                  let result = response.data.data.result;
-                  that.$log("result:" + JSON.stringify(result))
-                  let orderNo = ""
-                  let amount = 0;
-                  let merchantNo = ""
-                  let orderNos = ""
-                  if (result != undefined && result.length > 0 && result[0].orderNo.length > 8) {
-                    let len = result[0].orderNo.length;
-                    orderNos = JSON.stringify(result[0].orderNo.substr(len - 8)).replace(/\"/g, "");
-                    if (options.merchants.length == 1) {//单商户
-                      merchantNo = options.merchants[0].merchantNo;
+              if (this.isValidOrder(options)) {
+                if (options != null) {
+                  that.$api.xapi({
+                    method: 'post',
+                    url: '/order',
+                    data: options,
+                  }).then((response) => {
+                    that.$log("onSubmit:" + JSON.stringify(response.data));
+                    let result = response.data.data.result;
+                    that.$log("result:" + JSON.stringify(result))
+                    let orderNo = ""
+                    let amount = 0;
+                    let merchantNo = ""
+                    let orderNos = ""
+                    if (result != undefined && result.length > 0 && result[0].orderNo.length > 8) {
+                      let len = result[0].orderNo.length;
+                      orderNos = JSON.stringify(result[0].orderNo.substr(len - 8)).replace(/\"/g, "");
+                      if (options.merchants.length == 1) {//单商户
+                        merchantNo = options.merchants[0].merchantNo;
+                      }
+                      orderNo = this.$api.APP_ID + merchantNo + user.openId + orderNos
                     }
-                    orderNo = this.$api.APP_ID + merchantNo + user.openId + orderNos
-                  }
-                  if (orderNo.length > 0) {
-                    that.$log("orderNo is:" + orderNo)
-                    options.merchants.forEach(item => {
-                      amount += item.amount;
-                    })
-                    let pAnOrderInfo = {
-                      "accessToken": user.accessToken,
-                      "orderNo": '',// orderNo,
-                      "orderAmount": amount * 100,//分
-                      "openId": user.openId,
-                      "businessType": "11"
+                    if (orderNo.length > 0) {
+                      that.$log("orderNo is:" + orderNo)
+                      options.merchants.forEach(item => {
+                        amount += item.amount;
+                      })
+                      let pAnOrderInfo = {
+                        "accessToken": user.accessToken,
+                        "orderNo": '',// orderNo,
+                        "orderAmount": amount * 100,//分
+                        "openId": user.openId,
+                        "businessType": "11"
+                      }
+                      that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
+                    } else {
+                      that.$log("can not get correct orderNo");
+                      that.$toast("服务器失败")
                     }
-                    that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
-                  } else {
-                    that.$log("can not get correct orderNo");
-                    that.$toast("服务器失败")
-                  }
 
-                }).catch(function (error) {
-                  that.$log(error)
-                })
+                  }).catch(function (error) {
+                    that.$log(error)
+                  })
 
+                }
+              } else {
+                this.$log("无效订单")
+                this.$toast("无效订单")
               }
             } catch (e) {
-
             }
           }
         } else {
@@ -749,7 +764,7 @@
           this.selectedCarList.forEach(item => {
             inventorySkus.push({"skuId": item.skuId, "remainNum": item.count})
             skus.push({"skuId": item.skuId})
-            if(item.promotion.length > 0) {
+            if (item.promotion.length > 0) {
               item.promotionState = Util.getPromotionState(item);
             }
             //////////////////
@@ -777,6 +792,8 @@
             for (let i = 0; i < this.payCarList.length; i++) {
               if (this.payCarList[i].product.skuId == item.skuId && 1 === parseInt(item.state)) {
                 this.payCarList[i].valid = true
+              } else {
+                this.payCarList[i].valid = false
               }
             }
           })
@@ -843,16 +860,19 @@
 
 <style lang="less" scoped>
   @import "../../../assets/fz.less";
-  .header{
-    width:100%;
-    position:fixed;
-    z-index:5;
-    top:0;
+
+  .header {
+    width: 100%;
+    position: fixed;
+    z-index: 5;
+    top: 0;
   }
+
   .pay {
     width: 100%;
     padding-bottom: 5vw;
     padding-top: 2.3em;
+
     .custom-text {
       text-align: left;
       .fz(font-size, 30px);
@@ -911,8 +931,7 @@
 
         .van-card {
           background-color: #ffffff;
-          margin-top: -1px;
-          .prodDesc{
+          .prodDesc {
             .fz(font-size, 20);
             background-color: #ff4444;
             padding: 2px;
@@ -924,6 +943,7 @@
             white-space: nowrap;
             text-align: center;
           }
+
           &__price {
             margin-top: 0.5em;
             .fz(font-size, 40);
@@ -943,14 +963,17 @@
     .supplyer {
       margin-top: 1em;
       background-color: white;
+
       .promotionBox {
         display: flex;
         margin: 15px 5px 5px 15px;
         .fz(font-size, 25);
+
         .promotionTitle {
           color: #ff4444;
           font-weight: bold;
         }
+
         .promotionCountDown {
           margin-left: 10px;
           margin-top: 2px;
@@ -958,11 +981,14 @@
           .fz(font-size, 25);
         }
       }
-      .supplyerSummery{
-        margin-top: 5px;
+
+      .supplyerSummery {
+        margin-top: 10px;
         font-weight: bold;
         color: #2c3e50;
+        padding-bottom: 10px;
       }
+
       span {
         .fz(font-size, 30);
       }
