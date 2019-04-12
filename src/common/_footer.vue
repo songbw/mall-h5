@@ -1,16 +1,18 @@
-<!--<template>
-&lt;!&ndash;  <van-tabbar v-model="active" class="active_tab">
-    <van-tabbar-item
-      v-for="(item,index) in tabbars"
-      :key="index"
-      @click="tab(index,item.name)"
-    >
-      <span :class="currIndex == index ? active:''">{{item.title}}</span>
-      <template slot="icon" slot-scope="props">
-        <img :src="props.active ? item.active : item.normal">
-      </template>
-    </van-tabbar-item>
-  </van-tabbar>&ndash;&gt;
+<template>
+  <div class="navigationBar">
+    <van-tabbar v-model="active" class="active_tab">
+      <van-tabbar-item
+        v-for="(item,index) in tabbars"
+        :key="index"
+        @click="tab(index,item.name)"
+      >
+        <span :class="currIndex == index ? active:''">{{item.title}}</span>
+        <template slot="icon" slot-scope="props">
+          <img :src="props.active ? item.active : item.normal">
+        </template>
+      </van-tabbar-item>
+    </van-tabbar>
+  </div>
 </template>
 
 <script>
@@ -22,34 +24,28 @@
         active: 0,
         tabbars: [
           {
-            name: "home",
+            name: "/",
             title: "首页",
-            normal: require("../common/icon/home.png"),
-            active: require("../common/icon/home_ac.png")
+            normal: require('@/assets/icons/ico_home_default.png'),
+            active: require('@/assets/icons/ico_home_active.png')
           },
           {
-            name: "category",
+            name: "/category",
             title: "分类",
-            normal: require("../common/icon/category.png"),
-            active: require("../common/icon/category_ac.png")
+            normal: require('@/assets/icons/ico_classification.png'),
+            active: require('@/assets/icons/ico_classification_active.png')
           },
           {
-            name: "message",
-            title: "消息",
-            normal: require("../common/icon/message.png"),
-            active: require("../common/icon/message.png")
-          },
-          {
-            name: "cart",
+            name: "/car",
             title: "购物车",
-            normal: require("../common/icon/cart.png"),
-            active: require("../common/icon/cart_ac.png")
+            normal: require('@/assets/icons/ico_shopping_cart.png'),
+            active: require('@/assets/icons/ico_shopping_cart_active.png')
           },
           {
-            name: "mine",
-            title: "我的",
-            normal: require("../common/icon/mine.png"),
-            active: require("../common/icon/mine_ac.png")
+            name: "/car/oderList",
+            title: "我的订单",
+            normal: require('@/assets/icons/ico_my.png'),
+            active: require('@/assets/icons/ico_my_active.png')
           }
         ]
       };
@@ -64,12 +60,15 @@
 </script>
 
 <style lang="less" scoped>
-  .active_tab img {
-    width: 26px;
-    height: 26px;
+  .navigationBar{
+    .active_tab img {
+      width: 26px;
+      height: 26px;
+    }
+
+    .van-tabbar-item--active {
+      color: #f0cb92;
+    }
   }
 
-  .van-tabbar-item&#45;&#45;active {
-    color: #e10f02;
-  }
-</style>-->
+</style>

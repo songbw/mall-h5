@@ -12,6 +12,7 @@
         :datas="class1Data.list"
       />
     </section>
+    <v-footer></v-footer>
   </div>
 </template>
 
@@ -19,11 +20,13 @@
 
   import Header from '@/common/_header.vue'
   import Aside from '@/components/category/aside.vue'
+  import Footer from '@/common/_footer.vue'
 
   export default {
     components: {
       'v-header': Header,
-      'v-aside': Aside
+      'v-aside': Aside,
+      'v-footer':Footer
     },
     data() {
       return {

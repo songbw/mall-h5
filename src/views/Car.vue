@@ -72,17 +72,25 @@
         </div>
       </van-list>
     </div>
-    <v-footer/>
+    <v-cartfooter/>
+    <v-footer></v-footer>
   </div>
 </template>
 
 <script>
   import Header from '@/common/_header.vue'
-  import Footer from '@/components/car/footer.vue'
+  import CartFooter from '@/components/car/footer.vue'
   import CountDown from '@/common/_vue2-countdown.vue'
   import Util from '@/util/common'
+  import Footer from '@/common/_footer.vue'
 
   export default {
+    components: {
+      'v-header': Header,
+      'v-cartfooter': CartFooter,
+      "v-countdown": CountDown,
+      'v-footer': Footer,
+    },
     computed: {
       SelfList() {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
@@ -351,11 +359,6 @@
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
       }
 
-    },
-    components: {
-      'v-header': Header,
-      'v-footer': Footer,
-      "v-countdown": CountDown
     },
   }
 

@@ -71,16 +71,18 @@
         </van-list>
       </van-tab>
     </van-tabs>
+    <v-footer></v-footer>
   </div>
 </template>
 
 <script>
   import Header from '@/common/_header.vue'
-
+  import Footer from '@/common/_footer.vue'
 
   export default {
     components: {
       'v-header': Header,
+      'v-footer':Footer
     },
     data() {
       return {

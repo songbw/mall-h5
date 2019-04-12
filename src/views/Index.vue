@@ -31,8 +31,8 @@
           <img style="height: 1.5em;width: 1.5em" :src="icon_orderList">
         </div>
       </div>
+      <v-footer></v-footer>
     </div>
-<!--    <v-footer></v-footer>-->
   </section>
 </template>
 
@@ -45,7 +45,7 @@
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import Baseline from '@/common/_baseline.vue'
   import Loading from '@/common/_loading.vue'
-/*  import Footer from '@/common/_footer.vue'*/
+  import Footer from '@/common/_footer.vue'
 
   export default {
     components: {
@@ -56,8 +56,8 @@
       'v-sectionSlide': sectionSlide,
       'v-sectionGoods': sectionGoods,
       'v-baseline': Baseline,
-      'v-loading': Loading
-/*      'v-footer':Footer*/
+      'v-loading': Loading,
+      'v-footer':Footer
     },
     data() {
       return {
@@ -95,7 +95,7 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-   //     this.test();
+        this.test();
         this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
