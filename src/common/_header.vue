@@ -1,23 +1,25 @@
 <template>
   <header>
-    <van-row>
+    <van-row type="flex">
       <van-col span="3">
-        <router-link
-          class="icon-go"
-          :to="{ name: '首页'}"
-          v-if="$route.matched[0].path=='/category'"
-          replace>
-        </router-link>
-        <router-link
-          class="icon-go"
-          :to="{ name: '首页'}"
-          v-else-if="$route.matched[0].path=='/car/oderList'"
-          replace>
-        </router-link>
-        <span  class="icon-go" @click="closeWindow"  v-else-if="$route.name==='首页'">
+        <div v-if="goback===true">
+          <router-link
+            class="icon-go"
+            :to="{ name: '首页'}"
+            v-if="$route.matched[0].path=='/category'"
+            replace>
+          </router-link>
+          <router-link
+            class="icon-go"
+            :to="{ name: '首页'}"
+            v-else-if="$route.matched[0].path=='/car/oderList'"
+            replace>
+          </router-link>
+          <span class="icon-go" @click="closeWindow" v-else-if="$route.name==='首页'">
         </span>
-        <span class="icon-go" @click="$router.go(-1)" v-else>
+          <span class="icon-go" @click="$router.go(-1)" v-else>
         </span>
+        </div>
       </van-col>
       <van-col span="18">
         <slot name="title"></slot>
@@ -66,6 +68,12 @@
 
 <script>
   export default {
+    props: {
+      goback: {
+        type: Boolean,
+        default: true
+      }
+    },
     methods: {
       closeWindow() {
         this.$jsbridge.call("closeWindow");

@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="car">
-    <v-header class="header">
+    <v-header class="header" :goback="false">
       <h1 slot="title">购物车</h1>
     </v-header>
     <div class="cartBody">
@@ -375,8 +375,8 @@
 
   .car {
     width: 100%;
-    // margin-bottom: 18vw;
     height: 100%;
+
     .header{
       width:100%;
       position:fixed;
@@ -384,7 +384,7 @@
       top:0;
     }
     .cartBody {
-      padding-top: 2.3em;
+      margin-top: 3em;
       margin-bottom: 4.2em;
       .nothingInCar {
         display: flex;

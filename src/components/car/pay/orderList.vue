@@ -1,7 +1,6 @@
 <template lang="html">
-
-  <div class="orderlist">
-    <v-header>
+  <div class="orderlist" :goback="false">
+    <v-header :goback="false">
       <h1 slot="title">我的订单</h1>
     </v-header>
     <div class="orderlist-layout">
