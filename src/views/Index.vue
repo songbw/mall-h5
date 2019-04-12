@@ -1,31 +1,28 @@
 <template lang="html">
   <!-- 在首页父组件发送http请求,后将数据通过props传递给子组件,可减少请求次数,减少服务器压力 -->
-  <section>
-    <v-header class="header">
+  <div class="wrap">
+    <v-header>
       <h1 slot="title">商城</h1>
       <router-link :to="{name:'搜索页'}" slot="right">
         <van-icon name="search" size="1.2em"/>
       </router-link>
     </v-header>
-    <div v-if="pageloading" style="padding-top: 2.3em">
+    <div v-if="pageloading">
       <v-loading></v-loading>
     </div>
-    <div v-else>
-      <div class="index" :style="{'background-color': mBackgroundColor}">
-        <div style="padding-left: 5px;padding-right: 5px">
-          <li v-for="item in datas" style="list-style: none">
-            <v-swiper v-if="item.type==='0'" :datas="item.data"/>
-            <v-service v-else-if="item.type==='1'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-            <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-            <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
-            <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
-          </li>
-        </div>
-        <!--        <v-baseline/>-->
+   <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
+      <div style="padding-left: 5px;padding-right: 5px">
+        <li v-for="item in datas" style="list-style: none">
+          <v-swiper v-if="item.type==='0'" :datas="item.data"/>
+          <v-service v-else-if="item.type==='1'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
+          <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
+        </li>
       </div>
-      <v-footer></v-footer>
     </div>
-  </section>
+    <v-footer></v-footer>
+  </div>
 </template>
 
 <script>
@@ -49,11 +46,11 @@
       'v-sectionGoods': sectionGoods,
       'v-baseline': Baseline,
       'v-loading': Loading,
-      'v-footer':Footer
+      'v-footer': Footer
     },
 
     beforeRouteEnter(to, from, next) {
-      next(vm=>{
+      next(vm => {
         vm.$store.commit('SET_CURRENT_NAVI_INDEX', 0);
       })
     },
@@ -77,7 +74,7 @@
         method: 'get',
         url: '/aggregation/findHomePage'
       }).then((response) => {
-       // const pako = require('pako');
+        // const pako = require('pako');
         //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
@@ -288,29 +285,15 @@
 
 
 <style lang="less" scoped>
-  .index {
+  .wrap {
     width: 100%;
-    padding-bottom: 14vw;
-    background-color: #ffffff;
-  }
+    height: 100%;
 
-  .float-button-group {
-    position: fixed;
-    bottom: 20px;
-    right: 10px;
-
-    .float-button {
-      opacity: 0.8;
-      background: #27282C;
-      margin: 2px;
-      height: 3em;
-      width: 3em;
-      text-align: center;
-      line-height: 3em;
-      border-radius: 50%;
-      -moz-border-radius: 50%;
-      -webkit-border-radius: 50%;
-
+    .home-body {
+      width: 100%;
+      background-color: #ffffff;
     }
   }
+
+
 </style>
