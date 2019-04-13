@@ -4,14 +4,13 @@
       <h1 slot="title">物流信息</h1>
     </v-header>
     <div class="logistics-body">
-      <div class="noneInfo" v-if="loading && (logisticsList == null || logisticsList.length == 0)">
-        <img :src="no_logistics_bg"/>
-        <span>没有查询到物流信息</span>
+      <div class="noneInfo" v-if="loading">
+        <v-loading></v-loading>
       </div>
       <div class="logisticsInfo" v-else>
         <ul>
           <li v-for="(item,i)  in logisticsList" :key='i'>
-            <div class="logisticsBox">
+            <div class="logisticsBox" v-if="getMatchedGoods(item.nu).length > 0">
               <div class="matched-goods">
                 <ul>
                   <li v-for="(sku,skuIndex)  in getMatchedGoods(item.nu)" :key='skuIndex'>
@@ -33,7 +32,7 @@
             </div>
           </li>
         </ul>
-        <div class="logisticsBox">
+        <div class="logisticsBox" v-if="getPreparingGoods().length > 0">
           <ul>
             <li v-for="(sku,skuIndex)  in getPreparingGoods()" :key='skuIndex'>
               <van-card
@@ -58,10 +57,11 @@
 
 <script>
   import Header from '@/common/_header.vue'
-
+  import Loading from '@/common/_loading.vue'
   export default {
     components: {
       'v-header': Header,
+      'v-loading': Loading
     },
     data() {
       return {
@@ -69,7 +69,8 @@
         status: -1,
         no_logistics_bg: require('@/assets/images/truck.png'),
         logisticsList: [],
-        loading: false
+        matchedGoods:[],
+        loading: true
       }
     },
     computed: {},
@@ -78,6 +79,7 @@
       let that = this;
       that.$log("logistics created Enter")
       that.detail = this.$route.params.detail;
+      that.loading = true;
       this.$log(that.detail)
       that.$api.xapi({
         method: 'get',
@@ -89,10 +91,10 @@
       }).then((response) => {
         that.logisticsList = response.data.data.result;
         that.$log("logisticsList:" + JSON.stringify(that.logisticsList));
-        that.loading = true;
+        that.loading = false;
       }).catch(function (error) {
         that.$log(error)
-        that.loading = true;
+        that.loading = false;
       })
     },
 
@@ -100,22 +102,31 @@
 
     methods: {
       getPreparingGoods() {
+        this.$log("getPreparingGoods Enter,this.detail.skus.length"+this.detail.skus.length)
         let goods = []
         this.detail.skus.forEach(sku => {
-          if(sku.logisticsId == null)
-          goods.push(sku)
+           let found = -1;
+           for(let i=0; i < this.matchedGoods.length ; i++)
+           {
+              if(sku.skuId === this.matchedGoods[i].skuId) {
+                found = 1;
+                break;
+              }
+           }
+           if(found == -1)
+             goods.push(sku)
         })
         return goods
       },
       getMatchedGoods(nu) {
         this.$log(nu)
-        let goods = []
+        this.matchedGoods = []
         this.detail.skus.forEach(sku => {
           if (sku.logisticsId == nu) {
-            goods.push(sku)
+            this.matchedGoods.push(sku)
           }
         })
-        return goods
+        return this.matchedGoods
       },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
@@ -146,7 +157,7 @@
     }
 
     .logistics-body {
-      padding-top: 2.3em;
+      padding-top: 3em;
 
       .noneInfo {
         display: flex;
@@ -165,7 +176,6 @@
 
       .logisticsInfo {
         .logisticsBox {
-          margin-top: 10px;
           border: #f0f0f0 solid 10px;
 
           > li {
