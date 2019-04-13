@@ -59,7 +59,7 @@
     methods: {
       tab(index, val) {
         this.$store.commit('SET_CURRENT_NAVI_INDEX', index);
-        this.$router.replace(val);
+        this.$router.push(val);
       }
     }
   };
