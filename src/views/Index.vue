@@ -92,7 +92,7 @@
       this.initJsNativeCb();
       setTimeout(() => {
         //this.test();
-        this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
+        //this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
         this.showFloatButton = true;

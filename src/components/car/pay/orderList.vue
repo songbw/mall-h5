@@ -92,6 +92,20 @@
       })
     },
 
+    beforeRouteLeave(to, from, next) {
+      if (this.flag) {//这是一个点击事件
+        //说明我是点击事件的跳转
+        next(); //正常执行手机返回键也是正常返回上一个路由
+      } else {
+        if (from.path !== '/') { //要离开的路由不是site
+          next();//
+        }
+        //说明我是返回事件的跳转
+        //next(false);
+        this.$router.replace({path: '/'})//返回键要返回的路由
+      }
+    },
+
     data() {
       return {
         active: 0,
