@@ -11,22 +11,46 @@
       <div class="logisticsInfo" v-else>
         <ul>
           <li v-for="(item,i)  in logisticsList" :key='i'>
-            <div class="logisticsBox" v-if="orderSku(item.skuId) != null">
-              <van-card
-                :price="orderSku(item.skuId).unitPrice"
-                :title="orderSku(item.skuId).name"
-                :num="orderSku(item.skuId).num"
-                :thumb="orderSku(item.skuId).image">
-              </van-card>
+            <div class="logisticsBox">
+              <div class="matched-goods">
+                <ul>
+                  <li v-for="(sku,skuIndex)  in getMatchedGoods(item.nu)" :key='skuIndex'>
+                    <van-card
+                      :price="sku.unitPrice"
+                      :title="sku.name"
+                      :num="sku.num"
+                      :thumb="sku.image">
+                    </van-card>
+                  </li>
+                </ul>
+              </div>
               <van-steps direction="vertical" :active="0" active-color="#f44">
-                <van-step v-for="(info,k)  in getTimerFlowInfo(item.orderLogistics)" :key='k'>
-                  <h3>{{info.operateState}}</h3>
-                  <p>{{formatedTime(info.operateTime)}}</p>
+                <van-step v-for="(info,k)  in item.data" :key='k'>
+                  <h3>{{info.context}}</h3>
+                  <p>{{info.ftime}}</p>
                 </van-step>
               </van-steps>
             </div>
           </li>
         </ul>
+        <div class="logisticsBox">
+          <ul>
+            <li v-for="(sku,skuIndex)  in getPreparingGoods()" :key='skuIndex'>
+              <van-card
+                :price="sku.unitPrice"
+                :title="sku.name"
+                :num="sku.num"
+                :thumb="sku.image">
+              </van-card>
+            </li>
+          </ul>
+          <van-steps direction="vertical" :active="0" active-color="#f44">
+            <van-step>
+              <h3>商家正在准备商品，敬请等待...</h3>
+              <p>{{formatTime(this.detail.paymentAt)}}</p>
+            </van-step>
+          </van-steps>
+        </div>
       </div>
     </div>
   </section>
@@ -45,7 +69,7 @@
         status: -1,
         no_logistics_bg: require('@/assets/images/truck.png'),
         logisticsList: [],
-        loading:false
+        loading: false
       }
     },
     computed: {},
@@ -54,6 +78,7 @@
       let that = this;
       that.$log("logistics created Enter")
       that.detail = this.$route.params.detail;
+      this.$log(that.detail)
       that.$api.xapi({
         method: 'get',
         url: '/order/logistics',
@@ -63,7 +88,7 @@
         }
       }).then((response) => {
         that.logisticsList = response.data.data.result;
-        that.$log("logisticsList:"+JSON.stringify(that.logisticsList));
+        that.$log("logisticsList:" + JSON.stringify(that.logisticsList));
         that.loading = true;
       }).catch(function (error) {
         that.$log(error)
@@ -74,32 +99,34 @@
     computed: {},
 
     methods: {
-      orderSku(skuId) {
-        for (let i = 0; i < this.detail.skus.length; i++) {
-          this.$log(this.detail.skus[i].skuId)
-          if (skuId == this.detail.skus[i].skuId)
-            return this.detail.skus[i];
-        }
-        return null;
+      getPreparingGoods() {
+        let goods = []
+        this.detail.skus.forEach(sku => {
+          if(sku.logisticsId == null)
+          goods.push(sku)
+        })
+        return goods
+      },
+      getMatchedGoods(nu) {
+        this.$log(nu)
+        let goods = []
+        this.detail.skus.forEach(sku => {
+          if (sku.logisticsId == nu) {
+            goods.push(sku)
+          }
+        })
+        return goods
       },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
       },
-      formatedTime(timeStr) {
-        let year = timeStr.substr(0,4);
-        let month = timeStr.substr(4,2);
-        let day = timeStr.substr(6,2);
-        let h = timeStr.substr(8,2);
-        let m = timeStr.substr(10,2);
-        let s = timeStr.substr(12);
-        let timeFormated = year+"/"+month+"/"+day+" "+h+":"+m+":"+s
-        return timeFormated;
+      formatTime(timeString) {
+        //2019-01-27T07:56:27.000+0000
+        if (timeString == null)
+          return null
+        let dateee = new Date(timeString).toJSON();
+        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
       },
-
-      getTimerFlowInfo(orderLogistics) {
-        return orderLogistics.reverse();
-      }
-
     }
   }
 </script>
@@ -111,14 +138,16 @@
   @import "../../../assets/index/style.css";
 
   .logisticsDetail {
-    .header{
-      width:100%;
-      position:fixed;
-      z-index:5;
-      top:0;
+    .header {
+      width: 100%;
+      position: fixed;
+      z-index: 5;
+      top: 0;
     }
-    .logistics-body{
+
+    .logistics-body {
       padding-top: 2.3em;
+
       .noneInfo {
         display: flex;
         flex-direction: column;
@@ -133,15 +162,19 @@
           margin: 2vw;
         }
       }
+
       .logisticsInfo {
         .logisticsBox {
+          margin-top: 10px;
           border: #f0f0f0 solid 10px;
+
           > li {
             list-style: none;
           }
         }
 
       }
+
       .van-card {
         background-color: #ffffff;
 
