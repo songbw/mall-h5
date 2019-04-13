@@ -58,7 +58,7 @@
                   </div>
                   <div v-if="k.product.promotionState === 1">
                     <div v-if="!k.valid">
-                      <van-cell title="无效商品，不计入订单" icon="info" style="color: #ff4444" />
+                      <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444" />
                     </div>
                     <van-card
                       :num="k.product.count"
@@ -73,7 +73,7 @@
                   </div>
                   <div v-else>
                     <div v-if="!k.valid">
-                      <van-cell title="无效商品，不计入订单" icon="info" style="color: #ff4444" />
+                      <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444" />
                     </div>
                     <van-card
                       :num="k.product.count"
