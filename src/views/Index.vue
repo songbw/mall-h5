@@ -95,7 +95,7 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        //this.test();
+        this.test();
         this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();

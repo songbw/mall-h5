@@ -164,8 +164,8 @@
       }
 
       .logisticsInfo {
+        margin-top: 10px;
         .logisticsBox {
-          margin-top: 10px;
           border: #f0f0f0 solid 10px;
 
           > li {
