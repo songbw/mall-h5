@@ -102,13 +102,20 @@
 
     methods: {
       getPreparingGoods() {
-        this.$log("getPreparingGoods Enter,this.detail.skus.length"+this.detail.skus.length)
+        this.$log("getPreparingGoods Enter,this.detail.skus.length:"+this.detail.skus.length)
         let goods = []
+        let matchedGoods = [];
+        for(let i =0 ; i < this.logisticsList.length; i++) {
+          let subMatched = this.getMatchedGoods(this.logisticsList[i].nu)
+          subMatched.forEach(sku => {
+            matchedGoods.push(sku)
+          })
+        }
         this.detail.skus.forEach(sku => {
            let found = -1;
-           for(let i=0; i < this.matchedGoods.length ; i++)
+           for(let i=0; i < matchedGoods.length ; i++)
            {
-              if(sku.skuId === this.matchedGoods[i].skuId) {
+              if(sku.skuId === matchedGoods[i].skuId) {
                 found = 1;
                 break;
               }
@@ -120,13 +127,13 @@
       },
       getMatchedGoods(nu) {
         this.$log(nu)
-        this.matchedGoods = []
+        let matchedGoods = []
         this.detail.skus.forEach(sku => {
           if (sku.logisticsId == nu) {
-            this.matchedGoods.push(sku)
+            matchedGoods.push(sku)
           }
         })
-        return this.matchedGoods
+        return matchedGoods
       },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
@@ -182,7 +189,6 @@
             list-style: none;
           }
         }
-
       }
 
       .van-card {
