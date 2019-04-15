@@ -39,6 +39,11 @@
                   </div>
                   <div class="orderDetailAction">
                     <van-button plain round size="small" type="primary"
+                                style="background-color: white;color: black ;border-color: #dedede"
+                                @click="onConfirmBtnClick(k,i)" v-show="k.status==1">
+                      确认收货
+                    </van-button>
+                    <van-button plain round size="small" type="primary"
                                 style="background-color: #ff4444;color: white ;border-color: #ff4444"
                                 @click="onDelBtnClick(k,i)" v-show="k.status==2||k.status==3">
                       删除订单
@@ -295,6 +300,26 @@
           "businessType": "11"
         }
         this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo, listItem)
+      },
+
+      onConfirmBtnClick(listItem, i) {
+        this.$log("onConfirmBtnClick Enter")
+        let id = listItem.id
+        let options = {
+          "id": id,
+          "status": 2
+        }
+        this.$api.xapi({
+          method: 'put',
+          url: '/order/status',
+          data: options,
+        }).then((response) => {
+          if (response.data.code == 200) {
+            listItem.status = 2;
+          }
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
 
       onDelBtnClick(listItem, i) {

@@ -55,6 +55,15 @@
       })
     },
 
+
+    beforeRouteLeave (to, from, next) {
+      // 必须调用next(),next(true)进入原计划的下个页面
+      // next(false)进入from页面(即原本的页面)
+      console.log(to)
+      console.log(from)
+      next()
+    },
+
     data() {
       return {
         datas: {},
@@ -91,7 +100,7 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        //this.test();
+        this.test();
         //this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
