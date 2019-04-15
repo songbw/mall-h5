@@ -77,7 +77,6 @@
         mBackgroundColor: '#FFFFFF',
         icon_orderList: require('@/assets/images/icon_order.png'),
         icon_shopCart: require('@/assets/images/icon_shopping_cart.png'),
-        showFloatButton: false,
         pageloading: true
       }
     },
@@ -107,10 +106,10 @@
       this.initJsNativeCb();
       setTimeout(() => {
         //this.test();
-        this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
+
         this.getAccessTokenInfo();
         this.startLocation();
-        this.showFloatButton = true;
+        this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         //this.getUserInfo();
         //this.updateLocation();
       }, 1000);

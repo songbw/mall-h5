@@ -58,8 +58,13 @@
 
     methods: {
       tab(index, val) {
+        let lastIndex = this.$store.state.appconf.currentNaviIndex;
         this.$store.commit('SET_CURRENT_NAVI_INDEX', index);
-        this.$router.replace(val);
+        if(lastIndex === 0) {
+          this.$router.push(val);
+        } else {
+          this.$router.replace(val);
+        }
       }
     }
   };

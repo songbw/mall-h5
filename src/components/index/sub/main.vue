@@ -75,7 +75,6 @@
         mBackgroundColor: '#FFFFFF',
         icon_orderList: require('@/assets/images/icon_order.png'),
         icon_shopCart: require('@/assets/images/icon_shopping_cart.png'),
-        showFloatButton: false,
       }
     },
 
@@ -99,12 +98,6 @@
       }).catch(function (error) {
         alert(error)
       })
-    },
-
-    created() {
-      setTimeout(() => {
-        this.showFloatButton = true;
-      }, 1000);
     },
 
     methods: {
