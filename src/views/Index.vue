@@ -10,7 +10,7 @@
     <div v-if="pageloading">
       <v-loading></v-loading>
     </div>
-   <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
+    <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
       <div style="padding-left: 5px;padding-right: 5px">
         <li v-for="item in datas" style="list-style: none">
           <v-swiper v-if="item.type==='0'" :datas="item.data"/>
@@ -56,12 +56,18 @@
     },
 
 
-    beforeRouteLeave (to, from, next) {
+    beforeRouteLeave(to, from, next) {
       // 必须调用next(),next(true)进入原计划的下个页面
       // next(false)进入from页面(即原本的页面)
-      console.log(to)
-      console.log(from)
-      next()
+      let isValidPath = this.isValidLeavedPath(to);
+      console.log("isValidPath:" + isValidPath + ",path:" + to.path)
+      if(isValidPath) {
+          next()
+      }
+      else {
+         next(false)
+         this.closeWindow()
+      }
     },
 
     data() {
@@ -100,8 +106,8 @@
     created() {
       this.initJsNativeCb();
       setTimeout(() => {
-        this.test();
-        //this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
+        //this.test();
+        this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         this.getAccessTokenInfo();
         this.startLocation();
         this.showFloatButton = true;
@@ -115,6 +121,14 @@
       }
     },
     methods: {
+      isValidLeavedPath(to) {
+        let path = to.path;
+        // if("/category/all | /car | ^/index/ | /detail".match(path))
+        if (path.match('(^/index/)|(/category/all)|(/car)|(/detail)|(/search)'))
+          return true;
+        return false;
+      },
+
       initJsNativeCb() {
         this.$jsbridge.register('locationResult', (data) => {
           this.$log("locationResult:" + data);
@@ -154,7 +168,9 @@
           this.$store.commit('SET_USER', JSON.stringify(userInfo));
         }
       },
-
+      closeWindow() {
+        this.$jsbridge.call("closeWindow");
+      },
       onPayResult(payResult) {
         this.$store.dispatch('getPrePayOrderList');
         let list = this.$store.state.appconf.prePayOrderList
