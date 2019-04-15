@@ -124,7 +124,7 @@
       isValidLeavedPath(to) {
         let path = to.path;
         // if("/category/all | /car | ^/index/ | /detail".match(path))
-        if (path.match('(^/index/)|(/category/all)|(/car)|(/detail)|(/search)'))
+        if (path.match('(^/index/)|(/category/all)|(/car)|(/detail)|(/search)|(^/category/goods/promotion/)'))
           return true;
         return false;
       },
