@@ -103,6 +103,7 @@
         swipeThreshold: 5,
         no_orderList_bg: require('@/assets/images/emptyBox.png'),
         launchedLoading: false,
+        reload:false,
         orderTypes: [
           {
             "title": "全部",
@@ -173,8 +174,62 @@
         }
       },
 
+      resetOrderTypeList() {
+        for(let i = 0 ; i< this.orderTypes.length ; i++) {
+          this.orderTypes[i].list.splice(0,1);
+        }
+        this.orderTypes.splice(0,1);
+        this.orderTypes = [
+          {
+            "title": "全部",
+            "list": [],
+            "total": -1,
+            "pageNo": 1,
+            "status": -1,
+            "loading": false,
+            "finished": false,
+          },
+          {
+            "title": "待支付",
+            "list": [],
+            "total": -1,
+            "pageNo": 1,
+            "status": 0,
+            "loading": false,
+            "finished": false,
+          },
+          {
+            "title": "待收货",
+            "list": [],
+            "total": -1,
+            "pageNo": 1,
+            "status": 1,
+            "loading": false,
+            "finished": false,
+          },
+          {
+            "title": "已完成",
+            "list": [],
+            "total": -1,
+            "pageNo": 1,
+            "status": 2,
+            "loading": false,
+            "finished": false,
+          },
+          {
+            "title": "已取消",
+            "list": [],
+            "total": -1,
+            "pageNo": 1,
+            "status": 3,
+            "loading": false,
+            "finished": false,
+          },
+        ]
+      },
+
       getOrderStatus(status) {
-        this.$log("status is:" + status);
+        //this.$log("status is:" + status);
         switch (status) {
           case 0:
             return "待支付";
@@ -251,6 +306,8 @@
       onCancelBtnClick(listItem, i) {
         this.$log("onCancelBtnClick Enter")
         let id = listItem.id
+        let index = this.active
+        this.reload = true;
         let options = {
           "id": id,
           "status": 3
@@ -262,6 +319,20 @@
         }).then((response) => {
           if (response.data.code == 200) {
             listItem.status = 3;
+            let found = -1;
+            for (let i = 0; i < this.orderTypes[index].list.length; i++) {
+              this.$log("listItem.id:"+listItem.id)
+              this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
+              if (listItem.id === this.orderTypes[index].list[i].id) {
+                found = i;
+                break;
+              }
+            }
+            this.$log("found is:"+found)
+            if (found != -1) {
+              this.orderTypes[index].list.splice(found, 1)
+              this.orderTypes[index].total--;
+            }
           }
         }).catch(function (error) {
           console.log(error)
@@ -291,6 +362,8 @@
       onConfirmBtnClick(listItem, i) {
         this.$log("onConfirmBtnClick Enter")
         let id = listItem.id
+        let index = this.active
+        this.reload = true;
         let options = {
           "id": id,
           "status": 2
@@ -302,6 +375,20 @@
         }).then((response) => {
           if (response.data.code == 200) {
             listItem.status = 2;
+            let found = -1;
+            for (let i = 0; i < this.orderTypes[index].list.length; i++) {
+              this.$log("listItem.id:"+listItem.id)
+              this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
+              if (listItem.id === this.orderTypes[index].list[i].id) {
+                found = i;
+                break;
+              }
+            }
+            this.$log("found is:"+found)
+            if (found != -1) {
+              this.orderTypes[index].list.splice(found, 1)
+              this.orderTypes[index].total--;
+            }
           }
         }).catch(function (error) {
           console.log(error)
@@ -310,6 +397,7 @@
 
       onDelBtnClick(listItem, i) {
         let that = this;
+        that.reload = true;
         that.orderTypes.forEach(orderTypeItem => {
           let found = -1;
           that.$log(orderTypeItem)
@@ -376,11 +464,16 @@
         let that = this;
         that.launchedLoading = true;
         let userInfo = this.$store.state.appconf.userInfo;
+        if(this.reload) {
+          this.resetOrderTypeList();
+          this.reload = false;
+        }
         //  that.$log("userInfo:"+userInfo)
         if (that.isUserEmpty(userInfo)) {
           that.orderTypes[index].loading = false;
           return;
         }
+
         if (that.orderTypes[index].total == -1 || that.orderTypes[index].total > that.orderTypes[index].list.length) {
           that.orderTypes[index].loading = true;
           let user = JSON.parse(userInfo);
