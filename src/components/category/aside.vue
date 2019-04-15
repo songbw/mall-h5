@@ -52,7 +52,7 @@
 
       li {
         text-align: center;
-        background: whitesmoke;
+        background-color: #fafafa;
 
         a {
           display: block;
@@ -65,7 +65,7 @@
           position: relative;
           font-size: 12px;
           font-weight: bold;
-          color: #f44336;
+          color: #DEBA6F;
           background: #ffffff;
         }
 
@@ -77,7 +77,7 @@
           position: absolute;
           left: 0px;
           top: 0px;
-          background-color: firebrick;
+          background-color: #DEBA6F;
         }
       }
     }

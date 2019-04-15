@@ -15,7 +15,7 @@
     margin: 100px auto 0;
     width: 100px;
     text-align: center;
-    line-height: 12em;
+    line-height: 20em;
   }
 
   .spinner > div {

@@ -13,7 +13,7 @@
         <div class="goods-detail" @click="onListClick(k)">
           <van-card
             :price="k.price"
-            desc=""
+            desc="南京"
             :title="k.brand+ ' '+ k.name + ' '+ k.model"
             :thumb="k.image"
             centered>
@@ -198,6 +198,7 @@
         text-align: right;
         margin-right: 1em;
         color: #000000;
+        margin-top: -2em;
 
         .van-button {
           background: url('../../../assets/images/addtoCar.png') no-repeat center;
