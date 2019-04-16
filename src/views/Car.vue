@@ -50,12 +50,10 @@
                     </div>
                     <div v-else>
                       <van-card
+                        desc="南京"
                         :price="k.price"
                         :title="k.desc"
                         :thumb="k.image">
-                        <div slot="desc">
-                          <span class="prodDesc">南京</span>
-                        </div>
                         <div slot="footer">
                           <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
                         </div>
@@ -477,19 +475,6 @@
               color: #ffffff
             }
           }
-        }
-
-        .prodDesc {
-          .fz(font-size, 20);
-          background-color: #ff4444;
-          padding: 2px;
-          margin-top: 5px;
-          border-radius: 4px;
-          color: white;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          text-align: center;
         }
       }
     }

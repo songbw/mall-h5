@@ -61,14 +61,12 @@
                       <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444" />
                     </div>
                     <van-card
+                      :desc="locationCity"
                       :num="k.product.count"
                       :price="k.checkedPrice-k.product.promotion[0].discount"
                       :title="k.product.desc"
                       :thumb="k.product.image"
                       :origin-price="k.product.price">
-                      <div slot="desc">
-                        <span class="prodDesc">{{locationCity}}</span>
-                      </div>
                     </van-card>
                   </div>
                   <div v-else>
@@ -931,19 +929,6 @@
 
         .van-card {
           background-color: #ffffff;
-          .prodDesc {
-            .fz(font-size, 20);
-            background-color: #ff4444;
-            padding: 2px;
-            margin-top: 5px;
-            border-radius: 4px;
-            color: white;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            text-align: center;
-          }
-
           &__price {
             margin-top: 0.5em;
             .fz(font-size, 40);
