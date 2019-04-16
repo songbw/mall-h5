@@ -45,7 +45,9 @@ import {
   Swipe,
   SwipeItem,
   Tabbar,
-  TabbarItem
+  TabbarItem,
+  Actionsheet,
+  Uploader
 } from 'vant';
 
 Vue.use(Button)
@@ -82,7 +84,9 @@ Vue.use(Button)
   .use(Swipe)
   .use(SwipeItem)
   .use(Tabbar)
-  .use(TabbarItem);
+  .use(TabbarItem)
+  .use(Actionsheet)
+  .use(Uploader);
 
 
 ///////////////////////////////////////////////////////////////////////

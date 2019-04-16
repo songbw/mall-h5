@@ -12,17 +12,58 @@
           :thumb="goods.image">
         </van-card>
         <div slot="footer">
-          <van-cell title="申请数量:" title-class="requireNumberTitle" >
+          <van-cell title="申请数量" title-class="CellTitle" >
             <van-stepper v-model="count"/>
           </van-cell>
         </div>
       </div>
       <div class="requireReasonBox">
-        <span>XXXXXXXX</span>
-
+        <van-cell title="申请原因" title-class="CellTitle" value="请选择申请原因">
+          <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon" @click="showReasonSelector()"/>
+        </van-cell>
+        <van-actionsheet v-model="showReason" title="申请原因">
+          <van-cell-group>
+            <van-cell title="质量问题" clickable @click="radio = '1'">
+              <van-radio name="1" />
+            </van-cell>
+            <van-cell title="卖家发错货" clickable @click="radio = '2'">
+              <van-radio name="2" />
+            </van-cell>
+            <van-cell title="发票问题" clickable @click="radio = '1'">
+              <van-radio name="3" />
+            </van-cell>
+            <van-cell title="七天无理由" clickable @click="radio = '2'">
+              <van-radio name="4" />
+            </van-cell>
+            <van-cell title="商品与描述不符" clickable @click="radio = '2'">
+              <van-radio name="5" />
+            </van-cell>
+            <van-cell title="其他" clickable @click="radio = '2'">
+              <van-radio name="6" />
+            </van-cell>
+          </van-cell-group>
+          <van-button type="danger" size="large" @click="confirmedReason()">确定</van-button>
+        </van-actionsheet>
       </div>
-      <div class="discibleQuestion"></div>
-      <div class="contactBox"></div>
+      <div class="descibleQuestion">
+        <van-cell title="问题描述" title-class="CellTitle" >
+        </van-cell>
+        <van-field style="background-color: #f0f0f0"
+          type="textarea"
+          placeholder="请描述申请售后服务的具体原因，文字，图片至少填写一项"
+          rows="5"
+          maxlength = 500
+        />
+        <van-uploader :after-read="onRead" style="margin: 5px">
+          <van-icon name="photograph" size="large"/>
+        </van-uploader>
+      </div>
+      <div class="contactBox">
+        <span>xxx</span>
+      </div>
+    </div>
+    <div class="footer">
+      <van-button type="primary" size="large">提交</van-button>
     </div>
   </section>
 </template>
@@ -40,7 +81,8 @@
         goods: {},
         contact: {},
         openId: '',
-        count:0
+        count:0,
+        showReason: false
       }
     },
 
@@ -57,7 +99,18 @@
 
     computed: {},
 
-    methods: {}
+    methods: {
+      showReasonSelector() {
+        this.showReason = true
+      },
+      confirmedReason() {
+        this.showReason = false
+      },
+      onRead(file) {
+        this.$log("onRead Enter")
+        this.$log(file)
+      }
+    }
   }
 </script>
 
@@ -66,10 +119,8 @@
   .afterSaleService{
      .serviceBody{
        background-color: #f8f8f8;
+       margin-bottom: 3em;
        .goodsBox{
-         .requireNumberTitle{
-           .fz(font-size, 32)
-         }
          .van-card {
            background-color: #ffffff;
            margin-top: 5px;
@@ -83,13 +134,31 @@
          background-color: #ffffff;
          margin-top: 10px;
        }
-       .discibleQuestion{
-
+       .descibleQuestion{
+         background-color: #ffffff;
+         margin-top: 10px;
        }
        .contactBox{
-
+         background-color: #ffffff;
+         margin-top: 10px;
        }
      }
+
+    .CellTitle{
+      .fz(font-size, 32);
+      font-weight: bold;
+    }
+
+    .footer {
+      width: 100%;
+      display: -webkit-flex;
+      display: -ms-flex;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+    }
   }
 
 </style>
