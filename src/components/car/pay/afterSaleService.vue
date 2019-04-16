@@ -13,7 +13,9 @@
         </van-card>
         <div slot="footer">
           <van-cell title="申请数量" title-class="CellTitle" >
-            <van-stepper v-model="count"/>
+            <van-stepper
+              v-model="count"
+              :max="goods.num"/>
           </van-cell>
         </div>
       </div>
@@ -113,6 +115,13 @@
       onRead(file) {
         this.$log("onRead Enter")
         this.$log(file)
+      },
+      onCountChange() {
+        this.$log("count is:"+this.count)
+        if(this.count > this.goods.num)
+          this.count = this.goods.num;
+        else if(this.count < 1)
+          this.count = 1;
       }
     }
   }
