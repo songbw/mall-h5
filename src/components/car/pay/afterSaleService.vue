@@ -55,13 +55,10 @@
         </van-cell>
         <van-field style="background-color: #f0f0f0"
                    type="textarea"
-                   placeholder="请描述申请售后服务的具体原因，文字，图片至少填写一项"
+                   placeholder="请描述申请售后服务的具体原因"
                    rows="5"
                    maxlength=500
         />
-        <van-uploader :after-read="onRead" style="margin: 5px">
-          <van-icon name="photograph" size="large"/>
-        </van-uploader>
       </div>
       <div class="contactBox">
         <van-cell title="联系人" title-class="CellTitle" :value="contact.name"></van-cell>
@@ -116,10 +113,6 @@
       confirmedReason() {
         this.$log(this.radio);
         this.showReason = false
-      },
-      onRead(file) {
-        this.$log("onRead Enter")
-        this.$log(file)
       },
       onCountChange() {
         this.$log("count is:" + this.count)
