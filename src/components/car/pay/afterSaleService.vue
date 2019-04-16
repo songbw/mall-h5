@@ -59,11 +59,15 @@
         </van-uploader>
       </div>
       <div class="contactBox">
-        <span>xxx</span>
+        <van-cell title="联系人" title-class="CellTitle" :value="contact.name"></van-cell>
+        <van-cell title="联系电话" title-class="CellTitle" :value="contact.mobile"></van-cell>
+      </div>
+      <div class="tip">
+        <span>提交服务后，售后专员可能与您电话沟通，请保持手机通畅</span>
       </div>
     </div>
     <div class="footer">
-      <van-button type="primary" size="large">提交</van-button>
+      <van-button type="warning" size="large">提交</van-button>
     </div>
   </section>
 </template>
@@ -141,6 +145,10 @@
        .contactBox{
          background-color: #ffffff;
          margin-top: 10px;
+       }
+       .tip {
+         margin: 10px;
+         padding-bottom: 10px;
        }
      }
 
