@@ -28,6 +28,13 @@
               :title="sku.name"
               :num="sku.num"
               :thumb="sku.image">
+              <div slot="footer">
+                <van-button plain round size="small" type="primary"
+                            style="background-color: white;color: black;border-color: #dedede "
+                            @click="onAfterSalesServiceBtnClick(sku)" v-if="detail.status==2">
+                  申请售后
+                </van-button>
+              </div>
             </van-card>
           </li>
         </ul>
@@ -74,7 +81,7 @@
       </div>
       <div class="oder-ServerInfo">
         <!--<van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>-->
-        <van-col span="12" class="chat"  href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
+        <van-col span="12" class="chat" href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
           <van-icon name="service" size="1em"> 联系客服</van-icon>
         </van-col>
         <van-col span="12" class="phone">
@@ -113,6 +120,21 @@
     computed: {},
 
     methods: {
+      onAfterSalesServiceBtnClick(sku) {
+        this.$log("onAfterSalesServiceBtnClick Enter")
+        this.$router.push({
+          name: "售后服务页",
+          params: {
+            openId: this.detail.openId,
+            goods: sku,
+            contact: {
+              name: this.detail.receiverName,
+              mobile: this.detail.mobile,
+              address: this.detail.provinceName + this.detail.cityName + this.detail.countyName + this.detail.address
+            },
+          }
+        })
+      },
       getSavedPayOrderInfo(listItem) {
         /*        this.$log("getSavedPayOrderInfo Enter #########################")
                 this.$log(listItem.outTradeNo)
@@ -300,16 +322,17 @@
     width: 100%;
     text-align: left;
 
-    .header{
-      width:100%;
-      position:fixed;
-      z-index:5;
-      top:0;
+    .header {
+      width: 100%;
+      position: fixed;
+      z-index: 5;
+      top: 0;
     }
 
     .order-body {
       background-color: #f0f0f0;
       padding-top: 2.3em;
+
       .order-status {
         background: url('../../../assets/images/redbg.png') no-repeat;
         background-size: 100% 100%;
@@ -329,6 +352,7 @@
           }
         }
       }
+
       .user-info {
         background-color: white;
         padding: 1em;

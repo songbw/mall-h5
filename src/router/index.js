@@ -22,7 +22,7 @@ const AddressList = resolve => require(['@/components/car/pay/addressList.vue'],
 const Login = resolve => require(['@/views/login.vue'], resolve)
 const Casher = resolve => require(['@/components/car/pay/casher.vue'], resolve)
 const Promotion = resolve => require(['@/components/category/goods/promotion.vue'], resolve)
-
+const AfterSaleService = resolve => require(['@/components/car/pay/afterSaleService.vue'], resolve)
 
 export default new VueRouter({
   routes: [
@@ -111,6 +111,11 @@ export default new VueRouter({
       path: '/car/addressList',
       name: '地址列表页',
       component: AddressList
+    },
+    {
+      path: '/car/afterSaleService',
+      name: '售后服务页',
+      component: AfterSaleService
     },
     {
       path: '/user',
