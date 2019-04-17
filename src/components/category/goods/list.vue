@@ -14,7 +14,7 @@
           <van-card
             :price="k.price"
             desc="南京"
-            :title="k.brand+ ' '+ k.name + ' '+ k.model"
+            :title=composeGoodsTitle(k)
             :thumb="k.image"
             centered>
           </van-card>
@@ -124,6 +124,9 @@
           //error
           this.finished = true;
         }
+      },
+      composeGoodsTitle(goods) {
+         return (goods.brand==null?'':goods.brand) + ' '+ goods.name + ' '+ (goods.model==null? '': goods.model)
       },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));

@@ -173,7 +173,9 @@
     },
 
     methods: {
-
+      composeGoodsTitle(goods) {
+        return (goods.brand==null?'':goods.brand) + ' '+ goods.name + ' '+ (goods.model==null? '': goods.model)
+      },
       countDownS_cb(index, k) {
         this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
         this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
@@ -331,7 +333,7 @@
             "userId": user.userId,
             "id": item.id,
             "image": product.image,
-            "desc": product.brand + ' ' + product.name + ' ' + product.model,
+            "desc": this.composeGoodsTitle(product),
             "skuId": item.skuId,
             "count": item.count,
             "price": product.price,
