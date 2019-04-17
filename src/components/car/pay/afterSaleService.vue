@@ -68,6 +68,7 @@
         <van-cell title="问题描述" title-class="CellTitle">
         </van-cell>
         <van-field style="background-color: #f0f0f0"
+                   v-model="requestDescible"
                    type="textarea"
                    placeholder="请描述申请售后服务的具体原因"
                    rows="5"
@@ -96,6 +97,15 @@
     components: {
       'v-header': Header,
     },
+    watch: {
+      requestDescible: function (newVal,oldVal) {
+        if(this.requestState == "售后申请" && newVal.length > 0) {
+          this.commitDisabled = false;
+        } else {
+          this.commitDisabled = true;
+        }
+      }
+    },
     data() {
       return {
         goods: {},
@@ -106,7 +116,8 @@
         radio: '6',
         typeRadio: 'type1',
         requestState:"售后申请",
-        commitDisabled: true
+        commitDisabled: true,
+        requestDescible:''
       }
     },
 
