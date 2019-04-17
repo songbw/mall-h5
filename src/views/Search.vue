@@ -1,7 +1,7 @@
 <template lang="html">
   <section>
     <header>
-      <van-icon name="arrow-left" size="1em" @click="$router.go(-1)" slot="left"/>
+      <van-icon class="arrowback" name="arrow-left" size="1.2em" @click="$router.go(-1)" slot="left"/>
       <van-search
         background=#ffffff
         v-model="value"
@@ -91,7 +91,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-
+    .arrowback{
+      margin-left: 0.8em;
+    }
     .van-search {
       width: 100%;
     }
