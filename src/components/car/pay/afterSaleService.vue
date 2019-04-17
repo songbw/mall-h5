@@ -83,7 +83,7 @@
       </div>
     </div>
     <div class="footer">
-      <van-button type="warning" size="large">提交</van-button>
+      <van-button type="warning" size="large" :disabled="commitDisabled" >提交</van-button>
     </div>
   </section>
 </template>
@@ -105,7 +105,8 @@
         showReason: false,
         radio: '6',
         typeRadio: 'type1',
-        requestState:"售后申请"
+        requestState:"售后申请",
+        commitDisabled: true
       }
     },
 
