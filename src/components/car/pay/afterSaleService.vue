@@ -11,6 +11,7 @@
           :title="goods.name"
           :thumb="goods.image">
         </van-card>
+        <van-cell title="状态" title-class="CellTitle" :value="requestState"></van-cell>
         <div slot="footer">
           <van-cell title="申请数量" title-class="CellTitle">
             <van-stepper
@@ -18,6 +19,19 @@
               :max="goods.num"/>
           </van-cell>
         </div>
+      </div>
+      <div class="requireTypeBox">
+        <van-cell title="申请类型" title-class="CellTitle"></van-cell>
+        <van-radio-group v-model="typeRadio">
+          <van-cell-group>
+            <van-cell title="退货" clickable @click="radio = 'type1'">
+              <van-radio name="type1" />
+            </van-cell>
+            <van-cell title="其他" clickable @click="radio = 'type2'">
+              <van-radio name="type2" />
+            </van-cell>
+          </van-cell-group>
+        </van-radio-group>
       </div>
       <div class="requireReasonBox">
         <van-cell title="申请原因" title-class="CellTitle" value="请选择申请原因">
@@ -89,7 +103,9 @@
         openId: '',
         count: 0,
         showReason: false,
-        radio: '6'
+        radio: '6',
+        typeRadio: 'type1',
+        requestState:"售后申请"
       }
     },
 
@@ -144,6 +160,10 @@
           }
         }
       }
+      .requireTypeBox{
+        background-color: #ffffff;
+        margin-top: 10px;
+      }
 
       .requireReasonBox {
         background-color: #ffffff;
@@ -152,7 +172,6 @@
 
       .descibleQuestion {
         background-color: #ffffff;
-        margin-top: 10px;
       }
 
       .contactBox {
