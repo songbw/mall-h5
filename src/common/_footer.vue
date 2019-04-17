@@ -41,10 +41,10 @@
             active: require('@/assets/icons/ico_shopping_cart_active.png')
           },
           {
-            name: "/car/oderList",
-            title: "订单",
-            normal: require('@/assets/icons/ico_order.png'),
-            active: require('@/assets/icons/ico_order_active.png')
+            name: "/user",
+            title: "我的",
+            normal: require('@/assets/icons/ico_my.png'),
+            active: require('@/assets/icons/ico_my_active.png')
           }
         ]
       };
