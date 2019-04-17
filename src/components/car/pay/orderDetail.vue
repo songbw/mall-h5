@@ -109,7 +109,7 @@
 
 
     created() {
-      this.$log("oderDetail created Enter");
+      this.$log("order detail created Enter");
       //this.detail = this.$route.params.detail;
       this.detail = JSON.parse(this.$store.state.appconf.currentOrderInfo);
       //this.$log(this.detail)
@@ -126,6 +126,7 @@
           name: "售后服务页",
           params: {
             openId: this.detail.openId,
+            tradeNo: this.detail.tradeNo,
             goods: sku,
             contact: {
               name: this.detail.receiverName,

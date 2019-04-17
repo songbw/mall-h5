@@ -84,7 +84,7 @@
       </div>
     </div>
     <div class="footer">
-      <van-button type="warning" size="large" :disabled="commitDisabled" >提交</van-button>
+      <van-button type="warning" size="large" :disabled="commitDisabled"  @click="onCommitClick()">提交</van-button>
     </div>
   </section>
 </template>
@@ -110,6 +110,7 @@
       return {
         goods: {},
         contact: {},
+        tradeNo: '',
         openId: '',
         count: 0,
         showReason: false,
@@ -126,15 +127,43 @@
       this.goods = this.$route.params.goods;
       this.contact = this.$route.params.contact;
       this.openId = this.$route.params.openId;
+      this.tradeNo = this.$route.params.tradeNo;
       this.count = this.goods.num;
+
       this.$log(this.goods)
       this.$log(this.contact)
       this.$log(this.openId)
+      this.$log(this.tradeNo)
     },
 
     computed: {},
 
     methods: {
+      getRequestType() {
+        if(this.typeRadio === 'type1')
+          return 1
+        else
+          return 2
+      },
+      getRequestReason() {
+          return this.radio;
+      },
+      onCommitClick() {
+     //   this.$log(this.goods)
+        this.$log("onCommitClick Enter")
+         let options = {
+           orderId: this.tradeNo,
+           subOrderId: this.goods.subOrderId,
+           skuId:this.goods.skuId,
+           requestNumber: this.count,
+           requestType: this.getRequestType(),
+           requestReason:this.getRequestReason(),
+           requestDescible:this.requestDescible,
+           contactName: this.contact.name,
+           contactTel: this.contact.mobile
+         }
+         this.$log(options)
+      },
       showReasonSelector() {
         this.showReason = true
       },
