@@ -4,7 +4,10 @@
       <v-header>
         <h1 slot="title">{{title}}</h1>
       </v-header>
-      <div style="padding: 5px">
+      <div v-if="pageloading">
+        <v-loading></v-loading>
+      </div>
+      <div style="padding: 5px" v-else>
         <li v-for="item in datas" style="list-style: none">
           <v-swiper v-if="item.type==='0'" :datas="item.data"/>
           <v-service v-else-if="item.type==='1'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
@@ -27,7 +30,7 @@
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
-
+  import Loading from '@/common/_loading.vue'
   //import { Toast } from 'mint-ui'
   export default {
     components: {
@@ -38,7 +41,8 @@
       'v-sectionSlide': sectionSlide,
       'v-sectionGoods': sectionGoods,
       'v-baseline': Baseline,
-      'v-footer': Footer
+      'v-footer': Footer,
+      'v-loading': Loading
     },
     watch: {
       '$route' (to, from) {
@@ -71,6 +75,7 @@
       return {
         datas: {},
         loading: true,
+        pageloading:true,
         title: '',
         mBackgroundColor: '#FFFFFF',
         icon_orderList: require('@/assets/images/icon_order.png'),
@@ -80,6 +85,8 @@
 
     beforeCreate() {
       let id = this.$route.params.id;
+      let that = this
+      this.pageloading = true;
       this.$api.xapi({
         method: 'get',
         url: '/aggregation/findById',
@@ -95,8 +102,10 @@
         // this.$log(response.data.data.result)
         this.$log(this.datas)
         this.mBackgroundColor = response.data.data.result.backgroundColor
+        this.pageloading = false;
       }).catch(function (error) {
         alert(error)
+        that.pageloading = false;
       })
     },
 
