@@ -155,14 +155,14 @@
            orderId: this.tradeNo,
            subOrderId: this.goods.subOrderId,
            skuId:this.goods.skuId,
-           requestNumber: this.count,
-           requestType: this.getRequestType(),
-           requestReason:this.getRequestReason(),
-           requestDescible:this.requestDescible,
+           number: this.count,
+           type: this.getRequestType(),
+           reason:this.getRequestReason(),
+           description:this.requestDescible,
            contactName: this.contact.name,
            contactTel: this.contact.mobile
          }
-         this.$log(options)
+         this.$log(JSON.stringify(options))
       },
       showReasonSelector() {
         this.showReason = true
