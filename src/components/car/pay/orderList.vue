@@ -319,19 +319,21 @@
         }).then((response) => {
           if (response.data.code == 200) {
             listItem.status = 3;
-            let found = -1;
-            for (let i = 0; i < this.orderTypes[index].list.length; i++) {
-              this.$log("listItem.id:"+listItem.id)
-              this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
-              if (listItem.id === this.orderTypes[index].list[i].id) {
-                found = i;
-                break;
+            if(this.active != 0) {
+              let found = -1;
+              for (let i = 0; i < this.orderTypes[index].list.length; i++) {
+                this.$log("listItem.id:"+listItem.id)
+                this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
+                if (listItem.id === this.orderTypes[index].list[i].id) {
+                  found = i;
+                  break;
+                }
               }
-            }
-            this.$log("found is:"+found)
-            if (found != -1) {
-              this.orderTypes[index].list.splice(found, 1)
-              this.orderTypes[index].total--;
+              this.$log("found is:"+found)
+              if (found != -1) {
+                this.orderTypes[index].list.splice(found, 1)
+                this.orderTypes[index].total--;
+              }
             }
           }
         }).catch(function (error) {

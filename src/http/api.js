@@ -5,7 +5,7 @@ import router from '../router'
 //const GOODS_URL_PREFIX = "https://iwallet-1258175138.cos.ap-beijing.myqcloud.com"
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 
-//const SERVER_BASE_URL = "http://192.168.1.44:8080"  //local debug
+//const SERVER_BASE_URL = "http://192.168.1.35:8080"  //local debug
 const SERVER_BASE_URL = "http://119.3.111.161:8080"
 const APP_ID = "10" //无锡市民卡
 const SERVR_PHONE_NUM= "4000797717";
