@@ -4,8 +4,8 @@
       <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
               @change="onTabChanged"  :style="{'margin-left': '-5px','background-color': datas.settings.floorTitleColor}">
       </ly-tab>
-      <div :style="{ marginTop: marginTop }">
-        <div v-for="(category,index) in datas.list" :title=category.title :key="index" class="content">
+      <div :style="{marginTop: marginTop}">
+        <div v-for="(category,index) in datas.list" :title=category.title :key="index">
           <ul id="sectionGoods-list" :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
@@ -177,11 +177,14 @@
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
       overflow: hidden;
+      background-color: #f0f0f0;
       li {
         width: 50%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         padding: 0 3vw;
+        border: 3px solid #f0f0f0;
+        border-radius:10px;
         img {
           width: 99%;
           height: 10em;
@@ -219,6 +222,12 @@
           font-weight: bold;
         }
       }
+/*      li{
+        border-bottom: 2px solid #f0f0f0;
+      }
+      li:nth-child(2n) {
+        border-left: 2px solid #f0f0f0;
+      }*/
     }
 
     .sectionGoods-list3 {
@@ -233,11 +242,14 @@
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
       overflow: hidden;
+      background-color: #f0f0f0;
       li {
-        width: 33%;
+        width: 33.1%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         padding: 0 3vw;
+        border: 3px  solid #f0f0f0;
+        border-radius: 10px;
         img {
           width: 99%;
           height: 6.66em;
@@ -246,7 +258,7 @@
 
         > p {
           .fz(font-size,23);
-          height: 2.6em;
+          height: 3em;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
@@ -276,6 +288,13 @@
           font-weight: bold;
         }
       }
+      li:nth-child(3n+2) {
+        margin-left: 1px;
+      }
+      li:nth-child(3n+3) {
+        margin-left: 1px;
+      }
+
     }
 
     .sectionGoods-title {
