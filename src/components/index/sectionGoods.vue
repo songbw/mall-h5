@@ -246,6 +246,7 @@
 
         > p {
           .fz(font-size,23);
+          height: 2.6em;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
