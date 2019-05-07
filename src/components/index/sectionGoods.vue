@@ -183,7 +183,7 @@
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         padding: 0 3vw;
-        border: 3px solid #f0f0f0;
+        border: 4px solid #f0f0f0;
         border-radius:10px;
         img {
           width: 99%;

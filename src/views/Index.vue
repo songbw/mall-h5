@@ -11,13 +11,23 @@
       <v-loading></v-loading>
     </div>
     <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
-      <div style="padding-left: 5px;padding-right: 5px">
+      <div>
         <li v-for="item in datas" style="list-style: none">
-          <v-swiper v-if="item.type==='0'" :datas="item.data"/>
-          <v-service v-else-if="item.type==='1'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          <v-sectionSquared v-else-if="item.type==='2'" :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          <v-sectionSlide v-else-if="item.type==='3'" :datas="item.data"/>
-          <v-sectionGoods v-else="item.type==='4'" :datas="item.data"/>
+          <div v-if="item.type==='0'" style="padding-left: 5px;padding-right: 5px">
+            <v-swiper :datas="item.data"/>
+          </div>
+          <div v-else-if="item.type==='1'" style="padding-left: 5px;padding-right: 5px">
+            <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
+          <div v-else-if="item.type==='2'" style="padding-left: 5px;padding-right: 5px">
+            <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
+          <div v-else-if="item.type==='3'" style="padding-left: 5px;padding-right: 5px">
+            <v-sectionSlide :datas="item.data"/>
+          </div>
+          <div v-else="item.type==='4'">
+            <v-sectionGoods :datas="item.data"/>
+          </div>
         </li>
       </div>
     </div>
@@ -61,12 +71,11 @@
       // next(false)进入from页面(即原本的页面)
       let isValidPath = this.isValidLeavedPath(to);
       console.log("isValidPath:" + isValidPath + ",path:" + to.path)
-      if(isValidPath) {
-          next()
-      }
-      else {
-         next(false)
-         this.closeWindow()
+      if (isValidPath) {
+        next()
+      } else {
+        next(false)
+        this.closeWindow()
       }
     },
 
