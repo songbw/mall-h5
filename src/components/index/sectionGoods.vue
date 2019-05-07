@@ -186,6 +186,7 @@
         border: 4px solid #f0f0f0;
         border-radius:10px;
         img {
+          margin-top: 2px;
           width: 99%;
           height: 10em;
           display: inline-block;
@@ -193,6 +194,7 @@
 
         > p {
           .fz(font-size,23);
+          min-height: 2rem;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
@@ -251,6 +253,7 @@
         border: 3px  solid #f0f0f0;
         border-radius: 10px;
         img {
+          margin-top: 2px;
           width: 99%;
           height: 6.66em;
           display: inline-block;
@@ -258,7 +261,7 @@
 
         > p {
           .fz(font-size,23);
-          height: 3em;
+          min-height: 2rem;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
