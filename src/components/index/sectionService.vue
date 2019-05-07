@@ -116,7 +116,8 @@
         img {
           width: 100%;
           display: block;
-          height: 4.2em;
+          object-fit: cover;
+          min-height: 4em;
         }
 
         h2 {
@@ -152,7 +153,8 @@
         img {
           width: 100%;
           display: block;
-          height: 4.2em;
+          min-height: 4em;
+          object-fit: cover
         }
 
         h2 {
