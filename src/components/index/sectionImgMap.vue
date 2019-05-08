@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="imgMap">
-    <img :src="this.datas.settings.imageUrl" :usemap=mapName :ref="this.datas.settings.imageKey" >
+    <img :src="this.datas.settings.imageUrl" :usemap=mapName :ref="this.datas.settings.imageKey" @load="imgload">
     <map :name="this.datas.settings.imageKey">
       <div v-for="(k,index) in this.datas.list" :key="index">
           <area shape="rect" :coords=getCoords(k) @click="onClick(k)" alt="Sun">
@@ -34,16 +34,7 @@
       this.$log(this.datas.settings.imageUrl)
       this.mapName = "#"+this.datas.settings.imageKey
     },
-    mounted () {
-      const that = this
-      console.log("xxxxxxxxxxxx")
-      window.screenWidth = document.body.clientWidth
-      that.screenWidth = window.screenWidth
-      console.log("screenWidth width:"+that.screenWidth)
-      this.$nextTick( function () {    //dom已更新
-        that.imgload();
-      })
-    },
+
     methods: {
       See(e) {
         window.location.href = e
@@ -77,6 +68,8 @@
         this.$log(this.datas.settings.imageKey)
         this.imageWidth = this.$refs[this.datas.settings.imageKey].offsetWidth;
         this.imageHeight =  this.$refs[this.datas.settings.imageKey].offsetHeight;
+        this.$log("imageWidth:"+this.imageWidth);
+        this.$log("imageHeight:"+this.imageHeight);
       },
       getCoords(k) {
         let x1 = k.area.leftPer * this.imageWidth;
