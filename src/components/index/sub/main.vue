@@ -21,6 +21,9 @@
           <div v-else-if="item.type==='3'" style="padding-left: 5px;padding-right: 5px">
             <v-sectionSlide :datas="item.data"/>
           </div>
+          <div v-else-if="item.type==='7'" style="padding-left: 5px;padding-right: 5px">
+            <v-imgmap :datas="item.data"/>
+          </div>
           <div v-else="item.type==='4'">
             <v-sectionGoods :datas="item.data"/>
           </div>
@@ -38,6 +41,7 @@
   import sectionSquared from '@/components/index/sectionSquared.vue'
   import sectionSlide from '@/components/index/sectionSlide.vue'
   import sectionGoods from '@/components/index/sectionGoods.vue'
+  import sectionImgMap from '@/components/index/sectionImgMap.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Loading from '@/common/_loading.vue'
@@ -52,7 +56,8 @@
       'v-sectionGoods': sectionGoods,
       'v-baseline': Baseline,
       'v-footer': Footer,
-      'v-loading': Loading
+      'v-loading': Loading,
+      'v-imgmap': sectionImgMap
     },
     watch: {
       '$route' (to, from) {
