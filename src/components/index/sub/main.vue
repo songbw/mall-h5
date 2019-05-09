@@ -28,8 +28,8 @@
             <v-sectionGoods :datas="item.data"/>
           </div>
         </li>
+        <v-baseline :style="{'background-color': mBackgroundColor}" ></v-baseline>
       </div>
-      <v-baseline/>
     </div>
   </section>
 </template>

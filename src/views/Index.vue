@@ -33,8 +33,9 @@
           </div>
         </li>
       </div>
+      <v-baseline :style="{'background-color': mBackgroundColor}" ></v-baseline>
     </div>
-    <v-baseline></v-baseline>
+
     <v-footer></v-footer>
   </div>
 </template>
