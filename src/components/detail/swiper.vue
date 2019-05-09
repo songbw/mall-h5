@@ -3,7 +3,7 @@
     <span></span>
     <van-swipe :autoplay="4000">
       <van-swipe-item v-for="(k,index) in swiperData" :key="index">
-        <img v-lazy="k.imgPath">
+        <img :src="k.imgPath">
       </van-swipe-item>
     </van-swipe>
   </div>

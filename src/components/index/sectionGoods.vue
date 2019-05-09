@@ -4,13 +4,16 @@
       <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
               @change="onTabChanged"  :style="{'margin-left': '-5px','background-color': datas.settings.floorTitleColor}">
       </ly-tab>
-      <div :style="{ marginTop: marginTop }">
-        <div v-for="(category,index) in datas.list" :title=category.title :key="index" class="content">
+      <div :style="{marginTop: marginTop}">
+        <div v-for="(category,index) in datas.list" :title=category.title :key="index">
           <ul id="sectionGoods-list" :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <p>{{k.intro}}</p>
-              <span :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
+              <div class="goodsFooter">
+                <span :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
+              </div>
+
             </li>
           </ul>
         </div>
@@ -177,19 +180,26 @@
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
       overflow: hidden;
+      background-color: #f0f0f0;
+      padding-right: 2vw;
+      padding-left:  2vw;
       li {
-        width: 50%;
+        width: 48vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        padding: 0 3vw;
+        border: 4px solid #f0f0f0;
+        border-radius:15px;
         img {
-          width: 99%;
+          width: 100%;
           height: 10em;
           display: inline-block;
+          border-top-left-radius:  10px;
+          border-top-right-radius: 10px;
         }
 
         > p {
           .fz(font-size,23);
+          min-height: 2rem;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
@@ -210,15 +220,26 @@
           .fz(font-size, 40);
         }
 
-        > span {
-          display: inline-block;
-          align-content: center;
-          color: #ff4444;
-          padding: 2vw 1.2vw;
-          .fz(font-size, 30);
-          font-weight: bold;
+        .goodsFooter{
+          border-bottom-left-radius:  10px;
+          border-bottom-right-radius: 10px;
+          > span {
+            display: inline-block;
+            align-content: center;
+            color: #ff4444;
+            margin: 1vw;
+            .fz(font-size, 30);
+            font-weight: bold;
+          }
         }
+
       }
+/*      li{
+        border-bottom: 2px solid #f0f0f0;
+      }
+      li:nth-child(2n) {
+        border-left: 2px solid #f0f0f0;
+      }*/
     }
 
     .sectionGoods-list3 {
@@ -233,19 +254,26 @@
       -ms-flex-wrap: wrap;
       flex-wrap: wrap;
       overflow: hidden;
+      background-color: #f0f0f0;
+      padding-right: 2vw;
+      padding-left:  2vw;
       li {
-        width: 33%;
+        width: 32vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        padding: 0 3vw;
+        border: 3px  solid #f0f0f0;
+        border-radius:15px;
         img {
-          width: 99%;
+          width: 100%;
           height: 6.66em;
           display: inline-block;
+          border-top-left-radius:  10px;
+          border-top-right-radius: 10px;
         }
 
         > p {
           .fz(font-size,23);
+          min-height: 2rem;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
@@ -266,15 +294,26 @@
           .fz(font-size, 40);
         }
 
-        > span {
-          display: inline-block;
-          align-content: center;
-          color: #ff4444;
-          padding: 2vw 1.2vw;
-          .fz(font-size, 30);
-          font-weight: bold;
+        .goodsFooter{
+          border-bottom-left-radius:  10px;
+          border-bottom-right-radius: 10px;
+          > span {
+            display: inline-block;
+            align-content: center;
+            color: #ff4444;
+            margin: 1vw;
+            .fz(font-size, 30);
+            font-weight: bold;
+          }
         }
       }
+      li:nth-child(3n+2) {
+        margin-left: 1px;
+      }
+      li:nth-child(3n+3) {
+        margin-left: 1px;
+      }
+
     }
 
     .sectionGoods-title {

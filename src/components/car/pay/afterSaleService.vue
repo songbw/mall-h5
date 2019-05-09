@@ -11,7 +11,7 @@
           :title="goods.name"
           :thumb="goods.image">
         </van-card>
-        <van-cell title="状态" title-class="CellTitle" :value="requestState"></van-cell>
+        <van-cell title="状态" title-class="CellTitle" :value="requestStateValue"></van-cell>
         <div slot="footer">
           <van-cell title="申请数量" title-class="CellTitle">
             <van-stepper
@@ -24,11 +24,11 @@
         <van-cell title="申请类型" title-class="CellTitle"></van-cell>
         <van-radio-group v-model="typeRadio">
           <van-cell-group>
-            <van-cell title="退货" clickable @click="radio = 'type1'">
-              <van-radio name="type1" />
+            <van-cell title="退货" clickable @click="typeRadio = 'type1'">
+              <van-radio name="type1"/>
             </van-cell>
-            <van-cell title="其他" clickable @click="radio = 'type2'">
-              <van-radio name="type2" />
+            <van-cell title="换货" clickable @click="typeRadio = 'type2'">
+              <van-radio name="type2"/>
             </van-cell>
           </van-cell-group>
         </van-radio-group>
@@ -84,7 +84,7 @@
       </div>
     </div>
     <div class="footer">
-      <van-button type="warning" size="large" :disabled="commitDisabled"  @click="onCommitClick()">提交</van-button>
+      <van-button type="warning" size="large" :disabled="commitDisabled" @click="onCommitClick()">提交</van-button>
     </div>
   </section>
 </template>
@@ -98,13 +98,41 @@
       'v-header': Header,
     },
     watch: {
-      requestDescible: function (newVal,oldVal) {
-        if(this.requestState == "售后申请" && newVal.length > 0) {
+      requestState: function(newVal, oldVal) {
+        //-2:未初始化，-1:申请售后 0.处理中 1.审核通过 2.审核不通过 3.已完成
+         switch(newVal) {
+           case -1:
+             this.requestStateValue = "申请售后"
+             this.commitDisabled = false;
+             break;
+           case 0:
+             this.requestStateValue = "处理中"
+             this.commitDisabled = true;
+             break;
+           case 1:
+             this.requestStateValue = "审核通过"
+             this.commitDisabled = true;
+             break;
+           case 2:
+             this.requestStateValue = "审核不通过"
+             this.commitDisabled = false;
+             break;
+           case 3:
+             this.requestStateValue = "已完成"
+             this.commitDisabled = true;
+             break;
+           default:
+             this.commitDisabled = true;
+             break;
+         }
+      },
+/*      requestDescible: function (newVal, oldVal) {
+        if (this.requestState == -1 && newVal.length > 0) {
           this.commitDisabled = false;
         } else {
           this.commitDisabled = true;
         }
-      }
+      }*/
     },
     data() {
       return {
@@ -116,14 +144,15 @@
         showReason: false,
         radio: '6',
         typeRadio: 'type1',
-        requestState:"售后申请",
+        requestState: -2,//-2:未初始化，-1:申请售后 0.处理中 1.审核通过 2.审核不通过 3.已完成
+        requestStateValue: "",
         commitDisabled: true,
-        requestDescible:''
+        requestDescible: '',
       }
     },
 
 
-    created() {
+/*    created() {
       this.goods = this.$route.params.goods;
       this.contact = this.$route.params.contact;
       this.openId = this.$route.params.openId;
@@ -134,35 +163,97 @@
       this.$log(this.contact)
       this.$log(this.openId)
       this.$log(this.tradeNo)
-    },
+    },*/
+    created() {
+      let that = this
+      this.goods = this.$route.params.goods;
+      this.contact = this.$route.params.contact;
+      this.openId = this.$route.params.openId;
+      this.tradeNo = this.$route.params.tradeNo;
+      this.count = this.goods.num;
 
-    computed: {},
+      this.$api.xapi({
+        method: 'get',
+        url: '/refund/subOrder',
+        params: {
+          subOrderId: this.goods.subOrderId,
+        }
+      }).then((response) => {
+         let result = response.data.data.result;
+         this.$log(result)
+         if(result != undefined && result.length != 0) {
+            this.requestState = result[0].status;
+         } else {
+           this.requestState = -1;
+         }
+      }).catch(function (error) {
+        that.$log(error)
+        that.requestState = -1;
+      })
+    },
 
     methods: {
       getRequestType() {
-        if(this.typeRadio === 'type1')
+        if (this.typeRadio === 'type1')
           return 1
         else
           return 2
       },
       getRequestReason() {
-          return this.radio;
+        let reason = "其他"
+        switch (this.radio) {
+          case '1':
+            reason = "质量问题"
+            break;
+          case '2':
+            reason = "发票问题"
+            break;
+          case '3':
+            reason = "质量问题"
+            break;
+          case '4':
+            reason = "七天无理由"
+            break;
+          case '5':
+            reason = "商品与描述不符"
+            break;
+          default:
+            break;
+        }
+        return reason;
       },
       onCommitClick() {
-     //   this.$log(this.goods)
         this.$log("onCommitClick Enter")
-         let options = {
-           orderId: this.tradeNo,
-           subOrderId: this.goods.subOrderId,
-           skuId:this.goods.skuId,
-           requestNumber: this.count,
-           requestType: this.getRequestType(),
-           requestReason:this.getRequestReason(),
-           requestDescible:this.requestDescible,
-           contactName: this.contact.name,
-           contactTel: this.contact.mobile
-         }
-         this.$log(options)
+        let options = {
+          orderId: this.tradeNo,
+          subOrderId: this.goods.subOrderId,
+          skuId: this.goods.skuId,
+          number: this.count,
+          type: this.getRequestType(),
+          reason: this.getRequestReason(),
+          description: this.requestDescible,
+          contactName: this.contact.name,
+          contactTel: this.contact.mobile
+        }
+        this.$log(JSON.stringify(options))
+        let that = this
+        this.$api.xapi({
+          method: 'post',
+          url: '/refund',
+          data: options,
+        }).then((response) => {
+          let msg = response.data.msg;
+          this.$log(msg)
+          if (msg == "Success") {
+            this.$toast("申请已经成功提交，请等待客服人员联系")
+            this.requestState = 0;
+          } else {
+            this.$toast("申请提交失败，请联系客服人员")
+          }
+        }).catch(function (error) {
+          that.$log(error)
+          that.$toast("申请提交失败，请联系客服人员")
+        })
       },
       showReasonSelector() {
         this.showReason = true
@@ -201,7 +292,8 @@
           }
         }
       }
-      .requireTypeBox{
+
+      .requireTypeBox {
         background-color: #ffffff;
         margin-top: 10px;
       }

@@ -1,6 +1,5 @@
 <template lang="html">
-  <div>人家是有底线的-.-</div>
-
+  <div>----底线在此，不能更低了-----</div>
 </template>
 
 <script>
@@ -9,7 +8,8 @@
 
 <style lang="less" scoped>
   div {
-    padding: 8vw 0;
+    padding-top: 5vw;
+    padding-bottom: 18vw;
     text-align: center;
     letter-spacing: .2vw;
     color: rgb(158, 158, 158);

@@ -26,7 +26,9 @@
       loaded ({ bindType, el, naturalHeight, naturalWidth, $parent, src, loading, error, Init }) {
         el.setAttribute("class","fadeIn")
       }
-    }
+    },
+    observer: true,
+    observerOptions: { rootMargin: '1500px', threshold: 0.05 }
   })
   export default {
     components: {
