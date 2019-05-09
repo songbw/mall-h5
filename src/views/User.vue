@@ -1,116 +1,188 @@
 <template lang="html">
-
-  <div class="car">
-    <header class="header">
-      <div class="header-icon">
-        <span class="icon2-user"></span>
+  <div class="user">
+    <v-header class="header" :goback="false">
+      <h1 slot="title">我的</h1>
+    </v-header>
+    <div class="userMain">
+      <div class='box'>
+        <header class="userHeader">
+          <div class="header-icon">
+            <span class="icon2-user"></span>
+          </div>
+          <span>登录/注册</span>
+        </header>
       </div>
-      <span>登录/注册</span>
-    </header>
-    <div class="main">
-      <router-link class="my-indent" :to="{ name: ''}">
-        <span class="my-indent-left">我的订单</span>
-        <div class="my-indent-right">
-          <span>全部订单</span>
-          <i class="icon-go"></i>
+      <div class="userBody">
+        <div class="orderListBox">
+          <div>
+            <span>我的订单</span>
+          </div>
+          <div class="orderCategory">
+            <van-row type="flex" justify="space-between">
+              <van-col
+                v-for="(item,index) in orderbars"
+                :key="index"
+              >
+                <img :src=" item.img">
+                <span>{{item.title}}</span>
+              </van-col>
+            </van-row>
+          </div>
+
         </div>
-      </router-link>
 
-      <section class="my-pay">
-        <router-link :to="{ name: ''}">
-          <span class="icon2-money"></span>
-          <p>代付款</p>
-        </router-link>
-        <router-link :to="{ name: ''}">
-          <span class="icon2-thecar"></span>
-          <p>待收货</p>
-        </router-link>
-        <router-link :to="{ name: ''}">
-          <span class="icon2-fixed"></span>
-          <p>退换修</p>
-        </router-link>
-
-      </section>
-
-      <section class="my-vip">
-        <router-link class="my-vip-top ho" :to="{ name: ''}">
-          <div class="my-vip-top-div">
-                <span class="icon2-vip">
-                    <span class="path1"></span><span class="path2"></span><span class="path3"></span><span
-                  class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span
-                  class="path8"></span><span class="path9"></span>
-                </span>
-          </div>
-          <p>
-            <span>会员福利</span><i class="icon-go"></i>
-          </p>
-        </router-link>
-        <router-link class="my-vip-bottom ho" :to="{ name: ''}">
-          <div>
-            <span class="icon2-money"></span>
-          </div>
-          <p>
-            <span>我的优惠</span><i class="icon-go"></i>
-          </p>
-        </router-link>
-      </section>
-
-      <section class="my-service">
-        <router-link class="my-service-top" :to="{ name: ''}">
-          <div>
-                    <span class="icon2-service">
-                        <span class="path1"></span><span class="path2"></span><span class="path3"></span>
-                    </span>
-          </div>
-          <p>
-            <span>服务中心</span><i class="icon-go"></i>
-          </p>
-        </router-link>
-        <router-link class="my-service-bottom" :to="{ name: ''}">
-          <div>
-            <span class="icon2-milogo"></span>
-          </div>
-          <p>
-            <span>电商之家</span><i class="icon-go"></i>
-          </p>
-        </router-link>
-      </section>
-
-      <section class="my-settle">
-        <router-link :to="{ name: ''}" class="my-settle-top">
-          <div>
-            <span class="icon2-f"></span>
-
-          </div>
-
-          <p>
-            <span>F码通道</span><i class="icon-go"></i>
-          </p>
-        </router-link>
-        <router-link :to="{ name: ''}" class="my-settle-bottom">
-          <div>
-            <span class="icon2-settle"></span>
-          </div>
-          <p>
-            <span>设置</span><i class="icon-go"></i>
-          </p>
-        </router-link>
-      </section>
-
+      </div>
     </div>
-    <v-baseline></v-baseline>
-    <v-footer></v-footer>
+<!--    <div class='box'>
+      <header class="userHeader">
+        <div class="header-icon">
+          <span class="icon2-user"></span>
+        </div>
+        <span>登录/注册</span>
+      </header>
+      <div class="userBody">
+        <div class="orderListBox">
+        <span>xxxx</span>
+        </div>
+
+      </div>
+    </div>-->
+
+
+
+
+
+    <!--   <div class="main">
+          <router-link class="my-indent" :to="{ name: ''}">
+            <span class="my-indent-left">我的订单</span>
+            <div class="my-indent-right">
+              <span>全部订单</span>
+              <i class="icon-go"></i>
+            </div>
+          </router-link>
+
+          <section class="my-pay">
+            <router-link :to="{ name: ''}">
+              <span class="icon2-money"></span>
+              <p>代付款</p>
+            </router-link>
+            <router-link :to="{ name: ''}">
+              <span class="icon2-thecar"></span>
+              <p>待收货</p>
+            </router-link>
+            <router-link :to="{ name: ''}">
+              <span class="icon2-fixed"></span>
+              <p>退换修</p>
+            </router-link>
+
+          </section>
+
+          <section class="my-vip">
+            <router-link class="my-vip-top ho" :to="{ name: ''}">
+              <div class="my-vip-top-div">
+                    <span class="icon2-vip">
+                        <span class="path1"></span><span class="path2"></span><span class="path3"></span><span
+                      class="path4"></span><span class="path5"></span><span class="path6"></span><span class="path7"></span><span
+                      class="path8"></span><span class="path9"></span>
+                    </span>
+              </div>
+              <p>
+                <span>会员福利</span><i class="icon-go"></i>
+              </p>
+            </router-link>
+            <router-link class="my-vip-bottom ho" :to="{ name: ''}">
+              <div>
+                <span class="icon2-money"></span>
+              </div>
+              <p>
+                <span>我的优惠</span><i class="icon-go"></i>
+              </p>
+            </router-link>
+          </section>
+
+          <section class="my-service">
+            <router-link class="my-service-top" :to="{ name: ''}">
+              <div>
+                        <span class="icon2-service">
+                            <span class="path1"></span><span class="path2"></span><span class="path3"></span>
+                        </span>
+              </div>
+              <p>
+                <span>服务中心</span><i class="icon-go"></i>
+              </p>
+            </router-link>
+            <router-link class="my-service-bottom" :to="{ name: ''}">
+              <div>
+                <span class="icon2-milogo"></span>
+              </div>
+              <p>
+                <span>电商之家</span><i class="icon-go"></i>
+              </p>
+            </router-link>
+          </section>
+
+          <section class="my-settle">
+            <router-link :to="{ name: ''}" class="my-settle-top">
+              <div>
+                <span class="icon2-f"></span>
+
+              </div>
+
+              <p>
+                <span>F码通道</span><i class="icon-go"></i>
+              </p>
+            </router-link>
+            <router-link :to="{ name: ''}" class="my-settle-bottom">
+              <div>
+                <span class="icon2-settle"></span>
+              </div>
+              <p>
+                <span>设置</span><i class="icon-go"></i>
+              </p>
+            </router-link>
+          </section>
+
+        </div>
+        <v-footer></v-footer>-->
   </div>
 </template>
 
 <script>
+  import Header from '@/common/_header.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
 
   export default {
     components: {
+      'v-header': Header,
       'v-baseline': Baseline,
       'v-footer': Footer
+    },
+    data() {
+      return {
+        orderbars: [
+          {
+            title: "首页",
+            img: require('@/assets/icons/ico_home_default.png'),
+          },
+          {
+            title: "分类",
+            img: require('@/assets/icons/ico_classification.png'),
+          },
+          {
+            title: "购物车",
+            img: require('@/assets/icons/ico_shopping_cart.png'),
+          },
+          {
+            title: "我的",
+            img: require('@/assets/icons/ico_my.png')
+          },
+          {
+            title: "我的",
+            img: require('@/assets/icons/ico_my.png')
+          }
+        ]
+      }
     }
   }
 </script>
@@ -121,52 +193,107 @@
   @import '../assets/user/icon/carstyle.css';
 
 
-  .car {
+  .user {
     width: 100%;
-    padding-bottom: 14vw;
-    background-color: #F8FCFF;
+    .userMain{
+      .box {
+        position: relative;
+        width: 100%;
+        height: 100px;
+        background-color: #DEBA6F;
+        .userHeader {
+          width: 100%;
+          height: 100px;
+          background-size: auto 100%;
+          padding: 3.2vw 0;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
 
-    .header {
-      width: 100%;
-      height: 16vw;
-      background: url(../../static/carbg.png) center 0 #f37d0f;
-      background-size: auto 100%;
-      padding: 3.2vw 0;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
+          .header-icon {
+            border: .4vw solid #ffffff;
+            background-color: @cl;
+            margin-left: 4vw;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            width: 14vw;
+            height: 14vw;
+            line-height: 16vw;
+            text-align: center;
+            border-radius: 50%;
 
-      .header-icon {
-        border: .4vw solid #ffffff;
-        background-color: @cl;
-        margin-left: 4vw;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 14vw;
-        height: 14vw;
-        line-height: 16vw;
-        text-align: center;
-        border-radius: 50%;
+            span {
+              .fz(font-size, 54);
 
-        span {
-          .fz(font-size, 54);
+              &::before {
+                color: #ffffff;
+              }
+            }
+          }
 
-          &::before {
+          > span {
+            margin-left: 3.2vw;
+            .fz(font-size, 30);
             color: #ffffff;
+            letter-spacing: .2vw;
           }
         }
       }
-
-      > span {
-        margin-left: 3.2vw;
-        .fz(font-size, 30);
-        color: #ffffff;
-        letter-spacing: .2vw;
+      .box:after {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -50px;
+        z-index: -1;
+        content: ' ';
+        height: 100px;
+        width: 140%;
+        left: -20%;
+        border-radius: 0 0 90% 90%;
+        background-color: #DEBA6F;
       }
+     .userBody {
+        margin-top: 52px;
+        width: 100%;
+        height: 100vh;
+
+       .orderListBox {
+
+         padding: 10px;
+         background-color: #f8f8f8;
+         border: 4px solid white;
+         border-radius: 10px;
+
+         .orderCategory {
+           align-items: center;
+           text-align: center;
+           margin-top: 10px;
+           .van-col {
+             display: flex;
+             flex-direction: column;
+             justify-content: center;
+             align-items: Center;
+
+             img {
+               margin: 1px;
+               height: 30px;
+               width: 30px;
+             }
+
+             span {
+               margin: 1px;
+             }
+           }
+         }
+
+       }
+      }
+
     }
+
 
     .main {
       width: 100%;
