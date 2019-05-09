@@ -224,7 +224,7 @@
 
         p.sectionSlide-list-intro {
           padding-top: 1vw;
-          .fz(font-size, 20);
+          .fz(font-size, 23);
           color: #323233;
         }
 
