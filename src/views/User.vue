@@ -162,24 +162,24 @@
       return {
         orderbars: [
           {
-            title: "首页",
-            img: require('@/assets/icons/ico_home_default.png'),
+            title: "待支付",
+            img: require('@/assets/icons/ico_to_be_paid.png'),
           },
           {
-            title: "分类",
-            img: require('@/assets/icons/ico_classification.png'),
+            title: "待收货",
+            img: require('@/assets/icons/ico_goods_to_be_receive.png'),
           },
           {
-            title: "购物车",
-            img: require('@/assets/icons/ico_shopping_cart.png'),
+            title: "已完成",
+            img: require('@/assets/icons/ico_complete_order.png'),
           },
           {
-            title: "我的",
-            img: require('@/assets/icons/ico_my.png')
+            title: "已取消",
+            img: require('@/assets/icons/ico_order_cancel.png')
           },
           {
-            title: "我的",
-            img: require('@/assets/icons/ico_my.png')
+            title: "全部",
+            img: require('@/assets/icons/ico_order_default.png')
           }
         ]
       }
@@ -276,15 +276,14 @@
              flex-direction: column;
              justify-content: center;
              align-items: Center;
-
              img {
                margin: 1px;
-               height: 30px;
+               height: 25px;
                width: 30px;
              }
 
              span {
-               margin: 1px;
+               margin: 5px;
              }
            }
          }
