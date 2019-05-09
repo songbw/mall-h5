@@ -179,9 +179,11 @@
   .sectionSlide-list {
     overflow-x: auto;
     width: 100%;
-    .pt();
+    padding-top: 2px;
+    padding-bottom: 2px;
     /*原生滑动*/
     -webkit-overflow-scrolling: touch;
+    background-color: #f0f0f0;
 
     > ul {
       display: -ms-flex;
@@ -190,16 +192,21 @@
       display: flex;
       padding: 0vw;
       width: 100%;
+      background-color: #f0f0f0;
 
       li {
-        margin-right: 5vw;
-        width: 26vw;
+        margin-right: 0.5vw;
+        margin-left: 0.5vw;
+        width: 27vw;
+        border-radius: 10px;
 
         a,
         img {
           display: block;
           width: 100%;
           height: 6.1em;
+          border-top-right-radius: 10px;
+          border-top-left-radius: 10px;
         }
 
         h2,
@@ -217,7 +224,7 @@
 
         p.sectionSlide-list-intro {
           padding-top: 1vw;
-          .fz(font-size, 23);
+          .fz(font-size, 20);
           color: #323233;
         }
 
