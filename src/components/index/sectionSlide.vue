@@ -195,8 +195,8 @@
       background-color: #f0f0f0;
 
       li {
-        margin-right: 0.5vw;
-        margin-left: 0.5vw;
+        margin-right: 1vw;
+        margin-left: 1vw;
         width: 27vw;
         border-radius: 10px;
 
