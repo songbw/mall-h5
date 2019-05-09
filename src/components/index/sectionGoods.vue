@@ -10,7 +10,10 @@
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <p>{{k.intro}}</p>
-              <span :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
+              <div class="goodsFooter">
+                <span :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
+              </div>
+
             </li>
           </ul>
         </div>
@@ -178,18 +181,20 @@
       flex-wrap: wrap;
       overflow: hidden;
       background-color: #f0f0f0;
+      padding-right: 2vw;
+      padding-left:  2vw;
       li {
-        width: 50%;
+        width: 48vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        padding: 0 3vw;
         border: 4px solid #f0f0f0;
-        border-radius:10px;
+        border-radius:15px;
         img {
-          margin-top: 2px;
-          width: 99%;
+          width: 100%;
           height: 10em;
           display: inline-block;
+          border-top-left-radius:  10px;
+          border-top-right-radius: 10px;
         }
 
         > p {
@@ -215,14 +220,19 @@
           .fz(font-size, 40);
         }
 
-        > span {
-          display: inline-block;
-          align-content: center;
-          color: #ff4444;
-          padding: 2vw 1.2vw;
-          .fz(font-size, 30);
-          font-weight: bold;
+        .goodsFooter{
+          border-bottom-left-radius:  10px;
+          border-bottom-right-radius: 10px;
+          > span {
+            display: inline-block;
+            align-content: center;
+            color: #ff4444;
+            margin: 1vw;
+            .fz(font-size, 30);
+            font-weight: bold;
+          }
         }
+
       }
 /*      li{
         border-bottom: 2px solid #f0f0f0;
@@ -245,18 +255,20 @@
       flex-wrap: wrap;
       overflow: hidden;
       background-color: #f0f0f0;
+      padding-right: 2vw;
+      padding-left:  2vw;
       li {
-        width: 33.1%;
+        width: 32vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        padding: 0 3vw;
         border: 3px  solid #f0f0f0;
-        border-radius: 10px;
+        border-radius:15px;
         img {
-          margin-top: 2px;
-          width: 99%;
+          width: 100%;
           height: 6.66em;
           display: inline-block;
+          border-top-left-radius:  10px;
+          border-top-right-radius: 10px;
         }
 
         > p {
@@ -282,13 +294,17 @@
           .fz(font-size, 40);
         }
 
-        > span {
-          display: inline-block;
-          align-content: center;
-          color: #ff4444;
-          padding: 2vw 1.2vw;
-          .fz(font-size, 30);
-          font-weight: bold;
+        .goodsFooter{
+          border-bottom-left-radius:  10px;
+          border-bottom-right-radius: 10px;
+          > span {
+            display: inline-block;
+            align-content: center;
+            color: #ff4444;
+            margin: 1vw;
+            .fz(font-size, 30);
+            font-weight: bold;
+          }
         }
       }
       li:nth-child(3n+2) {
