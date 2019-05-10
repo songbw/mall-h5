@@ -152,8 +152,6 @@
 <style lang="less" scoped>
   @import "../../../assets/fz.less";
   @import "../../../assets/index/style.css";
-  @import "../../../assets/fz.less";
-  @import "../../../assets/index/style.css";
 
   .logisticsDetail {
     .header {
