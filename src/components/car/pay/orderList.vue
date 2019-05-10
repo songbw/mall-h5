@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="orderlist" :goback="false">
-    <v-header :goback="false">
+  <div class="orderlist">
+    <v-header>
       <h1 slot="title">我的订单</h1>
     </v-header>
     <div class="orderlist-layout">
@@ -10,7 +10,7 @@
                     :finished="item.finished"
                     @load="onLoad(active)">
             <div class="orderlist-body">
-              <div v-if="item.total === 0" class="no-oderlist">
+              <div v-if="item.total === 0" class="no-orderlist">
                 <img :src=no_orderList_bg>
                 <span>您还没有相关订单</span>
               </div>
@@ -77,7 +77,6 @@
         </van-tab>
       </van-tabs>
     </div>
-    <v-footer></v-footer>
   </div>
 </template>
 
@@ -91,11 +90,11 @@
       'v-footer':Footer
     },
 
-    beforeRouteEnter(to, from, next) {
+/*    beforeRouteEnter(to, from, next) {
       next(vm=>{
         vm.$store.commit('SET_CURRENT_NAVI_INDEX', 3);
       })
-    },
+    },*/
 
     data() {
       return {
@@ -547,7 +546,7 @@
           .fz(font-size, 30);
         }
 
-        .no-oderlist {
+        .no-orderlist {
           width: 100%;
           display: flex;
           background-color: white;
@@ -592,7 +591,6 @@
               .fz(font-size, 40);
             }
           }
-
         }
       }
     }

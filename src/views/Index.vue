@@ -205,7 +205,7 @@
           //this.$log("##### after this.$store.state.appconf.prePayOrderList")
           //this.$log(this.$store.state.appconf.prePayOrderList)
         }
-        this.$router.replace({path: '/car/oderList'})
+        this.$router.replace({path: '/car/orderList'})
       },
       getUserInfo(accessToken) {
         let that = this;

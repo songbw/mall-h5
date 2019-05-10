@@ -78,12 +78,12 @@ export default new VueRouter({
       },]
     },
     {
-      path: '/car/oderList',
+      path: '/car/orderList',
       name: '订单列表页',
       component: OrderList
     },
     {
-      path: '/car/oderDetail',
+      path: '/car/orderDetail',
       name: '订单详情页',
       component: OrderDetail
     },

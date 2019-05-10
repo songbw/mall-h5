@@ -15,7 +15,7 @@
       <div class="userBody">
         <div class="orderListBox">
           <div>
-            <van-cell value="全部订单" is-link>
+            <van-cell value="全部订单" is-link to="/car/orderList">
               <template slot="title">
                 <span class="orderListTitle">我的订单</span>
               </template>
@@ -75,6 +75,11 @@
       'v-header': Header,
       'v-baseline': Baseline,
       'v-footer': Footer
+    },
+    beforeRouteEnter(to, from, next) {
+      next(vm=>{
+        vm.$store.commit('SET_CURRENT_NAVI_INDEX', 3);
+      })
     },
     data() {
       return {
@@ -171,7 +176,7 @@
         border-radius: 0 0 90% 90%;
         background-color: #DEBA6F;
       }
-     .userBody {
+      .userBody {
         margin-top: 70px;
         width: 100%;
         height: 100%;
@@ -247,7 +252,6 @@
         height: 10vh;
         background-color: #f8f8f8;
       }
-
     }
   }
 
