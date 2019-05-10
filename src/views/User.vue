@@ -174,6 +174,8 @@
      .userBody {
         margin-top: 70px;
         width: 100%;
+        height: 100%;
+
 
        .orderListBox {
          margin: 10px;
@@ -241,31 +243,12 @@
          background-color:white;
        }
       }
+      .userfooter {
+        height: 10vh;
+        background-color: #f8f8f8;
+      }
 
     }
-
-    .userfooter{
-      height: 1em;
-    }
-  }
-
-  /*图标大小不一，重新定义*/
-
-  .icon-go {
-    .fz(font-size, 36);
-
-    &::before {
-      color: #aba8a8;
-    }
-  }
-
-  [class^="icon2-"],
-  [class*=" icon2-"] {
-    .fz(font-size, 50);
-  }
-
-  .icon2-service {
-    .fz(font-size, 34);
   }
 
 </style>
