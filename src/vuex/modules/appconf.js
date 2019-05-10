@@ -16,7 +16,8 @@ const state = {
   payDirectProduct:'',
   currentOrderInfo:'',
   prePayOrderList:[],
-  currentNaviIndex: 0
+  currentNaviIndex: 0,
+  currentOrderListIndex: 0,
 }
 
 const mutations = {
@@ -85,6 +86,11 @@ const mutations = {
     console.log("SET_CURRENT_NAVI_INDEX")
     state.currentNaviIndex = res
   },
+
+  [types.SET_CURRENT_ORDER_LIST_INDEX] (state, res) {
+    console.log("SET_CURRENT_ORDER_LIST_INDEX")
+    state.currentOrderListIndex = res
+  }
 }
 
 const actions = {

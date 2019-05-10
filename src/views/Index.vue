@@ -205,6 +205,7 @@
           //this.$log("##### after this.$store.state.appconf.prePayOrderList")
           //this.$log(this.$store.state.appconf.prePayOrderList)
         }
+        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
         this.$router.replace({path: '/car/orderList'})
       },
       getUserInfo(accessToken) {

@@ -15,7 +15,7 @@
       <div class="userBody">
         <div class="orderListBox">
           <div>
-            <van-cell value="全部订单" is-link to="/car/orderList">
+            <van-cell value="全部订单" is-link @click=onOrderListBarClick(0)>
               <template slot="title">
                 <span class="orderListTitle">我的订单</span>
               </template>
@@ -27,8 +27,11 @@
                 v-for="(item,index) in orderbars"
                 :key="index"
               >
-                <img :src=" item.img">
-                <span>{{item.title}}</span>
+                <div class="orderCategoryBar" @click=onOrderListBarClick(item.key)>
+                  <img :src=" item.img">
+                  <span>{{item.title}}</span>
+                </div>
+
               </van-col>
             </van-row>
           </div>
@@ -50,7 +53,7 @@
         <div class="settingsBox">
           <van-cell title="地址管理" is-link>
           </van-cell>
-          <van-cell title="关于我们"  is-link>
+          <van-cell title="关于我们" is-link>
           </van-cell>
         </div>
 
@@ -77,7 +80,7 @@
       'v-footer': Footer
     },
     beforeRouteEnter(to, from, next) {
-      next(vm=>{
+      next(vm => {
         vm.$store.commit('SET_CURRENT_NAVI_INDEX', 3);
       })
     },
@@ -86,22 +89,34 @@
         orderbars: [
           {
             title: "待支付",
+            key: 1,
             img: require('@/assets/icons/ico_to_be_paid.png'),
           },
           {
             title: "待收货",
+            key: 2,
             img: require('@/assets/icons/ico_goods_to_be_receive.png'),
           },
           {
             title: "已完成",
+            key: 3,
             img: require('@/assets/icons/ico_complete_order.png'),
           },
           {
             title: "已取消",
+            key: 4,
             img: require('@/assets/icons/ico_order_cancel.png')
           }
         ],
-        couponCenterImg:  require('@/assets/icons/ico_couponCenter.png'),
+        couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),
+      }
+    },
+    methods: {
+      onOrderListBarClick(type) {
+        //订单类型
+        this.$log("onOrderListBarClick:" + type);
+        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
+        this.$router.push({name: '订单列表页'})
       }
     }
   }
@@ -115,14 +130,17 @@
 
   .user {
     width: 100%;
-    .userMain{
+
+    .userMain {
       background-color: #f8f8f8;
       z-index: -1;
+
       .box {
         position: relative;
         width: 100%;
         height: 100px;
         background-color: #DEBA6F;
+
         .userHeader {
           width: 100%;
           height: 100px;
@@ -164,6 +182,7 @@
           }
         }
       }
+
       .box:after {
         position: absolute;
         left: 0;
@@ -176,78 +195,86 @@
         border-radius: 0 0 90% 90%;
         background-color: #DEBA6F;
       }
+
       .userBody {
         margin-top: 70px;
         width: 100%;
         height: 100%;
 
 
-       .orderListBox {
-         margin: 10px;
-         background-color:white;
-         border: 4px solid white;
-         border-radius: 10px;
+        .orderListBox {
+          margin: 10px;
+          background-color: white;
+          border: 4px solid white;
+          border-radius: 10px;
 
-         .orderListTitle{
-           margin: 8px;
-           .fz(font-size, 30);
-           font-weight: bold;
-         }
+          .orderListTitle {
+            margin: 8px;
+            .fz(font-size, 30);
+            font-weight: bold;
+          }
 
-         .orderCategory {
-           align-items: center;
-           text-align: center;
-           margin: 10px;
-           .van-col {
-             display: flex;
-             flex-direction: column;
-             justify-content: center;
-             align-items: Center;
-             img {
-               margin: 1px;
-               height: 20px;
-               width: 25px;
-             }
 
-             span {
-               margin: 5px;
-               .fz(font-size, 25);
-             }
-           }
-         }
+          .orderCategory {
+            align-items: center;
+            text-align: center;
+            margin: 10px;
+            .van-col {
+              .orderCategoryBar {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: Center;
 
-       }
+                img {
+                  margin: 1px;
+                  height: 20px;
+                  width: 25px;
+                }
 
-       .couponBox {
-         margin: 10px;
-         padding: 10px;
-         background-color:white;
-         border: 4px solid white;
-         border-radius: 10px;
+                span {
+                  margin: 5px;
+                  .fz(font-size, 25);
+                }
+              }
 
-         .couponTitle{
-           .fz(font-size, 30);
-           font-weight: bold;
-         }
+            }
+          }
 
-         .couponCategory {
-           align-items: center;
-           text-align: center;
-           margin-top: 10px;
-           img{
-             width: 100%;
-             display: inline-block;
-           }
-         }
+        }
 
-       }
+        .couponBox {
+          margin: 10px;
+          padding: 10px;
+          background-color: white;
+          border: 4px solid white;
+          border-radius: 10px;
 
-       .settingsBox {
-         margin: 10px;
-         padding: 10px;
-         background-color:white;
-       }
+          .couponTitle {
+            .fz(font-size, 30);
+            font-weight: bold;
+          }
+
+          .couponCategory {
+            align-items: center;
+            text-align: center;
+            margin-top: 10px;
+
+            img {
+              width: 100%;
+              display: inline-block;
+            }
+          }
+
+        }
+
+        .settingsBox {
+          margin: 10px;
+          padding: 10px;
+          background-color: white;
+        }
       }
+
       .userfooter {
         height: 10vh;
         background-color: #f8f8f8;

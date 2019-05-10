@@ -154,6 +154,7 @@
     },
 
     mounted() {
+      this.active = this.$store.state.appconf.currentOrderListIndex;
       setTimeout(() => {
         if (!this.launchedLoading) {
           this.onLoad(this.active)
@@ -455,6 +456,7 @@
 
       onClick(index, title) {
         this.$log("onClick Enter, index is:" + index + ",title is:" + title)
+        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', index);
         this.onLoad(index)
       },
       isUserEmpty(userInfo) {
