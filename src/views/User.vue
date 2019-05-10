@@ -46,7 +46,7 @@
             </van-cell>
           </div>
           <div class="couponCategory">
-            <img :src="couponCenterImg">
+            <img :src="couponCenterImg" @click="onCouponCenterClick()">
           </div>
 
         </div>
@@ -117,7 +117,12 @@
         this.$log("onOrderListBarClick:" + type);
         this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
         this.$router.push({name: '订单列表页'})
+      },
+      onCouponCenterClick() {
+        this.$log("onCouponCenterClick Enter")
+        this.$router.push("/user/couponCenter")
       }
+
     }
   }
 </script>
