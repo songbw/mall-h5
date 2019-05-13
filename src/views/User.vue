@@ -9,7 +9,7 @@
           <div class="header-icon">
             <span class="icon2-user"></span>
           </div>
-          <span v-if="nickName.length > 0">{{nickName}}</span>
+          <span v-if="user.nickname !=undefined && user.nickname.length > 0">{{user.nickname}}</span>
           <span v-else>登录/注册</span>
         </header>
       </div>
@@ -98,9 +98,12 @@
           }
         }).then((response) => {
           let user = response.data.data.user;
-          this.$log(user);
+
           if (user != null) {
-            this.nickName = user.nickname;
+            this.$log("xxxxxxxxxxxxxxxxxx")
+            this.user = user;
+            this.$log(this.user)
+            this.$log(this.user.nickname);
           }
         }).catch(function (error) {
           //alert(error)
@@ -137,7 +140,7 @@
           }
         ],
         couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),
-        nickName: '',
+        user:{}
       }
     },
     methods: {
@@ -156,7 +159,12 @@
       },
       onUserInfoClick() {
         this.$log("onUserInfoClick Enter")
-        this.$router.push("/user/userInfo")
+        this.$router.push({
+          name: "我的信息",
+          params: {
+            user: this.user
+          }
+        })
       }
 
     }

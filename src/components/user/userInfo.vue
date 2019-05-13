@@ -5,23 +5,23 @@
     </v-header>
     <div class="userMain">
       <van-cell-group>
-        <van-cell isLink="true" url="">
-          <div slot="title" class="avatarTitle">
-            <span>头像</span>
-          </div>
-          <div slot="right-icon" class="header-icon">
-            <span class="icon2-user"></span>
-          </div>
-        </van-cell>
+<!--        <van-cell isLink="true" url="">-->
+<!--          <div slot="title" class="avatarTitle">-->
+<!--            <span>头像</span>-->
+<!--          </div>-->
+<!--          <div slot="right-icon" class="header-icon">-->
+<!--            <span class="icon2-user"></span>-->
+<!--          </div>-->
+<!--        </van-cell>-->
         <van-cell title="用户ID" isLink="true" url="">
           <div slot="label">
-            <span>xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1</span>
+            <span>{{user.openId}}</span>
           </div>
         </van-cell>
-        <van-cell title="昵称" value="周俊" isLink="true" url=""></van-cell>
-        <van-cell title="手机号" value="13810964380" isLink="true" url=""></van-cell>
-        <van-cellcell title="性别" value="男" isLink="true" url=""></van-cellcell>
-        <van-cell title="生日" value="" isLink="true" url=""></van-cell>
+        <van-cell title="昵称" :value=user.nickname isLink="true" url=""></van-cell>
+        <van-cell title="手机号" :value=user.telephone isLink="true" url=""></van-cell>
+        <van-cell title="性别" :value=user.sex isLink="true" url=""></van-cell>
+        <van-cell title="生日" :value=user.birth isLink="true" url=""></van-cell>
       </van-cell-group>
     </div>
 
@@ -37,7 +37,16 @@
     },
 
     data() {
-      return {}
+      return {
+        user:{},
+      }
+    },
+
+    created() {
+      let that = this;
+      that.$log("userInfo created Enter")
+      that.user = this.$route.params.user;
+      that.$log(that.user);
     },
 
     methods: {}
