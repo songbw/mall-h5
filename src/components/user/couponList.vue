@@ -1,13 +1,10 @@
 <template lang="html">
-  <section class="couponCenter">
+  <section class="couponList">
     <v-header class="header">
-      <h1 slot="title">领券中心</h1>
+      <h1 slot="title">优惠券</h1>
     </v-header>
-    <div class="couponCenterBody">
-      <div class="couponCenterHeader">
-        <img :src="couponCenterHeaderImg">
-      </div>
-      <div class="couponCenterMain">
+    <div class="couponListBody">
+      <div class="couponListMain">
         <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable>
           <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
             <div class="couponList">
@@ -24,8 +21,8 @@
                     </div>
                     <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
                   </div>
-                  <div class="get-btn" @click="getCouponClick()">
-                    <span>立即领取</span>
+                  <div class="get-btn" @click="useCouponClick()">
+                    <span>立即使用</span>
                   </div>
                 </div>
               </div>
@@ -43,7 +40,7 @@
                     <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
                   </div>
                   <div class="get-btn">
-                    <span>已领取</span>
+                    <span>已过期</span>
                   </div>
                 </div>
               </div>
@@ -77,7 +74,7 @@
         swipeThreshold: 5,
         couponTypes: [
           {
-            "title": "全部",
+            "title": "未使用",
             "list": [],
             "total": -1,
             "pageNo": 1,
@@ -86,7 +83,16 @@
             "finished": false,
           },
           {
-            "title": "食品",
+            "title": "使用记录",
+            "list": [],
+            "total": -1,
+            "pageNo": 1,
+            "status": 0,
+            "loading": false,
+            "finished": false,
+          },
+          {
+            "title": "已过期",
             "list": [],
             "total": -1,
             "pageNo": 1,
@@ -95,7 +101,6 @@
             "finished": false,
           },
         ],
-        couponCenterHeaderImg: require('@/assets/icons/ico_couponCenterHeader.jpg'),
         /*        couponConfig: {
                   width: 120, // 卡券宽度
                   height: 160, // 卡券高度
@@ -118,8 +123,8 @@
       }
     },
     methods: {
-      getCouponClick(){
-        this.$log("getCouponClick Enter")
+      useCouponClick(){
+        this.$log("useCouponClick Enter")
       },
       onOrderListBarClick(type) {
         //订单类型
@@ -127,9 +132,9 @@
         this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
         this.$router.push({name: '订单列表页'})
       },
-      onCouponCenterClick() {
-        this.$log("onCouponCenterClick Enter")
-        this.$router.push("/user/couponCenter")
+      oncouponListClick() {
+        this.$log("oncouponListClick Enter")
+        this.$router.push("/user/couponList")
       }
 
     }
@@ -141,19 +146,12 @@
   @import '../../assets/index/style.css';
   @import '../../assets/user/icon/carstyle.css';
 
-  .couponCenter {
+  .couponList {
     width: 100%;
     height: 100vh;
 
-    .couponCenterBody {
-      .couponCenterHeader {
-        img {
-          width: 100%;
-          display: inline-block;
-        }
-      }
-
-      .couponCenterMain {
+    .couponListBody {
+      .couponListMain {
         width: 100%;
         .couponList {
           .coupon-item{
@@ -161,6 +159,7 @@
           }
           .coupon-item .nick {
             color: #fff;
+
           }
           .coupon-item .validDate {
             color: #fff;

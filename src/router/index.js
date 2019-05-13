@@ -24,6 +24,7 @@ const Casher = resolve => require(['@/components/car/pay/casher.vue'], resolve)
 const Promotion = resolve => require(['@/components/category/goods/promotion.vue'], resolve)
 const AfterSaleService = resolve => require(['@/components/car/pay/afterSaleService.vue'], resolve)
 const CouponCenter = resolve => require(['@/components/user/couponCenter.vue'], resolve)
+const CouponList = resolve => require(['@/components/user/CouponList.vue'], resolve)
 
 export default new VueRouter({
   routes: [
@@ -147,6 +148,11 @@ export default new VueRouter({
       path: '/user/couponCenter',
       name: '领券中心',
       component:CouponCenter
+    },
+    {
+      path: '/user/couponList',
+      name: '我的卡券',
+      component:CouponList
     }
   ]
 })

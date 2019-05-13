@@ -39,7 +39,7 @@
         </div>
         <div class="couponBox">
           <div>
-            <van-cell value="更多" is-link>
+            <van-cell value="更多" is-link to="/user/couponList">
               <template slot="title">
                 <span class="couponTitle">我的优惠券</span>
               </template>
