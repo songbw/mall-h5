@@ -35,12 +35,12 @@
     components: {
       'v-header': Header,
     },
+
     data() {
       return {}
     },
 
     methods: {}
-
   }
 </script>
 

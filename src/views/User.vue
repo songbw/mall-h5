@@ -9,7 +9,8 @@
           <div class="header-icon">
             <span class="icon2-user"></span>
           </div>
-          <span>登录/注册</span>
+          <span v-if="nickName.length > 0">{{nickName}}</span>
+          <span v-else>登录/注册</span>
         </header>
       </div>
       <div class="userBody">
@@ -84,6 +85,33 @@
         vm.$store.commit('SET_CURRENT_NAVI_INDEX', 3);
       })
     },
+    created() {
+      let userInfo = this.$store.state.appconf.userInfo;
+      if (!this.isUserEmpty(userInfo)) {
+        let user = JSON.parse(userInfo);
+        this.$api.xapi({
+          method: 'get',
+          url: '/user',
+          baseURL: this.$api.USER_BASE_URL,
+          params: {
+            openId: user.userId,
+          }
+        }).then((response) => {
+          let user = response.data.data.user;
+          this.$log(user);
+          if (user != null) {
+            this.nickName = user.nickname;
+          }
+        }).catch(function (error) {
+          //alert(error)
+          that.$log(error)
+          that.pageloading = false;
+        })
+      } else {
+        //goto register UI
+      }
+
+    },
     data() {
       return {
         orderbars: [
@@ -109,9 +137,13 @@
           }
         ],
         couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),
+        nickName: '',
       }
     },
     methods: {
+      isUserEmpty(userInfo) {
+        return (userInfo == undefined || userInfo.length === 0)
+      },
       onOrderListBarClick(type) {
         //订单类型
         this.$log("onOrderListBarClick:" + type);
@@ -228,6 +260,7 @@
             align-items: center;
             text-align: center;
             margin: 10px;
+
             .van-col {
               .orderCategoryBar {
                 display: flex;

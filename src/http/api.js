@@ -9,8 +9,9 @@ const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 const SERVER_BASE_URL = "http://119.3.111.161:8080"
 const APP_ID = "10" //无锡市民卡
 const SERVR_PHONE_NUM= "4000797717";
-
 const OPEN_CASHER_URL = "http://localhost:1322/#/pay/casher";
+
+const USER_BASE_URL="http://119.3.3.226:8081/";
 
 const xapi = axios.create();
 xapi.defaults.baseURL = SERVER_BASE_URL;
@@ -75,5 +76,6 @@ export default {
   GOODS_URL_PREFIX,
   APP_ID,
   SERVR_PHONE_NUM,
-  OPEN_CASHER_URL
+  OPEN_CASHER_URL,
+  USER_BASE_URL
 }

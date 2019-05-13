@@ -33,7 +33,7 @@
           </div>
         </li>
       </div>
-      <v-baseline :style="{'background-color': mBackgroundColor}" ></v-baseline>
+      <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
     </div>
 
     <v-footer></v-footer>
@@ -171,14 +171,17 @@
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
         this.$log("openId:" + openId);
         if (openId != undefined) {
+          let userId = this.$api.APP_ID + openId;
+          let accessToken = "TTTTTTTTTTTT"
           let userInfo = {
             openId: openId,
             userToken: "xxxxxxxxxxxxx",
-            accessToken: "TTTTTTTTTTTT",
-            userId: this.$api.APP_ID + openId
+            accessToken: accessToken,
+            userId: userId
           }
           this.$log(userInfo)
           this.$store.commit('SET_USER', JSON.stringify(userInfo));
+          this.thirdPartLogined(userId,accessToken);
         }
       },
       closeWindow() {
@@ -221,31 +224,42 @@
             let openId = jsonObj.openId;
             let userToken = jsonObj.userToken;
             if (openId != undefined) {
+              let userId = that.$api.APP_ID + openId;
               let userInfo = {
                 openId: openId,
                 accessToken: accessToken,
                 userToken: userToken,
-                userId: that.$api.APP_ID + openId
+                userId: userId
               }
               that.$log("userInfo  is:" + JSON.stringify(userInfo));
               that.$store.commit('SET_USER', JSON.stringify(userInfo));
+              that.thirdPartLogined(userId, accessToken)
             }
-            that.$api.xapi({
-              method: 'get',
-              url: '/zhcs/user',
-              params: {
-                userToken: userToken,
-                openId: openId,
-              }
-            }).then((response) => {
-              let rt = response.data.data.result
-              that.$log("user information:" + JSON.stringify(rt));
-            }).catch(function (error) {
-              that.$log(error)
-            })
           } catch (e) {
             that.$log(e)
           }
+        })
+      },
+
+      thirdPartLogined(userId, accessToken) {
+        let that = this;
+        this.$api.xapi({
+          method: 'post',
+          url: '/sso/thirdLogin',
+          baseURL: this.$api.USER_BASE_URL,
+          data: {
+            accessToken: accessToken,
+            openId: userId,
+          }
+        }).then((response) => {
+          let rt = response.data.data.result
+          this.$log("local information:" + JSON.stringify(rt));
+          if(rt.token != null) {
+            that.$store.commit('SET_TOKEN', rt.token);
+          }
+
+        }).catch(function (error) {
+          that.$log(error)
         })
       },
 
