@@ -22,6 +22,7 @@
                         <p class="demand">满100元可用</p>
                       </div>
                     </div>
+                    <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
                   </div>
                   <a href="javascript:;" class="get-btn">
                     <span>立即领取</span>
@@ -152,11 +153,15 @@
       .couponCenterMain {
         width: 100%;
         .couponList {
-          padding: 10px;
+          padding: 5px;
           .coupon-item .nick {
-            padding: .66% 0;
             color: #fff;
           }
+          .coupon-item .validDate {
+            color: #fff;
+            .fz(font-size, 25);
+          }
+
           .coupon-item .coupon-money {
             width: 100%;
             display: -webkit-box;
