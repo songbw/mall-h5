@@ -40,6 +40,7 @@
                         <p class="demand">满100元可用</p>
                       </div>
                     </div>
+                    <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
                   </div>
                   <a href="javascript:;" class="get-btn">
                     <span>已领取</span>
