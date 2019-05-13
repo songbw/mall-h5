@@ -5,7 +5,7 @@
     </v-header>
     <div class="userMain">
       <div class='box'>
-        <header class="userHeader">
+        <header class="userHeader" @click="onUserInfoClick()">
           <div class="header-icon">
             <span class="icon2-user"></span>
           </div>
@@ -121,6 +121,10 @@
       onCouponCenterClick() {
         this.$log("onCouponCenterClick Enter")
         this.$router.push("/user/couponCenter")
+      },
+      onUserInfoClick() {
+        this.$log("onUserInfoClick Enter")
+        this.$router.push("/user/userInfo")
       }
 
     }
