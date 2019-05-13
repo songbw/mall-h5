@@ -13,7 +13,7 @@
 <!--            <span class="icon2-user"></span>-->
 <!--          </div>-->
 <!--        </van-cell>-->
-        <van-cell title="用户ID" isLink="true" url="">
+        <van-cell title="用户ID">
           <div slot="label">
             <span>{{user.openId}}</span>
           </div>
