@@ -48,6 +48,9 @@ import {
   Tabbar,
   TabbarItem,
   Actionsheet,
+  Progress,
+  DatetimePicker,
+  Popup
 } from 'vant';
 
 Vue.use(Button)
@@ -85,7 +88,10 @@ Vue.use(Button)
   .use(SwipeItem)
   .use(Tabbar)
   .use(TabbarItem)
-  .use(Actionsheet);
+  .use(Actionsheet)
+  .use(Progress)
+  .use(DatetimePicker)
+  .use(Popup);
 
 
 ///////////////////////////////////////////////////////////////////////

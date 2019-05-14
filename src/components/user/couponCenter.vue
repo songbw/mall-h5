@@ -23,9 +23,17 @@
                   <div class="coupon-price">&yen;5.00</div>
                   <div class="coupon-desc">5元优惠券 满50.00元使用</div>
                   <div class="coupon-expire-date">2018.12.01-2018.12.12</div>
+                  <div class="coupon-progress">
+                    <van-progress
+                      pivot-text="已抢50%"
+                      color="#f44"
+                      :percentage="50"
+                    />
+                  </div>
                 </div>
                 <div class="coupon-get">立即领取</div>
               </div>
+
 
 
               <!--              <div class="coupon coupon-yellow">
@@ -356,7 +364,7 @@
           }
 
           .coupon-price {
-            font-size: 250%;
+            font-size: 150%;
             font-weight: bold;
           }
 
@@ -368,6 +376,10 @@
 
           .coupon-expire-date {
             .fz(font-size, 25);
+          }
+
+          .coupon-progress{
+            margin-top: 10px;
           }
 
           .coupon-suppler{

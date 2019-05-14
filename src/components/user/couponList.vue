@@ -294,7 +294,7 @@
             margin-bottom: .2rem;
           }
           .coupon-price {
-            font-size: 250%;
+            font-size: 150%;
             font-weight: bold;
           }
           .coupon-price > span {
