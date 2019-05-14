@@ -379,6 +379,9 @@
               border-radius: 8px;
               .fz(font-size,25);
             }
+            i{
+              .fz(font-size,28);
+            }
           }
 
 
