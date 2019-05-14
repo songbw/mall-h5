@@ -97,7 +97,7 @@
         telDlgShow: false,
         birthDlgShow: false,
         sexDlgShow: false,
-        minDate: new Date(1900, 1, 1),
+        minDate: new Date(1940, 1, 1),
         maxDate: new Date(2120, 1, 1),
         birthDay: '',
         birthDayValue: null,
@@ -110,11 +110,20 @@
       that.user = this.$route.params.user;
       that.$log(that.user);
       if(that.user.birth != null) {
-        this.birthDay = new Date(that.user.birth).toLocaleString();
+        this.birthDayValue = new Date(that.user.birth);
+        this.birthDay = that.user.birth;
       }
     },
 
     methods: {
+      formatDateTime(date) {
+        let y = date.getFullYear();
+        let m = date.getMonth() + 1;
+        m = m < 10 ? ('0' + m) : m;
+        let d = date.getDate();
+        d = d < 10 ? ('0' + d) : d;
+        return y + '-' + m + '-' + d
+      },
       saveUserInfo() {
         let that = this;
         this.$api.xapi({
@@ -132,11 +141,8 @@
           this.$log("onBirthSelectorConfirmClick Enter");
           this.birthDlgShow = false;
           let date = new Date(value);
-          this.birthDay = date.toLocaleDateString()
-          this.user.birth = date;
-          this.$log(value)
-          this.$log(this.birthDay)
-          this.$log(this.user.birth)
+          this.birthDay = this.formatDateTime(date);
+          this.user.birth = this.birthDay;
           this.saveUserInfo();
       },
       onBirthSelectorCancelClick() {

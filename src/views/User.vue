@@ -52,7 +52,7 @@
 
         </div>
         <div class="settingsBox">
-          <van-cell title="地址管理" is-link>
+          <van-cell title="地址管理" is-link :to="{ name: '地址列表页'}">
           </van-cell>
           <van-cell title="关于我们" is-link>
           </van-cell>

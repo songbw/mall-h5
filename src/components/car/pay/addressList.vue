@@ -52,7 +52,7 @@
                   id: item.id,
                   name: item.receiverName,
                   tel: item.mobile,
-                  address: (item.receiverName != null ? item.receiverName : "") +
+                  address: (item.proviceName != null ? item.proviceName : "") +
                     (item.cityName != null ? item.cityName : "") +
                     (item.countyName != null ? item.countyName : "") +
                     (item.address != null ? item.address : "")
@@ -77,7 +77,7 @@
                   id: item.id,
                   name: item.receiverName,
                   tel: item.mobile,
-                  address: (item.receiverName != null ? item.receiverName : "") +
+                  address: (item.proviceName != null ? item.proviceName : "") +
                     (item.cityName != null ? item.cityName : "") +
                     (item.countyName != null ? item.countyName : "") +
                     (item.address != null ? item.address : "")
@@ -91,6 +91,7 @@
           this.chosenAddressId = list[0].id
           this.$store.commit('SET_USED_ADDRESS_ID', this.chosenAddressId);
         }
+        this.$log(list)
         return list;
       },
 
