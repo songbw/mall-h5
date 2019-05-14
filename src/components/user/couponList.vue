@@ -13,9 +13,13 @@
                   <img :src="couponImg">
                 </div>
                 <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                  <div class="coupon-suppler">
+                    <span>头食</span>
+                    <i>限购头食商铺下所限商品</i>
+                  </div>
                   <div class="coupon-price">&yen;5.00</div>
                   <div class="coupon-desc">5元优惠券 满50.00元使用</div>
-                  <div class="coupon-expiry-date">2018.12.01-2018.12.12</div>
+                  <div class="coupon-expire-date">2018.12.01-2018.12.12</div>
                 </div>
                 <div class="coupon-get">立即使用</div>
               </div>
@@ -113,25 +117,6 @@
             "finished": false,
           },
         ],
-        /*        couponConfig: {
-                  width: 120, // 卡券宽度
-                  height: 160, // 卡券高度
-                  borderRadius: 10, // 卡券四个角的圆角半径
-                  borderColor: '#ffffff', // 边框颜色
-                  borderWidth: 0.5, // 边框粗细
-                  borderOpcity: 1, // 边框透明度
-                  borderDash: null, // 边框虚线数组, 直线是 null, 虚线的话给一个数组,如[2,2]
-                  showLine: true, // 是否显示分割线
-                  lineColor: '#33cc44', // 分割线颜色
-                  lineWidth: 0.4, // 分割线粗细
-                  lineOpcity: 1, // 分割线透明度
-                  lineDash: [3, 5], // 分割线虚线数组, 同 边框虚线数组
-                  lineOffset: 5, // 分割线跟卡券两侧的距离, 为 0 则相连
-                  cutPosition: 80, // 裁切口的位置
-                  cutRadius: 10, // 裁切口的半径
-                  cutSlope: 1.5, // 裁切口的弧度
-                  background: '#ffffff' // 背景颜色, 优先级低于 slot 的背景
-                }*/
       }
     },
     methods: {
@@ -232,7 +217,7 @@
             right: -7px;
           }
           .coupon-info-right-dashed {
-            border-right: 2px dashed #f0f0f0;
+            border-right: 2px dashed #c8c9cc;
           }
           .coupon-info-right-solid {
             border-right: 2px solid white;
@@ -317,8 +302,18 @@
             margin-left: .5rem;
             font-weight: normal;
           }
-          .coupon-expiry-date{
+          .coupon-expire-date{
             .fz(font-size, 25);
+          }
+          .coupon-suppler{
+
+            span{
+              background-color: #ff4444;
+              padding: 2px 5px;
+              color: white;
+              border-radius: 8px;
+              .fz(font-size,25);
+            }
           }
 
          /* .coupon-item{

@@ -16,106 +16,106 @@
                   <img :src="couponImg">
                 </div>
                 <div class="coupon-info coupon-hole coupon-info-right-dashed">
-              <div class="coupon-price">&yen;5.00</div>
-              <div class="coupon-desc">5元优惠券 满50.00元使用</div>
-              <div class="coupon-expiry-date">2018.12.01-2018.12.12</div>
-            </div>
-              <div class="coupon-get">立即领取</div>
-            </div>
-
-
-<!--              <div class="coupon coupon-yellow">
-                <div class="coupon-info coupon-wave-right">
+                  <div class="coupon-suppler">
+                    <span>头食</span>
+                    <i>限购头食商铺下所限商品</i>
+                  </div>
                   <div class="coupon-price">&yen;5.00</div>
-                  <div class="coupon-desc">5元优惠券满50.00元使用</div>
-                  <div class="coupon-expiry-date">有效期：2018.12.01-2018.12.12</div>
+                  <div class="coupon-desc">5元优惠券 满50.00元使用</div>
+                  <div class="coupon-expire-date">2018.12.01-2018.12.12</div>
                 </div>
                 <div class="coupon-get">立即领取</div>
-              </div>-->
+              </div>
 
-<!--              <div class="coupon coupon-wave-left coupon-wave-right coupon-yellow-gradient">
-                <div class="coupon-info coupon-info-right-dashed">
-                  <div class="coupon-store">XXXXXX旗舰店</div>
-                  <div class="coupon-price">&yen;5.00<span>优惠券</span></div>
-                  <div class="coupon-description">订单满50.00元</div>
-                </div>
-                <div class="coupon-get">
-                  <div class="coupon-desc">副券</div>
-                  <div class="coupon-expiry-date">2018.12.01<br/>2018.12.12</div>
-                </div>
-              </div>-->
 
-<!--              <div class="coupon coupon-wave-left coupon-wave-right coupon-red-gradient">
-                <div class="coupon-info coupon-info-right-dashed">
-                  <div class="coupon-store">XXXXXX旗舰店</div>
-                  <div class="coupon-price">&yen;5.00<span>优惠券</span></div>
-                  <div class="coupon-description">订单满50.00元</div>
-                </div>
-                <div class="coupon-get">
-                  <div class="coupon-desc">副券</div>
-                  <div class="coupon-expiry-date">2018.12.01<br/>2018.12.12</div>
-                </div>
-              </div>-->
-
-<!--              <div class="coupon coupon-wave-left coupon-wave-right coupon-green-gradient">
-                <div class="coupon-info coupon-info-right-dashed">
-                  <div class="coupon-store">XXXXXX旗舰店</div>
-                  <div class="coupon-price">&yen;5.00<span>优惠券</span></div>
-                  <div class="coupon-description">订单满50.00元</div>
-                </div>
-                <div class="coupon-get">
-                  <div class="coupon-desc">副券</div>
-                  <div class="coupon-expiry-date">2018.12.01<br/>2018.12.12</div>
-                </div>
-              </div>-->
-
-<!--              <div class="coupon coupon-wave-left coupon-wave-right coupon-blue-gradient">
-                <div class="coupon-info coupon-info-right-dashed">
-                  <div class="coupon-store">XXXXXX旗舰店</div>
-                  <div class="coupon-price">&yen;5.00<span>优惠券</span></div>
-                  <div class="coupon-description">订单满50.00元</div>
-                </div>
-                <div class="coupon-get">
-                  <div class="coupon-desc">副券</div>
-                  <div class="coupon-expiry-date">2018.12.01<br/>2018.12.12</div>
-                </div>
-              </div>-->
-              <!--              <div class="coupon-item">
-                              <div class="couponStyle">
-                                <div class="info-box">
-                                  <p class="nick">优惠券</p>
-                                  <div class="coupon-money">
-                                    <div class="lay of">￥<em>10</em></div>
-                                    <div class="lay">
-                                      <p class="tit">代金券</p>
-                                      <p class="demand">满100元可用</p>
-                                    </div>
-                                  </div>
-                                  <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
-                                </div>
-                                <div class="get-btn" @click="getCouponClick()">
-                                  <span>立即领取</span>
-                                </div>
+              <!--              <div class="coupon coupon-yellow">
+                              <div class="coupon-info coupon-wave-right">
+                                <div class="coupon-price">&yen;5.00</div>
+                                <div class="coupon-desc">5元优惠券满50.00元使用</div>
+                                <div class="coupon-expiry-date">有效期：2018.12.01-2018.12.12</div>
                               </div>
-                            </div>
-                            <div class="coupon-item">
-                              <div class="couponStyle have">
-                                <div class="info-box">
-                                  <p class="nick">优惠券</p>
-                                  <div class="coupon-money">
-                                    <div class="lay of">￥<em>10</em></div>
-                                    <div class="lay">
-                                      <p class="tit">代金券</p>
-                                      <p class="demand">满100元可用</p>
-                                    </div>
-                                  </div>
-                                  <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
-                                </div>
-                                <div class="get-btn">
-                                  <span>已领取</span>
-                                </div>
+                              <div class="coupon-get">立即领取</div>
+                            </div>-->
+              <!--              <div class="coupon coupon-wave-left coupon-wave-right coupon-yellow-gradient">
+                              <div class="coupon-info coupon-info-right-dashed">
+                                <div class="coupon-store">XXXXXX旗舰店</div>
+                                <div class="coupon-price">&yen;5.00<span>优惠券</span></div>
+                                <div class="coupon-description">订单满50.00元</div>
+                              </div>
+                              <div class="coupon-get">
+                                <div class="coupon-desc">副券</div>
+                                <div class="coupon-expiry-date">2018.12.01<br/>2018.12.12</div>
                               </div>
                             </div>-->
+              <!--              <div class="coupon coupon-wave-left coupon-wave-right coupon-red-gradient">
+                              <div class="coupon-info coupon-info-right-dashed">
+                                <div class="coupon-store">XXXXXX旗舰店</div>
+                                <div class="coupon-price">&yen;5.00<span>优惠券</span></div>
+                                <div class="coupon-description">订单满50.00元</div>
+                              </div>
+                              <div class="coupon-get">
+                                <div class="coupon-desc">副券</div>
+                                <div class="coupon-expiry-date">2018.12.01<br/>2018.12.12</div>
+                              </div>
+                            </div>-->
+              <!--              <div class="coupon coupon-wave-left coupon-wave-right coupon-green-gradient">
+                              <div class="coupon-info coupon-info-right-dashed">
+                                <div class="coupon-store">XXXXXX旗舰店</div>
+                                <div class="coupon-price">&yen;5.00<span>优惠券</span></div>
+                                <div class="coupon-description">订单满50.00元</div>
+                              </div>
+                              <div class="coupon-get">
+                                <div class="coupon-desc">副券</div>
+                                <div class="coupon-expiry-date">2018.12.01<br/>2018.12.12</div>
+                              </div>
+                            </div>-->
+              <!--              <div class="coupon coupon-wave-left coupon-wave-right coupon-blue-gradient">
+                              <div class="coupon-info coupon-info-right-dashed">
+                                <div class="coupon-store">XXXXXX旗舰店</div>
+                                <div class="coupon-price">&yen;5.00<span>优惠券</span></div>
+                                <div class="coupon-description">订单满50.00元</div>
+                              </div>
+                              <div class="coupon-get">
+                                <div class="coupon-desc">副券</div>
+                                <div class="coupon-expiry-date">2018.12.01<br/>2018.12.12</div>
+                              </div>
+                            </div>-->
+              <!--              <div class="coupon-item">
+                                            <div class="couponStyle">
+                                              <div class="info-box">
+                                                <p class="nick">优惠券</p>
+                                                <div class="coupon-money">
+                                                  <div class="lay of">￥<em>10</em></div>
+                                                  <div class="lay">
+                                                    <p class="tit">代金券</p>
+                                                    <p class="demand">满100元可用</p>
+                                                  </div>
+                                                </div>
+                                                <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
+                                              </div>
+                                              <div class="get-btn" @click="getCouponClick()">
+                                                <span>立即领取</span>
+                                              </div>
+                                            </div>
+                                          </div>
+                                          <div class="coupon-item">
+                                            <div class="couponStyle have">
+                                              <div class="info-box">
+                                                <p class="nick">优惠券</p>
+                                                <div class="coupon-money">
+                                                  <div class="lay of">￥<em>10</em></div>
+                                                  <div class="lay">
+                                                    <p class="tit">代金券</p>
+                                                    <p class="demand">满100元可用</p>
+                                                  </div>
+                                                </div>
+                                                <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
+                                              </div>
+                                              <div class="get-btn">
+                                                <span>已领取</span>
+                                              </div>
+                                            </div>
+                                          </div>-->
             </div>
           </van-tab>
         </van-tabs>
@@ -207,6 +207,7 @@
 
       .couponCenterMain {
         width: 100%;
+
         .couponList {
           .coupon {
             display: flex;
@@ -220,6 +221,7 @@
             border-bottom-right-radius: .3rem;
             overflow: hidden;
           }
+
           .coupon-img {
             display: flex;
             justify-content: center;
@@ -227,32 +229,42 @@
             flex-direction: column;
             width: 25%;
             position: relative;
-            .img{
-               width: 100%;
+
+            .img {
+              width: 100%;
             }
           }
+
           .coupon-white {
             background-color: white;
           }
+
           .coupon-yellow {
             background-color: #F39B00;
           }
+
           .coupon-white-gradient {
             background-image: linear-gradient(150deg, #FFFFFF 50%, #FFFFFFD8 50%);
           }
-          .coupon-yellow-gradient   {
+
+          .coupon-yellow-gradient {
             background-image: linear-gradient(150deg, #F39B00 50%, #F39B00D8 50%);
           }
+
           .coupon-red-gradient {
             background-image: linear-gradient(150deg, #D24161 50%, #D24161D8 50%);
           }
+
           .coupon-green-gradient {
             background-image: linear-gradient(150deg, #7EAB1E 50%, #7EAB1ED8 50%);
           }
+
           .coupon-blue-gradient {
             background-image: linear-gradient(150deg, #50ADD3 50%, #50ADD3D8 50%);
           }
+
           /* 左边框的波浪 */
+
           .coupon-wave-left::before, .coupon-wave-right::after {
             content: '';
             position: absolute;
@@ -266,19 +278,25 @@
             background-repeat: repeat-y;
             z-index: 1;
           }
+
           .coupon-wave-left::before {
             left: -7px;
           }
+
           .coupon-wave-right::after {
             right: -7px;
           }
+
           .coupon-info-right-dashed {
-            border-right: 2px dashed #f0f0f0;
+            border-right: 2px dashed #c8c9cc;
           }
+
           .coupon-info-right-solid {
             border-right: 2px solid white;
           }
+
           /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
+
           .coupon-hole::before, .coupon-hole::after {
             content: '';
             width: 1rem;
@@ -288,11 +306,13 @@
             position: absolute;
             right: -.5rem;
           }
+
           .coupon-info {
             padding: 0.5rem 0.5rem 0.5rem;
             width: 65%;
             position: relative;
           }
+
           .coupon-get {
             padding: .5rem;
             /** 这里使用flex是为了让文字居中 */
@@ -305,11 +325,13 @@
             position: relative;
             .fz(font-size, 25);
           }
+
           .coupon-get > .coupon-desc {
             font-size: 150%;
             margin-bottom: .5rem;
             font-weight: bold;
           }
+
           .coupon-get-already::after {
             content: '';
             width: 5rem;
@@ -320,26 +342,43 @@
             top: -1rem;
             right: -1rem;
           }
+
           .coupon-info::before {
             top: -.5rem;
           }
+
           .coupon-info::after {
             bottom: -.5rem;
           }
+
           .coupon-info > div {
             margin-bottom: .2rem;
           }
+
           .coupon-price {
             font-size: 250%;
             font-weight: bold;
           }
+
           .coupon-price > span {
             font-size: 40%;
             margin-left: .5rem;
             font-weight: normal;
           }
-          .coupon-expiry-date{
+
+          .coupon-expire-date {
             .fz(font-size, 25);
+          }
+
+          .coupon-suppler{
+
+            span{
+              background-color: #ff4444;
+              padding: 2px 5px;
+              color: white;
+              border-radius: 8px;
+              .fz(font-size,25);
+            }
           }
 
 
