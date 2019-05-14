@@ -11,17 +11,18 @@
         <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable>
           <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
             <div class="couponList">
-              <div class="coupon coupon-white">
+              <div class="coupon coupon-white coupon-wave-left coupon-wave-right">
                 <div class="coupon-img">
                   <img :src="couponImg">
                 </div>
                 <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                  <div class="coupon-price">&yen;5.00</div>
-                  <div class="coupon-desc">5元优惠券 满50.00元使用</div>
-                  <div class="coupon-expiry-date">有效期：2018.12.01-2018.12.12</div>
-                </div>
-                <div class="coupon-get">立即领取</div>
-              </div>
+              <div class="coupon-price">&yen;5.00</div>
+              <div class="coupon-desc">5元优惠券 满50.00元使用</div>
+              <div class="coupon-expiry-date">2018.12.01-2018.12.12</div>
+            </div>
+              <div class="coupon-get">立即领取</div>
+            </div>
+
 
 <!--              <div class="coupon coupon-yellow">
                 <div class="coupon-info coupon-wave-right">
@@ -208,7 +209,7 @@
         width: 100%;
         .couponList {
           .coupon {
-            display: inline-flex;
+            display: flex;
             color: black;
             position: relative;
             padding-left: .5rem;
@@ -218,15 +219,17 @@
             border-top-right-radius: .3rem;
             border-bottom-right-radius: .3rem;
             overflow: hidden;
-
           }
           .coupon-img {
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            min-width: 5rem;
+            width: 25%;
             position: relative;
+            .img{
+               width: 100%;
+            }
           }
           .coupon-white {
             background-color: white;
@@ -287,17 +290,18 @@
           }
           .coupon-info {
             padding: 0.5rem 0.5rem 0.5rem;
-            min-width: 16rem;
+            width: 65%;
             position: relative;
           }
           .coupon-get {
             padding: .5rem;
             /** 这里使用flex是为了让文字居中 */
             display: flex;
+            margin-left: 10px;
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            min-width: 5rem;
+            width: 10%;
             position: relative;
             .fz(font-size, 25);
           }
@@ -333,6 +337,9 @@
             font-size: 40%;
             margin-left: .5rem;
             font-weight: normal;
+          }
+          .coupon-expiry-date{
+            .fz(font-size, 25);
           }
 
 
