@@ -187,12 +187,12 @@
       .box {
         position: relative;
         width: 100%;
-        height: 100px;
+        line-height: 15vw;
         background-color: #DEBA6F;
 
         .userHeader {
           width: 100%;
-          height: 100px;
+          line-height: 15vw;
           background-size: auto 100%;
           padding: 3.2vw 0;
           display: -webkit-box;
@@ -210,7 +210,7 @@
             box-sizing: border-box;
             width: 14vw;
             height: 14vw;
-            line-height: 16vw;
+            line-height: 14vw;
             text-align: center;
             border-radius: 50%;
 
@@ -236,17 +236,17 @@
         position: absolute;
         left: 0;
         right: 0;
-        bottom: -50px;
+        bottom: -20px;
         content: ' ';
-        height: 50px;
-        width: 140%;
-        left: -20%;
+        height: 20px;
+        width: 100%;
         border-radius: 0 0 90% 90%;
         background-color: #DEBA6F;
+        overflow: hidden;
       }
 
       .userBody {
-        margin-top: 70px;
+        margin-top: 10vw;
         width: 100%;
         height: 100%;
 
