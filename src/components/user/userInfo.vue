@@ -30,6 +30,7 @@
         <van-dialog
           v-model="telDlgShow"
           title="修改手机号"
+          @confirm="onTelConfirmClick"
         >
           <van-field v-model="user.telephone" type="tel" rows="1" placeholder="请输入您的电话号码"/>
         </van-dialog>
@@ -37,6 +38,7 @@
         <van-dialog
           v-model="sexDlgShow"
           title="修改性别"
+          @confirm="onSexConfirmClick"
         >
           <div class="sexSelector">
             <van-radio-group v-model=user.sex>
@@ -45,7 +47,7 @@
             </van-radio-group>
           </div>
         </van-dialog>
-        <van-cell title="生日" :value=user.birth isLink="true" @click="onBirthClick()"></van-cell>
+        <van-cell title="生日" :value=birthDay isLink="true" @click="onBirthClick()"></van-cell>
         <!-- <van-dialog
            v-model="birthDlgShow"
            title="标题"
@@ -64,7 +66,7 @@
           <van-popup v-model="birthDlgShow" position="bottom" :overlay="false">
             <van-datetime-picker
               title="修改生日"
-              v-model="birthDay"
+              v-model="birthDayValue"
               type="date"
               :min-date="minDate"
               :max-date="maxDate"
@@ -97,7 +99,8 @@
         sexDlgShow: false,
         minDate: new Date(1900, 1, 1),
         maxDate: new Date(2120, 1, 1),
-        birthDay: new Date(),
+        birthDay: '',
+        birthDayValue: null,
       }
     },
 
@@ -106,13 +109,35 @@
       that.$log("userInfo created Enter")
       that.user = this.$route.params.user;
       that.$log(that.user);
+      if(that.user.birth != null) {
+        this.birthDay = new Date(that.user.birth).toLocaleString();
+      }
     },
 
     methods: {
+      saveUserInfo() {
+        let that = this;
+        this.$api.xapi({
+          method: 'put',
+          url: '/user',
+          baseURL: this.$api.USER_BASE_URL,
+          data: this.user
+        }).then((response) => {
+          that.$log(response.data)
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
       onBirthSelectorConfirmClick(value){
           this.$log("onBirthSelectorConfirmClick Enter");
           this.birthDlgShow = false;
-          this.user.birth = new Date(value).toLocaleDateString();
+          let date = new Date(value);
+          this.birthDay = date.toLocaleDateString()
+          this.user.birth = date;
+          this.$log(value)
+          this.$log(this.birthDay)
+          this.$log(this.user.birth)
+          this.saveUserInfo();
       },
       onBirthSelectorCancelClick() {
         this.$log("onBirthSelectorCancelClick Enter");
@@ -120,6 +145,15 @@
       },
       onNickNameConfirmClick() {
         this.$log("onNickNameConfirmClick Enter")
+        this.saveUserInfo();
+      },
+      onTelConfirmClick() {
+        this.$log("onTelConfirmClick Enter")
+        this.saveUserInfo();
+      },
+      onSexConfirmClick() {
+        this.$log("onSexConfirmClick Enter")
+        this.saveUserInfo();
       },
       onNickNameClick() {
         this.$log("onNickNameClick Enter")
