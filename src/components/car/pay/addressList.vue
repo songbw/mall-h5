@@ -30,6 +30,7 @@
     },
     computed: {
       addresslist() {
+        this.$log("addresslist Enter")
         let list = []
         let id = this.$store.state.appconf.usedAddressId;
         this.chosenAddressId = -1;
@@ -94,8 +95,38 @@
         this.$log(list)
         return list;
       },
-
-
+    },
+    beforeCreate() {
+      let that = this;
+      try {
+        let userInfo = this.$store.state.appconf.userInfo;
+        this.$log("userInfo:" + userInfo)
+        if (!(userInfo == undefined || userInfo.length == 0)) {
+          let user = JSON.parse(userInfo)
+          let options = {
+            "openId": user.userId,
+            "pageNo": 1,
+            "pageSize": "20",
+          }
+          this.$api.xapi({
+            method: 'post',
+            url: '/receiver/all',
+            data: options,
+          }).then((response) => {
+            let result = response.data.data.result;
+            this.addressCount = result.total;
+            if (this.addressCount != 0) {
+              this.$store.commit('SET_ADDRESS_LIST', result.list);
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        } else {
+          this.$log("ERROR!!, not get UserInfo in Pay page")
+        }
+      } catch (e) {
+        that.$log(e)
+      }
     },
     methods: {
       onAdd() {
