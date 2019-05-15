@@ -47,6 +47,7 @@
   import sectionSquared from '@/components/index/sectionSquared.vue'
   import sectionSlide from '@/components/index/sectionSlide.vue'
   import sectionGoods from '@/components/index/sectionGoods.vue'
+  import sectionImgMap from '@/components/index/sectionImgMap.vue'
   import Baseline from '@/common/_baseline.vue'
   import Loading from '@/common/_loading.vue'
   import Footer from '@/common/_footer.vue'
@@ -59,6 +60,7 @@
       'v-sectionSquared': sectionSquared,
       'v-sectionSlide': sectionSlide,
       'v-sectionGoods': sectionGoods,
+      'v-imgmap': sectionImgMap,
       'v-baseline': Baseline,
       'v-loading': Loading,
       'v-footer': Footer
