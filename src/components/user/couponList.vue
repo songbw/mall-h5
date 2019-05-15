@@ -9,60 +9,37 @@
           <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
             <div class="couponList">
               <div class="coupon coupon-white coupon-wave-left coupon-wave-right">
-                <div class="coupon-img">
-                  <img :src="couponImg">
-                </div>
-                <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                  <div class="coupon-suppler">
-                    <span>头食</span>
-                    <i>限购头食商铺下所限商品</i>
-                  </div>
-                  <div class="coupon-price">&yen;5.00</div>
-                  <div class="coupon-desc">5元优惠券 满50.00元使用</div>
-                  <div class="coupon-expire-date">2018.12.01-2018.12.12</div>
-                </div>
-                <div class="coupon-get">立即使用</div>
+              <div class="coupon-img">
+                <img :src="couponImg">
               </div>
-<!--              <div class="coupon-item">
-                <div class="couponStyle">
-                  <div class="info-box">
-                    <p class="nick">优惠券</p>
-                    <div class="coupon-money">
-                      <div class="lay of">￥<em>10</em></div>
-                      <div class="lay">
-                        <p class="tit">代金券</p>
-                        <p class="demand">满100元可用</p>
-                      </div>
-                    </div>
-                    <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
-                  </div>
-                  <div class="get-btn" @click="useCouponClick()">
-                    <span>立即使用</span>
-                  </div>
+              <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                <div class="coupon-suppler">
+                  <span>头食</span>
+                  <i>限购头食商铺下所限商品</i>
                 </div>
+                <div class="coupon-price">&yen;5.00</div>
+                <div class="coupon-desc">5元优惠券 满50.00元使用</div>
+                <div class="coupon-expire-date">2018.12.01-2018.12.12</div>
               </div>
-              <div class="coupon-item">
-                <div class="couponStyle have">
-                  <div class="info-box">
-                    <p class="nick">优惠券</p>
-                    <div class="coupon-money">
-                      <div class="lay of">￥<em>10</em></div>
-                      <div class="lay">
-                        <p class="tit">代金券</p>
-                        <p class="demand">满100元可用</p>
-                      </div>
-                    </div>
-                    <p class="validDate">2019.6.10 10:10 - 2019.6.20 10:10 </p>
-                  </div>
-                  <div class="get-btn">
-                    <span>已过期</span>
-                  </div>
-                </div>
-              </div>-->
+              <div class="coupon-get">立即使用</div>
+            </div>
             </div>
           </van-tab>
         </van-tabs>
       </div>
+      <div class="couponListFooter"></div>
+    </div>
+    <div class="couponListBottomFunc">
+      <van-col span="12" class="gotoCenter">
+        <div @click="onCouponCenterClick()">
+          <span>领更多券</span>
+        </div>
+      </van-col>
+      <van-col span="12" class="change" >
+        <div @click="onChangeCouponClick()">
+          <span>兑换</span>
+        </div>
+      </van-col>
     </div>
   </section>
 </template>
@@ -120,6 +97,14 @@
       }
     },
     methods: {
+      onCouponCenterClick(){
+        this.$log("onCouponCenterClick Enter")
+        this.$router.push("/user/couponCenter")
+      },
+      onChangeCouponClick() {
+        this.$log("onChangeCouponClick Enter")
+        this.$router.push("/user/couponChange")
+      },
       useCouponClick(){
         this.$log("useCouponClick Enter")
       },
@@ -147,7 +132,6 @@
     width: 100%;
     height: 100vh;
     background-color: #f0f0f0;
-
     .couponListBody {
       .couponListMain {
         width: 100%;
@@ -422,6 +406,42 @@
             color: #fff;
           }*/
         }
+      }
+      .couponListFooter{
+        width: 100%;
+        height: 8em;
+        background-color: #f0f0f0;
+      }
+    }
+
+    .couponListBottomFunc {
+      background-color: white;
+      width: 100%;
+      height: 3em;
+      display: -webkit-flex;
+      display: -ms-flex;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background-color: #ffffff;
+
+      .gotoCenter {
+        height: 100%;
+        background-color: white;
+        text-align: center;
+        line-height: 3em;
+        color: #ee892f;
+        font-weight: bold;
+      }
+
+      .change {
+        height: 100%;
+        background-color: #ee892f;
+        text-align: center;
+        line-height: 3em;
+        color: white;
       }
     }
   }
