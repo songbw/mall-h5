@@ -6,6 +6,7 @@ import services from '@/http/api.js'       //http请求
 import vueLogger from "vue-logger";
 import LyTab from 'ly-tab'
 import animated from 'animate.css'
+import moment from 'moment'
 
 Vue.use(animated)
 Vue.use(LyTab)
@@ -102,6 +103,9 @@ Vue.prototype.$api = services;
 let dsBridge = require("dsbridge");
 Vue.prototype.$jsbridge = dsBridge;
 ////////////////////////////////////////////////////////////////////////
+
+Vue.prototype.$moment = moment;
+
 Vue.use(vueLogger, {
   prefix: () => {
     const date = new Date()
