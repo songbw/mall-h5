@@ -13,7 +13,7 @@
             <van-list v-model="item.loading"
                       :finished="item.finished"
                       @load="onLoad(active)">
-              <div class="couponList"  v-for="(k,i) in item.list" :key="i">
+              <div class="couponList" v-for="(k,i) in item.list" :key="i">
                 <div class="coupon coupon-white coupon-wave-left coupon-wave-right">
                   <div class="coupon-img">
                     <img :src="k.imageUrl">
@@ -25,16 +25,22 @@
                     </div>
                     <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
                     <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>
-                    <div class="coupon-expire-date">{{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}</div>
+                    <div class="coupon-expire-date">
+                      {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+                    </div>
                     <div class="coupon-progress">
                       <van-progress
-                        pivot-text="已抢50%"
                         color="#f44"
-                        :percentage="50"
+                        :percentage=formateReleasePercentage(k)
                       />
                     </div>
                   </div>
-                  <div class="coupon-get">立即领取</div>
+                  <div class="coupon-get" @click="onConponActionClick(k)">
+                    <div>
+                      <span class="coupon-action">立即领取</span>
+                    </div>
+
+                  </div>
                 </div>
               </div>
 
@@ -207,6 +213,9 @@
     },
 
     methods: {
+      isUserEmpty(userInfo) {
+        return (userInfo == undefined || userInfo.length === 0)
+      },
       onLoad(index) {
         this.$log("onLoad:" + index)
         let that = this
@@ -258,22 +267,54 @@
         this.$log("onCouponCenterClick Enter")
         this.$router.push("/user/couponCenter")
       },
-      formateCouponPrice(rules){
-        switch(rules.type) {
+      onConponActionClick(coupon) {
+        this.$log("onConponActionClick Enter");
+        this.$log(coupon)
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        that.$log(userInfo)
+        if (!that.isUserEmpty(userInfo)) {
+          that.$log("xxxxxxxxxxxxxxxxxxxxxx")
+          let user = JSON.parse(userInfo);
+          let options = {
+            // userOpenId:"1044391000fd194ab888b1aa81c03c3710",//user.userId,
+            userOpenId: user.userId,
+            code: coupon.rules.code
+          }
+          that.$api.xapi({
+            method: 'post',
+            url: '/coupon/collect',
+            data: options,
+          }).then((response) => {
+            let result = response.data.data.result;
+            that.$log(result)
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
+      },
+      formateCouponPrice(rules) {
+        switch (rules.type) {
           case 0://满减券
-            return '￥'+ rules.fullReduceCoupon.reducePrice;
+            return '￥' + rules.fullReduceCoupon.reducePrice;
           case 1://代金券
-            return '￥'+ rules.cashCoupon.amount;
+            return '￥' + rules.cashCoupon.amount;
           case 2://折扣券
-            return  rules.discountCoupon.discountRatio*10+' 折';
+            return rules.discountCoupon.discountRatio * 10 + ' 折';
           default:
             return ""
         }
       },
-      formateCouponDescription(rules){
-        switch(rules.type) {
+      formateReleasePercentage(coupon) {
+        if (coupon.releaseTotal == 0)
+          return 100;
+        let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
+        return percentage;
+      },
+      formateCouponDescription(rules) {
+        switch (rules.type) {
           case 0://满减券
-            return '满'+rules.fullReduceCoupon.fullPrice+'可用';
+            return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
           case 1://代金券
             return '代金券';
           case 2://折扣券
@@ -283,8 +324,8 @@
         }
 
       },
-      formatEffectiveDateTime(effectiveStartDate,effectiveEndDate) {
-        return this.$moment(effectiveStartDate).format('YYYY-MM-DD')+' - '+this.$moment(effectiveEndDate).format('YYYY-MM-DD');
+      formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
       },
 
     }
@@ -477,6 +518,10 @@
 
           .coupon-progress {
             margin-top: 10px;
+          }
+
+          .coupon-action {
+            .fz(font-size, 25)
           }
 
           .coupon-suppler {
