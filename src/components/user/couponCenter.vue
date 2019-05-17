@@ -35,7 +35,12 @@
                       />
                     </div>
                   </div>
-                  <div class="coupon-get" @click="onConponActionClick(k)">
+                  <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already" @click="onConponActionClick(k,i)">
+                    <div>
+                      <span class="coupon-action">立即使用</span>
+                    </div>
+                  </div>
+                  <div v-else class="coupon-get" @click="onConponActionClick(k,i)">
                     <div>
                       <span class="coupon-action">立即领取</span>
                     </div>
@@ -97,6 +102,12 @@
     },
 
     methods: {
+      setCouponToLimited (k,i) {
+
+      },
+      isCouponUptoLimited(k,i) {
+        return false;
+      },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
       },
@@ -171,6 +182,11 @@
           }).then((response) => {
             let result = response.data.data.result;
             that.$log(result)
+            if(result.msg === "领取优惠卷已达上限") {
+              this.setCouponToLimited(coupon);
+            } else {
+              //
+            }
           }).catch(function (error) {
             that.$log(error)
           })
