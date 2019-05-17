@@ -34,23 +34,6 @@
                 </div>
               </div>
             </div>
-            <!--            <div class="couponList">
-                          <div class="coupon coupon-white coupon-wave-left coupon-wave-right">
-                          <div class="coupon-img">
-                            <img :src="couponImg">
-                          </div>
-                          <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                            <div class="coupon-suppler">
-                              <span>头食</span>
-                              <i>限购头食商铺下所限商品</i>
-                            </div>
-                            <div class="coupon-price">&yen;5.00</div>
-                            <div class="coupon-desc">5元优惠券 满50.00元使用</div>
-                            <div class="coupon-expire-date">2018.12.01-2018.12.12</div>
-                          </div>
-                          <div class="coupon-get">立即使用</div>
-                        </div>
-                        </div>-->
           </van-tab>
         </van-tabs>
       </div>
