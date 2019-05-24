@@ -67,11 +67,7 @@
       'v-baseline': Baseline,
       'v-footer': Footer
     },
-    beforeRouteEnter(to, from, next) {
-      next(vm => {
-        vm.$store.commit('SET_CURRENT_NAVI_INDEX', 3);
-      })
-    },
+
     data() {
       return {
         active: 0,
@@ -100,6 +96,22 @@
         couponCenterHeaderImg: require('@/assets/icons/ico_couponCenterHeader.jpg'),
       }
     },
+
+    beforeCreate() {
+      this.$log("beforeCreate Enter xxxx");
+      let that = this;
+      that.$api.xapi({
+        method: 'get',
+        url: '/coupon/activeCategories',
+      }).then((response) => {
+        let result = response.data.data.result;
+        that.$log(result)
+
+      }).catch(function (error) {
+        that.$log(error)
+      })
+    },
+
 
     methods: {
       setCouponToLimited (k,i) {
@@ -248,7 +260,6 @@
 
       .couponCenterMain {
         width: 100%;
-        padding-bottom: 10px;
         background-color: #f0f0f0;
         .couponList {
           .coupon {
