@@ -102,6 +102,17 @@
         ],
       }
     },
+
+    mounted() {
+      this.active = this.$store.state.appconf.currentOrderListIndex;
+      setTimeout(() => {
+        if (!this.launchedLoading) {
+          this.onLoad(this.active)
+        }
+      }, 1000);
+    },
+
+
     methods: {
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
@@ -553,6 +564,7 @@
       bottom: 0;
       left: 0;
       background-color: #ffffff;
+      z-index: 5;
 
       .gotoCenter {
         height: 100%;
