@@ -130,7 +130,7 @@
 
       },
       isCouponUptoLimited(k, i) {
-        this.$log(k);
+       // this.$log(k);
         if(k.userCollectNum < k.rules.perLimited)
           return false;
         return true;
@@ -152,13 +152,22 @@
             let user = JSON.parse(userInfo);
             params["userOpenId"] = user.userId
           }
+          that.$log("xxxxxxxxxxxxxxxxxx")
+          that.$log(that.couponTypes[index])
+          if(that.couponTypes[index].type == 'category') {
+            params["categoryId"] = that.couponTypes[index].id
+           // params["categoryName"] = that.couponTypes[index].title
+           // that.$log(that.couponTypes[index].title)
+          }
+          //that.$log(params)
+
           that.$api.xapi({
             method: 'get',
             url: '/coupon/activeCoupon',
             params: params
           }).then((response) => {
             let result = response.data.data.result;
-            that.$log(result)
+           // that.$log(result)
             that.couponTypes[index].total = result.total;
             if (result.list == undefined || result.list.length == 0) {
               that.couponTypes[index].loading = false;
@@ -170,8 +179,8 @@
               that.couponTypes[index].loading = false;
               if (that.couponTypes[index].list.length >= that.couponTypes[index].total) {
                 that.couponTypes[index].finished = true;
-                that.$log("index:" + index);
-                that.$log(that.couponTypes[index]);
+               // that.$log("index:" + index);
+               // that.$log(that.couponTypes[index]);
               }
             }
           }).catch(function (error) {
@@ -195,7 +204,7 @@
         this.$log("onCouponCenterClick Enter")
         this.$router.push("/user/couponCenter")
       },
-      onConponActionClick(coupon) {
+      onConponActionClick(coupon,i) {
         this.$log("onConponActionClick Enter");
         this.$log(coupon)
         let that = this
@@ -213,13 +222,10 @@
             url: '/coupon/collect',
             data: options,
           }).then((response) => {
-            let result = response.data.data.result;
+            let result = response.data.data;
             that.$log(result)
-            if (result.msg === "领取优惠卷已达上限") {
-              this.setCouponToLimited(coupon);
-            } else {
-              //
-            }
+            that.$log(that.couponTypes[that.active].list[i])
+            that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
           }).catch(function (error) {
             that.$log(error)
           })
