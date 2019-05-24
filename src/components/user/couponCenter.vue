@@ -292,6 +292,7 @@
       .couponCenterMain {
         width: 100%;
         background-color: #f0f0f0;
+        padding-bottom: 10px;
 
         .couponList {
           .coupon {
