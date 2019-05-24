@@ -194,18 +194,9 @@
       getCouponClick() {
         this.$log("getCouponClick Enter")
       },
-      onOrderListBarClick(type) {
-        //订单类型
-        this.$log("onOrderListBarClick:" + type);
-        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
-        this.$router.push({name: '订单列表页'})
-      },
-      onCouponCenterClick() {
-        this.$log("onCouponCenterClick Enter")
-        this.$router.push("/user/couponCenter")
-      },
-      onConponUseClick(coupon,i) {
 
+      onConponUseClick(coupon,i) {
+        this.$log("onConponUseClick Enter")
       },
       onConponCollectClick(coupon,i) {
         this.$log("onConponCollectClick Enter");

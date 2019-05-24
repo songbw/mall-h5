@@ -27,7 +27,7 @@
                     {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
                   </div>
                 </div>
-                <div class="coupon-get" @click="onConponActionClick(k)">
+                <div class="coupon-get" @click="onConponUseClick(k)">
                   <div>
                     <span class="coupon-action">立即使用</span>
                   </div>
@@ -165,6 +165,9 @@
         }
       },
 
+      onConponUseClick(coupon,i) {
+
+      },
 
       onCouponCenterClick() {
         this.$log("onCouponCenterClick Enter")
@@ -177,16 +180,7 @@
       useCouponClick() {
         this.$log("useCouponClick Enter")
       },
-      onOrderListBarClick(type) {
-        //订单类型
-        this.$log("onOrderListBarClick:" + type);
-        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
-        this.$router.push({name: '订单列表页'})
-      },
-      oncouponListClick() {
-        this.$log("oncouponListClick Enter")
-        this.$router.push("/user/couponList")
-      },
+
       formateCouponPrice(rules) {
         switch (rules.type) {
           case 0://满减券
