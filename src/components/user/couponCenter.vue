@@ -92,6 +92,8 @@
         tags.forEach(item => {
           let type = {
             "title": item,
+            "type": "tag",
+            "id": -1,
             "list": [],
             "total": -1,
             "pageNo": 1,
@@ -105,6 +107,8 @@
         categories.forEach(item => {
           let type = {
             "title": item.name,
+            "type": "category",
+            "id": item.id,
             "list": [],
             "total": -1,
             "pageNo": 1,
@@ -126,7 +130,10 @@
 
       },
       isCouponUptoLimited(k, i) {
-        return false;
+        this.$log(k);
+        if(k.userCollectNum < k.rules.perLimited)
+          return false;
+        return true;
       },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
@@ -136,13 +143,19 @@
         let that = this
         if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list.length) {
           that.couponTypes[index].loading = true;
+          let params = {
+            offset: that.couponTypes[index].pageNo++,
+            limit: 5,
+          }
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!that.isUserEmpty(userInfo)) {
+            let user = JSON.parse(userInfo);
+            params["userOpenId"] = user.userId
+          }
           that.$api.xapi({
             method: 'get',
             url: '/coupon/activeCoupon',
-            params: {
-              offset: that.couponTypes[index].pageNo++,
-              limit: 5
-            }
+            params: params
           }).then((response) => {
             let result = response.data.data.result;
             that.$log(result)
