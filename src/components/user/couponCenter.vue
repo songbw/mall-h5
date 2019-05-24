@@ -14,7 +14,7 @@
                       :finished="item.finished"
                       @load="onLoad(active)">
               <div class="couponList">
-                <div class="coupon coupon-white coupon-wave-left coupon-wave-right"  v-for="(k,i) in item.list" :key="i">
+                <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i">
                   <div class="coupon-img">
                     <img :src="k.imageUrl">
                   </div>
@@ -35,7 +35,8 @@
                       />
                     </div>
                   </div>
-                  <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already" @click="onConponActionClick(k,i)">
+                  <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
+                       @click="onConponActionClick(k,i)">
                     <div>
                       <span class="coupon-action">立即使用</span>
                     </div>
@@ -73,26 +74,7 @@
         active: 0,
         swipeThreshold: 5,
         couponImg: require('@/assets/icons/ico_order.png'),
-        couponTypes: [
-          {
-            "title": "全部",
-            "list": [],
-            "total": -1,
-            "pageNo": 1,
-            "status": -1,
-            "loading": false,
-            "finished": false,
-          },
-          {
-            "title": "食品",
-            "list": [],
-            "total": -1,
-            "pageNo": 1,
-            "status": 0,
-            "loading": false,
-            "finished": false,
-          },
-        ],
+        couponTypes: [],
         couponCenterHeaderImg: require('@/assets/icons/ico_couponCenterHeader.jpg'),
       }
     },
@@ -106,6 +88,32 @@
       }).then((response) => {
         let result = response.data.data.result;
         that.$log(result)
+        let tags = result.tags;
+        tags.forEach(item => {
+          let type = {
+            "title": item,
+            "list": [],
+            "total": -1,
+            "pageNo": 1,
+            "status": -1,
+            "loading": false,
+            "finished": false,
+          }
+          that.couponTypes.push(type);
+        })
+        let categories = result.categorys;
+        categories.forEach(item => {
+          let type = {
+            "title": item.name,
+            "list": [],
+            "total": -1,
+            "pageNo": 1,
+            "status": -1,
+            "loading": false,
+            "finished": false,
+          }
+          that.couponTypes.push(type);
+        })
 
       }).catch(function (error) {
         that.$log(error)
@@ -114,10 +122,10 @@
 
 
     methods: {
-      setCouponToLimited (k,i) {
+      setCouponToLimited(k, i) {
 
       },
-      isCouponUptoLimited(k,i) {
+      isCouponUptoLimited(k, i) {
         return false;
       },
       isUserEmpty(userInfo) {
@@ -194,7 +202,7 @@
           }).then((response) => {
             let result = response.data.data.result;
             that.$log(result)
-            if(result.msg === "领取优惠卷已达上限") {
+            if (result.msg === "领取优惠卷已达上限") {
               this.setCouponToLimited(coupon);
             } else {
               //
@@ -250,6 +258,7 @@
 
   .couponCenter {
     width: 100%;
+
     .couponCenterBody {
       .couponCenterHeader {
         img {
@@ -261,6 +270,7 @@
       .couponCenterMain {
         width: 100%;
         background-color: #f0f0f0;
+
         .couponList {
           .coupon {
             display: flex;
