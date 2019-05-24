@@ -233,12 +233,12 @@
 
   .myCouponList {
     width: 100%;
-    height: 100vh;
-    background-color: #f0f0f0;
 
     .couponListBody {
       .couponListMain {
         width: 100%;
+        background-color: #f0f0f0;
+        padding-bottom: 10px;
 
         .couponList {
           .coupon {
