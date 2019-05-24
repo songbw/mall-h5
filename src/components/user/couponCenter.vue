@@ -36,12 +36,12 @@
                     </div>
                   </div>
                   <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
-                       @click="onConponActionClick(k,i)">
+                       @click="onConponUseClick(k,i)">
                     <div>
                       <span class="coupon-action">立即使用</span>
                     </div>
                   </div>
-                  <div v-else class="coupon-get" @click="onConponActionClick(k,i)">
+                  <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
                     <div>
                       <span class="coupon-action">立即领取</span>
                     </div>
@@ -204,8 +204,11 @@
         this.$log("onCouponCenterClick Enter")
         this.$router.push("/user/couponCenter")
       },
-      onConponActionClick(coupon,i) {
-        this.$log("onConponActionClick Enter");
+      onConponUseClick(coupon,i) {
+
+      },
+      onConponCollectClick(coupon,i) {
+        this.$log("onConponCollectClick Enter");
         this.$log(coupon)
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
