@@ -91,9 +91,9 @@
         let tags = result.tags;
         tags.forEach(item => {
           let type = {
-            "title": item,
+            "title": item.name,
             "type": "tag",
-            "id": -1,
+            "id": item.id,
             "list": [],
             "total": -1,
             "pageNo": 1,
@@ -118,6 +118,7 @@
           }
           that.couponTypes.push(type);
         })
+        that.$log(that.couponTypes)
 
       }).catch(function (error) {
         that.$log(error)
@@ -152,14 +153,16 @@
             let user = JSON.parse(userInfo);
             params["userOpenId"] = user.userId
           }
-          that.$log("xxxxxxxxxxxxxxxxxx")
           that.$log(that.couponTypes[index])
           if(that.couponTypes[index].type == 'category') {
             params["categoryId"] = that.couponTypes[index].id
-           // params["categoryName"] = that.couponTypes[index].title
-           // that.$log(that.couponTypes[index].title)
+            params["categoryName"] = that.couponTypes[index].title
           }
-          //that.$log(params)
+          if(that.couponTypes[index].type == 'tag') {
+            params["tagId"] = that.couponTypes[index].id
+            params["tagName"] = that.couponTypes[index].title
+          }
+          that.$log(params)
 
           that.$api.xapi({
             method: 'get',
