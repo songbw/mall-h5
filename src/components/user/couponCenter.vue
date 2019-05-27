@@ -162,7 +162,7 @@
             params["tagId"] = that.couponTypes[index].id
             params["tagName"] = that.couponTypes[index].title
           }
-          that.$log(params)
+         // that.$log(params)
 
           that.$api.xapi({
             method: 'get',
@@ -286,9 +286,9 @@
       .couponCenterMain {
         width: 100%;
         background-color: #f0f0f0;
-        padding-bottom: 10px;
 
         .couponList {
+          padding-bottom: 10px;
           .coupon {
             display: flex;
             color: black;
