@@ -14,7 +14,7 @@
             <div class="couponList">
               <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i">
                 <div class="coupon-img">
-                  <img :src="k.couponInfo.imageUrl">
+                  <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
                 </div>
                 <div class="coupon-info coupon-hole coupon-info-right-dashed">
                   <div class="coupon-suppler">
@@ -69,7 +69,7 @@
       return {
         active: 0,
         swipeThreshold: 5,
-        couponImg: require('@/assets/icons/ico_order.png'),
+        couponImg: require('@/assets/icons/ico_coupon.png'),
         couponTypes: [
           {
             "title": "未使用",
