@@ -210,7 +210,7 @@
             } catch (e) {
             }
           } else if(paths[0] === 'listing') {
-            this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', coupon);
+            this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
             this.$router.push("/user/couponListActivity");
           }
         } else if (url.startsWith("http://") || url.startsWith("http://")) {
