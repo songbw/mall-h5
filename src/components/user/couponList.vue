@@ -113,6 +113,32 @@
 
 
     methods: {
+      See(e) {
+        window.location.href = e
+      },
+      updateCurrentGoods(goods) {
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
+      },
+      gotoGoodsPage(skuid) {
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            url: '/prod',
+            params: {
+              id: skuid,
+            }
+          }).then((res) => {
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
+      },
+
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
       },
@@ -166,16 +192,42 @@
       onConponUseClick(coupon,i) {
         this.$log("onCouponUseClick Enter")
         this.$log(coupon)
+        let couponInfo = coupon.couponInfo;
+        let url = couponInfo.url;
+        if (url.startsWith("aggregation://")) {
+          let id = url.substr(14);
+          this.$router.push({path: '/index/' + id});
+        } else if (url.startsWith("route://")) {
+          let target = url.substr(8);
+          let paths = target.split("/");
+          this.$log(paths);
+          if (paths[0] === 'category') {
+            this.$router.push({path: '/category'})
+          } else if (paths[0] === 'commodity') {
+            try {
+              if (paths[1] != null)
+                this.gotoGoodsPage(paths[1]);
+            } catch (e) {
+            }
+          } else if(paths[0] === 'listing') {
+            this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', coupon);
+            this.$router.push("/user/couponListActivity");
+          }
+        } else if (url.startsWith("http://") || url.startsWith("http://")) {
+          this.See(url);
+        }
       },
 
       onCouponCenterClick() {
         this.$log("onCouponCenterClick Enter")
         this.$router.push("/user/couponCenter")
       },
+
       onChangeCouponClick() {
         this.$log("onChangeCouponClick Enter")
         this.$router.push("/user/couponChange")
       },
+
       useCouponClick() {
         this.$log("useCouponClick Enter")
       },

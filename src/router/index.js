@@ -27,6 +27,7 @@ const CouponCenter = resolve => require(['@/components/user/couponCenter.vue'], 
 const CouponList = resolve => require(['@/components/user/couponList.vue'], resolve)
 const UserInfo = resolve => require(['@/components/user/userInfo.vue'], resolve)
 const CouponChange = resolve => require(['@/components/user/couponChange.vue'], resolve)
+const CouponListActivity = resolve => require(['@/components/user/couponListActivity.vue'], resolve)
 
 export default new VueRouter({
   routes: [
@@ -165,6 +166,11 @@ export default new VueRouter({
       path: '/user/couponChange',
       name: '兑换优惠券',
       component: CouponChange
+    },
+    {
+      path: '/user/couponListActivity',
+      name: '优惠活动',
+      component: CouponListActivity
     }
   ]
 })

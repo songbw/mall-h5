@@ -18,6 +18,7 @@ const state = {
   prePayOrderList:[],
   currentNaviIndex: 0,
   currentOrderListIndex: 0,
+  currentCouponPageInfo:'',
 }
 
 const mutations = {
@@ -90,7 +91,11 @@ const mutations = {
   [types.SET_CURRENT_ORDER_LIST_INDEX] (state, res) {
     console.log("SET_CURRENT_ORDER_LIST_INDEX")
     state.currentOrderListIndex = res
-  }
+  },
+
+  [types.SET_CURRENT_COUPON_PAGE_INFO](state, res) {
+    state.currentCouponPageInfo = res
+  },
 }
 
 const actions = {
