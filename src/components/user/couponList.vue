@@ -27,7 +27,7 @@
                     {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
                   </div>
                 </div>
-                <div class="coupon-get" @click="onConponUseClick(k)">
+                <div class="coupon-get" @click="onConponUseClick(k,i)">
                   <div>
                     <span class="coupon-action">立即使用</span>
                   </div>
@@ -37,7 +37,6 @@
           </van-tab>
         </van-tabs>
       </div>
-<!--      <div class="couponListFooter"></div>-->
     </div>
     <div class="couponListBottomFunc">
       <van-col span="12" class="gotoCenter">
@@ -161,12 +160,12 @@
               that.couponTypes[index].finished = true;
             })
           }
-
         }
       },
 
       onConponUseClick(coupon,i) {
-
+        this.$log("onCouponUseClick Enter")
+        this.$log(coupon)
       },
 
       onCouponCenterClick() {
