@@ -341,29 +341,7 @@
               background-image: linear-gradient(150deg, #50ADD3 50%, #50ADD3D8 50%);
             }
 
-            /* 左边框的波浪 */
 
-            .coupon-wave-left::before, .coupon-wave-right::after {
-              content: '';
-              position: absolute;
-              top: 0;
-              height: 100%;
-              width: 14px;
-              background-image: radial-gradient(#f0f0f0 0, #f0f0f0 4px, transparent 4px);
-              /** 如果只设置为半径的两倍(直径)，那么半圆之间没有类似堤岸的间隔 */
-              background-size: 14px 14px;
-              background-position: 0 2px;
-              background-repeat: repeat-y;
-              z-index: 1;
-            }
-
-            .coupon-wave-left::before {
-              left: -7px;
-            }
-
-            .coupon-wave-right::after {
-              right: -7px;
-            }
 
             .coupon-info-right-dashed {
               border-right: 2px dashed #c8c9cc;
@@ -483,6 +461,30 @@
                 .fz(font-size, 28);
               }
             }
+          }
+
+          /* 左边框的波浪 */
+
+          .coupon-wave-left::before, .coupon-wave-right::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            height: 100%;
+            width: 14px;
+            background-image: radial-gradient(#f0f0f0 0, #f0f0f0 4px, transparent 4px);
+            /** 如果只设置为半径的两倍(直径)，那么半圆之间没有类似堤岸的间隔 */
+            background-size: 14px 14px;
+            background-position: 0 2px;
+            background-repeat: repeat-y;
+            z-index: 1;
+          }
+
+          .coupon-wave-left::before {
+            left: -7px;
+          }
+
+          .coupon-wave-right::after {
+            right: -7px;
           }
 
         }
