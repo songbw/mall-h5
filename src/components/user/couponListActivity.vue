@@ -26,8 +26,28 @@
           <van-list v-model="loading"
                     :finished="finished"
                     @load="onLoad">
-            <li v-for="(k,index) in list" :key="index" class="goodsItem">
-              <span style="height: 120px;background-color: #ff4444">xxxxx</span>
+            <li v-for="(k,index) in list" :key="index">
+              <div class="goodsCard">
+                <van-col span="8" class="cardImg">
+                  <img v-lazy="k.image">
+                </van-col>
+                <van-col span="16" class="cardInfo">
+                  <div class="cardTitle">
+                    <span>{{k.name}}</span>
+                  </div>
+                  <div class="cardTag">
+                    <span></span>
+                  </div>
+                  <div class="cardFooter">
+                    <van-col span="12" class="priceBox">
+                      <div class="salePrice">￥{{k.price}} </div>
+                    </van-col>
+                    <van-col span="12" class="actionBox">
+                      <van-button type="primary" size="small" @click="onBuyBtnClick(k)">立即抢购</van-button>
+                    </van-col>
+                  </div>
+                </van-col>
+              </div>
             </li>
           </van-list>
         </div>
@@ -202,6 +222,8 @@
 
   .couponActivity {
     .couponActivityMain {
+      background-color: #f0f0f0;
+      height: 100vh;
       .couponActivityInfo {
         background-color: #FFAA00;
         width: 100%;
@@ -369,10 +391,64 @@
         flex-direction: column;
         li{
           list-style: none;
-          height: 100px;
           margin: 10px;
           border-radius: 10px;
-          padding: 10px;
+
+          .goodsCard{
+            width: 100%;
+            height: 7rem;
+            .cardImg{
+              height: 100%;
+              text-align: center;
+              img {
+                width: 100%;
+                height: 100%;
+                border-top-left-radius:  10px;
+                border-bottom-left-radius: 10px;
+              }
+            }
+            .cardInfo{
+              height: 100%;
+              padding: 10px;
+              .cardTitle{
+                .fz(font-size,30);
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                word-break:break-all;
+              }
+              .cardTag{
+                height: 15%;
+              }
+              .cardFooter{
+                height: 50%;
+                .priceBox{
+                  height: 100%;
+                  text-align: left;
+                  line-height: 3em;
+                  .salePrice{
+                    color: #ff4444;
+                    .fz(font-size,32);
+                    font-weight: bold;
+                  }
+                  .originPrice{
+                    color: #707070;
+                    .fz(font-size, 25);
+                    text-decoration:line-through
+                  }
+                }
+                .actionBox{
+                  height: 100%;
+                  text-align: center;
+                  line-height: 3em;
+                }
+              }
+
+            }
+          }
         }
       }
 
