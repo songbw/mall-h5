@@ -15,7 +15,7 @@
             <div>
               <div class="coupon-desc">{{formateCouponDescription(this.coupon.couponInfo.rules.couponRules)}}</div>
               <div class="coupon-expire-date">
-                {{formatEffectiveDateTime(this.coupon.couponInfo.rules.effectiveStartDate,this.coupon.couponInfo.rules.effectiveEndDate)}}
+                {{formatEffectiveDateTime(this.coupon.couponInfo.effectiveStartDate,this.coupon.couponInfo.effectiveEndDate)}}
               </div>
             </div>
           </div>
@@ -120,7 +120,10 @@
 
       },
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
-        return this.$moment(effectiveStartDate).format('YYYY.MM.DD HH:MM:SS') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD HH:MM:SS');
+        this.$log(effectiveStartDate)
+        this.$log(effectiveEndDate)
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD HH:MM:ss') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD HH:MM:ss' +
+          '');
       },
     }
 
