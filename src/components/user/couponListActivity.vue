@@ -7,13 +7,16 @@
       <div class="couponActivityInfo">
         <div class="coupon coupon-red-gradient coupon-wave-left coupon-wave-right">
           <div class="coupon-info coupon-hole coupon-info-right-dashed">
-            <div>
-              <span>100</span>
+            <div class="coupon-price">
+              <span>{{formateCouponPrice(this.coupon.couponInfo.rules.couponRules)}}</span>
             </div>
           </div>
-          <div class="coupon-get" @click="onConponUseClick(k,i)">
+          <div class="coupon-get">
             <div>
-              <span class="coupon-action">立即使用</span>
+              <div class="coupon-desc">{{formateCouponDescription(this.coupon.couponInfo.rules.couponRules)}}</div>
+              <div class="coupon-expire-date">
+                {{formatEffectiveDateTime(this.coupon.couponInfo.rules.effectiveStartDate,this.coupon.couponInfo.rules.effectiveEndDate)}}
+              </div>
             </div>
           </div>
         </div>
@@ -45,7 +48,7 @@
       }
     },
 
-    mounted() {
+    beforeCreate() {
       this.$log("mounted Enter")
       this.currentCouponPageInfo = this.$store.state.appconf.currentCouponPageInfo;
       if (this.currentCouponPageInfo.length) {
@@ -82,6 +85,43 @@
 
                 }*/
       }
+    },
+
+    methods: {
+      formateCouponPrice(rules) {
+        switch (rules.type) {
+          case 0://满减券
+            return '￥' + rules.fullReduceCoupon.reducePrice;
+          case 1://代金券
+            return '￥' + rules.cashCoupon.amount;
+          case 2://折扣券
+            return rules.discountCoupon.discountRatio * 10 + ' 折';
+          default:
+            return ""
+        }
+      },
+      formateReleasePercentage(coupon) {
+        if (coupon.releaseTotal == 0)
+          return 100;
+        let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
+        return percentage;
+      },
+      formateCouponDescription(rules) {
+        switch (rules.type) {
+          case 0://满减券
+            return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
+          case 1://代金券
+            return '代金券';
+          case 2://折扣券
+            return '折扣券 ';
+          default:
+            return ""
+        }
+
+      },
+      formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD HH:MM:SS') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD HH:MM:SS');
+      },
     }
 
 
@@ -97,7 +137,6 @@
       .couponActivityInfo {
         background-color: #FFAA00;
         width: 100%;
-        height: 100px;
         display: flex;
 
         .coupon {
@@ -113,7 +152,6 @@
           border-bottom-right-radius: .3rem;
           overflow: hidden;
           width: 100%;
-
 
           .coupon-info-right-dashed {
             border-right: 2px dashed #c8c9cc;
@@ -208,16 +246,11 @@
           .coupon-price {
             font-size: 150%;
             font-weight: bold;
-          }
-
-          .coupon-price > span {
-            font-size: 40%;
-            margin-left: .5rem;
-            font-weight: normal;
+            display: flex;
           }
 
           .coupon-expire-date {
-            .fz(font-size, 25);
+            .fz(font-size, 20);
           }
 
           .coupon-suppler {
