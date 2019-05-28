@@ -53,7 +53,18 @@
         </div>
       </div>
     </div>
-
+    <div class="couponActivityBottomFunc">
+      <van-col span="12" class="gotoCenter">
+        <div @click="onCouponCenterClick()">
+          <span>领更多券</span>
+        </div>
+      </van-col>
+      <van-col span="12" class="change">
+        <div @click="onChangeCouponClick()">
+          <span>兑换</span>
+        </div>
+      </van-col>
+    </div>
   </div>
 </template>
 
@@ -224,6 +235,7 @@
     .couponActivityMain {
       background-color: #f0f0f0;
       height: 100vh;
+      width: 100%;
       .couponActivityInfo {
         background-color: #FFAA00;
         width: 100%;
@@ -389,6 +401,7 @@
         background-color: #f0f0f0;
         display: flex;
         flex-direction: column;
+        margin-bottom: 3em;
         li{
           list-style: none;
           margin: 10px;
@@ -452,6 +465,37 @@
         }
       }
 
+    }
+    .couponActivityBottomFunc {
+      background-color: white;
+      width: 100%;
+      height: 3em;
+      display: -webkit-flex;
+      display: -ms-flex;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background-color: #ffffff;
+      z-index: 5;
+
+      .gotoCenter {
+        height: 100%;
+        background-color: white;
+        text-align: center;
+        line-height: 3em;
+        color: #ee892f;
+        font-weight: bold;
+      }
+
+      .change {
+        height: 100%;
+        background-color: #ee892f;
+        text-align: center;
+        line-height: 3em;
+        color: white;
+      }
     }
   }
 </style>
