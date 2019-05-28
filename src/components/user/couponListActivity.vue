@@ -43,7 +43,7 @@
                       <div class="salePrice">￥{{k.price}} </div>
                     </van-col>
                     <van-col span="12" class="actionBox">
-                      <van-button type="primary" size="small" @click="onBuyBtnClick(k)">立即抢购</van-button>
+                      <van-button type="primary" size="small" @click="onBuyBtnClick(k)">加入购物车</van-button>
                     </van-col>
                   </div>
                 </van-col>
@@ -56,12 +56,13 @@
     <div class="couponActivityBottomFunc">
       <van-col span="12" class="gotoCenter">
         <div @click="onCouponCenterClick()">
-          <span>领更多券</span>
+          <div>领更多券</div>
+          <div>领更多券</div>
         </div>
       </van-col>
       <van-col span="12" class="change">
         <div @click="onChangeCouponClick()">
-          <span>兑换</span>
+          <span>去购物车</span>
         </div>
       </van-col>
     </div>
@@ -483,9 +484,9 @@
       .gotoCenter {
         height: 100%;
         background-color: white;
-        text-align: center;
-        line-height: 3em;
+        text-align: left;
         color: #ee892f;
+        padding: 2px;
         font-weight: bold;
       }
 
