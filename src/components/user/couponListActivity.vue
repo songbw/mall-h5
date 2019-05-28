@@ -20,12 +20,17 @@
             </div>
           </div>
         </div>
-        <div class="couponActivityList">
-
+      </div>
+      <div class="couponActivityList">
+        <div>
+          <van-list v-model="loading"
+                    :finished="finished"
+                    @load="onLoad">
+            <li v-for="(k,index) in list" :key="index" class="goodsItem">
+              <span style="height: 120px;background-color: #ff4444">xxxxx</span>
+            </li>
+          </van-list>
         </div>
-
-
-
       </div>
     </div>
 
@@ -44,7 +49,12 @@
     data() {
       return {
         currentCouponPageInfo: '',
-
+        list: [],
+        total: -1,
+        pageNo: 1,
+        loading: false,
+        finished: false,
+        launchedLoading: false
       }
     },
 
@@ -87,7 +97,62 @@
       }
     },
 
+
+    mounted() {
+      setTimeout(() => {
+        if (!this.launchedLoading) {
+          this.onLoad()
+        }
+      }, 1000);
+    },
+
     methods: {
+      onLoad() {
+        this.$log("onLoad Enter XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
+        let that=this;
+        this.launchedLoading = true
+        try {
+          //获取goods信息，update current googds
+          if (this.total == -1 || this.total > this.list.length) {
+            this.loading = true;
+            this.$api.xapi({
+              method: 'get',
+              url: '/coupon/skuById',
+              params: {
+                id: this.coupon.couponInfo.id,
+                limit: 10,
+                offset: this.pageNo++
+              }
+            }).then((res) => {
+              let result = res.data.data.result;
+              this.$log(result)
+              this.$log(result.couponSkus)
+              this.total = result.couponSkus.total;
+              if (result.couponSkus.list == undefined || result.couponSkus.list.length == 0) {
+                that.loading = false;
+                that.finished = true;
+              } else {
+                result.couponSkus.list.forEach(item => {
+                  that.list.push(item);
+                })
+                that.loading = false;
+                if (that.list.length >= that.total) {
+                  that.finished = true;
+                }
+              }
+            }).catch((error) => {
+              console.log(error)
+              that.loading = false;
+              that.finished = true;
+            })
+          }
+        } catch (e) {
+          if (that.list.length >= that.total) {
+            that.loading = false;
+            that.finished = true;
+          }
+        }
+      },
       formateCouponPrice(rules) {
         switch (rules.type) {
           case 0://满减券
@@ -178,7 +243,7 @@
 
           .coupon-info {
             padding: 0.5rem 0.5rem 0.5rem;
-            width:25%;
+            width: 25%;
             position: relative;
           }
 
@@ -190,7 +255,7 @@
             justify-content: center;
             align-items: center;
             flex-direction: column;
-            width:75%;
+            width: 75%;
             position: relative;
             .fz(font-size, 25);
           }
@@ -295,6 +360,20 @@
           right: -7px;
         }
 
+      }
+      .couponActivityList{
+        text-align: left;
+        width: 100%;
+        background-color: #f0f0f0;
+        display: flex;
+        flex-direction: column;
+        li{
+          list-style: none;
+          height: 100px;
+          margin: 10px;
+          border-radius: 10px;
+          padding: 10px;
+        }
       }
 
     }
