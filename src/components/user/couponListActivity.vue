@@ -8,7 +8,7 @@
         <div class="coupon coupon-red-gradient coupon-wave-left coupon-wave-right">
           <div class="coupon-info coupon-hole coupon-info-right-dashed">
             <div class="coupon-price">
-              <span>{{formateCouponPrice(this.coupon.couponInfo.rules.couponRules)}}</span>
+             <span>{{formateCouponPrice(this.coupon.couponInfo.rules.couponRules)}}</span>
             </div>
           </div>
           <div class="coupon-get">
@@ -40,7 +40,7 @@
                   </div>
                   <div class="cardFooter">
                     <van-col span="12" class="priceBox">
-                      <div class="salePrice">￥{{k.price}} </div>
+                      <div class="salePrice">￥{{k.price}}</div>
                     </van-col>
                     <van-col span="12" class="actionBox">
                       <van-button type="primary" size="small" @click="onBuyBtnClick(k)">加入购物车</van-button>
@@ -78,6 +78,8 @@
   import Header from '@/common/_header.vue'
   import Baseline from '@/common/_baseline.vue'
 
+  import Util from '@/util/common'
+
   export default {
     components: {
       'v-header': Header,
@@ -91,7 +93,7 @@
         pageNo: 1,
         loading: false,
         finished: false,
-        launchedLoading: false
+        launchedLoading: false,
       }
     },
 
@@ -142,9 +144,7 @@
       },
     },
 
-    watch: {
-
-    },
+    watch: {},
 
     mounted() {
       setTimeout(() => {
@@ -155,9 +155,6 @@
     },
 
     methods: {
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
       add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
@@ -173,27 +170,71 @@
         }).then((response) => {
           this.result = response.data.data.result;
           this.$toast("添加到购物车成功！")
+          let cartItem = Util.getCartItem(this, user.userId,goods.skuId )
+          if(cartItem == null) {
+            let baseInfo = {
+              "userId": user.userId,
+              "skuId": goods.skuid,
+              "count": 1,
+              "choosed": true,
+            }
+            let goodsInfo = {
+              "id": goods.id,
+              "skuId": goods.skuid,
+              "image": goods.image,
+              "category": goods.category,
+              "name": goods.name,
+              "brand":goods.brand,
+              "model": goods.model,
+              "price": goods.price,
+              "checkedPrice": goods.price
+            }
+            let couponList = [
+              {"coupon": this.coupon},
+            ]
+            let promotionInfo = {}
+            cartItem = {
+              "baseInfo": baseInfo,
+              "goodsInfo": goodsInfo,
+              "couponList": couponList,
+              "promotionInfo": promotionInfo,
+            }
+          } else {
+            cartItem.baseInfo.count++;
+            let found = -1;
+            for(let i = 0 ; i < cartItem.couponList.length ; i++) {
+                if(cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
+                  found = i;
+                  break;
+                }
+            }
+            if(found != -1) {
+              cartItem.couponList.splice(found, 1)
+            }
+            cartItem.couponList.push(this.coupon)
+          }
+          Util.updateCartItem(this,cartItem)
+
         }).catch(function (error) {
           console.log(error)
         })
       },
       onGotoCarClick() {
-        //car
         this.$router.push({name: '购物车页'})
       },
 
       onBuyBtnClick(goods) {
         this.$log("onBuyBtnClick Enter");
-        this.$log(goods)
+        //this.$log(goods)
         let userInfo = this.$store.state.appconf.userInfo;
-        if (!this.isUserEmpty(userInfo)) {
-          this.add2Car(userInfo,goods)
+        if (!Util.isUserEmpty(userInfo)) {
+          this.add2Car(userInfo, goods)
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
         }
       },
       onLoad() {
-        let that=this;
+        let that = this;
         this.launchedLoading = true
         try {
           //获取goods信息，update current googds
@@ -287,6 +328,7 @@
       background-color: #f0f0f0;
       height: 100vh;
       width: 100%;
+
       .couponActivityInfo {
         background-color: #FFAA00;
         width: 100%;
@@ -445,65 +487,77 @@
           right: -7px;
         }
       }
-      .couponActivityList{
+
+      .couponActivityList {
         text-align: left;
         width: 100%;
         background-color: #f0f0f0;
         display: flex;
         flex-direction: column;
         margin-bottom: 3em;
-        li{
+
+        li {
           list-style: none;
           margin: 10px;
           border-radius: 10px;
 
-          .goodsCard{
+          .goodsCard {
             width: 100%;
             height: 7rem;
-            .cardImg{
+
+            .cardImg {
               height: 100%;
               text-align: center;
+
               img {
                 width: 100%;
                 height: 100%;
-                border-top-left-radius:  10px;
+                border-top-left-radius: 10px;
                 border-bottom-left-radius: 10px;
               }
             }
-            .cardInfo{
+
+            .cardInfo {
               height: 100%;
               padding: 10px;
-              .cardTitle{
-                .fz(font-size,30);
+
+              .cardTitle {
+                .fz(font-size, 30);
                 font-weight: bold;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 2;
-                word-break:break-all;
+                word-break: break-all;
               }
-              .cardTag{
+
+              .cardTag {
                 height: 15%;
               }
-              .cardFooter{
+
+              .cardFooter {
                 height: 50%;
-                .priceBox{
+
+                .priceBox {
                   height: 100%;
                   text-align: left;
                   line-height: 3em;
-                  .salePrice{
+
+                  .salePrice {
                     color: #ff4444;
-                    .fz(font-size,32);
+                    .fz(font-size, 32);
                     font-weight: bold;
                   }
-                  .originPrice{
+
+                  .originPrice {
                     color: #707070;
                     .fz(font-size, 25);
-                    text-decoration:line-through
+                    text-decoration: line-through
                   }
                 }
-                .actionBox{
+
+                .actionBox {
                   height: 100%;
                   text-align: center;
                   line-height: 3em;
@@ -515,6 +569,7 @@
       }
 
     }
+
     .couponActivityBottomFunc {
       background-color: white;
       width: 100%;

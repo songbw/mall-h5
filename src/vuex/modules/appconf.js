@@ -19,6 +19,7 @@ const state = {
   currentNaviIndex: 0,
   currentOrderListIndex: 0,
   currentCouponPageInfo:'',
+  cartList:[]
 }
 
 const mutations = {
@@ -36,6 +37,10 @@ const mutations = {
 
   [types.SET_SELECTED_CARLIST](state, res) {
     state.selStateInCarList = res
+  },
+
+  [types.SET_CART_LIST](state, res) {
+    state.cartList = res
   },
 
   [types.SET_LOCATION_CODE](state, res) {
