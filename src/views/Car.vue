@@ -254,7 +254,8 @@
         if (this.total == -1 || this.total > this.list.length) {
           let options = {
             "openId": userInfo.userId,
-            "pageNo": this.pageNo++
+            "pageNo": this.pageNo++,
+            "pageSize": 999
           }
           this.$api.xapi({
             method: 'post',

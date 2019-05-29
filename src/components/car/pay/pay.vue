@@ -75,7 +75,7 @@
                     </div>
                     <van-card
                       :num="k.product.count"
-                      :price="k.product.price"
+                      :price="k.checkedPrice"
                       :title="k.product.desc"
                       :thumb="k.product.image">
                       <div slot="desc">
