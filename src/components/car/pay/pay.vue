@@ -788,10 +788,12 @@
           this.$log("库存 result is:" + JSON.stringify(result));
           result.forEach(item => {
             for (let i = 0; i < this.payCarList.length; i++) {
-              if (this.payCarList[i].product.skuId == item.skuId && 1 === parseInt(item.state)) {
-                this.payCarList[i].valid = true
-              } else {
-                this.payCarList[i].valid = false
+              if (this.payCarList[i].product.skuId === item.skuId) {
+                if("1" === item.state) {
+                  this.payCarList[i].valid = true
+                } else {
+                  this.payCarList[i].valid = false
+                }
               }
             }
           })
