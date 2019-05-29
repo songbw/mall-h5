@@ -8,7 +8,7 @@
         <div class="coupon coupon-red-gradient coupon-wave-left coupon-wave-right">
           <div class="coupon-info coupon-hole coupon-info-right-dashed">
             <div class="coupon-price">
-             <span>{{formateCouponPrice(this.coupon.couponInfo.rules.couponRules)}}</span>
+              <span>{{formateCouponPrice(this.coupon.couponInfo.rules.couponRules)}}</span>
             </div>
           </div>
           <div class="coupon-get">
@@ -54,7 +54,7 @@
       </div>
     </div>
     <div class="couponActivityBottomFunc">
-      <van-col span="12" class="payInfo">
+      <van-col span="16" class="payInfo">
         <div @click="onCouponCenterClick()">
           <div class="amountPay">
             <span style="color: #515151">小计:</span>
@@ -65,7 +65,7 @@
           </div>
         </div>
       </van-col>
-      <van-col span="12" class="gotoCar">
+      <van-col span="8" class="gotoCar">
         <div @click="onGotoCarClick()">
           <span>去购物车</span>
         </div>
@@ -137,14 +137,59 @@
 
     computed: {
       allPay() {
-        return 0;
+        let payAmount = 0
+        let cartList = this.$store.state.appconf.cartList;
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          this.$log(cartList)
+          let user = JSON.parse(userInfo)
+          cartList.forEach(item => {
+            this.$log(item)
+            if (item.baseInfo.userId == user.userId) {
+              let found = -1
+              for (let i = 0; i < item.couponList.length; i++) {
+                if (item.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
+                  found = i;
+                  break;
+                }
+              }
+              if (found != -1) {
+                this.$log("item.goodsInfo")
+                payAmount += item.goodsInfo.checkedPrice * item.baseInfo.count
+              }
+            }
+          })
+        }
+        return payAmount.toFixed(2);
       },
+
       payTip() {
-        return "快去选购商品参加活动吧"
+        if (this.allPay == 0)
+          return "快去选购商品参加活动吧"
+        else {
+          let rules = this.coupon.couponInfo.rules.couponRules
+          switch (rules.type) {
+            case 0://满减券
+              // return '￥' + rules.fullReduceCoupon.fullPrice;
+              if (rules.fullReduceCoupon.fullPrice > this.allPay) {
+                let amount = rules.fullReduceCoupon.fullPrice - this.allPay
+                return "再买￥" + amount + "可享受优惠"
+              } else {
+                return "已满足优惠条件，下单使用该券可立减￥" + rules.fullReduceCoupon.reducePrice
+              }
+            case 1://代金券
+              return "已满足优惠条件，下单使用该券可立减￥" + rules.cashCoupon.amount
+            case 2://折扣券
+              return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折'+"优惠"
+            default:
+              return ""
+          }
+        }
       },
     },
 
-    watch: {},
+    watch: {}
+    ,
 
     mounted() {
       setTimeout(() => {
@@ -152,7 +197,8 @@
           this.onLoad()
         }
       }, 1000);
-    },
+    }
+    ,
 
     methods: {
       add2Car(userInfo, goods) {
@@ -170,8 +216,8 @@
         }).then((response) => {
           this.result = response.data.data.result;
           this.$toast("添加到购物车成功！")
-          let cartItem = Util.getCartItem(this, user.userId,goods.skuId )
-          if(cartItem == null) {
+          let cartItem = Util.getCartItem(this, user.userId, goods.skuId)
+          if (cartItem == null) {
             let baseInfo = {
               "userId": user.userId,
               "skuId": goods.skuid,
@@ -184,7 +230,7 @@
               "image": goods.image,
               "category": goods.category,
               "name": goods.name,
-              "brand":goods.brand,
+              "brand": goods.brand,
               "model": goods.model,
               "price": goods.price,
               "checkedPrice": goods.price
@@ -202,26 +248,28 @@
           } else {
             cartItem.baseInfo.count++;
             let found = -1;
-            for(let i = 0 ; i < cartItem.couponList.length ; i++) {
-                if(cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
-                  found = i;
-                  break;
-                }
+            for (let i = 0; i < cartItem.couponList.length; i++) {
+              if (cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
+                found = i;
+                break;
+              }
             }
-            if(found != -1) {
+            if (found != -1) {
               cartItem.couponList.splice(found, 1)
             }
             cartItem.couponList.push(this.coupon)
           }
-          Util.updateCartItem(this,cartItem)
+          Util.updateCartItem(this, cartItem)
 
         }).catch(function (error) {
           console.log(error)
         })
-      },
+      }
+      ,
       onGotoCarClick() {
         this.$router.push({name: '购物车页'})
-      },
+      }
+      ,
 
       onBuyBtnClick(goods) {
         this.$log("onBuyBtnClick Enter");
@@ -232,7 +280,8 @@
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
         }
-      },
+      }
+      ,
       onLoad() {
         let that = this;
         this.launchedLoading = true
@@ -277,7 +326,8 @@
             that.finished = true;
           }
         }
-      },
+      }
+      ,
       formateCouponPrice(rules) {
         switch (rules.type) {
           case 0://满减券
@@ -289,13 +339,15 @@
           default:
             return ""
         }
-      },
+      }
+      ,
       formateReleasePercentage(coupon) {
         if (coupon.releaseTotal == 0)
           return 100;
         let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
         return percentage;
-      },
+      }
+      ,
       formateCouponDescription(rules) {
         switch (rules.type) {
           case 0://满减券
@@ -308,13 +360,15 @@
             return ""
         }
 
-      },
+      }
+      ,
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         this.$log(effectiveStartDate)
         this.$log(effectiveEndDate)
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD HH:MM:ss') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD HH:MM:ss' +
           '');
-      },
+      }
+      ,
     }
   }
 </script>
