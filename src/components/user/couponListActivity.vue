@@ -54,14 +54,19 @@
       </div>
     </div>
     <div class="couponActivityBottomFunc">
-      <van-col span="12" class="gotoCenter">
+      <van-col span="12" class="payInfo">
         <div @click="onCouponCenterClick()">
-          <div>领更多券</div>
-          <div>领更多券</div>
+          <div class="amountPay">
+            <span style="color: #515151">小计:</span>
+            <span style="color: red">￥{{allPay}}</span>
+          </div>
+          <div>
+            <span style="color: #8a8a8a;font-size: x-small">{{payTip}}</span>
+          </div>
         </div>
       </van-col>
-      <van-col span="12" class="change">
-        <div @click="onChangeCouponClick()">
+      <van-col span="12" class="gotoCar">
+        <div @click="onGotoCarClick()">
           <span>去购物车</span>
         </div>
       </van-col>
@@ -102,7 +107,6 @@
         let couponRules = rules.couponRules;
         //scenario: 使用场景，包含如下属性
         //type: 类型（1：特定商品类，2：全场类，3：类目品牌类, 4:服务类）
-
         //couponRules
         //type： int 类型（0：满减券 1:代金券 2:折扣券 3:服务券）
 
@@ -129,6 +133,18 @@
       }
     },
 
+    computed: {
+      allPay() {
+        return 0;
+      },
+      payTip() {
+        return "快去选购商品参加活动吧"
+      },
+    },
+
+    watch: {
+
+    },
 
     mounted() {
       setTimeout(() => {
@@ -139,8 +155,44 @@
     },
 
     methods: {
+      isUserEmpty(userInfo) {
+        return (userInfo == undefined || userInfo.length === 0)
+      },
+      add2Car(userInfo, goods) {
+        let user = JSON.parse(userInfo);
+        let userId = user.userId;
+        let skuId = goods.skuid;
+        let addtoCar = {
+          "openId": userId,
+          "skuId": skuId
+        }
+        this.$api.xapi({
+          method: 'post',
+          url: '/cart',
+          data: addtoCar,
+        }).then((response) => {
+          this.result = response.data.data.result;
+          this.$toast("添加到购物车成功！")
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      onGotoCarClick() {
+        //car
+        this.$router.push({name: '购物车页'})
+      },
+
+      onBuyBtnClick(goods) {
+        this.$log("onBuyBtnClick Enter");
+        this.$log(goods)
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!this.isUserEmpty(userInfo)) {
+          this.add2Car(userInfo,goods)
+        } else {
+          this.$toast("没有用户信息，请先登录,再添加购物车")
+        }
+      },
       onLoad() {
-        this.$log("onLoad Enter XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")
         let that=this;
         this.launchedLoading = true
         try {
@@ -223,8 +275,6 @@
           '');
       },
     }
-
-
   }
 </script>
 
@@ -394,7 +444,6 @@
         .coupon-wave-right::after {
           right: -7px;
         }
-
       }
       .couponActivityList{
         text-align: left;
@@ -460,7 +509,6 @@
                   line-height: 3em;
                 }
               }
-
             }
           }
         }
@@ -481,16 +529,16 @@
       background-color: #ffffff;
       z-index: 5;
 
-      .gotoCenter {
+      .payInfo {
         height: 100%;
         background-color: white;
         text-align: left;
         color: #ee892f;
-        padding: 2px;
-        font-weight: bold;
+        padding-left: 10px;
+        padding-top: 3px;
       }
 
-      .change {
+      .gotoCar {
         height: 100%;
         background-color: #ee892f;
         text-align: center;
