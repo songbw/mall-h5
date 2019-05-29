@@ -102,36 +102,10 @@
       this.currentCouponPageInfo = this.$store.state.appconf.currentCouponPageInfo;
       if (this.currentCouponPageInfo.length) {
         this.coupon = JSON.parse(this.currentCouponPageInfo);
-        this.$log(this.coupon)
         let couponInfo = this.coupon.couponInfo;
         let rules = couponInfo.rules;
         let scenario = rules.scenario;
         let couponRules = rules.couponRules;
-        //scenario: 使用场景，包含如下属性
-        //type: 类型（1：特定商品类，2：全场类，3：类目品牌类, 4:服务类）
-        //couponRules
-        //type： int 类型（0：满减券 1:代金券 2:折扣券 3:服务券）
-
-        /*        try {
-                  //获取goods信息，update current googds
-                  this.$api.xapi({
-                    method: 'get',
-                    url: '/coupon/skuById',
-                    params: {
-                      id: couponInfo.id,
-                      limit: 10,
-                      offset: 1
-                    }
-                  }).then((res) => {
-                      let result = res.data.data.result;
-                      this.$log(result)
-                      this.$log(result.couponSkus)
-                  }).catch((error) => {
-                    console.log(error)
-                  })
-                } catch (e) {
-
-                }*/
       }
     },
 
@@ -141,13 +115,10 @@
         let cartList = this.$store.state.appconf.cartList;
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
-          this.$log(cartList)
           let user = JSON.parse(userInfo)
           cartList.forEach(item => {
-            this.$log(item)
             if (item.baseInfo.userId == user.userId) {
               let found = -1
-              this.$log(item.couponList)
               for (let i = 0; i < item.couponList.length; i++) {
                 if (item.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
                   found = i;
@@ -155,7 +126,6 @@
                 }
               }
               if (found != -1) {
-                this.$log("item.goodsInfo")
                 payAmount += item.goodsInfo.checkedPrice * item.baseInfo.count
               }
             }
@@ -217,11 +187,8 @@
         }).then((response) => {
           this.result = response.data.data.result;
           this.$toast("添加到购物车成功！")
-          this.$log(user.userId)
-          this.$log( goods.skuid)
           let cartItem = Util.getCartItem(this, user.userId, goods.skuid)
           if (cartItem == null) {
-            this.$log("sssssssssssssssss");
             let baseInfo = {
               "userId": user.userId,
               "skuId": goods.skuid,
@@ -250,7 +217,6 @@
               "promotionInfo": promotionInfo,
             }
           } else {
-            this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
             cartItem.baseInfo.count++;
             let found = -1;
             for (let i = 0; i < cartItem.couponList.length; i++) {
@@ -278,7 +244,6 @@
 
       onBuyBtnClick(goods) {
         this.$log("onBuyBtnClick Enter");
-        //this.$log(goods)
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           this.add2Car(userInfo, goods)
@@ -304,8 +269,6 @@
               }
             }).then((res) => {
               let result = res.data.data.result;
-              this.$log(result)
-              this.$log(result.couponSkus)
               this.total = result.couponSkus.total;
               if (result.couponSkus.list == undefined || result.couponSkus.list.length == 0) {
                 that.loading = false;
@@ -368,8 +331,6 @@
       }
       ,
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
-        this.$log(effectiveStartDate)
-        this.$log(effectiveEndDate)
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD HH:MM:ss') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD HH:MM:ss' +
           '');
       }
