@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="user">
-    <v-header class="header" :goback="false">
+    <v-header class="header" >
       <h1 slot="title">我的</h1>
     </v-header>
     <div class="userMain">

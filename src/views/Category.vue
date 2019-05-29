@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="wrap">
-    <v-header class="header" :goback="false">
+    <v-header class="header" >
       <h1 slot="title">商品分类</h1>
 <!--      <router-link :to="{name:'购物车页'}" slot="right">
         <van-icon name="shopping-cart-o" size="1.2em"/>

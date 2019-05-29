@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="car">
-    <v-header class="header"  :goback="false">
+    <v-header class="header"  >
       <h1 slot="title">购物车</h1>
     </v-header>
     <div class="cartBody">
