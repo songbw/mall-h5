@@ -55,7 +55,7 @@ export default {
       if (found == -1) {
         return null;
       } else {
-        return cartList[i]
+        return cartList[found]
       }
     } catch (e) {
       return null;

@@ -147,6 +147,7 @@
             this.$log(item)
             if (item.baseInfo.userId == user.userId) {
               let found = -1
+              this.$log(item.couponList)
               for (let i = 0; i < item.couponList.length; i++) {
                 if (item.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
                   found = i;
@@ -216,8 +217,11 @@
         }).then((response) => {
           this.result = response.data.data.result;
           this.$toast("添加到购物车成功！")
-          let cartItem = Util.getCartItem(this, user.userId, goods.skuId)
+          this.$log(user.userId)
+          this.$log( goods.skuid)
+          let cartItem = Util.getCartItem(this, user.userId, goods.skuid)
           if (cartItem == null) {
+            this.$log("sssssssssssssssss");
             let baseInfo = {
               "userId": user.userId,
               "skuId": goods.skuid,
@@ -246,6 +250,7 @@
               "promotionInfo": promotionInfo,
             }
           } else {
+            this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
             cartItem.baseInfo.count++;
             let found = -1;
             for (let i = 0; i < cartItem.couponList.length; i++) {
@@ -257,7 +262,7 @@
             if (found != -1) {
               cartItem.couponList.splice(found, 1)
             }
-            cartItem.couponList.push(this.coupon)
+            cartItem.couponList.push({"coupon": this.coupon})
           }
           Util.updateCartItem(this, cartItem)
 
