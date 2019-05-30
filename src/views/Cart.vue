@@ -5,57 +5,57 @@
     </v-header>
     <div class="cartBody">
       <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
-        <div class="nothingInCar" v-cloak v-if="finished && this.$store.state.appconf.selStateInCarList.length === 0">
+        <div class="nothingInCar" v-cloak v-if="finished && cartList.length === 0">
           <img :src="nothingInCar_bg"/>
           <span>购物车是空的，美好的生活需要您的填充！</span>
         </div>
 
         <div v-else>
           <div class="carlist">
-            <div class="prodInCart" v-for="(k,index) in this.selStateInCarList" :key="index">
+            <div class="prodInCart" v-for="(k,index) in cartList" :key="index">
               <van-swipe-cell :right-width="60">
                 <div style="display: flex;justify-content: left;background-color: #ffffff">
                   <div
                     style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
                     <van-checkbox
-                      v-model="k.choose"
+                      v-model="k.baseInfo.choosed"
                       class="checkedBox"
                       @change="singleChecked(index,k)">
                     </van-checkbox>
                   </div>
                   <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                    <div class="promotionBox" v-if="k.promotionState != -1">
-                      <span class="promotionTitle">{{k.promotion[0].tag}}</span>
+                    <div class="promotionBox" v-if="k.promotionInfo.promotionState != -1">
+                      <span class="promotionTitle">{{k.promotionInfo.promotion[0].tag}}</span>
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
                                    @end_callback="countDownE_cb(index,k)"
-                                   :startTime="new Date(k.promotion[0].startDate).getTime()"
-                                   :endTime="new Date(k.promotion[0].endDate).getTime()"
+                                   :startTime="new Date(k.promotionInfo.promotion[0].startDate).getTime()"
+                                   :endTime="new Date(k.promotionInfo.promotion[0].endDate).getTime()"
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>
-                    <div v-if="k.promotionState === 1">
+                    <div v-if="k.promotionInfo.promotionState === 1">
                       <van-card
-                        :price="k.price-k.promotion[0].discount"
-                        :title="k.desc"
-                        :thumb="k.image"
-                        :origin-price="k.price">
+                        :price="k.goodsInfo.checkedPrice-k.promotionInfo.promotion[0].discount"
+                        :title="k.goodsInfo.name"
+                        :thumb="k.goodsInfo.image"
+                        :origin-price="k.goodsInfo.checkedPrice">
                         <div slot="desc">
                           <span class="prodDesc">南京</span>
                         </div>
                         <div slot="footer">
-                          <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k.goodsInfo.id,k.goodsInfo.skuid,k.baseInfo.count)"/>
                         </div>
                       </van-card>
                     </div>
                     <div v-else>
                       <van-card
                         desc="南京"
-                        :price="k.price"
-                        :title="k.desc"
-                        :thumb="k.image">
+                        :price="k.goodsInfo.checkedPrice"
+                        :title="k.goodsInfo.name"
+                        :thumb="k.goodsInfo.image">
                         <div slot="footer">
-                          <van-stepper v-model="k.count" @change="onCountChange(k.id,k.skuid,k.count)"/>
+                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k.goodsInfo.id,k.goodsInfo.skuid,k.baseInfo.count)"/>
                         </div>
                       </van-card>
                     </div>
@@ -96,6 +96,10 @@
     },
 
     computed: {
+      cartList() {
+         return this.$store.state.appconf.cartList
+      },
+
       SelfList() {
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         return this.selStateInCarList.filter(function (item) {
@@ -146,7 +150,6 @@
         selStateInCarList: [],
         nothingInCar_bg: require('@/assets/images/cart.svg'),
         launchedLoading: false,
-        carList:[],
       }
     },
 
@@ -164,15 +167,15 @@
         return (goods.brand==null?'':goods.brand) + ' '+ goods.name + ' '+ (goods.model==null? '': goods.model)
       },
       countDownS_cb(index, k) {
-        this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
-        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+/*        this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
+        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);*/
         // this.$log("this.$store.state.appconf.selStateInCarList[index].promotionState:"+this.$store.state.appconf.selStateInCarList[index].promotionState )
       },
       countDownE_cb(index, k) {
-        this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
+/*        this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
         let len = this.selStateInCarList[index].promotion.length;
         this.selStateInCarList[index].promotion.splice(0, len);
-        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);*/
       },
 
       isUserEmpty(userInfo) {
@@ -404,14 +407,14 @@
       },
 
       singleChecked(index, k) {
-        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        for (let i = 0; i < this.selStateInCarList.length; i++) {
+/*        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
+        for (let i = 0; i < this.cartList.length; i++) {
           if (this.selStateInCarList[i].id == k.id && this.selStateInCarList[i].userId == k.userId) {
             this.selStateInCarList[i].choose = k.choose;
             break;
           }
         }
-        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
+        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);*/
       }
     },
   }
@@ -468,7 +471,7 @@
 
           .van-card {
             background-color: #ffffff;
-            margin-top: 5px;
+            margin-top: 10px;
 
             &__price {
               margin-top: 0.5em;
@@ -481,6 +484,7 @@
             align-items: center;
             float: right;
             justify-content: space-around;
+            margin-top: -3em;
           }
 
           .promotionBox {
