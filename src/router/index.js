@@ -9,6 +9,7 @@ const Category = resolve => require(['@/views/Category.vue'], resolve)
 const CategoryMain = resolve => require(['@/components/category/main.vue'], resolve)
 const CategoryList = resolve => require(['@/components/category/goods/list.vue'], resolve)
 const Car = resolve => require(['@/views/Car.vue'], resolve)
+const Cart = resolve => require(['@/views/Cart.vue'], resolve)
 const User = resolve => require(['@/views/User.vue'], resolve)
 const Detail = resolve => require(['@/views/Detail.vue'], resolve)
 const Search = resolve => require(['@/views/Search.vue'], resolve)
@@ -71,7 +72,7 @@ export default new VueRouter({
     {
       path: '/car',
       name: '购物车页',
-      component: Car
+      component: Cart
     },
     {
       path: '/car/pay',
