@@ -21,31 +21,21 @@
       count() {
         // 如果已选择列表为空 就返回0
         let selCount = 0;
-        if (this.$store.state.appconf.selStateInCarList == undefined) {
-          return selCount
-        } else {
-          let userInfo = this.$store.state.appconf.userInfo;
-          try {
-            if (!this.isUserEmpty(userInfo)) {
-              let user = JSON.parse(userInfo)
-              let selStateInCarList = this.$store.state.appconf.selStateInCarList;
-              selStateInCarList.forEach(item => {
-                if (item.userId == user.userId && item.choose) {
-                  selCount += item.count;
-                }
-              })
-            } else {
-              let selStateInCarList = this.$store.state.appconf.selStateInCarList;
-              selStateInCarList.forEach(item => {
-                if (item.userId == -1 && item.choose) {
-                  selCount += item.count;
-                }
-              })
-            }
-          } catch (e) {
+        let userInfo = this.$store.state.appconf.userInfo;
+        try {
+          if (!this.isUserEmpty(userInfo)) {
+            let user = JSON.parse(userInfo);
+            let cartList = this.$store.state.appconf.cartList;
+            cartList.forEach(item => {
+               if(item.baseInfo.userId == user.userId) {
+                 if(item.baseInfo.choosed)
+                     selCount += item.baseInfo.count;
+               }
+            });
           }
-          return selCount;
+        } catch (e) {
         }
+        return selCount;
       },
 
       //勾选的商品的价格总和
@@ -56,40 +46,26 @@
         try {
           if (!this.isUserEmpty(userInfo)) {
             let user = JSON.parse(userInfo)
-            let selStateInCarList = this.$store.state.appconf.selStateInCarList;
-            selStateInCarList.forEach(item => {
-              if (item.userId == user.userId && item.choose) {
-                if(item.promotionState === 1) {
-                  try {
-                    all += (item.price - item.promotion[0].discount) * item.count
-                  } catch (e) {
-                    all += item.price * item.count
+            let cartList = this.$store.state.appconf.cartList;
+            cartList.forEach(item => {
+
+              if(item.baseInfo.userId == user.userId) {
+                  if(item.baseInfo.choosed) {
+                    if(item.promotionInfo.promotionState === 1) {
+                      try {
+                        all += (item.goodsInfo.checkedPrice - item.promotionInfo.promotion[0].discount) * item.baseInfo.count
+                      } catch (e) {
+                        all += item.goodsInfo.checkedPrice * item.baseInfo.count
+                      }
+                    } else {
+                      all += item.goodsInfo.checkedPrice * item.baseInfo.count
+                    }
                   }
-                } else {
-                  all += item.price * item.count
-                }
               }
-            })
-          } else {
-            //no mobile App
-            let selStateInCarList = this.$store.state.appconf.selStateInCarList;
-            selStateInCarList.forEach(item => {
-              if (item.userId == -1 && item.choose) {
-                if(item.promotionState === 1) {
-                  try {
-                    all += (item.price - item.promotion[0].discount) * item.count
-                  } catch (e) {
-                    all += item.price * item.count
-                  }
-                } else {
-                  all += item.price * item.count
-                }
-              }
-            })
+            });
           }
         } catch (e) {
         }
-
         // 没有勾选 即为0
         return all
       }

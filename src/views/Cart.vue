@@ -44,7 +44,7 @@
                           <span class="prodDesc">南京</span>
                         </div>
                         <div slot="footer">
-                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k.goodsInfo.id,k.goodsInfo.skuid,k.baseInfo.count)"/>
+                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -55,7 +55,7 @@
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image">
                         <div slot="footer">
-                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k.goodsInfo.id,k.goodsInfo.skuid,k.baseInfo.count)"/>
+                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -167,15 +167,14 @@
         return (goods.brand==null?'':goods.brand) + ' '+ goods.name + ' '+ (goods.model==null? '': goods.model)
       },
       countDownS_cb(index, k) {
-/*        this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
-        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);*/
-        // this.$log("this.$store.state.appconf.selStateInCarList[index].promotionState:"+this.$store.state.appconf.selStateInCarList[index].promotionState )
+        k.promotionInfo.promotionState = Util.getPromotionState(k)
+        Util.updateCartItem(this,  k);
       },
       countDownE_cb(index, k) {
-/*        this.selStateInCarList[index].promotionState = Util.getPromotionState(k)
-        let len = this.selStateInCarList[index].promotion.length;
-        this.selStateInCarList[index].promotion.splice(0, len);
-        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);*/
+        k.promotionInfo.promotionState = Util.getPromotionState(k)
+        let len = k.promotionInfo.promotion.length;
+        k.promotionInfo.promotion.splice(0, len);
+        Util.updateCartItem(this,  k);
       },
 
       isUserEmpty(userInfo) {
@@ -201,41 +200,8 @@
         })
       },
 
-      onCountChange(id, skuid, count) {
-        let userInfo = this.$store.state.appconf.userInfo;
-        if (!this.isUserEmpty(userInfo)) {
-          let user = JSON.parse(userInfo);
-          this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
-          for (let i = 0; i < this.selStateInCarList.length; i++) {
-            if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == user.userId) {
-              this.selStateInCarList[i].count = count;
-              break;
-            }
-          }
-          this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-          let options = {
-            "id": id,
-            "count": count
-          }
-          this.$api.xapi({
-            method: 'put',
-            url: '/cart/num',
-            data: options,
-          }).then((response) => {
-          }).catch(function (error) {
-            console.log(error)
-          })
-        } else {
-          // no user
-          this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
-          for (let i = 0; i < this.selStateInCarList.length; i++) {
-            if (this.selStateInCarList[i].id == id && this.selStateInCarList[i].userId == -1) {
-              this.selStateInCarList[i].count = count;
-              break;
-            }
-          }
-          this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-        }
+      onCountChange(k) {
+        Util.updateCartItem(this,  k);
       },
 
       loadCartListBy(user) {
@@ -407,14 +373,7 @@
       },
 
       singleChecked(index, k) {
-/*        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        for (let i = 0; i < this.cartList.length; i++) {
-          if (this.selStateInCarList[i].id == k.id && this.selStateInCarList[i].userId == k.userId) {
-            this.selStateInCarList[i].choose = k.choose;
-            break;
-          }
-        }
-        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);*/
+        Util.updateCartItem(this,  k)
       }
     },
   }
