@@ -120,7 +120,7 @@
             if (item.baseInfo.userId == user.userId) {
               let found = -1
               for (let i = 0; i < item.couponList.length; i++) {
-                if (item.couponList[i].coupon.id == this.coupon.couponInfo.id) {
+                if (item.couponList[i].id == this.coupon.couponInfo.id) {
                   found = i;
                   break;
                 }
@@ -206,9 +206,7 @@
               "price": goods.price,
               "checkedPrice": goods.price
             }
-            let couponList = [
-              {"coupon": this.coupon.couponInfo},
-            ]
+            let couponList = [this.coupon.couponInfo]
             let promotionInfo = {}
             cartItem = {
               "baseInfo": baseInfo,
@@ -228,7 +226,7 @@
             if (found != -1) {
               cartItem.couponList.splice(found, 1)
             }
-            cartItem.couponList.push({"coupon": this.coupon.couponInfo})
+            cartItem.couponList.push(this.coupon.couponInfo)
           }
           Util.updateCartItem(this, cartItem)
         }).catch(function (error) {

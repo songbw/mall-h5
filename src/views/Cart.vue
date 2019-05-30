@@ -146,6 +146,7 @@
         selStateInCarList: [],
         nothingInCar_bg: require('@/assets/images/cart.svg'),
         launchedLoading: false,
+        carList:[],
       }
     },
 
@@ -335,6 +336,53 @@
         return goods;
       },
 
+      updateCarList(item,product,user) {
+       // this.carList = this.$store.state.appconf.cartList;
+       // let goods = Object();
+        this.$log(item)
+        this.$log(product)
+        let cartItem = Util.getCartItem(this, user.userId, item.skuId)
+        if (cartItem == null) {
+          let baseInfo = {
+            "userId": user.userId,
+            "skuId": item.skuId,
+            "count": item.count,
+            "choosed": false,
+          }
+          let goodsInfo = {
+            "id": product.id,
+            "skuId": product.skuid,
+            "image": product.image,
+            "category": product.category,
+            "name": product.name,
+            "brand": product.brand,
+            "model": product.model,
+            "price": product.price,
+            "checkedPrice": product.price
+          }
+          let couponList = product.coupon
+          let promotionInfo = {
+            "promotion": product.promotion,
+            "promotionState": Util.getPromotionState(product)
+          }
+          cartItem = {
+            "baseInfo": baseInfo,
+            "goodsInfo": goodsInfo,
+            "couponList": couponList,
+            "promotionInfo": promotionInfo,
+          }
+        } else {
+          cartItem.baseInfo.count = item.count
+          cartItem.couponList = product.coupon
+          cartItem.promotionInfo = {
+            "promotion": product.promotion,
+            "promotionState": Util.getPromotionState(product)
+          }
+        }
+        Util.updateCartItem(this, cartItem)
+        return cartItem;
+      },
+
       getSkuInfoBy(item, user) {
         this.$api.xapi({
           method: 'get',
@@ -344,10 +392,9 @@
           }
         }).then((res) => {
           let product = res.data.data.result;
-          this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-           this.$log(product);
           if (product != null) {
             this.updateSelectedCarlist(item, product, user)
+            this.updateCarList(item,product,user)
           } else {
             this.$log("product:" + JSON.stringify(product) + ",skuId:" + item.skuId)
           }
