@@ -186,6 +186,8 @@
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
+          this.$log("xxxxxxxxxxxxxxxxxxx")
+          this.$log(this.result)
           this.$toast("添加到购物车成功！")
           let cartItem = Util.getCartItem(this, user.userId, goods.skuid)
           if (cartItem == null) {
@@ -194,6 +196,7 @@
               "skuId": goods.skuid,
               "count": 1,
               "choosed": true,
+              "cartId": this.result,
             }
             let goodsInfo = {
               "id": goods.id,

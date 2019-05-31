@@ -34,7 +34,6 @@ export default {
     } else {
       return -1 // 无活动
     }
-
   },
 
   isUserEmpty(userInfo) {
@@ -59,6 +58,29 @@ export default {
       }
     } catch (e) {
       return null;
+    }
+  },
+
+  deletCartItem(env, cartItem) {
+    env.$log("deletCartItem Enter")
+    env.$log(cartItem)
+    let cartList = env.$store.state.appconf.cartList;
+    try {
+      let found = -1;
+      for (let i = 0; i < cartList.length; i++) {
+        if (cartList[i].baseInfo.userId === cartItem.baseInfo.userId &&
+          cartList[i].baseInfo.skuId === cartItem.baseInfo.skuId) {
+          found = i;
+          break;
+        }
+      }
+      if (found != -1) {
+        cartList.splice(found,1)
+        env.$store.commit('SET_CART_LIST', cartList);
+        env.$log(env.$store.state.appconf.cartList)
+      }
+    } catch (e) {
+
     }
   },
 

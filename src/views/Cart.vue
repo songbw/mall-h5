@@ -24,7 +24,7 @@
                     </van-checkbox>
                   </div>
                   <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                    <div class="promotionBox" v-if="k.promotionInfo.promotionState != -1">
+                    <div class="promotionBox" v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
                       <span class="promotionTitle">{{k.promotionInfo.promotion[0].tag}}</span>
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
@@ -99,44 +99,6 @@
       cartList() {
          return this.$store.state.appconf.cartList
       },
-
-      SelfList() {
-        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        return this.selStateInCarList.filter(function (item) {
-          return String(item.skuId).startsWith("10")
-        });
-      },
-
-      SuningList() {
-        // `this` points to the vm instance
-        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        return this.selStateInCarList.filter(function (item) {
-          return String(item.skuId).startsWith("20")
-        });
-      },
-
-      VIPsList() {
-        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        return this.selStateInCarList.filter(function (item) {
-          return String(item.skuId).startsWith("30")
-        });
-      },
-
-      TMallList() {
-        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        return this.selStateInCarList.filter(function (item) {
-          return String(item.skuId).startsWith("50")
-        });
-      },
-
-      JDList() {
-        // `this` points to the vm instance
-        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        return this.selStateInCarList.filter(function (item) {
-          return String(item.skuId).startsWith("60")
-        });
-      },
-
     },
 
     data() {
@@ -181,17 +143,14 @@
         return (userInfo == undefined || userInfo.length === 0)
       },
 
-      onDeleteBtnClick(k, index) {
+      onDeleteBtnClick(k,index) {
+        Util.deletCartItem(this,k)
         let that = this;
-        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        this.selStateInCarList.splice(index, 1);
-        this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-
         this.$api.xapi({
           method: 'delete',
           url: '/cart',
           params: {
-            id: k.id,
+            id: k.baseInfo.cartId,
           }
         }).then((response) => {
           that.$log("onDeleteBtnClick success")
@@ -202,6 +161,18 @@
 
       onCountChange(k) {
         Util.updateCartItem(this,  k);
+        let options = {
+          "id": k.baseInfo.cartId,
+          "count": k.baseInfo.count
+        }
+        this.$api.xapi({
+          method: 'put',
+          url: '/cart/num',
+          data: options,
+        }).then((response) => {
+        }).catch(function (error) {
+          console.log(error)
+        })
       },
 
       loadCartListBy(user) {
@@ -317,6 +288,7 @@
             "skuId": item.skuId,
             "count": item.count,
             "choosed": false,
+            "cartId": item.id
           }
           let goodsInfo = {
             "id": product.id,
@@ -342,6 +314,7 @@
           }
         } else {
           cartItem.baseInfo.count = item.count
+          cartItem.baseInfo.cartId =  item.id
           cartItem.couponList = product.coupon
           cartItem.promotionInfo = {
             "promotion": product.promotion,
