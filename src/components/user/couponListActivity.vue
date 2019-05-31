@@ -126,7 +126,7 @@
                 }
               }
               if (found != -1) {
-                payAmount += item.goodsInfo.checkedPrice * item.baseInfo.count
+                payAmount += item.goodsInfo.price * item.baseInfo.count
               }
             }
           })
@@ -207,7 +207,6 @@
               "brand": goods.brand,
               "model": goods.model,
               "price": goods.price,
-              "checkedPrice": goods.price
             }
             let couponList = [this.coupon.couponInfo]
             let promotionInfo = {}

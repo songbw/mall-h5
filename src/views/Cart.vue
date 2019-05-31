@@ -36,10 +36,10 @@
                     </div>
                     <div v-if="k.promotionInfo.promotionState === 1">
                       <van-card
-                        :price="k.goodsInfo.checkedPrice-k.promotionInfo.promotion[0].discount"
+                        :price="k.goodsInfo.price-k.promotionInfo.promotion[0].discount"
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image"
-                        :origin-price="k.goodsInfo.checkedPrice">
+                        :origin-price="k.goodsInfo.price">
                         <div slot="desc">
                           <span class="prodDesc">南京</span>
                         </div>
@@ -51,7 +51,7 @@
                     <div v-else>
                       <van-card
                         desc="南京"
-                        :price="k.goodsInfo.checkedPrice"
+                        :price="k.goodsInfo.price"
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image">
                         <div slot="footer">
@@ -260,7 +260,6 @@
             "brand": product.brand,
             "model": product.model,
             "price": product.price,
-            "checkedPrice": product.price
           }
           let couponList = product.coupon
           let promotionInfo = {

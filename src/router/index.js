@@ -14,6 +14,7 @@ const User = resolve => require(['@/views/User.vue'], resolve)
 const Detail = resolve => require(['@/views/Detail.vue'], resolve)
 const Search = resolve => require(['@/views/Search.vue'], resolve)
 const Pay = resolve => require(['@/components/car/pay/pay.vue'], resolve)
+const Settlement = resolve => require(['@/components/car/pay/settlement.vue'], resolve)
 const Invoice = resolve => require(['@/components/car/pay/invoice.vue'], resolve)
 const OrderList = resolve => require(['@/components/car/pay/orderList.vue'], resolve)
 const OrderDetail = resolve => require(['@/components/car/pay/orderDetail.vue'], resolve)
@@ -77,10 +78,10 @@ export default new VueRouter({
     {
       path: '/car/pay',
       name: '支付页',
-      component: Pay,
+      component: Settlement,
       children: [{
         path: '/car/pay/:action',
-        component: Pay
+        component: Settlement
       },]
     },
     {

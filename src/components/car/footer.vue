@@ -53,12 +53,12 @@
                   if(item.baseInfo.choosed) {
                     if(item.promotionInfo.promotionState === 1) {
                       try {
-                        all += (item.goodsInfo.checkedPrice - item.promotionInfo.promotion[0].discount) * item.baseInfo.count
+                        all += (item.goodsInfo.price - item.promotionInfo.promotion[0].discount) * item.baseInfo.count
                       } catch (e) {
-                        all += item.goodsInfo.checkedPrice * item.baseInfo.count
+                        all += item.goodsInfo.price * item.baseInfo.count
                       }
                     } else {
-                      all += item.goodsInfo.checkedPrice * item.baseInfo.count
+                      all += item.goodsInfo.price * item.baseInfo.count
                     }
                   }
               }
