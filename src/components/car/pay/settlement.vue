@@ -207,7 +207,6 @@
 
         ]
         let allPayList = this.$store.state.appconf.payList;
-
         try {
           allPayList.forEach(item => {
             if (item.product.baseInfo.skuId.startsWith("20")) {//苏宁易购
@@ -219,7 +218,7 @@
             } else if (item.product.baseInfo.skuId.startsWith("60")) {//京东
               payList[3].goods.push(item);
             } else { //商城自营
-              payList[4].goods.baseInfo.push(item);
+              payList[4].goods.push(item);
             }
           })
           payList.forEach(supplyer => {
@@ -703,7 +702,8 @@
         let options = {
           "carriages": carriges,
         }
-
+        this.$log("xxxxxxxxxxxxxxxxxxxx")
+        this.$log(this.arregationList)
         this.arregationList.forEach(item => {
           if (item.price > 0) {
             carriges.push({
