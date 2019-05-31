@@ -109,7 +109,6 @@
         list: [],
         loading: false,
         finished: false,
-        selStateInCarList: [],
         nothingInCar_bg: require('@/assets/images/cart.svg'),
         launchedLoading: false,
       }
@@ -233,48 +232,10 @@
       },
 
       getCarListWithoutUser() {
-        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
         this.loading = false;
         this.finished = true;
       },
 
-      updateSelectedCarlist(item, product, user) {
-        this.selStateInCarList = this.$store.state.appconf.selStateInCarList
-        let choose = true;
-        let found = false;
-        let goods = Object();
-        for (let i = 0; i < this.selStateInCarList.length; i++) {
-          if (this.selStateInCarList[i].id == item.id && this.selStateInCarList[i].userId == user.userId) {
-            //sync data
-            this.selStateInCarList[i].count = item.count
-            this.selStateInCarList[i].skuId = item.skuId
-            this.selStateInCarList[i].price = product.price
-            this.selStateInCarList[i].promotion = product.promotion
-            this.selStateInCarList[i].promotionState = Util.getPromotionState(product)
-            goods = this.selStateInCarList[i];
-            found = true;
-            break;
-          }
-        }
-        if (!found) {
-          goods = {
-            "userId": user.userId,
-            "id": item.id,
-            "image": product.image,
-            "desc": this.composeGoodsTitle(product),
-            "skuId": item.skuId,
-            "count": item.count,
-            "price": product.price,
-            "choose": true,
-            "isDel": 0,
-            "promotion": product.promotion,
-            "promotionState": Util.getPromotionState(product)
-          }
-          this.selStateInCarList.push(goods);
-          this.$store.commit('SET_SELECTED_CARLIST', this.selStateInCarList);
-        }
-        return goods;
-      },
 
       updateCarList(item,product,user) {
        // this.carList = this.$store.state.appconf.cartList;
@@ -335,7 +296,6 @@
         }).then((res) => {
           let product = res.data.data.result;
           if (product != null) {
-            this.updateSelectedCarlist(item, product, user)
             this.updateCarList(item,product,user)
           } else {
             this.$log("product:" + JSON.stringify(product) + ",skuId:" + item.skuId)

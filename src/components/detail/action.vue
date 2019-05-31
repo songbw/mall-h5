@@ -70,16 +70,16 @@
       addGoodsCar() {
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
-          this.add2Car(userInfo);
+          this.add2Car(userInfo,this.datas);
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
         }
       },
 
-      add2Car(userInfo) {
+      add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
-        let skuId = this.datas.skuid;
+        let skuId = goods.skuid;
         let addtoCar = {
           "openId": userId,
           "skuId": skuId
@@ -90,7 +90,52 @@
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
+          this.$log("xxxxxxxxxxxxxxxxxxx")
+          this.$log(this.result)
           this.$toast("添加到购物车成功！")
+          let cartItem = Util.getCartItem(this, user.userId, goods.skuid)
+          if (cartItem == null) {
+            let baseInfo = {
+              "userId": user.userId,
+              "skuId": goods.skuid,
+              "count": 1,
+              "choosed": true,
+              "cartId": this.result,
+            }
+            let goodsInfo = {
+              "id": goods.id,
+              "skuId": goods.skuid,
+              "image": goods.image,
+              "category": goods.category,
+              "name": goods.name,
+              "brand": goods.brand,
+              "model": goods.model,
+              "price": goods.price,
+              "checkedPrice": goods.price
+            }
+            let couponList = []
+            let promotionInfo = {}
+            cartItem = {
+              "baseInfo": baseInfo,
+              "goodsInfo": goodsInfo,
+              "couponList": couponList,
+              "promotionInfo": promotionInfo,
+            }
+          } else {
+            cartItem.baseInfo.count++;
+            let found = -1;
+            for (let i = 0; i < cartItem.couponList.length; i++) {
+              if (cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
+                found = i;
+                break;
+              }
+            }
+            if (found != -1) {
+              cartItem.couponList.splice(found, 1)
+            }
+            cartItem.couponList.push(this.coupon.couponInfo)
+          }
+          Util.updateCartItem(this, cartItem)
         }).catch(function (error) {
           console.log(error)
         })
