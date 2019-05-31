@@ -35,10 +35,37 @@
         <div class="pay-info">
           <van-cell title="支付方式:" value="现金支付">
           </van-cell>
-          <van-cell title="发票:" :value="invoiceDetail" is-link to="/car/invoice">
+          <van-cell title="发票:" :value="invoiceDetail" to="/car/invoice">
+            <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"/>
           </van-cell>
-          <van-cell title="优惠券:" :value="invoiceDetail" is-link>
+          <van-cell title="优惠券:" value="优惠￥0.00">
+            <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon" @click="showReasonSelector()"/>
           </van-cell>
+          <van-actionsheet v-model="showReason" title="申请原因">
+            <van-radio-group v-model="radio">
+              <van-cell-group>
+                <van-cell title="质量问题" clickable @click="radio = '1'">
+                  <van-radio name="1"/>
+                </van-cell>
+                <van-cell title="卖家发错货" clickable @click="radio = '2'">
+                  <van-radio name="2"/>
+                </van-cell>
+                <van-cell title="发票问题" clickable @click="radio = '3'">
+                  <van-radio name="3"/>
+                </van-cell>
+                <van-cell title="七天无理由" clickable @click="radio = '4'">
+                  <van-radio name="4"/>
+                </van-cell>
+                <van-cell title="商品与描述不符" clickable @click="radio = '5'">
+                  <van-radio name="5"/>
+                </van-cell>
+                <van-cell title="其他" clickable @click="radio = '6'">
+                  <van-radio name="6"/>
+                </van-cell>
+              </van-cell-group>
+            </van-radio-group>
+            <van-button type="danger" size="large" @click="confirmedReason()">确定</van-button>
+          </van-actionsheet>
         </div>
       </div>
       <div class="pay-list">
@@ -139,7 +166,9 @@
         invoiceDetail: '',
         pageLoadTimerId: -1,
         pageAction: "common",
-        locationCity: "南京"
+        locationCity: "南京",
+        showReason: false,
+        radio: '6',
       }
     },
 
@@ -374,6 +403,13 @@
     },
 
     methods: {
+      showReasonSelector() {
+        this.showReason = true
+      },
+      confirmedReason() {
+        this.$log(this.radio);
+        this.showReason = false
+      },
       countDownS_cb(index, k) {
         let found = -1;
         for (let i = 0; i < this.payCarList.length; i++) {
