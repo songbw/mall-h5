@@ -37,6 +37,8 @@
           </van-cell>
           <van-cell title="发票:" :value="invoiceDetail" is-link to="/car/invoice">
           </van-cell>
+          <van-cell title="优惠券:" :value="invoiceDetail" is-link>
+          </van-cell>
         </div>
       </div>
       <div class="pay-list">
@@ -99,6 +101,14 @@
           @submit="onSubmit"
           :tip=tip
         />
+      </div>
+      <div class="pay-settlement">
+        <van-cell title="商品金额:" value=0>
+        </van-cell>
+        <van-cell title="运费:" :value="invoiceDetail">
+        </van-cell>
+        <van-cell title="优惠券:" :value="invoiceDetail">
+        </van-cell>
       </div>
     </div>
   </section>
@@ -871,7 +881,6 @@
       width: 100%;
       padding-top: 2.3em;
       background-color: #f0f0f0;
-      padding-bottom: 5.5em;
       .custom-text {
         text-align: left;
         .fz(font-size, 30px);
@@ -967,7 +976,10 @@
           width: 100%;
         }
       }
-
+      .pay-settlement {
+        margin-top: 10px;
+        margin-bottom:5.7em;
+      }
     }
   }
 
