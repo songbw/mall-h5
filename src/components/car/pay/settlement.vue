@@ -872,25 +872,21 @@
     width: 100%;
     padding-bottom: 5vw;
     padding-top: 2.3em;
-
+    background-color: #f0f0f0;
     .custom-text {
       text-align: left;
       .fz(font-size, 30px);
     }
-
     .pay-body {
-      background-color: #f0f0f0;
-
       .pay-info {
         background-color: white;
-        margin-top: 1em;
+        margin-top: 10px;
 
         .van-cell {
           background-color: white;
           margin-top: -1px;
         }
       }
-
       .contact-edit {
         padding: 20px 0;
         text-align: center;
@@ -898,7 +894,6 @@
         line-height: 30px;
         .fz(font-size, 30);
       }
-
       .address-line {
         content: '';
         left: 0;
@@ -917,16 +912,46 @@
         background-size: 80px;
       }
     }
-
     .pay-list {
-      background-color: #f0f0f0;
-      overflow: auto;
-
       .pay-product {
+        .supplyer {
+          margin-top: 10px;
+          border-radius: 10px;
+          padding: 5px;
+
+          background-color: white;
+          .promotionBox {
+            display: flex;
+            margin: 15px 5px 5px 15px;
+            .fz(font-size, 25);
+
+            .promotionTitle {
+              color: #ff4444;
+              font-weight: bold;
+            }
+
+            .promotionCountDown {
+              margin-left: 10px;
+              margin-top: 2px;
+              color: black;
+              .fz(font-size, 25);
+            }
+          }
+
+          .supplyerSummery {
+            margin-top: 10px;
+            font-weight: bold;
+            color: #2c3e50;
+            padding-bottom: 10px;
+          }
+
+          span {
+            .fz(font-size, 30);
+          }
+        }
         li {
           list-style: none;
         }
-
         .van-card {
           background-color: #ffffff;
 
@@ -936,48 +961,13 @@
           }
         }
       }
-    }
-
-    .pay-footer {
-      background-color: white;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 70px;
-    }
-
-    .supplyer {
-      margin-top: 1em;
-      background-color: white;
-
-      .promotionBox {
-        display: flex;
-        margin: 15px 5px 5px 15px;
-        .fz(font-size, 25);
-
-        .promotionTitle {
-          color: #ff4444;
-          font-weight: bold;
-        }
-
-        .promotionCountDown {
-          margin-left: 10px;
-          margin-top: 2px;
-          color: black;
-          .fz(font-size, 25);
-        }
-      }
-
-      .supplyerSummery {
-        margin-top: 10px;
-        font-weight: bold;
-        color: #2c3e50;
-        padding-bottom: 10px;
-      }
-
-      span {
-        .fz(font-size, 30);
+      .pay-footer {
+        background-color: white;
+        bottom: 0;
+        left: 0;
+        width: 100%;
       }
     }
+
   }
 </style>
