@@ -1,5 +1,5 @@
 <template lang="html">
-  <section>
+  <section  class="settlement">
     <v-header class="header">
       <h1 slot="title">确认订单</h1>
     </v-header>
@@ -860,114 +860,115 @@
 
 <style lang="less" scoped>
   @import "../../../assets/fz.less";
-
-  .header {
-    width: 100%;
-    position: fixed;
-    z-index: 5;
-    top: 0;
-  }
-
-  .pay {
-    width: 100%;
-    padding-bottom: 5vw;
-    padding-top: 2.3em;
-    background-color: #f0f0f0;
-    .custom-text {
-      text-align: left;
-      .fz(font-size, 30px);
+  .settlement{
+    .header {
+      width: 100%;
+      position: fixed;
+      z-index: 5;
+      top: 0;
     }
-    .pay-body {
-      .pay-info {
-        background-color: white;
-        margin-top: 10px;
-
-        .van-cell {
+    .pay {
+      width: 100%;
+      padding-top: 2.3em;
+      background-color: #f0f0f0;
+      padding-bottom: 5.5em;
+      .custom-text {
+        text-align: left;
+        .fz(font-size, 30px);
+      }
+      .pay-body {
+        .pay-info {
           background-color: white;
-          margin-top: -1px;
-        }
-      }
-      .contact-edit {
-        padding: 20px 0;
-        text-align: center;
-        color: #000000;
-        line-height: 30px;
-        .fz(font-size, 30);
-      }
-      .address-line {
-        content: '';
-        left: 0;
-        right: 0;
-        bottom: 0;
-        height: 2px;
-        background: repeating-linear-gradient(-45deg,
-        #ff6c6c 0,
-        #ff6c6c 20%,
-        transparent 0,
-        transparent 25%,
-        blue 0,
-        blue 45%,
-        transparent 0,
-        transparent 50%);
-        background-size: 80px;
-      }
-    }
-    .pay-list {
-      .pay-product {
-        .supplyer {
           margin-top: 10px;
-          border-radius: 10px;
-          padding: 5px;
 
-          background-color: white;
-          .promotionBox {
-            display: flex;
-            margin: 15px 5px 5px 15px;
-            .fz(font-size, 25);
-
-            .promotionTitle {
-              color: #ff4444;
-              font-weight: bold;
-            }
-
-            .promotionCountDown {
-              margin-left: 10px;
-              margin-top: 2px;
-              color: black;
-              .fz(font-size, 25);
-            }
+          .van-cell {
+            background-color: white;
+            margin-top: -1px;
           }
-
-          .supplyerSummery {
+        }
+        .contact-edit {
+          padding: 20px 0;
+          text-align: center;
+          color: #000000;
+          line-height: 30px;
+          .fz(font-size, 30);
+        }
+        .address-line {
+          content: '';
+          left: 0;
+          right: 0;
+          bottom: 0;
+          height: 2px;
+          background: repeating-linear-gradient(-45deg,
+          #ff6c6c 0,
+          #ff6c6c 20%,
+          transparent 0,
+          transparent 25%,
+          blue 0,
+          blue 45%,
+          transparent 0,
+          transparent 50%);
+          background-size: 80px;
+        }
+      }
+      .pay-list {
+        .pay-product {
+          .supplyer {
             margin-top: 10px;
-            font-weight: bold;
-            color: #2c3e50;
-            padding-bottom: 10px;
-          }
+            border-radius: 10px;
+            padding: 5px;
 
-          span {
-            .fz(font-size, 30);
+            background-color: white;
+            .promotionBox {
+              display: flex;
+              margin: 15px 5px 5px 15px;
+              .fz(font-size, 25);
+
+              .promotionTitle {
+                color: #ff4444;
+                font-weight: bold;
+              }
+
+              .promotionCountDown {
+                margin-left: 10px;
+                margin-top: 2px;
+                color: black;
+                .fz(font-size, 25);
+              }
+            }
+
+            .supplyerSummery {
+              margin-top: 10px;
+              font-weight: bold;
+              color: #2c3e50;
+              padding-bottom: 10px;
+            }
+
+            span {
+              .fz(font-size, 30);
+            }
+          }
+          li {
+            list-style: none;
+          }
+          .van-card {
+            background-color: #ffffff;
+
+            &__price {
+              margin-top: 0.5em;
+              .fz(font-size, 40);
+            }
           }
         }
-        li {
-          list-style: none;
-        }
-        .van-card {
-          background-color: #ffffff;
-
-          &__price {
-            margin-top: 0.5em;
-            .fz(font-size, 40);
-          }
+        .pay-footer {
+          background-color: white;
+          bottom: 0;
+          left: 0;
+          width: 100%;
         }
       }
-      .pay-footer {
-        background-color: white;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-      }
+
     }
-
   }
+
 </style>
