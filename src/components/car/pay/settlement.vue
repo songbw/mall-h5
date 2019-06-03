@@ -1,5 +1,5 @@
 <template lang="html">
-  <section  class="settlement">
+  <section class="settlement">
     <v-header class="header">
       <h1 slot="title">确认订单</h1>
     </v-header>
@@ -35,34 +35,87 @@
         <div class="pay-info">
           <van-cell title="支付方式:" value="现金支付">
           </van-cell>
-          <van-cell title="发票:" :value="invoiceDetail" to="/car/invoice">
+          <van-cell title="发票:" :value="invoiceDetail" to="/cfar/invoice">
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"/>
           </van-cell>
           <van-cell title="优惠券:" value="优惠￥0.00">
-            <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon" @click="showReasonSelector()"/>
+            <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
+                      @click="showCouponSelector()"/>
           </van-cell>
-          <van-actionsheet v-model="showReason" title="可用优惠券" >
-            <van-radio-group v-model="radio" >
-                <van-cell v-for="coupon in couponList" clickable @click="radio = '1'" style="background-color: #f0f0f0">
+          <van-actionsheet v-model="showCoupon" title="可用优惠券">
+            <span class="couponTip">请选择优惠券， 一次仅限一张</span>
+            <van-radio-group v-model="radio">
+              <div v-for="coupon in couponList">
+                <van-cell  clickable @click="radio = coupon.code" style="background-color: #f0f0f0" v-if="coupon.couponInfo.rules.couponRules.type === 0">
                   <div slot="default" class="coupon-selector">
                     <div class="coupon-title">
                       <div style="margin-top: 30px">
                         <span style="font-size: large; font-weight: bold">￥</span>
-                        <span style="font-size: xx-large;font-weight: bold">200</span>
+                        <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
                       </div>
-                      <span>满999可用</span>
+                      <span>满{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
                     </div>
                     <div class="coupon-detail">
                       <div>
-                        <span>限某些指定的商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
                       </div>
-                      <span style="font-size: small">2019.5.10-2019.10.10</span>
+                      <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
                     </div>
                     <div class="coupon-radio">
-                      <van-radio name="1"/>
+                      <van-radio :name = coupon.code />
                     </div>
                   </div>
                 </van-cell>
+                <van-cell  clickable @click="radio = coupon.code" style="background-color: #f0f0f0" v-if="coupon.couponInfo.rules.couponRules.type === 1">
+                  <div slot="default" class="coupon-selector">
+                    <div class="coupon-title">
+                      <div style="margin-top: 30px">
+                        <span style="font-size: large; font-weight: bold">￥</span>
+                        <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.cashCoupon.amount}}</span>
+                      </div>
+                      <span>代金券</span>
+                    </div>
+                    <div class="coupon-detail">
+                      <div>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                      </div>
+                      <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
+                    </div>
+                    <div class="coupon-radio">
+                      <van-radio :name= coupon.code />
+                    </div>
+                  </div>
+                </van-cell>
+                <van-cell  clickable @click="radio = coupon.code" style="background-color: #f0f0f0" v-if="coupon.couponInfo.rules.couponRules.type === 2">
+                  <div slot="default" class="coupon-selector" >
+                    <div class="coupon-title">
+                      <div style="margin-top: 30px">
+                        <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio * 10}}</span>
+                        <span style="font-size: large; font-weight: bold">折</span>
+                      </div>
+                      <span>折扣券</span>
+                    </div>
+                    <div class="coupon-detail">
+                      <div>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                      </div>
+                      <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
+                    </div>
+                    <div class="coupon-radio">
+                      <van-radio :name= coupon.code />
+                    </div>
+                  </div>
+                </van-cell>
+              </div>
             </van-radio-group>
             <van-button type="danger" size="large" @click="confirmedReason()">确定</van-button>
           </van-actionsheet>
@@ -75,7 +128,8 @@
               <van-cell :title=item.supplyerName icon="shop"/>
               <ul>
                 <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f0f0f0;">
-                  <div class="promotionBox" v-if="k.product.promotionInfo != undefined && k.product.promotionInfo.promotionState != -1">
+                  <div class="promotionBox"
+                       v-if="k.product.promotionInfo != undefined && k.product.promotionInfo.promotionState != -1">
                     <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].tag}}</span>
                     <v-countdown class="promotionCountDown"
                                  @start_callback="countDownS_cb(index,k.product)"
@@ -167,8 +221,19 @@
         pageLoadTimerId: -1,
         pageAction: "common",
         locationCity: "南京",
-        showReason: false,
-        radio: '6',
+        showCoupon: false,
+        radio: '',
+        couponTypes: [
+          {
+            "title": "未使用",
+            "list": [],
+            "total": -1,
+            "pageNo": 1,
+            "status": -1,
+            "loading": false,
+            "finished": false,
+          }
+        ]
       }
     },
 
@@ -209,10 +274,55 @@
       couponList() {
         let couponList = []
         let allPayList = this.$store.state.appconf.payList;
-        allPayList.forEach(item => {
-
+        allPayList.forEach(payItem => {
+          if (payItem.valid && payItem.product.couponList != undefined) {
+            payItem.product.couponList.forEach(couponInfo => {
+              this.couponTypes[0].list.forEach(item => {
+                if (couponInfo.id === item.couponId) {
+                  //选出选购商品所有对应的优惠券
+                  couponList.push(item)
+                }
+              })
+            })
+          }
         })
-        return couponList;
+        //已经选出选购商品所有对应的优惠券
+        //判断优惠券是否满足条件
+        let avaliableCouponList = []
+        couponList.forEach(coupon => {
+          if(coupon.couponInfo.rules.couponRules.type === 0) {
+            let fullPrice = 0;
+            allPayList.forEach(payItem => {
+               this.$log(payItem);
+               if(payItem.valid) {
+                  for(let i = 0; i < payItem.product.couponList.length; i++) {
+                      if(payItem.product.couponList[i].id === coupon.couponInfo.id) {
+                        if (payItem.product.promotionInfo.promotionState === 1) {
+                          try {
+                            fullPrice += (payItem.checkedPrice - payItem.product.promotionInfo.promotion[0].discount) * payItem.product.baseInfo.count
+                          } catch (e) {
+                            fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
+                          }
+                        } else {
+                          fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
+                        }
+                      }
+                  }
+               }
+            })
+            if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice )
+            {
+              //
+            }
+            else {
+              avaliableCouponList.push(coupon)
+            }
+
+          } else {
+            avaliableCouponList.push(coupon)
+          }
+        });
+        return avaliableCouponList;
       },
 
       arregationList() {
@@ -412,12 +522,64 @@
     },
 
     methods: {
-      showReasonSelector() {
-        this.showReason = true
+      formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
+      },
+      onCouponLoad(index) {
+        this.$log("onCouponLoad:" + index)
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!that.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
+          if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list.length) {
+            that.couponTypes[index].loading = true;
+            let options =
+              {
+                userOpenId: user.userId,
+                status: index + 1,
+                "offset": that.couponTypes[index].pageNo++,
+                "limit": 50
+              }
+            that.$api.xapi({
+              method: 'post',
+              url: '/coupon/CouponByOpenId',
+              data: options
+            }).then((response) => {
+              let result = response.data.data.result;
+              that.$log(result)
+              that.couponTypes[index].total = result.total;
+              if (result.list == undefined || result.list.length == 0) {
+                that.couponTypes[index].loading = false;
+                that.couponTypes[index].finished = true;
+              } else {
+                result.list.forEach(item => {
+                  that.couponTypes[index].list.push(item);
+                })
+                that.couponTypes[index].loading = false;
+                if (that.couponTypes[index].list.length >= that.couponTypes[index].total) {
+                  that.couponTypes[index].finished = true;
+                  that.$log("index:" + index);
+                  that.$log(that.couponTypes[index]);
+                }
+              }
+              if (!that.couponTypes[index].finished) {
+                that.onCouponLoad(index);
+              }
+            }).catch(function (error) {
+              that.$log(error)
+              that.couponTypes[index].loading = false;
+              that.couponTypes[index].finished = true;
+            })
+          }
+        }
+      },
+
+      showCouponSelector() {
+        this.showCoupon = true
       },
       confirmedReason() {
         this.$log(this.radio);
-        this.showReason = false
+        this.showCoupon = false
       },
       countDownS_cb(index, k) {
         let found = -1;
@@ -798,6 +960,9 @@
           }
         })
       },
+      getUserCouponList() {
+        this.onCouponLoad(0);
+      },
       getCarList() {
         this.$log("carList Enter !!!!!!!!!")
         let that = this;
@@ -869,7 +1034,8 @@
             result.forEach(item => {
               for (let i = 0; i < this.payCarList.length; i++) {
                 // this.$log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
-                if (item != null && this.payCarList[i].product.baseInfo.skuId == item.skuId) {
+                if (item != null && this.payCarList[i].valid && this.payCarList[i].product.baseInfo.skuId == item.skuId
+                ) {
                   //this.$log("价格 change true");
                   this.payCarList[i].checkedPrice = item.price
                 }
@@ -878,6 +1044,7 @@
             //开始聚合不同商家
             this.savePayList();
             this.getfreightPay();
+            this.getUserCouponList();
           }).catch(function (error) {
             that.$log(error)
           })
@@ -915,21 +1082,25 @@
 
 <style lang="less" scoped>
   @import "../../../assets/fz.less";
-  .settlement{
+
+  .settlement {
     .header {
       width: 100%;
       position: fixed;
       z-index: 5;
       top: 0;
     }
+
     .pay {
       width: 100%;
       padding-top: 2.3em;
       background-color: #f0f0f0;
+
       .custom-text {
         text-align: left;
         .fz(font-size, 30px);
       }
+
       .pay-body {
         .pay-info {
           background-color: white;
@@ -940,12 +1111,20 @@
             margin-top: -1px;
           }
 
-          .van-radio-group{
+          .couponTip{
+            padding: 5px;
+            color: #000;
+            font-size: large;
+          }
+
+          .van-radio-group {
             background-color: #f0f0f0;
-            .coupon-selector{
+
+            .coupon-selector {
               height: 100px;
               display: flex;
-              .coupon-title{
+
+              .coupon-title {
                 width: 35%;
                 display: inline-block;
                 text-align: center;
@@ -953,7 +1132,8 @@
                 background-color: #1989fa;
                 justify-content: center;
               }
-              .coupon-detail{
+
+              .coupon-detail {
                 width: 55%;
                 display: inline-block;
                 text-align: left;
@@ -961,11 +1141,12 @@
                 color: black;
                 padding: 10px;
               }
-              .coupon-radio{
+
+              .coupon-radio {
                 width: 10%;
                 display: flex;
                 display: inline-block;
-                line-height:100px;
+                line-height: 100px;
                 background-color: white;
               }
             }
@@ -973,6 +1154,7 @@
 
 
         }
+
         .contact-edit {
           padding: 20px 0;
           text-align: center;
@@ -980,6 +1162,7 @@
           line-height: 30px;
           .fz(font-size, 30);
         }
+
         .address-line {
           content: '';
           left: 0;
@@ -998,6 +1181,7 @@
           background-size: 80px;
         }
       }
+
       .pay-list {
         .pay-product {
           .supplyer {
@@ -1006,6 +1190,7 @@
             padding: 5px;
 
             background-color: white;
+
             .promotionBox {
               display: flex;
               margin: 15px 5px 5px 15px;
@@ -1035,9 +1220,11 @@
               .fz(font-size, 30);
             }
           }
+
           li {
             list-style: none;
           }
+
           .van-card {
             background-color: #ffffff;
 
@@ -1047,6 +1234,7 @@
             }
           }
         }
+
         .pay-footer {
           background-color: white;
           bottom: 0;
@@ -1054,9 +1242,10 @@
           width: 100%;
         }
       }
+
       .pay-settlement {
         margin-top: 10px;
-        margin-bottom:5.7em;
+        margin-bottom: 5.7em;
       }
     }
   }
