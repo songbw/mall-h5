@@ -41,28 +41,28 @@
           <van-cell title="优惠券:" value="优惠￥0.00">
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon" @click="showReasonSelector()"/>
           </van-cell>
-          <van-actionsheet v-model="showReason" title="申请原因">
-            <van-radio-group v-model="radio">
-              <van-cell-group>
-                <van-cell title="质量问题" clickable @click="radio = '1'">
-                  <van-radio name="1"/>
+          <van-actionsheet v-model="showReason" title="可用优惠券" >
+            <van-radio-group v-model="radio" >
+                <van-cell v-for="coupon in couponList" clickable @click="radio = '1'" style="background-color: #f0f0f0">
+                  <div slot="default" class="coupon-selector">
+                    <div class="coupon-title">
+                      <div style="margin-top: 30px">
+                        <span style="font-size: large; font-weight: bold">￥</span>
+                        <span style="font-size: xx-large;font-weight: bold">200</span>
+                      </div>
+                      <span>满999可用</span>
+                    </div>
+                    <div class="coupon-detail">
+                      <div>
+                        <span>限某些指定的商品</span>
+                      </div>
+                      <span style="font-size: small">2019.5.10-2019.10.10</span>
+                    </div>
+                    <div class="coupon-radio">
+                      <van-radio name="1"/>
+                    </div>
+                  </div>
                 </van-cell>
-                <van-cell title="卖家发错货" clickable @click="radio = '2'">
-                  <van-radio name="2"/>
-                </van-cell>
-                <van-cell title="发票问题" clickable @click="radio = '3'">
-                  <van-radio name="3"/>
-                </van-cell>
-                <van-cell title="七天无理由" clickable @click="radio = '4'">
-                  <van-radio name="4"/>
-                </van-cell>
-                <van-cell title="商品与描述不符" clickable @click="radio = '5'">
-                  <van-radio name="5"/>
-                </van-cell>
-                <van-cell title="其他" clickable @click="radio = '6'">
-                  <van-radio name="6"/>
-                </van-cell>
-              </van-cell-group>
             </van-radio-group>
             <van-button type="danger" size="large" @click="confirmedReason()">确定</van-button>
           </van-actionsheet>
@@ -204,6 +204,15 @@
           })
         }
         return selectCarList;
+      },
+
+      couponList() {
+        let couponList = []
+        let allPayList = this.$store.state.appconf.payList;
+        allPayList.forEach(item => {
+
+        })
+        return couponList;
       },
 
       arregationList() {
@@ -930,6 +939,39 @@
             background-color: white;
             margin-top: -1px;
           }
+
+          .van-radio-group{
+            background-color: #f0f0f0;
+            .coupon-selector{
+              height: 100px;
+              display: flex;
+              .coupon-title{
+                width: 35%;
+                display: inline-block;
+                text-align: center;
+                color: white;
+                background-color: #1989fa;
+                justify-content: center;
+              }
+              .coupon-detail{
+                width: 55%;
+                display: inline-block;
+                text-align: left;
+                background-color: white;
+                color: black;
+                padding: 10px;
+              }
+              .coupon-radio{
+                width: 10%;
+                display: flex;
+                display: inline-block;
+                line-height:100px;
+                background-color: white;
+              }
+            }
+          }
+
+
         }
         .contact-edit {
           padding: 20px 0;
