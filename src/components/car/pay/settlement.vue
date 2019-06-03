@@ -274,10 +274,13 @@
       couponList() {
         let couponList = []
         let allPayList = this.$store.state.appconf.payList;
+        //this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         allPayList.forEach(payItem => {
           if (payItem.valid && payItem.product.couponList != undefined) {
             payItem.product.couponList.forEach(couponInfo => {
               this.couponTypes[0].list.forEach(item => {
+               // this.$log(item.id)
+              // this.$log(item.code)
                 if (couponInfo.id === item.couponId) {
                   //选出选购商品所有对应的优惠券
                   couponList.push(item)
@@ -286,14 +289,15 @@
             })
           }
         })
+       // this.$log("++++++++++++++++++++++++++++++++++++++++++++++++++++++")
         //已经选出选购商品所有对应的优惠券
         //判断优惠券是否满足条件
         let avaliableCouponList = []
+        //this.$log(couponList)
         couponList.forEach(coupon => {
           if(coupon.couponInfo.rules.couponRules.type === 0) {
             let fullPrice = 0;
             allPayList.forEach(payItem => {
-               this.$log(payItem);
                if(payItem.valid) {
                   for(let i = 0; i < payItem.product.couponList.length; i++) {
                       if(payItem.product.couponList[i].id === coupon.couponInfo.id) {
@@ -312,7 +316,7 @@
             })
             if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice )
             {
-              //
+              //nothing to do
             }
             else {
               avaliableCouponList.push(coupon)
@@ -558,8 +562,16 @@
                 that.couponTypes[index].loading = false;
                 if (that.couponTypes[index].list.length >= that.couponTypes[index].total) {
                   that.couponTypes[index].finished = true;
+                  that.$log("00000000000000000000000000000000000000");
                   that.$log("index:" + index);
                   that.$log(that.couponTypes[index]);
+                  that.couponTypes[index].list.forEach(item =>{
+                    that.$log("############################");
+                    this.$log(item.id)
+                    this.$log(item.code)
+                    that.$log("############################");
+                  })
+                  that.$log("111111111111111111111111111111111111111");
                 }
               }
               if (!that.couponTypes[index].finished) {
