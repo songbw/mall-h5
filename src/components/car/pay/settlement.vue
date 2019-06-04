@@ -38,7 +38,10 @@
           <van-cell title="发票:" :value="invoiceDetail" to="/cfar/invoice">
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"/>
           </van-cell>
-          <van-cell title="优惠券:" value="优惠￥0.00">
+          <van-cell title="优惠券:">
+            <div slot="default">
+              <span>{{couponUsedTip}}</span>
+            </div>
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                       @click="showCouponSelector()"/>
           </van-cell>
@@ -47,7 +50,7 @@
               <span class="couponTip">请选择优惠券， 一次仅限一张</span>
               <van-radio-group v-model="radio">
                 <div v-for="coupon in couponList">
-                  <van-cell clickable @click="radio = coupon.code" style="background-color: #f0f0f0"
+                  <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f0f0f0"
                             v-if="coupon.couponInfo.rules.couponRules.type === 0">
                     <div slot="default" class="coupon-selector">
                       <div class="coupon-title">
@@ -71,7 +74,7 @@
                       </div>
                     </div>
                   </van-cell>
-                  <van-cell clickable @click="radio = coupon.code" style="background-color: #f0f0f0"
+                  <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f0f0f0"
                             v-if="coupon.couponInfo.rules.couponRules.type === 1">
                     <div slot="default" class="coupon-selector">
                       <div class="coupon-title">
@@ -95,7 +98,7 @@
                       </div>
                     </div>
                   </van-cell>
-                  <van-cell clickable @click="radio = coupon.code" style="background-color: #f0f0f0"
+                  <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f0f0f0"
                             v-if="coupon.couponInfo.rules.couponRules.type === 2">
                     <div slot="default" class="coupon-selector">
                       <div class="coupon-title">
@@ -235,6 +238,7 @@
         locationCity: "南京",
         showCoupon: false,
         radio: '',
+        usedCoupon: null,
         couponTypes: [
           {
             "title": "未使用",
@@ -250,6 +254,18 @@
     },
 
     computed: {
+      couponUsedTip() {
+        if (this.couponList.length > 0) {
+          if (this.usedCoupon != null) {
+            return "可优惠￥" + this.couponReducedPrice(this.usedCoupon)
+          } else {
+            return this.couponList.length + "张可用"
+          }
+        } else {
+          return "无可用优惠券"
+        }
+
+      },
       pageloading() {
         let loading = this.$store.state.appconf.pageLoading;
         if (!loading) {
@@ -541,6 +557,36 @@
     },
 
     methods: {
+      couponReducedPrice(coupon) {
+        this.$log(coupon)
+        let reducePrice = 0;
+        switch (coupon.couponInfo.rules.couponRules.type) {
+          case 0:
+            reducePrice =  coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
+            break;
+          case 1:
+            reducePrice =  coupon.couponInfo.rules.couponRules.cashCoupon.amount;
+            break;
+          case 2:
+            break;
+          default:
+            break;
+        }
+        return reducePrice;
+      },
+      onCouponListClick(coupon) {
+        this.$log("onCouponListClick Enter")
+        this.$log(coupon)
+        if (this.radio === coupon.code) {
+          this.radio = ''
+          this.usedCoupon = null;
+        } else {
+          this.radio = coupon.code
+          this.usedCoupon = coupon;
+        }
+
+      },
+
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
       },
@@ -598,6 +644,7 @@
       },
       confirmedReason() {
         this.$log(this.radio);
+
         this.showCoupon = false
       },
       countDownS_cb(index, k) {
