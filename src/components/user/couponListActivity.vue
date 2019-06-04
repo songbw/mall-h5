@@ -122,6 +122,7 @@
               for (let i = 0; i < item.couponList.length; i++) {
                 if (item.couponList[i].id == this.coupon.couponInfo.id) {
                   found = i;
+                  item.baseInfo.choosed = true;
                   break;
                 }
               }
@@ -130,7 +131,8 @@
               }
             }
           })
-        }
+        }this
+        .$store.commit('SET_CART_LIST', cartList);
         return payAmount.toFixed(2);
       },
 
