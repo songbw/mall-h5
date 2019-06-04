@@ -127,6 +127,28 @@
 
 
     methods: {
+      See(e) {
+        window.location.href = e
+      },
+      gotoGoodsPage(skuid) {
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            url: '/prod',
+            params: {
+              id: skuid,
+            }
+          }).then((res) => {
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
+      },
       setCouponToLimited(k, i) {
 
       },
@@ -198,8 +220,34 @@
         this.$log("getCouponClick Enter")
       },
 
-      onConponUseClick(coupon,i) {
+      onConponUseClick(couponInfo,i) {
         this.$log("onConponUseClick Enter")
+        let url = couponInfo.url;
+        if (url.startsWith("aggregation://")) {
+          let id = url.substr(14);
+          this.$router.push({path: '/index/' + id});
+        } else if (url.startsWith("route://")) {
+          let target = url.substr(8);
+          let paths = target.split("/");
+          this.$log(paths);
+          if (paths[0] === 'category') {
+            this.$router.push({path: '/category'})
+          } else if (paths[0] === 'commodity') {
+            try {
+              if (paths[1] != null)
+                this.gotoGoodsPage(paths[1]);
+            } catch (e) {
+            }
+          } else if(paths[0] === 'listing') {
+            let coupon = {
+              "couponInfo": couponInfo
+            }
+            this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
+            this.$router.push("/user/couponListActivity");
+          }
+        } else if (url.startsWith("http://") || url.startsWith("http://")) {
+          this.See(url);
+        }
       },
       onConponCollectClick(coupon,i) {
         this.$log("onConponCollectClick Enter");
