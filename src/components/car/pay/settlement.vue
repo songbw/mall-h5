@@ -568,6 +568,24 @@
             reducePrice =  coupon.couponInfo.rules.couponRules.cashCoupon.amount;
             break;
           case 2:
+            let allPayList = this.$store.state.appconf.payList;
+            let found = -1;
+            for (let i = 0 ; i < allPayList.length ; i++) {
+              if(allPayList[i].valid && allPayList[i].product.couponList != undefined) {
+                 for(let j = 0; j < allPayList[i].product.couponList.length ;j++) {
+                     if(allPayList[i].product.couponList[j].id == coupon.couponId) {
+                       found = i;
+                       break;
+                     }
+                 }
+              }
+              if(found != -1)
+                break;
+            }
+            this.$log("found:"+found)
+            if(found != -1) {
+              reducePrice = allPayList[found].checkedPrice * (1-coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio)
+            }
             break;
           default:
             break;
