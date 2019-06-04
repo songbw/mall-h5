@@ -43,81 +43,92 @@
                       @click="showCouponSelector()"/>
           </van-cell>
           <van-actionsheet v-model="showCoupon" title="可用优惠券">
-            <span class="couponTip">请选择优惠券， 一次仅限一张</span>
-            <van-radio-group v-model="radio">
-              <div v-for="coupon in couponList">
-                <van-cell  clickable @click="radio = coupon.code" style="background-color: #f0f0f0" v-if="coupon.couponInfo.rules.couponRules.type === 0">
-                  <div slot="default" class="coupon-selector">
-                    <div class="coupon-title">
-                      <div style="margin-top: 30px">
-                        <span style="font-size: large; font-weight: bold">￥</span>
-                        <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
+            <div v-if="couponList.length > 0">
+              <span class="couponTip">请选择优惠券， 一次仅限一张</span>
+              <van-radio-group v-model="radio">
+                <div v-for="coupon in couponList">
+                  <van-cell clickable @click="radio = coupon.code" style="background-color: #f0f0f0"
+                            v-if="coupon.couponInfo.rules.couponRules.type === 0">
+                    <div slot="default" class="coupon-selector">
+                      <div class="coupon-title">
+                        <div style="margin-top: 30px">
+                          <span style="font-size: large; font-weight: bold">￥</span>
+                          <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
+                        </div>
+                        <span>满{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
                       </div>
-                      <span>满{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
-                    </div>
-                    <div class="coupon-detail">
-                      <div>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                      <div class="coupon-detail">
+                        <div>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                        </div>
+                        <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
                       </div>
-                      <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
-                    </div>
-                    <div class="coupon-radio">
-                      <van-radio :name = coupon.code />
-                    </div>
-                  </div>
-                </van-cell>
-                <van-cell  clickable @click="radio = coupon.code" style="background-color: #f0f0f0" v-if="coupon.couponInfo.rules.couponRules.type === 1">
-                  <div slot="default" class="coupon-selector">
-                    <div class="coupon-title">
-                      <div style="margin-top: 30px">
-                        <span style="font-size: large; font-weight: bold">￥</span>
-                        <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.cashCoupon.amount}}</span>
+                      <div class="coupon-radio">
+                        <van-radio :name=coupon.code></van-radio>
                       </div>
-                      <span>代金券</span>
                     </div>
-                    <div class="coupon-detail">
-                      <div>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                  </van-cell>
+                  <van-cell clickable @click="radio = coupon.code" style="background-color: #f0f0f0"
+                            v-if="coupon.couponInfo.rules.couponRules.type === 1">
+                    <div slot="default" class="coupon-selector">
+                      <div class="coupon-title">
+                        <div style="margin-top: 30px">
+                          <span style="font-size: large; font-weight: bold">￥</span>
+                          <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.cashCoupon.amount}}</span>
+                        </div>
+                        <span>代金券</span>
                       </div>
-                      <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
-                    </div>
-                    <div class="coupon-radio">
-                      <van-radio :name= coupon.code />
-                    </div>
-                  </div>
-                </van-cell>
-                <van-cell  clickable @click="radio = coupon.code" style="background-color: #f0f0f0" v-if="coupon.couponInfo.rules.couponRules.type === 2">
-                  <div slot="default" class="coupon-selector" >
-                    <div class="coupon-title">
-                      <div style="margin-top: 30px">
-                        <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio * 10}}</span>
-                        <span style="font-size: large; font-weight: bold">折</span>
+                      <div class="coupon-detail">
+                        <div>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                        </div>
+                        <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
                       </div>
-                      <span>折扣券</span>
-                    </div>
-                    <div class="coupon-detail">
-                      <div>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
-                        <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                      <div class="coupon-radio">
+                        <van-radio :name=coupon.code></van-radio>
                       </div>
-                      <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
                     </div>
-                    <div class="coupon-radio">
-                      <van-radio :name= coupon.code />
+                  </van-cell>
+                  <van-cell clickable @click="radio = coupon.code" style="background-color: #f0f0f0"
+                            v-if="coupon.couponInfo.rules.couponRules.type === 2">
+                    <div slot="default" class="coupon-selector">
+                      <div class="coupon-title">
+                        <div style="margin-top: 30px">
+                          <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio * 10}}</span>
+                          <span style="font-size: large; font-weight: bold">折</span>
+                        </div>
+                        <span>折扣券</span>
+                      </div>
+                      <div class="coupon-detail">
+                        <div>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
+                          <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                        </div>
+                        <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
+                      </div>
+                      <div class="coupon-radio">
+                        <van-radio :name=coupon.code></van-radio>
+                      </div>
                     </div>
-                  </div>
-                </van-cell>
+                  </van-cell>
+                </div>
+              </van-radio-group>
+              <van-button type="danger" size="large" @click="confirmedReason()">确定</van-button>
+            </div>
+            <div v-else>
+              <div class="noCoupon">
+                <img :src="icon_noCoupon">
+                <span>您暂无可用的优惠券</span>
               </div>
-            </van-radio-group>
-            <van-button type="danger" size="large" @click="confirmedReason()">确定</van-button>
+            </div>
           </van-actionsheet>
         </div>
       </div>
@@ -210,6 +221,7 @@
     },
     data() {
       return {
+        icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
         addressCount: 0,
         freight: 0,
         payCarList: [],
@@ -300,30 +312,28 @@
         let avaliableCouponList = []
         //this.$log(couponList)
         couponList.forEach(coupon => {
-          if(coupon.couponInfo.rules.couponRules.type === 0) {
+          if (coupon.couponInfo.rules.couponRules.type === 0) {
             let fullPrice = 0;
             allPayList.forEach(payItem => {
-               if(payItem.valid) {
-                  for(let i = 0; i < payItem.product.couponList.length; i++) {
-                      if(payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                        if (payItem.product.promotionInfo.promotionState === 1) {
-                          try {
-                            fullPrice += (payItem.checkedPrice - payItem.product.promotionInfo.promotion[0].discount) * payItem.product.baseInfo.count
-                          } catch (e) {
-                            fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
-                          }
-                        } else {
-                          fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
-                        }
+              if (payItem.valid) {
+                for (let i = 0; i < payItem.product.couponList.length; i++) {
+                  if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
+                    if (payItem.product.promotionInfo.promotionState === 1) {
+                      try {
+                        fullPrice += (payItem.checkedPrice - payItem.product.promotionInfo.promotion[0].discount) * payItem.product.baseInfo.count
+                      } catch (e) {
+                        fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
                       }
+                    } else {
+                      fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
+                    }
                   }
-               }
+                }
+              }
             })
-            if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice )
-            {
+            if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice) {
               //nothing to do
-            }
-            else {
+            } else {
               avaliableCouponList.push(coupon)
             }
 
@@ -1120,7 +1130,26 @@
             margin-top: -1px;
           }
 
-          .couponTip{
+          .noCoupon {
+            width: 100%;
+            background-color: #f0f0f0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: Center;
+            height: 300px;
+
+            img {
+              margin: 4vw;
+            }
+
+            span {
+              margin: 2vw;
+              color: #8a8a8a;
+            }
+          }
+
+          .couponTip {
             padding: 5px;
             color: #000;
             font-size: large;
