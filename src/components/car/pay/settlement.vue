@@ -266,7 +266,7 @@
       couponUsedTip() {
         if (this.couponList.length > 0) {
           if (this.usedCoupon != null) {
-            return "可优惠￥" + this.couponReducedPrice(this.usedCoupon)
+            return "优惠￥" + this.couponReducedPrice(this.usedCoupon)
           } else {
             return this.couponList.length + "张可用"
           }
