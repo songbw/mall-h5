@@ -450,7 +450,7 @@
       // 商品价格总和
 
       tip() {
-        return '商品总价:' +this.productPay.toFixed(2) + '元   合计运费:' + this.freightPay.toFixed(2) + '元'
+        return this.receiverAddress
       },
 
       freightPay() {
@@ -477,13 +477,7 @@
 
       allpay() {
         let all = 0;
-        try {
-          this.arregationList.forEach(item => {
-            // this.$log("allPay item:" + JSON.stringify(item))
-            all += item.price + item.freight;
-          })
-        } catch (e) {
-        }
+        all = this.productPay + this.freightPay - this.couponReducedPrice(this.usedCoupon)
         return all * 100;
       }
     },
