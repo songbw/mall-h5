@@ -122,12 +122,12 @@
               for (let i = 0; i < item.couponList.length; i++) {
                 if (item.couponList[i].id == this.coupon.couponInfo.id) {
                   found = i;
-                  item.baseInfo.choosed = true;
                   break;
                 }
               }
               if (found != -1) {
-                payAmount += item.goodsInfo.price * item.baseInfo.count
+                if(item.baseInfo.choosed)
+                    payAmount += item.goodsInfo.price * item.baseInfo.count
               }
             }
           })
@@ -220,6 +220,7 @@
             }
           } else {
             cartItem.baseInfo.count++;
+            cartItem.baseInfo.choosed = true;
             let found = -1;
             for (let i = 0; i < cartItem.couponList.length; i++) {
               if (cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
