@@ -35,7 +35,7 @@
         <div class="pay-info">
           <van-cell title="支付方式:" value="现金支付">
           </van-cell>
-          <van-cell title="发票:" :value="invoiceDetail" to="/cfar/invoice">
+          <van-cell title="发票:" :value="invoiceDetail" to="/car/invoice">
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"/>
           </van-cell>
           <van-cell title="优惠券:">
@@ -198,11 +198,20 @@
         />
       </div>
       <div class="pay-settlement">
-        <van-cell title="商品金额:" value=0>
+        <van-cell title="商品金额:">
+          <div slot="default">
+            <span style="color: #ff4444">￥{{productPay}}</span>
+          </div>
         </van-cell>
-        <van-cell title="运费:" :value="invoiceDetail">
+        <van-cell title="运费:">
+          <div slot="default">
+            <span style="color: #ff4444">￥{{freightPay}}</span>
+          </div>
         </van-cell>
-        <van-cell title="优惠券:" :value="invoiceDetail">
+        <van-cell title="优惠券:">
+          <div slot="default">
+            <span style="color: #ff4444">- ￥{{couponReducedPrice(this.usedCoupon)}}</span>
+          </div>
         </van-cell>
       </div>
     </div>
@@ -441,18 +450,29 @@
       // 商品价格总和
 
       tip() {
-        let productPay = 0;
+        return '商品总价:' +this.productPay.toFixed(2) + '元   合计运费:' + this.freightPay.toFixed(2) + '元'
+      },
+
+      freightPay() {
         let freightPay = 0;
         try {
           this.arregationList.forEach(item => {
-            // this.$log("allPay item:" + JSON.stringify(item))
-            productPay += item.price
             freightPay += item.freight;
           })
         } catch (e) {
         }
+        return freightPay
+      },
 
-        return '商品总价:' + productPay.toFixed(2) + '元   合计运费:' + freightPay.toFixed(2) + '元'
+      productPay() {
+        let productPay = 0;
+        try {
+          this.arregationList.forEach(item => {
+            productPay += item.price
+          })
+        } catch (e) {
+        }
+        return productPay
       },
 
       allpay() {
@@ -560,6 +580,8 @@
       couponReducedPrice(coupon) {
         this.$log(coupon)
         let reducePrice = 0;
+        if(coupon == null)
+          return reducePrice;
         switch (coupon.couponInfo.rules.couponRules.type) {
           case 0:
             reducePrice =  coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
@@ -572,7 +594,7 @@
             let found = -1;
             for (let i = 0 ; i < allPayList.length ; i++) {
               if(allPayList[i].valid && allPayList[i].product.couponList != undefined) {
-                 for(let j = 0; j < allPayList[i].product.couponList.length ;j++) {
+                 for(let j = 0; j < allPayList[i].product.couponList.length ;invoicej++) {
                      if(allPayList[i].product.couponList[j].id == coupon.couponId) {
                        found = i;
                        break;
