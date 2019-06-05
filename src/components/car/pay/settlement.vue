@@ -200,17 +200,17 @@
       <div class="pay-settlement">
         <van-cell title="商品金额:">
           <div slot="default">
-            <span style="color: #ff4444">￥{{productPay}}</span>
+            <span style="color: black">￥{{productPay.toFixed(2)}}</span>
           </div>
         </van-cell>
         <van-cell title="运费:">
           <div slot="default">
-            <span style="color: #ff4444">￥{{freightPay}}</span>
+            <span style="color: #ff4444">+￥{{freightPay.toFixed(2)}}</span>
           </div>
         </van-cell>
         <van-cell title="优惠券:">
           <div slot="default">
-            <span style="color: #ff4444">- ￥{{couponReducedPrice(this.usedCoupon)}}</span>
+            <span style="color: #ff4444">-￥{{couponReducedPrice(this.usedCoupon).toFixed(2)}}</span>
           </div>
         </van-cell>
       </div>
