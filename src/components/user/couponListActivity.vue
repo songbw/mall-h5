@@ -27,7 +27,7 @@
                     :finished="finished"
                     @load="onLoad">
             <li v-for="(k,index) in list" :key="index">
-              <div class="goodsCard">
+              <div class="goodsCard" @click="onGoodCardClick(k)">
                 <van-col span="8" class="cardImg">
                   <img v-lazy="k.image">
                 </van-col>
@@ -174,6 +174,29 @@
     ,
 
     methods: {
+      updateCurrentGoods(goods) {
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
+      },
+      onGoodCardClick(goods) {
+        this.$log("onGoodCardClick Enter")
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            url: '/prod',
+            params: {
+              id: goods.skuid,
+            }
+          }).then((res) => {
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
+      },
       add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
