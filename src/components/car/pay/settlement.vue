@@ -124,7 +124,7 @@
                   </van-cell>
                 </div>
               </van-radio-group>
-              <van-button type="danger" size="large" @click="confirmedReason()">确定</van-button>
+              <van-button type="danger" size="large" @click="confirmedCouponSeletor()">确定</van-button>
             </div>
             <div v-else>
               <div class="noCoupon">
@@ -676,7 +676,7 @@
       showCouponSelector() {
         this.showCoupon = true
       },
-      confirmedReason() {
+      confirmedCouponSeletor() {
         this.$log(this.radio);
 
         this.showCoupon = false

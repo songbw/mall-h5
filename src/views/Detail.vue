@@ -40,11 +40,18 @@
         </span>
         </div>
       </div>
-      <div class="couponBox">
-        <van-cell title="领券">
+      <div class="couponBox" v-if="this.goods.coupon !=undefined && this.goods.coupon.length > 0">
+        <van-cell>
+          <div slot="title">
+             <span style="font-size: medium;font-weight: bold">
+               领券
+             </span>
+          </div>
           <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                     @click="showCouponSelector()"/>
         </van-cell>
+        <van-actionsheet v-model="showCoupon" title="优惠券">
+        </van-actionsheet>
       </div>
       <v-content :contentData=contentUrls></v-content>
       <v-baseline/>
@@ -72,7 +79,7 @@
       'v-header': Header,
       'v-action': Action,
       'v-countdown': CountDown,
-      'v-loading':Loading
+      'v-loading': Loading
     },
     beforeRouteEnter(to, from, next) {
       // chrome
@@ -112,7 +119,7 @@
               })
             }
           }
-          if(this.goods.promotion != undefined && this.goods.promotion.length > 0) {
+          if (this.goods.promotion != undefined && this.goods.promotion.length > 0) {
             this.PromotionStartTime = new Date(this.goods.promotion[0].startDate).getTime()
             this.PromotionEndTime = new Date(this.goods.promotion[0].endDate).getTime()
             this.promotionType = this.goods.promotion[0].promotionType
@@ -135,18 +142,66 @@
         PromotionStartTime: 0,
         PromotionEndTime: 0,
         promotionType: -1,
-        discount:0,
+        discount: 0,
         promotionId: -1,
         defaultLocation: '南京',
-        pageloading: true
+        pageloading: true,
+        showCoupon: false,
+        radio: '',
+        userCouponList: [],
       }
     },
     methods: {
+      isUserEmpty(userInfo) {
+        return (userInfo == undefined || userInfo.length === 0)
+      },
+      confirmedCouponSeletor() {
+        this.$log(this.radio);
+        this.showCoupon = false
+      },
+      showCouponSelector() {
+        // this.$log(this.goods)
+        let that = this;
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!this.isUserEmpty(userInfo)) {
+          this.showCoupon = true
+          this.userCouponList = []
+          let user = JSON.parse(userInfo)
+          if (this.goods.coupon != undefined) {
+            this.goods.coupon.forEach(item => {
+              this.$log(item)
+              let options = {
+                userOpenId: user.userId,
+                couponId: item.id
+              }
+              that.$api.xapi({
+                method: 'post',
+                url: '/coupon/CouponByEquityId',
+                data: options,
+              }).then((response) => {
+                let result = response.data.data.result;
+                //   that.$log(result)
+                result.couponUseInfo.forEach(coupon => {
+                  this.userCouponList.push(coupon)
+                })
+                if(item.rules.perLimited > result.couponUseInfo.length) {
+                  this.$log("还有券可领")
+                }
+              }).catch(function (error) {
+                that.$log(error)
+              })
+            })
+          }
+        } else {
+          //no user
+        }
+
+      },
       countDownS_cb(data) {
         //this.$log("Start #################")
       },
-      countDownE_cb (data) {
-       // this.$log("End   #################")
+      countDownE_cb(data) {
+        // this.$log("End   #################")
         this.hasPromotion = false;
       },
     }
@@ -162,26 +217,35 @@
     width: 100%;
     padding-bottom: 14vw;
     height: 100%;
-    .header{
-      width:100%;
-      position:fixed;
-      z-index:5;
-      top:0;
+
+    .header {
+      width: 100%;
+      position: fixed;
+      z-index: 5;
+      top: 0;
     }
-    .detail-body{
+
+    .detail-body {
       padding-top: 2.3em;
       background-color: #f0f0f0;
-      .couponBox{
+
+      .couponBox {
         display: flex;
         margin-top: 10px;
         //border-radius: 10px;
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
         background-color: white;
-        .van-cell{
+
+        .van-cell {
           margin: 3px;
         }
+
+        .van-actionsheet {
+          font-weight: bold;
+        }
       }
+
       .price-title {
         text-align: left;
         color: #f44336;
@@ -191,6 +255,7 @@
         position: relative;
         background-color: #ffffff;
       }
+
       .promotion-price {
         background-color: white;
         padding-bottom: 0.1em;
@@ -232,11 +297,13 @@
           color: white;
         }
       }
+
       .goods-detail {
         padding-left: 10px;
         padding-bottom: 10px;
         background-color: white;
         .fz(font-size, 30);
+
         .goods-area {
           background-color: #ff4444;
           .fz(font-size, 25);
@@ -250,6 +317,7 @@
           background-color: white;
         }
       }
+
       #map-container {
         width: 300px;
         height: 300px;
