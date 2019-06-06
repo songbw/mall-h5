@@ -40,6 +40,12 @@
         </span>
         </div>
       </div>
+      <div class="couponBox">
+        <van-cell title="领券">
+          <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
+                    @click="showCouponSelector()"/>
+        </van-cell>
+      </div>
       <v-content :contentData=contentUrls></v-content>
       <v-baseline/>
     </div>
@@ -164,6 +170,18 @@
     }
     .detail-body{
       padding-top: 2.3em;
+      background-color: #f0f0f0;
+      .couponBox{
+        display: flex;
+        margin-top: 10px;
+        //border-radius: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: white;
+        .van-cell{
+          margin: 3px;
+        }
+      }
       .price-title {
         text-align: left;
         color: #f44336;
@@ -216,7 +234,8 @@
       }
       .goods-detail {
         padding-left: 10px;
-        margin-top: 5px;
+        padding-bottom: 10px;
+        background-color: white;
         .fz(font-size, 30);
         .goods-area {
           background-color: #ff4444;
