@@ -51,6 +51,12 @@
                     @click="showCouponSelector()"/>
         </van-cell>
         <van-actionsheet v-model="showCoupon" title="优惠券">
+          <div class="avaliableCoupon">
+            <span>可领取券</span>
+          </div>
+          <div class="gottedCoupon">
+            <span>已领取的券</span>
+          </div>
         </van-actionsheet>
       </div>
       <v-content :contentData=contentUrls></v-content>
@@ -93,6 +99,7 @@
 
     mounted() {
       this.pageloading = true;
+      let that = this;
       if (this.$store.state.appconf.currentGoods != undefined && this.$store.state.appconf.currentGoods.length > 0) {
         this.goods = JSON.parse(this.$store.state.appconf.currentGoods);
         this.$log(this.goods)
@@ -128,7 +135,38 @@
             this.hasPromotion = true;
           }
         }
-
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!this.isUserEmpty(userInfo)) {
+          this.userCouponList = []
+          let user = JSON.parse(userInfo)
+          if (this.goods.coupon != undefined) {
+            this.goods.coupon.forEach(item => {
+              this.$log(item)
+              let options = {
+                userOpenId: user.userId,
+                couponId: item.id
+              }
+              that.$api.xapi({
+                method: 'post',
+                url: '/coupon/CouponByEquityId',
+                data: options,
+              }).then((response) => {
+                let result = response.data.data.result;
+                //   that.$log(result)
+                result.couponUseInfo.forEach(coupon => {
+                  this.userCouponList.push(coupon)
+                })
+                if(item.rules.perLimited > result.couponUseInfo.length) {
+                  this.$log("还有券可领")
+                }
+              }).catch(function (error) {
+                that.$log(error)
+              })
+            })
+          }
+        } else {
+          //no user
+        }
       }
       this.pageloading = false;
     },
@@ -160,42 +198,7 @@
         this.showCoupon = false
       },
       showCouponSelector() {
-        // this.$log(this.goods)
-        let that = this;
-        let userInfo = this.$store.state.appconf.userInfo;
-        if (!this.isUserEmpty(userInfo)) {
-          this.showCoupon = true
-          this.userCouponList = []
-          let user = JSON.parse(userInfo)
-          if (this.goods.coupon != undefined) {
-            this.goods.coupon.forEach(item => {
-              this.$log(item)
-              let options = {
-                userOpenId: user.userId,
-                couponId: item.id
-              }
-              that.$api.xapi({
-                method: 'post',
-                url: '/coupon/CouponByEquityId',
-                data: options,
-              }).then((response) => {
-                let result = response.data.data.result;
-                //   that.$log(result)
-                result.couponUseInfo.forEach(coupon => {
-                  this.userCouponList.push(coupon)
-                })
-                if(item.rules.perLimited > result.couponUseInfo.length) {
-                  this.$log("还有券可领")
-                }
-              }).catch(function (error) {
-                that.$log(error)
-              })
-            })
-          }
-        } else {
-          //no user
-        }
-
+        this.showCoupon = true
       },
       countDownS_cb(data) {
         //this.$log("Start #################")
