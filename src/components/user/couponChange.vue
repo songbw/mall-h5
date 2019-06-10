@@ -8,8 +8,8 @@
         <span>兑换码使用: 在当前页输入兑换码即可兑换为相应的优惠券。一个兑换码只能兑换一张优惠券，不可重复使用</span>
       </div>
       <div class="changeCouponBox">
-        <van-field class="changeCouponInputBox" v-model="couponCode" placeholder="请输入兑换码"  clearable />
-        <van-button class="ChangeCouponBtn" size="large" type="danger">立即兑换</van-button>
+        <van-field class="changeCouponInputBox" v-model="couponCode" placeholder="请输入兑换码" clearable/>
+        <van-button class="ChangeCouponBtn" size="large" type="danger" @click="onChangeCouponBtnClick">立即兑换</van-button>
       </div>
     </div>
   </section>
@@ -17,7 +17,7 @@
 
 <script>
   import Header from '@/common/_header.vue'
-
+  import Util from '@/util/common'
   export default {
     components: {
       'v-header': Header,
@@ -25,7 +25,7 @@
 
     data() {
       return {
-        couponCode:''
+        couponCode: ''
       }
     },
 
@@ -33,7 +33,35 @@
 
     },
 
-    methods: {}
+    methods: {
+      onChangeCouponBtnClick() {
+        this.$log("onChangeCouponBtnClick Enter")
+        this.$log(this.couponCode)
+        let that = this
+        if (that.couponCode.length > 0) {
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+            let user = JSON.parse(userInfo);
+            let options = {
+              userOpenId: user.userId,
+              userCouponCode: this.couponCode
+            }
+            that.$api.xapi({
+              method: 'post',
+              url: '/coupon/redemption',
+              data: options
+            }).then((response) => {
+             // let result = response.data.data.result;
+              that.$log(response)
+            }).catch(function (error) {
+              that.$log(error)
+            })
+          }
+        } else {
+          this.$toast("请输入正确的兑换码")
+        }
+      }
+    }
   }
 </script>
 
@@ -41,20 +69,22 @@
   @import '../../assets/fz.less';
   @import '../../assets/index/style.css';
 
-  .changeCoupon{
-    .changeCouponBody{
-      .changCouponTip{
+  .changeCoupon {
+    .changeCouponBody {
+      .changCouponTip {
         margin: 10px;
       }
 
-      .changeCouponBox{
+      .changeCouponBox {
         margin: 10px;
-        .changeCouponInputBox{
+
+        .changeCouponInputBox {
           margin-top: 10px;
           border: 1px solid #ff4444;
 
         }
-        .ChangeCouponBtn{
+
+        .ChangeCouponBtn {
           margin-top: 10px;
         }
       }
