@@ -56,6 +56,49 @@
           </div>
           <div class="gottedCoupon">
             <span>已领取的券</span>
+            <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in this.userCouponList" :key="i">
+<!--              <div class="coupon-img">
+                <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
+              </div>
+              <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                <div class="coupon-suppler">
+                  <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                  <i>{{k.couponInfo.description}}</i>
+                </div>
+                <div class="coupon-price">{{formateCouponPrice(k.couponInfo.rules.couponRules)}}</div>
+                <div class="coupon-desc">{{formateCouponDescription(k.couponInfo.rules.couponRules)}}</div>
+                <div class="coupon-expire-date">
+                  {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
+                </div>
+              </div>
+              <div class="coupon-get" @click="onConponUseClick(k,i)">
+                <div>
+                  <span class="coupon-action">立即使用</span>
+                </div>
+              </div>-->
+              <div v-for="coupon in userCouponList">
+                <van-cell style="background-color: #f0f0f0">
+                  <div slot="default" class="coupon-item">
+                    <div class="coupon-title">
+                      <div style="margin-top: 30px">
+                        <span style="font-size: large; font-weight: bold">￥</span>
+                        <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
+                      </div>
+                      <span>满{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
+                    </div>
+                    <div class="coupon-detail">
+                      <div>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
+                        <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                      </div>
+                      <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
+                    </div>
+                  </div>
+                </van-cell>
+              </div>
+            </div>
           </div>
         </van-actionsheet>
       </div>
@@ -152,12 +195,17 @@
                 data: options,
               }).then((response) => {
                 let result = response.data.data.result;
-                //   that.$log(result)
                 result.couponUseInfo.forEach(coupon => {
+                  this.$log("已领券")
+                  coupon["couponInfo"]=item
                   this.userCouponList.push(coupon)
+                  this.$log(coupon)
+
                 })
                 if(item.rules.perLimited > result.couponUseInfo.length) {
                   this.$log("还有券可领")
+                  this.avaliableCouponList.push(item);
+                  this.$log(item)
                 }
               }).catch(function (error) {
                 that.$log(error)
@@ -187,9 +235,13 @@
         showCoupon: false,
         radio: '',
         userCouponList: [],
+        avaliableCouponList: []
       }
     },
     methods: {
+      formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
+      },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
       },
@@ -246,6 +298,37 @@
 
         .van-actionsheet {
           font-weight: bold;
+        }
+
+        .coupon-item {
+          height: 100px;
+          display: flex;
+
+          .coupon-title {
+            width: 40%;
+            display: inline-block;
+            text-align: center;
+            color: white;
+            background-color: #1989fa;
+            justify-content: center;
+          }
+
+          .coupon-detail {
+            width: 60%;
+            display: inline-block;
+            text-align: left;
+            background-color: white;
+            color: black;
+            padding: 10px;
+          }
+
+          .coupon-radio {
+            width: 10%;
+            display: flex;
+            display: inline-block;
+            line-height: 100px;
+            background-color: white;
+          }
         }
       }
 
