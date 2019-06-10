@@ -323,6 +323,7 @@
         .coupon-item {
           height: 100px;
           display: flex;
+          box-shadow:5px 10px  #f8f8f8;
 
           .coupon-title {
             width: 40%;
