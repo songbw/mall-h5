@@ -52,39 +52,50 @@
         </van-cell>
         <van-actionsheet v-model="showCoupon" title="优惠券">
           <div class="avaliableCoupon">
-            <span>可领取券</span>
+            <div v-if="avaliableCouponList.length > 0">
+              <van-cell title="可领取的券"></van-cell>
+              <div v-for="couponInfo in avaliableCouponList">
+                <van-cell>
+                  <div slot="default" class="coupon-item">
+                    <div class="coupon-title">
+                      <div style="margin-top: 30px">
+                        <span style="font-size: large; font-weight: bold">￥</span>
+                        <span style="font-size: xx-large;font-weight: bold">{{couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
+                      </div>
+                      <span v-if="couponInfo.rules.couponRules.type === 0">满{{couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
+                      <span  v-if="couponInfo.rules.couponRules.type === 1">代金券</span>
+                      <span  v-if="couponInfo.rules.couponRules.type === 2">折扣券</span>
+                    </div>
+                    <div class="coupon-detail">
+                      <div>
+                        <span v-if="couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
+                        <span v-if="couponInfo.rules.scenario.type===2">全场商品</span>
+                        <span v-if="couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
+                        <span v-if="couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
+                      </div>
+                      <span style="font-size: small">{{formatEffectiveDateTime(couponInfo.effectiveStartDate,couponInfo.effectiveEndDate)}}</span>
+                    </div>
+                  </div>
+                </van-cell>
+              </div>
+            </div>
+            <div v-else>
+            </div>
           </div>
           <div class="gottedCoupon">
-            <span>已领取的券</span>
-            <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in this.userCouponList" :key="i">
-<!--              <div class="coupon-img">
-                <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
-              </div>
-              <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                <div class="coupon-suppler">
-                  <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                  <i>{{k.couponInfo.description}}</i>
-                </div>
-                <div class="coupon-price">{{formateCouponPrice(k.couponInfo.rules.couponRules)}}</div>
-                <div class="coupon-desc">{{formateCouponDescription(k.couponInfo.rules.couponRules)}}</div>
-                <div class="coupon-expire-date">
-                  {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
-                </div>
-              </div>
-              <div class="coupon-get" @click="onConponUseClick(k,i)">
-                <div>
-                  <span class="coupon-action">立即使用</span>
-                </div>
-              </div>-->
+            <div v-if="userCouponList.length > 0">
+              <van-cell title="已领取的券"></van-cell>
               <div v-for="coupon in userCouponList">
-                <van-cell style="background-color: #f0f0f0">
+                <van-cell>
                   <div slot="default" class="coupon-item">
                     <div class="coupon-title">
                       <div style="margin-top: 30px">
                         <span style="font-size: large; font-weight: bold">￥</span>
                         <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
                       </div>
-                      <span>满{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
+                      <span v-if="coupon.couponInfo.rules.couponRules.type === 0">满{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
+                      <span  v-if="coupon.couponInfo.rules.couponRules.type === 1">代金券</span>
+                      <span  v-if="coupon.couponInfo.rules.couponRules.type === 2">折扣券</span>
                     </div>
                     <div class="coupon-detail">
                       <div>
@@ -98,6 +109,9 @@
                   </div>
                 </van-cell>
               </div>
+            </div>
+            <div v-else>
+
             </div>
           </div>
         </van-actionsheet>
@@ -197,12 +211,12 @@
                 let result = response.data.data.result;
                 result.couponUseInfo.forEach(coupon => {
                   this.$log("已领券")
-                  coupon["couponInfo"]=item
+                  coupon["couponInfo"] = item
                   this.userCouponList.push(coupon)
                   this.$log(coupon)
 
                 })
-                if(item.rules.perLimited > result.couponUseInfo.length) {
+                if (item.rules.perLimited > result.couponUseInfo.length) {
                   this.$log("还有券可领")
                   this.avaliableCouponList.push(item);
                   this.$log(item)
@@ -292,12 +306,18 @@
         border-top-right-radius: 10px;
         background-color: white;
 
-        .van-cell {
-          margin: 3px;
-        }
-
         .van-actionsheet {
           font-weight: bold;
+        }
+
+        .avaliableCoupon {
+          display: block;
+          background-color: #f0f0f0;
+        }
+
+        .gottedCoupon {
+          display: block;
+          background-color: #f0f0f0;
         }
 
         .coupon-item {
@@ -321,15 +341,8 @@
             color: black;
             padding: 10px;
           }
-
-          .coupon-radio {
-            width: 10%;
-            display: flex;
-            display: inline-block;
-            line-height: 100px;
-            background-color: white;
-          }
         }
+
       }
 
       .price-title {
