@@ -70,7 +70,7 @@
                         <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
                       </div>
                       <div class="coupon-radio">
-                        <van-radio :name=coupon.code></van-radio>
+                        <van-radio :name=coupon.userCouponCode @click="onRadioBtnClick(coupon)"></van-radio>
                       </div>
                     </div>
                   </van-cell>
@@ -94,7 +94,7 @@
                         <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
                       </div>
                       <div class="coupon-radio">
-                        <van-radio :name=coupon.code></van-radio>
+                        <van-radio :name=coupon.userCouponCode></van-radio>
                       </div>
                     </div>
                   </van-cell>
@@ -118,7 +118,7 @@
                         <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
                       </div>
                       <div class="coupon-radio">
-                        <van-radio :name=coupon.code></van-radio>
+                        <van-radio :name=coupon.userCouponCode></van-radio>
                       </div>
                     </div>
                   </van-cell>
@@ -247,6 +247,7 @@
         locationCity: "南京",
         showCoupon: false,
         radio: '',
+        lastRadio: '',
         usedCoupon: null,
         couponTypes: [
           {
@@ -571,8 +572,17 @@
     },
 
     methods: {
+      onRadioBtnClick(coupon) {
+        this.$log("onRadioBtnClick Enter")
+        this.$log(this.radio)
+        this.$log(this.lastRadio)
+        if(this.lastRadio == this.radio) {
+          this.radio = ''
+        }
+        this.lastRadio =  this.radio
+      },
       couponReducedPrice(coupon) {
-        this.$log(coupon)
+      //  this.$log(coupon)
         let reducePrice = 0;
         if(coupon == null)
           return reducePrice;
@@ -610,15 +620,15 @@
       },
       onCouponListClick(coupon) {
         this.$log("onCouponListClick Enter")
-        this.$log(coupon)
-        if (this.radio === coupon.code) {
+        //this.$log(coupon)
+        if (this.radio === coupon.userCouponCode) {
           this.radio = ''
           this.usedCoupon = null;
         } else {
-          this.radio = coupon.code
+          this.radio = coupon.userCouponCode
           this.usedCoupon = coupon;
         }
-
+        this.lastRadio = this.radio
       },
 
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
