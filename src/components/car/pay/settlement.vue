@@ -94,7 +94,7 @@
                         <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
                       </div>
                       <div class="coupon-radio">
-                        <van-radio :name=coupon.userCouponCode></van-radio>
+                        <van-radio :name=coupon.userCouponCode @click="onRadioBtnClick(coupon)"></van-radio>
                       </div>
                     </div>
                   </van-cell>
@@ -118,7 +118,7 @@
                         <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
                       </div>
                       <div class="coupon-radio">
-                        <van-radio :name=coupon.userCouponCode></van-radio>
+                        <van-radio :name=coupon.userCouponCode @click="onRadioBtnClick(coupon)"></van-radio>
                       </div>
                     </div>
                   </van-cell>
