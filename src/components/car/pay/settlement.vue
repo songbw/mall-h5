@@ -274,7 +274,6 @@
         } else {
           return "无可用优惠券"
         }
-
       },
       pageloading() {
         let loading = this.$store.state.appconf.pageLoading;
@@ -578,6 +577,9 @@
         this.$log(this.lastRadio)
         if(this.lastRadio == this.radio) {
           this.radio = ''
+          this.usedCoupon = null;
+        } else {
+          this.usedCoupon = coupon;
         }
         this.lastRadio =  this.radio
       },
