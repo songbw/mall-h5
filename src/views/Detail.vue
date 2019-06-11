@@ -59,8 +59,18 @@
                   <div slot="default" class="coupon-item"   @click="onAvaliableCouponClick(couponInfo,index)" >
                     <div class="coupon-title">
                       <div style="margin-top: 30px">
-                        <span style="font-size: large; font-weight: bold">￥</span>
-                        <span style="font-size: xx-large;font-weight: bold">{{couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
+                        <div v-if="couponInfo.rules.couponRules.type === 0">
+                          <span style="font-size: large; font-weight: bold">￥</span>
+                          <span style="font-size: xx-large;font-weight: bold">{{couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
+                        </div>
+                        <div v-if="couponInfo.rules.couponRules.type === 1">
+                          <span style="font-size: large; font-weight: bold">￥</span>
+                          <span style="font-size: xx-large;font-weight: bold">{{couponInfo.rules.couponRules.cashCoupon.amount}}</span>
+                        </div>
+                        <div v-if="couponInfo.rules.couponRules.type === 2">
+                          <span style="font-size: xx-large;font-weight: bold">{{couponInfo.rules.couponRules.discountCoupon.discountRatio*10}}</span>
+                          <span style="font-size: large; font-weight: bold">折</span>
+                        </div>
                       </div>
                       <span v-if="couponInfo.rules.couponRules.type === 0">满{{couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
                       <span  v-if="couponInfo.rules.couponRules.type === 1">代金券</span>
@@ -99,8 +109,18 @@
                   <div slot="default" class="coupon-item">
                     <div class="coupon-title">
                       <div style="margin-top: 30px">
-                        <span style="font-size: large; font-weight: bold">￥</span>
-                        <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
+                        <div v-if="coupon.couponInfo.rules.couponRules.type === 0">
+                          <span style="font-size: large; font-weight: bold">￥</span>
+                          <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
+                        </div>
+                        <div v-if="coupon.couponInfo.rules.couponRules.type === 1">
+                          <span style="font-size: large; font-weight: bold">￥</span>
+                          <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.cashCoupon.amount}}</span>
+                        </div>
+                        <div v-if="coupon.couponInfo.rules.couponRules.type === 2">
+                          <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio*10}}</span>
+                          <span style="font-size: large; font-weight: bold">折</span>
+                        </div>
                       </div>
                       <span v-if="coupon.couponInfo.rules.couponRules.type === 0">满{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
                       <span  v-if="coupon.couponInfo.rules.couponRules.type === 1">代金券</span>
