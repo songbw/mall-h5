@@ -12,7 +12,8 @@
                       @load="onLoad(active)">
             </van-list>
             <div class="couponList">
-              <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i">
+              <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i"
+                 @touchstart.prevent="touchEvtStart(type,i)" @touchend.prevent="touchEvtEnd(type,i)">
                 <div class="coupon-img">
                   <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
                 </div>
@@ -113,6 +114,23 @@
 
 
     methods: {
+      touchEvtStart(type,index) {
+        clearInterval(this.Loop); //再次清空定时器，防止重复注册定时器
+        this.Loop = setTimeout(function() {
+          this.$dialog.confirm({
+            message: '是否删除优惠券'
+          }).then(() => {
+            console.log("删除")
+            this.couponTypes[type].list.splice(index, 1);
+
+          }).catch(() => {
+            console.log("不删")
+          });
+        }.bind(this), 1000);
+      },
+      touchEvtEnd(type,index){
+        clearInterval(this.Loop);
+      },
       See(e) {
         window.location.href = e
       },
