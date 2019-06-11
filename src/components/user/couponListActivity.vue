@@ -43,7 +43,7 @@
                       <div class="salePrice">￥{{k.price}}</div>
                     </van-col>
                     <van-col span="12" class="actionBox">
-                      <van-button type="primary" size="small" @click="onBuyBtnClick(k)">加入购物车</van-button>
+                      <van-button type="primary" size="small" @click.stop="" @click="onBuyBtnClick(k)">加入购物车</van-button>
                     </van-col>
                   </div>
                 </van-col>
