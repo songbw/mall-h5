@@ -301,7 +301,11 @@
           case 1://代金券
             return '代金券';
           case 2://折扣券
-            return '折扣券 ';
+            if(rules.discountCoupon.fullPrice > 0) {
+              return '满' + rules.discountCoupon.fullPrice + '元可用';
+            } else {
+              return '折扣券 ';
+            }
           default:
             return ""
         }
