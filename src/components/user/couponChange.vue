@@ -52,7 +52,13 @@
               data: options
             }).then((response) => {
              // let result = response.data.data.result;
-              that.$log(response)
+              that.$log(response.data)
+              let rt = response.data
+              if(rt.msg == 'Success') {
+                that.$toast("兑换成功")
+              } else {
+                that.$toast("兑换失败")
+              }
             }).catch(function (error) {
               that.$log(error)
             })
