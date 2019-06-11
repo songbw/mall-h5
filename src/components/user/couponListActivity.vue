@@ -153,7 +153,13 @@
             case 1://代金券
               return "已满足优惠条件，下单使用该券可立减￥" + rules.cashCoupon.amount
             case 2://折扣券
-              return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折'+"优惠"
+              //return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折'+"优惠"
+              if (rules.discountCoupon.fullPrice > this.allPay) {
+                let amount = rules.discountCoupon.fullPrice - this.allPay
+                return "再买￥" + amount + "可享受优惠"
+              } else {
+                return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折'+"优惠"
+              }
             default:
               return ""
           }
@@ -348,7 +354,11 @@
           case 1://代金券
             return '代金券';
           case 2://折扣券
-            return '折扣券 ';
+            if(rules.discountCoupon.fullPrice > 0) {
+              return '满' + rules.discountCoupon.fullPrice + '元可用';
+            } else {
+              return '折扣券 ';
+            }
           default:
             return ""
         }
