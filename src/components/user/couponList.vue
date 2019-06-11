@@ -19,7 +19,7 @@
                 <div class="coupon-info coupon-hole coupon-info-right-dashed">
                   <div class="coupon-suppler">
                     <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                    <i>{{k.couponInfo.description}}</i>
+                    <i>{{k.couponInfo.name}}</i>
                   </div>
                   <div class="coupon-price">{{formateCouponPrice(k.couponInfo.rules.couponRules)}}</div>
                   <div class="coupon-desc">{{formateCouponDescription(k.couponInfo.rules.couponRules)}}</div>
