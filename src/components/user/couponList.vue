@@ -12,20 +12,21 @@
                       @load="onLoad(active)">
             </van-list>
             <div class="couponList">
-              <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i"
-                 @touchstart.prevent="touchEvtStart(type,i)" @touchend.prevent="touchEvtEnd(type,i)">
-                <div class="coupon-img">
-                  <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
-                </div>
-                <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                  <div class="coupon-suppler">
-                    <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                    <i>{{k.couponInfo.name}}</i>
+              <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i">
+                <div style="display: flex;flex-direction: row"  @touchstart.prevent="touchEvtStart(k,type,i)" @touchend.prevent="touchEvtEnd()">
+                  <div class="coupon-img">
+                    <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
                   </div>
-                  <div class="coupon-price">{{formateCouponPrice(k.couponInfo.rules.couponRules)}}</div>
-                  <div class="coupon-desc">{{formateCouponDescription(k.couponInfo.rules.couponRules)}}</div>
-                  <div class="coupon-expire-date">
-                    {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
+                  <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                    <div class="coupon-suppler">
+                      <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                      <i>{{k.couponInfo.name}}</i>
+                    </div>
+                    <div class="coupon-price">{{formateCouponPrice(k.couponInfo.rules.couponRules)}}</div>
+                    <div class="coupon-desc">{{formateCouponDescription(k.couponInfo.rules.couponRules)}}</div>
+                    <div class="coupon-expire-date">
+                      {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
+                    </div>
                   </div>
                 </div>
                 <div class="coupon-get" @click="onConponUseClick(k,i)">
@@ -114,21 +115,36 @@
 
 
     methods: {
-      touchEvtStart(type,index) {
+      deleteCoupon(k,type,index) {
+        this.$log("deleteCoupon Enter")
+        let that = this
+        that.$api.xapi({
+          method: 'delete',
+          url: '/coupon/delete',
+          params: {
+            id: k.id,
+          }
+        }).then((response) => {
+          that.$log("onDelBtnClick coupon success, response is:" + JSON.stringify(response.data))
+          this.couponTypes[type].list.splice(index, 1);
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+      touchEvtStart(k,type,index) {
         clearInterval(this.Loop); //再次清空定时器，防止重复注册定时器
         this.Loop = setTimeout(function() {
           this.$dialog.confirm({
             message: '是否删除优惠券'
           }).then(() => {
             console.log("删除")
-            this.couponTypes[type].list.splice(index, 1);
-
+            this.deleteCoupon(k,type,index)
           }).catch(() => {
             console.log("不删")
           });
         }.bind(this), 1000);
       },
-      touchEvtEnd(type,index){
+      touchEvtEnd(){
         clearInterval(this.Loop);
       },
       See(e) {
@@ -322,7 +338,7 @@
               justify-content: center;
               align-items: center;
               flex-direction: column;
-              width: 25%;
+              width: 35%;
               position: relative;
 
               img {
