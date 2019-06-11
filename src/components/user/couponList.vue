@@ -126,7 +126,9 @@
           }
         }).then((response) => {
           that.$log("onDelBtnClick coupon success, response is:" + JSON.stringify(response.data))
-          this.couponTypes[type].list.splice(index, 1);
+          if(response.data.msg == 'Success') {
+            this.couponTypes[type].list.splice(index, 1);
+          }
         }).catch(function (error) {
           that.$log(error)
         })
