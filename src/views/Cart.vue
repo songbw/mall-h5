@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="car">
     <v-header class="header"  >
-      <h1 slot="title">购物车1</h1>
+      <h1 slot="title">购物车</h1>
     </v-header>
     <div class="cartBody">
       <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">

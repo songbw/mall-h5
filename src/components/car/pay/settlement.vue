@@ -58,7 +58,7 @@
                           <span style="font-size: large; font-weight: bold">￥</span>
                           <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
                         </div>
-                        <span>满{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
+                        <span>{{formateCouponDescription(coupon.couponInfo.rules.couponRules)}}</span>
                       </div>
                       <div class="coupon-detail">
                         <div>
@@ -82,7 +82,7 @@
                           <span style="font-size: large; font-weight: bold">￥</span>
                           <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.cashCoupon.amount}}</span>
                         </div>
-                        <span>代金券</span>
+                        <span>{{formateCouponDescription(coupon.couponInfo.rules.couponRules)}}</span>
                       </div>
                       <div class="coupon-detail">
                         <div>
@@ -106,7 +106,7 @@
                           <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio * 10}}</span>
                           <span style="font-size: large; font-weight: bold">折</span>
                         </div>
-                        <span>折扣券</span>
+                        <span>{{formateCouponDescription(coupon.couponInfo.rules.couponRules)}}</span>
                       </div>
                       <div class="coupon-detail">
                         <div>
@@ -200,17 +200,22 @@
       <div class="pay-settlement">
         <van-cell title="商品金额:">
           <div slot="default">
-            <span style="color: black">￥{{productPay.toFixed(2)}}</span>
+            <span style="color: black">￥{{productPay}}</span>
           </div>
         </van-cell>
         <van-cell title="运费:">
           <div slot="default">
-            <span style="color: #ff4444">+￥{{freightPay.toFixed(2)}}</span>
+            <span style="color: #ff4444">+￥{{freightPay}}</span>
+          </div>
+        </van-cell>
+        <van-cell title="促销活动:">
+          <div slot="default">
+            <span style="color: #ff4444">-￥{{promotionPay}}</span>
           </div>
         </van-cell>
         <van-cell title="优惠券:">
           <div slot="default">
-            <span style="color: #ff4444">-￥{{couponReducedPrice(this.usedCoupon).toFixed(2)}}</span>
+            <span style="color: #ff4444">-￥{{couponReducedPrice(this.usedCoupon)}}</span>
           </div>
         </van-cell>
       </div>
@@ -337,31 +342,38 @@
         let avaliableCouponList = []
         //this.$log(couponList)
         couponList.forEach(coupon => {
-          if (coupon.couponInfo.rules.couponRules.type === 0) {
+          if (coupon.couponInfo.rules.couponRules.type === 0 ||
+            coupon.couponInfo.rules.couponRules.type == 2) { //券不考虑活动折扣
             let fullPrice = 0;
             allPayList.forEach(payItem => {
               if (payItem.valid) {
                 for (let i = 0; i < payItem.product.couponList.length; i++) {
                   if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                    if (payItem.product.promotionInfo.promotionState === 1) {
-                      try {
-                        fullPrice += (payItem.checkedPrice - payItem.product.promotionInfo.promotion[0].discount) * payItem.product.baseInfo.count
-                      } catch (e) {
-                        fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
-                      }
-                    } else {
-                      fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
-                    }
+                    fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
+                    break;
                   }
                 }
               }
             })
-            if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice) {
-              //nothing to do
-            } else {
-              avaliableCouponList.push(coupon)
+            switch (coupon.couponInfo.rules.couponRules.type) {
+              case 0:
+                if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice) {
+                  //nothing to do
+                } else {
+                  avaliableCouponList.push(coupon)
+                }
+                break;
+              case 2:
+                if (fullPrice < coupon.couponInfo.rules.couponRules.discountCoupon.fullPrice) {
+                  //nothing to do
+                } else {
+                  avaliableCouponList.push(coupon)
+                }
+                break;
+              default:
+                avaliableCouponList.push(coupon)
+                break;
             }
-
           } else {
             avaliableCouponList.push(coupon)
           }
@@ -428,16 +440,7 @@
             supplyer.goods.forEach(item => {
               //this.$log("item:" + JSON.stringify(item))
               if (item.valid) {
-                //change for promotion
-                if (item.product.promotionInfo.promotionState === 1) {
-                  try {
-                    all += (item.checkedPrice - item.product.promotionInfo.promotion[0].discount) * item.product.baseInfo.count
-                  } catch (e) {
-                    all += item.checkedPrice * item.product.baseInfo.count
-                  }
-                } else {
-                  all += item.checkedPrice * item.product.baseInfo.count
-                }
+                all += item.checkedPrice * item.product.baseInfo.count
               }
             })
             supplyer.price = all;
@@ -461,7 +464,26 @@
           })
         } catch (e) {
         }
-        return freightPay
+        return freightPay.toFixed(2)
+      },
+
+      promotionPay() {
+        let allPayList = this.$store.state.appconf.payList;
+        let promotionPay = 0
+        allPayList.forEach(item => {
+          if (item.valid) {
+            //change for promotion
+            if (item.product.promotionInfo.promotionState === 1) {
+              if (item.valid) {
+                try {
+                  promotionPay += item.product.promotionInfo.promotion[0].discount * item.product.baseInfo.count
+                } catch (e) {
+                }
+              }
+            }
+          }
+        })
+        return promotionPay.toFixed(2);
       },
 
       productPay() {
@@ -472,13 +494,13 @@
           })
         } catch (e) {
         }
-        return productPay
+        return productPay.toFixed(2)
       },
 
       allpay() {
         let all = 0;
-        all = this.productPay + this.freightPay - this.couponReducedPrice(this.usedCoupon)
-        return all * 100;
+        all = this.productPay* 100 + this.freightPay* 100  - this.promotionPay* 100 - this.couponReducedPrice(this.usedCoupon)* 100
+        return all ;
       }
     },
 
@@ -575,50 +597,46 @@
         this.$log("onRadioBtnClick Enter")
         this.$log(this.radio)
         this.$log(this.lastRadio)
-        if(this.lastRadio == this.radio) {
+        if (this.lastRadio == this.radio) {
           this.radio = ''
           this.usedCoupon = null;
         } else {
           this.usedCoupon = coupon;
         }
-        this.lastRadio =  this.radio
+        this.lastRadio = this.radio
       },
       couponReducedPrice(coupon) {
-      //  this.$log(coupon)
+        //  this.$log(coupon)
         let reducePrice = 0;
-        if(coupon == null)
+        if (coupon == null)
           return reducePrice;
         switch (coupon.couponInfo.rules.couponRules.type) {
           case 0:
-            reducePrice =  coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
+            reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
             break;
           case 1:
-            reducePrice =  coupon.couponInfo.rules.couponRules.cashCoupon.amount;
+            reducePrice = coupon.couponInfo.rules.couponRules.cashCoupon.amount;
             break;
           case 2:
             let allPayList = this.$store.state.appconf.payList;
-            let found = -1;
-            for (let i = 0 ; i < allPayList.length ; i++) {
-              if(allPayList[i].valid && allPayList[i].product.couponList != undefined) {
-                 for(let j = 0; j < allPayList[i].product.couponList.length ;invoicej++) {
-                     if(allPayList[i].product.couponList[j].id == coupon.couponId) {
-                       found = i;
-                       break;
-                     }
-                 }
+            let fullPrice = 0;
+            allPayList.forEach(payItem => {
+              if (payItem.valid) {
+                for (let i = 0; i < payItem.product.couponList.length; i++) {
+                  if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
+                    fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
+                    break;
+                  }
+                }
               }
-              if(found != -1)
-                break;
-            }
-            this.$log("found:"+found)
-            if(found != -1) {
-              reducePrice = allPayList[found].checkedPrice * (1-coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio)
-            }
+            })
+            reducePrice = fullPrice * (1 - coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio)
             break;
           default:
             break;
         }
-        return reducePrice;
+        this.$log("reducePrice:"+ reducePrice)
+        return reducePrice.toFixed(2);
       },
       onCouponListClick(coupon) {
         this.$log("onCouponListClick Enter")
@@ -631,6 +649,23 @@
           this.usedCoupon = coupon;
         }
         this.lastRadio = this.radio
+      },
+
+      formateCouponDescription(rules) {
+        switch (rules.type) {
+          case 0://满减券
+            return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
+          case 1://代金券
+            return '代金券';
+          case 2://折扣券
+            if (rules.discountCoupon.fullPrice > 0) {
+              return '满' + rules.discountCoupon.fullPrice + '元可用';
+            } else {
+              return '折扣券 ';
+            }
+          default:
+            return ""
+        }
       },
 
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
