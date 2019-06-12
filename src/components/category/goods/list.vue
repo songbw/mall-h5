@@ -72,6 +72,7 @@
             this.$api.xapi({
               method: 'post',
               url: '/prod/all',
+              baseURL: this.$api.PRODUCT_BASE_URL,
               data: options,
             }).then((response) => {
               this.result = response.data.data.result;

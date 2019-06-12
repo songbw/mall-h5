@@ -13,6 +13,10 @@ const OPEN_CASHER_URL = "http://localhost:1322/#/pay/casher";
 
 const USER_BASE_URL="http://119.3.3.226:8081/";
 
+
+const PRODUCT_BASE_URL = "https://api.weesharing.com/v2/products/";
+//const PRODUCT_BASE_URL = "http://119.3.111.161:8080";
+
 const xapi = axios.create();
 xapi.defaults.baseURL = SERVER_BASE_URL;
 xapi.defaults.timeout = 20000;
@@ -77,5 +81,6 @@ export default {
   APP_ID,
   SERVR_PHONE_NUM,
   OPEN_CASHER_URL,
-  USER_BASE_URL
+  USER_BASE_URL,
+  PRODUCT_BASE_URL
 }

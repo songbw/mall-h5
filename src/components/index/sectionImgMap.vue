@@ -50,6 +50,7 @@
           //获取goods信息，update current googds
           this.$api.xapi({
             method: 'get',
+            baseURL: this.$api.PRODUCT_BASE_URL,
             url: '/prod',
             params: {
               id: skuid,
