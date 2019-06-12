@@ -72,9 +72,7 @@
                           <span style="font-size: large; font-weight: bold">折</span>
                         </div>
                       </div>
-                      <span v-if="couponInfo.rules.couponRules.type === 0">满{{couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
-                      <span  v-if="couponInfo.rules.couponRules.type === 1">代金券</span>
-                      <span  v-if="couponInfo.rules.couponRules.type === 2">折扣券</span>
+                      <span>{{formateCouponDescription(couponInfo.rules.couponRules)}}</span>
                     </div>
                     <div class="coupon-detail coupon-get-already" v-if="couponInfo.userCollectNum >= couponInfo.rules.perLimited">
                       <div>
@@ -122,9 +120,7 @@
                           <span style="font-size: large; font-weight: bold">折</span>
                         </div>
                       </div>
-                      <span v-if="coupon.couponInfo.rules.couponRules.type === 0">满{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice}}可用</span>
-                      <span  v-if="coupon.couponInfo.rules.couponRules.type === 1">代金券</span>
-                      <span  v-if="coupon.couponInfo.rules.couponRules.type === 2">折扣券</span>
+                      <span>{{formateCouponDescription(coupon.couponInfo.rules.couponRules)}}</span>
                     </div>
                     <div class="coupon-detail">
                       <div>
@@ -312,6 +308,24 @@
           })
         }
       },
+
+      formateCouponDescription(rules) {
+        switch (rules.type) {
+          case 0://满减券
+            return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
+          case 1://代金券
+            return '代金券';
+          case 2://折扣券
+            if(rules.discountCoupon.fullPrice > 0) {
+              return '满' + rules.discountCoupon.fullPrice + '元可用';
+            } else {
+              return '折扣券 ';
+            }
+          default:
+            return ""
+        }
+      },
+
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
       },
