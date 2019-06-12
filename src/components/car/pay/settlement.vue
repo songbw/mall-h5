@@ -35,8 +35,9 @@
         <div class="pay-info">
           <van-cell title="支付方式:" value="现金支付">
           </van-cell>
-          <van-cell title="发票:" :value="invoiceDetail" to="/car/invoice">
-            <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"/>
+          <van-cell title="发票:" :value="invoiceDetail">
+            <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
+                      @click="showInvoiceSelector()"/>
           </van-cell>
           <van-cell title="优惠券:">
             <div slot="default">
@@ -45,6 +46,8 @@
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                       @click="showCouponSelector()"/>
           </van-cell>
+          <van-actionsheet v-model="showInvoice" title="发票">
+          </van-actionsheet>
           <van-actionsheet v-model="showCoupon" title="可用优惠券">
             <div v-if="couponList.length > 0">
               <span class="couponTip">请选择优惠券， 一次仅限一张</span>
@@ -124,7 +127,7 @@
                   </van-cell>
                 </div>
               </van-radio-group>
-              <van-button type="danger" size="large" @click="confirmedCouponSeletor()">确定</van-button>
+              <van-button type="danger" size="large" @click="confirmedCouponSelector()">确定</van-button>
             </div>
             <div v-else>
               <div class="noCoupon">
@@ -251,7 +254,9 @@
         pageAction: "common",
         locationCity: "南京",
         showCoupon: false,
+        showInvoice: false,
         radio: '',
+        invoiceRadio: '',
         lastRadio: '',
         usedCoupon: null,
         couponTypes: [
@@ -723,11 +728,21 @@
       showCouponSelector() {
         this.showCoupon = true
       },
-      confirmedCouponSeletor() {
+      showInvoiceSelector() {
+        this.$log("showInvoiceSelector Enter")
+        this.showInvoice = true
+      },
+      confirmedCouponSelector() {
         this.$log(this.radio);
 
         this.showCoupon = false
       },
+
+      confirmedInvoiceSelector() {
+        this.$log(this.invoiceRadio);
+        this.showInvoice = false
+      },
+
       countDownS_cb(index, k) {
         let found = -1;
         for (let i = 0; i < this.payCarList.length; i++) {
