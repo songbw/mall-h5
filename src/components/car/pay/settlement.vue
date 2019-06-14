@@ -1162,6 +1162,7 @@
         that.$log("options is:" + JSON.stringify(options))
         this.$api.xapi({
           method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
           url: '/prod/carriage',
           data: options,
         }).then((response) => {
@@ -1232,6 +1233,7 @@
         this.$log("options:" + JSON.stringify(options));
         this.$api.xapi({
           method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
           url: '/prod/inventory',
           data: options,
         }).then((response) => {
@@ -1256,6 +1258,7 @@
           // this.$log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
+            baseURL: this.$api.PRODUCT_BASE_URL,
             url: '/prod/price',
             data: options,
           }).then((response) => {

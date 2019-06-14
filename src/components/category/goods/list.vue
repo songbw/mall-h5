@@ -71,8 +71,8 @@
             }
             this.$api.xapi({
               method: 'post',
-              url: '/prod/all',
               baseURL: this.$api.PRODUCT_BASE_URL,
+              url: '/prod/all',
               data: options,
             }).then((response) => {
               this.result = response.data.data.result;
@@ -101,6 +101,7 @@
           }
           this.$api.xapi({
             method: 'post',
+            baseURL: this.$api.PRODUCT_BASE_URL,
             url: '/es/prod',
             data: options,
           }).then((response) => {

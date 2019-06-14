@@ -50,6 +50,7 @@
           let categoryId = this.datas[this.tabIndex]["categoryId"];
           this.$api.xapi({
             method: 'get',
+            baseURL: this.$api.PRODUCT_BASE_URL,
             url: 'category/allsub',
             params: {
               id: categoryId,

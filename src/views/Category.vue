@@ -58,6 +58,7 @@
     created() {
       this.$api.xapi({
         method: 'get',
+        baseURL: this.$api.PRODUCT_BASE_URL,
         url: '/category/ones'
       }).then((res) => {
         this.class1Data = res.data.data;
