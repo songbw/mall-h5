@@ -15,24 +15,26 @@
                       @load="onLoad(active)">
               <div class="couponList">
                 <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i">
-                  <div class="coupon-img">
-                    <img :src="k.imageUrl.length?k.imageUrl: couponImg">
-                  </div>
-                  <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                    <div class="coupon-suppler">
-                      <span>{{k.supplierMerchantName.length > 0? k.supplierMerchantName:'凤巢'}}</span>
-                      <i>{{k.name}}</i>
+                  <div class="coupon-main">
+                    <div class="coupon-img">
+                      <img :src="k.imageUrl.length?k.imageUrl: couponImg">
                     </div>
-                    <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
-                    <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>
-                    <div class="coupon-expire-date">
-                      {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
-                    </div>
-                    <div class="coupon-progress">
-                      <van-progress
-                        color="#f44"
-                        :percentage=formateReleasePercentage(k)
-                      />
+                    <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                      <div class="coupon-suppler">
+                        <span>{{k.supplierMerchantName.length > 0? k.supplierMerchantName:'凤巢'}}</span>
+                        <i>{{k.name}}</i>
+                      </div>
+                      <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
+                      <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>
+                      <div class="coupon-expire-date">
+                        {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+                      </div>
+                      <div class="coupon-progress">
+                        <van-progress
+                          color="#f44"
+                          :percentage=formateReleasePercentage(k)
+                        />
+                      </div>
                     </div>
                   </div>
                   <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
@@ -154,8 +156,8 @@
 
       },
       isCouponUptoLimited(k, i) {
-       // this.$log(k);
-        if(k.userCollectNum < k.rules.perLimited)
+        // this.$log(k);
+        if (k.userCollectNum < k.rules.perLimited)
           return false;
         return true;
       },
@@ -177,15 +179,15 @@
             params["userOpenId"] = user.userId
           }
           that.$log(that.couponTypes[index])
-          if(that.couponTypes[index].type == 'category') {
+          if (that.couponTypes[index].type == 'category') {
             params["categoryId"] = that.couponTypes[index].id
             params["categoryName"] = that.couponTypes[index].title
           }
-          if(that.couponTypes[index].type == 'tag') {
+          if (that.couponTypes[index].type == 'tag') {
             params["tagId"] = that.couponTypes[index].id
             params["tagName"] = that.couponTypes[index].title
           }
-         // that.$log(params)
+          // that.$log(params)
 
           that.$api.xapi({
             method: 'get',
@@ -193,7 +195,7 @@
             params: params
           }).then((response) => {
             let result = response.data.data.result;
-           // that.$log(result)
+            // that.$log(result)
             that.couponTypes[index].total = result.total;
             if (result.list == undefined || result.list.length == 0) {
               that.couponTypes[index].loading = false;
@@ -205,8 +207,8 @@
               that.couponTypes[index].loading = false;
               if (that.couponTypes[index].list.length >= that.couponTypes[index].total) {
                 that.couponTypes[index].finished = true;
-               // that.$log("index:" + index);
-               // that.$log(that.couponTypes[index]);
+                // that.$log("index:" + index);
+                // that.$log(that.couponTypes[index]);
               }
             }
           }).catch(function (error) {
@@ -221,7 +223,7 @@
         this.$log("getCouponClick Enter")
       },
 
-      onConponUseClick(couponInfo,i) {
+      onConponUseClick(couponInfo, i) {
         this.$log("onConponUseClick Enter")
         let url = couponInfo.url;
         if (url.startsWith("aggregation://")) {
@@ -239,7 +241,7 @@
                 this.gotoGoodsPage(paths[1]);
             } catch (e) {
             }
-          } else if(paths[0] === 'listing') {
+          } else if (paths[0] === 'listing') {
             let coupon = {
               "couponInfo": couponInfo
             }
@@ -250,7 +252,7 @@
           this.See(url);
         }
       },
-      onConponCollectClick(coupon,i) {
+      onConponCollectClick(coupon, i) {
         this.$log("onConponCollectClick Enter");
         this.$log(coupon)
         let that = this
@@ -302,7 +304,7 @@
           case 1://代金券
             return '代金券';
           case 2://折扣券
-            if(rules.discountCoupon.fullPrice > 0) {
+            if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
             } else {
               return '折扣券 ';
@@ -343,6 +345,7 @@
           display: flex;
           flex-direction: column;
           background-color: #f0f0f0;
+
           .coupon {
             background-color: white;
             display: flex;
@@ -355,20 +358,6 @@
             border-top-right-radius: .3rem;
             border-bottom-right-radius: .3rem;
             overflow: hidden;
-
-            .coupon-img {
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              flex-direction: column;
-              width: 25%;
-              position: relative;
-
-              img {
-                display: inline-block;
-                width: 100%;
-              }
-            }
 
             .coupon-white {
               background-color: white;
@@ -398,32 +387,101 @@
               background-image: linear-gradient(150deg, #50ADD3 50%, #50ADD3D8 50%);
             }
 
+            .coupon-main {
+              display: flex;
+              flex-direction: row;
+              width: 90%;
 
+              .coupon-img {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                width: 25%;
+                position: relative;
 
-            .coupon-info-right-dashed {
-              border-right: 2px dashed #c8c9cc;
-            }
+                img {
+                  display: inline-block;
+                  width: 100%;
+                }
+              }
 
-            .coupon-info-right-solid {
-              border-right: 2px solid white;
-            }
+              .coupon-info-right-dashed {
+                border-right: 2px dashed #c8c9cc;
+              }
 
-            /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
+              .coupon-info-right-solid {
+                border-right: 2px solid white;
+              }
 
-            .coupon-hole::before, .coupon-hole::after {
-              content: '';
-              width: 1rem;
-              height: 1rem;
-              background-color: #f0f0f0;
-              border-radius: 50%;
-              position: absolute;
-              right: -.5rem;
-            }
+              /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
 
-            .coupon-info {
-              padding: 0.5rem 0.5rem 0.5rem;
-              width: 65%;
-              position: relative;
+              .coupon-hole::before, .coupon-hole::after {
+                content: '';
+                width: 1rem;
+                height: 1rem;
+                background-color: #f0f0f0;
+                border-radius: 50%;
+                position: absolute;
+                right: -.5rem;
+              }
+
+              .coupon-info {
+                padding: 0.5rem 0.5rem 0.5rem;
+                width: 65%;
+                position: relative;
+              }
+
+              .coupon-info::before {
+                top: -.5rem;
+              }
+
+              .coupon-info::after {
+                bottom: -.5rem;
+              }
+
+              .coupon-info > div {
+                margin-bottom: .2rem;
+              }
+
+              .coupon-price {
+                font-size: 150%;
+                font-weight: bold;
+              }
+
+              .coupon-price > span {
+                font-size: 40%;
+                margin-left: .5rem;
+                font-weight: normal;
+              }
+
+              .coupon-expire-date {
+                .fz(font-size, 25);
+              }
+
+              .coupon-progress {
+                margin-top: 10px;
+              }
+
+              .coupon-action {
+                .fz(font-size, 25)
+              }
+
+              .coupon-suppler {
+
+                span {
+                  background-color: #ff4444;
+                  padding: 2px 5px;
+                  color: white;
+                  border-radius: 8px;
+                  .fz(font-size, 25);
+                }
+
+                i {
+                  .fz(font-size, 28);
+                }
+              }
+
             }
 
             .coupon-get {
@@ -454,56 +512,6 @@
               position: absolute;
               top: -1rem;
               right: -1rem;
-            }
-
-            .coupon-info::before {
-              top: -.5rem;
-            }
-
-            .coupon-info::after {
-              bottom: -.5rem;
-            }
-
-            .coupon-info > div {
-              margin-bottom: .2rem;
-            }
-
-            .coupon-price {
-              font-size: 150%;
-              font-weight: bold;
-            }
-
-            .coupon-price > span {
-              font-size: 40%;
-              margin-left: .5rem;
-              font-weight: normal;
-            }
-
-            .coupon-expire-date {
-              .fz(font-size, 25);
-            }
-
-            .coupon-progress {
-              margin-top: 10px;
-            }
-
-            .coupon-action {
-              .fz(font-size, 25)
-            }
-
-            .coupon-suppler {
-
-              span {
-                background-color: #ff4444;
-                padding: 2px 5px;
-                color: white;
-                border-radius: 8px;
-                .fz(font-size, 25);
-              }
-
-              i {
-                .fz(font-size, 28);
-              }
             }
           }
 

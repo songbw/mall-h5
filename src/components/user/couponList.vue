@@ -13,8 +13,7 @@
             </van-list>
             <div class="couponList">
               <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i">
-                <div style="display: flex;flex-direction: row" @touchstart.prevent="touchEvtStart(k,type,i)"
-                     @touchend.prevent="touchEvtEnd()">
+                <div  @touchstart.prevent="touchEvtStart(k,type,i)" @touchend.prevent="touchEvtEnd()" class="coupon-main">
                   <div class="coupon-img">
                     <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
                   </div>
@@ -357,20 +356,6 @@
             border-bottom-right-radius: .3rem;
             overflow: hidden;
 
-            .coupon-img {
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              flex-direction: column;
-              width: 35%;
-              position: relative;
-
-              img {
-                display: inline-block;
-                width: 100%;
-              }
-            }
-
             .coupon-white {
               background-color: white;
             }
@@ -399,31 +384,90 @@
               background-image: linear-gradient(150deg, #50ADD3 50%, #50ADD3D8 50%);
             }
 
+            .coupon-main{
+              display: flex;
+              flex-direction: row;
+              width: 90%;
+              .coupon-img {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+                width: 35%;
+                position: relative;
 
-            .coupon-info-right-dashed {
-              border-right: 2px dashed #c8c9cc;
-            }
+                img {
+                  display: inline-block;
+                  width: 100%;
+                }
+              }
+              .coupon-info-right-dashed {
+                border-right: 2px dashed #c8c9cc;
+              }
 
-            .coupon-info-right-solid {
-              border-right: 2px solid white;
-            }
+              .coupon-info-right-solid {
+                border-right: 2px solid white;
+              }
 
-            /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
+              /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
 
-            .coupon-hole::before, .coupon-hole::after {
-              content: '';
-              width: 1rem;
-              height: 1rem;
-              background-color: #f0f0f0;
-              border-radius: 50%;
-              position: absolute;
-              right: -.5rem;
-            }
+              .coupon-hole::before, .coupon-hole::after {
+                content: '';
+                width: 1rem;
+                height: 1rem;
+                background-color: #f0f0f0;
+                border-radius: 50%;
+                position: absolute;
+                right: -.5rem;
+              }
 
-            .coupon-info {
-              padding: 0.5rem 0.5rem 0.5rem;
-              width: 65%;
-              position: relative;
+              .coupon-info {
+                padding: 0.5rem 0.5rem 0.5rem;
+                width: 65%;
+                position: relative;
+              }
+
+              .coupon-info::before {
+                top: -.5rem;
+              }
+
+              .coupon-info::after {
+                bottom: -.5rem;
+              }
+
+              .coupon-info > div {
+                margin-bottom: .2rem;
+              }
+
+              .coupon-price {
+                font-size: 150%;
+                font-weight: bold;
+              }
+
+              .coupon-price > span {
+                font-size: 40%;
+                margin-left: .5rem;
+                font-weight: normal;
+              }
+
+              .coupon-expire-date {
+                .fz(font-size, 25);
+              }
+
+              .coupon-suppler {
+                span {
+                  background-color: #ff4444;
+                  padding: 2px 5px;
+                  color: white;
+                  border-radius: 8px;
+                  .fz(font-size, 25);
+                }
+
+                i {
+                  .fz(font-size, 28);
+                }
+              }
+
             }
 
             .coupon-get {
@@ -478,46 +522,6 @@
               right: -1rem;
             }
 
-            .coupon-info::before {
-              top: -.5rem;
-            }
-
-            .coupon-info::after {
-              bottom: -.5rem;
-            }
-
-            .coupon-info > div {
-              margin-bottom: .2rem;
-            }
-
-            .coupon-price {
-              font-size: 150%;
-              font-weight: bold;
-            }
-
-            .coupon-price > span {
-              font-size: 40%;
-              margin-left: .5rem;
-              font-weight: normal;
-            }
-
-            .coupon-expire-date {
-              .fz(font-size, 25);
-            }
-
-            .coupon-suppler {
-              span {
-                background-color: #ff4444;
-                padding: 2px 5px;
-                color: white;
-                border-radius: 8px;
-                .fz(font-size, 25);
-              }
-
-              i {
-                .fz(font-size, 28);
-              }
-            }
           }
 
           /* 左边框的波浪 */
