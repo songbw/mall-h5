@@ -13,7 +13,8 @@
             </van-list>
             <div class="couponList">
               <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i">
-                <div style="display: flex;flex-direction: row"  @touchstart.prevent="touchEvtStart(k,type,i)" @touchend.prevent="touchEvtEnd()">
+                <div style="display: flex;flex-direction: row" @touchstart.prevent="touchEvtStart(k,type,i)"
+                     @touchend.prevent="touchEvtEnd()">
                   <div class="coupon-img">
                     <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
                   </div>
@@ -29,7 +30,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="coupon-get" @click="onConponUseClick(k,i)">
+                <div :class=getCouponState(type) @click="onConponUseClick(k,i)">
                   <div>
                     <span class="coupon-action">立即使用</span>
                   </div>
@@ -115,7 +116,18 @@
 
 
     methods: {
-      deleteCoupon(k,type,index) {
+      getCouponState(type) {
+        this.$log("type:"+type)
+        switch (type) {
+          case 0://未使用
+            return "coupon-get"
+          case 1://已使用
+            return "coupon-get coupon-get-used"
+          default: //已过期
+            return "coupon-get coupon-get-expired"
+        }
+      },
+      deleteCoupon(k, type, index) {
         this.$log("deleteCoupon Enter")
         let that = this
         that.$api.xapi({
@@ -126,27 +138,27 @@
           }
         }).then((response) => {
           that.$log("onDelBtnClick coupon success, response is:" + JSON.stringify(response.data))
-          if(response.data.msg == 'Success') {
+          if (response.data.msg == 'Success') {
             this.couponTypes[type].list.splice(index, 1);
           }
         }).catch(function (error) {
           that.$log(error)
         })
       },
-      touchEvtStart(k,type,index) {
+      touchEvtStart(k, type, index) {
         clearInterval(this.Loop); //再次清空定时器，防止重复注册定时器
-        this.Loop = setTimeout(function() {
+        this.Loop = setTimeout(function () {
           this.$dialog.confirm({
             message: '是否删除优惠券'
           }).then(() => {
             console.log("删除")
-            this.deleteCoupon(k,type,index)
+            this.deleteCoupon(k, type, index)
           }).catch(() => {
             console.log("不删")
           });
         }.bind(this), 1000);
       },
-      touchEvtEnd(){
+      touchEvtEnd() {
         clearInterval(this.Loop);
       },
       See(e) {
@@ -226,32 +238,34 @@
         }
       },
 
-      onConponUseClick(coupon,i) {
+      onConponUseClick(coupon, i) {
         this.$log("onCouponUseClick Enter")
         this.$log(coupon)
-        let couponInfo = coupon.couponInfo;
-        let url = couponInfo.url;
-        if (url.startsWith("aggregation://")) {
-          let id = url.substr(14);
-          this.$router.push({path: '/index/' + id});
-        } else if (url.startsWith("route://")) {
-          let target = url.substr(8);
-          let paths = target.split("/");
-          this.$log(paths);
-          if (paths[0] === 'category') {
-            this.$router.push({path: '/category'})
-          } else if (paths[0] === 'commodity') {
-            try {
-              if (paths[1] != null)
-                this.gotoGoodsPage(paths[1]);
-            } catch (e) {
+        if(coupon.status === 1) { //未使用
+          let couponInfo = coupon.couponInfo;
+          let url = couponInfo.url;
+          if (url.startsWith("aggregation://")) {
+            let id = url.substr(14);
+            this.$router.push({path: '/index/' + id});
+          } else if (url.startsWith("route://")) {
+            let target = url.substr(8);
+            let paths = target.split("/");
+            this.$log(paths);
+            if (paths[0] === 'category') {
+              this.$router.push({path: '/category'})
+            } else if (paths[0] === 'commodity') {
+              try {
+                if (paths[1] != null)
+                  this.gotoGoodsPage(paths[1]);
+              } catch (e) {
+              }
+            } else if (paths[0] === 'listing') {
+              this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
+              this.$router.push("/user/couponListActivity");
             }
-          } else if(paths[0] === 'listing') {
-            this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
-            this.$router.push("/user/couponListActivity");
+          } else if (url.startsWith("http://") || url.startsWith("http://")) {
+            this.See(url);
           }
-        } else if (url.startsWith("http://") || url.startsWith("http://")) {
-          this.See(url);
         }
       },
 
@@ -294,7 +308,7 @@
           case 1://代金券
             return '代金券';
           case 2://折扣券
-            if(rules.discountCoupon.fullPrice > 0) {
+            if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
             } else {
               return '折扣券 ';
@@ -324,10 +338,12 @@
       .couponListMain {
         width: 100%;
         margin-bottom: 3em;
+
         .couponList {
           display: flex;
           flex-direction: column;
           background-color: #f0f0f0;
+
           .coupon {
             background-color: white;
             display: flex;
@@ -340,6 +356,7 @@
             border-top-right-radius: .3rem;
             border-bottom-right-radius: .3rem;
             overflow: hidden;
+
             .coupon-img {
               display: flex;
               justify-content: center;
@@ -381,7 +398,6 @@
             .coupon-blue-gradient {
               background-image: linear-gradient(150deg, #50ADD3 50%, #50ADD3D8 50%);
             }
-
 
 
             .coupon-info-right-dashed {
