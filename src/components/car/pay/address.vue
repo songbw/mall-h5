@@ -108,6 +108,7 @@
               }
               this.$api.xapi({
                 method: 'post',
+                baseURL: this.$api.ORDER_BASE_URL,
                 url: '/receiver',
                 data: options,
               }).then((response) => {
@@ -166,6 +167,7 @@
 
               this.$api.xapi({
                 method: 'put',
+                baseURL: this.$api.ORDER_BASE_URL,
                 url: '/receiver',
                 data: options,
               }).then((response) => {
@@ -231,6 +233,7 @@
           this.$store.commit('SET_ADDRESS_LIST', list);
           this.$api.xapi({
             method: 'delete',
+            baseURL: this.$api.ORDER_BASE_URL,
             url: '/receiver',
             params: {
               id: id,
@@ -253,6 +256,7 @@
 
         this.$api.xapi({
           method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/address/code',
           data: options,
         }).then((response) => {

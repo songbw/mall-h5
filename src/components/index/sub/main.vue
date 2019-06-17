@@ -104,6 +104,7 @@
       this.pageloading = true;
       this.$api.xapi({
         method: 'get',
+        baseURL: this.$api.AGGREGATION_BASE_URL,
         url: '/aggregation/findById',
         params: {
           id: id

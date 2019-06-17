@@ -110,6 +110,7 @@
           }
           this.$api.xapi({
             method: 'post',
+            baseURL: this.$api.ORDER_BASE_URL,
             url: '/receiver/all',
             data: options,
           }).then((response) => {

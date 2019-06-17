@@ -161,6 +161,7 @@
         }
         this.$api.xapi({
           method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/cart',
           data: addtoCar,
         }).then((response) => {

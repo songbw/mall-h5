@@ -15,6 +15,10 @@ const USER_BASE_URL="http://119.3.3.226:8081/";
 
 
 const PRODUCT_BASE_URL = "https://api.weesharing.com/v2/products/";
+const AGGREGATION_BASE_URL = "https://api.weesharing.com/v2/aggregations/"
+const ORDER_BASE_URL = "https://api.weesharing.com/v2/orders/"
+const EQUITY_BASE_URL = "https://api.weesharing.com/v2/equitys/"
+
 //const PRODUCT_BASE_URL = "http://119.3.111.161:8080";
 
 const xapi = axios.create();
@@ -82,5 +86,8 @@ export default {
   SERVR_PHONE_NUM,
   OPEN_CASHER_URL,
   USER_BASE_URL,
-  PRODUCT_BASE_URL
+  PRODUCT_BASE_URL,
+  AGGREGATION_BASE_URL,
+  ORDER_BASE_URL,
+  EQUITY_BASE_URL
 }

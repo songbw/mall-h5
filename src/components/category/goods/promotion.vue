@@ -69,6 +69,7 @@
 
       this.$api.xapi({
         method: 'get',
+        baseURL: this.$api.EQUITY_BASE_URL,
         url: '/promotion/findPromotion',
         params: {
           id: id,

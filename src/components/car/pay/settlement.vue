@@ -616,6 +616,7 @@
           // this.$log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
+            baseURL: this.$api.ORDER_BASE_URL,
             url: '/receiver/all',
             data: options,
           }).then((response) => {
@@ -1085,6 +1086,7 @@
                 if (options != null) {
                   that.$api.xapi({
                     method: 'post',
+                    baseURL: this.$api.ORDER_BASE_URL,
                     url: '/order',
                     data: options,
                   }).then((response) => {
@@ -1206,15 +1208,15 @@
           this.$log(payDirectProduct);
           if (payDirectProduct.length > 0) {
             let item = JSON.parse(payDirectProduct);
-            inventorySkus.push({"skuId": item.skuId, "remainNum": item.count})
-            skus.push({"skuId": item.skuId})
+            inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
+            skus.push({"skuId": item.baseInfo.skuId})
             this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.price})
           }
         } else {
           this.selectedCarList.forEach(item => {
             inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
             skus.push({"skuId": item.baseInfo.skuId})
-            if (item.promotionInfo.promotion.length > 0) {
+            if (item.promotionInfo.promotion != null && item.promotionInfo.promotion.length > 0) {
               item.promotionInfo.promotionState = Util.getPromotionState(item);
             }
             //////////////////
@@ -1255,7 +1257,7 @@
             "cityId": locationCode.cityId,
             "skus": skus,
           }
-          // this.$log("options:" + JSON.stringify(options));
+          this.$log("价格 options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             baseURL: this.$api.PRODUCT_BASE_URL,

@@ -213,6 +213,7 @@
         }
         this.$api.xapi({
           method: 'put',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/order/status',
           data: options,
         }).then((response) => {
@@ -251,6 +252,7 @@
         }
         this.$api.xapi({
           method: 'put',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/order/status',
           data: options,
         }).then((response) => {

@@ -1,7 +1,9 @@
 <template lang="html">
   <section class="goodsAction">
     <van-goods-action>
-      <van-goods-action-mini-btn style="color: #00a4ff" icon="chat-o"  href="javascript:void(0)" onclick="_MEIQIA('showPanel')">联系客服</van-goods-action-mini-btn>
+      <van-goods-action-mini-btn style="color: #00a4ff" icon="chat-o" href="javascript:void(0)"
+                                 onclick="_MEIQIA('showPanel')">联系客服
+      </van-goods-action-mini-btn>
       <van-goods-action-mini-btn style="color: #ea545d" icon="cart-o" text="购物车" @click="gotoCar"/>
       <van-goods-action-big-btn text="加入购物车" @click="addGoodsCar"/>
       <van-goods-action-big-btn text="立即购买" primary @click="gotoPay"/>
@@ -32,7 +34,7 @@
     },
 
     methods: {
-      onCustomerSvBtnClick(){
+      onCustomerSvBtnClick() {
         this.$log("onCustomerSvBtnClick Enter")
         _MEIQIA('showPanel');
       },
@@ -70,7 +72,7 @@
       addGoodsCar() {
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
-          this.add2Car(userInfo,this.datas);
+          this.add2Car(userInfo, this.datas);
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
         }
@@ -86,6 +88,7 @@
         }
         this.$api.xapi({
           method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/cart',
           data: addtoCar,
         }).then((response) => {
@@ -147,26 +150,40 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
+          let goods = this.datas
+          let baseInfo = {
+            "userId": user.userId,
+            "skuId": goods.skuid,
+            "count": 1,
+            "choosed": true,
+            "cartId": -1,
+          }
+          let goodsInfo = {
+            "id": goods.id,
+            "skuId": goods.skuid,
+            "image": goods.image,
+            "category": goods.category,
+            "name": goods.name,
+            "brand": goods.brand,
+            "model": goods.model,
+            "price": goods.price,
+          }
+          let couponList = []
+          let promotionInfo = {}
           let product = {
-            count: 1,
-            desc: this.datas.brand + ' ' + this.datas.name + ' ' + this.datas.model,
-            id: this.datas.id,
-            image: this.datas.image,
-            isDel: 0,
-            price: this.datas.price,
-            skuId: this.datas.skuid,
-            userId: user.userId,
-            promotion: this.datas.promotion,
-            promotionState: Util.getPromotionState(this.datas)
+            "baseInfo": baseInfo,
+            "goodsInfo": goodsInfo,
+            "couponList": couponList,
+            "promotionInfo": promotionInfo,
           }
           this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
           this.$router.push({path: '/car/pay/direct'})
-/*          this.$router.push({
-            name: "支付页",
-            params: {
-              tryPayed: tryPayed
-            }
-          })*/
+          /*          this.$router.push({
+                      name: "支付页",
+                      params: {
+                        tryPayed: tryPayed
+                      }
+                    })*/
 
         } else {
           this.$toast("没有用户信息，请先登录再购买")

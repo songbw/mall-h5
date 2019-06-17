@@ -102,6 +102,7 @@
       this.pageloading = true;
       this.$api.xapi({
         method: 'get',
+        baseURL: this.$api.AGGREGATION_BASE_URL,
         url: '/aggregation/findHomePage'
       }).then((response) => {
         // const pako = require('pako');
@@ -247,8 +248,8 @@
         let that = this;
         this.$api.xapi({
           method: 'post',
-          url: '/sso/thirdLogin',
           baseURL: this.$api.USER_BASE_URL,
+          url: '/sso/thirdLogin',
           data: {
             accessToken: accessToken,
             openId: userId,
@@ -323,6 +324,7 @@
         //this.$log("options:"+JSON.stringify(options))
         this.$api.xapi({
           method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/address/code',
           data: options,
         }).then((response) => {

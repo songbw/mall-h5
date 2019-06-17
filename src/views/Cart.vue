@@ -147,6 +147,7 @@
         let that = this;
         this.$api.xapi({
           method: 'delete',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/cart',
           params: {
             id: k.baseInfo.cartId,
@@ -166,6 +167,7 @@
         }
         this.$api.xapi({
           method: 'put',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/cart/num',
           data: options,
         }).then((response) => {
@@ -185,6 +187,7 @@
           }
           this.$api.xapi({
             method: 'post',
+            baseURL: this.$api.ORDER_BASE_URL,
             url: '/cart/all',
             data: options,
           }).then((response) => {
@@ -288,6 +291,7 @@
       getSkuInfoBy(item, user) {
         this.$api.xapi({
           method: 'get',
+          baseURL: this.$api.PRODUCT_BASE_URL,
           url: '/prod',
           params: {
             id: item.skuId,

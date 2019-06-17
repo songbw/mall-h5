@@ -83,6 +83,7 @@
       this.$log(that.detail)
       that.$api.xapi({
         method: 'get',
+        baseURL: this.$api.ORDER_BASE_URL,
         url: '/order/logistics',
         params: {
           merchantNo: this.detail.merchantNo,

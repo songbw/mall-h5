@@ -314,6 +314,7 @@
         }
         this.$api.xapi({
           method: 'put',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/order/status',
           data: options,
         }).then((response) => {
@@ -372,6 +373,7 @@
         }
         this.$api.xapi({
           method: 'put',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/order/status',
           data: options,
         }).then((response) => {
@@ -417,6 +419,7 @@
         })
         that.$api.xapi({
           method: 'delete',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/order',
           params: {
             id: listItem.id,
@@ -488,6 +491,7 @@
           }
           this.$api.xapi({
             method: 'post',
+            baseURL: this.$api.ORDER_BASE_URL,
             url: '/order/all',
             data: options,
           }).then((response) => {
