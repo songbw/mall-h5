@@ -12,7 +12,7 @@
         <div class="promotion-price" v-if="hasPromotion">
           <van-col span="8" class="priceBox">
           <span class="sales-price">
-            ￥{{this.goods.price-this.discount}}
+            ￥{{this.goods.dprice}}
           </span>
             <div>
               <span class="origin-price-title">原价</span>
@@ -216,6 +216,11 @@
             this.promotionId = this.goods.promotion[0].id
             this.hasPromotion = true;
           }
+        }
+        if(this.hasPromotion) {
+          this.goods['dprice'] = this.goods.price - this.discount
+        } else {
+          this.goods['dprice'] = this.goods.price
         }
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {

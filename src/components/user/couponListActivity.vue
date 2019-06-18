@@ -622,7 +622,7 @@
               }
               .cardInfo {
                 height: 100%;
-                padding: 10px;
+                padding: 5px;
 
                 .cardTitle {
                   .fz(font-size, 30);
