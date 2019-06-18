@@ -258,11 +258,6 @@
             <span style="color: #ff4444">+￥{{freightPay}}</span>
           </div>
         </van-cell>
-<!--        <van-cell title="促销活动:">
-          <div slot="default">
-            <span style="color: #ff4444">-￥{{promotionPay}}</span>
-          </div>
-        </van-cell>-->
         <van-cell title="优惠券:">
           <div slot="default">
             <span style="color: #ff4444">-￥{{couponReducedPrice(this.usedCoupon)}}</span>
@@ -479,9 +474,9 @@
         let allPayList = this.$store.state.appconf.payList;
         try {
           allPayList.forEach(item => {
-            if(item.product.promotionInfo != undefined) {
+            if (item.product.promotionInfo != undefined) {
               item.product.promotionInfo['promotionState'] = Util.getPromotionState(item.product.promotionInfo)
-              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(item.checkedPrice,item.product.promotionInfo)
+              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(item.checkedPrice, item.product.promotionInfo)
             }
             if (item.product.baseInfo.skuId.startsWith("20")) {//苏宁易购
               payList[0].goods.push(item);
@@ -798,30 +793,30 @@
       },
 
       countDownS_cb(index, k) {
-        /*        let found = -1;
-                for (let i = 0; i < this.payCarList.length; i++) {
-                  if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
-                    found = i;
-                  }
-                }
-                if (found != -1) {
-                  this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
-                  this.savePayList()
-                }*/
+        let found = -1;
+        for (let i = 0; i < this.payCarList.length; i++) {
+          if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
+            found = i;
+          }
+        }
+        if (found != -1) {
+          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
+          this.savePayList()
+        }
       },
       countDownE_cb(index, k) {
-        /*        let found = -1;
-                for (let i = 0; i < this.payCarList.length; i++) {
-                  if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
-                    found = i;
-                  }
-                }
-                if (found != -1) {
-                  this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
-                  let len = this.payCarList[found].product.promotionInfo.promotion.length;
-                  this.payCarList[found].product.promotionInfo.promotion.splice(0, len);
-                  this.savePayList()
-                }*/
+        let found = -1;
+        for (let i = 0; i < this.payCarList.length; i++) {
+          if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
+            found = i;
+          }
+        }
+        if (found != -1) {
+          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
+          let len = this.payCarList[found].product.promotionInfo.promotion.length;
+          this.payCarList[found].product.promotionInfo.promotion.splice(0, len);
+          this.savePayList()
+        }
       },
 
       See(e) {
