@@ -19,6 +19,23 @@ export default {
     return window.localStorage.setItem(key, JSON.stringify(res))
   },
 
+  getDisplayPrice(checkedPrice,k) {
+    if (k.promotion != undefined && k.promotion.length > 0) {
+      let startTime = new Date(k.promotion[0].startDate).getTime()
+      let endTime = new Date(k.promotion[0].endDate).getTime()
+      let current = new Date().getTime()
+      if (current < startTime) {
+        return checkedPrice //活动未开始
+      } else if (current <= endTime) {
+        return checkedPrice-k.promotion[0].discount //活动开始
+      } else {
+        return checkedPrice// 活动已经结束
+      }
+    } else {
+      return checkedPrice // 无活动
+    }
+  },
+
   getPromotionState(k) {
     if (k.promotion != undefined && k.promotion.length > 0) {
       let startTime = new Date(k.promotion[0].startDate).getTime()
@@ -85,6 +102,7 @@ export default {
   },
 
   updateCartItem(env, cartItem) {
+    env.$log("updateCartItem Enter")
     let cartList = env.$store.state.appconf.cartList;
     try {
       let found = -1;
@@ -95,6 +113,10 @@ export default {
           break;
         }
       }
+      if(cartItem.promotionInfo != undefined) {
+        cartItem.promotionInfo['promotionState'] = this.getPromotionState(cartItem.promotionInfo)
+        cartItem.goodsInfo['dprice'] = this.getDisplayPrice(cartItem.goodsInfo.price,cartItem.promotionInfo)
+      }
       if (found == -1) {
         cartList.push(cartItem) //添加一个新的
       } else {
@@ -104,7 +126,7 @@ export default {
       env.$store.commit('SET_CART_LIST', cartList);
       env.$log(env.$store.state.appconf.cartList)
     } catch (e) {
-
+      env.$log("error updateCartItem")
     }
   },
 }

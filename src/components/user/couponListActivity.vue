@@ -28,25 +28,39 @@
                     @load="onLoad">
             <li v-for="(k,index) in list" :key="index">
               <div class="goodsCard" @click="onGoodCardClick(k)">
-                <van-col span="8" class="cardImg">
-                  <img v-lazy="k.image">
-                </van-col>
-                <van-col span="16" class="cardInfo">
-                  <div class="cardTitle">
-                    <span>{{k.name}}</span>
-                  </div>
-                  <div class="cardTag">
-                    <span></span>
-                  </div>
-                  <div class="cardFooter">
-                    <van-col span="12" class="priceBox">
-                      <div class="salePrice">￥{{k.price}}</div>
-                    </van-col>
-                    <van-col span="12" class="actionBox">
-                      <van-button type="primary" size="small" @click.stop="" @click="onBuyBtnClick(k)">加入购物车</van-button>
-                    </van-col>
-                  </div>
-                </van-col>
+
+                <div class="card-layout">
+                  <van-col span="8" class="cardImg">
+                    <img v-lazy="k.image">
+                  </van-col>
+                  <van-col span="16" class="cardInfo">
+                    <div class="promotionBox" v-if="k.promotion!= undefined &&  k.promotionState != -1">
+                      <span class="promotionTitle">{{k.promotion[0].tag}}</span>
+                      <v-countdown class="promotionCountDown"
+                                   @start_callback="countDownS_cb(index,k)"
+                                   @end_callback="countDownE_cb(index,k)"
+                                   :startTime="new Date(k.promotion[0].startDate).getTime()"
+                                   :endTime="new Date(k.promotion[0].endDate).getTime()"
+                                   :secondsTxt="''">
+                      </v-countdown>
+                    </div>
+                    <div class="cardTitle">
+                      <span>{{k.name}}</span>
+                    </div>
+                    <div class="cardTag">
+                      <span></span>
+                    </div>
+                    <div class="cardFooter">
+                      <van-col span="12" class="priceBox">
+                        <div class="salePrice">￥{{k.dprice}}</div>
+                      </van-col>
+                      <van-col span="12" class="actionBox">
+                        <van-button type="primary" size="small" @click.stop="" @click="onBuyBtnClick(k)">加入购物车
+                        </van-button>
+                      </van-col>
+                    </div>
+                  </van-col>
+                </div>
               </div>
             </li>
           </van-list>
@@ -77,6 +91,7 @@
 <script>
   import Header from '@/common/_header.vue'
   import Baseline from '@/common/_baseline.vue'
+  import CountDown from '@/common/_vue2-countdown.vue'
 
   import Util from '@/util/common'
 
@@ -84,6 +99,7 @@
     components: {
       'v-header': Header,
       'v-baseline': Baseline,
+      "v-countdown": CountDown,
     },
     data() {
       return {
@@ -126,13 +142,14 @@
                 }
               }
               if (found != -1) {
-                if(item.baseInfo.choosed)
-                    payAmount += item.goodsInfo.price * item.baseInfo.count
+                if (item.baseInfo.choosed)
+                  payAmount += item.goodsInfo.dprice * item.baseInfo.count
               }
             }
           })
-        }this
-        .$store.commit('SET_CART_LIST', cartList);
+        }
+        this
+          .$store.commit('SET_CART_LIST', cartList);
         return payAmount.toFixed(2);
       },
 
@@ -158,7 +175,7 @@
                 let amount = rules.discountCoupon.fullPrice - this.allPay
                 return "再买￥" + amount + "可享受优惠"
               } else {
-                return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折'+"优惠"
+                return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折' + "优惠"
               }
             default:
               return ""
@@ -180,6 +197,15 @@
     ,
 
     methods: {
+      countDownS_cb(index, k) {
+        k['promotionState'] = Util.getPromotionState(k)
+        k['dprice']=Util.getDisplayPrice(k.price,k)
+      },
+      countDownE_cb(index, k) {
+        k['promotionState'] = Util.getPromotionState(k)
+        k['dprice']=Util.getDisplayPrice(k.price,k)
+      },
+
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
@@ -218,8 +244,8 @@
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
-          this.$log("xxxxxxxxxxxxxxxxxxx")
-          this.$log(this.result)
+          //this.$log("xxxxxxxxxxxxxxxxxxx")
+          //this.$log(this.result)
           this.$toast("添加到购物车成功！")
           let cartItem = Util.getCartItem(this, user.userId, goods.skuid)
           if (cartItem == null) {
@@ -241,7 +267,10 @@
               "price": goods.price,
             }
             let couponList = [this.coupon.couponInfo]
-            let promotionInfo = {}
+            let promotionInfo = {
+              "promotion": goods.promotion,
+              "promotionState": Util.getPromotionState(goods)
+            }
             cartItem = {
               "baseInfo": baseInfo,
               "goodsInfo": goodsInfo,
@@ -253,7 +282,8 @@
             cartItem.baseInfo.choosed = true;
             let found = -1;
             for (let i = 0; i < cartItem.couponList.length; i++) {
-              if (cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
+              if (cartItem.couponList[i].coupon != undefined && cartItem.couponList[i].coupon.couponInfo != undefined &&
+                cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
                 found = i;
                 break;
               }
@@ -267,12 +297,11 @@
         }).catch(function (error) {
           console.log(error)
         })
-      }
-      ,
+      },
+
       onGotoCarClick() {
         this.$router.push({name: '购物车页'})
-      }
-      ,
+      },
 
       onBuyBtnClick(goods) {
         this.$log("onBuyBtnClick Enter");
@@ -307,11 +336,14 @@
                 that.finished = true;
               } else {
                 result.couponSkus.list.forEach(item => {
+                  item['promotionState'] = Util.getPromotionState(item)
+                  item['dprice']=Util.getDisplayPrice(item.price,item)
                   that.list.push(item);
                 })
                 that.loading = false;
                 if (that.list.length >= that.total) {
                   that.finished = true;
+                  that.$log(that.list)
                 }
               }
             }).catch((error) => {
@@ -355,7 +387,7 @@
           case 1://代金券
             return '代金券';
           case 2://折扣券
-            if(rules.discountCoupon.fullPrice > 0) {
+            if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
             } else {
               return '折扣券 ';
@@ -559,64 +591,80 @@
 
           .goodsCard {
             width: 100%;
-            height: 7rem;
+            .card-layout{
+              height:8rem;
+              justify-content: center;
+              .promotionBox {
+                display: flex;
+                .fz(font-size, 25);
+                margin-bottom: 5px;
 
-            .cardImg {
-              height: 100%;
-              text-align: center;
-
-              img {
-                width: 100%;
+                .promotionTitle {
+                  color: #ff4444;
+                  font-weight: bold;
+                }
+                .promotionCountDown {
+                  margin-left: 10px;
+                  color: black;
+                  .fz(font-size, 25);
+                }
+              }
+              .cardImg {
                 height: 100%;
-                border-top-left-radius: 10px;
-                border-bottom-left-radius: 10px;
-              }
-            }
+                text-align: center;
 
-            .cardInfo {
-              height: 100%;
-              padding: 10px;
-
-              .cardTitle {
-                .fz(font-size, 30);
-                font-weight: bold;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2;
-                word-break: break-all;
-              }
-
-              .cardTag {
-                height: 15%;
-              }
-
-              .cardFooter {
-                height: 50%;
-
-                .priceBox {
+                img {
+                  width: 100%;
                   height: 100%;
-                  text-align: left;
-                  line-height: 3em;
+                  border-top-left-radius: 10px;
+                  border-bottom-left-radius: 10px;
+                }
+              }
+              .cardInfo {
+                height: 100%;
+                padding: 10px;
 
-                  .salePrice {
-                    color: #ff4444;
-                    .fz(font-size, 32);
-                    font-weight: bold;
-                  }
-
-                  .originPrice {
-                    color: #707070;
-                    .fz(font-size, 25);
-                    text-decoration: line-through
-                  }
+                .cardTitle {
+                  .fz(font-size, 30);
+                  font-weight: bold;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 2;
+                  word-break: break-all;
                 }
 
-                .actionBox {
-                  height: 100%;
-                  text-align: center;
-                  line-height: 3em;
+                .cardTag {
+                  height: 15%;
+                }
+
+                .cardFooter {
+                  height: 45%;
+
+                  .priceBox {
+                    height: 100%;
+                    text-align: left;
+                    line-height: 3em;
+
+                    .salePrice {
+                      color: #ff4444;
+                      .fz(font-size, 32);
+                      font-weight: bold;
+                    }
+
+                    .originPrice {
+                      color: #707070;
+                      .fz(font-size, 25);
+                      text-decoration: line-through
+                    }
+                  }
+
+                  .actionBox {
+                    height: 100%;
+                    text-align: center;
+                    line-height: 3em;
+                  }
                 }
               }
             }
