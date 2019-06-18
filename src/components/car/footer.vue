@@ -51,7 +51,8 @@
 
               if(item.baseInfo.userId == user.userId) {
                   if(item.baseInfo.choosed) {
-                    if(item.promotionInfo.promotionState === 1) {
+                    all += item.goodsInfo.dprice * item.baseInfo.count
+/*                    if(item.promotionInfo.promotionState === 1) {
                       try {
                         all += (item.goodsInfo.price - item.promotionInfo.promotion[0].discount) * item.baseInfo.count
                       } catch (e) {
@@ -59,7 +60,7 @@
                       }
                     } else {
                       all += item.goodsInfo.price * item.baseInfo.count
-                    }
+                    }*/
                   }
               }
             });

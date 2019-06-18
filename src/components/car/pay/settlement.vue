@@ -193,11 +193,11 @@
               <ul>
                 <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f0f0f0;">
                   <div class="promotionBox"
-                       v-if="k.product.promotionInfo != undefined && k.product.promotionInfo.promotionState != -1">
+                       v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
                     <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].tag}}</span>
                     <v-countdown class="promotionCountDown"
-                                 @start_callback="countDownS_cb(index,k.product)"
-                                 @end_callback="countDownE_cb(index,k.product)"
+                                 @start_callback="countDownS_cb(index,k)"
+                                 @end_callback="countDownE_cb(index,k)"
                                  :startTime="new Date(k.product.promotionInfo.promotion[0].startDate).getTime()"
                                  :endTime="new Date(k.product.promotionInfo.promotion[0].endDate).getTime()"
                                  :secondsTxt="''">
@@ -210,7 +210,7 @@
                     <van-card
                       :desc="locationCity"
                       :num="k.product.baseInfo.count"
-                      :price="k.checkedPrice-k.product.promotionInfo.promotion[0].discount"
+                      :price="k.product.goodsInfo.dprice"
                       :title="k.product.goodsInfo.name"
                       :thumb="k.product.goodsInfo.image"
                       :origin-price="k.checkedPrice">
@@ -222,7 +222,7 @@
                     </div>
                     <van-card
                       :num="k.product.baseInfo.count"
-                      :price="k.checkedPrice"
+                      :price="k.product.goodsInfo.dprice"
                       :title="k.product.goodsInfo.name"
                       :thumb="k.product.goodsInfo.image">
                       <div slot="desc">
@@ -258,11 +258,11 @@
             <span style="color: #ff4444">+￥{{freightPay}}</span>
           </div>
         </van-cell>
-        <van-cell title="促销活动:">
+<!--        <van-cell title="促销活动:">
           <div slot="default">
             <span style="color: #ff4444">-￥{{promotionPay}}</span>
           </div>
-        </van-cell>
+        </van-cell>-->
         <van-cell title="优惠券:">
           <div slot="default">
             <span style="color: #ff4444">-￥{{couponReducedPrice(this.usedCoupon)}}</span>
@@ -405,7 +405,7 @@
               if (payItem.valid) {
                 for (let i = 0; i < payItem.product.couponList.length; i++) {
                   if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                    fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
+                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                     break;
                   }
                 }
@@ -479,6 +479,10 @@
         let allPayList = this.$store.state.appconf.payList;
         try {
           allPayList.forEach(item => {
+            if(item.product.promotionInfo != undefined) {
+              item.product.promotionInfo['promotionState'] = Util.getPromotionState(item.product.promotionInfo)
+              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(item.checkedPrice,item.product.promotionInfo)
+            }
             if (item.product.baseInfo.skuId.startsWith("20")) {//苏宁易购
               payList[0].goods.push(item);
             } else if (item.product.baseInfo.skuId.startsWith("30")) {//唯品会
@@ -496,7 +500,7 @@
             supplyer.goods.forEach(item => {
               //this.$log("item:" + JSON.stringify(item))
               if (item.valid) {
-                all += item.checkedPrice * item.product.baseInfo.count
+                all += item.product.goodsInfo.dprice * item.product.baseInfo.count
               }
             })
             supplyer.price = all;
@@ -523,25 +527,6 @@
         return freightPay.toFixed(2)
       },
 
-      promotionPay() {
-        let allPayList = this.$store.state.appconf.payList;
-        let promotionPay = 0
-        allPayList.forEach(item => {
-          if (item.valid) {
-            //change for promotion
-            if (item.product.promotionInfo.promotionState === 1) {
-              if (item.valid) {
-                try {
-                  promotionPay += item.product.promotionInfo.promotion[0].discount * item.product.baseInfo.count
-                } catch (e) {
-                }
-              }
-            }
-          }
-        })
-        return promotionPay.toFixed(2);
-      },
-
       productPay() {
         let productPay = 0;
         try {
@@ -555,7 +540,7 @@
 
       allpay() {
         let all = 0;
-        all = this.productPay * 100 + this.freightPay * 100 - this.promotionPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100
+        all = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100
         return all;
       },
     },
@@ -680,7 +665,7 @@
               if (payItem.valid) {
                 for (let i = 0; i < payItem.product.couponList.length; i++) {
                   if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                    fullPrice += payItem.checkedPrice * payItem.product.baseInfo.count
+                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                     break;
                   }
                 }
@@ -813,30 +798,30 @@
       },
 
       countDownS_cb(index, k) {
-        let found = -1;
-        for (let i = 0; i < this.payCarList.length; i++) {
-          if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
-            found = i;
-          }
-        }
-        if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
-          this.savePayList()
-        }
+        /*        let found = -1;
+                for (let i = 0; i < this.payCarList.length; i++) {
+                  if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
+                    found = i;
+                  }
+                }
+                if (found != -1) {
+                  this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
+                  this.savePayList()
+                }*/
       },
       countDownE_cb(index, k) {
-        let found = -1;
-        for (let i = 0; i < this.payCarList.length; i++) {
-          if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
-            found = i;
-          }
-        }
-        if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
-          let len = this.payCarList[found].product.promotionInfo.promotion.length;
-          this.payCarList[found].product.promotionInfo.promotion.splice(0, len);
-          this.savePayList()
-        }
+        /*        let found = -1;
+                for (let i = 0; i < this.payCarList.length; i++) {
+                  if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
+                    found = i;
+                  }
+                }
+                if (found != -1) {
+                  this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
+                  let len = this.payCarList[found].product.promotionInfo.promotion.length;
+                  this.payCarList[found].product.promotionInfo.promotion.splice(0, len);
+                  this.savePayList()
+                }*/
       },
 
       See(e) {
@@ -1187,7 +1172,7 @@
           that.$log(error)
           that.$store.commit('SET_PAGE_LOADING', false);
           that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
-          this.$log("无法获取到运费")
+          that.$log("无法获取到运费")
           if (this.pageLoadTimerId != -1) {
             clearTimeout(this.pageLoadTimerId)
           }
@@ -1217,7 +1202,7 @@
             inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
             skus.push({"skuId": item.baseInfo.skuId})
             if (item.promotionInfo.promotion != null && item.promotionInfo.promotion.length > 0) {
-              item.promotionInfo.promotionState = Util.getPromotionState(item);
+              item.promotionInfo.promotionState = Util.getPromotionState(item.promotionInfo);
             }
             //////////////////
             this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.price})

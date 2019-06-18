@@ -270,8 +270,8 @@
             "promotionState": Util.getPromotionState(product)
           }
         }
-        this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-        this.$log(cartItem)
+      //  this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+      //  this.$log(cartItem)
         Util.updateCartItem(this, cartItem)
         return cartItem;
       },
