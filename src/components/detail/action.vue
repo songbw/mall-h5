@@ -168,8 +168,11 @@
             "model": goods.model,
             "price": goods.price,
           }
-          let couponList = []
-          let promotionInfo = {}
+          let couponList = goods.coupon
+          let promotionInfo = {
+            "promotion": goods.promotion,
+            "promotionState": Util.getPromotionState(goods)
+          }
           let product = {
             "baseInfo": baseInfo,
             "goodsInfo": goodsInfo,

@@ -210,7 +210,7 @@
                     <van-card
                       :desc="locationCity"
                       :num="k.product.baseInfo.count"
-                      :price="k.checkedPrice-k.product.goodsInfo.promotion[0].discount"
+                      :price="k.checkedPrice-k.product.promotionInfo.promotion[0].discount"
                       :title="k.product.goodsInfo.name"
                       :thumb="k.product.goodsInfo.image"
                       :origin-price="k.checkedPrice">
