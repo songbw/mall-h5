@@ -117,14 +117,15 @@ export default {
         cartItem.promotionInfo['promotionState'] = this.getPromotionState(cartItem.promotionInfo)
         cartItem.goodsInfo['dprice'] = this.getDisplayPrice(cartItem.goodsInfo.price,cartItem.promotionInfo)
       }
+      env.$log(cartItem)
       if (found == -1) {
         cartList.push(cartItem) //添加一个新的
       } else {
         //update baseInfo
-        cartList[i] = cartItem;
+        cartList[found] = cartItem;
       }
       env.$store.commit('SET_CART_LIST', cartList);
-      env.$log(env.$store.state.appconf.cartList)
+      //env.$log(env.$store.state.appconf.cartList)
     } catch (e) {
       env.$log("error updateCartItem")
     }
