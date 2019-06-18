@@ -34,24 +34,10 @@
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>
-                    <div v-if="k.promotionInfo.promotionState === 1">
-                      <van-card
-                        :price="k.goodsInfo.price-k.promotionInfo.promotion[0].discount"
-                        :title="k.goodsInfo.name"
-                        :thumb="k.goodsInfo.image"
-                        :origin-price="k.goodsInfo.price">
-                        <div slot="desc">
-                          <span class="prodDesc">南京</span>
-                        </div>
-                        <div slot="footer">
-                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k)"/>
-                        </div>
-                      </van-card>
-                    </div>
-                    <div v-else>
+                    <div>
                       <van-card
                         desc="南京"
-                        :price="k.goodsInfo.price"
+                        :price="k.goodsInfo.dprice"
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image">
                         <div slot="footer">
