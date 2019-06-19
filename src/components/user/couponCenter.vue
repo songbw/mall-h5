@@ -86,6 +86,7 @@
       let that = this;
       that.$api.xapi({
         method: 'get',
+        baseURL: this.$api.EQUITY_BASE_URL,
         url: '/coupon/activeCategories',
       }).then((response) => {
         let result = response.data.data.result;
@@ -191,6 +192,7 @@
 
           that.$api.xapi({
             method: 'get',
+            baseURL: this.$api.EQUITY_BASE_URL,
             url: '/coupon/activeCoupon',
             params: params
           }).then((response) => {
@@ -267,6 +269,7 @@
           }
           that.$api.xapi({
             method: 'post',
+            baseURL: this.$api.EQUITY_BASE_URL,
             url: '/coupon/collect',
             data: options,
           }).then((response) => {

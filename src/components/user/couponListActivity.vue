@@ -322,6 +322,7 @@
             this.loading = true;
             this.$api.xapi({
               method: 'get',
+              baseURL: this.$api.EQUITY_BASE_URL,
               url: '/coupon/skuById',
               params: {
                 id: this.coupon.couponInfo.id,

@@ -48,6 +48,7 @@
             }
             that.$api.xapi({
               method: 'post',
+              baseURL: this.$api.EQUITY_BASE_URL,
               url: '/coupon/redemption',
               data: options
             }).then((response) => {

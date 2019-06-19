@@ -131,6 +131,7 @@
         let that = this
         that.$api.xapi({
           method: 'delete',
+          baseURL: this.$api.EQUITY_BASE_URL,
           url: '/coupon/delete',
           params: {
             id: k.id,
@@ -208,6 +209,7 @@
               }
             that.$api.xapi({
               method: 'post',
+              baseURL: this.$api.EQUITY_BASE_URL,
               url: '/coupon/CouponByOpenId',
               data: options
             }).then((response) => {
