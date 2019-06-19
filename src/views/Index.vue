@@ -248,7 +248,7 @@
         let that = this;
         this.$api.xapi({
           method: 'post',
-          baseURL: this.$api.USER_BASE_URL,
+          baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/thirdLogin',
           data: {
             accessToken: accessToken,
@@ -276,7 +276,9 @@
           that.$log("initCode is:" + initCode);
           that.$api.xapi({
             method: 'get',
-            url: '/zhcs/token',
+            baseURL: this.$api.SSO_BASE_URL,
+            url:'/sso/pingan/token',
+            // url: '/zhcs/token',
             params: {
               initCode: initCode,
             }

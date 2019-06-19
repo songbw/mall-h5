@@ -13,15 +13,18 @@ const OPEN_CASHER_URL = "http://localhost:1322/#/pay/casher";
 
 const USER_BASE_URL="http://119.3.3.226:8081/";
 
-const PRODUCT_BASE_URL = "http://119.3.111.161:8080";
+/*const PRODUCT_BASE_URL = "http://119.3.111.161:8080";
 const AGGREGATION_BASE_URL = "http://119.3.111.161:8080"
 const ORDER_BASE_URL = "http://119.3.111.161:8080"
 const EQUITY_BASE_URL = "http://119.3.111.161:8080"
+const SSO_BASE_URL = "http://119.3.111.161:8080"
+*/
 
-/*const PRODUCT_BASE_URL = "https://api.weesharing.com/v2/products/";
+const PRODUCT_BASE_URL = "https://api.weesharing.com/v2/products/";
 const AGGREGATION_BASE_URL = "https://api.weesharing.com/v2/aggregations/"
 const ORDER_BASE_URL = "https://api.weesharing.com/v2/orders/"
-const EQUITY_BASE_URL = "https://api.weesharing.com/v2/equitys/"*/
+const EQUITY_BASE_URL = "https://api.weesharing.com/v2/equitys/"
+const SSO_BASE_URL = "http://api.weesharing.com/v2/ssoes/"
 
 //const PRODUCT_BASE_URL = "http://119.3.111.161:8080";
 
@@ -93,5 +96,6 @@ export default {
   PRODUCT_BASE_URL,
   AGGREGATION_BASE_URL,
   ORDER_BASE_URL,
-  EQUITY_BASE_URL
+  EQUITY_BASE_URL,
+  SSO_BASE_URL
 }

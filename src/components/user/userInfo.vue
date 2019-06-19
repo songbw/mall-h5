@@ -128,8 +128,9 @@
         let that = this;
         this.$api.xapi({
           method: 'put',
+          baseURL: this.$api.SSO_BASE_URL,
+          //url: '/user/updateProfile',
           url: '/user',
-          baseURL: this.$api.USER_BASE_URL,
           data: this.user
         }).then((response) => {
           that.$log(response.data)

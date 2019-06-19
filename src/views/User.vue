@@ -92,8 +92,8 @@
         let user = JSON.parse(userInfo);
         this.$api.xapi({
           method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
           url: '/user',
-          baseURL: this.$api.USER_BASE_URL,
           params: {
             openId: user.userId,
           }
