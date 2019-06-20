@@ -174,6 +174,7 @@
 
       this.$api.xapi({
         method: 'get',
+        baseURL: this.$api.ORDER_BASE_URL,
         url: '/refund/subOrder',
         params: {
           subOrderId: this.goods.subOrderId,
@@ -239,6 +240,7 @@
         let that = this
         this.$api.xapi({
           method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/refund',
           data: options,
         }).then((response) => {
