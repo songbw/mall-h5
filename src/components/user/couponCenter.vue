@@ -8,8 +8,13 @@
         <img :src="couponCenterHeaderImg">
       </div>
       <div class="couponCenterMain">
-        <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable :ellipsis=false>
-          <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
+        <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable :ellipsis=false title-active-color="#FF4444">
+          <van-tab v-for="(item,type) in couponTypes" :key="type">
+            <div slot="title" style="width: 70px;">
+              <span style="font-size: medium;font-weight: bold">
+                {{item.title}}
+              </span>
+            </div>
             <van-list v-model="item.loading"
                       :finished="item.finished"
                       @load="onLoad(active)">
