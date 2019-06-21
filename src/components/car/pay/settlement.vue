@@ -671,6 +671,7 @@
                 }
               })
               merchants.push({
+                "merchantNo": item.supplyer,
                 "skus": skus
               })
             }
