@@ -301,6 +301,8 @@
         invoiceRadio: '',
         lastRadio: '',
         usedCoupon: null,
+        reducedPriceOfCoupon: 0,
+        totalSkuPriceOfCoupon: 0,
         couponTypes: [
           {
             "title": "未使用",
@@ -641,36 +643,98 @@
         }
         this.lastRadio = this.radio
       },
-      couponReducedPrice(coupon) {
-        //  this.$log(coupon)
-        let reducePrice = 0;
-        if (coupon == null)
-          return reducePrice;
-        switch (coupon.couponInfo.rules.couponRules.type) {
-          case 0:
-            reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
-            break;
-          case 1:
-            reducePrice = coupon.couponInfo.rules.couponRules.cashCoupon.amount;
-            break;
-          case 2:
-            let allPayList = this.$store.state.appconf.payList;
-            let fullPrice = 0;
-            allPayList.forEach(payItem => {
-              if (payItem.valid) {
-                for (let i = 0; i < payItem.product.couponList.length; i++) {
-                  if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                    break;
+
+      getUsedCouponDetail4Order(coupon) {
+        this.$log("getUsedCouponDetail4Order Enter")
+        this.$log(coupon)
+        if (coupon != null) {
+          let merchants = []
+          this.arregationList.forEach(item => {
+            if (item.goods.length > 0) {
+              let skus = []
+              item.goods.forEach(sku => {
+                if (sku.valid) {
+                  this.$log(sku)
+                  let found = -1
+                  for (let i = 0; i < sku.product.couponList.length; i++) {
+                    if (sku.product.couponList[i].id === coupon.couponId) {
+                      found = i
+                      break;
+                    }
+                  }
+                  if (found != -1) {
+                    skus.push({
+                      "skuId": sku.product.baseInfo.skuId,
+                      "num": sku.product.baseInfo.count,
+                    })
                   }
                 }
-              }
-            })
-            reducePrice = fullPrice * (1 - coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio)
-            break;
-          default:
-            break;
+              })
+              merchants.push({
+                "skus": skus
+              })
+            }
+          })
+          let couponInfo = {
+            'id': coupon.id,
+            "merchants": merchants
+          }
+          return couponInfo
+        } else {
+          return null
         }
+      },
+
+      getSalePrice(sku) {
+        let salePrice = parseFloat(sku.product.goodsInfo.dprice)
+        if (this.usedCoupon != null) {
+          let found = -1
+          for (let i = 0; i < sku.product.couponList.length; i++) {
+            if (sku.product.couponList[i].id === this.usedCoupon.couponId) {
+              found = i
+              break;
+            }
+          }
+          if (found != -1) { //sku 使用了该优惠券
+            if (this.totalSkuPriceOfCoupon != 0) {
+              salePrice = sku.product.goodsInfo.dprice - this.reducedPriceOfCoupon * sku.product.goodsInfo.dprice / this.totalSkuPriceOfCoupon
+            }
+          }
+        }
+        return salePrice.toFixed(2)
+      },
+
+      couponReducedPrice(coupon) {
+        let reducePrice = 0;
+        let fullPrice = 0;
+        if (coupon != null) {
+          let allPayList = this.$store.state.appconf.payList;
+          allPayList.forEach(payItem => {
+            if (payItem.valid) {
+              for (let i = 0; i < payItem.product.couponList.length; i++) {
+                if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
+                  fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                  break;
+                }
+              }
+            }
+          })
+          switch (coupon.couponInfo.rules.couponRules.type) {
+            case 0:
+              reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
+              break;
+            case 1:
+              reducePrice = coupon.couponInfo.rules.couponRules.cashCoupon.amount;
+              break;
+            case 2:
+              reducePrice = fullPrice * (1 - coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio)
+              break;
+            default:
+              break;
+          }
+        }
+        this.reducedPriceOfCoupon = reducePrice.toFixed(2)
+        this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
         return reducePrice.toFixed(2);
       },
       onCouponListClick(coupon) {
@@ -914,7 +978,7 @@
         })
       },
 
-      getComposedOderOption(userInfo, receiverId) {
+      getComposedOrderOption(userInfo, receiverId) {
         let user = JSON.parse(userInfo)
         let invoiceType = "eInvoice"
         let invoiceTitleName = ""
@@ -922,7 +986,6 @@
         let merchants = []
 
         let locationCode = this.getLocationCode()
-
         const invoiceInfo = this.$store.state.appconf.invoice;
         if (invoiceInfo != undefined && invoiceInfo.length > 0) {
           try {
@@ -939,26 +1002,28 @@
 
           }
         }
-        //let selStateInCarList = this.$store.state.appconf.selStateInCarList
+
         this.arregationList.forEach(item => {
           if (item.goods.length > 0) {
             let skus = []
+            let saleAmount = item.freight;
+            let amount = item.freight;
             item.goods.forEach(sku => {
-              //this.$log("onSubmit，sku is:"+JSON.stringify(sku))
-              let unitPrice = sku.checkedPrice;
-              let promotionId = "";
-              let couponId = "";
-              if (sku.product.promotionState == 1) {
-                unitPrice = sku.checkedPrice - sku.product.promotion[0].discount
-                promotionId = sku.product.promotion[0].id
-              }
               if (sku.valid) {
+                let promotionId = 0
+                if (sku.product.promotionInfo.promotionState == 1) {
+                  promotionId = sku.product.promotionInfo.promotion[0].id
+                }
+                let unitPrice = parseFloat(sku.checkedPrice).toFixed(2)
+                let salePrice = this.getSalePrice(sku)
+                saleAmount += salePrice * sku.product.baseInfo.count
+                amount += unitPrice * sku.product.baseInfo.count
                 skus.push({
-                  "skuId": sku.product.skuId,
-                  "num": sku.product.count,
+                  "skuId": sku.product.baseInfo.skuId,
+                  "num": sku.product.baseInfo.count,
                   "unitPrice": unitPrice,
-                  "promotionId": promotionId,
-                  "couponId": couponId
+                  "salePrice": salePrice,
+                  "promotionId": promotionId
                 })
               }
             })
@@ -970,13 +1035,13 @@
               "merchantNo": item.supplyer, //商户号
               "payment": "01", //支付方式， 现金支付
               "servFee": item.freight, //运费
-              "amount": item.price + item.freight,//总价
+              "amount": amount,     //应给商户的实际总价
+              "saleAmount": saleAmount,//用户支付给商户的实际总价 = 单品salePrice*number + 运费
               "type": 1,//订单类型 0: 实时式订单  1: 预占型订单
               "skus": skus
             })
           }
         })
-        // this.$store.commit('SET_SELECTED_CARLIST', selStateInCarList);
         let options = {
           "openId": user.userId,
           "companyCustNo": "11",
@@ -987,7 +1052,13 @@
           "invoiceEnterpriseNumber ": invoiceEnterpriseNumber,
           "merchants": merchants
         }
-        this.$log("Order options:" + JSON.stringify(options))
+
+        let couponInfo = this.getUsedCouponDetail4Order(this.usedCoupon)
+        if (couponInfo != null) {
+          options['coupon'] = couponInfo;
+        }
+        this.$log("Order options:")
+        this.$log(options)
         return options;
       },
 
@@ -1005,7 +1076,9 @@
         that.$log("预下单:" + JSON.stringify(options))
         that.$api.xapi({
           method: 'post',
-          url: '/zhcs/payment',
+          baseURL: this.$api.SSO_BASE_URL,
+         // url: '/zhcs/payment',
+          url: '/payment/pingan',
           data: options,
         }).then((response) => {
           that.$log("预下单返回 :" + JSON.stringify(response.data))
@@ -1061,7 +1134,8 @@
             })
           } else {
             try {
-              let options = this.getComposedOderOption(userInfo, receiverId);
+              let options = this.getComposedOrderOption(userInfo, receiverId);
+              this.$log(JSON.stringify(options))
               if (this.isValidOrder(options)) {
                 if (options != null) {
                   that.$api.xapi({
@@ -1088,7 +1162,7 @@
                     if (orderNo.length > 0) {
                       that.$log("orderNo is:" + orderNo)
                       options.merchants.forEach(item => {
-                        amount += item.amount;
+                        amount += item.saleAmount;
                       })
                       let pAnOrderInfo = {
                         "accessToken": user.accessToken,
