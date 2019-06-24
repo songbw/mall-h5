@@ -27,10 +27,19 @@
                   <ul @click="onListClick(k,i)">
                     <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
                       <van-card
-                        :price="sku.unitPrice"
+                        :price="sku.salePrice"
                         :title="sku.name"
                         :num="sku.num"
                         :thumb="sku.image">
+                        <div slot="origin-price" v-if="sku.salePrice != sku.unitPrice">
+                          <span>
+                            ￥{{sku.unitPrice}}
+                          </span>
+                        </div>
+                        <div slot="tags"  v-if="sku.salePrice != sku.unitPrice" class="cardtags">
+                          <img :src="tag_promotion"/>
+                          <img :src="tag_coupon"/>
+                        </div>
                       </van-card>
                     </li>
                   </ul>
@@ -101,6 +110,8 @@
         active: 0,
         swipeThreshold: 5,
         no_orderList_bg: require('@/assets/images/emptyBox.png'),
+        tag_coupon: require('@/assets/icons/ico_lab_coupon.png'),
+        tag_promotion: require('@/assets/icons/ico_lab_promotion.png'),
         launchedLoading: false,
         reload:false,
         orderTypes: [
@@ -570,6 +581,13 @@
         .orderDetail {
           background-color: white;
           margin-top: 1em;
+
+          .cardtags{
+            >img{
+              width: 25px;
+              height: 25px;
+            }
+          }
 
           .orderDetailSummery {
             background-color: #ffffff;
