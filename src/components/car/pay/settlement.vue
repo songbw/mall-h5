@@ -962,23 +962,14 @@
       },
 
       deleteOrderedGoodsInCar() {
-        let selStateInCarList = this.$store.state.appconf.selStateInCarList
-        this.arregationList.forEach(item => {
-          if (item.goods.length > 0) {
-            item.goods.forEach(sku => {
-              let found = -1;
-              for (let i = 0; i < selStateInCarList.length; i++) { //从CarList中删除订单中的货物
-                if (selStateInCarList[i].skuId === sku.product.skuId) {
-                  found = i;
-                  break;
-                }
-              }
-              if (found != -1) {
-                selStateInCarList.splice(found, 1);
-              }
-            })
-          }
-        })
+        this.$log("deleteOrderedGoodsInCar Enter")
+        let allPayList = this.$store.state.appconf.payList;
+        try {
+          allPayList.forEach(item => {
+            Util.deletCartItem(this,item.product)
+          })
+        } catch (e) {
+        }
       },
 
       getComposedOrderOption(userInfo, receiverId) {
@@ -1097,11 +1088,6 @@
           } else {
             if (response.data.data.result != undefined) {
               let orderNo = response.data.data.result.orderNo
-              if (that.pageAction == "direct") {
-                this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
-              } else {
-                that.deleteOrderedGoodsInCar();
-              }
               pAnOrderInfo.orderNo = orderNo
               that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
               that.$jsbridge.call("openCashPage", pAnOrderInfo);
@@ -1174,6 +1160,11 @@
                         "orderAmount": amount * 100,//分
                         "openId": user.openId,
                         "businessType": "11"
+                      }
+                      if (that.pageAction == "direct") {
+                        this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
+                      } else {
+                        that.deleteOrderedGoodsInCar();
                       }
                       that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
                     } else {

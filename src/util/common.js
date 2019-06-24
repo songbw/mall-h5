@@ -81,6 +81,7 @@ export default {
   deletCartItem(env, cartItem) {
     env.$log("deletCartItem Enter")
     env.$log(cartItem)
+    env.$log(env.$store.state.appconf.cartList)
     let cartList = env.$store.state.appconf.cartList;
     try {
       let found = -1;
