@@ -24,10 +24,19 @@
         <ul>
           <li v-for="(sku,i)  in detail.skus" :key='i' style="list-style: none">
             <van-card
-              :price="sku.unitPrice"
+              :price="sku.salePrice"
               :title="sku.name"
               :num="sku.num"
               :thumb="sku.image">
+              <div slot="origin-price" v-if="sku.salePrice != sku.unitPrice">
+                          <span>
+                            ￥{{sku.unitPrice}}
+                          </span>
+              </div>
+              <div slot="tags" v-if="sku.salePrice != sku.unitPrice" class="cardtags">
+                <img :src="tag_promotion"/>
+                <img :src="tag_coupon"/>
+              </div>
               <div slot="footer">
                 <van-button plain round size="small" type="primary"
                             style="background-color: white;color: black;border-color: #dedede "
@@ -39,7 +48,7 @@
           </li>
         </ul>
         <div class="orderSummery">
-          <span>合计: ￥{{detail.amount.toFixed(2)}}元 (含运费￥{{detail.servFee.toFixed(2)}}元) </span>
+          <span>合计: ￥{{detail.saleAmount.toFixed(2)}}元 (含运费￥{{detail.servFee.toFixed(2)}}元) </span>
         </div>
         <div class="orderDetailAction">
           <van-button plain round size="small" type="primary"
@@ -63,6 +72,33 @@
             确认收货
           </van-button>
         </div>
+      </div>
+      <div class="pay-settlement">
+        <van-cell title="商品金额:">
+          <div slot="default">
+            <span style="color: black">￥{{productPrice}}</span>
+          </div>
+        </van-cell>
+        <van-cell title="运费:">
+          <div slot="default">
+            <span style="color: #ff4444">+￥{{freightFee}}</span>
+          </div>
+        </van-cell>
+        <van-cell title="活动优惠:">
+          <div slot="default">
+            <span style="color: #ff4444">-￥xxxx</span>
+          </div>
+        </van-cell>
+        <van-cell title="优惠券:">
+          <div slot="default">
+            <span style="color: #ff4444">-￥xxxx</span>
+          </div>
+        </van-cell>
+        <van-cell title="合计:">
+          <div slot="default">
+            <span style="font-weight: bold;color: black;">￥xxxx</span>
+          </div>
+        </van-cell>
       </div>
       <div class="order-detail">
         <van-cell title="订单信息" icon="info-o"/>
@@ -103,21 +139,37 @@
       return {
         detail: {},
         status: -1,
-        orderIcon: require('@/assets/images/order.png')
+        orderIcon: require('@/assets/images/order.png'),
+        tag_coupon: require('@/assets/icons/ico_lab_coupon.png'),
+        tag_promotion: require('@/assets/icons/ico_lab_promotion.png'),
+        coupon:{},
       }
     },
 
-
     created() {
+      let that = this
       this.$log("order detail created Enter");
       //this.detail = this.$route.params.detail;
       this.detail = JSON.parse(this.$store.state.appconf.currentOrderInfo);
-      //this.$log(this.detail)
+      this.$log(this.detail)
       this.status = this.detail.status;
     },
 
 
-    computed: {},
+    computed: {
+      productPrice() {
+         let productPrice = 0;
+         this.detail.skus.forEach(sku =>{
+           productPrice += sku.unitPrice * sku.num;
+         })
+         return productPrice.toFixed(2)
+      },
+
+      freightFee() {
+        return  this.detail.servFee.toFixed(2)
+      }
+
+    },
 
     methods: {
       onAfterSalesServiceBtnClick(sku) {
@@ -393,6 +445,13 @@
 
         .van-card {
           background-color: #ffffff;
+
+          .cardtags {
+            > img {
+              width: 25px;
+              height: 25px;
+            }
+          }
         }
       }
 
@@ -455,6 +514,10 @@
         }
 
 
+      }
+
+      .pay-settlement {
+        margin-top: 10px;
       }
     }
   }

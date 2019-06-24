@@ -678,7 +678,7 @@
           })
           let couponInfo = {
             'id': coupon.id,
-            'code':coupon.userCouponCode,
+            'code': coupon.userCouponCode,
             "merchants": merchants
           }
           return couponInfo
@@ -1079,7 +1079,7 @@
         that.$api.xapi({
           method: 'post',
           baseURL: this.$api.SSO_BASE_URL,
-         // url: '/zhcs/payment',
+          // url: '/zhcs/payment',
           url: '/payment/pingan',
           data: options,
         }).then((response) => {
