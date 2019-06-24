@@ -678,6 +678,7 @@
           })
           let couponInfo = {
             'id': coupon.id,
+            'code':coupon.userCouponCode,
             "merchants": merchants
           }
           return couponInfo
