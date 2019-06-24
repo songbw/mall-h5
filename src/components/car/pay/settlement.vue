@@ -679,6 +679,7 @@
           let couponInfo = {
             'id': coupon.id,
             'code': coupon.userCouponCode,
+            'discount': parseFloat(this.reducedPriceOfCoupon),
             "merchants": merchants
           }
           return couponInfo
@@ -1025,7 +1026,8 @@
                   "num": sku.product.baseInfo.count,
                   "unitPrice": unitPrice,
                   "salePrice": salePrice,
-                  "promotionId": promotionId
+                  "promotionId": promotionId,
+                  "promotionDiscount": (unitPrice - sku.product.goodsInfo.dprice).toFixed(2)
                 })
               }
             })

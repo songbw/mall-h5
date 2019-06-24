@@ -74,7 +74,7 @@
         </div>
       </div>
       <div class="pay-settlement">
-        <van-cell title="商品金额:">
+        <van-cell title="商品原价:">
           <div slot="default">
             <span style="color: black">￥{{productPrice}}</span>
           </div>
@@ -86,17 +86,20 @@
         </van-cell>
         <van-cell title="活动优惠:">
           <div slot="default">
-            <span style="color: #ff4444">-￥xxxx</span>
+            <span style="color: #ff4444">-￥{{promotionDiscout}}</span>
           </div>
         </van-cell>
         <van-cell title="优惠券:">
           <div slot="default">
-            <span style="color: #ff4444">-￥xxxx</span>
+            <span style="color: #ff4444">-￥{{detail.couponDiscount.toFixed(2)}}</span>
           </div>
         </van-cell>
-        <van-cell title="合计:">
+        <van-cell>
+          <div slot="title">
+            <span style="font-weight: bold;color: black;">合计:</span>
+          </div>
           <div slot="default">
-            <span style="font-weight: bold;color: black;">￥xxxx</span>
+            <span style="font-weight: bold;color: black;">￥{{detail.saleAmount.toFixed(2)}}</span>
           </div>
         </van-cell>
       </div>
@@ -167,7 +170,15 @@
 
       freightFee() {
         return  this.detail.servFee.toFixed(2)
-      }
+      },
+
+      promotionDiscout() {
+        let promotionDiscount = 0;
+        this.detail.skus.forEach(sku =>{
+          promotionDiscount += sku.promotionDiscount * sku.num;
+        })
+        return promotionDiscount.toFixed(2)
+      },
 
     },
 
