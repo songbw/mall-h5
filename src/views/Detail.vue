@@ -240,11 +240,12 @@
               }).then((response) => {
                 let result = response.data.data.result;
                 result.couponUseInfo.forEach(coupon => {
-                  this.$log("已领券")
-                  coupon["couponInfo"] = item
-                  this.userCouponList.push(coupon)
-                  this.$log(coupon)
-
+                  if(coupon.status === 1) {
+                    this.$log("已领券") //已领取券，未使用
+                    coupon["couponInfo"] = item
+                    this.userCouponList.push(coupon)
+                    this.$log(coupon)
+                  }
                 })
                 if (item.rules.perLimited > result.couponUseInfo.length) {
                   this.$log("还有券可领")
