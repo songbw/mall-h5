@@ -2,18 +2,20 @@
   <section class="sectionGoods" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
     <div class="container" ref="container">
       <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
-              @change="onTabChanged"  :style="{'margin-left': '-5px','background-color': datas.settings.floorTitleColor}">
+              @change="onTabChanged"
+              :style="{'margin-left': '-5px','background-color': datas.settings.floorTitleColor}">
       </ly-tab>
       <div :style="{marginTop: marginTop}">
         <div v-for="(category,index) in datas.list" :title=category.title :key="index">
-          <ul id="sectionGoods-list" :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
+          <ul id="sectionGoods-list"
+              :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <p>{{k.intro}}</p>
               <div class="goodsFooter">
-                <span :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
+                <span
+                  :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
               </div>
-
             </li>
           </ul>
         </div>
@@ -71,13 +73,6 @@
     },
 
     methods: {
-/*      getCurrentGoodsWidth(countPerLine) {
-        this.$log("getCurrentGoodsWidth:"+countPerLine);
-        if(countPerLine == 3)
-          return '33.33%'
-        else
-          return '50%'
-      },*/
       onTabChanged(item, index) {
         this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
         if (this.isTabChanging) {
@@ -94,13 +89,12 @@
         }
       },
       handleScroll() {
-        if(document.querySelector('#fixedBar') == null)
+        if (document.querySelector('#fixedBar') == null)
           return;
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         if (!this.isFixed) {
           this.tabsOffsetTop = document.querySelector('#fixedBar').offsetTop;
         }
-        //this.$log("tabsOffsetTop is:" + this.tabsOffsetTop)
         if (scrollTop >= this.tabsOffsetTop) {
           this.isFixed = true;
           this.marginTop = document.querySelector('#fixedBar').offsetHeight + 'px';
@@ -183,30 +177,32 @@
       overflow: hidden;
       background-color: #f0f0f0;
       padding-right: 2vw;
-      padding-left:  2vw;
+      padding-left: 2vw;
+
       li {
         width: 48vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         border: 4px solid #f0f0f0;
-        border-radius:15px;
+        border-radius: 15px;
+
         img {
           width: 100%;
           height: 10em;
           display: inline-block;
-          border-top-left-radius:  10px;
+          border-top-left-radius: 10px;
           border-top-right-radius: 10px;
         }
 
         > p {
-          .fz(font-size,23);
+          .fz(font-size, 23);
           min-height: 2rem;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
-          word-break:break-all;
+          word-break: break-all;
           bottom: 0;
           left: 0;
           width: 100%;
@@ -221,9 +217,10 @@
           .fz(font-size, 40);
         }
 
-        .goodsFooter{
-          border-bottom-left-radius:  10px;
+        .goodsFooter {
+          border-bottom-left-radius: 10px;
           border-bottom-right-radius: 10px;
+
           > span {
             display: inline-block;
             align-content: center;
@@ -235,12 +232,13 @@
         }
 
       }
-/*      li{
-        border-bottom: 2px solid #f0f0f0;
-      }
-      li:nth-child(2n) {
-        border-left: 2px solid #f0f0f0;
-      }*/
+
+      /*      li{
+              border-bottom: 2px solid #f0f0f0;
+            }
+            li:nth-child(2n) {
+              border-left: 2px solid #f0f0f0;
+            }*/
     }
 
     .sectionGoods-list3 {
@@ -257,30 +255,32 @@
       overflow: hidden;
       background-color: #f0f0f0;
       padding-right: 2vw;
-      padding-left:  2vw;
+      padding-left: 2vw;
+
       li {
         width: 32vw;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        border: 3px  solid #f0f0f0;
-        border-radius:15px;
+        border: 3px solid #f0f0f0;
+        border-radius: 15px;
+
         img {
           width: 100%;
           height: 6.66em;
           display: inline-block;
-          border-top-left-radius:  10px;
+          border-top-left-radius: 10px;
           border-top-right-radius: 10px;
         }
 
         > p {
-          .fz(font-size,23);
+          .fz(font-size, 23);
           min-height: 2rem;
           overflow: hidden;
           text-overflow: ellipsis;
           display: -webkit-box;
           -webkit-box-orient: vertical;
           -webkit-line-clamp: 2;
-          word-break:break-all;
+          word-break: break-all;
           bottom: 0;
           left: 0;
           width: 100%;
@@ -295,9 +295,10 @@
           .fz(font-size, 40);
         }
 
-        .goodsFooter{
-          border-bottom-left-radius:  10px;
+        .goodsFooter {
+          border-bottom-left-radius: 10px;
           border-bottom-right-radius: 10px;
+
           > span {
             display: inline-block;
             align-content: center;
@@ -308,9 +309,11 @@
           }
         }
       }
+
       li:nth-child(3n+2) {
         margin-left: 1px;
       }
+
       li:nth-child(3n+3) {
         margin-left: 1px;
       }

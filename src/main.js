@@ -130,9 +130,7 @@ Vue.use(vueLogger, {
 // 用钩子函数beforeEach()对路由进行判断
 
 router.beforeEach((to, from, next) => {
-  //document.body.scrollTop = 0;
   console.log("route:" + from.fullPath + "-->" + to.fullPath)
-
   next();
 })
 
