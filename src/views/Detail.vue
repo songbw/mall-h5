@@ -170,13 +170,11 @@
       'v-loading': Loading
     },
     beforeRouteEnter(to, from, next) {
-      // chrome
-      document.body.scrollTop = 0
-      // firefox
-      document.documentElement.scrollTop = 0
-      // safari
-      window.pageYOffset = 0
-      next()
+      next(vm => {
+        setTimeout(() => {
+          window.scrollTo(0,0);
+        }, 20);
+      })
     },
 
     mounted() {

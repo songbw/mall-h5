@@ -23,7 +23,7 @@ const PRODUCT_BASE_URL = "https://api.weesharing.com/v2/products/";
 const AGGREGATION_BASE_URL = "https://api.weesharing.com/v2/aggregations/"
 const ORDER_BASE_URL = "https://api.weesharing.com/v2/orders/"
 const EQUITY_BASE_URL = "https://api.weesharing.com/v2/equitys/"
-const SSO_BASE_URL = "http://api.weesharing.com/v2/ssoes/"
+const SSO_BASE_URL = "https://api.weesharing.com/v2/ssoes/"
 
 //const PRODUCT_BASE_URL = "http://119.3.111.161:8080";
 
