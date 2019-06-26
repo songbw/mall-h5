@@ -24,6 +24,7 @@ const AGGREGATION_BASE_URL = "https://api.weesharing.com/v2/aggregations/"
 const ORDER_BASE_URL = "https://api.weesharing.com/v2/orders/"
 const EQUITY_BASE_URL = "https://api.weesharing.com/v2/equitys/"
 const SSO_BASE_URL = "https://api.weesharing.com/v2/ssoes/"
+const WORKER_ORDER_BASE_URL = "https://api.weesharing.com/v2/workorders"
 
 //const PRODUCT_BASE_URL = "http://119.3.111.161:8080";
 
@@ -96,5 +97,6 @@ export default {
   AGGREGATION_BASE_URL,
   ORDER_BASE_URL,
   EQUITY_BASE_URL,
-  SSO_BASE_URL
+  SSO_BASE_URL,
+  WORKER_ORDER_BASE_URL
 }

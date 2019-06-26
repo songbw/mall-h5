@@ -6,10 +6,15 @@
     <div class="serviceBody">
       <div class="goodsBox">
         <van-card
-          :num="goods.num"
-          :price="goods.unitPrice"
+          :price="goods.salePrice"
           :title="goods.name"
+          :num="goods.num"
           :thumb="goods.image">
+          <div slot="origin-price" v-if="goods.salePrice != goods.unitPrice">
+            <span>
+              ￥{{goods.unitPrice}}
+            </span>
+          </div>
         </van-card>
         <van-cell title="状态" title-class="CellTitle" :value="requestStateValue"></van-cell>
         <div slot="footer">
@@ -24,7 +29,7 @@
         <van-cell title="申请类型" title-class="CellTitle"></van-cell>
         <van-radio-group v-model="typeRadio">
           <van-cell-group>
-            <van-cell title="退货" clickable @click="typeRadio = 'type1'">
+            <van-cell title="退货/退款" clickable @click="typeRadio = 'type1'">
               <van-radio name="type1"/>
             </van-cell>
             <van-cell title="换货" clickable @click="typeRadio = 'type2'">
@@ -34,7 +39,7 @@
         </van-radio-group>
       </div>
       <div class="requireReasonBox">
-        <van-cell title="申请原因" title-class="CellTitle" value="请选择申请原因">
+        <van-cell title="申请原因" title-class="CellTitle" :value="getRequestReason()">
           <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                     @click="showReasonSelector()"/>
         </van-cell>
@@ -98,41 +103,45 @@
       'v-header': Header,
     },
     watch: {
-      requestState: function(newVal, oldVal) {
+      requestState: function (newVal, oldVal) {
         //-2:未初始化，-1:申请售后 0.处理中 1.审核通过 2.审核不通过 3.已完成
-         switch(newVal) {
-           case -1:
-             this.requestStateValue = "申请售后"
-             this.commitDisabled = false;
-             break;
-           case 0:
-             this.requestStateValue = "处理中"
-             this.commitDisabled = true;
-             break;
-           case 1:
-             this.requestStateValue = "审核通过"
-             this.commitDisabled = true;
-             break;
-           case 2:
-             this.requestStateValue = "审核不通过"
-             this.commitDisabled = false;
-             break;
-           case 3:
-             this.requestStateValue = "已完成"
-             this.commitDisabled = true;
-             break;
-           default:
-             this.commitDisabled = true;
-             break;
-         }
-      },
-/*      requestDescible: function (newVal, oldVal) {
-        if (this.requestState == -1 && newVal.length > 0) {
-          this.commitDisabled = false;
-        } else {
-          this.commitDisabled = true;
+        this.$log("requestState Enter")
+        switch (newVal) {
+          case -1:
+            this.requestStateValue = "申请售后"
+            this.commitDisabled = false;
+            break;
+          case 1:
+            this.requestStateValue = "待审核"
+            this.commitDisabled = true;
+            break;
+          case 2:
+            this.requestStateValue = "审核中"
+            this.commitDisabled = true;
+            break;
+          case 3:
+            this.requestStateValue = "审核通过"
+            this.commitDisabled = true;
+            break;
+          case 4:
+            this.requestStateValue = "审核不通过"
+            this.commitDisabled = false;
+            break;
+          case 5:
+            this.requestStateValue = "处理中"
+            this.commitDisabled = false;
+            break;
+          case 6:
+            this.requestStateValue = "处理完成"
+            this.commitDisabled = true;
+            break;
+          default:
+            this.commitDisabled = true;
+            break;
         }
-      }*/
+        this.$log("requestStateValue:" + this.requestStateValue)
+        this.$log("commitDisabled:" + this.commitDisabled)
+      },
     },
     data() {
       return {
@@ -151,19 +160,6 @@
       }
     },
 
-
-/*    created() {
-      this.goods = this.$route.params.goods;
-      this.contact = this.$route.params.contact;
-      this.openId = this.$route.params.openId;
-      this.tradeNo = this.$route.params.tradeNo;
-      this.count = this.goods.num;
-
-      this.$log(this.goods)
-      this.$log(this.contact)
-      this.$log(this.openId)
-      this.$log(this.tradeNo)
-    },*/
     created() {
       let that = this
       this.goods = this.$route.params.goods;
@@ -171,22 +167,34 @@
       this.openId = this.$route.params.openId;
       this.tradeNo = this.$route.params.tradeNo;
       this.count = this.goods.num;
-
+      this.$log(this.goods)
       this.$api.xapi({
         method: 'get',
-        baseURL: this.$api.ORDER_BASE_URL,
-        url: '/refund/subOrder',
+        baseURL: this.$api.WORKER_ORDER_BASE_URL,
+        url: '/customers/work_orders',
         params: {
-          subOrderId: this.goods.subOrderId,
+          customer: this.openId,
+          orderId: this.goods.subOrderId,
+          pageIndex: 1,
+          pageSize: 20
         }
       }).then((response) => {
-         let result = response.data.data.result;
-         this.$log(result)
-         if(result != undefined && result.length != 0) {
-            this.requestState = result[0].status;
-         } else {
-           this.requestState = -1;
-         }
+        this.$log(response)
+        if (response.status == 200) {
+          let result = response.data;
+          if (JSON.stringify(result) == "{}") {
+            this.requestState = -1;
+          } else {
+            this.requestState = result.rows[0].status
+          }
+        }
+        /*         let result = response.data.data.result;
+                 this.$log(result)
+                 if(result != undefined && result.length != 0) {
+                    this.requestState = result[0].status;
+                 } else {
+                   this.requestState = -1;
+                 }*/
       }).catch(function (error) {
         that.$log(error)
         that.requestState = -1;
@@ -225,28 +233,34 @@
       },
       onCommitClick() {
         this.$log("onCommitClick Enter")
-        let options = {
-          orderId: this.tradeNo,
-          subOrderId: this.goods.subOrderId,
-          skuId: this.goods.skuId,
-          number: this.count,
-          type: this.getRequestType(),
-          reason: this.getRequestReason(),
-          description: this.requestDescible,
-          contactName: this.contact.name,
-          contactTel: this.contact.mobile
-        }
+        /*        let options = {
+                  orderId: this.tradeNo,
+                  subOrderId: this.goods.subOrderId,
+                  skuId: this.goods.skuId,
+                  number: this.count,
+                  type: this.getRequestType(),
+                  reason: this.getRequestReason(),
+                  description: this.requestDescible,
+                  contactName: this.contact.name,
+                  contactTel: this.contact.mobile
+                }*/
         this.$log(JSON.stringify(options))
         let that = this
+        let options = {
+          customer: this.openId,
+          description: this.requestDescible,
+          orderId: this.goods.subOrderId,
+          title: this.getRequestReason(),
+          typeId: this.getRequestType(),
+        }
         this.$api.xapi({
           method: 'post',
-          baseURL: this.$api.ORDER_BASE_URL,
-          url: '/refund',
+          baseURL: this.$api.WORKER_ORDER_BASE_URL,
+          url: '/customers/work_orders',
           data: options,
         }).then((response) => {
-          let msg = response.data.msg;
-          this.$log(msg)
-          if (msg == "Success") {
+          this.$log(response)
+          if (response.status == 201) {
             this.$toast("申请已经成功提交，请等待客服人员联系")
             this.requestState = 0;
           } else {
