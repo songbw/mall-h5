@@ -1,19 +1,12 @@
-//import Vue from 'vue'
-//import Router from 'vue-router'
-
-//Vue.use(Router);
-//按需加载,当渲染其他页面时才加载其组件,并缓存,减少首屏加载时间
 const Index = resolve => require(['@/views/Index.vue'], resolve)
 const IndexSub = resolve => require(['@/components/index/sub/main.vue'], resolve)
 const Category = resolve => require(['@/views/Category.vue'], resolve)
 const CategoryMain = resolve => require(['@/components/category/main.vue'], resolve)
 const CategoryList = resolve => require(['@/components/category/goods/list.vue'], resolve)
-const Car = resolve => require(['@/views/Car.vue'], resolve)
 const Cart = resolve => require(['@/views/Cart.vue'], resolve)
 const User = resolve => require(['@/views/User.vue'], resolve)
 const Detail = resolve => require(['@/views/Detail.vue'], resolve)
 const Search = resolve => require(['@/views/Search.vue'], resolve)
-const Pay = resolve => require(['@/components/car/pay/pay.vue'], resolve)
 const Settlement = resolve => require(['@/components/car/pay/settlement.vue'], resolve)
 const Invoice = resolve => require(['@/components/car/pay/invoice.vue'], resolve)
 const OrderList = resolve => require(['@/components/car/pay/orderList.vue'], resolve)
