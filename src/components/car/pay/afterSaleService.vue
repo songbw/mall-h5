@@ -306,17 +306,11 @@
       .goodsBox {
         .van-card {
           background-color: #ffffff;
-          margin-top: 5px;
-
-          &__price {
-            margin-top: 2em;
-            .fz(font-size, 30);
-          }
 
           .cardtags {
             > img {
-              width: 25px;
-              height: 25px;
+              width: 30px;
+              height: 30px;
             }
           }
         }
