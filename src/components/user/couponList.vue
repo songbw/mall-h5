@@ -10,32 +10,36 @@
             <van-list v-model="item.loading"
                       :finished="item.finished"
                       @load="onLoad(active)">
-            </van-list>
-            <div class="couponList">
-              <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i">
-                <div  @touchstart.prevent="touchEvtStart(k,type,i)" @touchend.prevent="touchEvtEnd()" class="coupon-main">
-                  <div class="coupon-img">
-                    <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
-                  </div>
-                  <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                    <div class="coupon-suppler">
-                      <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                      <i>{{k.couponInfo.name}}</i>
+              <div class="couponList">
+                <li v-for="(k,i) in item.list" :key=i style="list-style: none">
+                  <div style="padding:2px;background-color: #f0f0f0">
+                    <div class="coupon coupon-white coupon-wave-left coupon-wave-right">
+                      <div  @touchstart.prevent="touchEvtStart(k,type,i)" @touchend.prevent="touchEvtEnd()" class="coupon-main">
+                        <div class="coupon-img">
+                          <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
+                        </div>
+                        <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                          <div class="coupon-suppler">
+                            <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                            <i>{{k.couponInfo.name}}</i>
+                          </div>
+                          <div class="coupon-price">{{formateCouponPrice(k.couponInfo.rules.couponRules)}}</div>
+                          <div class="coupon-desc">{{formateCouponDescription(k.couponInfo.rules.couponRules)}}</div>
+                          <div class="coupon-expire-date">
+                            {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
+                          </div>
+                        </div>
+                      </div>
+                      <div :class=getCouponState(type) @click="onConponUseClick(k,i)">
+                        <div>
+                          <span class="coupon-action">立即使用</span>
+                        </div>
+                      </div>
                     </div>
-                    <div class="coupon-price">{{formateCouponPrice(k.couponInfo.rules.couponRules)}}</div>
-                    <div class="coupon-desc">{{formateCouponDescription(k.couponInfo.rules.couponRules)}}</div>
-                    <div class="coupon-expire-date">
-                      {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
-                    </div>
                   </div>
-                </div>
-                <div :class=getCouponState(type) @click="onConponUseClick(k,i)">
-                  <div>
-                    <span class="coupon-action">立即使用</span>
-                  </div>
-                </div>
+                </li>
               </div>
-            </div>
+            </van-list>
           </van-tab>
         </van-tabs>
       </div>
@@ -106,17 +110,17 @@
 
     mounted() {
       this.active = this.$store.state.appconf.currentOrderListIndex;
-      setTimeout(() => {
+/*      setTimeout(() => {
         if (!this.launchedLoading) {
-          this.onLoad(this.active)
+            this.onLoad(this.active)
         }
-      }, 1000);
+      }, 1000);*/
     },
 
 
     methods: {
       getCouponState(type) {
-        this.$log("type:"+type)
+        //  this.$log("type:"+type)
         switch (type) {
           case 0://未使用
             return "coupon-get"
@@ -192,7 +196,7 @@
         return (userInfo == undefined || userInfo.length === 0)
       },
       onLoad(index) {
-        this.$log("onLoad:" + index)
+        this.$log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  onLoad:" + index)
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         that.$log(userInfo)
@@ -205,7 +209,7 @@
                 userOpenId: user.userId,
                 status: index + 1,
                 "offset": that.couponTypes[index].pageNo++,
-                "limit": 10
+                "limit": 5
               }
             that.$api.xapi({
               method: 'post',
@@ -242,7 +246,7 @@
       onConponUseClick(coupon, i) {
         this.$log("onCouponUseClick Enter")
         this.$log(coupon)
-        if(coupon.status === 1) { //未使用
+        if (coupon.status === 1) { //未使用
           let couponInfo = coupon.couponInfo;
           let url = couponInfo.url;
           if (url.startsWith("aggregation://")) {
@@ -386,10 +390,11 @@
               background-image: linear-gradient(150deg, #50ADD3 50%, #50ADD3D8 50%);
             }
 
-            .coupon-main{
+            .coupon-main {
               display: flex;
               flex-direction: row;
               width: 90%;
+
               .coupon-img {
                 display: flex;
                 justify-content: center;
@@ -403,6 +408,7 @@
                   width: 100%;
                 }
               }
+
               .coupon-info-right-dashed {
                 border-right: 2px dashed #c8c9cc;
               }
