@@ -169,13 +169,13 @@
       'v-countdown': CountDown,
       'v-loading': Loading
     },
-/*    beforeRouteEnter(to, from, next) {
+    beforeRouteEnter(to, from, next) {
       next(vm => {
         setTimeout(() => {
           window.scrollTo(0,0);
         }, 20);
       })
-    },*/
+    },
 
     mounted() {
       this.pageloading = true;
