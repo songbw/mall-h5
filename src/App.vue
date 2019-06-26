@@ -1,11 +1,10 @@
 <template>
   <div id="app">
-
-    <keep-alive>
-      <transition enter-active-class="animated fadeIn">
+    <transition enter-active-class="animated fadeIn">
+      <keep-alive>
         <router-view v-if="$route.meta.keepAlive"></router-view>
-      </transition>
-    </keep-alive>
+      </keep-alive>
+    </transition>
     <transition enter-active-class="animated fadeIn">
       <router-view v-if="!$route.meta.keepAlive"></router-view>
     </transition>
