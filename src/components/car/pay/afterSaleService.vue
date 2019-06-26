@@ -15,6 +15,10 @@
               ￥{{goods.unitPrice}}
             </span>
           </div>
+          <div slot="tags" v-if="goods.salePrice != goods.unitPrice" class="cardtags">
+            <img :src="tag_promotion"  v-if="goods.promotionDiscount > 0"/>
+            <img :src="tag_coupon" v-if="goods.unitPrice - goods.salePrice - goods.promotionDiscount > 0" />
+          </div>
         </van-card>
         <van-cell title="状态" title-class="CellTitle" :value="requestStateValue"></van-cell>
         <div slot="footer">
@@ -157,6 +161,8 @@
         requestStateValue: "",
         commitDisabled: true,
         requestDescible: '',
+        tag_coupon: require('@/assets/icons/ico_lab_coupon.png'),
+        tag_promotion: require('@/assets/icons/ico_lab_promotion.png'),
       }
     },
 
@@ -305,6 +311,13 @@
           &__price {
             margin-top: 2em;
             .fz(font-size, 30);
+          }
+
+          .cardtags {
+            > img {
+              width: 25px;
+              height: 25px;
+            }
           }
         }
       }

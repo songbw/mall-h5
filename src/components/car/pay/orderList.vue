@@ -37,8 +37,8 @@
                           </span>
                         </div>
                         <div slot="tags"  v-if="sku.salePrice != sku.unitPrice" class="cardtags">
-                          <img :src="tag_promotion"/>
-                          <img :src="tag_coupon"/>
+                          <img :src="tag_promotion"  v-if="sku.promotionDiscount > 0"/>
+                          <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />
                         </div>
                       </van-card>
                     </li>

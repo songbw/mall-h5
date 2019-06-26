@@ -34,8 +34,8 @@
                           </span>
               </div>
               <div slot="tags" v-if="sku.salePrice != sku.unitPrice" class="cardtags">
-                <img :src="tag_promotion"/>
-                <img :src="tag_coupon"/>
+                <img :src="tag_promotion"  v-if="sku.promotionDiscount > 0"/>
+                <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />
               </div>
               <div slot="footer">
                 <van-button plain round size="small" type="primary"
@@ -91,7 +91,7 @@
         </van-cell>
         <van-cell title="优惠券:">
           <div slot="default">
-            <span style="color: #ff4444">-￥{{detail.couponDiscount.toFixed(2)}}</span>
+            <span style="color: #ff4444">-￥{{couponDiscount}}</span>
           </div>
         </van-cell>
         <van-cell>
@@ -179,6 +179,14 @@
         })
         return promotionDiscount.toFixed(2)
       },
+
+      couponDiscount() {
+        let couponDiscount = 0;
+        if(this.detail.couponDiscount != null) {
+          couponDiscount = this.detail.couponDiscount
+        }
+        return couponDiscount.toFixed(2)
+      }
 
     },
 
