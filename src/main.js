@@ -5,10 +5,8 @@ import store from '@/vuex/store.js'   //vuex
 import services from '@/http/api.js'       //http请求
 import vueLogger from "vue-logger";
 import LyTab from 'ly-tab'
-import animated from 'animate.css'
 import moment from 'moment'
 
-Vue.use(animated)
 Vue.use(LyTab)
 
 import {

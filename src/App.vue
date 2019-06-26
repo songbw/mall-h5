@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <transition enter-active-class="animated fadeIn">
+    <transition name="fade">
       <keep-alive>
         <router-view v-if="$route.meta.keepAlive"></router-view>
       </keep-alive>
     </transition>
-    <transition enter-active-class="animated fadeIn">
+    <transition name="fade">
       <router-view v-if="!$route.meta.keepAlive"></router-view>
     </transition>
   </div>
@@ -182,5 +182,11 @@
     -webkit-animation: fadeIn 1s linear;
   }
 
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+  .fade-enter, .fade-leave-active {
+    opacity: 0
+  }
 
 </style>
