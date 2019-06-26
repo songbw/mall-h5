@@ -135,7 +135,8 @@ export default new VueRouter({
       path: '/detail',
       name: '详情页',
       component: Detail
-    }, {
+    },
+    {
       path: '/search',
       name: '搜索页',
       component: Search

@@ -1,7 +1,13 @@
 <template>
   <div id="app">
-    <transition  enter-active-class="animated fadeIn">
-      <router-view></router-view>
+
+    <keep-alive>
+      <transition enter-active-class="animated fadeIn">
+        <router-view v-if="$route.meta.keepAlive"></router-view>
+      </transition>
+    </keep-alive>
+    <transition enter-active-class="animated fadeIn">
+      <router-view v-if="!$route.meta.keepAlive"></router-view>
     </transition>
   </div>
 </template>
@@ -18,12 +24,12 @@
     loading: 'static/loading.png',
     attempt: 3,
     adapter: {
-      loaded ({ bindType, el, naturalHeight, naturalWidth, $parent, src, loading, error, Init }) {
-        el.setAttribute("class","fadeIn")
+      loaded({bindType, el, naturalHeight, naturalWidth, $parent, src, loading, error, Init}) {
+        el.setAttribute("class", "fadeIn")
       }
     },
     observer: true,
-    observerOptions: { rootMargin: '1500px', threshold: 0.05 }
+    observerOptions: {rootMargin: '1500px', threshold: 0.05}
   })
   export default {
     components: {
