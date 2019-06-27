@@ -790,6 +790,7 @@
               }
             that.$api.xapi({
               method: 'post',
+              baseURL: this.$api.EQUITY_BASE_URL,
               url: '/coupon/CouponByOpenId',
               data: options
             }).then((response) => {
@@ -1091,6 +1092,12 @@
               pAnOrderInfo.orderNo = orderNo
               that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
               that.$jsbridge.call("openCashPage", pAnOrderInfo);
+              this.$router.push({
+                name: "收银台页",
+                params: {
+                  orderInfo: pAnOrderInfo
+                }
+              })
             }
           }
         }).catch(function (error) {
@@ -1123,6 +1130,19 @@
             }).then(() => {
             })
           } else {
+           /* let pAnOrderInfo = {
+              "accessToken": user.accessToken,
+              "orderNo": '222222222222222',// orderNo,
+              "orderAmount": 100 * 100,//分
+              "openId": user.openId,
+              "businessType": "11"
+            }
+            this.$router.push({
+              name: "收银台页",
+              params: {
+                orderInfo: pAnOrderInfo
+              }
+            })*/
             try {
               let options = this.getComposedOrderOption(userInfo, receiverId);
               this.$log(JSON.stringify(options))
@@ -1368,6 +1388,12 @@
   @import "../../../assets/fz.less";
 
   .settlement {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
+
     .header {
       width: 100%;
       position: fixed;
@@ -1378,7 +1404,7 @@
     .pay {
       width: 100%;
       padding-top: 2.3em;
-      background-color: #f0f0f0;
+
 
       .custom-text {
         text-align: left;
@@ -1455,7 +1481,7 @@
 
           .noCoupon {
             width: 100%;
-            background-color: #f0f0f0;
+            background-color: #f8f8f8;
             display: flex;
             flex-direction: column;
             justify-content: center;

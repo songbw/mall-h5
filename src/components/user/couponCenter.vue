@@ -336,7 +336,11 @@
   @import '../../assets/user/icon/carstyle.css';
 
   .couponCenter {
+    position: fixed;
     width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
 
     .couponCenterBody {
       .couponCenterHeader {

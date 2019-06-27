@@ -179,7 +179,11 @@
 
 
   .user {
+    position: fixed;
     width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
 
     .userMain {
       background-color: #f8f8f8;
@@ -324,11 +328,6 @@
           padding: 10px;
           background-color: white;
         }
-      }
-
-      .userfooter {
-        height: 10vh;
-        background-color: #f8f8f8;
       }
     }
   }

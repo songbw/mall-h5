@@ -413,11 +413,14 @@
   @import '../../assets/index/style.css';
 
   .couponActivity {
-    .couponActivityMain {
-      background-color: #f0f0f0;
-      height: 100vh;
-      width: 100%;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
 
+    .couponActivityMain {
+      width: 100%;
       .couponActivityInfo {
         background-color: #FFAA00;
         width: 100%;
