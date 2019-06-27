@@ -543,7 +543,11 @@
   @import "../../../assets/index/style.css";
 
   .orderlist {
+    position: fixed;
     width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
     text-align: left;
 
     .orderlist-layout{
@@ -557,7 +561,6 @@
       }
 
       .orderlist-body {
-        background-color: #f0f0f0;
 
         span {
           .fz(font-size, 30);

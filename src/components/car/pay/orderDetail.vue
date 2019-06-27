@@ -393,7 +393,11 @@
   @import "../../../assets/index/style.css";
 
   .orderDetail {
+    position: fixed;
     width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
     text-align: left;
 
     .header {
@@ -404,7 +408,6 @@
     }
 
     .order-body {
-      background-color: #f0f0f0;
       padding-top: 2.3em;
 
       .order-status {

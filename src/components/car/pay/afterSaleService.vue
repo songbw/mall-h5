@@ -76,7 +76,7 @@
       <div class="descibleQuestion">
         <van-cell title="问题描述" title-class="CellTitle">
         </van-cell>
-        <van-field style="background-color: #f0f0f0"
+        <van-field style="background-color: #f8f8f8"
                    v-model="requestDescible"
                    type="textarea"
                    placeholder="请描述申请售后服务的具体原因"
@@ -299,9 +299,18 @@
   @import "../../../assets/fz.less";
 
   .afterSaleService {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
     .serviceBody {
-      background-color: #f8f8f8;
       margin-bottom: 3em;
+
+      .van-cell {
+        background-color: white;
+        margin-top: -1px;
+      }
 
       .goodsBox {
         .van-card {

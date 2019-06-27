@@ -224,8 +224,11 @@
   @import "../../../assets/fz.less";
 
   .detaillist {
+    position: fixed;
     width: 100%;
-    background-color: #f0f0f0;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
     .header{
       width:100%;
       position:fixed;

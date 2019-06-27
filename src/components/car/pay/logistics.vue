@@ -182,7 +182,7 @@
 
       .logisticsInfo {
         .logisticsBox {
-          border: #f0f0f0 solid 10px;
+          border: #f8f8f8 solid 10px;
 
           > li {
             list-style: none;

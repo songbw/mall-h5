@@ -129,6 +129,12 @@
   @import "../../../assets/index/style.css";
 
   .promotion {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
+
     .promotionTitle {
       color: black;
       font-weight: bold;
