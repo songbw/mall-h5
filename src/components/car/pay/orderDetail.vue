@@ -393,7 +393,6 @@
   @import "../../../assets/index/style.css";
 
   .orderDetail {
-    position: fixed;
     width: 100%;
     height: 100%;
     top: 0px;

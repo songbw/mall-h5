@@ -129,7 +129,6 @@
   @import "../../../assets/index/style.css";
 
   .promotion {
-    position: fixed;
     width: 100%;
     height: 100%;
     top: 0px;

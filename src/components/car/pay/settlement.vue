@@ -1388,7 +1388,6 @@
   @import "../../../assets/fz.less";
 
   .settlement {
-    position: fixed;
     width: 100%;
     height: 100%;
     top: 0px;

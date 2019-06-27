@@ -64,11 +64,10 @@
   @import "../../../assets/index/style.css";
 
   .casher {
-    position: fixed;
     width: 100%;
     height: 100%;
     top: 0px;
-    background-color: #f0f0f0;
+    background-color: #f8f8f8;
 
     .pay-order {
       background-color: white;

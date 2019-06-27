@@ -413,7 +413,6 @@
   @import '../../assets/index/style.css';
 
   .couponActivity {
-    position: fixed;
     width: 100%;
     height: 100%;
     top: 0px;

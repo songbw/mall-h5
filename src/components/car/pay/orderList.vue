@@ -543,7 +543,6 @@
   @import "../../../assets/index/style.css";
 
   .orderlist {
-    position: fixed;
     width: 100%;
     height: 100%;
     top: 0px;

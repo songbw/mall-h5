@@ -310,6 +310,8 @@
   .car {
     width: 100%;
     height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
 
     .header {
       width: 100%;
@@ -347,10 +349,10 @@
       }
 
       .carlist {
-        background-color: #f0f0f0;
+        background-color: #f8f8f8;
 
         .prodInCart {
-          border-bottom: 1px solid #f0f0f0;
+          margin-top: 10px;
 
           .van-card {
             background-color: #ffffff;
