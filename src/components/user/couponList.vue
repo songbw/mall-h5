@@ -14,7 +14,7 @@
                 <li v-for="(k,i) in item.list" :key=i style="list-style: none">
                   <div style="padding:2px;background-color: #f8f8f8">
                     <div class="coupon coupon-white coupon-wave-left coupon-wave-right">
-                      <div  @touchstart.prevent="touchEvtStart(k,type,i)" @touchend.prevent="touchEvtEnd()" class="coupon-main">
+                      <div  @touchmove="gtouchmove()" @touchstart="touchEvtStart(k,type,i)" @touchend="touchEvtEnd()" class="coupon-main">
                         <div class="coupon-img">
                           <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
                         </div>
@@ -164,7 +164,14 @@
       },
       touchEvtEnd() {
         clearInterval(this.Loop);
+        this.Loop = 0;
       },
+
+      gtouchmove(){
+        clearTimeout(this.Loop);//清除定时器
+        this.Loop = 0;
+      },
+
       See(e) {
         window.location.href = e
       },
@@ -196,7 +203,7 @@
         return (userInfo == undefined || userInfo.length === 0)
       },
       onLoad(index) {
-        this.$log("XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX  onLoad:" + index)
+        this.$log("onLoad:" + index)
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         that.$log(userInfo)
@@ -230,9 +237,11 @@
                 that.couponTypes[index].loading = false;
                 if (that.couponTypes[index].list.length >= that.couponTypes[index].total) {
                   that.couponTypes[index].finished = true;
-                  that.$log("index:" + index);
-                  that.$log(that.couponTypes[index]);
+                  //that.$log("index:" + index);
+                 // that.$log(that.couponTypes[index]);
                 }
+                that.$log("index:" + index);
+                that.$log(that.couponTypes[index]);
               }
             }).catch(function (error) {
               that.$log(error)
