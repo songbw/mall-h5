@@ -356,7 +356,7 @@
         .couponList {
           display: flex;
           flex-direction: column;
-          background-color: #f0f0f0;
+          background-color: #f8f8f8;
 
           .coupon {
             background-color: white;
@@ -432,7 +432,7 @@
                 content: '';
                 width: 1rem;
                 height: 1rem;
-                background-color: #f0f0f0;
+                background-color: #f8f8f8;
                 border-radius: 50%;
                 position: absolute;
                 right: -.5rem;
@@ -535,7 +535,7 @@
             top: 0;
             height: 100%;
             width: 14px;
-            background-image: radial-gradient(#f0f0f0 0, #f0f0f0 4px, transparent 4px);
+            background-image: radial-gradient(#f8f8f8 0, #f8f8f8 4px, transparent 4px);
             /** 如果只设置为半径的两倍(直径)，那么半圆之间没有类似堤岸的间隔 */
             background-size: 14px 14px;
             background-position: 0 2px;
