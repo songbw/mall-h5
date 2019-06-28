@@ -6,6 +6,10 @@ import services from '@/http/api.js'       //http请求
 import vueLogger from "vue-logger";
 import LyTab from 'ly-tab'
 import moment from 'moment'
+import ba from 'vue-ba'
+
+Vue.use(ba, "03a0d710c71e9da54f17e6e0544e5030");
+Vue.use(ba, { siteId: "03a0d710c71e9da54f17e6e0544e5030" });
 
 Vue.use(LyTab)
 
@@ -129,6 +133,9 @@ Vue.use(vueLogger, {
 
 router.beforeEach((to, from, next) => {
   console.log("route:" + from.fullPath + "-->" + to.fullPath)
+  if (to.path) {
+     window._hmt.push(['_trackPageview', '/#' + to.fullPath]);
+  }
   next();
 })
 

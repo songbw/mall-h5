@@ -245,6 +245,7 @@
           button-text="提交订单"
           @submit="onSubmit"
           :tip=tip
+          v-track-event="{category:'提交订单', action:'click'}"
         />
       </div>
       <div class="pay-settlement">
@@ -1060,7 +1061,7 @@
 
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo) {
         let that = this;
-        pAnOrderInfo.orderAmount = 1 //for test
+        //pAnOrderInfo.orderAmount = 1 //for test
         let options = {
           "openId": pAnOrderInfo.openId,
           "appId": this.$api.APP_ID,
