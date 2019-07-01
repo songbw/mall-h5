@@ -15,7 +15,6 @@ const state = {
   invoice: '',
   payDirectProduct:'',
   currentOrderInfo:'',
-  prePayOrderList:[],
   currentNaviIndex: 0,
   currentOrderListIndex: 0,
   currentCouponPageInfo:'',
@@ -80,13 +79,6 @@ const mutations = {
     state.currentOrderInfo = res
   },
 
-  [types.SET_PREPAYORDER_LIST](state) {
-    let list = Util.getLocal('prePayOrderList')
-    if(list != null || list != undefined)
-       state.prePayOrderList = list;
-    else
-      state.prePayOrderList = [];
-  },
 
   [types.SET_CURRENT_NAVI_INDEX](state, res) {
     console.log("SET_CURRENT_NAVI_INDEX")
@@ -115,21 +107,11 @@ const actions = {
     commit(types.SET_INVOICE_INFO);
   },
 
-  setPrePayOrderList({commit}, res) {
-    console.log("setPrePayOrderList Enter");
-    Util.setLocal(res, 'prePayOrderList', false);
-    commit(types.SET_PREPAYORDER_LIST);
-  },
 
   getInvoiceInfo({commit}) {
     console.log("getInvoiceInfo Enter");
     commit(types.SET_INVOICE_INFO);
   },
-
-  getPrePayOrderList({commit}) {
-    console.log("getPrePayOrderList Enter");
-    commit(types.SET_PREPAYORDER_LIST);
-  }
 
 }
 

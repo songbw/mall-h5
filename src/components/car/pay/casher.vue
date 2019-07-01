@@ -51,9 +51,23 @@
     },
 
     methods: {
+      onPayResult() {
+        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+        this.$router.replace({path: '/car/orderList'})
+      },
       onPayBtnClick(){
         this.$log("onPayBtnClick Enter")
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
+          url: '/payment',
+          data: this.orderInfo,
+        }).then((response) => {
+          this.$log(response)
+          this.onPayResult()
+        }).catch(function (error) {
 
+        })
       }
     }
   }

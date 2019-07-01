@@ -1093,7 +1093,7 @@
               pAnOrderInfo.orderNo = orderNo
               that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
               that.$jsbridge.call("openCashPage", pAnOrderInfo);
-              this.$router.push({
+              this.$router.replace({
                 name: "收银台页",
                 params: {
                   orderInfo: pAnOrderInfo
