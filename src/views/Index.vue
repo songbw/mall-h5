@@ -2,10 +2,7 @@
   <!-- 在首页父组件发送http请求,后将数据通过props传递给子组件,可减少请求次数,减少服务器压力 -->
   <div class="wrap">
     <v-header>
-      <h1 slot="title">商城</h1>
-      <router-link :to="{name:'搜索页'}" slot="right">
-        <van-icon name="search" size="1.2em"/>
-      </router-link>
+      <h1 slot="title">凤巢商城</h1>
     </v-header>
     <div v-if="pageloading">
       <v-loading></v-loading>

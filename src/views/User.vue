@@ -185,9 +185,6 @@
     background-color: #f8f8f8;
 
     .userMain {
-      background-color: #f8f8f8;
-      z-index: -1;
-
       .box {
         position: relative;
         width: 100%;
