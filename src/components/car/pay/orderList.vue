@@ -287,8 +287,9 @@
         } else {
           that.$log("预下单:" + JSON.stringify(options))
           that.$api.xapi({
-            method: 'post',
-            url: '/zhcs/payment',
+            baseURL: this.$api.SSO_BASE_URL,
+            // url: '/zhcs/payment',
+            url: '/payment/pingan',
             data: options,
           }).then((response) => {
             that.$log("预下单返回 :" + JSON.stringify(response.data))
