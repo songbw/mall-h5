@@ -8,6 +8,9 @@
       <v-loading></v-loading>
     </div>
     <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
+      <div class='box'>
+        <van-search placeholder="搜索您感兴趣的商品" shape="round" background="#FF4444"  readonly @click="onSearchInputClick()" />
+      </div>
       <div>
         <li v-for="item in datas" style="list-style: none">
           <div v-if="item.type==='0'" style="padding-left: 5px;padding-right: 5px">
@@ -334,6 +337,11 @@
           that.$log(error)
           that.finished = true;
         })
+      },
+
+      onSearchInputClick() {
+        this.$log("onSearchInputClick")
+        this.$router.push({name:'搜索页'})
       }
     }
   }
@@ -342,12 +350,30 @@
 
 <style lang="less" scoped>
   .wrap {
-    width: 100%;
-    height: 100%;
-
     .home-body {
       width: 100%;
-      background-color: #ffffff;
+      height: 100%;
+      top: 0px;
+      background-color: #f8f8f8;
+
+      .box {
+        position: relative;
+        width: 100%;
+        line-height: 15vw;
+        background-color: #ff4444;
+      }
+      .box:after {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -60px;
+        content: ' ';
+        height: 60px;
+        width: 100%;
+        border-radius: 0 0 30% 30%;
+        background-color:  #ff4444;
+        overflow: hidden;
+      }
     }
   }
 

@@ -72,7 +72,7 @@
 
   .van-swipe {
     width: 100%;
-
+    border-radius: 10px;
     a, img {
       display: block;
       width: 100%;

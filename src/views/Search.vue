@@ -40,6 +40,7 @@
     beforeCreate() {
       this.$api.xapi({
         method: 'get',
+        baseURL: this.$api.BASE_BASE_URL,
         url: '/tags'
       }).then((response) => {
         let words = response.data.data.cdnUrl.work;
