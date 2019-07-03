@@ -1,14 +1,14 @@
 <template lang="html">
-  <section class="sectionGoods" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
+  <section class="sectionGoods" :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
     <div class="container" ref="container">
       <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
               @change="onTabChanged"
-              :style="{'margin-left': '-5px','background-color': datas.settings.floorTitleColor}">
+              :style="{'background-color': datas.settings.floorTitleColor}">
       </ly-tab>
       <div :style="{marginTop: marginTop}">
         <div v-for="(category,index) in datas.list" :title=category.title :key="index">
           <ul id="sectionGoods-list"
-              :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
+              :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' " >
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <p>{{k.intro}}</p>
@@ -26,14 +26,7 @@
 
 <script>
   export default {
-    props: {
-      datas: {
-        type: Object,
-        default: function () {
-          return {}
-        }
-      }
-    },
+    props: ['datas', 'mBackgroundColor'],
     data() {
       return {
         active: 0,
@@ -161,7 +154,6 @@
   .sectionGoods {
     width: 100%;
     overflow: hidden;
-    .pt();
 
     .sectionGoods-list2 {
       width: 100%;
@@ -176,11 +168,9 @@
       flex-wrap: wrap;
       overflow: hidden;
       background-color: #f0f0f0;
-      padding-right: 2vw;
-      padding-left: 2vw;
 
       li {
-        width: 48vw;
+        width: 50%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         border: 4px solid #f0f0f0;
@@ -254,11 +244,9 @@
       flex-wrap: wrap;
       overflow: hidden;
       background-color: #f0f0f0;
-      padding-right: 2vw;
-      padding-left: 2vw;
 
       li {
-        width: 32vw;
+        width: 33%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         border: 3px solid #f0f0f0;

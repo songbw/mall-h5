@@ -12,24 +12,24 @@
         <van-search placeholder="搜索您感兴趣的商品" shape="round" background="#FF4444"  readonly @click="onSearchInputClick()" />
       </div>
       <div>
-        <div v-for="item in datas" style="margin-left: 5px;margin-right: 5px;">
-          <div v-if="item.type==='0'">
+        <div v-for="item in datas" >
+          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px;">
             <v-swiper :datas="item.data" :mBackgroundColor="mBackgroundColor" />
           </div>
-          <div v-else-if="item.type==='1'">
+          <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
             <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-          <div v-else-if="item.type==='2'">
+          <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
             <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-          <div v-else-if="item.type==='3'">
+          <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
             <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-          <div v-else-if="item.type==='7'">
+          <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
             <v-imgmap :datas="item.data"/>
           </div>
           <div v-else-if="item.type==='4'">
-            <v-sectionGoods :datas="item.data"/>
+            <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
         </div>
       </div>
@@ -110,7 +110,7 @@
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
         this.$log(this.datas);
-        this.mBackgroundColor = '#0088f8' //response.data.data.result.backgroundColor
+        this.mBackgroundColor = response.data.data.result.backgroundColor
         this.pageloading = false;
       }).catch(function (error) {
         //alert(error)
