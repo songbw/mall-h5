@@ -1,21 +1,16 @@
 <template lang="html">
-  <van-swipe :autoplay="4000">
-    <van-swipe-item v-for="(k,index) in datas.list" :key="index">
-      <img :src="k.imageUrl" @click="onClick(k.targetUrl)">
-    </van-swipe-item>
-  </van-swipe>
+  <div class="wrap" :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
+    <van-swipe :autoplay="4000">
+      <van-swipe-item v-for="(k,index) in datas.list" :key="index">
+        <img :src="k.imageUrl" @click="onClick(k.targetUrl)">
+      </van-swipe-item>
+    </van-swipe>
+  </div>
 </template>
 
 <script>
   export default {
-    props: {
-      datas: {
-        type: Object,
-        default: function () {
-          return {}
-        }
-      }
-    },
+    props: ['datas', 'mBackgroundColor'],
     methods: {
       See(e) {
         window.location.href = e
@@ -70,13 +65,16 @@
 
 <style lang="less" scoped>
 
-  .van-swipe {
-    width: 100%;
-    border-radius: 10px;
-    a, img {
-      display: block;
+  .wrap{
+    .van-swipe {
       width: 100%;
-      height: 100%;
+      border-radius: 10px;
+      a, img {
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
     }
   }
+
 </style>

@@ -12,20 +12,20 @@
         <van-search placeholder="搜索您感兴趣的商品" shape="round" background="#FF4444"  readonly @click="onSearchInputClick()" />
       </div>
       <div>
-        <li v-for="item in datas" style="list-style: none">
-          <div v-if="item.type==='0'" style="padding-left: 5px;padding-right: 5px">
-            <v-swiper :datas="item.data"/>
+        <li v-for="item in datas" style="list-style: none;margin-left: 5px;margin-right: 5px">
+          <div v-if="item.type==='0'">
+            <v-swiper :datas="item.data" :mBackgroundColor="mBackgroundColor" />
           </div>
-          <div v-else-if="item.type==='1'" style="padding-left: 5px;padding-right: 5px">
+          <div v-else-if="item.type==='1'">
             <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-          <div v-else-if="item.type==='2'" style="padding-left: 5px;padding-right: 5px">
+          <div v-else-if="item.type==='2'">
             <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-          <div v-else-if="item.type==='3'" style="padding-left: 5px;padding-right: 5px">
+          <div v-else-if="item.type==='3'">
             <v-sectionSlide :datas="item.data"/>
           </div>
-          <div v-else-if="item.type==='7'" style="padding-left: 5px;padding-right: 5px">
+          <div v-else-if="item.type==='7'">
             <v-imgmap :datas="item.data"/>
           </div>
           <div v-else-if="item.type==='4'">
@@ -110,7 +110,7 @@
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
         this.$log(this.datas);
-        this.mBackgroundColor = response.data.data.result.backgroundColor
+        this.mBackgroundColor = '#f8f8f8' //response.data.data.result.backgroundColor
         this.pageloading = false;
       }).catch(function (error) {
         //alert(error)
@@ -350,6 +350,9 @@
 
 <style lang="less" scoped>
   .wrap {
+    width: 100%;
+    height: 100%;
+    top: 0px;
     .home-body {
       width: 100%;
       height: 100%;
