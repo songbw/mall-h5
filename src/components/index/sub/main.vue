@@ -8,26 +8,26 @@
         <v-loading></v-loading>
       </div>
       <div v-else>
-        <li v-for="item in datas" style="list-style: none">
-          <div v-if="item.type==='0'" style="padding-left: 5px;padding-right: 5px">
-            <v-swiper :datas="item.data"/>
+        <div v-for="item in datas" >
+          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px;">
+            <v-swiper :datas="item.data" :mBackgroundColor="mBackgroundColor" />
           </div>
-          <div v-else-if="item.type==='1'" style="padding-left: 5px;padding-right: 5px">
+          <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
             <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-          <div v-else-if="item.type==='2'" style="padding-left: 5px;padding-right: 5px">
+          <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
             <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-          <div v-else-if="item.type==='3'" style="padding-left: 5px;padding-right: 5px">
-            <v-sectionSlide :datas="item.data"/>
+          <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
+            <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-          <div v-else-if="item.type==='7'" style="padding-left: 5px;padding-right: 5px">
+          <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
             <v-imgmap :datas="item.data"/>
           </div>
           <div v-else-if="item.type==='4'">
-            <v-sectionGoods :datas="item.data"/>
+            <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-        </li>
+        </div>
         <v-baseline :style="{'background-color': mBackgroundColor}" ></v-baseline>
       </div>
     </div>
