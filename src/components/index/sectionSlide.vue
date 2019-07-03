@@ -1,45 +1,72 @@
 <template>
-  <section class="sectionSlide" :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
-    <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()">
-      <h1 slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
-        {{datas.settings.title.textValue}}
-      </h1>
-      <div v-if="datas.settings.title.hasPromotionActivity" class="countdownBox">
-        <v-countdown
-          @start_callback="countDownS_cb"
-          @end_callback="countDownE_cb"
-          :startTime="PromotionStartTime"
-          :endTime="PromotionEndTime"
-          :secondsTxt="''">
-        </v-countdown>
+  <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
+    <div class="wrap">
+      <div class='box' :style="{'background-color': decorateBgColor}">
+        <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()"  :style="{'background-color':decorateBgColor}">
+          <div slot="title" class="sectionSlide-title"  :style="{'text-align': datas.settings.title.textAlign}">
+            <span :style="isDeepColor(decorateBgColor)? 'color:white':'color:blank'">
+               {{datas.settings.title.textValue}}
+            </span>
+          </div>
+          <div v-if="datas.settings.title.hasPromotionActivity" class="countdownBox" :style="isDeepColor(decorateBgColor)? 'color:white':'color:blank'">
+            <v-countdown
+              @start_callback="countDownS_cb"
+              @end_callback="countDownE_cb"
+              :startTime="PromotionStartTime"
+              :endTime="PromotionEndTime"
+              :secondsTxt="''">
+            </v-countdown>
+          </div>
+        </van-cell>
+        <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
+          <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
+        </div>
       </div>
-    </van-cell>
-    <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
-      <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
-    </div>
-    <div class="sectionSlide-list">
-      <ul>
-        <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
-          <img v-lazy="k.imagePath">
-          <p class="sectionSlide-list-intro">
-            {{k.intro}}
-          </p>
-          <div v-if="k.discount != undefined">
-            <p class="sectionSlide-list-sales-price">
-              ￥{{k.price-k.discount}}
+      <div class="sectionSlide-list">
+        <ul>
+          <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
+            <img v-lazy="k.imagePath">
+            <p class="sectionSlide-list-intro">
+              {{k.intro}}
             </p>
-            <p class="sectionSlide-list-origin-price">
-              ￥{{k.price}}
-            </p>
-          </div>
-          <div v-else>
-            <p class="sectionSlide-list-sales-price">
-              ￥{{k.price}}
-            </p>
-          </div>
-        </li>
-      </ul>
-    </div>
+            <div v-if="k.discount != undefined">
+              <p class="sectionSlide-list-sales-price">
+                ￥{{k.price-k.discount}}
+              </p>
+              <p class="sectionSlide-list-origin-price">
+                ￥{{k.price}}
+              </p>
+            </div>
+            <div v-else>
+              <p class="sectionSlide-list-sales-price">
+                ￥{{k.price}}
+              </p>
+            </div>
+          </li>
+        </ul>
+      </div>
+      </div>
+
+<!--    <div class='box'>-->
+<!--      <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()">
+        <h1 slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
+          {{datas.settings.title.textValue}}
+        </h1>
+        <div v-if="datas.settings.title.hasPromotionActivity" class="countdownBox">
+          <v-countdown
+            @start_callback="countDownS_cb"
+            @end_callback="countDownE_cb"
+            :startTime="PromotionStartTime"
+            :endTime="PromotionEndTime"
+            :secondsTxt="''">
+          </v-countdown>
+        </div>
+      </van-cell>
+      <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
+        <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
+      </div>-->
+<!--    </div>-->
+<!--    -->
   </section>
 </template>
 
@@ -50,19 +77,14 @@
     components: {
       "v-countdown": CountDown
     },
-    props: {
-      datas: {
-        type: Object,
-        default: function () {
-          return {}
-        }
-      }
-    },
+    props: ['datas', 'mBackgroundColor'],
+
     data() {
       return {
         PromotionStartTime: 0,
         PromotionEndTime: 0,
-        promotionActivityId: 0
+        promotionActivityId: 0,
+        decorateBgColor: '#FF4444'
       }
     },
     created() {
@@ -76,6 +98,26 @@
       }
     },
     methods: {
+      isDeepColor(hexColor) {
+        this.$log("isDeepColor:"+hexColor)
+        /*        if(hexColor == undefined)
+                  return false;*/
+        if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
+        hexColor = hexColor.toLowerCase();
+        let b = new Array();
+        for (let x = 0; x < 3; x++) {
+          b[0] = hexColor.substr(x * 2, 2)
+          b[3] = "0123456789abcdef";
+          b[1] = b[0].substr(0, 1)
+          b[2] = b[0].substr(1, 1)
+          b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
+        }
+        let grayLevel  =  b[20] * 0.299 +  b[21] * 0.587 +  b[22]* 0.114
+        if(grayLevel >= 192)
+          return false
+        else
+          return true;
+      },
       countDownS_cb(data) {
        // this.$log("Start #################")
       },
@@ -170,38 +212,55 @@
   @import "../../assets/fz.less";
   @import "../../assets/index/style.css";
 
-  .sectionSlide-title {
-    text-align: left;
-    .fz(font-size, 40);
-    font-weight: bold;
-    position: relative;
-    background-color: #ffffff;
+  .wrap {
+    border-radius: 10px;
+    background-color: white;
+    height: 200px;
+    padding-bottom: 20px;
+    .box {
+      position: relative;
+      width: 100%;
+      line-height: 15vw;
+      background-color: #ff4444;
+    }
+    .box:after {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -60px;
+      content: ' ';
+      height: 60px;
+      width: 100%;
+      border-radius: 0 0 30% 30%;
+      background-color:  #ff4444;
+      overflow: hidden;
+    }
   }
+
 
   .sectionSlide-list {
     overflow-x: auto;
     width: 100%;
     padding-top: 2px;
     padding-bottom: 2px;
+
     /*原生滑动*/
     -webkit-overflow-scrolling: touch;
-    background-color: #f0f0f0;
 
     > ul {
       display: -ms-flex;
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
-      padding: 0vw;
+      padding: 1vw;
       width: 100%;
-      background-color: #f0f0f0;
 
       li {
         margin-right: 1vw;
         margin-left: 1vw;
         width: 27vw;
         border-radius: 10px;
-
+        z-index: 1;
         a,
         img {
           display: block;

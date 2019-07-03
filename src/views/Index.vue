@@ -23,7 +23,7 @@
             <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
           <div v-else-if="item.type==='3'">
-            <v-sectionSlide :datas="item.data"/>
+            <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
           <div v-else-if="item.type==='7'">
             <v-imgmap :datas="item.data"/>
