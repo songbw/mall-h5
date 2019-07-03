@@ -24,8 +24,8 @@
           <div v-else-if="item.type==='7'" style="padding-left: 5px;padding-right: 5px">
             <v-imgmap :datas="item.data"/>
           </div>
-          <div v-else-i="item.type==='4'">
-            <v-sectionGoods :datas="item.data"/>f
+          <div v-else-if="item.type==='4'">
+            <v-sectionGoods :datas="item.data"/>
           </div>
         </li>
         <v-baseline :style="{'background-color': mBackgroundColor}" ></v-baseline>
