@@ -221,7 +221,7 @@
       position: relative;
       width: 100%;
       line-height: 15vw;
-      background-color: #ff4444;
+      background: #ff4444;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
       .van-cell{
@@ -238,7 +238,7 @@
       height: 60px;
       width: 100%;
       border-radius: 0 0 30% 30%;
-      background-color:  #ff4444;
+      background: linear-gradient(#ff4444, #ffcccc);
       overflow: hidden;
     }
   }
