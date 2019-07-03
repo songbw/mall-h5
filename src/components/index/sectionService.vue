@@ -1,24 +1,26 @@
 <template>
   <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
-    <div class="section0-list">
-      <ul :style="{'background-color':mBackgroundColor}">
-        <li v-for="k in datas.list.slice(0,5)" @click="onClick(k.targetUrl)" :style="{'background-color':mBackgroundColor}">
-          <img v-lazy="k.imageUrl">
-          <h2 :style="isDeepColor(mBackgroundColor)? 'color:white':'color:blank'">
-            {{k.name}}
-          </h2>
-        </li>
-      </ul>
-    </div>
-    <div class="section1-list" v-if="datas.list.length > 5">
-      <ul :style="{'background-color':mBackgroundColor}">
-        <li v-for="k in datas.list.slice(5,10)" @click="onClick(k.targetUrl)" :style="{'background-color':mBackgroundColor}">
-          <img v-lazy="k.imageUrl">
-          <h2 :style="isDeepColor(mBackgroundColor)? 'color:white':'color:blank'">
-            {{k.name}}
-          </h2>
-        </li>
-      </ul>
+    <div class="wrap">
+      <div class="section0-list">
+        <ul>
+          <li v-for="k in datas.list.slice(0,this.lineNume)" @click="onClick(k.targetUrl)" :style="{'width': listWidth}">
+            <img v-lazy="k.imageUrl">
+            <h2 :style="isDeepColor(cardBgClr)? 'color:white':'color:blank'">
+              {{k.name}}
+            </h2>
+          </li>
+        </ul>
+      </div>
+      <div class="section1-list" v-if="datas.list.length > this.lineNume">
+        <ul>
+          <li v-for="k in datas.list.slice(this.lineNume,datas.list.length)" @click="onClick(k.targetUrl)" :style="{'width':listWidth}">
+            <img v-lazy="k.imageUrl">
+            <h2 :style="isDeepColor(cardBgClr)? 'color:white':'color:blank'">
+              {{k.name}}
+            </h2>
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 </template>
@@ -26,6 +28,25 @@
 <script>
   export default {
     props: ['datas', 'mBackgroundColor'],
+    data() {
+      return {
+        cardBgClr:'#FFFFFF',
+        listWidth: '20%',
+        lineNume: 5
+      }
+    },
+    created() {
+      this.$log(this.datas)
+      if(this.datas.list.length > 8) {
+          this.listWidth =  '20%',
+          this.lineNume = 5
+      } else {
+          this.listWidth =  '25%',
+          this.lineNume = 4
+      }
+      this.$log(this.lineNume)
+      this.$log(this.listWidth)
+    },
     methods: {
       See(e) {
         window.location.href = e
@@ -98,77 +119,81 @@
   @import "../../assets/fz.less";
   @import "../../assets/index/style.css";
 
-  .section0-list {
-    ul {
-      display: -webkit-flex;
-      display: -ms-flex;
-      display: flex;
+  .wrap{
+    background-color: white;
+    border-radius: 10px;
+    padding: 10px;
 
-      li {
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 20%;
+    .section0-list {
+      ul {
+        display: -webkit-flex;
+        display: -ms-flex;
         display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: Center;
 
-        a,
-        img {
-          width: 100%;
-          display: block;
-          object-fit: cover;
-          height: 4.5rem;
+        li {
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          width: 20%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
+
+          a,
+          img {
+            display: block;
+            object-fit: cover;
+            height: 4.5rem;
+          }
+
+          h2 {
+            .fz(font-size, 26);
+            color: #333;
+            padding: 2vw 1.2vw;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+          }
         }
+      }
+    }
+    .section1-list {
+      ul {
+        display: -webkit-flex;
+        display: -ms-flex;
+        display: flex;
 
-        h2 {
-          .fz(font-size, 26);
-          color: #333;
-          padding: 2vw 1.2vw;
-          width: 100%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          text-align: center;
+        li {
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          width: 20%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
+
+          a,
+          img {
+            display: block;
+            object-fit: cover;
+            height: 4.5rem;
+          }
+
+          h2 {
+            .fz(font-size, 26);
+            color: #333;
+            padding: 2vw 1.2vw;
+            width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            text-align: center;
+          }
         }
       }
     }
   }
 
-  .section1-list {
-    ul {
-      display: -webkit-flex;
-      display: -ms-flex;
-      display: flex;
-
-      li {
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 20%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: Center;
-
-        a,
-        img {
-          width: 100%;
-          display: block;
-          object-fit: cover;
-          height: 4.5rem;
-        }
-
-        h2 {
-          .fz(font-size, 26);
-          color: #333;
-          padding: 2vw 1.2vw;
-          width: 100%;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          text-align: center;
-        }
-      }
-    }
-  }
 </style>

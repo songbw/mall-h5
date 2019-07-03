@@ -110,7 +110,7 @@
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
         this.$log(this.datas);
-        this.mBackgroundColor = '#f8f8f8' //response.data.data.result.backgroundColor
+        this.mBackgroundColor = '#0088f8' //response.data.data.result.backgroundColor
         this.pageloading = false;
       }).catch(function (error) {
         //alert(error)
