@@ -222,6 +222,12 @@
       width: 100%;
       line-height: 15vw;
       background-color: #ff4444;
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      .van-cell{
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+      }
     }
     .box:after {
       position: absolute;
