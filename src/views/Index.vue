@@ -355,7 +355,6 @@
     top: 0px;
     .home-body {
       width: 100%;
-      height: 100%;
       top: 0px;
       background-color: #f8f8f8;
 
