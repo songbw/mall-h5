@@ -12,7 +12,7 @@
         <van-search placeholder="搜索您感兴趣的商品" shape="round" background="#FF4444"  readonly @click="onSearchInputClick()" />
       </div>
       <div>
-        <li v-for="item in datas" style="list-style: none;margin-left: 5px;margin-right: 5px">
+        <div v-for="item in datas" style="margin-left: 5px;margin-right: 5px;">
           <div v-if="item.type==='0'">
             <v-swiper :datas="item.data" :mBackgroundColor="mBackgroundColor" />
           </div>
@@ -31,7 +31,7 @@
           <div v-else-if="item.type==='4'">
             <v-sectionGoods :datas="item.data"/>
           </div>
-        </li>
+        </div>
       </div>
       <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
     </div>
