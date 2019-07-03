@@ -258,8 +258,9 @@
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
-      padding: 1vw;
-      width: 100%;
+      padding-left: 0vw;
+      width: 0px;
+      background-color: #3dd5c8;
 
       li {
         margin-right: 1vw;
