@@ -215,8 +215,8 @@
   .wrap {
     border-radius: 10px;
     background-color: white;
-    height: 200px;
-    padding-bottom: 20px;
+    padding-bottom: 2px;
+
     .box {
       position: relative;
       width: 100%;
