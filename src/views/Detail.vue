@@ -373,7 +373,6 @@
 
     .detail-body {
       padding-top: 2.3em;
-      background-color: #f0f0f0;
 
       .couponBox {
         display: flex;
