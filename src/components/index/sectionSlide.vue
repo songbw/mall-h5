@@ -46,27 +46,6 @@
         </ul>
       </div>
       </div>
-
-<!--    <div class='box'>-->
-<!--      <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()">
-        <h1 slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
-          {{datas.settings.title.textValue}}
-        </h1>
-        <div v-if="datas.settings.title.hasPromotionActivity" class="countdownBox">
-          <v-countdown
-            @start_callback="countDownS_cb"
-            @end_callback="countDownE_cb"
-            :startTime="PromotionStartTime"
-            :endTime="PromotionEndTime"
-            :secondsTxt="''">
-          </v-countdown>
-        </div>
-      </van-cell>
-      <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
-        <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
-      </div>-->
-<!--    </div>-->
-<!--    -->
   </section>
 </template>
 
