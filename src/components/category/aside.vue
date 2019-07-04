@@ -65,7 +65,7 @@
           position: relative;
           font-size: 12px;
           font-weight: bold;
-          color: #DEBA6F;
+          color: #000000;
           background: #ffffff;
         }
 
@@ -73,11 +73,11 @@
           display: flex;
           content: '';
           width: 4px;
-          height: 100%;
+          height: 40%;
           position: absolute;
           left: 0px;
-          top: 0px;
-          background-color: #DEBA6F;
+          top: 30%;
+          background-color:  #FF4444;
         }
       }
     }

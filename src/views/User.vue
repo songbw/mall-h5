@@ -7,10 +7,12 @@
       <div class='box'>
         <header class="userHeader" @click="onUserInfoClick()">
           <div class="header-icon">
-            <span class="icon2-user"></span>
+          <!--  <span class="icon2-user"></span>-->
+            <img :src="avatarDefaultImg">
           </div>
           <span v-if="user.nickname !=undefined && user.nickname.length > 0">{{user.nickname}}</span>
           <span v-else>登录/注册</span>
+          <van-icon name="arrow"/>
         </header>
       </div>
       <div class="userBody">
@@ -141,6 +143,7 @@
           }
         ],
         couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),
+        avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
         user:{}
       }
     },
@@ -189,7 +192,7 @@
         position: relative;
         width: 100%;
         line-height: 15vw;
-        background-color: #DEBA6F;
+        background-color:  #FF4444;
 
         .userHeader {
           width: 100%;
@@ -204,23 +207,13 @@
           align-items: center;
 
           .header-icon {
-            border: .4vw solid #ffffff;
-            background-color: @cl;
-            margin-left: 4vw;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            width: 14vw;
-            height: 14vw;
-            line-height: 14vw;
-            text-align: center;
-            border-radius: 50%;
-
-            span {
-              .fz(font-size, 54);
-
-              &::before {
-                color: #ffffff;
-              }
+            margin-left: 5vw;
+            img{
+              display: inline-block;
+              background-color: white;
+              border-radius: 50%;
+              height: 50px;
+              width: 50px;
             }
           }
 
@@ -229,6 +222,11 @@
             .fz(font-size, 30);
             color: #ffffff;
             letter-spacing: .2vw;
+          }
+
+          .van-icon{
+            float: right;
+            color: white;
           }
         }
       }
@@ -242,7 +240,7 @@
         height: 20px;
         width: 100%;
         border-radius: 0 0 90% 90%;
-        background-color: #DEBA6F;
+        background-color:  #FF4444;
         overflow: hidden;
       }
 

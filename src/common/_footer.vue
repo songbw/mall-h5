@@ -78,7 +78,7 @@
     }
 
     .title_active {
-      color: #f0cb92;
+      color: #FF4444;
     }
     .title_norm{
       color: black;
