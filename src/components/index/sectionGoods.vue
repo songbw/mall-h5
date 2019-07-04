@@ -57,6 +57,10 @@
       };
     },
 
+    deactivated() {
+       this.isFixed = false;
+    },
+
     created() {
       this.datas.list.forEach(item => {
         this.items.push({label: item.title})
