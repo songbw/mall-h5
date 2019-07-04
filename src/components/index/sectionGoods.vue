@@ -12,7 +12,9 @@
               :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
-              <p>{{k.intro}}</p>
+              <div class="goodsComment">
+                <p>{{k.intro}}</p>
+              </div>
               <div class="goodsFooter">
                 <span
                   :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}
@@ -219,22 +221,24 @@
           border-top-right-radius: 10px;
         }
 
-        > p {
-          .fz(font-size, 23);
-          min-height: 2rem;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
-          word-break: break-all;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-          margin-top: 5px;
-          color: #323233;
+        .goodsComment{
+          margin: 2px 5px;
+          > p {
+            .fz(font-size, 25);
+            min-height: 2rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            word-break: break-all;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            color: #323233;
+          }
         }
 
         > h3 {
@@ -252,7 +256,6 @@
             color: #ff4444;
             margin: 1vw;
             .fz(font-size, 30);
-            font-weight: bold;
           }
 
 

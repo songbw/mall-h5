@@ -33,12 +33,14 @@
                 {{k.intro}}
               </p>
               <div v-if="k.discount != undefined">
-                <p class="sectionSlide-list-sales-price">
-                  ￥{{k.price-k.discount}}
-                </p>
-                <p class="sectionSlide-list-origin-price">
-                  ￥{{k.price}}
-                </p>
+                <div style="display: flex">
+                  <p class="sectionSlide-list-sales-price">
+                    ￥{{k.price-k.discount}}
+                  </p>
+                  <p class="sectionSlide-list-origin-price">
+                    ￥{{k.price}}
+                  </p>
+                </div>
               </div>
               <div v-else>
                 <p class="sectionSlide-list-sales-price">
@@ -198,7 +200,7 @@
   .wrap {
     border-radius: 10px;
     background-color: white;
-    padding-bottom: 2px;
+    padding-bottom: 5px;
 
     .box {
       position: relative;
@@ -283,12 +285,14 @@
             }
 
             p.sectionSlide-list-origin-price {
+              margin: 4px;
               color: #707070;
               .fz(font-size, 25);
               text-decoration: line-through
             }
 
             p.sectionSlide-list-sales-price {
+              margin: 2px;
               color: #ff4444;
               .fz(font-size, 30);
               font-weight: bold;
