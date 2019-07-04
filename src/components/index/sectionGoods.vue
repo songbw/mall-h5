@@ -1,5 +1,6 @@
 <template lang="html">
-  <section class="sectionGoods" :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
+  <section class="sectionGoods"
+           :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
     <div class="container" ref="container">
       <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
               @change="onTabChanged"
@@ -8,13 +9,15 @@
       <div :style="{marginTop: marginTop}">
         <div v-for="(category,index) in datas.list" :title=category.title :key="index">
           <ul id="sectionGoods-list"
-              :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' " >
+              :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <p>{{k.intro}}</p>
               <div class="goodsFooter">
                 <span
-                  :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}</span>
+                  :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}
+                </span>
+                <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
               </div>
             </li>
           </ul>
@@ -25,6 +28,8 @@
 </template>
 
 <script>
+  import Util from '@/util/common'
+
   export default {
     props: ['datas', 'mBackgroundColor'],
     data() {
@@ -120,6 +125,7 @@
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
+
       onGoodsClick(goods) {
         try {
           //获取goods信息，update current googds
@@ -140,9 +146,38 @@
 
         }
       },
-      onClick(index, title) {
-
+      onAdd2carBtnClick(goods) {
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          this.add2Car(userInfo, goods);
+        } else {
+          this.$toast("没有用户信息，请先登录,再添加购物车")
+        }
       },
+
+      add2Car(userInfo, goods) {
+        let user = JSON.parse(userInfo);
+        this.$log(goods)
+        let userId = user.userId;
+        let skuId = goods.skuid;
+        let addtoCar = {
+          "openId": userId,
+          "skuId": skuId
+        }
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
+          url: '/cart',
+          data: addtoCar,
+        }).then((response) => {
+          this.result = response.data.data.result;
+          this.$log("xxxxxxxxxxxxxxxxxxx")
+          this.$log(this.result)
+          this.$toast("添加到购物车成功！")
+        }).catch(function (error) {
+          console.log(error)
+        })
+      }
     }
   }
 </script>
@@ -218,6 +253,19 @@
             margin: 1vw;
             .fz(font-size, 30);
             font-weight: bold;
+          }
+
+
+          .van-button {
+            margin: 1vw;
+            background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+            background-size: 15px 15px;
+            border: none;
+            float: right;
+          }
+
+          .van-button:active {
+            opacity: 0;
           }
         }
 

@@ -254,7 +254,7 @@
         margin-top: -2em;
 
         .van-button {
-          background: url('../../../assets/images/addtoCar.png') no-repeat center;
+          background: url('../../../assets/icons/ico_add_cart.png') no-repeat center;
           background-size: 30px 25px;
           border: none;
         }
