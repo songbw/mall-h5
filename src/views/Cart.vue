@@ -5,58 +5,58 @@
     </v-header>
     <div class="cartBody">
       <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
-        <div class="nothingInCar" v-cloak v-if="finished && cartList.length === 0">
-          <img :src="nothingInCar_bg"/>
-          <span>购物车是空的，美好的生活需要您的填充！</span>
-        </div>
-
-        <div v-else>
-          <div class="carlist">
-            <div class="prodInCart" v-for="(k,index) in cartList" :key="index">
-              <van-swipe-cell :right-width="60">
-                <div style="display: flex;justify-content: left;background-color: #ffffff">
-                  <div
-                    style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
-                    <van-checkbox
-                      v-model="k.baseInfo.choosed"
-                      class="checkedBox"
-                      @change="singleChecked(index,k)">
-                    </van-checkbox>
-                  </div>
-                  <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                    <div class="promotionBox" v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
-                      <span class="promotionTitle">{{k.promotionInfo.promotion[0].tag}}</span>
-                      <v-countdown class="promotionCountDown"
-                                   @start_callback="countDownS_cb(index,k)"
-                                   @end_callback="countDownE_cb(index,k)"
-                                   :startTime="new Date(k.promotionInfo.promotion[0].startDate).getTime()"
-                                   :endTime="new Date(k.promotionInfo.promotion[0].endDate).getTime()"
-                                   :secondsTxt="''">
-                      </v-countdown>
-                    </div>
-                    <div>
-                      <van-card
-                        desc="南京"
-                        :price="k.goodsInfo.dprice"
-                        :title="k.goodsInfo.name"
-                        :thumb="k.goodsInfo.image">
-                        <div slot="footer">
-                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k)"/>
-                        </div>
-                      </van-card>
-                    </div>
-                  </div>
-                </div>
-                <div slot="right" @click=onDeleteBtnClick(k,index) class="rightSlot">
-                  <span style="margin-left: 1em">删除</span>
-                </div>
-              </van-swipe-cell>
-            </div>
-          </div>
-        </div>
       </van-list>
+      <div class="nothingInCar" v-cloak v-if="finished && cartList.length === 0">
+        <img :src="nothingInCar_bg"/>
+        <span>购物车是空的，美好的生活需要您的填充！</span>
+      </div>
+      <div v-else>
+        <div class="carlist">
+          <div class="prodInCart" v-for="(k,index) in cartList" :key="index">
+            <van-swipe-cell :right-width="60">
+              <div style="display: flex;justify-content: left;background-color: #ffffff">
+                <div
+                  style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                  <van-checkbox
+                    v-model="k.baseInfo.choosed"
+                    class="checkedBox"
+                    @change="singleChecked(index,k)">
+                  </van-checkbox>
+                </div>
+                <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
+                  <div class="promotionBox" v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
+                    <span class="promotionTitle">{{k.promotionInfo.promotion[0].tag}}</span>
+                    <v-countdown class="promotionCountDown"
+                                 @start_callback="countDownS_cb(index,k)"
+                                 @end_callback="countDownE_cb(index,k)"
+                                 :startTime="new Date(k.promotionInfo.promotion[0].startDate).getTime()"
+                                 :endTime="new Date(k.promotionInfo.promotion[0].endDate).getTime()"
+                                 :secondsTxt="''">
+                    </v-countdown>
+                  </div>
+                  <div>
+                    <van-card
+                      desc="南京"
+                      :price="k.goodsInfo.dprice"
+                      :title="k.goodsInfo.name"
+                      :thumb="k.goodsInfo.image">
+                      <div slot="footer">
+                        <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k)"/>
+                      </div>
+                    </van-card>
+                  </div>
+                </div>
+              </div>
+              <div slot="right" @click=onDeleteBtnClick(k,index) class="rightSlot">
+                <span style="margin-left: 1em">删除</span>
+              </div>
+            </van-swipe-cell>
+          </div>
+          <v-cartfooter class="cartfooter"/>
+        </div>
+      </div>
     </div>
-    <v-cartfooter class="cartfooter"/>
+
     <v-footer></v-footer>
   </div>
 </template>
