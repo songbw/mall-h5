@@ -96,7 +96,7 @@
         list: [],
         loading: false,
         finished: false,
-        nothingInCar_bg: require('@/assets/images/cart.svg'),
+        nothingInCar_bg: require('@/assets/icons/ico_empty_cart.png'),
         launchedLoading: false,
       }
     },
@@ -341,11 +341,12 @@
         align-items: Center;
 
         img {
-          margin: 4vw;
+          height: 150px;
         }
 
         span {
-          margin: 2vw;
+          margin: 1vw 0vw 5vw 0vw;
+          .fz(font-size, 32);
         }
       }
 
