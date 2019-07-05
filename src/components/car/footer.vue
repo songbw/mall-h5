@@ -8,7 +8,7 @@
       全选
     </van-checkbox>
     <div class="footer-result">
-      <p>合计:<span> ￥{{allpay}}</span></p>
+      <p>合计: <span> ￥{{allpay.toFixed(2)}}</span></p>
     </div>
     <van-button round type="danger" style="width: 30%" @click="goPay">去结算</van-button>
   </footer>
