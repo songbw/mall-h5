@@ -8,7 +8,7 @@
       </van-list>
       <div class="nothingInCar" v-if="finished && cartList.length === 0">
         <img :src="nothingInCar_bg"/>
-        <van-button round type="danger" style="width:35%;font-size: medium">去逛逛</van-button>
+        <van-button round type="danger" style="width:35%;font-size: medium" @click="gotoCategoryPage()">去逛逛</van-button>
       </div>
       <div v-else>
         <div class="carlist">
@@ -110,6 +110,9 @@
     },
 
     methods: {
+      gotoCategoryPage(){
+        this.$router.replace({'name': '分类页'})
+      },
       composeGoodsTitle(goods) {
         return (goods.brand==null?'':goods.brand) + ' '+ goods.name + ' '+ (goods.model==null? '': goods.model)
       },
