@@ -64,9 +64,17 @@
     -ms-flex-flow: column nowrap;
     flex-flow: column nowrap;
 
+    .header {
+      width: 100%;
+      position: fixed;
+      z-index: 5;
+      top: 0;
+    }
+
     .view {
       width: 100%;
       height: 100%;
+      padding-top: 2.8em;
       margin-bottom: 3.2em;
       display: -webkit-box;
       display: -ms-flexbox;
