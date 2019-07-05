@@ -2,23 +2,11 @@
   <header>
     <van-row type="flex">
       <van-col span="3">
-        <div v-if="goback===true">
-          <router-link
-            class="icon-go"
-            :to="{ name: '首页'}"
-            v-if="$route.matched[0].path=='/category'"
-            replace>
-          </router-link>
-          <router-link
-            class="icon-go"
-            :to="{ name: '首页'}"
-            v-else-if="$route.matched[0].path=='/car/oderList'"
-            replace>
-          </router-link>
-          <span class="icon-go" @click="closeWindow" v-else-if="$route.name==='首页'">
-        </span>
-          <span class="icon-go" @click="$router.go(-1)" v-else>
-        </span>
+        <div v-if="goback===true" >
+          <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-if="$route.matched[0].path=='/category'"></van-icon>
+          <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-else-if="$route.matched[0].path=='/car/oderList'"></van-icon>
+          <van-icon name="arrow-left"@click="closeWindow" v-else-if="$route.name==='首页'"></van-icon>
+          <van-icon name="arrow-left" @click="$router.go(-1)" v-else></van-icon>
         </div>
       </van-col>
       <van-col span="18">
@@ -37,12 +25,13 @@
   @import '../assets/index/style.css';
 
   header {
-    background-color: #F8FCFF;
     align-items: center;
     text-align: center;
     justify-content: space-between;
     padding: 0.8em 0.15em 0em 0.15em;
     height: 2.2em;
+    background-color: #FF4444;
+    color: white;
 
     h1 {
       .fz(font-size, 34);
