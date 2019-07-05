@@ -3,13 +3,16 @@
     <v-header class="header"  >
       <h1 slot="title">购物车</h1>
     </v-header>
+    <div class="box"></div>
     <div class="cartBody">
       <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
       </van-list>
-      <div class="nothingInCar" v-if="finished && cartList.length === 0">
-        <img :src="nothingInCar_bg"/>
-        <span>您的购物车还没有商品，快去挑选吧</span>
-        <van-button round type="danger" style="width:35%;font-size: medium" @click="gotoCategoryPage()">去逛逛</van-button>
+      <div class="emptyCart" v-if="finished && cartList.length === 0">
+        <div class="nothingInCar" v-if="finished && cartList.length === 0">
+          <img :src="nothingInCar_bg"/>
+          <span>您的购物车还没有商品，快去挑选吧</span>
+          <van-button round type="danger" style="width:35%;font-size: medium" @click="gotoCategoryPage()">去逛逛</van-button>
+        </div>
       </div>
       <div v-else>
         <div class="carlist">
@@ -317,6 +320,26 @@
     top: 0px;
     background-color: #f8f8f8;
 
+    .box {
+      padding-top: 2em;
+      position: relative;
+      width: 100%;
+      line-height: 15vw;
+      background-color: #ff4444;
+    }
+    .box:after {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -60px;
+      content: ' ';
+      height: 60px;
+      width: 100%;
+      border-radius: 0 0 30% 30%;
+      background-color:  #ff4444;
+      overflow: hidden;
+    }
+
     .header {
       width: 100%;
       position: fixed;
@@ -326,10 +349,36 @@
 
     .cartBody {
       padding-top: 2em;
-      .emptyCartBox{
 
+      .emptyCart{
+        display: flex;
+        position: fixed;
+        width:100%;
+        height: 80%;
+        justify-content: center;
+        justify-items: center;
+        .nothingInCar {
+          z-index: 1;
+          width: 96%;
+          background-color: white;
+          border-radius: 5px;
+          height: 100%;
+          top: 0;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
+          img {
+            height: 150px;
+          }
+
+          span {
+            margin: 1vw 0vw 5vw 0vw;
+            .fz(font-size, 32);
+          }
+        }
       }
-      .nothingInCar {
+/*      .nothingInCar {
         position: fixed;
         height: 100%;
         width: 100%;
@@ -348,7 +397,7 @@
           margin: 1vw 0vw 5vw 0vw;
           .fz(font-size, 32);
         }
-      }
+      }*/
 
       [v-cloak] {
         display: none !important;
@@ -359,11 +408,12 @@
       }
 
       .carlist {
-        background-color: #f8f8f8;
         padding-bottom: 8rem;
-
+        justify-content: center;
+        justify-items: center;
+        background-color: #f8f8f8;
         .prodInCart {
-          margin-top: 10px;
+          margin: 10px;
 
           .van-card {
             background-color: #ffffff;
