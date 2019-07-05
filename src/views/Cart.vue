@@ -321,8 +321,7 @@
     }
 
     .cartBody {
-      margin-top: 3em;
-
+      padding-top: 2em;
       .nothingInCar {
         display: flex;
         flex-direction: column;
