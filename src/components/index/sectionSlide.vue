@@ -231,7 +231,7 @@
       width: 100%;
       justify-content: center;
       .sectionSlide-list {
-        width: 99.8%;
+        width: 100%;
         overflow-x: auto;
         padding-top: 2px;
         padding-bottom: 2px;

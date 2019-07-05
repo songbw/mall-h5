@@ -1,23 +1,44 @@
 <template lang="html">
   <footer class="footer">
+    <van-checkbox
+      v-model="checked"
+      checked-color="#FF4444"
+      @click="checkboxClicked()"
+    >
+      全选
+    </van-checkbox>
     <div class="footer-result">
-      <p>共{{count}}件 金额：</p>
-      <p><span>{{allpay}} </span>元</p>
+      <p>合计:<span> ￥{{allpay}}</span></p>
     </div>
-    <router-link :to="{ name: '分类页'}" class="footer-goon" replace>
-      继续购物
-    </router-link>
-    <a class="footer-pay" @click="goPay">
-      去结算
-    </a>
+    <van-button round type="danger" style="width: 30%" @click="goPay">去结算</van-button>
   </footer>
 </template>
 
 <script>
 
   export default {
+    data() {
+      return {
+        selected: false,
+      }
+    },
     computed: {
       // 勾选的商品数量
+      checked() {
+        let checked = true;
+        let cartList = this.$store.state.appconf.cartList;
+        if (cartList.length === 0)
+          checked = false;
+        else {
+          for (let i = 0; i < cartList.length; i++) {
+            if (!cartList[i].baseInfo.choosed) {
+              checked = false;
+              break;
+            }
+          }
+        }
+        return checked;
+      },
       count() {
         // 如果已选择列表为空 就返回0
         let selCount = 0;
@@ -27,10 +48,10 @@
             let user = JSON.parse(userInfo);
             let cartList = this.$store.state.appconf.cartList;
             cartList.forEach(item => {
-               if(item.baseInfo.userId == user.userId) {
-                 if(item.baseInfo.choosed)
-                     selCount += item.baseInfo.count;
-               }
+              if (item.baseInfo.userId == user.userId) {
+                if (item.baseInfo.choosed)
+                  selCount += item.baseInfo.count;
+              }
             });
           }
         } catch (e) {
@@ -49,19 +70,10 @@
             let cartList = this.$store.state.appconf.cartList;
             cartList.forEach(item => {
 
-              if(item.baseInfo.userId == user.userId) {
-                  if(item.baseInfo.choosed) {
-                    all += item.goodsInfo.dprice * item.baseInfo.count
-/*                    if(item.promotionInfo.promotionState === 1) {
-                      try {
-                        all += (item.goodsInfo.price - item.promotionInfo.promotion[0].discount) * item.baseInfo.count
-                      } catch (e) {
-                        all += item.goodsInfo.price * item.baseInfo.count
-                      }
-                    } else {
-                      all += item.goodsInfo.price * item.baseInfo.count
-                    }*/
-                  }
+              if (item.baseInfo.userId == user.userId) {
+                if (item.baseInfo.choosed) {
+                  all += item.goodsInfo.dprice * item.baseInfo.count
+                }
               }
             });
           }
@@ -73,6 +85,19 @@
     },
 
     methods: {
+      checkboxClicked() {
+        this.$log("checkboxClicked Enter:" + this.checked)
+        let cartList = this.$store.state.appconf.cartList;
+        if(this.checked) {
+          cartList.forEach(item => {
+            item.baseInfo.choosed = false
+          })
+        } else {
+          cartList.forEach(item => {
+            item.baseInfo.choosed = true
+          })
+        }
+      },
       isUserEmpty(userInfo) {
         return (userInfo == null || userInfo == undefined || userInfo.length == 0)
       },
@@ -123,6 +148,11 @@
     left: 0;
     background-color: #ffffff;
 
+    .van-checkbox {
+      margin-left: 20px;
+      margin-top: 1px;
+    }
+
     .footer-result,
     a {
       -webkit-flex: 1;
@@ -133,16 +163,14 @@
 
     .footer-result {
       p {
-        .fz(font-size, 24);
-        color: #999;
+        .fz(font-size, 31);
+        color: #000000;
       }
 
       p:last-of-type {
-        padding: 1vw 0 0 1vw;
-
         span {
-          color: @cl;
-          .fz(font-size, 42);
+          color: #FF4444;
+          .fz(font-size, 30);
         }
       }
     }

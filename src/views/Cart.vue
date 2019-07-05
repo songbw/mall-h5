@@ -24,7 +24,7 @@
                   style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
                   <van-checkbox
                     v-model="k.baseInfo.choosed"
-                    class="checkedBox"
+                    checked-color="#FF4444"
                     @change="singleChecked(index,k)">
                   </van-checkbox>
                 </div>
@@ -378,30 +378,6 @@
             .fz(font-size, 32);
           }
         }
-      }
-/*      .nothingInCar {
-        position: fixed;
-        height: 100%;
-        width: 100%;
-        top: 0;
-        background-color: white;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: Center;
-
-        img {
-          height: 150px;
-        }
-
-        span {
-          margin: 1vw 0vw 5vw 0vw;
-          .fz(font-size, 32);
-        }
-      }*/
-
-      [v-cloak] {
-        display: none !important;
       }
 
       .van-list {
