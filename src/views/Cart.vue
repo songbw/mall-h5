@@ -3,8 +3,9 @@
     <v-header class="header"  >
       <h1 slot="title">购物车</h1>
     </v-header>
-    <div class="box"></div>
+
     <div class="cartBody">
+      <div class="box"></div>
       <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
       </van-list>
       <div class="emptyCart" v-if="finished && cartList.length === 0">
