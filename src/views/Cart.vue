@@ -6,9 +6,9 @@
     <div class="cartBody">
       <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
       </van-list>
-      <div class="nothingInCar" v-cloak v-if="finished && cartList.length === 0">
+      <div class="nothingInCar" v-if="finished && cartList.length === 0">
         <img :src="nothingInCar_bg"/>
-        <span>购物车是空的，美好的生活需要您的填充！</span>
+        <van-button round type="danger" style="width:35%;font-size: medium">去逛逛</van-button>
       </div>
       <div v-else>
         <div class="carlist">
@@ -322,12 +322,19 @@
 
     .cartBody {
       padding-top: 2em;
+      .emptyCartBox{
+
+      }
       .nothingInCar {
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        top: 0;
+        background-color: white;
         display: flex;
         flex-direction: column;
         justify-content: center;
         align-items: Center;
-        background-color: #ffffff;
 
         img {
           margin: 4vw;
