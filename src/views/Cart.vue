@@ -322,7 +322,6 @@
 
     .cartBody {
       margin-top: 3em;
-      margin-bottom: 4.2em;
 
       .nothingInCar {
         display: flex;
@@ -350,6 +349,7 @@
 
       .carlist {
         background-color: #f8f8f8;
+        padding-bottom: 8rem;
 
         .prodInCart {
           margin-top: 10px;
