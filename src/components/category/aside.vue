@@ -63,7 +63,7 @@
 
         .active {
           position: relative;
-          font-size: 12px;
+          font-size: 14px;
           font-weight: bold;
           color: #000000;
           background: #ffffff;

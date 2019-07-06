@@ -91,8 +91,6 @@
         datas: {},
         loading: true,
         mBackgroundColor: '#FFFFFF',
-        icon_orderList: require('@/assets/images/icon_order.png'),
-        icon_shopCart: require('@/assets/images/icon_shopping_cart.png'),
         pageloading: true
       }
     },

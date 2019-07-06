@@ -40,7 +40,6 @@
         list: [],
         loading: false,
         finished: false,
-        iconAdd2car: require('@/assets/images/addtoCar.png'),
         launchedLoading: false
       }
     },
