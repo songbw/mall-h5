@@ -1,21 +1,49 @@
 <template lang="html">
   <div class="user">
-    <v-header class="header" >
+    <v-header class="header">
       <h1 slot="title">我的</h1>
     </v-header>
     <div class="userMain">
       <div class='box'>
         <header class="userHeader" @click="onUserInfoClick()">
-          <div class="header-icon">
-          <!--  <span class="icon2-user"></span>-->
-            <img :src="avatarDefaultImg">
+          <div class="headerTitle">
+            <div class="header-icon">
+              <!--  <span class="icon2-user"></span>-->
+              <img :src="avatarDefaultImg">
+            </div>
+            <span v-if="user.nickname !=undefined && user.nickname.length > 0">{{user.nickname}}</span>
+            <span v-else>登录/注册</span>
           </div>
-          <span v-if="user.nickname !=undefined && user.nickname.length > 0">{{user.nickname}}</span>
-          <span v-else>登录/注册</span>
-          <van-icon name="arrow"/>
+          <div class="header-right">
+            <van-icon name="arrow"/>
+          </div>
         </header>
       </div>
       <div class="userBody">
+        <div class="orderListBox">
+          <div>
+            <van-cell value="全部订单" is-link @click=onOrderListBarClick(0)>
+              <template slot="title">
+                <span class="orderListTitle">我的订单</span>
+              </template>
+            </van-cell>
+          </div>
+          <div class="orderCategory">
+            <van-row type="flex" justify="space-between">
+              <van-col
+                v-for="(item,index) in orderbars"
+                :key="index"
+              >
+                <div class="orderCategoryBar" @click=onOrderListBarClick(item.key)>
+                  <img :src=" item.img">
+                  <span>{{item.title}}</span>
+                </div>
+
+              </van-col>
+            </van-row>
+          </div>
+
+        </div>
         <div class="orderListBox">
           <div>
             <van-cell value="全部订单" is-link @click=onOrderListBarClick(0)>
@@ -144,7 +172,7 @@
         ],
         couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),
         avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
-        user:{}
+        user: {}
       }
     },
     methods: {
@@ -192,7 +220,16 @@
         position: relative;
         width: 100%;
         line-height: 15vw;
-        background-color:  #FF4444;
+        background-color: #FF4444;
+
+        .van-cell {
+          background-color: #FF4444;
+          color: white;
+          .header-right{
+            color: white;
+          }
+
+        }
 
         .userHeader {
           width: 100%;
@@ -206,28 +243,51 @@
           -ms-flex-align: center;
           align-items: center;
 
-          .header-icon {
-            margin-left: 5vw;
-            img{
-              display: inline-block;
-              background-color: white;
-              border-radius: 50%;
-              height: 50px;
-              width: 50px;
+          .headerTitle{
+            display: flex;
+            flex-direction: row;
+            width: 90%;
+
+            .header-icon {
+              margin-left: 5vw;
+
+              img {
+                display: inline-block;
+                background-color: white;
+                border-radius: 50%;
+                height: 50px;
+                width: 50px;
+              }
+            }
+
+            > span {
+              margin-left: 3.2vw;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
+              .fz(font-size, 30);
+              color: #ffffff;
+              letter-spacing: .2vw;
             }
           }
 
-          > span {
-            margin-left: 3.2vw;
-            .fz(font-size, 30);
-            color: #ffffff;
-            letter-spacing: .2vw;
+          .header-right{
+            width: 10%;
+            display: flex;
+            flex-direction: row;
+
+            .van-icon {
+              width: 100%;
+              float: right;
+              color: white;
+            }
           }
 
-          .van-icon{
-            float: right;
-            color: white;
-          }
+
+
         }
       }
 
@@ -240,7 +300,7 @@
         height: 20px;
         width: 100%;
         border-radius: 0 0 90% 90%;
-        background-color:  #FF4444;
+        background-color: #FF4444;
         overflow: hidden;
       }
 
