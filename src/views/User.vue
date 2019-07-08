@@ -34,7 +34,7 @@
       </div>
       <div class="orderListBox">
         <div>
-          <van-cell value="全部订单" is-link @click=onOrderListBarClick(0)>
+          <van-cell value="查看全部 " is-link @click=onOrderListBarClick(0)>
             <template slot="title">
               <span class="orderListTitle">我的订单</span>
             </template>
@@ -54,7 +54,6 @@
             </van-col>
           </van-row>
         </div>
-
       </div>
       <div class="couponBox">
         <div>
@@ -286,6 +285,7 @@
 
     .userBody {
       padding-top: 2em;
+      margin-bottom: 5em;
 
       .coupon-box {
         display: flex;
@@ -342,9 +342,8 @@
         border-radius: 10px;
 
         .orderListTitle {
-          margin: 8px;
           .fz(font-size, 30);
-          font-weight: bold;
+          color: black;
         }
 
 
@@ -362,7 +361,7 @@
 
               img {
                 margin: 1px;
-                height: 20px;
+                height: 25px;
                 width: 25px;
               }
 
