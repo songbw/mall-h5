@@ -8,39 +8,39 @@
       <v-loading></v-loading>
     </div>
     <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
-      <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
-        <van-search placeholder="搜索您感兴趣的商品"
-                    shape="round"
-                    :background=this.mHeader.backgroundColor
-                    readonly
-                    @click="onSearchInputClick()"
-                    v-if="this.mHeader.showSearchBar"/>
-      </div>
-      <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
-      <div class="index_main">
-        <div v-for="item in datas" >
-          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
-            <v-swiper :datas="item.data"/>
-          </div>
-          <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
-            <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
-            <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
-            <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
-            <v-imgmap :datas="item.data"/>
-          </div>
-          <div v-else-if="item.type==='4'">
-            <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
+    <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
+      <van-search placeholder="搜索您感兴趣的商品"
+                  shape="round"
+                  :background=this.mHeader.backgroundColor
+                  readonly
+                  @click="onSearchInputClick()"
+                  v-if="this.mHeader.showSearchBar"/>
+    </div>
+    <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
+    <div class="index_main">
+      <div v-for="item in datas" >
+        <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
+          <v-swiper :datas="item.data"/>
+        </div>
+        <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
+          <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+        </div>
+        <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
+          <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+        </div>
+        <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
+          <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+        </div>
+        <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
+          <v-imgmap :datas="item.data"/>
+        </div>
+        <div v-else-if="item.type==='4'">
+          <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
         </div>
       </div>
-      <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
     </div>
+    <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
+  </div>
 
     <v-footer></v-footer>
   </div>
@@ -379,20 +379,6 @@
         background-color: #ff4444;
 
       }
-
-/*      .box::after {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: -60px;
-        content: ' ';
-        height: 60px;
-        width: 100%;
-        border-radius: 0 0 30% 30%;
-        background-color:  #ff4444;
-        overflow: hidden;
-      }*/
-
       .box_after{
         bottom: -60px;
         height: 60px;

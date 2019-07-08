@@ -2,7 +2,7 @@
   <header :style="{'background-color':mBackgroundColor}">
     <van-row type="flex">
       <van-col span="3">
-        <div>
+        <div style="margin-top: 3px">
           <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-if="$route.matched[0].path=='/category'"></van-icon>
           <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-else-if="$route.matched[0].path=='/car/oderList'"></van-icon>
           <van-icon name="arrow-left"@click="closeWindow" v-else-if="$route.name==='首页'"></van-icon>
@@ -12,7 +12,7 @@
       <van-col span="18">
         <slot name="title"></slot>
       </van-col>
-      <van-col span="3">
+      <van-col span="3" style="margin-top: 3px">
         <slot name="right"></slot>
       </van-col>
     </van-row>
@@ -33,22 +33,8 @@
     background-color: #FF4444;
     color: white;
 
-    h1 {
-      .fz(font-size, 34);
-      letter-spacing: .2vw;
-      font-weight: 600;
-      margin-right: 36vw;
-    }
 
-    span, a {
-      display: inline-block;
-      .fz(font-size, 46);
-      transform: rotate(-180deg);
 
-      &::before {
-        color: #333;
-      }
-    }
   }
 
 

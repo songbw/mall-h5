@@ -1,34 +1,45 @@
 <template lang="html">
   <section>
     <div class="index" :style="{'background-color': mBackgroundColor}">
-      <v-header>
+      <v-header :mBackgroundColor="this.mHeader.backgroundColor">
         <h1 slot="title">{{title}}</h1>
       </v-header>
       <div v-if="pageloading">
         <v-loading></v-loading>
       </div>
-      <div v-else>
-        <div v-for="item in datas" >
-          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px;">
-            <v-swiper :datas="item.data" :mBackgroundColor="mBackgroundColor" />
-          </div>
-          <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
-            <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
-            <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
-            <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
-            <v-imgmap :datas="item.data"/>
-          </div>
-          <div v-else-if="item.type==='4'">
-            <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+      <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
+        <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
+          <van-search placeholder="搜索您感兴趣的商品"
+                      shape="round"
+                      :background=this.mHeader.backgroundColor
+                      readonly
+                      @click="onSearchInputClick()"
+                      v-if="this.mHeader.showSearchBar"/>
+        </div>
+        <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
+        <div class="index_main">
+          <div v-for="item in datas" >
+            <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
+              <v-swiper :datas="item.data"/>
+            </div>
+            <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
+              <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
+              <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
+              <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
+              <v-imgmap :datas="item.data"/>
+            </div>
+            <div v-else-if="item.type==='4'">
+              <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
           </div>
         </div>
-        <v-baseline :style="{'background-color': mBackgroundColor}" ></v-baseline>
+        <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
       </div>
     </div>
   </section>
@@ -72,13 +83,14 @@
             },
           }).then((response) => {
             this.title = response.data.data.result.name;
-            //const pako = require('pako');
-           // const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
             let jsonString = response.data.data.result.content
             this.datas = JSON.parse(jsonString);
-            // this.$log(response.data.data.result)
-            // this.$log(jsonString)
             this.mBackgroundColor = response.data.data.result.backgroundColor
+            if(response.data.data.result.header != undefined)
+            {
+              let header =  JSON.parse(response.data.data.result.header)
+              this.mHeader = header
+            }
           }).catch(function (error) {
             alert(error)
           })
@@ -93,6 +105,10 @@
         pageloading:true,
         title: '',
         mBackgroundColor: '#FFFFFF',
+        mHeader:{
+          backgroundColor: '#FFFFFF',
+          showSearchBar:false
+        },
       }
     },
 
@@ -116,6 +132,11 @@
         // this.$log(response.data.data.result)
         this.$log(this.datas)
         this.mBackgroundColor = response.data.data.result.backgroundColor
+        if(response.data.data.result.header != undefined)
+        {
+          let header =  JSON.parse(response.data.data.result.header)
+          this.mHeader = header
+        }
         this.pageloading = false;
       }).catch(function (error) {
         alert(error)
@@ -142,5 +163,30 @@
     width: 100%;
     padding-bottom: 4vw;
     background-color: #F8FCFF;
+
+    .home-body {
+      width: 100%;
+      top: 0px;
+      background-color: #f8f8f8;
+
+      .box {
+        position: relative;
+        width: 100%;
+        line-height: 15vw;
+        background-color: #ff4444;
+
+      }
+      .box_after{
+        bottom: -60px;
+        height: 60px;
+        border-radius: 0 0 30% 30%;
+        background-color:  #ff4444;
+        overflow: hidden;
+        z-index: -1;
+      }
+      .index_main{
+        margin-top: -50px;
+      }
+    }
   }
 </style>
