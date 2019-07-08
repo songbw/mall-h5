@@ -19,13 +19,13 @@
         </van-cell>
       </div>
     </div>
-    <li v-for="item in datas.list">
+    <div v-for="item in datas.list">
       <ul class="sectionSquared-list" :style="{'background-color':mBackgroundColor}">
         <li v-for="k in item.grids" :style="{'background-color':mBackgroundColor}">
           <img v-lazy="k.imageUrl" @click="onClick(k.targetUrl)">
         </li>
       </ul>
-    </li>
+    </div>
   </section>
 </template>
 
