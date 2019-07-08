@@ -55,7 +55,7 @@
           </van-row>
         </div>
       </div>
-      <div class="couponBox">
+<!--      <div class="couponBox">
         <div>
           <van-cell value="更多" is-link to="/user/couponList">
             <template slot="title">
@@ -67,11 +67,16 @@
           <img :src="couponCenterImg" @click="onCouponCenterClick()">
         </div>
 
-      </div>
+      </div>-->
       <div class="settingsBox">
-        <van-cell title="地址管理" is-link :to="{ name: '地址列表页'}">
+        <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
+          <img slot="icon" :src="receriverAddressIcon"/>
         </van-cell>
-        <van-cell title="关于我们" is-link>
+        <van-cell title="关于凤巢" is-link>
+          <img slot="icon" :src="aboutIcon"/>
+        </van-cell>
+        <van-cell title="我的客服" value="4000797717" is-link>
+          <img slot="icon" :src="customServiceIcon"/>
         </van-cell>
       </div>
     </div>
@@ -155,6 +160,11 @@
         avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
         myCouponIcon: require('@/assets/icons/ico_mycoupon.png'),
         chCouponIcon: require('@/assets/icons/ico_changecoupon.png'),
+
+        receriverAddressIcon: require('@/assets/icons/ico_receiveraddress.png'),
+        aboutIcon: require('@/assets/icons/ico_info.png'),
+        customServiceIcon: require('@/assets/icons/ico_customService.png'),
+
         user: {}
       }
     },
@@ -404,7 +414,16 @@
       .settingsBox {
         margin: 10px;
         padding: 10px;
+        border-radius: 10px;
         background-color: white;
+        .van-cell{
+          img{
+            height: 16px;
+            width: 16px;
+            margin: 3px;
+          }
+
+        }
       }
     }
 
