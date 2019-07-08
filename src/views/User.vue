@@ -246,6 +246,7 @@
           }
 
           > span {
+            margin-top: 1vw;
             margin-left: 3.2vw;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -255,7 +256,7 @@
             word-break: break-all;
             .fz(font-size, 30);
             color: #ffffff;
-            letter-spacing: .2vw;
+            letter-spacing: .3vw;
           }
         }
 
