@@ -153,6 +153,10 @@
         this.$log("gotoOrderList Enter")
         this.$router.push({name: '订单列表页'})
       },
+      onSearchInputClick() {
+        this.$log("onSearchInputClick")
+        this.$router.push({name:'搜索页'})
+      }
     }
   }
 </script>
