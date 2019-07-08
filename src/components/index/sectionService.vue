@@ -44,17 +44,14 @@
           this.listWidth =  '25%',
           this.lineNume = 4
       }
-      this.$log(this.lineNume)
-      this.$log(this.listWidth)
+/*      this.$log(this.lineNume)
+      this.$log(this.listWidth)*/
     },
     methods: {
       See(e) {
         window.location.href = e
       },
       isDeepColor(hexColor) {
-        this.$log("isDeepColor:"+hexColor)
-/*        if(hexColor == undefined)
-          return false;*/
         if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
         hexColor = hexColor.toLowerCase();
         let b = new Array();

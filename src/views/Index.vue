@@ -1,20 +1,26 @@
 <template lang="html">
   <!-- 在首页父组件发送http请求,后将数据通过props传递给子组件,可减少请求次数,减少服务器压力 -->
   <div class="wrap">
-    <v-header>
+    <v-header :mBackgroundColor="this.mHeader.backgroundColor">
       <h1 slot="title">凤巢商城</h1>
     </v-header>
     <div v-if="pageloading">
       <v-loading></v-loading>
     </div>
     <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
-      <div class='box'>
-        <van-search placeholder="搜索您感兴趣的商品" shape="round" background="#FF4444"  readonly @click="onSearchInputClick()" />
+      <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
+        <van-search placeholder="搜索您感兴趣的商品"
+                    shape="round"
+                    :background=this.mHeader.backgroundColor
+                    readonly
+                    @click="onSearchInputClick()"
+                    v-if="this.mHeader.showSearchBar"/>
       </div>
-      <div>
+      <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
+      <div class="index_main">
         <div v-for="item in datas" >
-          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px;">
-            <v-swiper :datas="item.data" :mBackgroundColor="mBackgroundColor" />
+          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
+            <v-swiper :datas="item.data"/>
           </div>
           <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
             <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
@@ -91,6 +97,10 @@
         datas: {},
         loading: true,
         mBackgroundColor: '#FFFFFF',
+        mHeader:{
+          backgroundColor: '#FFFFFF',
+          showSearchBar:false
+        },
         pageloading: true
       }
     },
@@ -109,6 +119,12 @@
         this.datas = JSON.parse(jsonString);
         this.$log(this.datas);
         this.mBackgroundColor = response.data.data.result.backgroundColor
+        if(response.data.data.result.header != undefined)
+        {
+          let header =  JSON.parse(response.data.data.result.header)
+          this.mHeader = header
+        }
+        this.$log(this.mHeader);
         this.pageloading = false;
       }).catch(function (error) {
         //alert(error)
@@ -361,8 +377,10 @@
         width: 100%;
         line-height: 15vw;
         background-color: #ff4444;
+
       }
-      .box:after {
+
+/*      .box::after {
         position: absolute;
         left: 0;
         right: 0;
@@ -373,6 +391,18 @@
         border-radius: 0 0 30% 30%;
         background-color:  #ff4444;
         overflow: hidden;
+      }*/
+
+      .box_after{
+        bottom: -60px;
+        height: 60px;
+        border-radius: 0 0 30% 30%;
+        background-color:  #ff4444;
+        overflow: hidden;
+        z-index: -1;
+      }
+      .index_main{
+        margin-top: -50px;
       }
     }
   }

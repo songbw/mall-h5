@@ -1,8 +1,8 @@
 <template>
-  <header>
+  <header :style="{'background-color':mBackgroundColor}">
     <van-row type="flex">
       <van-col span="3">
-        <div v-if="goback===true" >
+        <div>
           <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-if="$route.matched[0].path=='/category'"></van-icon>
           <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-else-if="$route.matched[0].path=='/car/oderList'"></van-icon>
           <van-icon name="arrow-left"@click="closeWindow" v-else-if="$route.name==='首页'"></van-icon>
@@ -57,12 +57,8 @@
 
 <script>
   export default {
-    props: {
-      goback: {
-        type: Boolean,
-        default: true
-      }
-    },
+    props: ['mBackgroundColor'],
+
     methods: {
       closeWindow() {
         this.$jsbridge.call("closeWindow");
