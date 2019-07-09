@@ -16,10 +16,14 @@
                 <p>{{k.intro}}</p>
               </div>
               <div class="goodsFooter">
-                <span
-                  :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}
+                <div class="goodsPriceBox">
+                 <span
+                   :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">￥{{k.price}}
                 </span>
-                <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                </div>
+                <div class="goodsBuyBox">
+                  <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                </div>
               </div>
             </li>
           </ul>
@@ -58,7 +62,7 @@
     },
 
     deactivated() {
-       this.isFixed = false;
+      this.isFixed = false;
     },
 
     created() {
@@ -78,7 +82,7 @@
 
     methods: {
       onTabChanged(item, index) {
-        this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
+        // this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
         if (this.isTabChanging) {
           this.isTabChanging = false;
         } else {
@@ -225,8 +229,9 @@
           border-top-right-radius: 10px;
         }
 
-        .goodsComment{
+        .goodsComment {
           margin: 2px 5px;
+
           > p {
             .fz(font-size, 25);
             min-height: 2rem;
@@ -245,45 +250,57 @@
           }
         }
 
-        > h3 {
-          padding-top: 3vw;
-          .fz(font-size, 40);
-        }
-
         .goodsFooter {
           border-bottom-left-radius: 10px;
           border-bottom-right-radius: 10px;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-items: center;
+          height: 2em;
 
-          > span {
-            display: inline-block;
-            align-content: center;
-            color: #ff4444;
-            margin: 1vw;
-            .fz(font-size, 30);
-          }
-
-
-          .van-button {
-            margin: 1vw;
-            background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-            background-size: 15px 15px;
-            border: none;
-            float: right;
-          }
-
-          .van-button:active {
-            opacity: 0;
-          }
-        }
-
-      }
-
-      /*      li{
-              border-bottom: 2px solid #f0f0f0;
+          .goodsPriceBox {
+            width: 80%;
+            line-height: 2em;
+            margin-left: 5px;
+            > span {
+              display: inline-block;
+              align-content: center;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
+              bottom: 0;
+              left: 0;
+              color: #ff4444;
+              .fz(font-size, 30);
             }
-            li:nth-child(2n) {
-              border-left: 2px solid #f0f0f0;
-            }*/
+          }
+
+          .goodsBuyBox {
+            width: 20%;
+            justify-content: center;
+            line-height: 2em;
+            .van-button {
+              margin: 1vw;
+              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+              background-size: 15px 15px;
+              border: none;
+              float: right;
+            }
+            .van-button:active {
+              opacity: 0;
+            }
+          }
+
+
+
+
+
+        }
+      }
     }
 
     .sectionGoods-list3 {
@@ -315,41 +332,76 @@
           border-top-right-radius: 10px;
         }
 
-        > p {
-          .fz(font-size, 23);
-          min-height: 2rem;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          display: -webkit-box;
-          -webkit-box-orient: vertical;
-          -webkit-line-clamp: 2;
-          word-break: break-all;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          -webkit-box-sizing: border-box;
-          box-sizing: border-box;
-          margin-top: 5px;
-          color: #323233;
-        }
+        .goodsComment {
+          margin: 2px 5px;
 
-        > h3 {
-          padding-top: 3vw;
-          .fz(font-size, 40);
+          > p {
+            .fz(font-size, 25);
+            min-height: 2rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            word-break: break-all;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            color: #323233;
+          }
         }
 
         .goodsFooter {
           border-bottom-left-radius: 10px;
           border-bottom-right-radius: 10px;
+          width: 100%;
+          display: flex;
+          flex-direction: row;
+          justify-items: center;
+          height: 2em;
 
-          > span {
-            display: inline-block;
-            align-content: center;
-            color: #ff4444;
-            margin: 1vw;
-            .fz(font-size, 30);
-            font-weight: bold;
+          .goodsPriceBox {
+            width: 80%;
+            line-height: 2em;
+            margin-left: 5px;
+            > span {
+              display: inline-block;
+              align-content: center;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
+              bottom: 0;
+              left: 0;
+              color: #ff4444;
+              .fz(font-size, 30);
+            }
           }
+
+          .goodsBuyBox {
+            width: 20%;
+            justify-content: center;
+            line-height: 2em;
+            .van-button {
+              margin: 1vw;
+              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+              background-size: 15px 15px;
+              border: none;
+              float: right;
+            }
+            .van-button:active {
+              opacity: 0;
+            }
+          }
+
+
+
+
+
         }
       }
 
@@ -393,6 +445,5 @@
       width: 100%;
       background-color: white;
     }
-
   }
 </style>
