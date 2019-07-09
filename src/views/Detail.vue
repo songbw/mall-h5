@@ -144,7 +144,7 @@
           </div>
         </van-actionsheet>
       </div>
-      <v-content :contentData=contentUrls></v-content>
+      <v-content :contentData=contentUrls class="contentBox"></v-content>
       <v-baseline/>
     </div>
     <v-action :datas="this.goods"/>
@@ -365,8 +365,10 @@
 
   .detail {
     width: 100%;
-    padding-bottom: 14vw;
     height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
+    padding-bottom: 14vw;
 
     .header {
       width: 100%;
@@ -435,6 +437,10 @@
           }
         }
 
+      }
+
+      .contentBox{
+        margin-top: 10px;
       }
 
       .price-title {
