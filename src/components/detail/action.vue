@@ -1,12 +1,20 @@
 <template lang="html">
-  <section class="goodsAction">
-    <van-goods-action>
-      <van-goods-action-mini-btn style="color: #00a4ff" icon="chat-o" href="javascript:void(0)"
-                                 onclick="_MEIQIA('showPanel')">联系客服
+  <section>
+    <van-goods-action class="goodsAction">
+      <van-goods-action-mini-btn class="contactServiceBtn"
+                                 text="联系客服"
+                                 icon="chat-o"
+                                 href="javascript:void(0)"
+                                 onclick="_MEIQIA('showPanel')">
       </van-goods-action-mini-btn>
-      <van-goods-action-mini-btn style="color: #ea545d" icon="cart-o" text="购物车" @click="gotoCar"/>
-      <van-goods-action-big-btn text="加入购物车" @click="addGoodsCar"/>
-      <van-goods-action-big-btn text="立即购买" primary @click="gotoPay"/>
+      <van-goods-action-mini-btn class="gotoCartBtn"
+                                 icon="cart-o"
+                                 text="购物车"
+                                 @click="gotoCar">
+
+      </van-goods-action-mini-btn>
+      <van-goods-action-big-btn class="add2CartBtn" text="加入购物车" @click="addGoodsCar"/>
+      <van-goods-action-big-btn class="buyDirectBtn" text="立即购买" primary @click="gotoPay"/>
     </van-goods-action>
   </section>
 
@@ -26,7 +34,9 @@
     },
     data() {
       return {
-        selStateInCarList: []
+        selStateInCarList: [],
+        myCouponIcon: require('@/assets/icons/ico_mycoupon.png'),
+        chCouponIcon: require('@/assets/icons/ico_changecoupon.png'),
       }
     },
     created() {
@@ -203,5 +213,39 @@
 <style lang="less" scoped>
   @import "../../assets/fz.less";
   @import "../../assets/index/style.css";
+
+  .goodsAction {
+    background-color: white;
+    width: 100%;
+
+    .contactServiceBtn {
+      width: 10%;
+      margin-top: 5px;
+      color: black;
+    }
+
+    .gotoCartBtn {
+      width: 10%;
+      margin-top: 5px;
+      color: black;
+    }
+
+    .add2CartBtn {
+      background-color: #EA8F24;
+      border-radius: 30px;
+      height: 40px;
+      line-height: 40px;
+      margin: 8px 2px 2px 2px;
+    }
+
+    .buyDirectBtn {
+      background-color: #EA3724;
+      border-radius: 30px;
+      height: 40px;
+      line-height: 40px;
+      margin: 8px 2px 2px 2px;
+    }
+  }
+
 
 </style>

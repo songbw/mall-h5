@@ -52,7 +52,7 @@
     },
     methods: {
       isDeepColor(hexColor) {
-        this.$log(" HEADER, isDeepColor:"+hexColor)
+      //  this.$log(" HEADER, isDeepColor:"+hexColor)
         if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
         hexColor = hexColor.toLowerCase();
         let b = new Array();

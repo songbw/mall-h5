@@ -42,7 +42,7 @@
         </span>
         </div>
       </div>
-      <div class="couponBox" v-if="this.goods.coupon !=undefined && this.goods.coupon.length > 0">
+      <div class="couponBox" v-if="this.userCouponList.length > 0 || this.avaliableCouponList.length > 0">
         <van-cell>
           <div slot="title">
              <span style="font-size: medium;font-weight: bold">
@@ -242,14 +242,15 @@
               }).then((response) => {
                 let result = response.data.data.result;
                 result.couponUseInfo.forEach(coupon => {
-                  if (coupon.status === 1) {
+                  if (item.rules.couponRules.type < 3  && coupon.status === 1) {
                     this.$log("已领券") //已领取券，未使用
                     coupon["couponInfo"] = item
                     this.userCouponList.push(coupon)
                     this.$log(coupon)
                   }
                 })
-                if (item.rules.perLimited > result.couponUseInfo.length) {
+                if (item.rules.couponRules.type < 3 &&
+                    item.rules.perLimited > result.couponUseInfo.length) {
                   this.$log("还有券可领")
                   item.userCollectNum = result.couponUseInfo.length
                   this.avaliableCouponList.push(item);
@@ -283,7 +284,7 @@
         showCoupon: false,
         radio: '',
         userCouponList: [],
-        avaliableCouponList: []
+        avaliableCouponList: [],
       }
     },
     methods: {
