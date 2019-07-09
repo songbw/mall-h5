@@ -236,6 +236,7 @@
               }
               that.$api.xapi({
                 method: 'post',
+                baseURL: this.$api.EQUITY_BASE_URL,
                 url: '/coupon/CouponByEquityId',
                 data: options,
               }).then((response) => {

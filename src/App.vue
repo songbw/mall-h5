@@ -19,8 +19,8 @@
 
   Vue.use(Lazyload, {
     preLoad: 1.3,
-    error: 'static/error.png',
-    loading: 'static/loading.png',
+    error: require('../static/error.png'),
+    loading: require('../static/loading.png'),
     attempt: 3,
     adapter: {
       loaded({bindType, el, naturalHeight, naturalWidth, $parent, src, loading, error, Init}) {
