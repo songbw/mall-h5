@@ -11,8 +11,14 @@ const TESTSTUB_PAYMENT_BASE_URL = "http://119.3.111.161:8088/v1/"
 const APP_ID = "10" //无锡市民卡
 const SERVR_PHONE_NUM= "4000797717";
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
+
+let SERVICE_URL = "https://api.weesharing.com"
+if (process.env.NODE_ENV === 'development') { //生产环境走的地址
+   SERVICE_URL = "http://192.168.200.37:8000"
+}
+
 //const SERVICE_URL = "http://192.168.200.37:8000"
-const SERVICE_URL = "https://api.weesharing.com"
+//const SERVICE_URL = "https://api.weesharing.com"
 
 const PRODUCT_BASE_URL = SERVICE_URL+"/v2/products/";
 const AGGREGATION_BASE_URL = SERVICE_URL+"/v2/aggregations/"
