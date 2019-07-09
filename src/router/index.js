@@ -25,6 +25,7 @@ const CouponChange = resolve => require(['@/components/user/couponChange.vue'], 
 const CouponListActivity = resolve => require(['@/components/user/couponListActivity.vue'], resolve)
 
 export default new VueRouter({
+  mode: 'history',
   routes: [
     {
       path: '/',
