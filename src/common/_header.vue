@@ -1,6 +1,6 @@
 <template>
-  <header :style="{'background-color':mBackgroundColor}">
-    <van-row type="flex">
+  <header :style="{'background-color':defaultBgColor}">
+    <van-row type="flex" :style="isDeepColor(defaultBgColor)? 'color:white':'color:blank'">
       <van-col span="3">
         <div style="margin-top: 3px">
           <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-if="$route.matched[0].path=='/category'"></van-icon>
@@ -31,10 +31,6 @@
     padding: 0.8em 0.15em 0em 0.15em;
     height: 2.2em;
     background-color: #FF4444;
-    color: white;
-
-
-
   }
 
 
@@ -44,8 +40,35 @@
 <script>
   export default {
     props: ['mBackgroundColor'],
-
+    data() {
+      return {
+        defaultBgColor: '#FF4444'
+      }
+    },
+    watch: {
+      mBackgroundColor: function(newVal){
+        this.defaultBgColor = newVal;
+      }
+    },
     methods: {
+      isDeepColor(hexColor) {
+        this.$log(" HEADER, isDeepColor:"+hexColor)
+        if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
+        hexColor = hexColor.toLowerCase();
+        let b = new Array();
+        for (let x = 0; x < 3; x++) {
+          b[0] = hexColor.substr(x * 2, 2)
+          b[3] = "0123456789abcdef";
+          b[1] = b[0].substr(0, 1)
+          b[2] = b[0].substr(1, 1)
+          b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
+        }
+        let grayLevel  =  b[20] * 0.299 +  b[21] * 0.587 +  b[22]* 0.114
+        if(grayLevel >= 192)
+          return false
+        else
+          return true;
+      },
       closeWindow() {
         this.$jsbridge.call("closeWindow");
       },

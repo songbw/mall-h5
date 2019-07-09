@@ -2,31 +2,25 @@
 import store from '@/vuex/store.js'
 import router from '../router'
 
-//const GOODS_URL_PREFIX = "https://iwallet-1258175138.cos.ap-beijing.myqcloud.com"
-const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
-
-//const SERVER_BASE_URL = "http://192.168.1.35:8080"  //local debug
 const SERVER_BASE_URL = "http://119.3.111.161:8080"
-const APP_ID = "10" //无锡市民卡
-const SERVR_PHONE_NUM= "4000797717";
 const OPEN_CASHER_URL = "http://localhost:1322/#/pay/casher";
-
 const USER_BASE_URL="http://119.3.3.226:8081/";
-
-/*const PRODUCT_BASE_URL = "http://119.3.111.161:8080";
-const AGGREGATION_BASE_URL = "http://119.3.111.161:8080"
-const ORDER_BASE_URL = "http://119.3.111.161:8080"
-const EQUITY_BASE_URL = "http://119.3.111.161:8080"
-const SSO_BASE_URL = "http://119.3.3.226:8081/"*/
 const TESTSTUB_PAYMENT_BASE_URL = "http://119.3.111.161:8088/v1/"
 
-const PRODUCT_BASE_URL = "https://api.weesharing.com/v2/products/";
-const AGGREGATION_BASE_URL = "https://api.weesharing.com/v2/aggregations/"
-const ORDER_BASE_URL = "https://api.weesharing.com/v2/orders/"
-const EQUITY_BASE_URL = "https://api.weesharing.com/v2/equities/"
-const SSO_BASE_URL = "https://api.weesharing.com/v2/ssoes/"
-const WORKER_ORDER_BASE_URL = "https://api.weesharing.com/v2/workorders"
-const BASE_BASE_URL = "http://api.weesharing.com/v2/bases/"
+
+const APP_ID = "10" //无锡市民卡
+const SERVR_PHONE_NUM= "4000797717";
+const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
+//const SERVICE_URL = "http://192.168.200.37:8000"
+const SERVICE_URL = "https://api.weesharing.com"
+
+const PRODUCT_BASE_URL = SERVICE_URL+"/v2/products/";
+const AGGREGATION_BASE_URL = SERVICE_URL+"/v2/aggregations/"
+const ORDER_BASE_URL = SERVICE_URL+"/v2/orders/"
+const EQUITY_BASE_URL = SERVICE_URL+"/v2/equities/"
+const SSO_BASE_URL = SERVICE_URL+"/v2/ssoes/"
+const WORKER_ORDER_BASE_URL = SERVICE_URL+"/v2/workorders"
+const BASE_BASE_URL = SERVICE_URL+"/v2/bases/"
 
 
 //const PRODUCT_BASE_URL = "http://119.3.111.161:8080";

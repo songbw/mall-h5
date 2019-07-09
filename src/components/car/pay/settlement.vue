@@ -1014,12 +1014,15 @@
                 let salePrice = this.getSalePrice(sku)
                 saleAmount += salePrice * sku.product.baseInfo.count
                 amount += unitPrice * sku.product.baseInfo.count
+                this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+                this.$log(sku)
                 skus.push({
                   "skuId": sku.product.baseInfo.skuId,
                   "num": sku.product.baseInfo.count,
                   "unitPrice": unitPrice,
                   "salePrice": salePrice,
                   "promotionId": promotionId,
+                  "merchantId" : 2,
                   "promotionDiscount": (unitPrice - sku.product.goodsInfo.dprice).toFixed(2)
                 })
               }
@@ -1030,6 +1033,7 @@
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.supplyer, //商户号
+              "merchantId": 2,
               "payment": "01", //支付方式， 现金支付
               "servFee": item.freight, //运费
               "amount": amount,     //应给商户的实际总价
@@ -1131,23 +1135,10 @@
             }).then(() => {
             })
           } else {
-           /* let pAnOrderInfo = {
-              "accessToken": user.accessToken,
-              "orderNo": '222222222222222',// orderNo,
-              "orderAmount": 100 * 100,//分
-              "openId": user.openId,
-              "businessType": "11"
-            }
-            this.$router.push({
-              name: "收银台页",
-              params: {
-                orderInfo: pAnOrderInfo
-              }
-            })*/
             try {
               let options = this.getComposedOrderOption(userInfo, receiverId);
               this.$log(JSON.stringify(options))
-              if (this.isValidOrder(options)) {
+ /*             if (this.isValidOrder(options)) {
                 if (options != null) {
                   that.$api.xapi({
                     method: 'post',
@@ -1162,9 +1153,9 @@
                     let amount = 0;
                     let merchantNo = ""
                     let orderNos = ""
-                    if (result != undefined && result.length > 0 && result[0].orderNo.length > 8) {
-                      let len = result[0].orderNo.length;
-                      orderNos = JSON.stringify(result[0].orderNo.substr(len - 8)).replace(/\"/g, "");
+                    if (result != undefined && result.length > 0 && result[0].tradeNo.length > 8) {
+                      let len = result[0].tradeNo.length;
+                      orderNos = JSON.stringify(result[0].tradeNo.substr(len - 8)).replace(/\"/g, "");
                       if (options.merchants.length == 1) {//单商户
                         merchantNo = options.merchants[0].merchantNo;
                       }
@@ -1201,7 +1192,7 @@
               } else {
                 this.$log("无效订单")
                 this.$toast("无效订单")
-              }
+              }*/
             } catch (e) {
             }
           }
