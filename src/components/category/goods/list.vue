@@ -3,7 +3,7 @@
     <v-header class="header">
       <h1 slot="title">商品列表</h1>
       <router-link :to="{name:'购物车页'}" slot="right">
-        <van-icon name="shopping-cart-o" size="1.2em"/>
+        <van-icon color="white" name="shopping-cart-o" size="1.2em"/>
       </router-link>
     </v-header>
     <van-list v-model="loading"
@@ -254,7 +254,7 @@
 
         .van-button {
           background: url('../../../assets/icons/ico_add_cart.png') no-repeat center;
-          background-size: 30px 25px;
+          background-size: 25px 25px;
           border: none;
         }
 
