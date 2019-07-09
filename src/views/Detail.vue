@@ -11,14 +11,14 @@
       <div>
         <div class="promotion-price" v-if="hasPromotion">
           <van-col span="8" class="priceBox">
-          <span class="sales-price">
-            ￥{{this.goods.dprice}}
-          </span>
+            <p class="sales-price">
+              <span>￥</span>{{parseFloat(this.goods.dprice).toFixed(2)}}
+            </p>
             <div>
               <span class="origin-price-title">原价</span>
-              <span class="origin-price">
-            ￥{{this.goods.price}}
-          </span>
+              <p class="origin-price">
+                <span>￥</span>{{parseFloat(this.goods.price).toFixed(2)}}
+              </p>
             </div>
 
           </van-col>
@@ -32,7 +32,9 @@
             </v-countdown>
           </van-col>
         </div>
-        <p class="price-title" v-else>￥{{this.goods.price}}</p>
+        <p class="price-title" v-else>
+          <span>￥</span>{{parseFloat(this.goods.price).toFixed(2)}}
+        </p>
         <div class="goods-detail">
         <span class="goods-disciption">
           <i class="goods-area">南京</i>
@@ -56,7 +58,7 @@
               <van-cell title="可领取的券"></van-cell>
               <div v-for="(couponInfo,index) in avaliableCouponList" :key="index">
                 <van-cell>
-                  <div slot="default" class="coupon-item"   @click="onAvaliableCouponClick(couponInfo,index)" >
+                  <div slot="default" class="coupon-item" @click="onAvaliableCouponClick(couponInfo,index)">
                     <div class="coupon-title">
                       <div style="margin-top: 30px">
                         <div v-if="couponInfo.rules.couponRules.type === 0">
@@ -74,7 +76,8 @@
                       </div>
                       <span>{{formateCouponDescription(couponInfo.rules.couponRules)}}</span>
                     </div>
-                    <div class="coupon-detail coupon-get-already" v-if="couponInfo.userCollectNum >= couponInfo.rules.perLimited">
+                    <div class="coupon-detail coupon-get-already"
+                         v-if="couponInfo.userCollectNum >= couponInfo.rules.perLimited">
                       <div>
                         <span v-if="couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
                         <span v-if="couponInfo.rules.scenario.type===2">全场商品</span>
@@ -172,7 +175,7 @@
     beforeRouteEnter(to, from, next) {
       next(vm => {
         setTimeout(() => {
-          window.scrollTo(0,0);
+          window.scrollTo(0, 0);
         }, 20);
       })
     },
@@ -215,7 +218,7 @@
             this.hasPromotion = true;
           }
         }
-        if(this.hasPromotion) {
+        if (this.hasPromotion) {
           this.goods['dprice'] = this.goods.price - this.discount
         } else {
           this.goods['dprice'] = this.goods.price
@@ -238,7 +241,7 @@
               }).then((response) => {
                 let result = response.data.data.result;
                 result.couponUseInfo.forEach(coupon => {
-                  if(coupon.status === 1) {
+                  if (coupon.status === 1) {
                     this.$log("已领券") //已领取券，未使用
                     coupon["couponInfo"] = item
                     this.userCouponList.push(coupon)
@@ -283,10 +286,10 @@
       }
     },
     methods: {
-      onAvaliableCouponClick(couponInfo,index) {
+      onAvaliableCouponClick(couponInfo, index) {
         this.$log("onAvaliableCouponClick Enter")
         this.$log(couponInfo)
-        if(couponInfo.userCollectNum >= couponInfo.rules.perLimited)
+        if (couponInfo.userCollectNum >= couponInfo.rules.perLimited)
           return;
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
@@ -304,7 +307,7 @@
           }).then((response) => {
             let result = response.data.data;
             that.$log(result)
-            if(result != undefined) {
+            if (result != undefined) {
               that.avaliableCouponList[index].userCollectNum = result.couponCollectNum;
             }
           }).catch(function (error) {
@@ -320,7 +323,7 @@
           case 1://代金券
             return '代金券';
           case 2://折扣券
-            if(rules.discountCoupon.fullPrice > 0) {
+            if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
             } else {
               return '折扣券 ';
@@ -372,7 +375,7 @@
     }
 
     .detail-body {
-      padding-top: 2.3em;
+      padding-top: 3em;
 
       .couponBox {
         display: flex;
@@ -399,7 +402,7 @@
         .coupon-item {
           height: 100px;
           display: flex;
-          box-shadow:5px 10px  #f8f8f8;
+          box-shadow: 5px 10px #f8f8f8;
 
           .coupon-title {
             width: 40%;
@@ -441,6 +444,9 @@
         padding: 2vw;
         position: relative;
         background-color: #ffffff;
+        > span {
+          .fz(font-size, 20);
+        }
       }
 
       .promotion-price {
@@ -473,6 +479,10 @@
           .sales-price {
             .fz(font-size, 40);
             font-weight: bold;
+
+            > span {
+              .fz(font-size, 20);
+            }
           }
         }
 
@@ -491,17 +501,17 @@
         background-color: white;
         .fz(font-size, 30);
 
-        .goods-area {
-          background-color: #ff4444;
-          .fz(font-size, 25);
-          border-radius: 4px;
-          padding: 0.2em;
-          color: white;
-        }
-
         .goods-disciption {
-          color: #888888;
+          color: black;
           background-color: white;
+          .goods-area {
+            background-color: #ff4444;
+            .fz(font-size, 26);
+            border-radius: 4px;
+            padding: 2px;
+
+            color: white;
+          }
         }
       }
 
