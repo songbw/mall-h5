@@ -1138,7 +1138,7 @@
             try {
               let options = this.getComposedOrderOption(userInfo, receiverId);
               this.$log(JSON.stringify(options))
- /*             if (this.isValidOrder(options)) {
+              if (this.isValidOrder(options)) {
                 if (options != null) {
                   that.$api.xapi({
                     method: 'post',
@@ -1192,7 +1192,7 @@
               } else {
                 this.$log("无效订单")
                 this.$toast("无效订单")
-              }*/
+              }
             } catch (e) {
             }
           }
@@ -1395,6 +1395,82 @@
     .pay {
       width: 100%;
       padding-top: 3em;
+
+      .box {
+        padding-top: .5em;
+        position: relative;
+        width: 100%;
+        line-height: 12vw;
+        background-color: #ff4444;
+        .userHeader {
+          width: 100%;
+          line-height: 12vw;
+          background-size: auto 100%;
+          padding: 3.2vw 0;
+          display: -webkit-box;
+          display: -ms-flexbox;
+          display: flex;
+          -webkit-box-align: center;
+          -ms-flex-align: center;
+          align-items: center;
+
+          .headerTitle{
+            display: flex;
+            flex-direction: row;
+            width: 90%;
+
+            .header-icon {
+              margin-left: 5vw;
+
+              img {
+                display: inline-block;
+                border-radius: 50%;
+                height: 50px;
+                width: 50px;
+              }
+            }
+
+            > span {
+              margin-top: 1vw;
+              margin-left: 3.2vw;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
+              .fz(font-size, 30);
+              color: #ffffff;
+              letter-spacing: .3vw;
+            }
+          }
+
+          .header-right{
+            width: 10%;
+            display: flex;
+            flex-direction: row;
+
+            .van-icon {
+              width: 100%;
+              float: right;
+              color: white;
+            }
+          }
+        }
+      }
+
+      .box:after {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -30px;
+        content: ' ';
+        height: 30px;
+        width: 100%;
+        border-radius: 0 0 30% 30%;
+        background-color: #ff4444;
+        overflow: hidden;
+      }
 
 
       .custom-text {
