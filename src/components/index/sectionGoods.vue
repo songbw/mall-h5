@@ -69,8 +69,6 @@
     },
 
     created() {
-      this.$log("create .............")
-      this.$log(this.datas)
       this.fixedBarId = 'fixedBar'+this.datas.id
       this.sectionGoodsListId = 'sectionGoods-list'+this.datas.id
       this.datas.list.forEach(item => {
@@ -89,16 +87,11 @@
 
     methods: {
       onTabChanged(item, index) {
-        this.$log("index:" + index )
-        this.$log(item)
-
         if (this.isTabChanging) {
           this.isTabChanging = false;
         } else {
-          this.$log("this.goodsLists[index].offsetTop:"+this.goodsLists[index].offsetTop)
-          this.$log("document.querySelector('#fixedBar').offsetHeight"+document.querySelector('#'+this.fixedBarId).offsetHeight)
           let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#'+this.fixedBarId).offsetHeight) + 1;
-          this.$log("movePos is:" + movePos)
+         // this.$log("movePos is:" + movePos)
           this.isTabChanging = true;
           setTimeout(() => {
             this.isTabChanging = false;
@@ -192,7 +185,6 @@
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
-          this.$log("xxxxxxxxxxxxxxxxxxx")
           this.$log(this.result)
           this.$toast("添加到购物车成功！")
         }).catch(function (error) {
