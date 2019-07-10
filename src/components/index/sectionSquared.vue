@@ -94,7 +94,6 @@
 
   .squaredBody{
     background-color: transparent;
-    border-radius: 10px;
 
     .sectionSquared-title {
       .fz(font-size, 40);
@@ -115,7 +114,6 @@
         width: 100%;
 
         img {
-          border-radius: 10px;
           width: 100%;
           display: inline-block;
         }
