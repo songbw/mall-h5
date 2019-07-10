@@ -117,6 +117,10 @@
         //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
+        for (let i = 0 ; i < this.datas.length; i++) {
+            if(this.datas[i].type === '4')
+              this.datas[i].data.id = 0;
+        }
         this.$log(this.datas);
         this.mBackgroundColor = response.data.data.result.backgroundColor
         if(response.data.data.result.header != undefined)

@@ -2,13 +2,13 @@
   <section class="sectionGoods"
            :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
     <div class="container" ref="container">
-      <ly-tab id="fixedBar" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
+      <ly-tab :id="fixedBarId" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
               @change="onTabChanged"
               :style="{'background-color': datas.settings.floorTitleColor}">
       </ly-tab>
       <div >
         <div v-for="(category,index) in datas.list" :title=category.title :key="index">
-          <ul id="sectionGoods-list"
+          <ul :id="sectionGoodsListId"
               :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
@@ -58,6 +58,9 @@
         isTabChanging: false,
         tabsOffsetTop: 0,
         marginTop: 0,
+        fixedBarId: 'fixedBar',
+        sectionGoodsListId:'sectionGoods-list'
+
       };
     },
 
@@ -66,6 +69,10 @@
     },
 
     created() {
+      this.$log("create .............")
+      this.$log(this.datas)
+      this.fixedBarId = 'fixedBar'+this.datas.id
+      this.sectionGoodsListId = 'sectionGoods-list'+this.datas.id
       this.datas.list.forEach(item => {
         this.items.push({label: item.title})
       });
@@ -73,7 +80,7 @@
 
     mounted() {
       window.addEventListener('scroll', this.handleScroll);
-      this.goodsLists = document.querySelectorAll('#sectionGoods-list')
+      this.goodsLists = document.querySelectorAll('#'+this.sectionGoodsListId)
     },
 
     destroyed() {
@@ -89,8 +96,8 @@
           this.isTabChanging = false;
         } else {
           this.$log("this.goodsLists[index].offsetTop:"+this.goodsLists[index].offsetTop)
-          this.$log("document.querySelector('#fixedBar').offsetHeight"+document.querySelector('#fixedBar').offsetHeight)
-          let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#fixedBar').offsetHeight) + 1;
+          this.$log("document.querySelector('#fixedBar').offsetHeight"+document.querySelector('#'+this.fixedBarId).offsetHeight)
+          let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#'+this.fixedBarId).offsetHeight) + 1;
           this.$log("movePos is:" + movePos)
           this.isTabChanging = true;
           setTimeout(() => {
@@ -101,15 +108,15 @@
         }
       },
       handleScroll() {
-        if (document.querySelector('#fixedBar') == null)
+        if (document.querySelector('#'+this.fixedBarId) == null)
           return;
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         if (!this.isFixed) {
-          this.tabsOffsetTop = document.querySelector('#fixedBar').offsetTop;
+          this.tabsOffsetTop = document.querySelector('#'+this.fixedBarId).offsetTop;
         }
         if (scrollTop >= this.tabsOffsetTop) {
           this.isFixed = true;
-          this.marginTop = document.querySelector('#fixedBar').offsetHeight + 'px';
+          this.marginTop = document.querySelector('#'+this.fixedBarId).offsetHeight + 'px';
           let found = -1;
           for (let i = 0; i < this.goodsLists.length; i++) {
             if (i == this.goodsLists.length - 1) {

@@ -85,6 +85,10 @@
             this.title = response.data.data.result.name;
             let jsonString = response.data.data.result.content
             this.datas = JSON.parse(jsonString);
+            for (let i = 0 ; i < this.datas.length; i++) {
+              if(this.datas[i].type === '4')
+                this.datas[i].data.id = id;
+            }
             this.mBackgroundColor = response.data.data.result.backgroundColor
             if(response.data.data.result.header != undefined)
             {
@@ -130,6 +134,10 @@
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
         // this.$log(response.data.data.result)
+        for (let i = 0 ; i < this.datas.length; i++) {
+          if(this.datas[i].type === '4')
+            this.datas[i].data.id = id;
+        }
         this.$log(this.datas)
         this.mBackgroundColor = response.data.data.result.backgroundColor
         if(response.data.data.result.header != undefined)
