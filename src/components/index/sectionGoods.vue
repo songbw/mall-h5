@@ -6,7 +6,7 @@
               @change="onTabChanged"
               :style="{'background-color': datas.settings.floorTitleColor}">
       </ly-tab>
-      <div :style="{marginTop: marginTop}">
+      <div >
         <div v-for="(category,index) in datas.list" :title=category.title :key="index">
           <ul id="sectionGoods-list"
               :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
@@ -82,12 +82,16 @@
 
     methods: {
       onTabChanged(item, index) {
-        // this.$log("index:" + index + ",label:" + item.label + ",isScrollChanged:" + this.isScrollChanged)
+        this.$log("index:" + index )
+        this.$log(item)
+
         if (this.isTabChanging) {
           this.isTabChanging = false;
         } else {
+          this.$log("this.goodsLists[index].offsetTop:"+this.goodsLists[index].offsetTop)
+          this.$log("document.querySelector('#fixedBar').offsetHeight"+document.querySelector('#fixedBar').offsetHeight)
           let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#fixedBar').offsetHeight) + 1;
-          //     this.$log("offsetTop is:" + movePos)
+          this.$log("movePos is:" + movePos)
           this.isTabChanging = true;
           setTimeout(() => {
             this.isTabChanging = false;
@@ -263,6 +267,7 @@
             width: 80%;
             line-height: 2em;
             margin-left: 5px;
+
             > span {
               display: inline-block;
               align-content: center;
@@ -283,6 +288,7 @@
             width: 20%;
             justify-content: center;
             line-height: 2em;
+
             .van-button {
               margin: 1vw;
               background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
@@ -290,13 +296,11 @@
               border: none;
               float: right;
             }
+
             .van-button:active {
               opacity: 0;
             }
           }
-
-
-
 
 
         }
@@ -366,6 +370,7 @@
             width: 80%;
             line-height: 2em;
             margin-left: 5px;
+
             > span {
               display: inline-block;
               align-content: center;
@@ -386,6 +391,7 @@
             width: 20%;
             justify-content: center;
             line-height: 2em;
+
             .van-button {
               margin: 1vw;
               background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
@@ -393,13 +399,11 @@
               border: none;
               float: right;
             }
+
             .van-button:active {
               opacity: 0;
             }
           }
-
-
-
 
 
         }
