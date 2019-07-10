@@ -1394,7 +1394,7 @@
 
     .pay {
       width: 100%;
-      padding-top: 2.3em;
+      padding-top: 3em;
 
 
       .custom-text {

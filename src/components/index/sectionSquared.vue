@@ -1,30 +1,32 @@
 <template lang="html">
   <section class="sectionSquared"
-           :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
-    <div v-if="datas.settings.title.show">
-      <div v-if="datas.settings.title.text.hasLink">
-        <van-cell :is-link="datas.settings.title.text.hasLink"
-                  :value="datas.settings.title.text.linkTitle"
-                  :url="datas.settings.title.text.linkUrl">
-          <h1 slot="title" class="sectionSquared-title" :style="{'text-align': datas.settings.title.text.align}">
-            {{datas.settings.title.text.value}}
-          </h1>
-        </van-cell>
+           :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
+    <div class="squaredBody">
+<!--      <div v-if="datas.settings.title.show">
+        <div v-if="datas.settings.title.text.hasLink">
+          <van-cell :is-link="datas.settings.title.text.hasLink"
+                    :value="datas.settings.title.text.linkTitle"
+                    :url="datas.settings.title.text.linkUrl">
+            <h1 slot="title" class="sectionSquared-title" :style="{'text-align': datas.settings.title.text.align}">
+              {{datas.settings.title.text.value}}
+            </h1>
+          </van-cell>
+        </div>
+        <div v-else>
+          <van-cell>
+            <h1 slot="title" class="sectionSquared-title" :style="{'text-align': datas.settings.title.text.align}">
+              {{datas.settings.title.text.value}}
+            </h1>
+          </van-cell>
+        </div>
+      </div>-->
+      <div v-for="item in datas.list">
+        <ul class="sectionSquared-list">
+          <li v-for="k in item.grids">
+            <img v-lazy="k.imageUrl" @click="onClick(k.targetUrl)">
+          </li>
+        </ul>
       </div>
-      <div v-else>
-        <van-cell>
-          <h1 slot="title" class="sectionSquared-title" :style="{'text-align': datas.settings.title.text.align}">
-            {{datas.settings.title.text.value}}
-          </h1>
-        </van-cell>
-      </div>
-    </div>
-    <div v-for="item in datas.list">
-      <ul class="sectionSquared-list" :style="{'background-color':mBackgroundColor}">
-        <li v-for="k in item.grids" :style="{'background-color':mBackgroundColor}">
-          <img v-lazy="k.imageUrl" @click="onClick(k.targetUrl)">
-        </li>
-      </ul>
     </div>
   </section>
 </template>
@@ -90,66 +92,75 @@
   @import "../../assets/fz.less";
   @import "../../assets/index/style.css";
 
-  .sectionSquared-title {
-    .fz(font-size, 40);
-    font-weight: bold;
-  }
+  .squaredBody{
+    background-color: transparent;
+    border-radius: 10px;
 
-  .sectionSquared-list {
-    display: -ms-flex;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-wrap: wrap;
-    list-style: none;
-    margin-bottom: 1px;
-
-    li:first-child:nth-last-child(1) {
-      /* -或者可以使用- li:only-child { */
-      width: 100%;
-
-      img {
-        width: 100%;
-        display: inline-block;
-      }
+    .sectionSquared-title {
+      .fz(font-size, 40);
+      font-weight: bold;
     }
-
-    /* 两个元素时 */
-
-    li:first-child:nth-last-child(2),
-    li:first-child:nth-last-child(2) ~ li {
-      width: 50%;
-    }
-
-    /* 三个元素时 */
-
-    li:first-child:nth-last-child(3),
-    li:first-child:nth-last-child(3) ~ li {
-      width: 33.3333%;
-    }
-
-    /* 四个元素时 */
-
-    li:first-child:nth-last-child(4),
-    li:first-child:nth-last-child(4) ~ li {
-      width: 25%;
-    }
-
-    li {
-      width: 25%;
+    .sectionSquared-list {
+      display: -ms-flex;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
       list-style: none;
-      display: inline-block; //使li对象显示为一行
-      //margin: 1.5px;
-      text-align: center;
+      margin-bottom: 1px;
+      background-color: transparent;
 
-      img {
+      li:first-child:nth-last-child(1) {
+        /* -或者可以使用- li:only-child { */
         width: 100%;
-        display: inline-block;
+
+        img {
+          border-radius: 10px;
+          width: 100%;
+          display: inline-block;
+        }
       }
 
-      img:nth-child(1) {
-        margin-left: 1px;
+      /* 两个元素时 */
+
+      li:first-child:nth-last-child(2),
+      li:first-child:nth-last-child(2) ~ li {
+        width: 50%;
+      }
+
+      /* 三个元素时 */
+
+      li:first-child:nth-last-child(3),
+      li:first-child:nth-last-child(3) ~ li {
+        width: 33.3333%;
+      }
+
+      /* 四个元素时 */
+
+      li:first-child:nth-last-child(4),
+      li:first-child:nth-last-child(4) ~ li {
+        width: 25%;
+      }
+
+      li {
+        width: 25%;
+        list-style: none;
+        display: inline-block; //使li对象显示为一行
+        //margin: 1.5px;
+        text-align: center;
+        background-color: transparent;
+
+        img {
+          width: 100%;
+          display: inline-block;
+        }
+
+        img:nth-child(1) {
+          margin-left: 1px;
+        }
       }
     }
   }
+
+
 </style>
