@@ -1153,9 +1153,11 @@
                     let amount = 0;
                     let merchantNo = ""
                     let orderNos = ""
-                    if (result != undefined && result.length > 0 && result[0].tradeNo.length > 8) {
-                      let len = result[0].tradeNo.length;
-                      orderNos = JSON.stringify(result[0].tradeNo.substr(len - 8)).replace(/\"/g, "");
+                    this.$log(result.length )
+                    this.$log(result[0].orderNo)
+                    if (result != undefined && result.length > 0 && result[0].orderNo.length > 8) {
+                      let len = result[0].orderNo.length;
+                      orderNos = JSON.stringify(result[0].orderNo.substr(len - 8)).replace(/\"/g, "");
                       if (options.merchants.length == 1) {//单商户
                         merchantNo = options.merchants[0].merchantNo;
                       }
