@@ -384,9 +384,11 @@
               break;
             }
           }
-          if (found != -1) {
+          if (found != -1 && item.couponInfo.rules.couponRules.type != 3) {
             couponList.push(item)
           }
+          this.$log("#############################")
+          this.$log(couponList)
         })
 
         //已经选出选购商品所有对应的优惠券
