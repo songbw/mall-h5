@@ -7,8 +7,28 @@
       <v-loading></v-loading>
     </div>
     <div class="pay" v-else>
+      <div class='box'>
+      </div>
+      <div class="box_after"></div>
       <div class="pay-body">
         <div class="contact-address-card" @click="editAddressOrList">
+          <div class="contact-card-left-icon">
+            <img :src="icon_conatct_address">
+          </div>
+          <div class="contact-card-detail">
+            <div v-if="addressCount == 0" class="contact-edit">
+              您的收获地址为空，点此添加收货地址
+            </div>
+            <div v-else class="contact-info">
+              <p class="recevierInfo">{{receiverName}} <span>{{receiverMobile}}</span></p>
+              <span class="recevierAddress">{{receiverAddress}}</span>
+            </div>
+          </div>
+          <div class="contact-card-right-icon">
+            <van-icon class="contact-edit" name="arrow" size="12px"/>
+          </div>
+        </div>
+<!--        <div class="contact-address-card" @click="editAddressOrList">
           <van-row type="flex">
             <van-col span="22">
               <div v-if="addressCount == 0" class="contact-edit" style="background-color: white">
@@ -30,7 +50,7 @@
               <van-icon class="contact-edit" name="arrow" size="12px"/>
             </van-col>
           </van-row>
-        </div>
+        </div>-->
         <div class="address-line"></div>
         <div class="pay-info">
           <van-cell title="支付方式:" value="现金支付">
@@ -285,10 +305,12 @@
     data() {
       return {
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
+        icon_conatct_address: require('@/assets/icons/ico_contact_address.png'),
         addressCount: 0,
         freight: 0,
         payCarList: [],
-        receiverInfo: '',
+        receiverName: '',
+        receiverMobile: '',
         receiverAddress: '',
         addressEmptyInfo: '',
         usedAddress: {},
@@ -949,7 +971,8 @@
           address = list[0]
         }
         if (JSON.stringify(address) != "{}") {
-          this.receiverInfo = "收货人:" + address.receiverName + "  " + address.mobile
+          this.receiverName = address.receiverName
+          this.receiverMobile = address.mobile
           this.receiverAddress = (address.provinceName != null ? address.provinceName : "") +
             (address.cityName != null ? address.cityName : "") +
             (address.countyName != null ? address.countyName : "") +
@@ -968,7 +991,7 @@
         let allPayList = this.$store.state.appconf.payList;
         try {
           allPayList.forEach(item => {
-            Util.deletCartItem(this,item.product)
+            Util.deletCartItem(this, item.product)
           })
         } catch (e) {
         }
@@ -1022,7 +1045,7 @@
                   "unitPrice": unitPrice,
                   "salePrice": salePrice,
                   "promotionId": promotionId,
-                  "merchantId" : 2,
+                  "merchantId": 2,
                   "promotionDiscount": (unitPrice - sku.product.goodsInfo.dprice).toFixed(2)
                 })
               }
@@ -1153,7 +1176,7 @@
                     let amount = 0;
                     let merchantNo = ""
                     let orderNos = ""
-                    this.$log(result.length )
+                    this.$log(result.length)
                     this.$log(result[0].orderNo)
                     if (result != undefined && result.length > 0 && result[0].orderNo.length > 8) {
                       let len = result[0].orderNo.length;
@@ -1404,6 +1427,7 @@
         width: 100%;
         line-height: 12vw;
         background-color: #ff4444;
+
         .userHeader {
           width: 100%;
           line-height: 12vw;
@@ -1416,7 +1440,7 @@
           -ms-flex-align: center;
           align-items: center;
 
-          .headerTitle{
+          .headerTitle {
             display: flex;
             flex-direction: row;
             width: 90%;
@@ -1447,7 +1471,7 @@
             }
           }
 
-          .header-right{
+          .header-right {
             width: 10%;
             display: flex;
             flex-direction: row;
@@ -1461,17 +1485,13 @@
         }
       }
 
-      .box:after {
-        position: absolute;
-        left: 0;
-        right: 0;
-        bottom: -30px;
-        content: ' ';
-        height: 30px;
-        width: 100%;
+      .box_after {
+        bottom: -60px;
+        height: 60px;
         border-radius: 0 0 30% 30%;
         background-color: #ff4444;
         overflow: hidden;
+        z-index: -1;
       }
 
 
@@ -1481,6 +1501,82 @@
       }
 
       .pay-body {
+        margin-top: -50px;
+
+        .contact-address-card {
+          background-color: white;
+          height: 80px;
+          border-radius: 10px;
+          margin: 10px;
+          display: flex;
+          flex-direction: row;
+
+          .contact-card-left-icon {
+            line-height: 80px;
+            img {
+              width: 35px;
+              height: 35px;
+              margin-top: -5px;
+              margin-left: 10px;
+            }
+          }
+
+          .contact-card-detail {
+            width: 100%;
+            height: 80px;
+            justify-content: center;
+            margin-left: 10px;
+
+            .contact-edit {
+              line-height: 80px;
+              text-align: center;
+              color: #000000;
+              .fz(font-size, 30);
+            }
+
+            .contact-info {
+              display: flex;
+              flex-direction: column;
+              height: 80px;
+              font-size: large;
+              justify-items: center;
+              margin-top: 15px;
+              color: black;
+
+              .recevierInfo {
+                margin: 2px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+                .fz(font-size, 35);
+                >span{
+                  .fz(font-size, 25);
+                  color: #8a8a8a;
+                }
+              }
+              .recevierAddress {
+                margin: 2px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+                .fz(font-size, 25);
+              }
+            }
+          }
+
+          .contact-card-right-icon {
+            line-height: 80px;
+            margin-right: 10px;
+          }
+
+        }
+
         .pay-info {
           background-color: white;
           margin-top: 10px;
@@ -1609,14 +1705,6 @@
           }
 
 
-        }
-
-        .contact-edit {
-          padding: 20px 0;
-          text-align: center;
-          color: #000000;
-          line-height: 30px;
-          .fz(font-size, 30);
         }
 
         .address-line {
