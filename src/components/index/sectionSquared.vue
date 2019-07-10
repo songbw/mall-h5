@@ -2,7 +2,7 @@
   <section class="sectionSquared"
            :style="{'margin-bottom': datas.settings.marginBottom+'px'}">
     <div class="squaredBody">
-<!--      <div v-if="datas.settings.title.show">
+      <div v-if="datas.settings.title.show">
         <div v-if="datas.settings.title.text.hasLink">
           <van-cell :is-link="datas.settings.title.text.hasLink"
                     :value="datas.settings.title.text.linkTitle"
@@ -19,7 +19,7 @@
             </h1>
           </van-cell>
         </div>
-      </div>-->
+      </div>
       <div v-for="item in datas.list">
         <ul class="sectionSquared-list">
           <li v-for="k in item.grids">
@@ -92,13 +92,14 @@
   @import "../../assets/fz.less";
   @import "../../assets/index/style.css";
 
-  .squaredBody{
+  .squaredBody {
     background-color: transparent;
 
     .sectionSquared-title {
       .fz(font-size, 40);
       font-weight: bold;
     }
+
     .sectionSquared-list {
       display: -ms-flex;
       display: -webkit-box;
