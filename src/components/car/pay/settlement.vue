@@ -28,30 +28,69 @@
             <van-icon class="contact-edit" name="arrow" size="12px"/>
           </div>
         </div>
-<!--        <div class="contact-address-card" @click="editAddressOrList">
-          <van-row type="flex">
-            <van-col span="22">
-              <div v-if="addressCount == 0" class="contact-edit" style="background-color: white">
-                您的收获地址为空，点此添加收货地址
+        <div class="pay-list">
+          <div class="pay-product">
+            <li v-for="item in arregationList" style="list-style: none">
+              <div v-if="item.goods.length > 0" class="supplyer">
+                <van-cell :title=item.supplyerName icon="shop"/>
+                <ul>
+                  <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f0f0f0;">
+                    <div class="promotionBox"
+                         v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
+                      <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].tag}}</span>
+                      <v-countdown class="promotionCountDown"
+                                   @start_callback="countDownS_cb(index,k)"
+                                   @end_callback="countDownE_cb(index,k)"
+                                   :startTime="new Date(k.product.promotionInfo.promotion[0].startDate).getTime()"
+                                   :endTime="new Date(k.product.promotionInfo.promotion[0].endDate).getTime()"
+                                   :secondsTxt="''">
+                      </v-countdown>
+                    </div>
+                    <div v-if="k.product.promotionInfo.promotionState === 1">
+                      <div v-if="!k.valid">
+                        <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                      </div>
+                      <van-card
+                        :desc="locationCity"
+                        :num="k.product.baseInfo.count"
+                        :price="k.product.goodsInfo.dprice"
+                        :title="k.product.goodsInfo.name"
+                        :thumb="k.product.goodsInfo.image"
+                        :origin-price="k.checkedPrice">
+                      </van-card>
+                    </div>
+                    <div v-else>
+                      <div v-if="!k.valid">
+                        <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                      </div>
+                      <van-card
+                        :num="k.product.baseInfo.count"
+                        :price="k.product.goodsInfo.dprice"
+                        :title="k.product.goodsInfo.name"
+                        :thumb="k.product.goodsInfo.image">
+                        <div slot="desc">
+                          <span class="prodDesc">{{locationCity}}</span>
+                        </div>
+                      </van-card>
+                    </div>
+                  </li>
+                </ul>
+                <div class="supplyerSummery">
+                <span
+                  style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
+                </div>
               </div>
-              <div v-else>
-                <van-cell>
-                  <template slot="title">
-                    <span class="custom-text">{{receiverInfo}}</span>
-                    <p>
-                      <van-icon name="location"></van-icon>
-                      <span class="custom-text">{{receiverAddress}}</span>
-                    </p>
-                  </template>
-                </van-cell>
-              </div>
-            </van-col>
-            <van-col span="2" style="background: white;display: flex;">
-              <van-icon class="contact-edit" name="arrow" size="12px"/>
-            </van-col>
-          </van-row>
-        </div>-->
-        <div class="address-line"></div>
+            </li>
+          </div>
+          <div class="pay-footer"></div>
+          <van-submit-bar
+            :price="allpay"
+            button-text="提交订单"
+            @submit="onSubmit"
+            :tip=tip
+            v-track-event="{category:'提交订单', action:'click'}"
+          />
+        </div>
         <div class="pay-info">
           <van-cell title="支付方式:" value="现金支付">
           </van-cell>
@@ -204,86 +243,23 @@
             </div>
           </van-actionsheet>
         </div>
-      </div>
-      <div class="pay-list">
-        <div class="pay-product">
-          <li v-for="item in arregationList" style="list-style: none">
-            <div v-if="item.goods.length > 0" class="supplyer">
-              <van-cell :title=item.supplyerName icon="shop"/>
-              <ul>
-                <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f0f0f0;">
-                  <div class="promotionBox"
-                       v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
-                    <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].tag}}</span>
-                    <v-countdown class="promotionCountDown"
-                                 @start_callback="countDownS_cb(index,k)"
-                                 @end_callback="countDownE_cb(index,k)"
-                                 :startTime="new Date(k.product.promotionInfo.promotion[0].startDate).getTime()"
-                                 :endTime="new Date(k.product.promotionInfo.promotion[0].endDate).getTime()"
-                                 :secondsTxt="''">
-                    </v-countdown>
-                  </div>
-                  <div v-if="k.product.promotionInfo.promotionState === 1">
-                    <div v-if="!k.valid">
-                      <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
-                    </div>
-                    <van-card
-                      :desc="locationCity"
-                      :num="k.product.baseInfo.count"
-                      :price="k.product.goodsInfo.dprice"
-                      :title="k.product.goodsInfo.name"
-                      :thumb="k.product.goodsInfo.image"
-                      :origin-price="k.checkedPrice">
-                    </van-card>
-                  </div>
-                  <div v-else>
-                    <div v-if="!k.valid">
-                      <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
-                    </div>
-                    <van-card
-                      :num="k.product.baseInfo.count"
-                      :price="k.product.goodsInfo.dprice"
-                      :title="k.product.goodsInfo.name"
-                      :thumb="k.product.goodsInfo.image">
-                      <div slot="desc">
-                        <span class="prodDesc">{{locationCity}}</span>
-                      </div>
-                    </van-card>
-                  </div>
-                </li>
-              </ul>
-              <div class="supplyerSummery">
-                <span
-                  style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
-              </div>
+        <div class="pay-settlement">
+          <van-cell title="商品金额:">
+            <div slot="default">
+              <span style="color: black">￥{{productPay}}</span>
             </div>
-          </li>
+          </van-cell>
+          <van-cell title="运费:">
+            <div slot="default">
+              <span style="color: #ff4444">+￥{{freightPay}}</span>
+            </div>
+          </van-cell>
+          <van-cell title="优惠券:">
+            <div slot="default">
+              <span style="color: #ff4444">-￥{{couponReducedPrice(this.usedCoupon)}}</span>
+            </div>
+          </van-cell>
         </div>
-        <div class="pay-footer"></div>
-        <van-submit-bar
-          :price="allpay"
-          button-text="提交订单"
-          @submit="onSubmit"
-          :tip=tip
-          v-track-event="{category:'提交订单', action:'click'}"
-        />
-      </div>
-      <div class="pay-settlement">
-        <van-cell title="商品金额:">
-          <div slot="default">
-            <span style="color: black">￥{{productPay}}</span>
-          </div>
-        </van-cell>
-        <van-cell title="运费:">
-          <div slot="default">
-            <span style="color: #ff4444">+￥{{freightPay}}</span>
-          </div>
-        </van-cell>
-        <van-cell title="优惠券:">
-          <div slot="default">
-            <span style="color: #ff4444">-￥{{couponReducedPrice(this.usedCoupon)}}</span>
-          </div>
-        </van-cell>
       </div>
     </div>
   </section>
@@ -1408,7 +1384,6 @@
     width: 100%;
     height: 100%;
     top: 0px;
-    background-color: #f8f8f8;
 
     .header {
       width: 100%;
@@ -1419,7 +1394,10 @@
 
     .pay {
       width: 100%;
+      top: 0px;
+      background-color: #f8f8f8;
       padding-top: 3em;
+      padding-bottom: 10px;
 
       .box {
         padding-top: .5em;
@@ -1513,6 +1491,7 @@
 
           .contact-card-left-icon {
             line-height: 80px;
+
             img {
               width: 35px;
               height: 35px;
@@ -1552,11 +1531,13 @@
                 -webkit-line-clamp: 1;
                 word-break: break-all;
                 .fz(font-size, 35);
-                >span{
+
+                > span {
                   .fz(font-size, 25);
                   color: #8a8a8a;
                 }
               }
+
               .recevierAddress {
                 margin: 2px;
                 overflow: hidden;
@@ -1578,8 +1559,10 @@
         }
 
         .pay-info {
+          margin: 10px;
           background-color: white;
-          margin-top: 10px;
+          padding: 2px;
+          border-radius: 10px;
 
           .van-cell {
             background-color: white;
@@ -1703,8 +1686,6 @@
               }
             }
           }
-
-
         }
 
         .address-line {
@@ -1724,72 +1705,75 @@
           transparent 50%);
           background-size: 80px;
         }
-      }
 
-      .pay-list {
-        .pay-product {
-          .supplyer {
-            margin-top: 10px;
-            border-radius: 10px;
-            padding: 5px;
-
-            background-color: white;
-
-            .promotionBox {
-              display: flex;
-              margin: 15px 5px 5px 15px;
-              .fz(font-size, 25);
-
-              .promotionTitle {
-                color: #ff4444;
-                font-weight: bold;
-              }
-
-              .promotionCountDown {
-                margin-left: 10px;
-                margin-top: 2px;
-                color: black;
-                .fz(font-size, 25);
-              }
-            }
-
-            .supplyerSummery {
-              margin-top: 10px;
-              font-weight: bold;
-              color: #2c3e50;
-              padding-bottom: 10px;
-            }
-
-            span {
-              .fz(font-size, 30);
-            }
-          }
-
-          li {
-            list-style: none;
-          }
-
-          .van-card {
-            background-color: #ffffff;
-
-            &__price {
-              margin-top: 0.5em;
-              .fz(font-size, 40);
-            }
-          }
-        }
-
-        .pay-footer {
+        .pay-list {
+          margin: 10px;
           background-color: white;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-        }
-      }
+          padding: 2px;
+          border-radius: 10px;
 
-      .pay-settlement {
-        margin-top: 10px;
-        margin-bottom: 5.7em;
+          .pay-product {
+            .supplyer {
+              border-radius: 10px;
+              padding: 5px;
+              .promotionBox {
+                display: flex;
+                margin: 15px 5px 5px 15px;
+                .fz(font-size, 25);
+
+                .promotionTitle {
+                  color: #ff4444;
+                  font-weight: bold;
+                }
+
+                .promotionCountDown {
+                  margin-left: 10px;
+                  margin-top: 2px;
+                  color: black;
+                  .fz(font-size, 25);
+                }
+              }
+
+              .supplyerSummery {
+                margin-top: 10px;
+                font-weight: bold;
+                color: #2c3e50;
+                padding-bottom: 10px;
+              }
+
+              span {
+                .fz(font-size, 30);
+              }
+            }
+
+            li {
+              list-style: none;
+            }
+
+            .van-card {
+              background-color: #ffffff;
+
+              &__price {
+                margin-top: 0.5em;
+                .fz(font-size, 40);
+              }
+            }
+          }
+
+          .pay-footer {
+            background-color: white;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+          }
+        }
+
+        .pay-settlement {
+          margin: 10px 10px 5.7em 10px;
+          background-color: white;
+          padding: 2px;
+          border-radius: 10px;
+        }
       }
     }
   }
