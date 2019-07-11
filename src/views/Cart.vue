@@ -247,7 +247,7 @@
             "userId": user.userId,
             "skuId": item.skuId,
             "mpu": item.mpu,
-            "merchantId": goods.merchantId,
+            "merchantId": item.merchantId,
             "count": item.count,
             "choosed": false,
             "cartId": item.id
@@ -256,7 +256,7 @@
             "id": product.id,
             "skuId": product.skuid,
             "mpu": product.mpu,
-            "merchantId": goods.merchantId,
+            "merchantId": product.merchantId,
             "image": product.image,
             "category": product.category,
             "name": product.name,

@@ -317,6 +317,7 @@
         invoiceTitleType: 'personal',
         invoiceEnterpriseName: '',
         invoiceEnterpriseNumber: '',
+        payList:[]
       }
     },
 
@@ -355,8 +356,6 @@
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let cartList = this.$store.state.appconf.cartList;
-          this.$log("selectedCarList @@@@@@@@@@@@@@@@@@@@@@@@")
-          this.$log(cartList)
           cartList.forEach(item => {
             if (item.baseInfo.userId == user.userId && item.baseInfo.choosed) {
               selectCarList.push(item)
@@ -543,6 +542,7 @@
     },
 
     created() {
+      this.obtainMerchantArray();
       let action = this.$route.params.action;
       if (action == "direct") {
         this.pageAction = "direct";
@@ -631,6 +631,32 @@
     },
 
     methods: {
+      obtainMerchantArray() {
+        let that = this;
+        this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/merchantCode/all',
+        }).then((response) => {
+          let result = response.data.data.result;
+          this.$log("obtainMerchantArray  xxxxxxxxxxxxxxxx")
+          this.$log(result)
+          result.forEach(item => {
+             this.$log(item)
+             let payList
+          })
+/*          let payList = [
+            {
+              "supplyer": "20",
+              "supplyerName": "苏宁易购",
+              goods: [],
+              price: 0,
+              freight: 0
+            },*/
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
       onRadioBtnClick(coupon) {
         this.$log("onRadioBtnClick Enter")
         this.$log(this.radio)
@@ -1014,8 +1040,6 @@
                 let salePrice = this.getSalePrice(sku)
                 saleAmount += salePrice * sku.product.baseInfo.count
                 amount += unitPrice * sku.product.baseInfo.count
-                this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-                this.$log(sku)
                 skus.push({
                   "skuId": sku.product.baseInfo.skuId,
                   "mpu": sku.product.baseInfo.mpu,
@@ -1215,8 +1239,6 @@
         let options = {
           "carriages": carriges,
         }
-        this.$log("xxxxxxxxxxxxxxxxxxxx")
-        this.$log(this.arregationList)
         this.arregationList.forEach(item => {
           if (item.price > 0) {
             carriges.push({
