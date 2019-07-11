@@ -355,6 +355,7 @@
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let cartList = this.$store.state.appconf.cartList;
+          this.$log("selectedCarList @@@@@@@@@@@@@@@@@@@@@@@@")
           this.$log(cartList)
           cartList.forEach(item => {
             if (item.baseInfo.userId == user.userId && item.baseInfo.choosed) {
@@ -1018,11 +1019,11 @@
                 skus.push({
                   "skuId": sku.product.baseInfo.skuId,
                   "mpu": sku.product.baseInfo.mpu,
+                  "merchantId": sku.product.merchantId,
                   "num": sku.product.baseInfo.count,
                   "unitPrice": unitPrice,
                   "salePrice": salePrice,
                   "promotionId": promotionId,
-                  "merchantId": 2,
                   "promotionDiscount": (unitPrice - sku.product.goodsInfo.dprice).toFixed(2)
                 })
               }
@@ -1138,7 +1139,7 @@
             try {
               let options = this.getComposedOrderOption(userInfo, receiverId);
               this.$log(JSON.stringify(options))
-              if (this.isValidOrder(options)) {
+/*              if (this.isValidOrder(options)) {
                 if (options != null) {
                   that.$api.xapi({
                     method: 'post',
@@ -1194,7 +1195,7 @@
               } else {
                 this.$log("无效订单")
                 this.$toast("无效订单")
-              }
+              }*/
             } catch (e) {
             }
           }
@@ -1277,6 +1278,8 @@
           }
         } else {
           this.selectedCarList.forEach(item => {
+            this.$log("xxxxxxxxxxxxxxxxxxxxx")
+            this.$log(item)
             inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
             skus.push({"skuId": item.baseInfo.skuId})
             if (item.promotionInfo.promotion != null && item.promotionInfo.promotion.length > 0) {

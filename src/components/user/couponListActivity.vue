@@ -253,6 +253,7 @@
             let baseInfo = {
               "userId": user.userId,
               "skuId": goods.skuid,
+              "merchantId": goods.merchantId,
               "mpu": goods.mpu,
               "count": 1,
               "choosed": true,
@@ -262,6 +263,7 @@
               "id": goods.id,
               "skuId": goods.skuid,
               "mpu": goods.mpu,
+              "merchantId": goods.merchantId,
               "image": goods.image,
               "category": goods.category,
               "name": goods.name,
