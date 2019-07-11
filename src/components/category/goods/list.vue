@@ -127,7 +127,7 @@
         }
       },
       composeGoodsTitle(goods) {
-         return (goods.brand==null?'':goods.brand) + ' '+ goods.name + ' '+ (goods.model==null? '': goods.model)
+         return  goods.name
       },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
@@ -238,12 +238,14 @@
     }
     .van-list {
       padding-top: 2.3em;
+      background-color: #f8f8f8;
       .van-card {
         background-color: #ffffff;
         margin-top: 1em;
         &__price {
           margin-top: 0.5em;
-          .fz(font-size, 40);
+          margin-top: 18px;
+          .fz(font-size, 35);
         }
       }
 
