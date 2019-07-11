@@ -127,7 +127,7 @@
         }
       },
       composeGoodsTitle(goods) {
-         return (goods.brand==null?'':goods.brand) + ' '+ goods.name + ' '+ (goods.model==null? '': goods.model)
+         return  goods.name
       },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
