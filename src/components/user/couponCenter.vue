@@ -138,7 +138,7 @@
       See(e) {
         window.location.href = e
       },
-      gotoGoodsPage(skuid) {
+      gotoGoodsPage(mpu) {
         try {
           //获取goods信息，update current googds
           this.$api.xapi({
@@ -146,7 +146,7 @@
             baseURL: this.$api.PRODUCT_BASE_URL,
             url: '/prod',
             params: {
-              id: skuid,
+              mpu: mpu,
             }
           }).then((res) => {
             this.updateCurrentGoods(res.data.data.result);

@@ -116,7 +116,7 @@
            let found = -1;
            for(let i=0; i < matchedGoods.length ; i++)
            {
-              if(sku.skuId === matchedGoods[i].skuId) {
+              if(sku.mpu === matchedGoods[i].mpu) {
                 found = 1;
                 break;
               }

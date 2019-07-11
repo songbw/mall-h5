@@ -57,13 +57,13 @@ export default {
     return (userInfo == undefined || userInfo.length === 0)
   },
 
-  getCartItem(env, userId, skuId) {
+  getCartItem(env, userId, mpu) {
     let cartList = env.$store.state.appconf.cartList;
     try {
       let found = -1;
       for (let i = 0; i < cartList.length; i++) {
         if (cartList[i].baseInfo.userId === userId &&
-          cartList[i].baseInfo.skuId === skuId) {
+          cartList[i].baseInfo.mpu === mpu) {
           found = i;
           break;
         }
@@ -87,7 +87,7 @@ export default {
       let found = -1;
       for (let i = 0; i < cartList.length; i++) {
         if (cartList[i].baseInfo.userId === cartItem.baseInfo.userId &&
-          cartList[i].baseInfo.skuId === cartItem.baseInfo.skuId) {
+          cartList[i].baseInfo.mpu === cartItem.baseInfo.mpu) {
           found = i;
           break;
         }
@@ -109,7 +109,7 @@ export default {
       let found = -1;
       for (let i = 0; i < cartList.length; i++) {
         if (cartList[i].baseInfo.userId === cartItem.baseInfo.userId &&
-          cartList[i].baseInfo.skuId === cartItem.baseInfo.skuId) {
+          cartList[i].baseInfo.mpu === cartItem.baseInfo.mpu) {
           found = i;
           break;
         }

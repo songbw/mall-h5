@@ -241,11 +241,12 @@
        // let goods = Object();
         this.$log(item)
         this.$log(product)
-        let cartItem = Util.getCartItem(this, user.userId, item.skuId)
+        let cartItem = Util.getCartItem(this, user.userId, item.mpu)
         if (cartItem == null) {
           let baseInfo = {
             "userId": user.userId,
             "skuId": item.skuId,
+            "mpu": item.mpu,
             "count": item.count,
             "choosed": false,
             "cartId": item.id
@@ -253,6 +254,7 @@
           let goodsInfo = {
             "id": product.id,
             "skuId": product.skuid,
+            "mpu": product.mpu,
             "image": product.image,
             "category": product.category,
             "name": product.name,
@@ -287,19 +289,21 @@
       },
 
       getSkuInfoBy(item, user) {
+        this.$log(item)
         this.$api.xapi({
           method: 'get',
           baseURL: this.$api.PRODUCT_BASE_URL,
           url: '/prod',
           params: {
-            id: item.skuId,
+          //  id: item.skuId,
+            mpu: item.mpu,
           }
         }).then((res) => {
           let product = res.data.data.result;
           if (product != null) {
             this.updateCarList(item,product,user)
           } else {
-            this.$log("product:" + JSON.stringify(product) + ",skuId:" + item.skuId)
+            this.$log("product:" + JSON.stringify(product) + ",mpu:" + item.mpu)
           }
         }).catch((error) => {
           console.log(error)

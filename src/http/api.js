@@ -14,7 +14,7 @@ const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 
 let SERVICE_URL = "https://api.weesharing.com"
 if (process.env.NODE_ENV === 'development') { //生产环境走的地址
-   SERVICE_URL = "https://api.weesharing.com"; //"http://192.168.200.37:8000"
+   SERVICE_URL = "http://192.168.200.37:8000";
 }
 
 //const SERVICE_URL = "http://192.168.200.37:8000"

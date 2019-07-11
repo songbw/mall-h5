@@ -70,6 +70,7 @@
             "image": this.datas.image,
             "desc": this.datas.brand + ' ' + this.datas.name + ' ' + this.datas.model,
             "skuId": this.datas.skuId,
+            "mpu": this.datas.mpu,
             "count": 1,
             "price": this.datas.price,
             "choose": true,
@@ -91,10 +92,10 @@
       add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
-        let skuId = goods.skuid;
+        let mpu = goods.mpu;
         let addtoCar = {
           "openId": userId,
-          "skuId": skuId
+          "mpu": mpu
         }
         this.$api.xapi({
           method: 'post',
@@ -106,11 +107,12 @@
           this.$log("xxxxxxxxxxxxxxxxxxx")
           this.$log(this.result)
           this.$toast("添加到购物车成功！")
-          let cartItem = Util.getCartItem(this, user.userId, goods.skuid)
+          let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
           if (cartItem == null) {
             let baseInfo = {
               "userId": user.userId,
               "skuId": goods.skuid,
+              "mpu": goods.mpu,
               "count": 1,
               "choosed": true,
               "cartId": this.result,
@@ -118,6 +120,7 @@
             let goodsInfo = {
               "id": goods.id,
               "skuId": goods.skuid,
+              "mpu": goods.mpu,
               "image": goods.image,
               "category": goods.category,
               "name": goods.name,
@@ -164,6 +167,7 @@
           let baseInfo = {
             "userId": user.userId,
             "skuId": goods.skuid,
+            "mpu": goods.mpu,
             "count": 1,
             "choosed": true,
             "cartId": -1,
@@ -171,6 +175,7 @@
           let goodsInfo = {
             "id": goods.id,
             "skuId": goods.skuid,
+            "mpu": goods.mpu,
             "image": goods.image,
             "category": goods.category,
             "name": goods.name,

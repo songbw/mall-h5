@@ -141,6 +141,8 @@
       },
 
       onGoodsClick(goods) {
+        this.$log("onGoodsClick Enter")
+        this.$log(goods)
         try {
           //获取goods信息，update current googds
           this.$api.xapi({
@@ -148,7 +150,7 @@
             baseURL: this.$api.PRODUCT_BASE_URL,
             url: '/prod',
             params: {
-              id: goods.skuid,
+              mpu: goods.mpu,
             }
           }).then((res) => {
             this.updateCurrentGoods(res.data.data.result);
@@ -173,10 +175,10 @@
         let user = JSON.parse(userInfo);
         this.$log(goods)
         let userId = user.userId;
-        let skuId = goods.skuid;
+        let mpu = goods.mpu;
         let addtoCar = {
           "openId": userId,
-          "skuId": skuId
+          "mpu": mpu
         }
         this.$api.xapi({
           method: 'post',

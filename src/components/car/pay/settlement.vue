@@ -1017,6 +1017,7 @@
                 this.$log(sku)
                 skus.push({
                   "skuId": sku.product.baseInfo.skuId,
+                  "mpu": sku.product.baseInfo.mpu,
                   "num": sku.product.baseInfo.count,
                   "unitPrice": unitPrice,
                   "salePrice": salePrice,

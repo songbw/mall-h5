@@ -106,7 +106,7 @@
             baseURL: this.$api.PRODUCT_BASE_URL,
             url: '/prod',
             params: {
-              id: k.skuid,
+              mpu: k.mpu,
             }
           }).then((res) => {
             this.updateCurrentGoods(res.data.data.result);
