@@ -97,6 +97,8 @@
           this.$log(paths);
           if (paths[0] === 'category') {
             this.$router.push({path: '/category'})
+          } else  if (paths[0] === 'coupon_center') {
+            this.$router.push({path:'/user/couponCenter'})
           } else if (paths[0] === 'commodity') {
             try {
               if (paths[1] != null)
