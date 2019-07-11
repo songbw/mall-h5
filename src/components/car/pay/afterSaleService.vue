@@ -316,6 +316,7 @@
           background-color: #ffffff;
 
           .cardtags {
+            margin-top: 10px;
             > img {
               width: 30px;
               height: 30px;

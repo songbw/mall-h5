@@ -547,11 +547,11 @@
     width: 100%;
     height: 100%;
     top: 0px;
-    background-color: #f8f8f8;
     text-align: left;
 
     .orderlist-layout{
       margin-bottom: 3em;
+      background-color: #f8f8f8;
       .section-title {
         background-color: #ffffff;
         text-align: left;
@@ -586,6 +586,7 @@
           margin-top: 1em;
 
           .cardtags{
+            margin-top: 10px;
             >img{
               width: 30px;
               height: 30px;
