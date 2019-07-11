@@ -256,6 +256,7 @@
         .goodsFooter {
           border-bottom-left-radius: 10px;
           border-bottom-right-radius: 10px;
+          padding-bottom: 3px;
           width: 100%;
           display: flex;
           flex-direction: row;
