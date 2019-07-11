@@ -196,6 +196,8 @@
               this.finished = true;
             } else {
               this.result.list.forEach(item => {
+                this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                this.$log(item)
                 this.list.push(item);
                 this.getSkuInfoBy(item, userInfo);
               })
@@ -245,9 +247,9 @@
         if (cartItem == null) {
           let baseInfo = {
             "userId": user.userId,
-            "skuId": item.skuId,
-            "mpu": item.mpu,
-            "merchantId": item.merchantId,
+            "skuId": product.skuid,
+            "mpu": product.mpu,
+            "merchantId": product.merchantId,
             "count": item.count,
             "choosed": false,
             "cartId": item.id
@@ -284,8 +286,8 @@
             "promotionState": Util.getPromotionState(product)
           }
         }
-      //  this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-      //  this.$log(cartItem)
+        this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+        this.$log(cartItem)
         Util.updateCartItem(this, cartItem)
         return cartItem;
       },
@@ -297,7 +299,6 @@
           baseURL: this.$api.PRODUCT_BASE_URL,
           url: '/prod',
           params: {
-          //  id: item.skuId,
             mpu: item.mpu,
           }
         }).then((res) => {
