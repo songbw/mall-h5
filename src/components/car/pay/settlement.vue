@@ -387,8 +387,6 @@
           if (found != -1 && item.couponInfo.rules.couponRules.type != 3) {
             couponList.push(item)
           }
-          this.$log("#############################")
-          this.$log(couponList)
         })
 
         //已经选出选购商品所有对应的优惠券
@@ -1626,8 +1624,14 @@
           }
 
           .coupon_layout {
+            .coupon_main{
+              .couponTip {
+                padding: 5px;
+                color: #000;
+                font-size: large;
+              }
+            }
           }
-
 
           .noCoupon {
             width: 100%;
@@ -1646,12 +1650,6 @@
               margin: 2vw;
               color: #8a8a8a;
             }
-          }
-
-          .couponTip {
-            padding: 5px;
-            color: #000;
-            font-size: large;
           }
 
           .van-radio-group {
