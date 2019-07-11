@@ -15,9 +15,9 @@
               <span>￥</span>{{parseFloat(this.goods.dprice).toFixed(2)}}
             </p>
             <div>
-              <span class="origin-price-title">原价</span>
-              <p class="origin-price">
-                <span>￥</span>{{parseFloat(this.goods.price).toFixed(2)}}
+              <p >
+                <span class="origin-price-title">原价</span>
+                <span class="origin-price">￥{{parseFloat(this.goods.price).toFixed(2)}}</span>
               </p>
             </div>
 
