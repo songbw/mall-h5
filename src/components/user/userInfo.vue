@@ -5,14 +5,14 @@
     </v-header>
     <div class="userMain">
       <van-cell-group>
-        <!--        <van-cell isLink="true" url="">-->
-        <!--          <div slot="title" class="avatarTitle">-->
-        <!--            <span>头像</span>-->
-        <!--          </div>-->
-        <!--          <div slot="right-icon" class="header-icon">-->
-        <!--            <span class="icon2-user"></span>-->
-        <!--          </div>-->
-        <!--        </van-cell>-->
+        <van-cell isLink="true" url="">
+          <div slot="title" class="avatarTitle">
+            <span>头像</span>
+          </div>
+          <div slot="right-icon" class="header-icon">
+            <img :src="avatarDefaultImg">
+          </div>
+        </van-cell>
         <van-cell title="用户ID">
           <div slot="label">
             <span>{{user.openId}}</span>
@@ -62,7 +62,7 @@
             />
           </div>
          </van-dialog>-->
-        <div  class="birthSelector">
+        <div class="birthSelector">
           <van-popup v-model="birthDlgShow" position="bottom" :overlay="false">
             <van-datetime-picker
               title="修改生日"
@@ -101,6 +101,7 @@
         maxDate: new Date(2120, 1, 1),
         birthDay: '',
         birthDayValue: null,
+        avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
       }
     },
 
@@ -109,7 +110,7 @@
       that.$log("userInfo created Enter")
       that.user = this.$route.params.user;
       that.$log(that.user);
-      if(that.user.birth != null) {
+      if (that.user.birth != null) {
         this.birthDayValue = new Date(that.user.birth);
         this.birthDay = that.user.birth;
       }
@@ -138,13 +139,13 @@
           that.$log(error)
         })
       },
-      onBirthSelectorConfirmClick(value){
-          this.$log("onBirthSelectorConfirmClick Enter");
-          this.birthDlgShow = false;
-          let date = new Date(value);
-          this.birthDay = this.formatDateTime(date);
-          this.user.birth = this.birthDay;
-          this.saveUserInfo();
+      onBirthSelectorConfirmClick(value) {
+        this.$log("onBirthSelectorConfirmClick Enter");
+        this.birthDlgShow = false;
+        let date = new Date(value);
+        this.birthDay = this.formatDateTime(date);
+        this.user.birth = this.birthDay;
+        this.saveUserInfo();
       },
       onBirthSelectorCancelClick() {
         this.$log("onBirthSelectorCancelClick Enter");
@@ -195,23 +196,12 @@
       }
 
       .header-icon {
-        border: .4vw solid #ffffff;
-        background-color: @cl;
-        margin-left: 4vw;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        width: 14vw;
-        height: 14vw;
-        line-height: 16vw;
-        text-align: center;
-        border-radius: 50%;
-
-        span {
-          .fz(font-size, 54);
-
-          &::before {
-            color: #ffffff;
-          }
+        height: 4em;
+        line-height: 4em;
+        align-items: center;
+        img{
+          height: 35px;
+          width: 35px;
         }
       }
 
@@ -229,7 +219,7 @@
 
       }
 
-      .birthSelector{
+      .birthSelector {
         width: 100%;
       }
     }
