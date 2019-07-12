@@ -194,13 +194,6 @@
             this.requestState = result.rows[0].status
           }
         }
-        /*         let result = response.data.data.result;
-                 this.$log(result)
-                 if(result != undefined && result.length != 0) {
-                    this.requestState = result[0].status;
-                 } else {
-                   this.requestState = -1;
-                 }*/
       }).catch(function (error) {
         that.$log(error)
         that.requestState = -1;
@@ -239,21 +232,11 @@
       },
       onCommitClick() {
         this.$log("onCommitClick Enter")
-        /*        let options = {
-                  orderId: this.tradeNo,
-                  subOrderId: this.goods.subOrderId,
-                  skuId: this.goods.skuId,
-                  number: this.count,
-                  type: this.getRequestType(),
-                  reason: this.getRequestReason(),
-                  description: this.requestDescible,
-                  contactName: this.contact.name,
-                  contactTel: this.contact.mobile
-                }*/
-        this.$log(JSON.stringify(options))
         let that = this
+        this.$log(this.goods)
         let options = {
           customer: this.openId,
+          merchantId: this.goods.merchantId,
           description: this.requestDescible,
           orderId: this.goods.subOrderId,
           title: this.getRequestReason(),

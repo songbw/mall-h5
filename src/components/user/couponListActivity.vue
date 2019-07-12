@@ -234,10 +234,14 @@
         let user = JSON.parse(userInfo);
         let userId = user.userId;
         //let skuId = goods.skuid;
+        let mpu = goods.mpu;
+        if(mpu == null)
+        {
+          mpu = goods.skuid;
+        }
         let addtoCar = {
           "openId": userId,
-          //"skuId": skuId
-          "mpu": goods.mpu
+          "mpu": mpu
         }
         this.$api.xapi({
           method: 'post',
