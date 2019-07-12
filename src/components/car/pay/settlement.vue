@@ -1358,9 +1358,19 @@
               this.getfreightPay();
             }).catch(function (error) {
               that.$log(error)
+              this.$store.commit('SET_PAGE_LOADING', false);
+              this.$log("page loading end");
+              if (this.pageLoadTimerId != -1) {
+                clearTimeout(this.pageLoadTimerId)
+              }
             })
           }).catch(function (error) {
             that.$log(error)
+            this.$store.commit('SET_PAGE_LOADING', false);
+            this.$log("page loading end");
+            if (this.pageLoadTimerId != -1) {
+              clearTimeout(this.pageLoadTimerId)
+            }
           })
         } else {//other merchant
           this.$store.commit('SET_PAGE_LOADING', false);
