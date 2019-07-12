@@ -393,7 +393,7 @@
         //this.$log(couponList)
         couponList.forEach(coupon => {
           if (coupon.couponInfo.rules.couponRules.type === 0 ||
-            coupon.couponInfo.rules.couponRules.type == 2) { //券不考虑活动折扣
+            coupon.couponInfo.rules.couponRules.type == 2) {
             let fullPrice = 0;
             allPayList.forEach(payItem => {
               if (payItem.valid) {
