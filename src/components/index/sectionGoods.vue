@@ -145,7 +145,7 @@
         this.$log(goods)
         let mpu = goods.mpu
         if(mpu == null) {
-          mpu = goods.skuId;
+          mpu = goods.skuid;
         }
         try {
           //获取goods信息，update current googds
@@ -181,7 +181,7 @@
         let userId = user.userId;
         let mpu = goods.mpu;
         if(mpu == null) {
-          mpu = goods.skuId;
+          mpu = goods.skuid;
         }
         let addtoCar = {
           "openId": userId,

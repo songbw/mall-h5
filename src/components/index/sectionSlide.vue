@@ -174,7 +174,7 @@
       onGoodsClick(goods) {
         let mpu = goods.mpu
         if(mpu == null) {
-          mpu = goods.skuId;
+          mpu = goods.skuid;
         }
         try {
           //获取goods信息，update current googds
