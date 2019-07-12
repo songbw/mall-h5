@@ -10,7 +10,7 @@
     <div class="footer-result">
       <p>合计: <span> ￥{{allpay.toFixed(2)}}</span></p>
     </div>
-    <van-button round type="danger" style="width: 30%" @click="goPay">去结算</van-button>
+    <van-button round type="danger" style="margin-right:10px;width: 30%" @click="goPay">去结算 ( {{count}} )</van-button>
   </footer>
 </template>
 
@@ -158,7 +158,8 @@
       -webkit-flex: 1;
       -ms-flex: 1;
       flex: 1;
-      text-align: center;
+      text-align: left;
+      margin-left: 20px;
     }
 
     .footer-result {
