@@ -269,7 +269,6 @@
       },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
-        pAnOrderInfo.orderAmount = 1 //for test
         let options = {
           "openId": pAnOrderInfo.openId,
           "appId": this.$api.APP_ID,
@@ -284,6 +283,12 @@
           pAnOrderInfo.orderNo = savedOrderNo
           that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
           that.$jsbridge.call("openCashPage", pAnOrderInfo);
+          this.$router.replace({
+            name: "收银台页",
+            params: {
+              orderInfo: pAnOrderInfo
+            }
+          })
         } else {
           that.$log("预下单:" + JSON.stringify(options))
           that.$api.xapi({
@@ -305,9 +310,14 @@
               if (response.data.data.result != undefined) {
                 let orderNo = response.data.data.result.orderNo
                 pAnOrderInfo.orderNo = orderNo
-
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                 that.$jsbridge.call("openCashPage", pAnOrderInfo);
+                this.$router.replace({
+                  name: "收银台页",
+                  params: {
+                    orderInfo: pAnOrderInfo
+                  }
+                })
               }
             }
           }).catch(function (error) {
