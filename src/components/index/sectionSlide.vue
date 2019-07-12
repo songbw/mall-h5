@@ -172,6 +172,10 @@
         }
       },
       onGoodsClick(goods) {
+        let mpu = goods.mpu
+        if(mpu == null) {
+          mpu = goods.skuId;
+        }
         try {
           //获取goods信息，update current googds
           this.$api.xapi({
@@ -179,7 +183,7 @@
             baseURL: this.$api.PRODUCT_BASE_URL,
             url: '/prod',
             params: {
-              mpu: goods.mpu,
+              mpu: mpu,
             }
           }).then((res) => {
             this.updateCurrentGoods(res.data.data.result);

@@ -13,7 +13,7 @@
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <div class="goodsComment">
-                <p>{{k.intro}}</p>
+                <p>{{k.name}}</p>
               </div>
               <div class="goodsFooter">
                 <div class="goodsPriceBox">
@@ -143,6 +143,10 @@
       onGoodsClick(goods) {
         this.$log("onGoodsClick Enter")
         this.$log(goods)
+        let mpu = goods.mpu
+        if(mpu == null) {
+          mpu = goods.skuId;
+        }
         try {
           //获取goods信息，update current googds
           this.$api.xapi({
@@ -150,7 +154,7 @@
             baseURL: this.$api.PRODUCT_BASE_URL,
             url: '/prod',
             params: {
-              mpu: goods.mpu,
+              mpu: mpu,
             }
           }).then((res) => {
             this.updateCurrentGoods(res.data.data.result);
@@ -176,6 +180,9 @@
         this.$log(goods)
         let userId = user.userId;
         let mpu = goods.mpu;
+        if(mpu == null) {
+          mpu = goods.skuId;
+        }
         let addtoCar = {
           "openId": userId,
           "mpu": mpu
