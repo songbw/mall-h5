@@ -1275,15 +1275,19 @@
           this.$log(payDirectProduct);
           if (payDirectProduct.length > 0) {
             let item = JSON.parse(payDirectProduct);
-            inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
-            skus.push({"skuId": item.baseInfo.skuId})
+            if (item.baseInfo.merchantId === 2) { //aoyi
+              inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
+              skus.push({"skuId": item.baseInfo.skuId})
+            }
             this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.price})
           }
         } else {
           this.selectedCarList.forEach(item => {
             this.$log(item)
-            inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
-            skus.push({"skuId": item.baseInfo.skuId})
+            if (item.baseInfo.merchantId === 2) { //aoyi
+              inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
+              skus.push({"skuId": item.baseInfo.skuId})
+            }
             if (item.promotionInfo.promotion != null && item.promotionInfo.promotion.length > 0) {
               item.promotionInfo.promotionState = Util.getPromotionState(item.promotionInfo);
             }
@@ -1294,67 +1298,77 @@
         this.$log("paylist:")
         this.$log(this.payCarList)
         let locationCode = this.getLocationCode()
-        //////////////////////查询库存//////////////////
-        let options = {
-          "cityId": locationCode.cityId,
-          "countyId": locationCode.countyId,
-          "skus": inventorySkus,
-        }
-        this.$log("options:" + JSON.stringify(options));
-        this.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.PRODUCT_BASE_URL,
-          url: '/prod/inventory',
-          data: options,
-        }).then((response) => {
-          let result = response.data.data.result;
-          this.$log("库存 result is:" + JSON.stringify(result));
-          result.forEach(item => {
-            for (let i = 0; i < this.payCarList.length; i++) {
-              if (this.payCarList[i].product.baseInfo.skuId === item.skuId) {
-                if ("1" === item.state) {
-                  this.payCarList[i].valid = true
-                } else {
-                  this.payCarList[i].valid = false
-                }
-              }
-            }
-          })
-          //////////////////////查询价格//////////////////
-          options = {
+
+        this.savePayList();
+        this.getUserCouponList();
+
+        if (skus.length > 0)
+        { //has aoyi product
+          //////////////////////查询库存//////////////////
+          let options = {
             "cityId": locationCode.cityId,
-            "skus": skus,
+            "countyId": locationCode.countyId,
+            "skus": inventorySkus,
           }
-          this.$log("价格 options:" + JSON.stringify(options));
+          this.$log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod/price',
+            url: '/prod/inventory',
             data: options,
           }).then((response) => {
             let result = response.data.data.result;
-            this.$log("价格 result is:" + JSON.stringify(result));
+            this.$log("库存 result is:" + JSON.stringify(result));
             result.forEach(item => {
               for (let i = 0; i < this.payCarList.length; i++) {
-                // this.$log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
-                if (item != null && this.payCarList[i].valid && this.payCarList[i].product.baseInfo.skuId == item.skuId
-                ) {
-                  //this.$log("价格 change true");
-                  this.payCarList[i].checkedPrice = item.price
+                if (this.payCarList[i].product.baseInfo.skuId === item.skuId) {
+                  if ("1" === item.state) {
+                    this.payCarList[i].valid = true
+                  } else {
+                    this.payCarList[i].valid = false
+                  }
                 }
               }
             })
-            //开始聚合不同商家
-            this.savePayList();
-            this.getfreightPay();
-            this.getUserCouponList();
+            //////////////////////查询价格//////////////////
+            options = {
+              "cityId": locationCode.cityId,
+              "skus": skus,
+            }
+            this.$log("价格 options:" + JSON.stringify(options));
+            this.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.PRODUCT_BASE_URL,
+              url: '/prod/price',
+              data: options,
+            }).then((response) => {
+              let result = response.data.data.result;
+              this.$log("价格 result is:" + JSON.stringify(result));
+              result.forEach(item => {
+                for (let i = 0; i < this.payCarList.length; i++) {
+                  // this.$log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
+                  if (item != null && this.payCarList[i].valid && this.payCarList[i].product.baseInfo.skuId == item.skuId
+                  ) {
+                    //this.$log("价格 change true");
+                    this.payCarList[i].checkedPrice = item.price
+                  }
+                }
+              })
+              //开始聚合不同商家
+              this.getfreightPay();
+            }).catch(function (error) {
+              that.$log(error)
+            })
           }).catch(function (error) {
             that.$log(error)
           })
-        }).catch(function (error) {
-          that.$log(error)
-        })
-
+        } else {//other merchant
+          this.$store.commit('SET_PAGE_LOADING', false);
+          this.$log("page loading end");
+          if (this.pageLoadTimerId != -1) {
+            clearTimeout(this.pageLoadTimerId)
+          }
+        }
       },
       editAddressOrList() {
         this.$log("addressCount:" + this.addressCount)
