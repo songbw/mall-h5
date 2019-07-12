@@ -18,7 +18,8 @@ const state = {
   currentNaviIndex: 0,
   currentOrderListIndex: 0,
   currentCouponPageInfo:'',
-  cartList:[]
+  cartList:[],
+  merchantList:[],
 }
 
 const mutations = {
@@ -40,6 +41,10 @@ const mutations = {
 
   [types.SET_CART_LIST](state, res) {
     state.cartList = res
+  },
+
+  [types.SET_MERCHANT_LIST](state, res) {
+    state.merchantList = res
   },
 
   [types.SET_LOCATION_CODE](state, res) {

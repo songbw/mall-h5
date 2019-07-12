@@ -32,7 +32,7 @@
           <div class="pay-product">
             <li v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
-                <van-cell :title=item.supplyerName icon="shop"/>
+                <van-cell :title=item.merchantName icon="shop"/>
                 <ul>
                   <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f0f0f0;">
                     <div class="promotionBox"
@@ -317,7 +317,7 @@
         invoiceTitleType: 'personal',
         invoiceEnterpriseName: '',
         invoiceEnterpriseNumber: '',
-        payList:[]
+        merchantList: []
       }
     },
 
@@ -341,8 +341,6 @@
               title: '您还没有收货地址，请新增一个吧',
               confirmButtonText: '新增地址'
             }).then(() => {
-              //on confirm
-              //on confirm
               this.$router.push({name: '地址页'})
             }).catch(() => {
               // on cancel
@@ -434,44 +432,21 @@
       },
 
       arregationList() {
-        let payList = [
-          {
-            "supplyer": "20",
-            "supplyerName": "苏宁易购",
-            goods: [],
-            price: 0,
-            freight: 0
-          },
-          {
-            "supplyer": "30",
-            "supplyerName": "唯品会",
-            goods: [],
-            price: 0,
-            freight: 0
-          },
-          {
-            "supplyer": "50",
-            "supplyerName": "天猫精选",
-            goods: [],
-            price: 0,
-            freight: 0
-          },
-          {
-            "supplyer": "60",
-            "supplyerName": "京东",
-            goods: [],
-            price: 0,
-            freight: 0
-          },
-          {
-            "supplyer": "10",
-            "supplyerName": "商城自营",
-            goods: [],
-            price: 0,
-            freight: 0
-          },
+        let merchantList = this.$store.state.appconf.merchantList;
+        let arregationPayList = [];
+        merchantList.forEach(item => {
+          arregationPayList.push(
+            {
+              "merchantCode": item.merchantCode,
+              "merchantName": item.merchantName,
+              "merchantId": item.merchantId,
+              "goods": [],
+              price: 0,
+              freight: 0
+            }
+          )
+        });
 
-        ]
         let allPayList = this.$store.state.appconf.payList;
         try {
           allPayList.forEach(item => {
@@ -479,34 +454,39 @@
               item.product.promotionInfo['promotionState'] = Util.getPromotionState(item.product.promotionInfo)
               item.product.goodsInfo['dprice'] = Util.getDisplayPrice(item.checkedPrice, item.product.promotionInfo)
             }
-            if (item.product.baseInfo.skuId.startsWith("20")) {//苏宁易购
-              payList[0].goods.push(item);
-            } else if (item.product.baseInfo.skuId.startsWith("30")) {//唯品会
-              payList[1].goods.baseInfo.push(item);
-            } else if (item.product.baseInfo.skuId.startsWith("50")) {//天猫精选
-              payList[2].goods.push(item);
-            } else if (item.product.baseInfo.skuId.startsWith("60")) {//京东
-              payList[3].goods.push(item);
-            } else { //商城自营
-              payList[4].goods.push(item);
+            if (item.product.baseInfo.merchantId = 2) {//aoyi
+              let itemMerchantCode = item.product.baseInfo.mpu.substring(0, 2)
+              arregationPayList.forEach(merchant => {
+                  if (itemMerchantCode === merchant.merchantCode) {
+                    merchant.goods.push(item)
+                  }
+                }
+              )
+            } else {
+              arregationPayList.forEach(merchant => {
+                  if (item.product.baseInfo.merchantId === merchant.merchantId) {
+                    merchant.goods.push(item)
+                  }
+                }
+              )
             }
           })
-          payList.forEach(supplyer => {
+
+          arregationPayList.forEach(merchant => {
             let all = 0;
-            supplyer.goods.forEach(item => {
-              //this.$log("item:" + JSON.stringify(item))
+            merchant.goods.forEach(item => {
               if (item.valid) {
                 all += item.product.goodsInfo.dprice * item.product.baseInfo.count
               }
             })
-            supplyer.price = all;
+            merchant.price = all;
           })
         } catch (e) {
         }
-        return payList;
+        this.$log("~~~~~~~~~~~~~~~~~~")
+        this.$log(arregationPayList);
+        return arregationPayList;
       },
-
-      // 商品价格总和
 
       tip() {
         return this.receiverAddress
@@ -639,20 +619,15 @@
           url: '/merchantCode/all',
         }).then((response) => {
           let result = response.data.data.result;
-          this.$log("obtainMerchantArray  xxxxxxxxxxxxxxxx")
-          this.$log(result)
           result.forEach(item => {
-             this.$log(item)
-             let payList
+            let merchantItem = {
+              "merchantCode": item.merchantCode,
+              "merchantName": item.merchantName,
+              "merchantId": item.merchantId,
+            }
+            this.merchantList.push(merchantItem);
           })
-/*          let payList = [
-            {
-              "supplyer": "20",
-              "supplyerName": "苏宁易购",
-              goods: [],
-              price: 0,
-              freight: 0
-            },*/
+          this.saveMechantList();
         }).catch(function (error) {
           that.$log(error)
         })
@@ -697,7 +672,7 @@
                 }
               })
               merchants.push({
-                "merchantNo": item.supplyer,
+                "merchantNo": item.merchantCode,
                 "skus": skus
               })
             }
@@ -929,7 +904,14 @@
         this.See(url);
       },
       savePayList() {
+        this.$log("save Pay List Enter")
+        this.$log(this.payCarList)
         this.$store.commit('SET_PAY_LIST', this.payCarList);
+      },
+      saveMechantList() {
+        this.$log("save Merchant List Enter")
+        this.$log(this.merchantList)
+        this.$store.commit('SET_MERCHANT_LIST', this.merchantList);
       },
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
@@ -1043,7 +1025,7 @@
                 skus.push({
                   "skuId": sku.product.baseInfo.skuId,
                   "mpu": sku.product.baseInfo.mpu,
-                  "merchantId": sku.product.merchantId,
+                  "merchantId": sku.product.baseInfo.merchantId,
                   "num": sku.product.baseInfo.count,
                   "unitPrice": unitPrice,
                   "salePrice": salePrice,
@@ -1054,11 +1036,11 @@
             })
             //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
             // let usrId = this.prefixInteger(user.userId, 8);
-            let tradeNo = "10" + locationCode.cityId + item.supplyer + user.userId
+            let tradeNo = "10" + locationCode.cityId + item.merchantCode + user.userId
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
-              "merchantNo": item.supplyer, //商户号
-              "merchantId": 2,
+              "merchantNo": item.merchantCode, //商户号
+              "merchantId": item.merchantId,
               "payment": "01", //支付方式， 现金支付
               "servFee": item.freight, //运费
               "amount": amount,     //应给商户的实际总价
@@ -1163,7 +1145,7 @@
             try {
               let options = this.getComposedOrderOption(userInfo, receiverId);
               this.$log(JSON.stringify(options))
-/*              if (this.isValidOrder(options)) {
+              if (this.isValidOrder(options)) {
                 if (options != null) {
                   that.$api.xapi({
                     method: 'post',
@@ -1179,10 +1161,10 @@
                     let merchantNo = ""
                     let orderNos = ""
                     this.$log(result.length)
-                    this.$log(result[0].orderNo)
-                    if (result != undefined && result.length > 0 && result[0].orderNo.length > 8) {
-                      let len = result[0].orderNo.length;
-                      orderNos = JSON.stringify(result[0].orderNo.substr(len - 8)).replace(/\"/g, "");
+                    this.$log(result[0].tradeNo)
+                    if (result != undefined && result.length > 0 && result[0].tradeNo.length > 8) {
+                      let len = result[0].tradeNo.length;
+                      orderNos = JSON.stringify(result[0].tradeNo.substr(len - 8)).replace(/\"/g, "");
                       if (options.merchants.length == 1) {//单商户
                         merchantNo = options.merchants[0].merchantNo;
                       }
@@ -1219,7 +1201,7 @@
               } else {
                 this.$log("无效订单")
                 this.$toast("无效订单")
-              }*/
+              }
             } catch (e) {
             }
           }
@@ -1243,7 +1225,7 @@
           if (item.price > 0) {
             carriges.push({
               "amount": item.price,
-              "merchantNo": item.supplyer
+              "merchantNo": item.merchantCode
             })
           }
         })
@@ -1258,12 +1240,11 @@
           this.$log("运费  result is:" + JSON.stringify(result));
           result.forEach(iFreight => {
             this.arregationList.forEach(item => {
-              if (iFreight.merchantNo === item.supplyer) {
+              if (iFreight.merchantNo === item.merchantCode) {
                 item.freight = parseFloat(iFreight.freightFare);
               }
             })
           });
-          // this.$log("this.arregationList is:" + JSON.stringify(this.arregationList));
           this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
           if (this.pageLoadTimerId != -1) {
@@ -1300,7 +1281,6 @@
           }
         } else {
           this.selectedCarList.forEach(item => {
-            this.$log("xxxxxxxxxxxxxxxxxxxxx")
             this.$log(item)
             inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
             skus.push({"skuId": item.baseInfo.skuId})
@@ -1650,7 +1630,7 @@
           }
 
           .coupon_layout {
-            .coupon_main{
+            .coupon_main {
               .couponTip {
                 padding: 5px;
                 color: #000;
@@ -1742,6 +1722,7 @@
             .supplyer {
               border-radius: 10px;
               padding: 5px;
+
               .promotionBox {
                 display: flex;
                 margin: 15px 5px 5px 15px;
