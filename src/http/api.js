@@ -72,19 +72,17 @@ xapi.interceptors.response.use(function (response) {
   // 对响应错误做点什么
   // store.commit('SET_LOADING', false);
   console.log("receive network response error:" + error)
-  if (errore.response) {
+  if (error.response) {
 
     if (error.response.status == 401) {
       // 如果返回401 即没有权限，跳到登录页重新登录
-      store.commit('CHANGE_TOKEN', 0);
-
+      console.log("401, 请重新登录")
+/*      store.commit('CHANGE_TOKEN', 0);
       alert('请重新登录');
-
       router.replace({
         path: 'login',
         query: {redirect: router.currentRoute.fullPath}
-      })
-
+      })*/
     }
   }
 

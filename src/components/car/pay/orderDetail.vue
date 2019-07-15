@@ -24,15 +24,15 @@
         <ul>
           <li v-for="(sku,i)  in detail.skus" :key='i' style="list-style: none">
             <van-card
-              :price="sku.salePrice"
+              :price="sku.unitPrice"
               :title="sku.name"
               :num="sku.num"
               :thumb="sku.image">
-              <div slot="origin-price" v-if="sku.salePrice != sku.unitPrice">
+<!--              <div slot="origin-price" v-if="sku.salePrice != sku.unitPrice">
                           <span>
                             ￥{{sku.unitPrice}}
                           </span>
-              </div>
+              </div>-->
               <div slot="tags" v-if="sku.salePrice != sku.unitPrice" class="cardtags">
                 <img :src="tag_promotion"  v-if="sku.promotionDiscount > 0"/>
                 <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />
@@ -48,7 +48,7 @@
           </li>
         </ul>
         <div class="orderSummery">
-          <span>合计: ￥{{detail.saleAmount.toFixed(2)}}元 (含运费￥{{detail.servFee.toFixed(2)}}元) </span>
+          <span>合计: ￥{{detail.saleAmount.toFixed(2)}}元 (含运费￥{{detail.servFee.toFixed(2)}}元, 优惠券:￥{{detail.couponDiscount.toFixed(2)}}) </span>
         </div>
         <div class="orderDetailAction">
           <van-button plain round size="small" type="primary"
@@ -461,7 +461,7 @@
           background-color: #ffffff;
           text-align: right;
           margin-right: 1em;
-          .fz(font-size, 30);
+          .fz(font-size, 25);
           color: #000000;
           padding-top: 0.5em;
         }
