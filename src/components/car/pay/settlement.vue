@@ -179,7 +179,7 @@
                         </div>
                       </div>
                       <div class="coupon-get">
-                          <van-radio :name=k.userCouponCode @click="onRadioBtnClick(k)"></van-radio>
+                          <van-radio :name=k.userCouponCode @click="onRadioBtnClick(k)" checked-color="#FF4444"></van-radio>
                       </div>
                     </div>
                   </div>
@@ -416,8 +416,8 @@
           if (found != -1 && item.couponInfo.rules.couponRules.type != 3) {
             couponList.push(item)
           }
-          this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-          this.$log(couponList)
+/*          this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+          this.$log(couponList)*/
         })
 
         //已经选出选购商品所有对应的优惠券
@@ -1941,11 +1941,10 @@
                     padding: .5rem;
                     /** 这里使用flex是为了让文字居中 */
                     display: flex;
-                    margin-left: 10px;
                     justify-content: center;
                     align-items: center;
                     flex-direction: column;
-                    width: 10%;
+                    width: 12%;
                     position: relative;
                     .fz(font-size, 25);
                   }

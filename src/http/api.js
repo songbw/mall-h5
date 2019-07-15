@@ -10,8 +10,8 @@ const APP_ID = "10" //无锡市民卡
 const SERVR_PHONE_NUM= "4000797717";
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 
-//let SERVICE_URL = "https://api.weesharing.com"
-//let TESTSTUB_PAYMENT_URL = "http://119.3.111.161:8088"
+/*let SERVICE_URL = "https://api.weesharing.com"
+let TESTSTUB_PAYMENT_URL = "http://119.3.111.161:8088"*/
 
 let SERVICE_URL = "http://192.168.200.37:8000";
 let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"
