@@ -48,7 +48,8 @@
           </li>
         </ul>
         <div class="orderSummery">
-          <span>合计: ￥{{detail.saleAmount.toFixed(2)}}元 (含运费￥{{detail.servFee.toFixed(2)}}元, 优惠券:￥{{detail.couponDiscount.toFixed(2)}}) </span>
+          <span v-if="detail.couponDiscount != null">合计: ￥{{detail.saleAmount.toFixed(2)}}元 (含运费￥{{detail.servFee.toFixed(2)}}元, 优惠券:￥{{detail.couponDiscount.toFixed(2)}}) </span>
+          <span v-else>合计: ￥{{parseFloat(detail.saleAmount).toFixed(2)}}元 (含运费:￥{{detail.servFee.toFixed(2)}})</span>
         </div>
         <div class="orderDetailAction">
           <van-button plain round size="small" type="primary"
