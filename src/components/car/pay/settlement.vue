@@ -34,7 +34,7 @@
               <div v-if="item.goods.length > 0" class="supplyer">
                 <van-cell :title=item.merchantName icon="shop"/>
                 <ul>
-                  <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f0f0f0;">
+                  <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f8f8f8;">
                     <div class="promotionBox"
                          v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
                       <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].tag}}</span>
@@ -149,13 +149,16 @@
               </div>
             </div>
           </van-actionsheet>
-          <van-actionsheet v-model="showCoupon" title="可用优惠券">
-            <div v-if="couponList.length > 0" class="coupon_layout">
+          <van-actionsheet v-model="showCoupon" title="优惠券" class="coupon_layout">
+            <div class="couponTip">
+              <span class="tipLeft">可用优惠券({{couponList.length }})</span>
+              <span  class="tipRight"> 一个订单只能使用一张优惠券，不能叠加使用</span>
+            </div>
+            <div v-if="couponList.length > 0" >
               <div class="coupon_main">
-                <span class="couponTip">请选择优惠券， 一次仅限一张</span>
                 <van-radio-group v-model="radio">
                   <div v-for="coupon in couponList">
-                    <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f0f0f0"
+                    <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f8f8f8"
                               v-if="coupon.couponInfo.rules.couponRules.type === 0">
                       <div slot="default" class="coupon-selector">
                         <div class="coupon-title">
@@ -179,7 +182,7 @@
                         </div>
                       </div>
                     </van-cell>
-                    <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f0f0f0"
+                    <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f8f8f8"
                               v-if="coupon.couponInfo.rules.couponRules.type === 1">
                       <div slot="default" class="coupon-selector">
                         <div class="coupon-title">
@@ -203,7 +206,7 @@
                         </div>
                       </div>
                     </van-cell>
-                    <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f0f0f0"
+                    <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f8f8f8"
                               v-if="coupon.couponInfo.rules.couponRules.type === 2">
                       <div slot="default" class="coupon-selector">
                         <div class="coupon-title">
@@ -238,7 +241,8 @@
             <div v-else>
               <div class="noCoupon">
                 <img :src="icon_noCoupon">
-                <span>您暂无可用的优惠券</span>
+                <span class="noCoupon_line1">很遗憾</span>
+                <span class="noCoupon_line2">您暂时还没有可用的优惠券</span>
               </div>
             </div>
           </van-actionsheet>
@@ -1637,6 +1641,11 @@
           padding: 2px;
           border-radius: 10px;
 
+          .van-actionsheet {
+              border-top-left-radius: 10px;
+              border-top-right-radius: 10px;
+          }
+
           .van-cell {
             background-color: white;
             margin-top: -1px;
@@ -1697,36 +1706,68 @@
           }
 
           .coupon_layout {
-            .coupon_main {
-              .couponTip {
-                padding: 5px;
-                color: #000;
-                font-size: large;
+            font-weight: bold;
+            .couponTip {
+              display: flex;
+              height: 2em;
+              background-color: #f8f8f8;
+              width: 100%;
+
+              .tipLeft{
+                width: 30%;
+                text-align: left;
+                .fz(font-size, 24);
+                margin: 5px;
+              }
+
+              .tipRight {
+                width: 70%;
+                text-align: right;
+                color: #8c8c8c;
+                .fz(font-size, 20);
+                margin: 8px 5px;
               }
             }
-          }
 
-          .noCoupon {
-            width: 100%;
-            background-color: #f8f8f8;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: Center;
-            height: 300px;
+            .coupon_main {
 
-            img {
-              margin: 4vw;
             }
 
-            span {
-              margin: 2vw;
-              color: #8a8a8a;
+            .noCoupon {
+              width: 100%;
+              background-color: #f8f8f8;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: Center;
+              height: 400px;
+
+              img {
+                height: 130px;
+                width: 130px;
+              }
+
+              span {
+                margin: 2vw;
+              }
+
+             .noCoupon_line1 {
+               font-weight: lighter;
+               color: black;
+               .fz(font-size, 35);
+              }
+
+              .noCoupon_line2 {
+                 font-weight: lighter;
+                 color: #8c8c8c;
+                 .fz(font-size, 28);
+              }
+
             }
           }
 
           .van-radio-group {
-            background-color: #f0f0f0;
+            background-color: #f8f8f8;
 
             .coupon-selector {
               height: 100px;
