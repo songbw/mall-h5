@@ -6,20 +6,21 @@
     <div class="serviceBody">
       <div class="goodsBox">
         <van-card
-          :price="goods.salePrice"
+          :price="goods.unitPrice"
           :title="goods.name"
           :num="goods.num"
           :thumb="goods.image">
-          <div slot="origin-price" v-if="goods.salePrice != goods.unitPrice">
+<!--          <div slot="origin-price" v-if="goods.salePrice != goods.unitPrice">
             <span>
               ￥{{goods.unitPrice}}
             </span>
-          </div>
+          </div>-->
           <div slot="tags" v-if="goods.salePrice != goods.unitPrice" class="cardtags">
             <img :src="tag_promotion"  v-if="goods.promotionDiscount > 0"/>
             <img :src="tag_coupon" v-if="goods.unitPrice - goods.salePrice - goods.promotionDiscount > 0" />
           </div>
         </van-card>
+        <van-cell title="实际销售单价" title-class="CellTitle"  v-if="goods.unitPrice != goods.salePrice">￥{{goods.salePrice.toFixed(2)}}元</van-cell>
         <van-cell title="状态" title-class="CellTitle" :value="requestStateValue"></van-cell>
         <div slot="footer">
           <van-cell title="申请数量" title-class="CellTitle">
