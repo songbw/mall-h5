@@ -653,6 +653,7 @@
           this.arregationList.forEach(item => {
             if (item.goods.length > 0) {
               let skus = []
+              let couponOccupiedPrice4OnPerMerchant = 0;
               item.goods.forEach(sku => {
                 if (sku.valid) {
                   this.$log(sku)
@@ -667,20 +668,44 @@
                     skus.push({
                       "skuId": sku.product.baseInfo.skuId,
                       "num": sku.product.baseInfo.count,
+                      "dprice": sku.product.goodsInfo.dprice
                     })
+                    couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice *  sku.product.baseInfo.count
                   }
                 }
               })
               merchants.push({
                 "merchantNo": item.merchantCode,
-                "skus": skus
+                "skus": skus,
+                "couponOccupiedPrice": couponOccupiedPrice4OnPerMerchant
               })
             }
           })
+          //找到不等于0的最小couponOccupiedPrice 的 merchants
+          if(merchants.length > 0) {
+            let minId = 0;
+            if(merchants.length  > 1) {
+              for(let i = 1; i < merchants.length; i++) {
+                  if(merchants[i].couponOccupiedPrice < merchants[minId].couponOccupiedPrice) {
+                    minId = i;
+                  }
+              }
+            }
+            let discountPriceExcludeMin = 0;
+            for (let i = 0; i < merchants.length; i++) {
+              if(i != minId)
+              {
+                merchants[i]['discount'] = this.reducedPriceOfCoupon * merchants[i].couponOccupiedPrice/this.totalSkuPriceOfCoupon
+                discountPriceExcludeMin += merchants[i]['discount'];
+              }
+            }
+            merchants[minId]['discount'] = this.reducedPriceOfCoupon - discountPriceExcludeMin;
+          }
+          let couponDiscount = parseFloat(this.reducedPriceOfCoupon)
           let couponInfo = {
             'id': coupon.id,
             'code': coupon.userCouponCode,
-            'discount': parseFloat(this.reducedPriceOfCoupon),
+            'discount': couponDiscount,
             "merchants": merchants
           }
           return couponInfo
@@ -1006,11 +1031,11 @@
 
           }
         }
+        let couponInfo = this.getUsedCouponDetail4Order(this.usedCoupon)
 
         this.arregationList.forEach(item => {
           if (item.goods.length > 0) {
             let skus = []
-            let saleAmount = item.freight;
             let amount = item.freight;
             item.goods.forEach(sku => {
               if (sku.valid) {
@@ -1020,7 +1045,6 @@
                 }
                 let unitPrice = parseFloat(sku.checkedPrice).toFixed(2)
                 let salePrice = this.getSalePrice(sku)
-                saleAmount += salePrice * sku.product.baseInfo.count
                 amount += unitPrice * sku.product.baseInfo.count
                 skus.push({
                   "skuId": sku.product.baseInfo.skuId,
@@ -1037,6 +1061,22 @@
             //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
             // let usrId = this.prefixInteger(user.userId, 8);
             let tradeNo = "10" + locationCode.cityId + item.merchantCode + user.userId
+
+            let couponDiscountOfMerchant = 0;
+            let found  = -1;
+            if(couponInfo != null) {
+              for (let i = 0; i < couponInfo.merchants.length; i++) {
+                if(couponInfo.merchants[i].merchantNo === item.merchantCode)
+                {
+                  found = i;
+                  break;
+                }
+              }
+            }
+            if(found != -1) {
+              couponDiscountOfMerchant = couponInfo.merchants[found].discount;
+            }
+            let saleAmount = amount - couponDiscountOfMerchant;
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.merchantCode, //商户号
@@ -1050,6 +1090,7 @@
             })
           }
         })
+
         let options = {
           "openId": user.userId,
           "companyCustNo": "11",
@@ -1061,10 +1102,12 @@
           "merchants": merchants
         }
 
-        let couponInfo = this.getUsedCouponDetail4Order(this.usedCoupon)
+
         if (couponInfo != null) {
           options['coupon'] = couponInfo;
         }
+
+
         this.$log("Order options:")
         this.$log(options)
         return options;
