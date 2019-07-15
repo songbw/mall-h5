@@ -196,8 +196,8 @@
               this.finished = true;
             } else {
               this.result.list.forEach(item => {
-                this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                this.$log(item)
+/*                this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                this.$log(item)*/
                 this.list.push(item);
                 this.getSkuInfoBy(item, userInfo);
               })
