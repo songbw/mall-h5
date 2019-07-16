@@ -27,15 +27,10 @@
                   <ul @click="onListClick(k,i)">
                     <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
                       <van-card
-                        :price="sku.unitPrice"
+                        :price="sku.unitPrice - sku.promotionDiscount"
                         :title="sku.name"
                         :num="sku.num"
                         :thumb="sku.image">
-<!--                        <div slot="origin-price" v-if="sku.salePrice != sku.unitPrice">
-                          <span>
-                            ￥{{sku.unitPrice}}
-                          </span>
-                        </div>-->
                         <div slot="tags"  v-if="sku.salePrice != sku.unitPrice" class="cardtags">
                           <img :src="tag_promotion"  v-if="sku.promotionDiscount > 0"/>
                           <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />

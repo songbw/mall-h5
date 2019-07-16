@@ -1099,6 +1099,7 @@
           if (item.goods.length > 0) {
             let skus = []
             let amount = item.freight;
+            let promotionDiscountOfMerchant = 0;
             item.goods.forEach(sku => {
               if (sku.valid) {
                 let promotionId = 0
@@ -1107,7 +1108,9 @@
                 }
                 let unitPrice = parseFloat(sku.checkedPrice).toFixed(2)
                 let salePrice = this.getSalePrice(sku)
+                let promotionDiscount = (unitPrice - sku.product.goodsInfo.dprice)
                 amount += unitPrice * sku.product.baseInfo.count
+                promotionDiscountOfMerchant += promotionDiscount
                 skus.push({
                   "skuId": sku.product.baseInfo.skuId,
                   "mpu": sku.product.baseInfo.mpu,
@@ -1116,7 +1119,7 @@
                   "unitPrice": unitPrice,
                   "salePrice": salePrice,
                   "promotionId": promotionId,
-                  "promotionDiscount": (unitPrice - sku.product.goodsInfo.dprice).toFixed(2)
+                  "promotionDiscount": promotionDiscount.toFixed(2)
                 })
               }
             })
@@ -1137,7 +1140,7 @@
             if (found != -1) {
               couponDiscountOfMerchant = couponInfo.merchants[found].discount;
             }
-            let saleAmount = amount - couponDiscountOfMerchant;
+            let saleAmount = amount - promotionDiscountOfMerchant - couponDiscountOfMerchant;
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.merchantCode, //商户号
