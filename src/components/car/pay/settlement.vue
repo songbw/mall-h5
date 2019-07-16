@@ -105,9 +105,21 @@
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                       @click="showCouponSelector()"/>
           </van-cell>
-          <van-actionsheet v-model="showInvoice" title="发票">
-            <div class="invoice_layout">
-              <h1 class="section-title">
+          <van-actionsheet v-model="showInvoice" title="发票" class="invoice_layout">
+            <div >
+              <div class="invoiceTip">
+                凤巢商城启用电子普通发票，订单完成后24小时内开具，点击"我的订单"查看与下载
+              </div>
+              <div class="invoiceTypeBox">
+                <h1 class="section-title">
+                  发票类型
+                </h1>
+                <div class="RadioStyle">
+                  <input type="radio" id="eInvoice" value="eInvoice" v-model="invoiceType">
+                  <label for="eInvoice">电子发票</label>
+                </div>
+              </div>
+<!--              <h1 class="section-title">
                 发票类型
               </h1>
               <div class="RadioStyle">
@@ -146,7 +158,7 @@
               </div>
               <div class="footer_layout">
                 <van-button type="primary" size="large" @click="confirmedInvoiceSelector">确定</van-button>
-              </div>
+              </div>-->
             </div>
           </van-actionsheet>
           <van-actionsheet v-model="showCoupon" title="优惠券" class="coupon_layout">
@@ -188,86 +200,8 @@
                       </div>
                     </div>
                   </div>
-                  <!--                  <div v-for="coupon in couponList">
-                                      <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f8f8f8"
-                                                v-if="coupon.couponInfo.rules.couponRules.type === 0">
-                                        <div slot="default" class="coupon-selector">
-                                          <div class="coupon-title">
-                                            <div style="margin-top: 30px">
-                                              <span style="font-size: large; font-weight: bold">￥</span>
-                                              <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice}}</span>
-                                            </div>
-                                            <span>{{formateCouponDescription(coupon.couponInfo.rules.couponRules)}}</span>
-                                          </div>
-                                          <div class="coupon-detail">
-                                            <div>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
-                                            </div>
-                                            <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
-                                          </div>
-                                          <div class="coupon-radio">
-                                            <van-radio :name=coupon.userCouponCode @click="onRadioBtnClick(coupon)"></van-radio>
-                                          </div>
-                                        </div>
-                                      </van-cell>
-                                      <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f8f8f8"
-                                                v-if="coupon.couponInfo.rules.couponRules.type === 1">
-                                        <div slot="default" class="coupon-selector">
-                                          <div class="coupon-title">
-                                            <div style="margin-top: 30px">
-                                              <span style="font-size: large; font-weight: bold">￥</span>
-                                              <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.cashCoupon.amount}}</span>
-                                            </div>
-                                            <span>{{formateCouponDescription(coupon.couponInfo.rules.couponRules)}}</span>
-                                          </div>
-                                          <div class="coupon-detail">
-                                            <div>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
-                                            </div>
-                                            <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
-                                          </div>
-                                          <div class="coupon-radio">
-                                            <van-radio :name=coupon.userCouponCode @click="onRadioBtnClick(coupon)"></van-radio>
-                                          </div>
-                                        </div>
-                                      </van-cell>
-                                      <van-cell clickable @click=onCouponListClick(coupon) style="background-color: #f8f8f8"
-                                                v-if="coupon.couponInfo.rules.couponRules.type === 2">
-                                        <div slot="default" class="coupon-selector">
-                                          <div class="coupon-title">
-                                            <div style="margin-top: 30px">
-                                              <span style="font-size: xx-large;font-weight: bold">{{coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio * 10}}</span>
-                                              <span style="font-size: large; font-weight: bold">折</span>
-                                            </div>
-                                            <span>{{formateCouponDescription(coupon.couponInfo.rules.couponRules)}}</span>
-                                          </div>
-                                          <div class="coupon-detail">
-                                            <div>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===1">仅限某些指定的商品</span>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===2">全场商品</span>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===3">仅限定某些品牌类商品</span>
-                                              <span v-if="coupon.couponInfo.rules.scenario.type===4">限提供所描述特定的服务</span>
-                                            </div>
-                                            <span style="font-size: small">{{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}</span>
-                                          </div>
-                                          <div class="coupon-radio">
-                                            <van-radio :name=coupon.userCouponCode @click="onRadioBtnClick(coupon)"></van-radio>
-                                          </div>
-                                        </div>
-                                      </van-cell>
-                                    </div>-->
                 </van-radio-group>
               </div>
-
-              <!--              <div class="coupon_footer">
-                              <van-button type="danger" size="large" @click="confirmedCouponSelector()">确定</van-button>
-                            </div>-->
             </div>
             <div v-else>
               <div class="noCoupon">
@@ -663,7 +597,16 @@
       },
 
       formateCouponDescription(couponInfo) {
-        return couponInfo.description
+          switch (couponInfo.rules.scenario.type) {
+            case 1://满减券
+              return "仅限某些指定的商品可用";
+            case 2://代金券
+              return "全场商品可用";
+            case 3://折扣券
+              return "仅限定某些品牌类商品可用";
+            default:
+              return "限提供所描述特定的服务可用"
+          }
       },
 
       formateCouponDetail(rules) {
@@ -1351,8 +1294,8 @@
           that.$store.commit('SET_PAGE_LOADING', false);
           that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
           that.$log("无法获取到运费")
-          if (this.pageLoadTimerId != -1) {
-            clearTimeout(this.pageLoadTimerId)
+          if (that.pageLoadTimerId != -1) {
+            clearTimeout(that.pageLoadTimerId)
           }
         })
       },
@@ -1453,18 +1396,18 @@
               this.getfreightPay();
             }).catch(function (error) {
               that.$log(error)
-              this.$store.commit('SET_PAGE_LOADING', false);
-              this.$log("page loading end");
-              if (this.pageLoadTimerId != -1) {
-                clearTimeout(this.pageLoadTimerId)
+              that.$store.commit('SET_PAGE_LOADING', false);
+              that.$log("page loading end");
+              if (that.pageLoadTimerId != -1) {
+                clearTimeout(that.pageLoadTimerId)
               }
             })
           }).catch(function (error) {
             that.$log(error)
-            this.$store.commit('SET_PAGE_LOADING', false);
-            this.$log("page loading end");
-            if (this.pageLoadTimerId != -1) {
-              clearTimeout(this.pageLoadTimerId)
+            that.$store.commit('SET_PAGE_LOADING', false);
+            that.$log("page loading end");
+            if (that.pageLoadTimerId != -1) {
+              clearTimeout(that.pageLoadTimerId)
             }
           })
         } else {//other merchant
@@ -1704,6 +1647,25 @@
           .invoice_layout {
             width: 100%;
             text-align: center;
+            font-weight: bolder;
+            background-color: white;
+
+            .invoiceTip{
+               background-color: #F9E6E6;
+               border-radius: 30px;
+               padding: 5px 15px;
+               margin: 10px;
+               color: #E06558;
+               .fz(font-size,25);
+               font-weight: lighter;
+               text-align: left;
+            }
+
+            .invoiceTypeBox{
+              display: flex;
+              flex-direction: column;
+              justify-items: left;
+            }
 
             .enterpriseInfo {
               margin: 1.2em;
@@ -1717,27 +1679,22 @@
 
             .RadioStyle {
               display: flex;
-              margin: 1em;
-
+              margin-left: 10px;
               input {
                 display: none
               }
 
               label {
-                border: 1px solid #00a4ff;
+                border: 1px solid  #E06558;
                 padding: 2px 10px 2px 5px;
                 line-height: 28px;
-                min-width: 80px;
+                min-width: 90px;
                 text-align: center;
                 float: left;
-                margin: 2px;
-                border-radius: 4px
-              }
-
-              input:checked + label {
-                background: url('../../../assets/images/ico_checkon.svg') no-repeat right bottom;
-                background-size: 21px 21px;
-                color: #00a4ff
+                border-radius: 30px;
+                color: #E06558;
+                font-weight: lighter;
+                .fz(font-size, 25)
               }
             }
 
@@ -1885,7 +1842,11 @@
                     }
 
                     .coupon-desc {
+                      margin-left: 3px;
                       min-height: 1em;
+                      .fz(font-size, 25);
+                      font-weight: lighter;
+                      color: #323233;
                     }
 
                     .coupon-price {
