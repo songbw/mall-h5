@@ -18,6 +18,10 @@
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
+      gotoPromotionPage(promotionId) {
+        this.$log("gotoPromotionPage:"+promotionId)
+        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+      },
       gotoGoodsPage(mpu) {
         try {
           //获取goods信息，update current googds
@@ -48,12 +52,21 @@
           this.$log(paths);
           if (paths[0] === 'category') {
             this.$router.push({path: '/category'})
-          }  else  if (paths[0] === 'coupon_center') {
+          } else  if (paths[0] === 'coupon_center') {
             this.$router.push({path:'/user/couponCenter'})
-          }  else if (paths[0] === 'commodity') {
+          } else if (paths[0] === 'commodity') {
             try {
               if (paths[1] != null)
                 this.gotoGoodsPage(paths[1]);
+            } catch (e) {
+            }
+          } else if (paths[0] === 'promotion') {
+            try {
+              if (paths[1] != null) {
+                //this.gotoGoodsPage(paths[1]);
+                //this.$log("promotion:"+paths[1])
+                this.gotoPromotionPage(paths[1]);
+              }
             } catch (e) {
             }
           }

@@ -41,6 +41,9 @@
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
+      gotoPromotionPage(promotionId) {
+        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+      },
       gotoGoodsPage(mpu) {
         try {
           //获取goods信息，update current googds
@@ -78,6 +81,15 @@
             try {
               if (paths[1] != null)
                 this.gotoGoodsPage(paths[1]);
+            } catch (e) {
+            }
+          } else if (paths[0] === 'promotion') {
+            try {
+              if (paths[1] != null) {
+                //this.gotoGoodsPage(paths[1]);
+                //this.$log("promotion:"+paths[1])
+                this.gotoPromotionPage(paths[1]);
+              }
             } catch (e) {
             }
           }
