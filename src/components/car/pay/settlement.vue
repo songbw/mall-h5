@@ -118,6 +118,23 @@
                   <input type="radio" id="eInvoice" value="eInvoice" v-model="invoiceType">
                   <label for="eInvoice">电子发票</label>
                 </div>
+                <span style="text-align: left;font-weight: lighter;font-size: x-small;margin: 15px;color: #8c8c8c">电子普通发票与纸质普通发票具备同等法律效力，可支持报销入账</span>
+              </div>
+              <div class="invoiceTitleBox">
+                <h1 class="section-title">
+                  发票抬头
+                </h1>
+                <div class="RadioStyle">
+                  <div>
+                    <input type="radio" id="personalInvoice" value="personal" v-model="invoiceTitleType">
+                    <label for="personalInvoice">个人</label>
+                  </div>
+                  <div style="margin-left: 10px">
+                    <input type="radio" id="enterpriseInvoice" value="enterprise" v-model="invoiceTitleType">
+                    <label for="enterpriseInvoice">单位</label>
+                  </div>
+                </div>
+                <span style="text-align: left;font-weight: lighter;font-size: x-small;margin: 15px;color: #8c8c8c">电子普通发票与纸质普通发票具备同等法律效力，可支持报销入账</span>
               </div>
 <!--              <h1 class="section-title">
                 发票类型
@@ -1667,6 +1684,12 @@
               justify-items: left;
             }
 
+            .invoiceTitleBox{
+              display: flex;
+              flex-direction: column;
+              justify-items: left;
+            }
+
             .enterpriseInfo {
               margin: 1.2em;
             }
@@ -1685,16 +1708,22 @@
               }
 
               label {
-                border: 1px solid  #E06558;
+                color: #8c8c8c;
+                border: 1px solid  #8c8c8c;
+
                 padding: 2px 10px 2px 5px;
                 line-height: 28px;
                 min-width: 90px;
                 text-align: center;
                 float: left;
                 border-radius: 30px;
-                color: #E06558;
                 font-weight: lighter;
                 .fz(font-size, 25)
+              }
+
+              input:checked + label {
+                color: #E06558;
+                border: 1px solid  #E06558;
               }
             }
 
@@ -1703,7 +1732,7 @@
               text-align: left;
               font-weight: bold;
               margin: 1em;
-              .fz(font-size, 35);
+              .fz(font-size, 30);
               color: #000000;
             }
 

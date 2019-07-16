@@ -10,7 +10,7 @@
       <div class="couponCenterMain">
         <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable :ellipsis=false title-active-color="#FF4444">
           <van-tab v-for="(item,type) in couponTypes" :key="type">
-            <div slot="title" style="width: 70px;">
+            <div slot="title" style="min-width: 70px;">
               <span style="font-size: medium;font-weight: bold">
                 {{item.title}}
               </span>
