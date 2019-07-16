@@ -76,7 +76,7 @@
 
       onClick(word) {
         console.log("onClick:" + word);
-      //  this.requestSearch(word);
+        this.requestSearch(word);
       }
 
     }

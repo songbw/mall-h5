@@ -100,7 +100,7 @@
           }
           this.$api.xapi({
             method: 'post',
-        //    baseURL: this.$api.PRODUCT_BASE_URL,
+            baseURL: this.$api.ES_BASE_URL,
             url: '/es/prod',
             data: options,
           }).then((response) => {
