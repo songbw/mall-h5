@@ -106,7 +106,7 @@
                       @click="showCouponSelector()"/>
           </van-cell>
           <van-actionsheet v-model="showInvoice" title="发票" class="invoice_layout">
-            <div >
+            <div>
               <div class="invoiceTip">
                 凤巢商城启用电子普通发票，订单完成后24小时内开具，点击"我的订单"查看与下载
               </div>
@@ -135,47 +135,85 @@
                   </div>
                 </div>
                 <span style="text-align: left;font-weight: lighter;font-size: x-small;margin: 15px;color: #8c8c8c">电子普通发票与纸质普通发票具备同等法律效力，可支持报销入账</span>
-              </div>
-<!--              <h1 class="section-title">
-                发票类型
-              </h1>
-              <div class="RadioStyle">
-                <input type="radio" id="eInvoice" value="eInvoice" v-model="invoiceType">
-                <label for="eInvoice">电子普通发票</label>
-              </div>
-              <h1 class="section-title">
-                发票抬头
-              </h1>
-              <div class="RadioStyle">
-                <input type="radio" id="personalInvoice" value="personal" v-model="invoiceTitleType">
-                <label for="personalInvoice">个人</label>
-                <input type="radio" id="enterpriseInvoice" value="enterprise" v-model="invoiceTitleType">
-                <label for="enterpriseInvoice">企业</label>
-              </div>
-              <div class="enterpriseInfo" v-if="invoiceTitleType==='enterprise'">
-                <van-cell-group>
-                  <van-field
-                    v-model="invoiceEnterpriseName"
-                    required
-                    placeholder="请填写单位名称"
-                  />
+                <div class="enterpriseInfo" v-if="invoiceTitleType==='enterprise'">
+                  <van-cell-group>
+                    <van-field
+                      v-model="invoiceEnterpriseName"
+                      required
+                      placeholder="请填写单位名称"
+                    />
 
-                  <van-field
-                    v-model="invoiceEnterpriseNumber"
-                    required
-                    placeholder="请填写纳税人识别号"
-                  />
-                </van-cell-group>
+                    <van-field
+                      v-model="invoiceEnterpriseNumber"
+                      required
+                      placeholder="请填写纳税人识别号"
+                    />
+                  </van-cell-group>
+                </div>
               </div>
-              <div class="tip">
-                <p>
-                  温馨提示： 电子发票与纸票具有相同的法律效力，可以做为维权,保修，报销的有效凭据，且不存在损毁丢失的情况，您永远也不必担心发票损失。
-                  订单签收后可在订单详情下载您的电子普通发票。
-                </p>
+              <div class="invoiceReceiver">
+                <h1 class="section-title">
+                  收票人信息
+                </h1>
+                <div class="invoiceReceiverInfo">
+                  <van-cell-group>
+                    <van-field
+                      v-model="invoiceReceiverMobile"
+                      required
+                      placeholder="收票人手机号"
+                    />
+
+                    <van-field
+                      v-model="invoiceReceiverEmail"
+                      required
+                      placeholder="收票人邮箱"
+                    />
+                  </van-cell-group>
+                </div>
+                <div class="footer_layout">
+                  <van-button type="danger" size="large" round @click="confirmedInvoiceSelector">确定</van-button>
+                </div>
               </div>
-              <div class="footer_layout">
-                <van-button type="primary" size="large" @click="confirmedInvoiceSelector">确定</van-button>
-              </div>-->
+              <!--              <h1 class="section-title">
+                              发票类型
+                            </h1>
+                            <div class="RadioStyle">
+                              <input type="radio" id="eInvoice" value="eInvoice" v-model="invoiceType">
+                              <label for="eInvoice">电子普通发票</label>
+                            </div>
+                            <h1 class="section-title">
+                              发票抬头
+                            </h1>
+                            <div class="RadioStyle">
+                              <input type="radio" id="personalInvoice" value="personal" v-model="invoiceTitleType">
+                              <label for="personalInvoice">个人</label>
+                              <input type="radio" id="enterpriseInvoice" value="enterprise" v-model="invoiceTitleType">
+                              <label for="enterpriseInvoice">企业</label>
+                            </div>
+                            <div class="enterpriseInfo" v-if="invoiceTitleType==='enterprise'">
+                              <van-cell-group>
+                                <van-field
+                                  v-model="invoiceEnterpriseName"
+                                  required
+                                  placeholder="请填写单位名称"
+                                />
+
+                                <van-field
+                                  v-model="invoiceEnterpriseNumber"
+                                  required
+                                  placeholder="请填写纳税人识别号"
+                                />
+                              </van-cell-group>
+                            </div>
+                            <div class="tip">
+                              <p>
+                                温馨提示： 电子发票与纸票具有相同的法律效力，可以做为维权,保修，报销的有效凭据，且不存在损毁丢失的情况，您永远也不必担心发票损失。
+                                订单签收后可在订单详情下载您的电子普通发票。
+                              </p>
+                            </div>
+                            <div class="footer_layout">
+                              <van-button type="primary" size="large" @click="confirmedInvoiceSelector">确定</van-button>
+                            </div>-->
             </div>
           </van-actionsheet>
           <van-actionsheet v-model="showCoupon" title="优惠券" class="coupon_layout">
@@ -304,6 +342,8 @@
         invoiceTitleType: 'personal',
         invoiceEnterpriseName: '',
         invoiceEnterpriseNumber: '',
+        invoiceReceiverMobile: '',
+        invoiceReceiverEmail: '',
         merchantList: []
       }
     },
@@ -538,7 +578,9 @@
           "invoiceType": "eInvoice",
           "invoiceTitleType": "personal",
           "invoiceEnterpriseName": "",
-          "invoiceEnterpriseNumber": ""
+          "invoiceEnterpriseNumber": "",
+          "invoiceReceiverMobile":  "",
+          "invoiceReceiverEmail": "",
         }
         this.$store.dispatch('setInvoicdInfo', JSON.stringify(invoice));
         this.invoiceDetail = "电子普票(个人)";
@@ -614,16 +656,16 @@
       },
 
       formateCouponDescription(couponInfo) {
-          switch (couponInfo.rules.scenario.type) {
-            case 1://满减券
-              return "仅限某些指定的商品可用";
-            case 2://代金券
-              return "全场商品可用";
-            case 3://折扣券
-              return "仅限定某些品牌类商品可用";
-            default:
-              return "限提供所描述特定的服务可用"
-          }
+        switch (couponInfo.rules.scenario.type) {
+          case 1://满减券
+            return "仅限某些指定的商品可用";
+          case 2://代金券
+            return "全场商品可用";
+          case 3://折扣券
+            return "仅限定某些品牌类商品可用";
+          default:
+            return "限提供所描述特定的服务可用"
+        }
       },
 
       formateCouponDetail(rules) {
@@ -878,15 +920,21 @@
 
       confirmedInvoiceSelector() {
         this.$log(this.invoiceRadio);
-        if (this.invoiceTitleType != "personal" && (this.invoiceEnterpriseName.length == 0 || this.invoiceEnterpriseNumber == 0)) {
+        if (this.invoiceTitleType != "personal" && (this.invoiceEnterpriseName.length == 0 || this.invoiceEnterpriseNumber.length == 0)) {
           this.$toast("请正确填写企业名称与纳税人识别号!")
+          return
+        }
+        if (this.invoiceReceiverMobile.length == 0 || this.invoiceReceiverEmail.length == 0) {
+          this.$toast("请正确填写收票人信息!")
           return
         }
         const invoice = {
           "invoiceType": this.invoiceType,
           "invoiceTitleType": this.invoiceTitleType,
           "invoiceEnterpriseName": this.invoiceEnterpriseName,
-          "invoiceEnterpriseNumber": this.invoiceEnterpriseNumber
+          "invoiceEnterpriseNumber": this.invoiceEnterpriseNumber,
+          "invoiceReceiverMobile": this.invoiceReceiverMobile,
+          "invoiceReceiverEmail": this.invoiceReceiverEmail
         }
         this.$store.dispatch('setInvoicdInfo', JSON.stringify(invoice));
         if (invoice.invoiceType === "eInvoice") {
@@ -1667,31 +1715,43 @@
             font-weight: bolder;
             background-color: white;
 
-            .invoiceTip{
-               background-color: #F9E6E6;
-               border-radius: 30px;
-               padding: 5px 15px;
-               margin: 10px;
-               color: #E06558;
-               .fz(font-size,25);
-               font-weight: lighter;
-               text-align: left;
+            .invoiceTip {
+              background-color: #F9E6E6;
+              border-radius: 30px;
+              padding: 5px 15px;
+              margin: 10px;
+              color: #E06558;
+              .fz(font-size, 25);
+              font-weight: lighter;
+              text-align: left;
             }
 
-            .invoiceTypeBox{
+            .invoiceTypeBox {
               display: flex;
               flex-direction: column;
               justify-items: left;
             }
 
-            .invoiceTitleBox{
+            .invoiceTitleBox {
+              display: flex;
+              flex-direction: column;
+              justify-items: left;
+            }
+
+            .invoiceReceiver {
               display: flex;
               flex-direction: column;
               justify-items: left;
             }
 
             .enterpriseInfo {
-              margin: 1.2em;
+              margin-left: 10px;
+              margin-right: 10px;
+            }
+
+            .invoiceReceiverInfo {
+              margin-left: 10px;
+              margin-right: 10px;
             }
 
             .tip {
@@ -1703,13 +1763,14 @@
             .RadioStyle {
               display: flex;
               margin-left: 10px;
+
               input {
                 display: none
               }
 
               label {
                 color: #8c8c8c;
-                border: 1px solid  #8c8c8c;
+                border: 1px solid #8c8c8c;
 
                 padding: 2px 10px 2px 5px;
                 line-height: 28px;
@@ -1723,7 +1784,7 @@
 
               input:checked + label {
                 color: #E06558;
-                border: 1px solid  #E06558;
+                border: 1px solid #E06558;
               }
             }
 
