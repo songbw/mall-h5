@@ -32,9 +32,6 @@ const SSO_BASE_URL = SERVICE_URL+"/v2/ssoes/"
 const WORKER_ORDER_BASE_URL = SERVICE_URL+"/v2/workorders"
 const BASE_BASE_URL = SERVICE_URL+"/v2/bases/"
 
-
-//const PRODUCT_BASE_URL = "http://119.3.111.161:8080";
-
 const xapi = axios.create();
 xapi.defaults.baseURL = SERVER_BASE_URL;
 xapi.defaults.timeout = 20000;

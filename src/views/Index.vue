@@ -138,16 +138,25 @@
     },
 
     created() {
-      this.initJsNativeCb();
-      setTimeout(() => {
-        this.test();
+      let auth_code = this.$route.query.auth_code;
+      this.$log(auth_code)
+      if(auth_code != undefined)
+      {
+        //获取关爱通 access Token
+        this.ga_getAccessTokenInfo()
+        //获取关爱通 openId
 
-        this.getAccessTokenInfo();
-        this.startLocation();
-        this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
-        //this.getUserInfo();
-        //this.updateLocation();
-      }, 1000);
+      } else {
+        this.initJsNativeCb();
+        setTimeout(() => {
+          this.test();
+          this.getAccessTokenInfo();
+          this.startLocation();
+          this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
+          //this.getUserInfo();
+          //this.updateLocation();
+        }, 1000);
+      }
     },
     computed: {
       mlocation() {
@@ -286,6 +295,23 @@
 
       setStatusBarColor(color) {
         this.$jsbridge.call("initStatusBarColor", color);
+      },
+
+      ga_getAccessTokenInfo() {
+        let that = this;
+        that.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url:'/sso/pingan/token',
+          params: {
+            initCode: initCode,
+          }
+        }).then((response) => {
+          let rt = response.data.data.result
+          that.$log("rt:" + JSON.stringify(rt));
+        }) .catch(function (error) {
+          that.$log(error)
+        })
       },
 
       getAccessTokenInfo() {
