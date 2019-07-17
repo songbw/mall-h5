@@ -9,12 +9,7 @@
                   sticky
                   @click="onClick"
                   :swipe-threshold=swipeThreshold
-                  swipeable
-                  color="#f44"
-                  title-active-color="#ffffff"
-                  title-inactive-color="#FFD0D0"
-                  background="#FF4444"
-                  type="card">
+                  swipeabl>
           <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
             <van-list v-model="item.loading"
                       :finished="item.finished"
@@ -364,10 +359,6 @@
       .couponListMain {
         width: 100%;
         margin-bottom: 3em;
-
-        .van-tabs {
-          background-color: #FF4444;
-        }
 
         .couponList {
           display: flex;
