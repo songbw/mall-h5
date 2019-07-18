@@ -807,26 +807,6 @@
         }
       },
 
-      getSalePrice(sku,couponInfo) {
-        let salePrice = parseFloat(sku.product.goodsInfo.dprice).toFixed(2)
-        this.$log("getSalePrice Enter")
-        if (this.usedCoupon != null) {
-          if(couponInfo != null) {
-            this.$log(couponInfo)
-            for (let i=0 ; i < couponInfo.merchants.length; i++) {
-              for(let j = 0; j < couponInfo.merchants[i].skus.length; j++) {
-                if(couponInfo.merchants[i].skus[j].mpu === sku.product.goodsInfo.mpu)
-                {
-                   salePrice = couponInfo.merchants[i].skus[j].salePrice;
-                   break;
-                }
-              }
-            }
-          }
-        }
-        return  salePrice
-      },
-
       couponReducedPrice(coupon) {
         let reducePrice = 0;
         let fullPrice = 0;
@@ -1126,8 +1106,22 @@
                 }
                 //SKU 单价为货物原价 - 活动优惠价格
                 let unitPrice = parseFloat(sku.product.goodsInfo.dprice).toFixed(2)
-                let salePrice = this.getSalePrice(sku,couponInfo)
-
+                let salePrice = unitPrice;
+                let skuCouponDiscount = 0;
+                if (this.usedCoupon != null) {
+                  if(couponInfo != null) {
+                    for (let i=0 ; i < couponInfo.merchants.length; i++) {
+                      for(let j = 0; j < couponInfo.merchants[i].skus.length; j++) {
+                        if(couponInfo.merchants[i].skus[j].mpu === sku.product.goodsInfo.mpu)
+                        {
+                          salePrice = couponInfo.merchants[i].skus[j].salePrice;
+                          skuCouponDiscount = couponInfo.merchants[i].skus[j].skuCouponDiscount
+                          break;
+                        }
+                      }
+                    }
+                  }
+                }
                 let promotionDiscount = (sku.checkedPrice - sku.product.goodsInfo.dprice)
                 amount += unitPrice * sku.product.baseInfo.count
                 promotionDiscountOfMerchant += promotionDiscount
@@ -1139,7 +1133,8 @@
                   "unitPrice": unitPrice,
                   "salePrice": salePrice,
                   "promotionId": promotionId,
-                  "promotionDiscount": promotionDiscount.toFixed(2)
+                  "promotionDiscount": promotionDiscount.toFixed(2),
+                  "skuCouponDiscount": skuCouponDiscount
                 })
               }
             })
