@@ -808,7 +808,7 @@
       },
 
       getSalePrice(sku,couponInfo) {
-        let salePrice = parseFloat(sku.product.goodsInfo.dprice)
+        let salePrice = parseFloat(sku.product.goodsInfo.dprice).toFixed(2)
         this.$log("getSalePrice Enter")
         if (this.usedCoupon != null) {
           if(couponInfo != null) {
@@ -818,12 +818,13 @@
                 if(couponInfo.merchants[i].skus[j].mpu === sku.product.goodsInfo.mpu)
                 {
                    salePrice = couponInfo.merchants[i].skus[j].salePrice;
+                   break;
                 }
               }
             }
           }
         }
-        return salePrice.toFixed(2)
+        return  salePrice
       },
 
       couponReducedPrice(coupon) {
@@ -1126,6 +1127,7 @@
                 //SKU 单价为货物原价 - 活动优惠价格
                 let unitPrice = parseFloat(sku.product.goodsInfo.dprice).toFixed(2)
                 let salePrice = this.getSalePrice(sku,couponInfo)
+
                 let promotionDiscount = (sku.checkedPrice - sku.product.goodsInfo.dprice)
                 amount += unitPrice * sku.product.baseInfo.count
                 promotionDiscountOfMerchant += promotionDiscount
@@ -1172,7 +1174,6 @@
             })
           }
         })
-
         let options = {
           "openId": user.userId,
           "companyCustNo": "11",
@@ -1188,7 +1189,6 @@
         if (couponInfo != null) {
           options['coupon'] = couponInfo;
         }
-
 
         this.$log("Order options:")
         this.$log(options)
@@ -1270,7 +1270,7 @@
             try {
               let options = this.getComposedOrderOption(userInfo, receiverId);
               this.$log(JSON.stringify(options))
-/*              if (this.isValidOrder(options)) {
+              if (this.isValidOrder(options)) {
                 if (options != null) {
                   that.$api.xapi({
                     method: 'post',
@@ -1326,7 +1326,7 @@
               } else {
                 this.$log("无效订单")
                 this.$toast("无效订单")
-              }*/
+              }
             } catch (e) {
             }
           }
