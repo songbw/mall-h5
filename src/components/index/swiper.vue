@@ -9,6 +9,8 @@
 </template>
 
 <script>
+  import Util from '@/util/common'
+
   export default {
     props: ['datas', 'mBackgroundColor'],
     methods: {
@@ -71,6 +73,11 @@
             }
           }
         } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+            let user = JSON.parse(userInfo);
+            targetId +=  "?open_id="+user.userId;
+          }
           this.See(targetId);
         }
       }
