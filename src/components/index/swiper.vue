@@ -76,7 +76,8 @@
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
             let user = JSON.parse(userInfo);
-            targetId +=  "?open_id="+user.userId;
+            targetId +=  "?open_id="+user.userId+"?return_url="+window.location.href+this.$router.currentRoute.fullPath.substring(1);
+            this.$log(targetId)
           }
           this.See(targetId);
         }
