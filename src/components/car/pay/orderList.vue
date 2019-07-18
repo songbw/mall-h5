@@ -27,7 +27,7 @@
                   <ul @click="onListClick(k,i)">
                     <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
                       <van-card
-                        :price="sku.unitPrice - sku.promotionDiscount"
+                        :price="sku.unitPrice"
                         :title="sku.name"
                         :num="sku.num"
                         :thumb="sku.image">

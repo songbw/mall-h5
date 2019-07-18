@@ -10,11 +10,6 @@
           :title="goods.name"
           :num="goods.num"
           :thumb="goods.image">
-<!--          <div slot="origin-price" v-if="goods.salePrice != goods.unitPrice">
-            <span>
-              ￥{{goods.unitPrice}}
-            </span>
-          </div>-->
           <div slot="tags" v-if="goods.salePrice != goods.unitPrice" class="cardtags">
             <img :src="tag_promotion"  v-if="goods.promotionDiscount > 0"/>
             <img :src="tag_coupon" v-if="goods.unitPrice - goods.salePrice - goods.promotionDiscount > 0" />

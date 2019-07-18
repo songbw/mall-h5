@@ -1106,9 +1106,10 @@
                 if (sku.product.promotionInfo.promotionState == 1) {
                   promotionId = sku.product.promotionInfo.promotion[0].id
                 }
-                let unitPrice = parseFloat(sku.checkedPrice).toFixed(2)
+                //SKU 单价为货物原价 - 活动优惠价格
+                let unitPrice = parseFloat(sku.product.goodsInfo.dprice).toFixed(2)
                 let salePrice = this.getSalePrice(sku)
-                let promotionDiscount = (unitPrice - sku.product.goodsInfo.dprice)
+                let promotionDiscount = (sku.checkedPrice - sku.product.goodsInfo.dprice)
                 amount += unitPrice * sku.product.baseInfo.count
                 promotionDiscountOfMerchant += promotionDiscount
                 skus.push({
