@@ -683,7 +683,6 @@
           default:
             return ""
         }
-
       },
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');

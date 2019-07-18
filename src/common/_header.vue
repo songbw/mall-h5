@@ -3,9 +3,9 @@
     <van-row type="flex" :style="isDeepColor(defaultBgColor)? 'color:white':'color:blank'">
       <van-col span="3">
         <div style="margin-top: 3px">
-          <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-if="$route.matched[0].path=='/category'"></van-icon>
-          <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-else-if="$route.matched[0].path=='/car/oderList'"></van-icon>
-          <van-icon name="arrow-left"@click="closeWindow" v-else-if="$route.name==='首页'"></van-icon>
+<!--          <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-if="$route.matched[0].path=='/category'"></van-icon>-->
+<!--          <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-if="$route.matched[0].path=='/car/oderList'"></van-icon>-->
+          <van-icon name="arrow-left"@click="closeWindow" v-if="$route.name==='首页'"></van-icon>
           <van-icon name="arrow-left" @click="$router.go(-1)" v-else></van-icon>
         </div>
       </van-col>
