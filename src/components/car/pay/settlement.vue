@@ -727,10 +727,12 @@
         this.$log(coupon)
         if (coupon != null) {
           let merchants = []
+          let totalCouponDiscount = 0
           this.arregationList.forEach(item => {
             if (item.goods.length > 0) {
               let skus = []
-              let couponOccupiedPrice4OnPerMerchant = 0;
+              //let couponOccupiedPrice4OnPerMerchant = 0;
+              let couponDiscountOfMerchant = 0;
               item.goods.forEach(sku => {
                 if (sku.valid) {
                   this.$log(sku)
@@ -742,40 +744,55 @@
                     }
                   }
                   if (found != -1) {
+                    let unitCouponDiscount =  Math.floor((this.reducedPriceOfCoupon * sku.product.goodsInfo.dprice / this.totalSkuPriceOfCoupon) * 100) / 100;
+                    let skuCouponDiscount = unitCouponDiscount* sku.product.baseInfo.count;
                     skus.push({
                       "skuId": sku.product.baseInfo.skuId,
+                      "mpu": sku.product.baseInfo.mpu,
                       "num": sku.product.baseInfo.count,
-                      "dprice": sku.product.goodsInfo.dprice
+                      "dprice": sku.product.goodsInfo.dprice,
+                      "salePrice": sku.product.goodsInfo.dprice - unitCouponDiscount,
+                      "skuCouponDiscount": skuCouponDiscount
                     })
-                    couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice * sku.product.baseInfo.count
+                   // couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice * sku.product.baseInfo.count
+                    couponDiscountOfMerchant += skuCouponDiscount
                   }
                 }
               })
+              this.$log(skus)
               merchants.push({
                 "merchantNo": item.merchantCode,
                 "skus": skus,
-                "couponOccupiedPrice": couponOccupiedPrice4OnPerMerchant
+             //   "couponOccupiedPrice": couponOccupiedPrice4OnPerMerchant,
+                "couponDiscountOfMerchant": couponDiscountOfMerchant
               })
+              totalCouponDiscount += couponDiscountOfMerchant;
             }
           })
-          //找到不等于0的最小couponOccupiedPrice 的 merchants
-          if (merchants.length > 0) {
-            let minId = 0;
-            if (merchants.length > 1) {
-              for (let i = 1; i < merchants.length; i++) {
-                if (merchants[i].couponOccupiedPrice < merchants[minId].couponOccupiedPrice) {
-                  minId = i;
+          if(totalCouponDiscount != this.reducedPriceOfCoupon) {
+            // coupon 价格不平， 重新分配,由于coupon 单价计算是舍去2位后的数据，所以reducedPriceOfCoupon大于等于totalCouponDiscount
+            // 把多余的优惠差价给最大的优惠价格拥有的商户
+            if (merchants.length > 0) {
+              let maxMerchants = 0;
+              if (merchants.length > 1) {
+                for (let i = 1; i < merchants.length; i++) {
+                  if (merchants[i].couponOccupiedPrice > merchants[minId].couponOccupiedPrice) {
+                    maxMerchants = i;
+                  }
                 }
               }
-            }
-            let discountPriceExcludeMin = 0;
-            for (let i = 0; i < merchants.length; i++) {
-              if (i != minId) {
-                merchants[i]['discount'] = this.reducedPriceOfCoupon * merchants[i].couponOccupiedPrice / this.totalSkuPriceOfCoupon
-                discountPriceExcludeMin += merchants[i]['discount'];
+              merchants[maxMerchants].couponDiscountOfMerchant +=  (this.reducedPriceOfCoupon-totalCouponDiscount) //把多余的优惠差价给最大的优惠价格拥有的商户
+              //找到maxMerchants这个商户的有最大优惠券价值的SKU，把多余的券值赋给这个SKU
+              let maxMpu = 0;
+              if (merchants[maxMerchants].skus.length > 1) {
+                for (let i = 1; i < merchants[maxMerchants].skus.length; i++) {
+                  if (merchants[maxMerchants].skus[i].skuCouponDiscount > merchants[maxMerchants].skus[maxMpu].skuCouponDiscount ) {
+                    maxMpu = i;
+                  }
+                }
               }
+              merchants[maxMerchants].skus[maxMpu].skuCouponDiscount +=  (this.reducedPriceOfCoupon-totalCouponDiscount) //把多余的券值赋给这个SKU
             }
-            merchants[minId]['discount'] = this.reducedPriceOfCoupon - discountPriceExcludeMin;
           }
           let couponDiscount = parseFloat(this.reducedPriceOfCoupon)
           let couponInfo = {
@@ -1253,7 +1270,7 @@
             try {
               let options = this.getComposedOrderOption(userInfo, receiverId);
               this.$log(JSON.stringify(options))
-              if (this.isValidOrder(options)) {
+/*              if (this.isValidOrder(options)) {
                 if (options != null) {
                   that.$api.xapi({
                     method: 'post',
@@ -1309,7 +1326,7 @@
               } else {
                 this.$log("无效订单")
                 this.$toast("无效订单")
-              }
+              }*/
             } catch (e) {
             }
           }
