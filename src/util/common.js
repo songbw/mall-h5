@@ -1,6 +1,85 @@
+import CryptoJS from 'crypto-js'
 const STORAGE_USER_KEY = 'STORAGE_USER_KEY'
 
 export default {
+  test() {
+      this.$log("timeStamp:"+Date.parse(new Date())/1000);
+      let timestamp = Date.parse(new Date())/1000;
+      let signString = {
+        appid: "20110843",
+        appsecret: "78dde3cc1e3cab6cbbabbc1bf88faa4e",
+        grant_type: "client_credential",
+        timestamp: timestamp
+      }
+      let formatedString = Util.formatSignString(signString);
+      let sign = Util.sha1(formatedString)
+      this.$log(formatedString)
+      this.$log("SHA1:"+sign)
+      let that = this;
+      let params = {
+        appid: signString.appid,
+        grant_type:signString.grant_type,
+        timestamp:signString.timestamp,
+        sign: ""+sign
+      }
+      this.$log(params)
+      this.$api.xapi({
+        method: 'post',
+        baseURL: "https://openapi.guanaitong.cc",
+        headers:{
+          'Content-Type':'application/x-www-form-urlencoded;charset=UTF-8'
+        },
+        url: '/token/create',
+        params: params
+      }).then((response) => {
+        this.$log(response)
+      }).catch(function (error) {
+        that.$log(error)
+      })
+    },
+  sha1(encodeStr) {
+    return CryptoJS.SHA1(encodeStr);
+  },
+
+  formatSignString(jsonObj) {
+    let arr = [];
+    for (let key in jsonObj) {
+      arr.push(key)
+    }
+    arr.sort();
+    let str = '';
+    for (let i in arr) {
+      if (jsonObj[arr[i]] != null) {
+        if (typeof jsonObj[arr[i]] == "object") {
+          if (jsonObj[arr[i]] instanceof Array) {
+            let len = jsonObj[arr[i]].length;
+
+            str += arr[i] + '=['
+            for (let k = 0; k < len; k++) {
+              str += '{'
+              str += this.formatSignString(jsonObj[arr[i]][k]);
+              str += '}'
+              if (k < len - 1) {
+                str += ','
+              }
+            }
+            str += ']' + "&"
+          } else {
+            str += arr[i] + '={'
+            str += this.formatSignString(jsonObj[arr[i]])
+            str += '}' + "&"
+          }
+
+        } else {
+          if (typeof jsonObj[arr[i]] == "string" && jsonObj[arr[i]].length == 0)
+            continue;
+          str += arr[i] + "=" + jsonObj[arr[i]] + "&";
+        }
+      }
+    }
+    return str.substr(0, str.length - 1)
+  },
+
   // 获取
   getLocal(key = STORAGE_USER_KEY) {
     console.log("getLocal:" + key)
