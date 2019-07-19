@@ -17,25 +17,38 @@
               <div class="couponList">
                 <li v-for="(k,i) in item.list" :key=i style="list-style: none">
                   <div style="padding:2px;background-color: #f8f8f8">
-                    <div class="coupon coupon-white coupon-wave-left coupon-wave-right">
+                    <div class="coupon coupon-white">
                       <div  @touchmove="gtouchmove()" @touchstart="touchEvtStart(k,type,i)" @touchend="touchEvtEnd()" class="coupon-main">
                         <div class="coupon-img">
                           <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                          <div class="coupon-suppler">
+                          <div class="coupon-suppler" v-if="type === 0">
                             <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                             <i>{{k.couponInfo.name}}</i>
                           </div>
-                          <div class="coupon-price">{{formateCouponPrice(k.couponInfo.rules.couponRules)}}</div>
-                          <div class="coupon-desc">{{formateCouponDescription(k.couponInfo.rules.couponRules)}}</div>
+                          <div class="coupon-suppler-deactive" v-else>
+                            <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                            <i>{{k.couponInfo.name}}</i>
+                          </div>
+                          <div class="coupon-price" v-if="type === 0">
+                            <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                            {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
+                            <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
+                          </div>
+                          <div class="coupon-price-deactive" v-else>
+                            <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                            {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
+                            <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
+                          </div>
+                          <div class="coupon-desc">{{formateCouponDescription(k.couponInfo)}}</div>
                           <div class="coupon-expire-date">
                             {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
                           </div>
                         </div>
                       </div>
                       <div :class=getCouponState(type) @click="onConponUseClick(k,i)">
-                        <div>
+                        <div v-if="type === 0">
                           <span class="coupon-action">立即使用</span>
                         </div>
                       </div>
@@ -278,8 +291,28 @@
               } catch (e) {
               }
             } else if (paths[0] === 'listing') {
-              this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
-              this.$router.push("/user/couponListActivity");
+              switch(couponInfo.rules.scenario.type) {
+                case 1: {
+                  this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
+                  this.$router.push("/user/couponListActivity");
+                  return;
+                }
+                case 2: {
+                  this.$router.push({path:"/category"});
+                  return
+                }
+                case 3: {
+                  this.$router.push({path:"/category/"+couponInfo.rules.scenario.categories[0]});
+                  return
+                }
+                default: {
+                  if (url.startsWith("http://") || url.startsWith("http://")) {
+                    this.See(url);
+                  }
+                  return
+                }
+              }
+
             }
           } else if (url.startsWith("http://") || url.startsWith("http://")) {
             this.See(url);
@@ -304,22 +337,30 @@
       formateCouponPrice(rules) {
         switch (rules.type) {
           case 0://满减券
-            return '￥' + rules.fullReduceCoupon.reducePrice;
+            return rules.fullReduceCoupon.reducePrice;
           case 1://代金券
-            return '￥' + rules.cashCoupon.amount;
+            return rules.cashCoupon.amount;
           case 2://折扣券
             return rules.discountCoupon.discountRatio * 10 + ' 折';
           default:
             return ""
         }
       },
-      formateReleasePercentage(coupon) {
-        if (coupon.releaseTotal == 0)
-          return 100;
-        let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
-        return percentage;
+
+      formateCouponDescription(couponInfo) {
+        switch (couponInfo.rules.scenario.type) {
+          case 1:
+            return "仅限某些指定的商品可用";
+          case 2:
+            return "全场商品可用";
+          case 3:
+            return "仅限定某些品牌类商品可用";
+          default:
+            return "限提供所描述特定的服务可用"
+        }
       },
-      formateCouponDescription(rules) {
+
+      formateCouponDetail(rules) {
         switch (rules.type) {
           case 0://满减券
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
@@ -334,8 +375,14 @@
           default:
             return ""
         }
-
       },
+      formateReleasePercentage(coupon) {
+        if (coupon.releaseTotal == 0)
+          return 100;
+        let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
+        return percentage;
+      },
+
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
       },
@@ -416,7 +463,7 @@
                 justify-content: center;
                 align-items: center;
                 flex-direction: column;
-                width: 35%;
+                width: 25%;
                 position: relative;
 
                 img {
@@ -463,20 +510,43 @@
                 margin-bottom: .2rem;
               }
 
+              .coupon-desc {
+                margin-left: 3px;
+                min-height: 1em;
+                .fz(font-size, 25);
+                font-weight: lighter;
+                color: #323233;
+              }
+
               .coupon-price {
                 font-size: 150%;
                 font-weight: bold;
+                color: #FF4444;
+                span {
+                  font-size: 60%;
+                  margin-left: .5rem;
+                  font-weight: normal;
+                }
               }
 
-              .coupon-price > span {
-                font-size: 40%;
-                margin-left: .5rem;
-                font-weight: normal;
+              .coupon-price-deactive {
+                font-size: 150%;
+                font-weight: bold;
+                color: #8c8c8c;
+                span {
+                  font-size: 60%;
+                  margin-left: .5rem;
+                  font-weight: normal;
+                }
               }
 
               .coupon-expire-date {
-                .fz(font-size, 25);
+                margin-left: 5px;
+                .fz(font-size, 22);
+                font-weight: lighter;
+                color: #8c8c8c;
               }
+
 
               .coupon-suppler {
                 span {
@@ -492,25 +562,53 @@
                 }
               }
 
+              .coupon-suppler-deactive {
+                span {
+                  background-color: #8c8c8c;
+                  padding: 2px 5px;
+                  color: white;
+                  border-radius: 8px;
+                  .fz(font-size, 25);
+                }
+                i {
+                  .fz(font-size, 28);
+                }
+              }
+
             }
 
             .coupon-get {
-              padding: .5rem;
+              padding: .2rem;
               /** 这里使用flex是为了让文字居中 */
               display: flex;
-              margin-left: 10px;
               justify-content: center;
               align-items: center;
               flex-direction: column;
-              width: 10%;
+              width: 18%;
               position: relative;
               .fz(font-size, 25);
+
+              .coupon-action {
+                .fz(font-size, 20);
+                background-color: #FF4444;
+                color: white;
+                padding: 2px;
+                border-radius: 10px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+              }
             }
 
             .coupon-get > .coupon-desc {
-              font-size: 150%;
-              margin-bottom: .5rem;
-              font-weight: bold;
+              margin-left: 3px;
+              min-height: 1em;
+              .fz(font-size, 25);
+              font-weight: lighter;
+              color: #323233;
             }
 
             .coupon-get-already::after {

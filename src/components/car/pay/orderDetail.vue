@@ -24,7 +24,7 @@
         <ul>
           <li v-for="(sku,i)  in detail.skus" :key='i' style="list-style: none">
             <van-card
-              :price="sku.unitPrice - sku.promotionDiscount"
+              :price="sku.unitPrice"
               :title="sku.name"
               :num="sku.num"
               :thumb="sku.image">
@@ -80,11 +80,11 @@
             <span style="color: #ff4444">+￥{{freightFee}}</span>
           </div>
         </van-cell>
-        <van-cell title="活动优惠:">
+<!--        <van-cell title="活动优惠:">
           <div slot="default">
             <span style="color: #ff4444">-￥{{promotionDiscout}}</span>
           </div>
-        </van-cell>
+        </van-cell>-->
         <van-cell title="优惠券:">
           <div slot="default">
             <span style="color: #ff4444">-￥{{couponDiscount}}</span>

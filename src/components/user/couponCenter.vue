@@ -19,7 +19,7 @@
                       :finished="item.finished"
                       @load="onLoad(active)">
               <div class="couponList">
-                <div class="coupon coupon-white coupon-wave-left coupon-wave-right" v-for="(k,i) in item.list" :key="i">
+                <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
                   <div class="coupon-main">
                     <div class="coupon-img">
                       <img :src="k.imageUrl.length?k.imageUrl: couponImg">
@@ -29,8 +29,14 @@
                         <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
                         <i>{{k.name}}</i>
                       </div>
-                      <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
-                      <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>
+<!--                      <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
+                      <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>-->
+                      <div class="coupon-price">
+                        <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                        {{formateCouponPrice(k.rules.couponRules)}}
+                        <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+                      </div>
+                      <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
                       <div class="coupon-expire-date">
                         {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
                       </div>
@@ -162,7 +168,8 @@
 
       },
       isCouponUptoLimited(k, i) {
-        // this.$log(k);
+        this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        this.$log(k);
         if (k.userCollectNum < k.rules.perLimited)
           return false;
         return true;
@@ -230,6 +237,8 @@
         this.$log("getCouponClick Enter")
       },
 
+
+
       onConponUseClick(couponInfo, i) {
         this.$log("onConponUseClick Enter")
         let url = couponInfo.url;
@@ -249,11 +258,30 @@
             } catch (e) {
             }
           } else if (paths[0] === 'listing') {
-            let coupon = {
-              "couponInfo": couponInfo
+            switch(couponInfo.rules.scenario.type) {
+              case 1: {
+                let coupon = {
+                  "couponInfo": couponInfo
+                }
+                this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
+                this.$router.push("/user/couponListActivity");
+                return;
+              }
+              case 2: {
+                this.$router.push({path:"/category"});
+                return
+              }
+              case 3: {
+                this.$router.push({path:"/category/"+couponInfo.rules.scenario.categories[0]});
+                return
+              }
+              default: {
+                if (url.startsWith("http://") || url.startsWith("http://")) {
+                  this.See(url);
+                }
+                return
+              }
             }
-            this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
-            this.$router.push("/user/couponListActivity");
           }
         } else if (url.startsWith("http://") || url.startsWith("http://")) {
           this.See(url);
@@ -290,22 +318,30 @@
       formateCouponPrice(rules) {
         switch (rules.type) {
           case 0://满减券
-            return '￥' + rules.fullReduceCoupon.reducePrice;
+            return rules.fullReduceCoupon.reducePrice;
           case 1://代金券
-            return '￥' + rules.cashCoupon.amount;
+            return rules.cashCoupon.amount;
           case 2://折扣券
             return rules.discountCoupon.discountRatio * 10 + ' 折';
           default:
             return ""
         }
       },
-      formateReleasePercentage(coupon) {
-        if (coupon.releaseTotal == 0)
-          return 100;
-        let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
-        return percentage;
+
+      formateCouponDescription(couponInfo) {
+        switch (couponInfo.rules.scenario.type) {
+          case 1:
+            return "仅限某些指定的商品可用";
+          case 2:
+            return "全场商品可用";
+          case 3:
+            return "仅限定某些品牌类商品可用";
+          default:
+            return "限提供所描述特定的服务可用"
+        }
       },
-      formateCouponDescription(rules) {
+
+      formateCouponDetail(rules) {
         switch (rules.type) {
           case 0://满减券
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
@@ -320,7 +356,12 @@
           default:
             return ""
         }
-
+      },
+      formateReleasePercentage(coupon) {
+        if (coupon.releaseTotal == 0)
+          return 100;
+        let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
+        return percentage;
       },
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
@@ -455,27 +496,35 @@
                 margin-bottom: .2rem;
               }
 
+              .coupon-desc {
+                margin-left: 3px;
+                min-height: 1em;
+                .fz(font-size, 25);
+                font-weight: lighter;
+                color: #323233;
+              }
+
               .coupon-price {
                 font-size: 150%;
                 font-weight: bold;
+                color: #FF4444;
               }
 
               .coupon-price > span {
-                font-size: 40%;
+                font-size: 60%;
                 margin-left: .5rem;
                 font-weight: normal;
               }
 
               .coupon-expire-date {
-                .fz(font-size, 25);
+                margin-left: 5px;
+                .fz(font-size, 22);
+                font-weight: lighter;
+                color: #8c8c8c;
               }
 
               .coupon-progress {
                 margin-top: 10px;
-              }
-
-              .coupon-action {
-                .fz(font-size, 25)
               }
 
               .coupon-suppler {
@@ -496,16 +545,29 @@
             }
 
             .coupon-get {
-              padding: .5rem;
+              padding: .2rem;
               /** 这里使用flex是为了让文字居中 */
               display: flex;
-              margin-left: 10px;
               justify-content: center;
               align-items: center;
               flex-direction: column;
-              width: 10%;
+              width: 18%;
               position: relative;
               .fz(font-size, 25);
+
+              .coupon-action {
+                .fz(font-size, 20);
+                background-color: #FF4444;
+                color: white;
+                padding: 2px;
+                border-radius: 10px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+              }
             }
 
             .coupon-get > .coupon-desc {
