@@ -325,7 +325,7 @@
                     let userInfo = this.$store.state.appconf.userInfo;
                     if (!Util.isUserEmpty(userInfo)) {
                       let user = JSON.parse(userInfo);
-                      url +=  "&open_id="+user.userId+"&return_url="+"http://mall.weesharing.com";
+                      url +=  "&open_id="+user.userId+"&return_url="+window.location.href;
                     }
                     this.See(url);
                   }
@@ -339,7 +339,7 @@
             let userInfo = this.$store.state.appconf.userInfo;
             if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
-              url +=  "&open_id="+user.userId+"&return_url="+"http://mall.weesharing.com";
+              url +=  "&open_id="+user.userId+"&return_url="+window.location.href;
             }
             this.See(url);
           }
