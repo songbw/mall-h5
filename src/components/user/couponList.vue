@@ -23,26 +23,32 @@
                           <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                          <div class="coupon-suppler">
+                          <div class="coupon-suppler" v-if="type === 0">
                             <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                             <i>{{k.couponInfo.name}}</i>
                           </div>
-                          <div class="coupon-price">
+                          <div class="coupon-suppler-deactive" v-else>
+                            <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                            <i>{{k.couponInfo.name}}</i>
+                          </div>
+                          <div class="coupon-price" v-if="type === 0">
+                            <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                            {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
+                            <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
+                          </div>
+                          <div class="coupon-price-deactive" v-else>
                             <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
                             {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
                             <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
                           </div>
                           <div class="coupon-desc">{{formateCouponDescription(k.couponInfo)}}</div>
-<!--                          <div class="coupon-desc">{{formateCouponDescription(k.couponInfo)}}</div>
-                          <div class="coupon-price">{{formateCouponPrice(k.couponInfo.rules.couponRules)}}</div>
-                          <div class="coupon-desc">{{formateCouponDescription(k.couponInfo.rules.couponRules)}}</div>-->
                           <div class="coupon-expire-date">
                             {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
                           </div>
                         </div>
                       </div>
                       <div :class=getCouponState(type) @click="onConponUseClick(k,i)">
-                        <div>
+                        <div v-if="type === 0">
                           <span class="coupon-action">立即使用</span>
                         </div>
                       </div>
@@ -516,12 +522,22 @@
                 font-size: 150%;
                 font-weight: bold;
                 color: #FF4444;
+                span {
+                  font-size: 60%;
+                  margin-left: .5rem;
+                  font-weight: normal;
+                }
               }
 
-              .coupon-price > span {
-                font-size: 60%;
-                margin-left: .5rem;
-                font-weight: normal;
+              .coupon-price-deactive {
+                font-size: 150%;
+                font-weight: bold;
+                color: #8c8c8c;
+                span {
+                  font-size: 60%;
+                  margin-left: .5rem;
+                  font-weight: normal;
+                }
               }
 
               .coupon-expire-date {
@@ -541,6 +557,19 @@
                   .fz(font-size, 25);
                 }
 
+                i {
+                  .fz(font-size, 28);
+                }
+              }
+
+              .coupon-suppler-deactive {
+                span {
+                  background-color: #8c8c8c;
+                  padding: 2px 5px;
+                  color: white;
+                  border-radius: 8px;
+                  .fz(font-size, 25);
+                }
                 i {
                   .fz(font-size, 28);
                 }

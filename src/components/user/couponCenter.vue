@@ -168,7 +168,8 @@
 
       },
       isCouponUptoLimited(k, i) {
-        // this.$log(k);
+        this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        this.$log(k);
         if (k.userCollectNum < k.rules.perLimited)
           return false;
         return true;
