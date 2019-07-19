@@ -30,7 +30,10 @@
         <van-dialog
           v-model="telDlgShow"
           title="修改手机号"
-          @confirm="onTelConfirmClick"
+          show-cancel-button="true"
+          confirm-button-color="#FF4444"
+          cancel-button-color="#8c8c8c"
+          :beforeClose="beforeCloseTelDialog"
         >
           <van-field v-model="user.telephone" type="tel" rows="1" placeholder="请输入您的电话号码"/>
         </van-dialog>
@@ -155,10 +158,25 @@
         this.$log("onNickNameConfirmClick Enter")
         this.saveUserInfo();
       },
-      onTelConfirmClick() {
-        this.$log("onTelConfirmClick Enter")
-        this.saveUserInfo();
+
+      beforeCloseTelDialog(action, done) {
+        this.$log("beforeCloseTelDialog Enter");
+
+        if(action === 'confirm') {
+          if(!this.user.telephone.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$"))
+          {
+            this.$toast("请输入正确的电话号码")
+            done(false) //不关闭弹框
+          } else {
+            this.saveUserInfo();
+            done()
+          }
+
+        } else if(action === 'cancel') {
+          done() //关闭
+        }
       },
+
       onSexConfirmClick() {
         this.$log("onSexConfirmClick Enter")
         this.saveUserInfo();
