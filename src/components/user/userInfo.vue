@@ -22,9 +22,12 @@
         <van-dialog
           v-model="nickNameDlgShow"
           title="修改昵称"
-          @confirm="onNickNameConfirmClick"
+          show-cancel-button="true"
+          confirm-button-color="#FF4444"
+          cancel-button-color="#8c8c8c"
+          :beforeClose="beforeCloseNickNameDialog"
         >
-          <van-field v-model="user.nickname" rows="1" placeholder="请输入您的昵称"/>
+          <van-field v-model="inputNickName" rows="1" placeholder="请输入您的昵称"/>
         </van-dialog>
         <van-cell title="手机号" :value=user.telephone isLink="true" @click="onTelClick()"></van-cell>
         <van-dialog
@@ -35,7 +38,7 @@
           cancel-button-color="#8c8c8c"
           :beforeClose="beforeCloseTelDialog"
         >
-          <van-field v-model="user.telephone" type="tel" rows="1" placeholder="请输入您的电话号码"/>
+          <van-field v-model="inputTel" type="tel" rows="1" placeholder="请输入您的电话号码"/>
         </van-dialog>
         <van-cell title="性别" :value=user.sex isLink="true" @click="onSexClick()"></van-cell>
         <van-dialog
@@ -45,8 +48,8 @@
         >
           <div class="sexSelector">
             <van-radio-group v-model=user.sex>
-              <van-radio name="男">男</van-radio>
-              <van-radio name="女">女</van-radio>
+              <van-radio name="男" checked-color="#FF4444">男</van-radio>
+              <van-radio name="女" checked-color="#FF4444">女</van-radio>
             </van-radio-group>
           </div>
         </van-dialog>
@@ -105,6 +108,8 @@
         birthDay: '',
         birthDayValue: null,
         avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
+        inputNickName: '',
+        inputTel: '',
       }
     },
 
@@ -154,25 +159,30 @@
         this.$log("onBirthSelectorCancelClick Enter");
         this.birthDlgShow = false;
       },
-      onNickNameConfirmClick() {
-        this.$log("onNickNameConfirmClick Enter")
-        this.saveUserInfo();
+
+      beforeCloseNickNameDialog(action, done) {
+        this.$log("beforeCloseNickNameDialog Enter");
+        if (action === 'confirm') {
+          this.user.nickname = this.inputNickName
+          this.saveUserInfo();
+          done()
+        } else if (action === 'cancel') {
+          done() //关闭
+        }
       },
 
       beforeCloseTelDialog(action, done) {
         this.$log("beforeCloseTelDialog Enter");
-
-        if(action === 'confirm') {
-          if(!this.user.telephone.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$"))
-          {
+        if (action === 'confirm') {
+          if (!this.inputTel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
             this.$toast("请输入正确的电话号码")
             done(false) //不关闭弹框
           } else {
+            this.user.telephone = this.inputTel
             this.saveUserInfo();
             done()
           }
-
-        } else if(action === 'cancel') {
+        } else if (action === 'cancel') {
           done() //关闭
         }
       },
@@ -183,10 +193,12 @@
       },
       onNickNameClick() {
         this.$log("onNickNameClick Enter")
+        this.inputNickName = this.user.nickname;
         this.nickNameDlgShow = true;
       },
       onTelClick() {
         this.$log("onTelClick Enter")
+        this.inputTel = this.user.telephone
         this.telDlgShow = true;
       },
       onBirthClick() {
@@ -217,7 +229,8 @@
         height: 4em;
         line-height: 4em;
         align-items: center;
-        img{
+
+        img {
           height: 35px;
           width: 35px;
         }
