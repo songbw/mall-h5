@@ -575,6 +575,12 @@
 
 
               .coupon-suppler {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
                 span {
                   background-color: #ff4444;
                   padding: 2px 5px;
@@ -589,6 +595,12 @@
               }
 
               .coupon-suppler-deactive {
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
                 span {
                   background-color: #8c8c8c;
                   padding: 2px 5px;
