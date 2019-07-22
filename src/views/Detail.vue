@@ -392,6 +392,8 @@
 
         .van-actionsheet {
           font-weight: bold;
+          border-top-left-radius: 10px;
+          border-top-right-radius: 10px;
         }
 
         .avaliableCoupon {
