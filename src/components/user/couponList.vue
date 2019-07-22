@@ -44,7 +44,7 @@
                             </div>
                             <div class="coupon-desc">{{formateCouponDescription(k.couponInfo)}}</div>
                           </div>
-                          <div v-else>
+                          <div v-else> <!-- 第三方优惠券   -->
                             <div class="coupon-price" v-if="type === 0">
                               <span style="margin-right: -7px">￥</span>
                               {{k.couponInfo.price}}
