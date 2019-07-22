@@ -23,22 +23,31 @@
           v-model="nickNameDlgShow"
           title="修改昵称"
           show-cancel-button="true"
-          confirm-button-color="#FF4444"
-          cancel-button-color="#8c8c8c"
           :beforeClose="beforeCloseNickNameDialog"
         >
-          <van-field v-model="inputNickName" rows="1" placeholder="请输入您的昵称"/>
+          <van-field
+            v-model="inputNickName"
+            rows="1"
+            maxlength="10"
+            placeholder="请输入您的昵称"
+            clearable
+          />
         </van-dialog>
         <van-cell title="手机号" :value=user.telephone isLink="true" @click="onTelClick()"></van-cell>
         <van-dialog
           v-model="telDlgShow"
+          maxlength="30"
           title="修改手机号"
           show-cancel-button="true"
-          confirm-button-color="#FF4444"
-          cancel-button-color="#8c8c8c"
           :beforeClose="beforeCloseTelDialog"
         >
-          <van-field v-model="inputTel" type="tel" rows="1" placeholder="请输入您的电话号码"/>
+          <van-field
+            v-model="inputTel"
+            type="tel"
+            rows="1"
+            placeholder="请输入您的电话号码"
+            clearable>
+          </van-field>
         </van-dialog>
         <van-cell title="性别" :value=user.sex isLink="true" @click="onSexClick()"></van-cell>
         <van-dialog
@@ -54,20 +63,6 @@
           </div>
         </van-dialog>
         <van-cell title="生日" :value=birthDay isLink="true" @click="onBirthClick()"></van-cell>
-        <!-- <van-dialog
-           v-model="birthDlgShow"
-           title="标题"
-         >
-          <div class="birthSelector">
-            <van-datetime-picker
-              v-model="user.birth"
-              type="date"
-              :min-date="minDate"
-              :max-date="maxDate"
-              :format="formatter"
-            />
-          </div>
-         </van-dialog>-->
         <div class="birthSelector">
           <van-popup v-model="birthDlgShow" position="bottom" :overlay="false">
             <van-datetime-picker
@@ -219,6 +214,11 @@
 
   .userInfo {
     .userMain {
+
+      .van-dialog {
+        color: black;
+      }
+
       .avatarTitle {
         height: 4em;
         line-height: 4em;
@@ -236,6 +236,7 @@
         }
       }
 
+
       .sexSelector {
         .van-radio-group {
           width: 100%;
@@ -244,7 +245,7 @@
           justify-content: center;
 
           .van-radio {
-            margin: 10px;
+            margin: 20px;
           }
         }
 
@@ -254,6 +255,7 @@
         width: 100%;
       }
     }
+
   }
 
 
