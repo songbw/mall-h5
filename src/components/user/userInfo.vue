@@ -22,17 +22,32 @@
         <van-dialog
           v-model="nickNameDlgShow"
           title="修改昵称"
-          @confirm="onNickNameConfirmClick"
+          show-cancel-button="true"
+          :beforeClose="beforeCloseNickNameDialog"
         >
-          <van-field v-model="user.nickname" rows="1" placeholder="请输入您的昵称"/>
+          <van-field
+            v-model="inputNickName"
+            rows="1"
+            maxlength="10"
+            placeholder="请输入您的昵称"
+            clearable
+          />
         </van-dialog>
         <van-cell title="手机号" :value=user.telephone isLink="true" @click="onTelClick()"></van-cell>
         <van-dialog
           v-model="telDlgShow"
+          maxlength="30"
           title="修改手机号"
-          @confirm="onTelConfirmClick"
+          show-cancel-button="true"
+          :beforeClose="beforeCloseTelDialog"
         >
-          <van-field v-model="user.telephone" type="tel" rows="1" placeholder="请输入您的电话号码"/>
+          <van-field
+            v-model="inputTel"
+            type="tel"
+            rows="1"
+            placeholder="请输入您的电话号码"
+            clearable>
+          </van-field>
         </van-dialog>
         <van-cell title="性别" :value=user.sex isLink="true" @click="onSexClick()"></van-cell>
         <van-dialog
@@ -42,26 +57,12 @@
         >
           <div class="sexSelector">
             <van-radio-group v-model=user.sex>
-              <van-radio name="男">男</van-radio>
-              <van-radio name="女">女</van-radio>
+              <van-radio name="男" checked-color="#FF4444">男</van-radio>
+              <van-radio name="女" checked-color="#FF4444">女</van-radio>
             </van-radio-group>
           </div>
         </van-dialog>
         <van-cell title="生日" :value=birthDay isLink="true" @click="onBirthClick()"></van-cell>
-        <!-- <van-dialog
-           v-model="birthDlgShow"
-           title="标题"
-         >
-          <div class="birthSelector">
-            <van-datetime-picker
-              v-model="user.birth"
-              type="date"
-              :min-date="minDate"
-              :max-date="maxDate"
-              :format="formatter"
-            />
-          </div>
-         </van-dialog>-->
         <div class="birthSelector">
           <van-popup v-model="birthDlgShow" position="bottom" :overlay="false">
             <van-datetime-picker
@@ -102,6 +103,8 @@
         birthDay: '',
         birthDayValue: null,
         avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
+        inputNickName: '',
+        inputTel: '',
       }
     },
 
@@ -151,24 +154,46 @@
         this.$log("onBirthSelectorCancelClick Enter");
         this.birthDlgShow = false;
       },
-      onNickNameConfirmClick() {
-        this.$log("onNickNameConfirmClick Enter")
-        this.saveUserInfo();
+
+      beforeCloseNickNameDialog(action, done) {
+        this.$log("beforeCloseNickNameDialog Enter");
+        if (action === 'confirm') {
+          this.user.nickname = this.inputNickName
+          this.saveUserInfo();
+          done()
+        } else if (action === 'cancel') {
+          done() //关闭
+        }
       },
-      onTelConfirmClick() {
-        this.$log("onTelConfirmClick Enter")
-        this.saveUserInfo();
+
+      beforeCloseTelDialog(action, done) {
+        this.$log("beforeCloseTelDialog Enter");
+        if (action === 'confirm') {
+          if (!this.inputTel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+            this.$toast("请输入正确的电话号码")
+            done(false) //不关闭弹框
+          } else {
+            this.user.telephone = this.inputTel
+            this.saveUserInfo();
+            done()
+          }
+        } else if (action === 'cancel') {
+          done() //关闭
+        }
       },
+
       onSexConfirmClick() {
         this.$log("onSexConfirmClick Enter")
         this.saveUserInfo();
       },
       onNickNameClick() {
         this.$log("onNickNameClick Enter")
+        this.inputNickName = this.user.nickname;
         this.nickNameDlgShow = true;
       },
       onTelClick() {
         this.$log("onTelClick Enter")
+        this.inputTel = this.user.telephone
         this.telDlgShow = true;
       },
       onBirthClick() {
@@ -189,6 +214,11 @@
 
   .userInfo {
     .userMain {
+
+      .van-dialog {
+        color: black;
+      }
+
       .avatarTitle {
         height: 4em;
         line-height: 4em;
@@ -199,11 +229,13 @@
         height: 4em;
         line-height: 4em;
         align-items: center;
-        img{
+
+        img {
           height: 35px;
           width: 35px;
         }
       }
+
 
       .sexSelector {
         .van-radio-group {
@@ -213,7 +245,7 @@
           justify-content: center;
 
           .van-radio {
-            margin: 10px;
+            margin: 20px;
           }
         }
 
@@ -223,6 +255,7 @@
         width: 100%;
       }
     }
+
   }
 
 

@@ -20,7 +20,7 @@
                     <div class="coupon coupon-white">
                       <div  @touchmove="gtouchmove()" @touchstart="touchEvtStart(k,type,i)" @touchend="touchEvtEnd()" class="coupon-main">
                         <div class="coupon-img">
-                          <img :src="k.couponInfo.imageUrl.length? k.couponInfo.imageUrl : couponImg">
+                          <img :src="(k.couponInfo.imageUrl != undefined && k.couponInfo.imageUrl.length > 0)?k.couponInfo.imageUrl : couponImg">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
                           <div class="coupon-suppler" v-if="type === 0">
@@ -31,17 +31,30 @@
                             <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                             <i>{{k.couponInfo.name}}</i>
                           </div>
-                          <div class="coupon-price" v-if="type === 0">
-                            <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
-                            {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
-                            <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
+                          <div v-if="k.type === 0">
+                            <div class="coupon-price" v-if="type === 0">
+                              <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                              {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
+                              <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
+                            </div>
+                            <div class="coupon-price-deactive" v-else>
+                              <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                              {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
+                              <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
+                            </div>
+                            <div class="coupon-desc">{{formateCouponDescription(k.couponInfo)}}</div>
                           </div>
-                          <div class="coupon-price-deactive" v-else>
-                            <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
-                            {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
-                            <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
+                          <div v-else> <!-- 第三方优惠券   -->
+                            <div class="coupon-price" v-if="type === 0">
+                              <span style="margin-right: -7px">￥</span>
+                              {{k.couponInfo.price}}
+                            </div>
+                            <div class="coupon-price-deactive" v-else>
+                              <span style="margin-right: -7px">￥</span>
+                              {{k.couponInfo.price}}
+                            </div>
+                            <div class="coupon-desc">{{k.couponInfo.description}}</div>
                           </div>
-                          <div class="coupon-desc">{{formateCouponDescription(k.couponInfo)}}</div>
                           <div class="coupon-expire-date">
                             {{formatEffectiveDateTime(k.couponInfo.effectiveStartDate,k.couponInfo.effectiveEndDate)}}
                           </div>
@@ -80,6 +93,8 @@
   import Header from '@/common/_header.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
+
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -307,6 +322,11 @@
                 }
                 default: {
                   if (url.startsWith("http://") || url.startsWith("http://")) {
+                    let userInfo = this.$store.state.appconf.userInfo;
+                    if (!Util.isUserEmpty(userInfo)) {
+                      let user = JSON.parse(userInfo);
+                      url +=  "&open_id="+user.userId+"&return_url="+window.location.href;
+                    }
                     this.See(url);
                   }
                   return
@@ -315,6 +335,12 @@
 
             }
           } else if (url.startsWith("http://") || url.startsWith("http://")) {
+
+            let userInfo = this.$store.state.appconf.userInfo;
+            if (!Util.isUserEmpty(userInfo)) {
+              let user = JSON.parse(userInfo);
+              url +=  "&open_id="+user.userId+"&return_url="+window.location.href;
+            }
             this.See(url);
           }
         }
