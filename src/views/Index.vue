@@ -145,7 +145,7 @@
       if(auth_code != undefined)
       {
         //获取关爱通 access Token
-        this.ga_getAccessTokenInfo()
+        this.getThirdPartyAccessTokenInfo(auth_code)
         //获取关爱通 openId
 
       } else {
@@ -299,14 +299,15 @@
         this.$jsbridge.call("initStatusBarColor", color);
       },
 
-      ga_getAccessTokenInfo() {
+      getThirdPartyAccessTokenInfo(authCode) {
         let that = this;
         that.$api.xapi({
           method: 'get',
           baseURL: this.$api.SSO_BASE_URL,
-          url:'/sso/pingan/token',
+          url:'/sso/thirdParty/token',
           params: {
-            initCode: initCode,
+            iAppId:  this.$api.APP_ID,
+            initCode: authCode,
           }
         }).then((response) => {
           let rt = response.data.data.result
