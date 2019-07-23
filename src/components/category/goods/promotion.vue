@@ -18,7 +18,7 @@
     <div class="promotionBody">
       <ul>
         <li v-for="(k,index) in detail.promotionSkus" :key="index">
-          <div class="goodsCard">
+          <div class="goodsCard" @click="onGoodsClick(k)">
               <van-col span="8" class="cardImg">
                 <img v-lazy="k.image">
               </van-col>
@@ -35,7 +35,7 @@
                     <div class="originPrice">￥{{k.price}}</div>
                   </van-col>
                   <van-col span="12" class="actionBox">
-                    <van-button type="primary" size="small" @click="onBuyBtnClick(k)">立即抢购</van-button>
+                    <van-button type="primary"  @click.stop="" size="small" @click="onAdd2carBtnClick(k)">立即抢购</van-button>
                   </van-col>
                 </div>
               </van-col>
@@ -49,6 +49,7 @@
 <script>
   import Header from '@/common/_header.vue'
   import CountDown from '@/common/_vue2-countdown.vue'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -88,6 +89,66 @@
     computed: {},
 
     methods: {
+      add2Car(userInfo, goods) {
+        let user = JSON.parse(userInfo);
+        this.$log(goods)
+        let userId = user.userId;
+        let mpu = goods.mpu;
+        if(mpu == null) {
+          mpu = goods.skuid;
+        }
+        let addtoCar = {
+          "openId": userId,
+          "mpu": mpu
+        }
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
+          url: '/cart',
+          data: addtoCar,
+        }).then((response) => {
+          this.result = response.data.data.result;
+          this.$log(this.result)
+          this.$toast("添加到购物车成功！")
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
+      onAdd2carBtnClick(goods) {
+        this.$log("onAdd2carBtnClick")
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          this.add2Car(userInfo, goods);
+        } else {
+          this.$toast("没有用户信息，请先登录,再添加购物车")
+        }
+      },
+      onGoodsClick(goods) {
+        this.$log("onGoodsClick Enter")
+        this.$log(goods)
+        let mpu = goods.mpu
+        if(mpu == null) {
+          mpu = goods.skuid;
+        }
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.PRODUCT_BASE_URL,
+            url: '/prod',
+            params: {
+              mpu: mpu,
+            }
+          }).then((res) => {
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
+      },
       countDownS_cb: function (x) {
         //console.log(x)
       },

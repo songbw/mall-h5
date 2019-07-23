@@ -133,8 +133,28 @@
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
       onListClick(goods) {
-        this.updateCurrentGoods(goods);
-        this.$router.push("/detail");
+        this.$log("onListClick Enter")
+        let mpu = goods.mpu
+        if(mpu == null) {
+          mpu = goods.skuid;
+        }
+        try {
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.PRODUCT_BASE_URL,
+            url: '/prod',
+            params: {
+              mpu: mpu,
+            }
+          }).then((res) => {
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
       },
       onAdd2carBtnClick(goods) {
         //this.$log("onAdd2carBtnClick Enter",goods)
