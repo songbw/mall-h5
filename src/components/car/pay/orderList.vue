@@ -323,41 +323,49 @@
       },
       onCancelBtnClick(listItem, i) {
         this.$log("onCancelBtnClick Enter")
-        let id = listItem.id
-        let index = this.active
-        this.reload = true;
-        let options = {
-          "id": id,
-          "status": 3
-        }
-        this.$api.xapi({
-          method: 'put',
-          baseURL: this.$api.ORDER_BASE_URL,
-          url: '/order/status',
-          data: options,
-        }).then((response) => {
-          if (response.data.code == 200) {
-            listItem.status = 3;
-            if(this.active != 0) {
-              let found = -1;
-              for (let i = 0; i < this.orderTypes[index].list.length; i++) {
-                this.$log("listItem.id:"+listItem.id)
-                this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
-                if (listItem.id === this.orderTypes[index].list[i].id) {
-                  found = i;
-                  break;
+        this.$dialog.confirm({
+          message: '确定取消订单?'
+        }).then(() => {
+          console.log("确定")
+          let id = listItem.id
+          let index = this.active
+          this.reload = true;
+          let options = {
+            "id": id,
+            "status": 3
+          }
+          this.$api.xapi({
+            method: 'put',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/order/status',
+            data: options,
+          }).then((response) => {
+            if (response.data.code == 200) {
+              listItem.status = 3;
+              if(this.active != 0) {
+                let found = -1;
+                for (let i = 0; i < this.orderTypes[index].list.length; i++) {
+                  this.$log("listItem.id:"+listItem.id)
+                  this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
+                  if (listItem.id === this.orderTypes[index].list[i].id) {
+                    found = i;
+                    break;
+                  }
+                }
+                this.$log("found is:"+found)
+                if (found != -1) {
+                  this.orderTypes[index].list.splice(found, 1)
+                  this.orderTypes[index].total--;
                 }
               }
-              this.$log("found is:"+found)
-              if (found != -1) {
-                this.orderTypes[index].list.splice(found, 1)
-                this.orderTypes[index].total--;
-              }
             }
-          }
-        }).catch(function (error) {
-          console.log(error)
-        })
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }).catch(() => {
+          console.log("不删")
+        });
+
       },
 
       onPayBtnClick(listItem, i) {

@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="wrap" :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
-    <van-swipe :autoplay="4000">
+    <van-swipe :autoplay="4000" indicator-color="white">
       <van-swipe-item v-for="(k,index) in datas.list" :key="index">
         <img :src="k.imageUrl" @click="onClick(k.targetUrl)">
       </van-swipe-item>
