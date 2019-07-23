@@ -16,7 +16,9 @@
               @end_callback="countDownE_cb"
               :startTime="PromotionStartTime"
               :endTime="PromotionEndTime"
-              :secondsTxt="''">
+              :secondsTxt="''"
+              backgroundColor="#FFFFFF"
+              textColor="#FF4444">
             </v-countdown>
           </div>
         </van-cell>

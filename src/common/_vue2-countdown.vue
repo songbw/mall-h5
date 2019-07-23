@@ -3,10 +3,10 @@
     <p v-if="msTime.show">
       <span v-if="tipShow">{{tipText}}:</span>
       <span v-if="!tipShow">{{tipTextEnd}}:</span>
-      <span v-if="msTime.day>0"><span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.day}}</span><i style="margin-left: 1px">{{dayTxt}}</i></span>
-      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.hour}}</span><i style="margin-left: 1px">{{hourTxt}}</i>
-      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.minutes}}</span><i style="margin-left: 1px">{{minutesTxt}}</i>
-      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.seconds}}</span><i style="margin-left: 1px">{{secondsTxt}}</i>
+      <span v-if="msTime.day>0"><span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.day}}</span><i class="timeSplitText">{{dayTxt}}</i></span>
+      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.hour}}</span><i class="timeSplitText">{{hourTxt}}</i>
+      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.minutes}}</span><i class="timeSplitText">{{minutesTxt}}</i>
+      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.seconds}}</span><i class="timeSplitText">{{secondsTxt}}</i>
 
     </p>
     <p v-if="!msTime.show">{{endText}}</p>
@@ -203,3 +203,9 @@
     }
   }
 </script>
+
+<style lang="less" scoped>
+  .timeSplitText{
+    padding-left: 3px ;
+  }
+</style>
