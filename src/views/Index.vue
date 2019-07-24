@@ -140,13 +140,14 @@
     },
 
     created() {
-      let auth_code = this.$route.query.auth_code;
-      this.$log(auth_code)
-      if(auth_code != undefined)
+      if(this.$api.APP_ID === "10")
       {
-        //获取关爱通 access Token
-        this.getThirdPartyAccessTokenInfo(auth_code)
-        //获取关爱通 openId
+        let auth_code = this.$route.query.auth_code;
+        this.$log(`auto_code$(auth_code)`)
+        if(auth_code != undefined) {
+          //获取关爱通openId
+          this.getThirdPartyAccessTokenInfo(auth_code)
+        }
 
       } else {
         this.initJsNativeCb();
@@ -207,7 +208,6 @@
           let accessToken = "TTTTTTTTTTTT"
           let userInfo = {
             openId: openId,
-            userToken: "xxxxxxxxxxxxx",
             accessToken: accessToken,
             userId: userId
           }
@@ -254,13 +254,12 @@
           try {
             let jsonObj = JSON.parse(jsonString);
             let openId = jsonObj.openId;
-            let userToken = jsonObj.userToken;
+            let accessToken = jsonObj.userToken;
             if (openId != undefined) {
               let userId = that.$api.APP_ID + openId;
               let userInfo = {
                 openId: openId,
                 accessToken: accessToken,
-                userToken: userToken,
                 userId: userId
               }
               that.$log("userInfo  is:" + JSON.stringify(userInfo));
@@ -312,6 +311,19 @@
         }).then((response) => {
           let rt = response.data.data.result
           that.$log("rt:" + JSON.stringify(rt));
+          let openId = rt.openId;
+          let accessToken = rt.accessToken;
+          if (openId != undefined) {
+            let userId = that.$api.APP_ID + openId;
+            let userInfo = {
+              openId: openId,
+              accessToken: rt.accessToken,
+              userId: userId
+            }
+            that.$log("userInfo  is:" + JSON.stringify(userInfo));
+            that.$store.commit('SET_USER', JSON.stringify(userInfo));
+            that.thirdPartLogined(userId, accessToken)
+          }
         }) .catch(function (error) {
           that.$log(error)
         })
