@@ -213,7 +213,7 @@
           }
           this.$log(userInfo)
           this.$store.commit('SET_USER', JSON.stringify(userInfo));
-          this.thirdPartLogined(userId,accessToken);
+          this.thirdPartLogined(openId,accessToken);
         }
       },
       closeWindow() {
@@ -264,7 +264,7 @@
               }
               that.$log("userInfo  is:" + JSON.stringify(userInfo));
               that.$store.commit('SET_USER', JSON.stringify(userInfo));
-              that.thirdPartLogined(userId, accessToken)
+              that.thirdPartLogined(openId, accessToken)
             }
           } catch (e) {
             that.$log(e)
@@ -272,15 +272,16 @@
         })
       },
 
-      thirdPartLogined(userId, accessToken) {
+      thirdPartLogined(openId, accessToken) {
         let that = this;
         this.$api.xapi({
           method: 'post',
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/thirdLogin',
           data: {
+            iAppId: this.$api.APP_ID,
             accessToken: accessToken,
-            openId: userId,
+            openId: openId,
           }
         }).then((response) => {
           let rt = response.data.data.result
@@ -322,7 +323,7 @@
             }
             that.$log("userInfo  is:" + JSON.stringify(userInfo));
             that.$store.commit('SET_USER', JSON.stringify(userInfo));
-            that.thirdPartLogined(userId, accessToken)
+            that.thirdPartLogined(openId,accessToken)
           }
         }) .catch(function (error) {
           that.$log(error)

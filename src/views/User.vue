@@ -111,11 +111,11 @@
           baseURL: this.$api.SSO_BASE_URL,
           url: '/user',
           params: {
-            openId: user.userId,
+            iAppId: this.$api.APP_ID,
+            openId: user.openId,
           }
         }).then((response) => {
           let user = response.data.data.user;
-
           if (user != null) {
             this.$log("xxxxxxxxxxxxxxxxxx")
             this.user = user;
