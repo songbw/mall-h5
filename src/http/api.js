@@ -6,7 +6,8 @@ const SERVER_BASE_URL = "http://119.3.111.161:8080"
 const OPEN_CASHER_URL = "http://localhost:1322/#/pay/casher";
 const USER_BASE_URL="http://119.3.3.226:8081/";
 
-const APP_ID = "10" //无锡市民卡
+const APP_ID = "11" //10:关爱通
+const T_APP_ID ="" //20110843:关爱通
 const SERVR_PHONE_NUM= "4000797717";
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 
@@ -78,6 +79,7 @@ export default {
   xapi,
   GOODS_URL_PREFIX,
   APP_ID,
+  T_APP_ID,
   SERVR_PHONE_NUM,
   OPEN_CASHER_URL,
   USER_BASE_URL,

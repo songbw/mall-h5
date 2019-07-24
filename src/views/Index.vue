@@ -337,9 +337,9 @@
           that.$api.xapi({
             method: 'get',
             baseURL: this.$api.SSO_BASE_URL,
-            url:'/sso/pingan/token',
-            // url: '/zhcs/token',
+            url:'/sso/thirdParty/token',
             params: {
+              iAppId:  this.$api.APP_ID,
               initCode: initCode,
             }
           }).then((response) => {

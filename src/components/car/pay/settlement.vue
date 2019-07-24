@@ -1154,7 +1154,7 @@
             if (found != -1) {
               couponDiscountOfMerchant = couponInfo.merchants[found].couponDiscountOfMerchant;
             }
-            let saleAmount = amount - promotionDiscountOfMerchant - couponDiscountOfMerchant;
+            let saleAmount = amount - couponDiscountOfMerchant;
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.merchantCode, //商户号
@@ -1193,7 +1193,9 @@
         let that = this;
         //pAnOrderInfo.orderAmount = 1 //for test
         let options = {
-          "openId": pAnOrderInfo.openId,
+          "iAppId": this.$api.APP_ID,
+          "tAppId": this.$api.T_APP_ID,
+          "openId": user.userId,
           "appId": this.$api.APP_ID,
           "merchantNo": merchantNo,
           "orderNos": orderNos,
@@ -1204,8 +1206,7 @@
         that.$api.xapi({
           method: 'post',
           baseURL: this.$api.SSO_BASE_URL,
-          // url: '/zhcs/payment',
-          url: '/payment/pingan',
+          url: '/payment',
           data: options,
         }).then((response) => {
           that.$log("预下单返回 :" + JSON.stringify(response.data))
