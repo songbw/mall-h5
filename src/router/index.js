@@ -16,6 +16,7 @@ const Address = resolve => require(['@/components/car/pay/address.vue'], resolve
 const AddressList = resolve => require(['@/components/car/pay/addressList.vue'], resolve)
 const Login = resolve => require(['@/views/login.vue'], resolve)
 const Casher = resolve => require(['@/components/car/pay/casher.vue'], resolve)
+const Cashering = resolve => require(['@/components/car/pay/cashering.vue'], resolve)
 const Promotion = resolve => require(['@/components/category/goods/promotion.vue'], resolve)
 const AfterSaleService = resolve => require(['@/components/car/pay/afterSaleService.vue'], resolve)
 const CouponCenter = resolve => require(['@/components/user/couponCenter.vue'], resolve)
@@ -63,6 +64,11 @@ export default new VueRouter({
       path: '/pay/casher',
       name: '收银台页',
       component: Casher
+    },
+    {
+      path: '/pay/cashering',
+      name: '支付中页',
+      component: Cashering
     },
     {
       path: '/car',

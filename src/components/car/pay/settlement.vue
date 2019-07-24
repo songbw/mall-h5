@@ -1192,6 +1192,11 @@
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo) {
         let that = this;
         //pAnOrderInfo.orderAmount = 1 //for test
+        let returnUrl = ""
+        if(this.$api.APP_ID === "10")
+        {
+          returnUrl  =   window.location.origin+"/pay/cashering";
+        }
         let options = {
           "iAppId": this.$api.APP_ID,
           "tAppId": this.$api.T_APP_ID,
@@ -1200,7 +1205,8 @@
           "merchantNo": merchantNo,
           "orderNos": orderNos,
           "goodsName": "商品支付订单",
-          "amount": pAnOrderInfo.orderAmount
+          "amount": pAnOrderInfo.orderAmount,
+          "returnUrl": returnUrl,
         }
         that.$log("预下单:" + JSON.stringify(options))
         that.$api.xapi({
