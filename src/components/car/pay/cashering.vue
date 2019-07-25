@@ -7,7 +7,7 @@
     <div class="casheringBox">
       <div class="casheringBoxCard">
         <img :src="ico_clock"/>
-        <span>支付完成，页面自动跳转</span>
+        <span>{{payInfoText}}</span>
       </div>
     </div>
   </div>
@@ -26,6 +26,7 @@
         ico_clock: require('@/assets/icons/ico_clock.png'),
         timer: '',
         value: 0,
+        payInfoText:'支付完成，页面自动跳转'
       }
     },
     computed: {
@@ -51,9 +52,32 @@
     methods: {
       checkPaymentStatus() {
         this.value++;
+        let that = this;
         if(this.value < 10) {
-          this.$log(this.value)
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/order/payment/status',
+            params: {
+              outerTradeNo: this.payInfo.outer_trade_no
+            }
+          }).then((response) => {
+            this.$log(response)
+            let rt = response.data.data.result;
+            if(rt === 'success') {
+              this.payInfoText = "支付成功!"
+              this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+              this.$router.replace({path: '/car/orderList'})
+            }
+          }).catch(function (error) {
+            that.$log(error)
+            that.pageloading = false;
+            this.payInfoText = "网络错误!"
+            this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+            this.$router.replace({path: '/car/orderList'})
+          })
         } else {
+          this.payInfoText = "支付超时"
           this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
           this.$router.replace({path: '/car/orderList'})
         }
