@@ -8,7 +8,6 @@ const User = resolve => require(['@/views/User.vue'], resolve)
 const Detail = resolve => require(['@/views/Detail.vue'], resolve)
 const Search = resolve => require(['@/views/Search.vue'], resolve)
 const Settlement = resolve => require(['@/components/car/pay/settlement.vue'], resolve)
-const Invoice = resolve => require(['@/components/car/pay/invoice.vue'], resolve)
 const OrderList = resolve => require(['@/components/car/pay/orderList.vue'], resolve)
 const OrderDetail = resolve => require(['@/components/car/pay/orderDetail.vue'], resolve)
 const Logistics = resolve => require(['@/components/car/pay/logistics.vue'], resolve)
@@ -98,11 +97,6 @@ export default new VueRouter({
       path: '/car/Logistics',
       name: '物流信息页',
       component: Logistics
-    },
-    {
-      path: '/car/invoice',
-      name: '发票页',
-      component: Invoice
     },
     {
       path: '/car/address',

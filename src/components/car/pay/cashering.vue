@@ -1,27 +1,14 @@
 <template lang="html">
-  <div class="casher">
+  <div class="cashering">
     <v-header>
       <h1 slot="title">订单支付中</h1>
     </v-header>
-    <div class="pay-order">
-      <van-cell title="订单单号:">
-        <div slot="default">
-          <span>{{this.orderInfo.orderNo}}</span>
-        </div>
-      </van-cell>
-      <van-cell title="订单详情:">
-        <div slot="default">
-          <span>订单支付中</span>
-        </div>
-      </van-cell>
-    </div>
-    <div class="pay-amount">
-      <span>
-        ￥{{amount}}
-      </span>
-    </div>
-    <div class="footer_layout">
-      <van-button type="primary" size="large" @click="onPayBtnClick">支付</van-button>
+    <div class="box"></div>
+    <div class="casheringBox">
+      <div class="casheringBoxCard">
+        <img :src="ico_clock"/>
+        <span>支付完成，页面自动跳转</span>
+      </div>
     </div>
   </div>
 </template>
@@ -35,41 +22,23 @@
     },
     data() {
       return {
-         orderInfo:{}
+        payInfo: {},
+        ico_clock: require('@/assets/icons/ico_clock.png'),
       }
     },
     computed: {
       amount() {
-        return (this.orderInfo.orderAmount/100).toFixed(2)
+        /*        return (this.orderInfo.orderAmount/100).toFixed(2)*/
       }
     },
 
     created() {
       this.$log("cashser created Enter")
-      this.orderInfo = this.$route.params.orderInfo;
-      this.$log(this.orderInfo);
+      this.$log(this.$route.query)
+      this.payInfo = this.$route.query
     },
 
-    methods: {
-      onPayResult() {
-        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-        this.$router.replace({path: '/car/orderList'})
-      },
-      onPayBtnClick(){
-        this.$log("onPayBtnClick Enter")
-        this.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
-          url: '/payment',
-          data: this.orderInfo,
-        }).then((response) => {
-          this.$log(response)
-          this.onPayResult()
-        }).catch(function (error) {
-
-        })
-      }
-    }
+    methods: {}
   }
 </script>
 
@@ -77,38 +46,64 @@
   @import "../../../assets/fz.less";
   @import "../../../assets/index/style.css";
 
-  .casher {
+  .cashering {
     width: 100%;
     height: 100%;
     top: 0px;
     background-color: #f8f8f8;
 
-    .pay-order {
-      background-color: white;
-      margin-top: 10px;
-    }
-    .pay-amount {
-      background-color: white;
-      margin-top: 10px;
-      display: flex;
-      text-align: center;
-      justify-content: center;
-      height: 200px;
-      line-height: 200px;
-      color: #ff4444;
-      font-size: xx-large;
-      font-weight: bold;
-    }
-    .footer_layout{
+    .box {
+      padding-top: 2em;
+      position: relative;
       width: 100%;
-      height: 16vw;
-      display: -webkit-flex;
-      display: -ms-flex;
-      display: flex;
-      align-items: center;
-      position: fixed;
-      bottom: 0;
+      line-height: 15vw;
+      background-color: #ff4444;
+    }
+
+    .box:after {
+      position: absolute;
       left: 0;
+      right: 0;
+      bottom: -60px;
+      content: ' ';
+      height: 60px;
+      width: 100%;
+      border-radius: 0 0 30% 30%;
+      background-color: #ff4444;
+      overflow: hidden;
+    }
+
+    .casheringBox {
+      display: flex;
+      position: fixed;
+      width: 100%;
+      height: 85%;
+      justify-content: center;
+      justify-items: center;
+
+      .casheringBoxCard {
+        z-index: 1;
+        width: 96%;
+        background-color: white;
+        border-radius: 5px;
+        height: 100%;
+        top: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
+
+        img {
+          height: 120px;
+          width: 120px;
+        }
+
+        span {
+          margin: 5vw 0vw 5vw 0vw;
+          .fz(font-size, 30);
+          color: #8c8c8c;
+        }
+      }
     }
   }
 </style>

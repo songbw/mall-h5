@@ -329,12 +329,12 @@
     background-color: #f8f8f8;
 
     .box {
-      padding-top: 2em;
-      position: relative;
-      width: 100%;
-      line-height: 15vw;
-      background-color: #ff4444;
-    }
+           padding-top: 2em;
+           position: relative;
+           width: 100%;
+           line-height: 15vw;
+           background-color: #ff4444;
+         }
     .box:after {
       position: absolute;
       left: 0;
