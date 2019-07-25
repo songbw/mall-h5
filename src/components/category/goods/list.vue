@@ -260,7 +260,11 @@
     }
     .van-list {
       padding-top: 2.3em;
+      width: 100%;
+      height: 100%;
+      top: 0px;
       background-color: #f8f8f8;
+
       .van-card {
         background-color: #ffffff;
         margin-top: 1em;

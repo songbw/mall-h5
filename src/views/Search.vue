@@ -1,5 +1,5 @@
 <template lang="html">
-  <section>
+  <section class="search">
     <header>
       <van-icon class="arrowback" name="arrow-left" size="1.2em" @click="$router.go(-1)" slot="left"/>
       <van-search
@@ -88,46 +88,55 @@
   @import '../assets/fz.less';
   @import '../assets/index/style.css';
 
-  header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    .arrowback{
-      margin-left: 0.8em;
+  .search {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .arrowback {
+        margin-left: 0.8em;
+      }
+
+      .van-search {
+        width: 100%;
+      }
     }
-    .van-search {
-      width: 100%;
+
+    .hotSearchtitle {
+      .bt();
+      text-align: left;
+      .fz(font-size, 30);
+      font-weight: bold;
+      position: relative;
+      background-color: #ffffff;
+      padding-left: 10px;
+      padding-top: 10px;
+    }
+
+    hotSearch {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .van-search {
+        width: 100%;
+      }
+    }
+
+    .item {
+      font-size: 40px;
+      display: inline-block;
+      -webkit-box-sizing: border-box;
+      -moz-box-sizing: border-box;
+      box-sizing: border-box;
+      margin-top: 8px;
+      margin-left: 5px;
     }
   }
 
-  .hotSearchtitle {
-    .bt();
-    text-align: left;
-    .fz(font-size, 30);
-    font-weight: bold;
-    position: relative;
-    background-color: #ffffff;
-    padding-left: 10px;
-    padding-top: 10px;
-  }
-
-  hotSearch {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .van-search {
-      width: 100%;
-    }
-  }
-
-  .item {
-    font-size: 40px;
-    display: inline-block;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-    margin-top: 8px;
-    margin-left: 5px;
-  }
 </style>
