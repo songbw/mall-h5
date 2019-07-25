@@ -1140,7 +1140,7 @@
             })
             //APP ID 10:无锡市民卡 (2位) + CITY ID (3位)+ 商户 ID (2位)+ 用户ID (8位)
             // let usrId = this.prefixInteger(user.userId, 8);
-            let tradeNo = "10" + locationCode.cityId + item.merchantCode + user.userId
+            let tradeNo = this.$api.APP_ID + locationCode.cityId + item.merchantCode + user.userId
 
             let couponDiscountOfMerchant = 0;
             let found = -1;
