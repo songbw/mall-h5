@@ -8,7 +8,8 @@
         <img :src="couponCenterHeaderImg">
       </div>
       <div class="couponCenterMain">
-        <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable :ellipsis=false title-active-color="#FF4444">
+        <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable
+                  :ellipsis=false title-active-color="#FF4444">
           <van-tab v-for="(item,type) in couponTypes" :key="type">
             <div slot="title" style="min-width: 70px;">
               <span style="font-size: medium;font-weight: bold">
@@ -29,8 +30,8 @@
                         <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
                         <i>{{k.name}}</i>
                       </div>
-<!--                      <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
-                      <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>-->
+                      <!--                      <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
+                                            <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>-->
                       <div class="coupon-price">
                         <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
                         {{formateCouponPrice(k.rules.couponRules)}}
@@ -235,55 +236,77 @@
         this.$log("getCouponClick Enter")
       },
 
-
+      isCouponActivied(couponInfo) {
+        this.$log(couponInfo)
+        let ret = "";
+        let startTime = new Date(couponInfo.effectiveStartDate).getTime()
+        let endTime = new Date(couponInfo.effectiveEndDate).getTime()
+        let current = new Date().getTime()
+        if (current < startTime) {
+          ret =  "优惠券活动未开始"//券活动未开始
+        } else if (current <= endTime) {
+          ret =  "success" //活动开始
+        } else {
+          ret = "优惠券已无效"// 活动已经结束
+        }
+        return ret
+      },
 
       onConponUseClick(couponInfo, i) {
         this.$log("onConponUseClick Enter")
-        let url = couponInfo.url;
-        if (url.startsWith("aggregation://")) {
-          let id = url.substr(14);
-          this.$router.push({path: '/index/' + id});
-        } else if (url.startsWith("route://")) {
-          let target = url.substr(8);
-          let paths = target.split("/");
-          this.$log(paths);
-          if (paths[0] === 'category') {
-            this.$router.push({path: '/category'})
-          } else if (paths[0] === 'commodity') {
-            try {
-              if (paths[1] != null)
-                this.gotoGoodsPage(paths[1]);
-            } catch (e) {
-            }
-          } else if (paths[0] === 'listing') {
-            switch(couponInfo.rules.scenario.type) {
-              case 1: {
-                let coupon = {
-                  "couponInfo": couponInfo
+        let ret = this.isCouponActivied(coupon);
+        if (ret == "success") {
+          let url = couponInfo.url;
+          if (url.startsWith("aggregation://")) {
+            let id = url.substr(14);
+            this.$router.push({path: '/index/' + id});
+          } else if (url.startsWith("route://")) {
+            let target = url.substr(8);
+            let paths = target.split("/");
+            this.$log(paths);
+            if (paths[0] === 'category') {
+              this.$router.push({path: '/category'})
+            } else if (paths[0] === 'commodity') {
+              try {
+                if (paths[1] != null)
+                  this.gotoGoodsPage(paths[1]);
+              } catch (e) {
+              }
+            } else if (paths[0] === 'listing') {
+              switch (couponInfo.rules.scenario.type) {
+                case 1: {
+                  let coupon = {
+                    "couponInfo": couponInfo
+                  }
+                  this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
+                  this.$router.push("/user/couponListActivity");
+                  return;
                 }
-                this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
-                this.$router.push("/user/couponListActivity");
-                return;
-              }
-              case 2: {
-                this.$router.push({path:"/category"});
-                return
-              }
-              case 3: {
-                this.$router.push({path:"/category/"+couponInfo.rules.scenario.categories[0]});
-                return
-              }
-              default: {
-                if (url.startsWith("http://") || url.startsWith("http://")) {
-                  this.See(url);
+                case 2: {
+                  this.$router.push({path: "/category"});
+                  return
                 }
-                return
+                case 3: {
+                  this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
+                  return
+                }
+                default: {
+                  if (url.startsWith("http://") || url.startsWith("http://")) {
+                    this.See(url);
+                  }
+                  return
+                }
               }
             }
+          } else if (url.startsWith("http://") || url.startsWith("http://")) {
+            this.See(url);
           }
-        } else if (url.startsWith("http://") || url.startsWith("http://")) {
-          this.See(url);
+        } else {
+          if (ret.length > 0) {
+            this.$toast(ret)
+          }
         }
+
       },
       onConponCollectClick(coupon, i) {
         this.$log("onConponCollectClick Enter");
@@ -532,6 +555,7 @@
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
                 word-break: break-all;
+
                 span {
                   background-color: #ff4444;
                   padding: 2px 5px;

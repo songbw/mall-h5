@@ -18,9 +18,11 @@
                 <li v-for="(k,i) in item.list" :key=i style="list-style: none">
                   <div style="padding:2px;background-color: #f8f8f8">
                     <div class="coupon coupon-white">
-                      <div  @touchmove="gtouchmove()" @touchstart="touchEvtStart(k,type,i)" @touchend="touchEvtEnd()" class="coupon-main">
+                      <div @touchmove="gtouchmove()" @touchstart="touchEvtStart(k,type,i)" @touchend="touchEvtEnd()"
+                           class="coupon-main">
                         <div class="coupon-img">
-                          <img :src="(k.couponInfo.imageUrl != undefined && k.couponInfo.imageUrl.length > 0)?k.couponInfo.imageUrl : couponImg">
+                          <img
+                            :src="(k.couponInfo.imageUrl != undefined && k.couponInfo.imageUrl.length > 0)?k.couponInfo.imageUrl : couponImg">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
                           <div class="coupon-suppler" v-if="type === 0">
@@ -142,11 +144,11 @@
 
     mounted() {
       this.active = this.$store.state.appconf.currentOrderListIndex;
-/*      setTimeout(() => {
-        if (!this.launchedLoading) {
-            this.onLoad(this.active)
-        }
-      }, 1000);*/
+      /*      setTimeout(() => {
+              if (!this.launchedLoading) {
+                  this.onLoad(this.active)
+              }
+            }, 1000);*/
     },
 
 
@@ -199,7 +201,7 @@
         this.Loop = 0;
       },
 
-      gtouchmove(){
+      gtouchmove() {
         clearTimeout(this.Loop);//清除定时器
         this.Loop = 0;
       },
@@ -270,7 +272,7 @@
                 if (that.couponTypes[index].list.length >= that.couponTypes[index].total) {
                   that.couponTypes[index].finished = true;
                   //that.$log("index:" + index);
-                 // that.$log(that.couponTypes[index]);
+                  // that.$log(that.couponTypes[index]);
                 }
                 that.$log("index:" + index);
                 that.$log(that.couponTypes[index]);
@@ -286,8 +288,8 @@
 
       onConponUseClick(coupon, i) {
         this.$log("onCouponUseClick Enter")
-        this.$log(coupon)
-        if (coupon.status === 1) { //未使用
+        let ret = this.isCouponActivied(coupon);
+        if (ret == "success") { //未使用
           let couponInfo = coupon.couponInfo;
           let url = couponInfo.url;
           if (url.startsWith("aggregation://")) {
@@ -306,18 +308,18 @@
               } catch (e) {
               }
             } else if (paths[0] === 'listing') {
-              switch(couponInfo.rules.scenario.type) {
+              switch (couponInfo.rules.scenario.type) {
                 case 1: {
                   this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
                   this.$router.push("/user/couponListActivity");
                   return;
                 }
                 case 2: {
-                  this.$router.push({path:"/category"});
+                  this.$router.push({path: "/category"});
                   return
                 }
                 case 3: {
-                  this.$router.push({path:"/category/"+couponInfo.rules.scenario.categories[0]});
+                  this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
                   return
                 }
                 default: {
@@ -325,7 +327,7 @@
                     let userInfo = this.$store.state.appconf.userInfo;
                     if (!Util.isUserEmpty(userInfo)) {
                       let user = JSON.parse(userInfo);
-                      url +=  "&open_id="+user.userId+"&return_url="+window.location.href;
+                      url += "&open_id=" + user.userId + "&return_url=" + window.location.href;
                     }
                     this.See(url);
                   }
@@ -339,11 +341,33 @@
             let userInfo = this.$store.state.appconf.userInfo;
             if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
-              url +=  "&open_id="+user.userId+"&return_url="+window.location.href;
+              url += "&open_id=" + user.userId + "&return_url=" + window.location.href;
             }
             this.See(url);
           }
+        } else {
+          if (ret.length > 0) {
+            this.$toast(ret)
+          }
         }
+      },
+
+      isCouponActivied(coupon) {
+        this.$log(coupon)
+        let ret = "";
+        if (coupon.status === 1) {
+          let startTime = new Date(coupon.couponInfo.effectiveStartDate).getTime()
+          let endTime = new Date(coupon.couponInfo.effectiveEndDate).getTime()
+          let current = new Date().getTime()
+          if (current < startTime) {
+            ret =  "优惠券活动未开始"//券活动未开始
+          } else if (current <= endTime) {
+            ret =  "success" //活动开始
+          } else {
+            ret =  "优惠券已无效"// 活动已经结束
+          }
+        }
+        return ret
       },
 
       onCouponCenterClick() {
@@ -548,6 +572,7 @@
                 font-size: 150%;
                 font-weight: bold;
                 color: #FF4444;
+
                 span {
                   font-size: 60%;
                   margin-left: .5rem;
@@ -559,6 +584,7 @@
                 font-size: 150%;
                 font-weight: bold;
                 color: #8c8c8c;
+
                 span {
                   font-size: 60%;
                   margin-left: .5rem;
@@ -581,6 +607,7 @@
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
                 word-break: break-all;
+
                 span {
                   background-color: #ff4444;
                   padding: 2px 5px;
@@ -601,6 +628,7 @@
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
                 word-break: break-all;
+
                 span {
                   background-color: #8c8c8c;
                   padding: 2px 5px;
@@ -608,6 +636,7 @@
                   border-radius: 8px;
                   .fz(font-size, 25);
                 }
+
                 i {
                   .fz(font-size, 28);
                 }
