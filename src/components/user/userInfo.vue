@@ -13,7 +13,7 @@
             <img :src="avatarDefaultImg">
           </div>
         </van-cell>
-        <van-cell title="用户ID">
+        <van-cell title="用户ID" v-if="user.openId != null">
           <div slot="label">
             <span>{{user.openId}}</span>
           </div>

@@ -24,6 +24,8 @@
       return {
         payInfo: {},
         ico_clock: require('@/assets/icons/ico_clock.png'),
+        timer: '',
+        value: 0,
       }
     },
     computed: {
@@ -32,13 +34,31 @@
       }
     },
 
+    mounted() {
+      this.timer = setInterval(this.checkPaymentStatus, 5000);
+    },
+
+    beforeDestroy() {
+      clearInterval(this.timer);
+    },
+
     created() {
       this.$log("cashser created Enter")
       this.$log(this.$route.query)
       this.payInfo = this.$route.query
     },
 
-    methods: {}
+    methods: {
+      checkPaymentStatus() {
+        this.value++;
+        if(this.value < 10) {
+          this.$log(this.value)
+        } else {
+          this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+          this.$router.replace({path: '/car/orderList'})
+        }
+      }
+    }
   }
 </script>
 
