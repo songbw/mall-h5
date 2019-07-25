@@ -349,6 +349,23 @@
     },
 
     computed: {
+      isCouponActivied(coupon) {
+        let ret = false;
+        if (coupon.status === 1) {
+          let startTime = new Date(coupon.couponInfo.effectiveStartDate).getTime()
+          let endTime = new Date(coupon.couponInfo.effectiveEndDate).getTime()
+          let current = new Date().getTime()
+          if (current < startTime) {
+            ret =  false//券活动未开始
+          } else if (current <= endTime) {
+            ret =  true //活动开始
+          } else {
+            ret =  false // 活动已经结束
+          }
+        }
+        return ret
+      },
+
       couponUsedTip() {
         if (this.couponList.length > 0) {
           if (this.usedCoupon != null) {
@@ -421,40 +438,42 @@
         let avaliableCouponList = []
         //this.$log(couponList)
         couponList.forEach(coupon => {
-          if (coupon.couponInfo.rules.couponRules.type === 0 ||
-            coupon.couponInfo.rules.couponRules.type == 2) {
-            let fullPrice = 0;
-            allPayList.forEach(payItem => {
-              if (payItem.valid) {
-                for (let i = 0; i < payItem.product.couponList.length; i++) {
-                  if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                    break;
+          if(this.isCouponActivied(coupon)) {
+            if (coupon.couponInfo.rules.couponRules.type === 0 ||
+              coupon.couponInfo.rules.couponRules.type == 2) {
+              let fullPrice = 0;
+              allPayList.forEach(payItem => {
+                if (payItem.valid) {
+                  for (let i = 0; i < payItem.product.couponList.length; i++) {
+                    if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
+                      fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                      break;
+                    }
                   }
                 }
+              })
+              switch (coupon.couponInfo.rules.couponRules.type) {
+                case 0:
+                  if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice) {
+                    //nothing to do
+                  } else {
+                    avaliableCouponList.push(coupon)
+                  }
+                  break;
+                case 2:
+                  if (fullPrice < coupon.couponInfo.rules.couponRules.discountCoupon.fullPrice) {
+                    //nothing to do
+                  } else {
+                    avaliableCouponList.push(coupon)
+                  }
+                  break;
+                default:
+                  avaliableCouponList.push(coupon)
+                  break;
               }
-            })
-            switch (coupon.couponInfo.rules.couponRules.type) {
-              case 0:
-                if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice) {
-                  //nothing to do
-                } else {
-                  avaliableCouponList.push(coupon)
-                }
-                break;
-              case 2:
-                if (fullPrice < coupon.couponInfo.rules.couponRules.discountCoupon.fullPrice) {
-                  //nothing to do
-                } else {
-                  avaliableCouponList.push(coupon)
-                }
-                break;
-              default:
-                avaliableCouponList.push(coupon)
-                break;
+            } else {
+              avaliableCouponList.push(coupon)
             }
-          } else {
-            avaliableCouponList.push(coupon)
           }
         });
         return avaliableCouponList;
