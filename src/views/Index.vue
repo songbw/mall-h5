@@ -148,7 +148,6 @@
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
-
       } else {
         this.initJsNativeCb();
         setTimeout(() => {

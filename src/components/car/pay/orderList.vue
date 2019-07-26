@@ -170,6 +170,11 @@
     },
 
     methods: {
+      See(e) {
+        this.$log("jump to:" + e)
+        window.location.href = e
+        //window.location.replace(e)
+      },
       getSavedPayOrderInfo(listItem) {
         /*        this.$log("getSavedPayOrderInfo Enter #########################")
                 this.$log(listItem.outTradeNo)
@@ -265,61 +270,95 @@
       },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
-        let options = {
-          "openId": pAnOrderInfo.openId,
-          "appId": this.$api.APP_ID,
-          "merchantNo": merchantNo,
-          "orderNos": orderNos,
-          "goodsName": "商品支付订单",
-          "amount": pAnOrderInfo.orderAmount
-        }
-        let savedOrderNo = this.getSavedPayOrderInfo(listItem);
-        this.$log("savedOrderNo:" + savedOrderNo)
-        if (savedOrderNo != null) {
-          pAnOrderInfo.orderNo = savedOrderNo
-          that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-          that.$jsbridge.call("openCashPage", pAnOrderInfo);
-          this.$router.replace({
-            name: "收银台页",
-            params: {
-              orderInfo: pAnOrderInfo
-            }
-          })
-        } else {
+        let returnUrl = ""
+        if(this.$api.APP_ID === "10")
+        {
+          returnUrl  =   "https://mall.weesharing.com/pay/cashering";
+          let options = {
+            "iAppId": this.$api.APP_ID,
+            "tAppId": this.$api.T_APP_ID,
+            "openId": user.openId,
+            "appId": this.$api.APP_ID,
+            "merchantNo": merchantNo,
+            "orderNos": orderNos,
+            "goodsName": "商品支付订单",
+            "amount": pAnOrderInfo.orderAmount,
+            "returnUrl": returnUrl,
+          }
           that.$log("预下单:" + JSON.stringify(options))
           that.$api.xapi({
+            method: 'post',
             baseURL: this.$api.SSO_BASE_URL,
-            // url: '/zhcs/payment',
-            url: '/payment/pingan',
+            url: '/payment',
             data: options,
           }).then((response) => {
             that.$log("预下单返回 :" + JSON.stringify(response.data))
-            if (response.data.msg === "会员不存在") {
-              //未开通钱包
-              let walletInfo = {
-                accessToken: user.accessToken,
-                openId: user.openId,
-              }
-              that.$log("walletInfo:" + JSON.stringify(walletInfo))
-              that.$jsbridge.call("dredgeWallet", walletInfo);
-            } else {
-              if (response.data.data.result != undefined) {
-                let orderNo = response.data.data.result.orderNo
-                pAnOrderInfo.orderNo = orderNo
-                that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-                that.$jsbridge.call("openCashPage", pAnOrderInfo);
-                this.$router.replace({
-                  name: "收银台页",
-                  params: {
-                    orderInfo: pAnOrderInfo
-                  }
-                })
-              }
+            if (response.data.data.result != undefined) {
+              let urlEncode = response.data.data.result.urlEncode;
+              this.See(urlEncode)
             }
           }).catch(function (error) {
             that.$log(error)
           })
+        } else {
+          let options = {
+            "openId": pAnOrderInfo.openId,
+            "appId": this.$api.APP_ID,
+            "merchantNo": merchantNo,
+            "orderNos": orderNos,
+            "goodsName": "商品支付订单",
+            "amount": pAnOrderInfo.orderAmount,
+            "returnUrl": returnUrl,
+          }
+          let savedOrderNo = this.getSavedPayOrderInfo(listItem);
+          this.$log("savedOrderNo:" + savedOrderNo)
+          if (savedOrderNo != null) {
+            pAnOrderInfo.orderNo = savedOrderNo
+            that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
+            that.$jsbridge.call("openCashPage", pAnOrderInfo);
+            this.$router.replace({
+              name: "收银台页",
+              params: {
+                orderInfo: pAnOrderInfo
+              }
+            })
+          } else {
+            that.$log("预下单:" + JSON.stringify(options))
+            that.$api.xapi({
+              baseURL: this.$api.SSO_BASE_URL,
+              // url: '/zhcs/payment',
+              url: '/payment/pingan',
+              data: options,
+            }).then((response) => {
+              that.$log("预下单返回 :" + JSON.stringify(response.data))
+              if (response.data.msg === "会员不存在") {
+                //未开通钱包
+                let walletInfo = {
+                  accessToken: user.accessToken,
+                  openId: user.openId,
+                }
+                that.$log("walletInfo:" + JSON.stringify(walletInfo))
+                that.$jsbridge.call("dredgeWallet", walletInfo);
+              } else {
+                if (response.data.data.result != undefined) {
+                  let orderNo = response.data.data.result.orderNo
+                  pAnOrderInfo.orderNo = orderNo
+                  that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
+                  that.$jsbridge.call("openCashPage", pAnOrderInfo);
+                  this.$router.replace({
+                    name: "收银台页",
+                    params: {
+                      orderInfo: pAnOrderInfo
+                    }
+                  })
+                }
+              }
+            }).catch(function (error) {
+              that.$log(error)
+            })
+          }
         }
+
       },
       onCancelBtnClick(listItem, i) {
         this.$log("onCancelBtnClick Enter")
