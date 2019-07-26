@@ -32,7 +32,7 @@
             <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath">
               <p class="sectionSlide-list-intro">
-                {{k.name == undefined? k.intro : k.name}}
+                {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
               </p>
               <div v-if="k.discount != undefined">
                 <div style="display: flex">
