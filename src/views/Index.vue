@@ -205,6 +205,8 @@
         this.$log("openId:" + openId);
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
+          //let auth_code = "12345678"
+          //this.getThirdPartyAccessTokenInfo(auth_code)
           let accessToken = "TTTTTTTTTTTT"
           let userInfo = {
             openId: openId,
