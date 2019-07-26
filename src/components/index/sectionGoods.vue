@@ -13,7 +13,7 @@
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <div class="goodsComment">
-                <p>{{k.name == undefined? k.intro : k.name}}</p>
+                <p>{{k.name}}</p>
               </div>
               <div class="goodsFooter">
                 <div class="goodsPriceBox">
