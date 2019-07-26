@@ -331,6 +331,7 @@
             that.$log(result)
             that.$log(that.couponTypes[that.active].list[i])
             that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
+            that.couponTypes[that.active].list[i].releaseNum++;
           }).catch(function (error) {
             that.$log(error)
           })
