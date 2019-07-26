@@ -243,9 +243,9 @@
         let endTime = new Date(couponInfo.effectiveEndDate).getTime()
         let current = new Date().getTime()
         if (current < startTime) {
-          ret =  "优惠券活动未开始"//券活动未开始
+          ret = "优惠券活动未开始"//券活动未开始
         } else if (current <= endTime) {
-          ret =  "success" //活动开始
+          ret = "success" //活动开始
         } else {
           ret = "优惠券已无效"// 活动已经结束
         }
@@ -254,7 +254,7 @@
 
       onConponUseClick(couponInfo, i) {
         this.$log("onConponUseClick Enter")
-        let ret = this.isCouponActivied(coupon);
+        let ret = this.isCouponActivied(couponInfo);
         if (ret == "success") {
           let url = couponInfo.url;
           if (url.startsWith("aggregation://")) {
@@ -308,6 +308,7 @@
         }
 
       },
+
       onConponCollectClick(coupon, i) {
         this.$log("onConponCollectClick Enter");
         this.$log(coupon)
@@ -332,6 +333,21 @@
             that.$log(that.couponTypes[that.active].list[i])
             that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
             that.couponTypes[that.active].list[i].releaseNum++;
+            /*            that.couponTypes.forEach((item =>{
+                           if(item.category === that.couponTypes[that.active].category) {
+
+                           }
+                        }))*/
+            for (let i = 0; i < that.couponTypes.length; i++) {
+              if (i != that.active && that.couponTypes[i].category === that.couponTypes[that.active].category) {
+                that.couponTypes[i].list = []
+                that.couponTypes[i].total = -1
+                that.couponTypes[i].pageNo = 1
+                that.couponTypes[i].status = -1
+                that.couponTypes[i].loading = false
+                that.couponTypes[i].finished = false
+              }
+            }
           }).catch(function (error) {
             that.$log(error)
           })
