@@ -52,7 +52,7 @@
                   <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
                        @click="onConponUseClick(k,i)">
                     <div>
-                      <span class="coupon-action">立即使用</span>
+                      <span class="coupon-action" v-if="k.url != undefined && k.url.length > 0">立即使用</span>
                     </div>
                   </div>
                   <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
@@ -315,7 +315,8 @@
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         that.$log(userInfo)
-        if (!that.isUserEmpty(userInfo)) {
+        if (!that.isUserEmpty(userInfo) &&
+          couponInfo.releaseTotal > couponInfo.releaseNum) {
           let user = JSON.parse(userInfo);
           let options = {
             // userOpenId:"1044391000fd194ab888b1aa81c03c3710",//user.userId,
