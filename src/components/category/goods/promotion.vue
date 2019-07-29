@@ -64,6 +64,14 @@
       }
     },
 
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+        }, 20);
+      })
+    },
+
     created() {
       let id = this.$route.params.id;
       this.$log("promotion:" + id)

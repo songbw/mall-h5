@@ -76,14 +76,19 @@
     },
     created() {
       if (this.datas.settings.title.hasPromotionActivity) {
-        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate).getTime() // new Date('2019/03/27 10:10:10').getTime()
-        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime() //new Date('2019/03/28 20:10:10').getTime()
-        // this.PromotionStartTime = new Date('2019/04/1 17:59:10').getTime()
-        // this.PromotionEndTime = new Date('2019/04/1 18:02:10').getTime()
-
+        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate).getTime()
+        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime()
         this.promotionActivityId = this.datas.settings.title.promotionActivityId
       }
     },
+
+    activated() {
+      if (this.datas.settings.title.hasPromotionActivity) {
+        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate).getTime()
+        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime()
+      }
+    },
+
     methods: {
       isDeepColor(hexColor) {
         this.$log("isDeepColor:" + hexColor)
