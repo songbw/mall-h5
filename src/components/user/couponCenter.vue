@@ -319,7 +319,7 @@
         let userInfo = this.$store.state.appconf.userInfo;
         that.$log(userInfo)
         if (!that.isUserEmpty(userInfo) &&
-          couponInfo.releaseTotal > couponInfo.releaseNum) {
+          coupon.releaseTotal > coupon.releaseNum) {
           let user = JSON.parse(userInfo);
           let options = {
             // userOpenId:"1044391000fd194ab888b1aa81c03c3710",//user.userId,
