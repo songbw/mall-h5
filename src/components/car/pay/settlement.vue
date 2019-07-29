@@ -349,23 +349,6 @@
     },
 
     computed: {
-      isCouponActivied(coupon) {
-        let ret = false;
-        if (coupon.status === 1) {
-          let startTime = new Date(coupon.couponInfo.effectiveStartDate).getTime()
-          let endTime = new Date(coupon.couponInfo.effectiveEndDate).getTime()
-          let current = new Date().getTime()
-          if (current < startTime) {
-            ret =  false//券活动未开始
-          } else if (current <= endTime) {
-            ret =  true //活动开始
-          } else {
-            ret =  false // 活动已经结束
-          }
-        }
-        return ret
-      },
-
       couponUsedTip() {
         if (this.couponList.length > 0) {
           if (this.usedCoupon != null) {
@@ -661,6 +644,22 @@
     },
 
     methods: {
+      isCouponActivied(coupon) {
+        let ret = false;
+        if (coupon.status === 1) {
+          let startTime = new Date(coupon.couponInfo.effectiveStartDate).getTime()
+          let endTime = new Date(coupon.couponInfo.effectiveEndDate).getTime()
+          let current = new Date().getTime()
+          if (current < startTime) {
+            ret =  false//券活动未开始
+          } else if (current <= endTime) {
+            ret =  true //活动开始
+          } else {
+            ret =  false // 活动已经结束
+          }
+        }
+        return ret
+      },
       formateCouponPrice(rules) {
         switch (rules.type) {
           case 0://满减券
