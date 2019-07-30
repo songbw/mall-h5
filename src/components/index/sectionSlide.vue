@@ -37,16 +37,16 @@
               <div v-if="k.discount != undefined">
                 <div style="display: flex">
                   <p class="sectionSlide-list-sales-price">
-                    ￥{{k.price-k.discount}}
+                    <span>￥</span>{{k.price-k.discount}}
                   </p>
                   <p class="sectionSlide-list-origin-price">
-                    ￥{{k.price}}
+                    <span>￥</span>{{k.price}}
                   </p>
                 </div>
               </div>
               <div v-else>
                 <p class="sectionSlide-list-sales-price">
-                  ￥{{k.price}}
+                  <span>￥</span>{{k.price}}
                 </p>
               </div>
             </li>
@@ -298,17 +298,22 @@
             }
 
             p.sectionSlide-list-origin-price {
-              margin: 4px;
+              margin: 6px 2px 2px 2px;
               color: #707070;
-              .fz(font-size, 25);
-              text-decoration: line-through
+              .fz(font-size, 20);
+              text-decoration: line-through;
+              span{
+                .fz(font-size, 15);
+              }
             }
 
             p.sectionSlide-list-sales-price {
               margin: 2px;
               color: #ff4444;
-              .fz(font-size, 30);
-              font-weight: bold;
+              .fz(font-size, 28);
+              span{
+                .fz(font-size, 20);
+              }
             }
           }
         }
