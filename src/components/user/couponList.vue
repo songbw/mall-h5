@@ -240,6 +240,18 @@
         this.$log("onLoad:" + index)
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
+        let status = 1;
+        switch (index) {
+          case 0:
+            status = 1; //未使用
+            break;
+          case 1:
+            status = 3; //已使用
+            break;
+          case 2:
+            status = 4; //过期
+            break;
+        }
         if (!that.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list.length) {
@@ -247,7 +259,7 @@
             let options =
               {
                 userOpenId: user.userId,
-                status: index + 1,
+                status: status,
                 "offset": that.couponTypes[index].pageNo++,
                 "limit": 5
               }

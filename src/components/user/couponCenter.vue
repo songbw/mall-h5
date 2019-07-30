@@ -134,7 +134,7 @@
         }
         let categories = result.categorys;
         categories.forEach(item => {
-          if(item.id != null && item.name == null) {
+          if(item.id != null && item.name != null) {
             let type = {
               "title": item.name,
               "type": "category",
