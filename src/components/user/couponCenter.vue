@@ -134,18 +134,20 @@
         }
         let categories = result.categorys;
         categories.forEach(item => {
-          let type = {
-            "title": item.name,
-            "type": "category",
-            "id": item.id,
-            "list": [],
-            "total": -1,
-            "pageNo": 1,
-            "status": -1,
-            "loading": false,
-            "finished": false,
+          if(item.id != null && item.name == null) {
+            let type = {
+              "title": item.name,
+              "type": "category",
+              "id": item.id,
+              "list": [],
+              "total": -1,
+              "pageNo": 1,
+              "status": -1,
+              "loading": false,
+              "finished": false,
+            }
+            that.couponTypes.push(type);
           }
-          that.couponTypes.push(type);
         })
         that.$log(that.couponTypes)
 
