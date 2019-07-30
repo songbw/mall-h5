@@ -47,9 +47,11 @@
         backIsDeepColor: false
       }
     },
+
     watch: {
       mBackgroundColor: function(newVal){
         this.defaultBgColor = newVal;
+        this.isDeepColor(this.defaultBgColor)
       }
     },
 
