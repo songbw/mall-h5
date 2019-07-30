@@ -1,74 +1,81 @@
 <template lang="html">
   <section class="couponCenter">
-    <v-header class="header">
+    <v-header class="header" :mBackgroundColor="headerColor">
       <h1 slot="title">领券中心</h1>
     </v-header>
     <div class="couponCenterBody">
-      <div class="couponCenterHeader">
+<!--      <div class="couponCenterHeader">
         <img :src="couponCenterHeaderImg">
-      </div>
+      </div>-->
       <div class="couponCenterMain">
-        <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable
-                  :ellipsis=false title-active-color="#FF4444">
-          <van-tab v-for="(item,type) in couponTypes" :key="type">
-            <div slot="title" style="min-width: 70px;">
-              <span style="font-size: medium;font-weight: bold">
-                {{item.title}}
-              </span>
-            </div>
-            <van-list v-model="item.loading"
-                      :finished="item.finished"
-                      @load="onLoad(active)">
-              <div class="couponList">
-                <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
-                  <div class="coupon-main">
-                    <div class="coupon-img" v-if="k.releaseTotal > k.releaseNum">
-                      <img :src="k.imageUrl.length?k.imageUrl: couponImg">
-                    </div>
-                    <div class="coupon-img coupon-img-allreleased" v-else>
-                      <img :src="k.imageUrl.length?k.imageUrl: couponImg">
-                    </div>
-                    <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                      <div class="coupon-suppler">
-                        <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
-                        <i>{{k.name}}</i>
+        <div v-if="couponTypes.length > 0">
+          <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable
+                    :ellipsis=false title-active-color="#FF4444" title-inactive-color="#555555">
+            <van-tab v-for="(item,type) in couponTypes" :key="type">
+              <div slot="title" style="min-width: 70px;">
+                        <span style="font-size: medium;font-weight: bold">
+                          {{item.title}}
+                        </span>
+              </div>
+              <van-list v-model="item.loading"
+                        :finished="item.finished"
+                        @load="onLoad(active)">
+                <div class="couponList">
+                  <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
+                    <div class="coupon-main">
+                      <div class="coupon-img" v-if="k.releaseTotal > k.releaseNum">
+                        <img :src="k.imageUrl.length?k.imageUrl: couponImg">
                       </div>
-                      <!--                      <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
-                                            <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>-->
-                      <div class="coupon-price">
-                        <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
-                        {{formateCouponPrice(k.rules.couponRules)}}
-                        <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+                      <div class="coupon-img coupon-img-allreleased" v-else>
+                        <img :src="k.imageUrl.length?k.imageUrl: couponImg">
                       </div>
-                      <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
-                      <div class="coupon-expire-date">
-                        {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
-                      </div>
-                      <div class="coupon-progress">
-                        <van-progress
-                          color="#f44"
-                          :percentage=formateReleasePercentage(k)
-                        />
+                      <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                        <div class="coupon-suppler">
+                          <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
+                          <i>{{k.name}}</i>
+                        </div>
+                        <!--                      <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
+                                              <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>-->
+                        <div class="coupon-price">
+                          <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                          {{formateCouponPrice(k.rules.couponRules)}}
+                          <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+                        </div>
+                        <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
+                        <div class="coupon-expire-date">
+                          {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+                        </div>
+                        <div class="coupon-progress">
+                          <van-progress
+                            color="#f44"
+                            :percentage=formateReleasePercentage(k)
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
-                       @click="onConponUseClick(k,i)">
-                    <div>
-                      <span class="coupon-action" v-if="k.url != undefined && k.url.length > 0">立即使用</span>
+                    <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
+                         @click="onConponUseClick(k,i)">
+                      <div>
+                        <span class="coupon-action" v-if="k.url != undefined && k.url.length > 0">立即使用</span>
+                      </div>
                     </div>
-                  </div>
-                  <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
-                    <div>
-                      <span class="coupon-action">立即领取</span>
+                    <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
+                      <div>
+                        <span class="coupon-action">立即领取</span>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-            </van-list>
-          </van-tab>
-        </van-tabs>
+              </van-list>
+            </van-tab>
+          </van-tabs>
+        </div>
+        <div class="noCoupon" v-else>
+          <img :src="icon_noCoupon">
+          <span class="noCoupon_line1">很遗憾</span>
+          <span class="noCoupon_line2">暂时还没有可领取优惠券</span>
+        </div>
       </div>
     </div>
   </section>
@@ -93,6 +100,8 @@
         couponImg: require('@/assets/icons/ico_coupon.png'),
         couponTypes: [],
         couponCenterHeaderImg: require('@/assets/icons/ico_couponCenterHeader.jpg'),
+        icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
+        headerColor:"#FFFFFF"
       }
     },
 
@@ -107,20 +116,22 @@
         let result = response.data.data.result;
         that.$log(result)
         let tags = result.tags;
-        tags.forEach(item => {
-          let type = {
-            "title": item.name,
-            "type": "tag",
-            "id": item.id,
-            "list": [],
-            "total": -1,
-            "pageNo": 1,
-            "status": -1,
-            "loading": false,
-            "finished": false,
-          }
-          that.couponTypes.push(type);
-        })
+        if(tags != null) {
+          tags.forEach(item => {
+            let type = {
+              "title": item.name,
+              "type": "tag",
+              "id": item.id,
+              "list": [],
+              "total": -1,
+              "pageNo": 1,
+              "status": -1,
+              "loading": false,
+              "finished": false,
+            }
+            that.couponTypes.push(type);
+          })
+        }
         let categories = result.categorys;
         categories.forEach(item => {
           let type = {
@@ -434,6 +445,38 @@
 
       .couponCenterMain {
         width: 100%;
+
+        .noCoupon {
+          width: 100%;
+          margin-top: 50px;
+          background-color: #f8f8f8;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
+
+          img {
+            height: 130px;
+            width: 130px;
+          }
+
+          span {
+            margin: 2vw;
+          }
+
+          .noCoupon_line1 {
+            font-weight: lighter;
+            color: black;
+            .fz(font-size, 35);
+          }
+
+          .noCoupon_line2 {
+            font-weight: lighter;
+            color: #8c8c8c;
+            .fz(font-size, 28);
+          }
+
+        }
 
         .couponList {
           display: flex;

@@ -1,6 +1,7 @@
 <template>
   <header :style="{'background-color':defaultBgColor}">
-    <van-row type="flex" :style="isDeepColor(defaultBgColor)? 'color:white':'color:blank'">
+    <van-row type="flex"
+             :style="{'color':backIsDeepColor? 'white':'blank'}">
       <van-col span="3">
         <div style="margin-top: 3px">
 <!--          <van-icon name="arrow-left" @click="$router.replace({name: '首页'})" v-if="$route.matched[0].path=='/category'"></van-icon>-->
@@ -42,7 +43,8 @@
     props: ['mBackgroundColor'],
     data() {
       return {
-        defaultBgColor: '#FF4444'
+        defaultBgColor: '#FF4444',
+        backIsDeepColor: false
       }
     },
     watch: {
@@ -50,9 +52,16 @@
         this.defaultBgColor = newVal;
       }
     },
+
+    mounted() {
+      if(this.mBackgroundColor != undefined) {
+        this.defaultBgColor = this.mBackgroundColor;
+      }
+      this.isDeepColor(this.defaultBgColor)
+    },
     methods: {
       isDeepColor(hexColor) {
-      //  this.$log(" HEADER, isDeepColor:"+hexColor)
+        this.$log(" HEADER, isDeepColor:"+hexColor)
         if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
         hexColor = hexColor.toLowerCase();
         let b = new Array();
@@ -64,10 +73,11 @@
           b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
         }
         let grayLevel  =  b[20] * 0.299 +  b[21] * 0.587 +  b[22]* 0.114
+        this.$log(grayLevel)
         if(grayLevel >= 192)
-          return false
+          this.backIsDeepColor = false
         else
-          return true;
+          this.backIsDeepColor = true
       },
       closeWindow() {
         this.$jsbridge.call("closeWindow");
