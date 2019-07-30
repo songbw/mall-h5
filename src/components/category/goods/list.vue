@@ -281,7 +281,7 @@
 
         .van-button {
           background: url('../../../assets/icons/ico_add_cart.png') no-repeat center;
-          background-size: 25px 25px;
+          background-size: 20px 20px;
           border: none;
         }
 
