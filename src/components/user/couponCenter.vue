@@ -4,9 +4,9 @@
       <h1 slot="title">领券中心</h1>
     </v-header>
     <div class="couponCenterBody">
-<!--      <div class="couponCenterHeader">
-        <img :src="couponCenterHeaderImg">
-      </div>-->
+      <!--      <div class="couponCenterHeader">
+              <img :src="couponCenterHeaderImg">
+            </div>-->
       <div class="couponCenterMain">
         <div v-if="couponTypes.length > 0">
           <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable
@@ -101,7 +101,7 @@
         couponTypes: [],
         couponCenterHeaderImg: require('@/assets/icons/ico_couponCenterHeader.jpg'),
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
-        headerColor:"#FFFFFF"
+        headerColor: "#FFFFFF"
       }
     },
 
@@ -116,7 +116,7 @@
         let result = response.data.data.result;
         that.$log(result)
         let tags = result.tags;
-        if(tags != null) {
+        if (tags != null) {
           tags.forEach(item => {
             let type = {
               "title": item.name,
