@@ -240,7 +240,6 @@
         this.$log("onLoad:" + index)
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
-        that.$log(userInfo)
         if (!that.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list.length) {
@@ -283,6 +282,9 @@
               that.couponTypes[index].finished = true;
             })
           }
+        } else {
+          that.couponTypes[index].loading = false;
+          that.couponTypes[index].finished = true;
         }
       },
 
