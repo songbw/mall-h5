@@ -20,7 +20,6 @@
                 <span class="origin-price">￥{{parseFloat(this.goods.price).toFixed(2)}}</span>
               </p>
             </div>
-
           </van-col>
           <van-col span="16" class="promotionBox">
             <v-countdown
@@ -429,10 +428,12 @@
         border-top-right-radius: 10px;
         background-color: white;
 
+
         .van-actionsheet {
-          font-weight: bold;
           border-top-left-radius: 10px;
           border-top-right-radius: 10px;
+          min-height: 500px;
+          background-color: #f8f8f8;
         }
 
         .avaliableCoupon {
