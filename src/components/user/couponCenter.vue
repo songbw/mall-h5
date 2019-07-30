@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="couponCenter">
-    <v-header class="header" :mBackgroundColor="headerColor">
+    <v-header class="header">
       <h1 slot="title">领券中心</h1>
     </v-header>
     <div class="couponCenterBody">
@@ -8,10 +8,10 @@
               <img :src="couponCenterHeaderImg">
             </div>-->
       <div class="couponCenterMain">
-        <div v-if="couponTypes.length > 0">
-          <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable
-                    :ellipsis=false title-active-color="#FF4444" title-inactive-color="#555555">
-            <van-tab v-for="(item,type) in couponTypes" :key="type">
+        <div v-if="couponTypes.length > 0" style="background-color: #FF4444">
+          <van-tabs  sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable
+                    :ellipsis=false title-active-color="#FFFFFF" title-inactive-color="#Fccccc" background="#FF4444" type="card">
+            <van-tab v-for="(item,type) in couponTypes" :key="type" >
               <div slot="title" style="min-width: 70px;">
                         <span style="font-size: medium;font-weight: bold">
                           {{item.title}}
@@ -445,7 +445,6 @@
 
       .couponCenterMain {
         width: 100%;
-
         .noCoupon {
           width: 100%;
           margin-top: 50px;

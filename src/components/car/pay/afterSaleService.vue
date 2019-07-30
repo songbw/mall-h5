@@ -210,10 +210,10 @@
             reason = "质量问题"
             break;
           case '2':
-            reason = "发票问题"
+            reason = "卖家发错货"
             break;
           case '3':
-            reason = "质量问题"
+            reason = "发票问题"
             break;
           case '4':
             reason = "七天无理由"
