@@ -11,18 +11,47 @@
           :num="goods.num"
           :thumb="goods.image">
           <div slot="tags" v-if="goods.salePrice != goods.unitPrice" class="cardtags">
-            <img :src="tag_promotion"  v-if="goods.promotionDiscount > 0"/>
-            <img :src="tag_coupon" v-if="goods.unitPrice - goods.salePrice - goods.promotionDiscount > 0" />
+            <img :src="tag_promotion" v-if="goods.promotionDiscount > 0"/>
+            <img :src="tag_coupon" v-if="goods.unitPrice - goods.salePrice - goods.promotionDiscount > 0"/>
           </div>
         </van-card>
-        <van-cell title="实际销售单价" title-class="CellTitle"  v-if="goods.unitPrice != goods.salePrice">￥{{goods.salePrice.toFixed(2)}}元</van-cell>
+        <van-cell title="实际销售单价" title-class="CellTitle" v-if="goods.unitPrice != goods.salePrice">
+          ￥{{goods.salePrice.toFixed(2)}}元
+        </van-cell>
         <van-cell title="状态" title-class="CellTitle" :value="requestStateValue"></van-cell>
         <div slot="footer">
           <van-cell title="申请数量" title-class="CellTitle">
             <van-stepper
               v-model="count"
-              :max="goods.num"/>
+              :max="goods.num"
+              @change="onCountChange"/>
           </van-cell>
+          <van-cell title="历史工单" :value=this.history_list.length title-class="CellTitle" isLink="true"
+                    @click="onHistListClick">
+          </van-cell>
+          <van-actionsheet v-model="historyListShow" title="历史工单" class="invoice_layout">
+            <div>
+              <div class="workerOrderCard"
+                   v-for="(k,i) in this.history_list"
+                   :key="i">
+                <div class="title">
+                  <span>{{formateWOrderType(k.typeId)}}</span>
+                </div>
+                <div class="info">
+                  <div class="createTimeAndNumber">
+                    <span >{{formatWOrderCreateDateTime(k.createTime)}}</span>
+                    <span  style="margin-left: 15px">数量:{{k.returnedNum}}</span>
+                  </div>
+                  <div class="reasonBox">
+                    <span >￥{{k.refundAmount.toFixed(2)}}  {{k.title}}</span>
+                  </div>
+                  <div class="statusBox">
+                    <span >状态: {{formatWOrderStatus(k.status)}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </van-actionsheet>
         </div>
       </div>
       <div class="requireTypeBox">
@@ -103,44 +132,12 @@
       'v-header': Header,
     },
     watch: {
-      requestState: function (newVal, oldVal) {
-        //-2:未初始化，-1:申请售后 0.处理中 1.审核通过 2.审核不通过 3.已完成
-        this.$log("requestState Enter")
-        switch (newVal) {
-          case -1:
-            this.requestStateValue = "申请售后"
-            this.commitDisabled = false;
-            break;
-          case 1:
-            this.requestStateValue = "待审核"
-            this.commitDisabled = true;
-            break;
-          case 2:
-            this.requestStateValue = "审核中"
-            this.commitDisabled = true;
-            break;
-          case 3:
-            this.requestStateValue = "审核通过"
-            this.commitDisabled = true;
-            break;
-          case 4:
-            this.requestStateValue = "审核不通过"
-            this.commitDisabled = false;
-            break;
-          case 5:
-            this.requestStateValue = "处理中"
-            this.commitDisabled = false;
-            break;
-          case 6:
-            this.requestStateValue = "处理完成"
-            this.commitDisabled = true;
-            break;
-          default:
-            this.commitDisabled = true;
-            break;
+      count: function (newVal, oldVal) {
+        if (newVal == 0) {
+          this.commitDisabled = true;
+        } else {
+          this.commitDisabled = false;
         }
-        this.$log("requestStateValue:" + this.requestStateValue)
-        this.$log("commitDisabled:" + this.commitDisabled)
       },
     },
     data() {
@@ -153,12 +150,14 @@
         showReason: false,
         radio: '6',
         typeRadio: 'type1',
-        requestState: -2,//-2:未初始化，-1:申请售后 0.处理中 1.审核通过 2.审核不通过 3.已完成
-        requestStateValue: "",
-        commitDisabled: true,
+        requestState: -1,// 1:编辑中 2.正在审核中 3.审核通过 4.审核有问题 5.处理中 6.处理完成
+        requestStateValue: "编辑中",
+        commitDisabled: false,
         requestDescible: '',
         tag_coupon: require('@/assets/icons/ico_lab_coupon.png'),
         tag_promotion: require('@/assets/icons/ico_lab_promotion.png'),
+        history_list: [],
+        historyListShow: false
       }
     },
 
@@ -169,6 +168,8 @@
       this.openId = this.$route.params.openId;
       this.tradeNo = this.$route.params.tradeNo;
       this.count = 0;
+      this.requestState = -1;
+
       this.$log(this.goods)
 
       this.$api.xapi({
@@ -182,7 +183,8 @@
         }
       }).then((response) => {
         if (response.status == 200) {
-          this.count = response.data.validNum;
+          this.goods.num = response.data.validNum;
+          this.count = this.goods.num
         }
       }).catch(function (error) {
         that.$log(error)
@@ -202,11 +204,7 @@
         this.$log(response)
         if (response.status == 200) {
           let result = response.data;
-          if (JSON.stringify(result) == "{}") {
-            this.requestState = -1;
-          } else {
-            this.requestState = result.rows[0].status
-          }
+          this.history_list = result.rows;
         }
       }).catch(function (error) {
         that.$log(error)
@@ -215,12 +213,63 @@
     },
 
     methods: {
+      formatWOrderCreateDateTime(createDate) {
+        return this.$moment(createDate).format('YYYY.MM.DD')
+      },
+
+      formatWOrderStatus(statusType) {
+        let status = ""
+        switch (statusType) {
+          case 1:
+            status = "待审核"
+            break;
+          case 2:
+            status = "正在审核中"
+            break;
+          case 3:
+            status = "审核通过"
+            break;
+          case 4:
+            status = "审核有问题"
+            break;
+          case 5:
+            status = "处理中"
+            break;
+          case 6:
+            status = "处理完成"
+            break;
+          default:
+            break;
+        }
+        return status;
+      },
+
+      formateWOrderType(type) {
+        switch (type) {
+          case 1:
+            return "退货/退款";
+          case 2:
+            return "换货";
+          case 3:
+            return "退款";
+          default:
+            return ""
+        }
+      },
+
+      onHistListClick() {
+        this.$log("onHistListClick Enter")
+        if (this.history_list.length > 0) {
+          this.historyListShow = true
+        }
+      },
       getRequestType() {
         if (this.typeRadio === 'type1')
           return 1
         else
           return 2
       },
+
       getRequestReason() {
         let reason = "其他"
         switch (this.radio) {
@@ -286,8 +335,8 @@
         this.$log("count is:" + this.count)
         if (this.count > this.goods.num)
           this.count = this.goods.num;
-        else if (this.count < 1)
-          this.count = 1;
+        else if (this.count < 0)
+          this.count = 0;
       }
     }
   }
@@ -301,6 +350,7 @@
     height: 100%;
     top: 0px;
     background-color: #f8f8f8;
+
     .serviceBody {
       margin-bottom: 3em;
 
@@ -315,6 +365,7 @@
 
           .cardtags {
             margin-top: 10px;
+
             > img {
               width: 30px;
               height: 30px;
@@ -362,6 +413,65 @@
       position: fixed;
       bottom: 0;
       left: 0;
+
+    }
+
+    .van-actionsheet {
+      border-top-left-radius: 10px;
+      border-top-right-radius: 10px;
+      min-height: 500px;
+      background-color: #f8f8f8;
+    }
+
+    .workerOrderCard {
+      background-color: white;
+      display: flex;
+      color: black;
+      position: relative;
+      padding-left: .5rem;
+      padding-right: .5rem;
+      margin: .5rem;
+      overflow: hidden;
+      border-radius: 10px;
+      height: 100px;
+
+      .title {
+        width: 30%;
+        background-color: #FF4444;
+        border-top-left-radius: 10px;
+        border-bottom-left-radius: 10px;
+        text-align: center;
+        justify-items: center;
+        line-height: 100px;
+        color: white;
+        .fz(font-size, 40)
+
+      }
+
+      .info {
+        display: flex;
+        flex-direction: column;
+        padding: 5px;
+        margin-left: 5px;
+        width: 70%;
+
+        .createTimeAndNumber{
+          color: #8c8c8c;
+          margin-top: 8px;
+        }
+
+        .reasonBox{
+          margin-top: 8px;
+          color: #FF4444;
+          margin-left: -5px;
+           .fz(font-size, 40)
+        }
+
+        .statusBox{
+          margin-top: 8px;
+          color: #8c8c8c;
+        }
+      }
     }
   }
 
