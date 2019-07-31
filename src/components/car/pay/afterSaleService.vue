@@ -168,7 +168,7 @@
       this.contact = this.$route.params.contact;
       this.openId = this.$route.params.openId;
       this.tradeNo = this.$route.params.tradeNo;
-      this.count = this.goods.num;
+      this.count = 0;
       this.$log(this.goods)
 
       this.$api.xapi({
@@ -181,14 +181,11 @@
           orderId: this.goods.subOrderId,
         }
       }).then((response) => {
-        this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-        this.$log(response)
         if (response.status == 200) {
-          let result = response.data;
+          this.count = response.data.validNum;
         }
       }).catch(function (error) {
         that.$log(error)
-        that.requestState = -1;
       })
 
       this.$api.xapi({
