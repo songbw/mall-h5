@@ -179,7 +179,7 @@
           let options = {
             "openId": userInfo.userId,
             "pageNo": this.pageNo++,
-            "pageSize": 999
+            "pageSize": 80
           }
           this.$api.xapi({
             method: 'post',

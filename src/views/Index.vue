@@ -8,39 +8,39 @@
       <v-loading></v-loading>
     </div>
     <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
-    <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
-      <van-search placeholder="搜索您感兴趣的商品"
-                  shape="round"
-                  :background=this.mHeader.backgroundColor
-                  readonly
-                  @click="onSearchInputClick()"
-                  v-if="this.mHeader.showSearchBar"/>
-    </div>
-    <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
-    <div class="index_main">
-      <div v-for="item in datas" >
-        <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
-          <v-swiper :datas="item.data"/>
-        </div>
-        <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
-          <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-        </div>
-        <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
-          <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-        </div>
-        <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
-          <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-        </div>
-        <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
-          <v-imgmap :datas="item.data"/>
-        </div>
-        <div v-else-if="item.type==='4'">
-          <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+      <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
+        <van-search placeholder="搜索您感兴趣的商品"
+                    shape="round"
+                    :background=this.mHeader.backgroundColor
+                    readonly
+                    @click="onSearchInputClick()"
+                    v-if="this.mHeader.showSearchBar"/>
+      </div>
+      <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
+      <div class="index_main">
+        <div v-for="item in datas">
+          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
+            <v-swiper :datas="item.data"/>
+          </div>
+          <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
+            <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
+          <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
+            <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
+          <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
+            <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
+          <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
+            <v-imgmap :datas="item.data"/>
+          </div>
+          <div v-else-if="item.type==='4'">
+            <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
         </div>
       </div>
+      <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
     </div>
-    <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
-  </div>
 
     <v-footer></v-footer>
   </div>
@@ -90,9 +90,9 @@
         next()
       } else {
         next(false)
-        if(this.$api.APP_ID === "10") {
-          this.closeWindow()
-        }
+        /*        if(this.$api.APP_ID === "10") {
+                  this.closeWindow()
+                }*/
       }
     },
 
@@ -101,9 +101,9 @@
         datas: {},
         loading: true,
         mBackgroundColor: '#FFFFFF',
-        mHeader:{
+        mHeader: {
           backgroundColor: '#FFFFFF',
-          showSearchBar:false
+          showSearchBar: false
         },
         pageloading: true
       }
@@ -121,15 +121,14 @@
         //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
-        for (let i = 0 ; i < this.datas.length; i++) {
-            if(this.datas[i].type === '4')
-              this.datas[i].data.id = 0;
+        for (let i = 0; i < this.datas.length; i++) {
+          if (this.datas[i].type === '4')
+            this.datas[i].data.id = 0;
         }
         this.$log(this.datas);
         this.mBackgroundColor = response.data.data.result.backgroundColor
-        if(response.data.data.result.header != undefined)
-        {
-          let header =  JSON.parse(response.data.data.result.header)
+        if (response.data.data.result.header != undefined) {
+          let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
         }
         this.$log(this.mHeader);
@@ -142,11 +141,10 @@
     },
 
     created() {
-      if(this.$api.APP_ID === "10")
-      {
+      if (this.$api.APP_ID === "10") {
         let auth_code = this.$route.query.auth_code;
         this.$log(`auto_code$(auth_code)`)
-        if(auth_code != undefined) {
+        if (auth_code != undefined) {
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
@@ -216,12 +214,13 @@
           }
           this.$log(userInfo)
           this.$store.commit('SET_USER', JSON.stringify(userInfo));
-          this.thirdPartLogined(openId,accessToken);
+          this.thirdPartLogined(openId, accessToken);
         }
       },
       closeWindow() {
-
-        this.$jsbridge.call("closeWindow");
+        if (this.$api.APP_ID != "10") {
+          this.$jsbridge.call("closeWindow");
+        }
       },
       onPayResult(payResult) {
         this.$store.dispatch('getPrePayOrderList');
@@ -290,7 +289,7 @@
         }).then((response) => {
           let rt = response.data.data.result
           this.$log("local information:" + JSON.stringify(rt));
-          if(rt.token != null) {
+          if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
           }
 
@@ -308,9 +307,9 @@
         that.$api.xapi({
           method: 'get',
           baseURL: this.$api.SSO_BASE_URL,
-          url:'/sso/thirdParty/token',
+          url: '/sso/thirdParty/token',
           params: {
-            iAppId:  this.$api.APP_ID,
+            iAppId: this.$api.APP_ID,
             initCode: authCode,
           }
         }).then((response) => {
@@ -327,9 +326,9 @@
             }
             that.$log("userInfo  is:" + JSON.stringify(userInfo));
             that.$store.commit('SET_USER', JSON.stringify(userInfo));
-            that.thirdPartLogined(openId,accessToken)
+            that.thirdPartLogined(openId, accessToken)
           }
-        }) .catch(function (error) {
+        }).catch(function (error) {
           that.$log(error)
         })
       },
@@ -341,9 +340,9 @@
           that.$api.xapi({
             method: 'get',
             baseURL: this.$api.SSO_BASE_URL,
-            url:'/sso/thirdParty/token',
+            url: '/sso/thirdParty/token',
             params: {
-              iAppId:  this.$api.APP_ID,
+              iAppId: this.$api.APP_ID,
               initCode: initCode,
             }
           }).then((response) => {
@@ -405,7 +404,7 @@
 
       onSearchInputClick() {
         this.$log("onSearchInputClick")
-        this.$router.push({name:'搜索页'})
+        this.$router.push({name: '搜索页'})
       }
     }
   }
@@ -417,6 +416,7 @@
     width: 100%;
     height: 100%;
     top: 0px;
+
     .home-body {
       width: 100%;
       top: 0px;
@@ -429,15 +429,17 @@
         background-color: #ff4444;
 
       }
-      .box_after{
+
+      .box_after {
         bottom: -60px;
         height: 60px;
         border-radius: 0 0 30% 30%;
-        background-color:  #ff4444;
+        background-color: #ff4444;
         overflow: hidden;
         z-index: -1;
       }
-      .index_main{
+
+      .index_main {
         margin-top: -50px;
       }
     }

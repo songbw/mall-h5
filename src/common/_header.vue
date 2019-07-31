@@ -82,7 +82,9 @@
           this.backIsDeepColor = true
       },
       closeWindow() {
-        this.$jsbridge.call("closeWindow");
+        if(this.$api.APP_ID != "10") {
+          this.$jsbridge.call("closeWindow");
+        }
       },
     }
   }
