@@ -236,6 +236,7 @@
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
       },
+
       onLoad(index) {
         this.$log("onLoad:" + index)
         let that = this
@@ -261,7 +262,7 @@
                 userOpenId: user.userId,
                 status: status,
                 "offset": that.couponTypes[index].pageNo++,
-                "limit": 5
+                "limit": 15
               }
             that.$api.xapi({
               method: 'post',
