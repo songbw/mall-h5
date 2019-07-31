@@ -170,6 +170,27 @@
       this.tradeNo = this.$route.params.tradeNo;
       this.count = this.goods.num;
       this.$log(this.goods)
+
+      this.$api.xapi({
+        method: 'get',
+        baseURL: this.$api.WORKER_ORDER_BASE_URL,
+        url: '/customers/orders/validNum',
+        params: {
+          merchantId: this.goods.merchantId,
+          customer: this.openId,
+          orderId: this.goods.subOrderId,
+        }
+      }).then((response) => {
+        this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+        this.$log(response)
+        if (response.status == 200) {
+          let result = response.data;
+        }
+      }).catch(function (error) {
+        that.$log(error)
+        that.requestState = -1;
+      })
+
       this.$api.xapi({
         method: 'get',
         baseURL: this.$api.WORKER_ORDER_BASE_URL,
@@ -237,6 +258,7 @@
           orderId: this.goods.subOrderId,
           title: this.getRequestReason(),
           typeId: this.getRequestType(),
+          num: this.count,
         }
         this.$api.xapi({
           method: 'post',

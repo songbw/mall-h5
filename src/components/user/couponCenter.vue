@@ -9,9 +9,10 @@
             </div>-->
       <div class="couponCenterMain">
         <div v-if="couponTypes.length > 0" style="background-color: #FF4444">
-          <van-tabs  sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable
-                    :ellipsis=false title-active-color="#FFFFFF" title-inactive-color="#Fccccc" background="#FF4444" type="card">
-            <van-tab v-for="(item,type) in couponTypes" :key="type" >
+          <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable
+                    :ellipsis=false title-active-color="#FFFFFF" title-inactive-color="#Fccccc" background="#FF4444"
+                    type="card">
+            <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
               <div slot="title" style="min-width: 70px;">
                         <span style="font-size: medium;font-weight: bold">
                           {{item.title}}
@@ -101,7 +102,8 @@
         couponTypes: [],
         couponCenterHeaderImg: require('@/assets/icons/ico_couponCenterHeader.jpg'),
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
-        headerColor: "#FFFFFF"
+        headerColor: "#FFFFFF",
+        reload: false,
       }
     },
 
@@ -134,7 +136,7 @@
         }
         let categories = result.categorys;
         categories.forEach(item => {
-          if(item.id != null && item.name != null) {
+          if (item.id != null && item.name != null) {
             let type = {
               "title": item.name,
               "type": "category",
@@ -192,9 +194,35 @@
       isUserEmpty(userInfo) {
         return (userInfo == undefined || userInfo.length === 0)
       },
+
+      resetCouponTypeList() {
+        /*        for(let i = 0 ; i< this.couponTypes.length ; i++) {
+                  this.couponTypes[i].list.splice(0,1);
+                }
+                this.couponTypes.splice(0,1);*/
+        for (let i = 0; i < this.couponTypes.length; i++) {
+          this.couponTypes[i].list = [];
+          this.couponTypes[i].total = -1;
+          this.couponTypes[i].status = -1;
+          this.couponTypes[i].pageNo = 1;
+          this.couponTypes[i].loading = false;
+          this.couponTypes[i].finished = false;
+        }
+      },
+      onClick(index, title) {
+        this.$log("onClick Enter, index is:" + index + ",title is:" + title)
+        this.onLoad(index)
+      },
+
       onLoad(index) {
         this.$log("onLoad:" + index)
         let that = this
+        this.$log(this.reload)
+        if (this.reload) {
+          this.resetCouponTypeList();
+          this.reload = false;
+        }
+        this.$log(that.couponTypes[index])
         if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list.length) {
           that.couponTypes[index].loading = true;
           let params = {
@@ -215,8 +243,6 @@
             params["tagId"] = that.couponTypes[index].id
             params["tagName"] = that.couponTypes[index].title
           }
-          // that.$log(params)
-
           that.$api.xapi({
             method: 'get',
             baseURL: this.$api.EQUITY_BASE_URL,
@@ -236,8 +262,6 @@
               that.couponTypes[index].loading = false;
               if (that.couponTypes[index].list.length >= that.couponTypes[index].total) {
                 that.couponTypes[index].finished = true;
-                // that.$log("index:" + index);
-                // that.$log(that.couponTypes[index]);
               }
             }
           }).catch(function (error) {
@@ -350,21 +374,7 @@
             that.$log(that.couponTypes[that.active].list[i])
             that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
             that.couponTypes[that.active].list[i].releaseNum++;
-            /*            that.couponTypes.forEach((item =>{
-                           if(item.category === that.couponTypes[that.active].category) {
-
-                           }
-                        }))*/
-            for (let i = 0; i < that.couponTypes.length; i++) {
-              if (i != that.active && that.couponTypes[i].category === that.couponTypes[that.active].category) {
-                that.couponTypes[i].list = []
-                that.couponTypes[i].total = -1
-                that.couponTypes[i].pageNo = 1
-                that.couponTypes[i].status = -1
-                that.couponTypes[i].loading = false
-                that.couponTypes[i].finished = false
-              }
-            }
+            that.reload = true;
           }).catch(function (error) {
             that.$log(error)
           })
@@ -447,6 +457,7 @@
 
       .couponCenterMain {
         width: 100%;
+
         .noCoupon {
           width: 100%;
           margin-top: 50px;
