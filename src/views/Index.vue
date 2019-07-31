@@ -90,7 +90,9 @@
         next()
       } else {
         next(false)
-        this.closeWindow()
+        if(this.$api.APP_ID === "10") {
+          this.closeWindow()
+        }
       }
     },
 
@@ -218,6 +220,7 @@
         }
       },
       closeWindow() {
+
         this.$jsbridge.call("closeWindow");
       },
       onPayResult(payResult) {
