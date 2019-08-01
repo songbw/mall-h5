@@ -6,24 +6,28 @@
         <van-icon color="white" name="shopping-cart-o" size="1.2em"/>
       </router-link>
     </v-header>
-    <van-list v-model="loading"
-              :finished="finished"
-              @load="onLoad">
-      <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
-        <div class="goods-detail" @click="onListClick(k)">
-          <van-card
-            :price="k.price"
-            desc="南京"
-            :title=composeGoodsTitle(k)
-            :thumb="k.image"
-            centered>
-          </van-card>
-        </div>
-        <div class="goods-action">
-          <van-button size="mini" @click="onAdd2carBtnClick(k)"></van-button>
-        </div>
-      </li>
-    </van-list>
+    <div class="productList">
+      <div class="box"></div>
+      <van-list v-model="loading"
+                :finished="finished"
+                @load="onLoad">
+        <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
+          <div class="goods-detail" @click="onListClick(k)">
+            <van-card
+              :price="k.price"
+              desc="南京"
+              :title=composeGoodsTitle(k)
+              :thumb="k.image"
+              centered>
+            </van-card>
+          </div>
+          <div class="goods-action">
+            <van-button size="mini" @click="onAdd2carBtnClick(k)"></van-button>
+          </div>
+        </li>
+      </van-list>
+    </div>
+
   </div>
 </template>
 
@@ -257,49 +261,72 @@
     top: 0px;
     background-color: #f8f8f8;
 
+    .box {
+      padding-top: 2em;
+      position: relative;
+      width: 100%;
+      line-height: 15vw;
+      background-color: #ff4444;
+    }
+    .box:after {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -60px;
+      content: ' ';
+      height: 60px;
+      width: 100%;
+      border-radius: 0 0 30% 30%;
+      background-color:  #ff4444;
+      overflow: hidden;
+    }
+
     .header{
       width:100%;
       position:fixed;
       z-index:5;
       top:0;
     }
-    .van-list {
-      padding-top: 1px;
-      background-color: #f8f8f8;
+    .productList{
+      .van-list {
+        margin-top: 5px;
+        background-color: #f8f8f8;
 
-      .van-card {
-        background-color: #ffffff;
-        margin-top: 1em;
-        &__price {
-          margin-top: 0.5em;
-          margin-top: 18px;
-          .fz(font-size, 35);
-        }
-      }
-
-      .goods-action {
-        background-color: #ffffff;
-        text-align: right;
-        margin-right: 1em;
-        color: #000000;
-        margin-top: -2em;
-
-        .van-button {
-          background: url('../../../assets/icons/ico_add_cart.png') no-repeat center;
-          background-size: 20px 20px;
-          border: none;
+        .van-card {
+          background-color: #ffffff;
+          margin-top: 1em;
+          &__price {
+            margin-top: 0.5em;
+            margin-top: 18px;
+            .fz(font-size, 35);
+          }
         }
 
-        .van-button:active {
-          opacity: 0;
-        }
+        .goods-action {
+          background-color: #ffffff;
+          text-align: right;
+          margin-right: 1em;
+          color: #000000;
+          margin-top: -2em;
 
-        img {
-          width: 30px;
-          height: 25px;
+          .van-button {
+            background: url('../../../assets/icons/ico_add_cart.png') no-repeat center;
+            background-size: 20px 20px;
+            border: none;
+          }
+
+          .van-button:active {
+            opacity: 0;
+          }
+
+          img {
+            width: 30px;
+            height: 25px;
+          }
         }
       }
     }
+
 
   }
 </style>

@@ -338,7 +338,7 @@
            width: 100%;
            line-height: 15vw;
            background-color: #ff4444;
-         }
+    }
     .box:after {
       position: absolute;
       left: 0;

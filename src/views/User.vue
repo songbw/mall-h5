@@ -216,7 +216,6 @@
     background-color: #f8f8f8;
 
     .box {
-      padding-top: .5em;
       position: relative;
       width: 100%;
       line-height: 12vw;
@@ -293,7 +292,6 @@
 
     .header {
       width: 100%;
-      position: fixed;
       z-index: 5;
       top: 0;
     }

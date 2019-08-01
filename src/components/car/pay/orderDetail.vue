@@ -445,9 +445,6 @@
 
     .header {
       width: 100%;
-      position: fixed;
-      z-index: 5;
-      top: 0;
     }
 
     .order-body {

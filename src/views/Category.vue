@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="wrap">
-    <v-header class="header" v-if="showHeader">
+    <v-header v-if="showHeader">
       <h1 slot="title">商品分类</h1>
     </v-header>
     <div class="view">
@@ -68,12 +68,6 @@
     -ms-flex-flow: column nowrap;
     flex-flow: column nowrap;
 
-    .header {
-      width: 100%;
-      position: fixed;
-      z-index: 5;
-      top: 0;
-    }
 
     .view {
       width: 100%;

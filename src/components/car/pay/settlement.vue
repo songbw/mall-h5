@@ -1604,7 +1604,7 @@
       padding-bottom: 10px;
 
       .box {
-        padding-top: .5em;
+        padding-top: 1.8em;
         position: relative;
         width: 100%;
         line-height: 12vw;
