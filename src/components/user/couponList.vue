@@ -30,8 +30,8 @@
                             <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                           </div>
                           <div class="coupon-suppler-deactive" v-else>
-                            <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                             <i>{{k.couponInfo.name}}</i>
+                            <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                           </div>
                           <div v-if="k.type === 0">
                             <div class="coupon-price" v-if="type === 0">
