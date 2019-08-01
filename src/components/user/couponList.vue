@@ -372,8 +372,8 @@
         this.$log(coupon)
         let ret = "";
         if (coupon.status === 1) {
-          let startTime = new Date(coupon.couponInfo.effectiveStartDate).getTime()
-          let endTime = new Date(coupon.couponInfo.effectiveEndDate).getTime()
+          let startTime = new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
+          let endTime = new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
           let current = new Date().getTime()
           if (current < startTime) {
             ret =  "优惠券活动未开始"//券活动未开始

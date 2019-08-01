@@ -91,8 +91,8 @@
       }).then((response) => {
         this.$log(response.data.data.result)
         this.detail = response.data.data.result
-        this.PromotionStartTime = new Date(this.detail.startDate).getTime()
-        this.PromotionEndTime = new Date(this.detail.endDate).getTime()
+        this.PromotionStartTime = new Date(this.detail.startDate.replace(/-/g,'/')).getTime()
+        this.PromotionEndTime = new Date(this.detail.endDate.replace(/-/g,'/')).getTime()
       }).catch(function (error) {
         alert(error)
       })

@@ -286,8 +286,8 @@
       isCouponActivied(couponInfo) {
         this.$log(couponInfo)
         let ret = "";
-        let startTime = new Date(couponInfo.effectiveStartDate).getTime()
-        let endTime = new Date(couponInfo.effectiveEndDate).getTime()
+        let startTime = new Date(couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
+        let endTime = new Date(couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
         let current = new Date().getTime()
         if (current < startTime) {
           ret = "优惠券活动未开始"//券活动未开始

@@ -39,8 +39,8 @@
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
                                    @end_callback="countDownE_cb(index,k)"
-                                   :startTime="new Date(k.promotion[0].startDate).getTime()"
-                                   :endTime="new Date(k.promotion[0].endDate).getTime()"
+                                   :startTime="new Date(k.promotion[0].startDate.replace(/-/g,'/')).getTime()"
+                                   :endTime="new Date(k.promotion[0].endDate.replace(/-/g,'/')).getTime()"
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>

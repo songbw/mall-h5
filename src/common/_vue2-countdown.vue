@@ -7,7 +7,6 @@
       <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.hour}}</span><i class="timeSplitText">{{hourTxt}}</i>
       <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.minutes}}</span><i class="timeSplitText">{{minutesTxt}}</i>
       <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.seconds}}</span><i class="timeSplitText">{{secondsTxt}}</i>
-
     </p>
     <p v-if="!msTime.show">{{endText}}</p>
   </div>

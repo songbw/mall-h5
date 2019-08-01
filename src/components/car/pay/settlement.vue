@@ -41,8 +41,8 @@
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
                                    @end_callback="countDownE_cb(index,k)"
-                                   :startTime="new Date(k.product.promotionInfo.promotion[0].startDate).getTime()"
-                                   :endTime="new Date(k.product.promotionInfo.promotion[0].endDate).getTime()"
+                                   :startTime="new Date(k.product.promotionInfo.promotion[0].startDate.replace(/-/g,'/')).getTime()"
+                                   :endTime="new Date(k.product.promotionInfo.promotion[0].endDate.replace(/-/g,'/')).getTime()"
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>
@@ -651,8 +651,8 @@
       isCouponActivied(coupon) {
         let ret = false;
         if (coupon.status === 1) {
-          let startTime = new Date(coupon.couponInfo.effectiveStartDate).getTime()
-          let endTime = new Date(coupon.couponInfo.effectiveEndDate).getTime()
+          let startTime = new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
+          let endTime = new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
           let current = new Date().getTime()
           if (current < startTime) {
             ret =  false//券活动未开始

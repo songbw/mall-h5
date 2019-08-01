@@ -76,16 +76,20 @@
     },
     created() {
       if (this.datas.settings.title.hasPromotionActivity) {
-        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate).getTime()
-        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime()
+/*        this.$toast("this.datas.settings.title.promotionActivityStartDate:"+this.datas.settings.title.promotionActivityStartDate+"，" +
+          "this.datas.settings.title.promotionActivityEndDate:"+this.datas.settings.title.promotionActivityEndDate)*/
+        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate.replace(/-/g,'/')).getTime()
+        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g,'/')).getTime()
         this.promotionActivityId = this.datas.settings.title.promotionActivityId
+
+/*        this.$toast("this.startTime:"+this.PromotionStartTime+"，this.endTime:"+this.PromotionEndTime)*/
       }
     },
 
     activated() {
       if (this.datas.settings.title.hasPromotionActivity) {
-        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate).getTime()
-        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate).getTime()
+        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate.replace(/-/g,'/')).getTime()
+        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g,'/')).getTime()
       }
     },
 
