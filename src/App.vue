@@ -2,11 +2,11 @@
   <div id="app">
     <transition name="fade">
       <keep-alive>
-        <router-view v-if="$route.meta.keepAlive"></router-view>
+        <router-view v-if="$route.meta.keepAlive" v-wechat-title='$route.meta.title'></router-view>
       </keep-alive>
     </transition>
     <transition name="fade">
-      <router-view v-if="!$route.meta.keepAlive"></router-view>
+      <router-view v-if="!$route.meta.keepAlive" v-wechat-title='$route.meta.title'></router-view>
     </transition>
   </div>
 </template>

@@ -24,6 +24,7 @@
     "vant": "^1.6.6",
     "vue-ba": "^1.2.5",
     "vue-logger": "0.0.4",
+    "vue-wechat-title": "^2.0.5",
     "vuex-persistedstate": "^2.5.4"
   },
   "devDependencies": {

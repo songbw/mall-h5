@@ -33,12 +33,17 @@ export default new VueRouter({
       component: Index,
       meta: {
         keepAlive: true, //此组件需要被缓存
+        title: '慧聚优选',
       }
     },
     {
       path: '/index/:id',
       name: '活动页',
       component: IndexSub,
+      meta: {
+        keepAlive: true, //此组件需要被缓存
+        title: '慧聚优选',
+      }
     },
 
     {
@@ -46,77 +51,120 @@ export default new VueRouter({
       name: '分类页',
       redirect: '/category/all',
       component: Category,
+      meta: {
+        title: '商品分类',
+      },
       children: [{
         path: '/category/:tab',
         component: CategoryMain,
         meta: {
           keepAlive: true, //此组件需要被缓存
+          title: '商品分类',
         }
       },]
     },
     {
       path: '/category/goods/list',
       name: '商品列表页',
-      component: CategoryList
+      component: CategoryList,
+      meta: {
+        title: '商品列表',
+      }
     },
     {
       path: '/pay/casher',
       name: '收银台页',
-      component: Casher
+      component: Casher,
+      meta: {
+        title: '收银台',
+      }
     },
     {
       path: '/pay/cashering',
       name: '支付中页',
-      component: Cashering
+      component: Cashering,
+      meta: {
+        title: '支付中',
+      }
     },
     {
       path: '/car',
       name: '购物车页',
-      component: Cart
+      component: Cart,
+      meta: {
+        title: '购物车',
+      }
     },
     {
       path: '/car/pay',
       name: '支付页',
       component: Settlement,
+      meta: {
+        title: '确认订单',
+      },
       children: [{
         path: '/car/pay/:action',
-        component: Settlement
+        component: Settlement,
+        meta: {
+          title: '确认订单',
+        }
       },]
     },
     {
       path: '/car/orderList',
       name: '订单列表页',
-      component: OrderList
+      component: OrderList,
+      meta: {
+        title: '我的订单',
+      }
     },
     {
       path: '/car/orderDetail',
       name: '订单详情页',
-      component: OrderDetail
+      component: OrderDetail,
+      meta: {
+        title: '订单详情',
+      }
     },
     {
       path: '/car/Logistics',
       name: '物流信息页',
-      component: Logistics
+      component: Logistics,
+      meta: {
+        title: '物流信息',
+      }
     },
     {
       path: '/car/address',
       name: '地址页',
       redirect: '/car/address/new',
       component: Address,
+      meta: {
+        title: '地址编辑',
+      },
       children: [{
         path: '/car/address/:id',
-        component: Address
+        component: Address,
+        meta: {
+          title: '地址编辑',
+        }
       },]
     },
     {
       path: '/car/addressList',
       name: '地址列表页',
-      component: AddressList
+      component: AddressList,
+      meta: {
+        title: '用户地址',
+      }
     },
     {
       path: '/car/afterSaleService',
       name: '售后服务页',
-      component: AfterSaleService
+      component: AfterSaleService,
+      meta: {
+        title: '售后服务',
+      }
     },
     {
       path: '/user',
@@ -128,46 +176,73 @@ export default new VueRouter({
     }, {
       path: '/detail',
       name: '详情页',
-      component: Detail
+      component: Detail,
+      meta: {
+        title: '商品详情',
+      }
     },
     {
       path: '/search',
       name: '搜索页',
-      component: Search
+      component: Search,
+      meta: {
+        title: '搜索',
+      }
     }, {
       path: '/login',
       name: '登录页',
-      component: Login
+      component: Login,
+      meta: {
+        title: '用户登录',
+      }
     },
     {
       path: '/category/goods/promotion/:id',
       name: '商品促销列表',
       component: Promotion,
+      meta: {
+        title: '商品促销',
+      }
     },
     {
       path: '/user/couponCenter',
       name: '领券中心',
-      component: CouponCenter
+      component: CouponCenter,
+      meta: {
+        title: '领券中心',
+      }
     },
     {
       path: '/user/couponList',
       name: '我的卡券',
-      component: CouponList
+      component: CouponList,
+      meta: {
+        title: '优惠券',
+      }
     },
     {
       path: '/user/userInfo',
       name: '我的信息',
-      component: UserInfo
+      component: UserInfo,
+      meta: {
+        title: '个人信息',
+      }
     },
     {
       path: '/user/couponChange',
       name: '兑换优惠券',
-      component: CouponChange
+      component: CouponChange,
+      meta: {
+        title: '兑换优惠券',
+      }
     },
     {
       path: '/user/couponListActivity',
       name: '优惠活动',
-      component: CouponListActivity
+      component: CouponListActivity,
+      meta: {
+        title: '优惠活动',
+      }
     }
   ]
 })
