@@ -1,6 +1,6 @@
 <template lang="html">
-  <section class="changeCoupon" v-if="showHeader">
-    <v-header class="header">
+  <section class="changeCoupon">
+    <v-header class="header"  v-if="showHeader">
       <h1 slot="title">兑换优惠券</h1>
     </v-header>
     <div class="changeCouponBody">

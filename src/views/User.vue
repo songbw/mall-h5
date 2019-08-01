@@ -299,7 +299,6 @@
     }
 
     .userBody {
-      padding-top: 2em;
       margin-bottom: 5em;
 
       .coupon-box {

@@ -425,8 +425,6 @@
     }
 
     .detail-body {
-      padding-top: 3em;
-
       .couponBox {
         display: flex;
         margin-top: 10px;

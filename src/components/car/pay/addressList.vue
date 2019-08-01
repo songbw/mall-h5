@@ -173,7 +173,6 @@
       top:0;
     }
     .list-body{
-      padding-top: 2.3em;
     }
   }
 </style>

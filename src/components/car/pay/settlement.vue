@@ -1601,7 +1601,6 @@
       width: 100%;
       top: 0px;
       background-color: #f8f8f8;
-      padding-top: 3em;
       padding-bottom: 10px;
 
       .box {

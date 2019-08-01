@@ -360,8 +360,6 @@
     }
 
     .cartBody {
-      padding-top: 2em;
-
       .emptyCart{
         display: flex;
         position: fixed;

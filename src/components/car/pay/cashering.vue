@@ -104,7 +104,6 @@
     background-color: #f8f8f8;
 
     .box {
-      padding-top: 2em;
       position: relative;
       width: 100%;
       line-height: 15vw;

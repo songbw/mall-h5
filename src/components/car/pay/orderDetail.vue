@@ -451,8 +451,6 @@
     }
 
     .order-body {
-      padding-top: 2.3em;
-
       .order-status {
         background: url('../../../assets/images/redbg.png') no-repeat;
         background-size: 100% 100%;

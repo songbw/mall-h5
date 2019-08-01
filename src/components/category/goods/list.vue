@@ -264,7 +264,7 @@
       top:0;
     }
     .van-list {
-      padding-top: 2.3em;
+      padding-top: 1px;
       background-color: #f8f8f8;
 
       .van-card {
