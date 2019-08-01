@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="detaillist">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">商品列表</h1>
       <router-link :to="{name:'购物车页'}" slot="right">
         <van-icon color="white" name="shopping-cart-o" size="1.2em"/>
@@ -40,14 +40,19 @@
         list: [],
         loading: false,
         finished: false,
-        launchedLoading: false
+        launchedLoading: false,
+        showHeader: true
       }
     },
 
     components: {
       'v-header': Header
     },
-
+    created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
+    },
     mounted() {
       setTimeout(() => {
         if(!this.launchedLoading) {

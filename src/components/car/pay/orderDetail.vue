@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="orderDetail">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">订单详情</h1>
     </v-header>
     <div class="order-body">
@@ -136,6 +136,7 @@
     },
     data() {
       return {
+        showHeader: true,
         detail: {},
         status: -1,
         orderIcon: require('@/assets/images/order.png'),
@@ -146,8 +147,10 @@
     },
 
     created() {
-      let that = this
       this.$log("order detail created Enter");
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       //this.detail = this.$route.params.detail;
       this.detail = JSON.parse(this.$store.state.appconf.currentOrderInfo);
       this.$log(this.detail)

@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="logisticsDetail">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">物流信息</h1>
     </v-header>
     <div class="logistics-body">
@@ -65,6 +65,7 @@
     },
     data() {
       return {
+        showHeader: true,
         detail: {},
         status: -1,
         no_logistics_bg: require('@/assets/images/truck.png'),
@@ -77,10 +78,13 @@
 
     created() {
       let that = this;
+      if (that.$api.APP_ID === "10") {
+        that.showHeader = false;
+      }
       that.$log("logistics created Enter")
       that.detail = this.$route.params.detail;
       that.loading = true;
-      this.$log(that.detail)
+      that.$log(that.detail)
       that.$api.xapi({
         method: 'get',
         baseURL: this.$api.ORDER_BASE_URL,

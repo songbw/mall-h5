@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="car">
-    <v-header class="header"  >
+    <v-header class="header"  v-if="showHeader">
       <h1 slot="title">购物车</h1>
     </v-header>
 
@@ -104,10 +104,14 @@
         finished: false,
         nothingInCar_bg: require('@/assets/icons/ico_empty_cart.png'),
         launchedLoading: false,
+        showHeader: true
       }
     },
 
     created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       setTimeout(() => {
         this.$log("setTimeout launchedLoading:" + this.launchedLoading)
         if (!this.launchedLoading) {

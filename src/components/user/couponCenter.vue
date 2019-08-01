@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="couponCenter">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">领券中心</h1>
     </v-header>
     <div class="couponCenterBody">
@@ -104,6 +104,7 @@
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
         headerColor: "#FFFFFF",
         reload: false,
+        showHeader: true
       }
     },
 
@@ -158,6 +159,11 @@
       })
     },
 
+    created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
+    },
 
     methods: {
       See(e) {

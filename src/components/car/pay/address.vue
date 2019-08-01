@@ -1,7 +1,7 @@
 <template lang="html">
 
   <div class="address">
-    <v-header>
+    <v-header v-if="showHeader">
       <h1 slot="title">地址编辑</h1>
     </v-header>
     <van-address-edit
@@ -26,12 +26,16 @@
     },
     data() {
       return {
+        showHeader: true,
         areaList,
         addressInfo: {},
         //searchResult: []
       }
     },
     created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       let id = this.$route.params.id
       if (id != "new") {
         //获取id 相关的地址数据

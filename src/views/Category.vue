@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="wrap">
-    <v-header class="header" >
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">商品分类</h1>
     </v-header>
     <div class="view">
@@ -37,9 +37,13 @@
       return {
         allData: {},
         class1Data: {},
+        showHeader: true
       }
     },
     created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       this.$api.xapi({
         method: 'get',
         baseURL: this.$api.PRODUCT_BASE_URL,

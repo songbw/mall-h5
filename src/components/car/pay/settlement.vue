@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="settlement">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">确认订单</h1>
     </v-header>
     <div v-if="pageloading" style="padding-top: 2.3em">
@@ -304,6 +304,7 @@
     },
     data() {
       return {
+        showHeader: true,
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
         icon_conatct_address: require('@/assets/icons/ico_contact_address.png'),
         couponImg: require('@/assets/icons/ico_coupon.png'),
@@ -553,6 +554,9 @@
     },
 
     created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       this.obtainMerchantArray();
       let action = this.$route.params.action;
       if (action == "direct") {

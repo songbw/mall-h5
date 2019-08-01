@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="casher">
+  <div class="casher"  v-if="showHeader">
     <v-header>
       <h1 slot="title">订单支付</h1>
     </v-header>
@@ -35,6 +35,7 @@
     },
     data() {
       return {
+         showHeader: true,
          orderInfo:{}
       }
     },
@@ -46,6 +47,9 @@
 
     created() {
       this.$log("cashser created Enter")
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       this.orderInfo = this.$route.params.orderInfo;
       this.$log(this.orderInfo);
     },

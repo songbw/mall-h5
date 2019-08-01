@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="car">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">我的</h1>
     </v-header>
 
@@ -104,6 +104,9 @@
     created() {
       let userInfo = this.$store.state.appconf.userInfo;
       let that = this
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       if (!this.isUserEmpty(userInfo)) {
         let user = JSON.parse(userInfo);
         this.$api.xapi({
@@ -134,6 +137,7 @@
     },
     data() {
       return {
+        showHeader: true,
         orderbars: [
           {
             title: "待支付",

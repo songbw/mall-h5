@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="userInfo">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">个人信息</h1>
     </v-header>
     <div class="userMain">
@@ -105,12 +105,16 @@
         avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
         inputNickName: '',
         inputTel: '',
+        showHeader: true
       }
     },
 
     created() {
       let that = this;
       that.$log("userInfo created Enter")
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       that.user = this.$route.params.user;
       that.$log(that.user);
       if (that.user.birth != null) {

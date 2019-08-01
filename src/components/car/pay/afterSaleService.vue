@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="afterSaleService">
-    <v-header>
+    <v-header v-if="showHeader">
       <h1 slot="title">售后服务</h1>
     </v-header>
     <div class="serviceBody">
@@ -142,6 +142,7 @@
     },
     data() {
       return {
+        showHeader: true,
         goods: {},
         contact: {},
         tradeNo: '',
@@ -163,6 +164,9 @@
 
     created() {
       let that = this
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       this.goods = this.$route.params.goods;
       this.contact = this.$route.params.contact;
       this.openId = this.$route.params.openId;

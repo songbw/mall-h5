@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="cashering">
-    <v-header>
+    <v-header v-if="showHeader">
       <h1 slot="title">订单支付中</h1>
     </v-header>
     <div class="box"></div>
@@ -22,6 +22,7 @@
     },
     data() {
       return {
+        showHeader: true,
         payInfo: {},
         ico_clock: require('@/assets/icons/ico_clock.png'),
         timer: '',
@@ -37,6 +38,12 @@
 
     mounted() {
       this.timer = setInterval(this.checkPaymentStatus, 5000);
+    },
+
+    created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
     },
 
     beforeDestroy() {

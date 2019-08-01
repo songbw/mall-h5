@@ -1,7 +1,7 @@
 <template lang="html">
   <section class="search">
-    <header>
-      <van-icon class="arrowback" name="arrow-left" size="1.2em" @click="$router.go(-1)" slot="left"/>
+    <header v-if="showHeader">
+      <van-icon class="arrowback" name="arrow-left" size="1.2em" @click="$router.go(-1)" slot="left" v-if="showBackArrow"/>
       <van-search
         background=#ffffff
         v-model="value"
@@ -34,7 +34,9 @@
     data() {
       return {
         value: "",
-        hotSearch: []
+        hotSearch: [],
+        showHeader: true,
+        showBackArrow: true
       }
     },
     beforeCreate() {
@@ -48,6 +50,12 @@
       }).catch(function (error) {
         alert(error)
       })
+    },
+
+    created() {
+      if(this.$api.APP_ID == '10') {
+        this.showBackArrow = false;
+      }
     },
 
     methods: {

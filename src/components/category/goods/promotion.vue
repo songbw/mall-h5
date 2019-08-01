@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="promotion">
-    <v-header>
+    <v-header v-if="showHeader">
       <h1 slot="title">{{detail.name}}</h1>
     </v-header>
     <div class="promotionTitle">
@@ -61,6 +61,7 @@
         detail: {},
         PromotionStartTime: 0,
         PromotionEndTime: 0,
+        showHeader: true
       }
     },
 
@@ -72,10 +73,13 @@
       })
     },
 
+
     created() {
       let id = this.$route.params.id;
       this.$log("promotion:" + id)
-
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
       this.$api.xapi({
         method: 'get',
         baseURL: this.$api.EQUITY_BASE_URL,

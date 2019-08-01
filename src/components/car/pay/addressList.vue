@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="addressList">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">用户地址</h1>
     </v-header>
     <div class="list-body">
@@ -24,6 +24,7 @@
     },
     data() {
       return {
+        showHeader: true,
         chosenAddressId: '-1',
         disabledList: []
       }
@@ -127,6 +128,11 @@
         }
       } catch (e) {
         that.$log(e)
+      }
+    },
+    created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
       }
     },
     methods: {

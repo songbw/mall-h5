@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="couponActivity">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">优惠活动</h1>
     </v-header>
     <div class="couponActivityMain">
@@ -110,6 +110,7 @@
         loading: false,
         finished: false,
         launchedLoading: false,
+        showHeader: true
       }
     },
 
@@ -122,6 +123,12 @@
         let rules = couponInfo.rules;
         let scenario = rules.scenario;
         let couponRules = rules.couponRules;
+      }
+    },
+
+    created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
       }
     },
 

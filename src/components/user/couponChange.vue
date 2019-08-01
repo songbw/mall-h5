@@ -1,5 +1,5 @@
 <template lang="html">
-  <section class="changeCoupon">
+  <section class="changeCoupon" v-if="showHeader">
     <v-header class="header">
       <h1 slot="title">兑换优惠券</h1>
     </v-header>
@@ -25,12 +25,15 @@
 
     data() {
       return {
-        couponCode: ''
+        couponCode: '',
+        showHeader: true
       }
     },
 
     created() {
-
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
     },
 
     methods: {

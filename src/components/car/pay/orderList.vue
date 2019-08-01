@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="orderlist">
-    <v-header>
+    <v-header  v-if="showHeader">
       <h1 slot="title">我的订单</h1>
     </v-header>
     <div class="orderlist-layout">
@@ -103,6 +103,7 @@
 
     data() {
       return {
+        showHeader: true,
         active: 0,
         swipeThreshold: 5,
         no_orderList_bg: require('@/assets/images/emptyBox.png'),
@@ -167,6 +168,12 @@
           this.onLoad(this.active)
         }
       }, 1000);
+    },
+
+    created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
     },
 
     methods: {

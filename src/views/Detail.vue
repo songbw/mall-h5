@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="detail">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">商品详情</h1>
     </v-header>
     <div v-if="pageloading" style="padding-top: 2.3em">
@@ -163,6 +163,12 @@
       })
     },
 
+    created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
+    },
+
     mounted() {
       this.pageloading = true;
       let that = this;
@@ -253,6 +259,7 @@
 
     data() {
       return {
+        showHeader: true,
         goods: {},
         swiperUrls: [],
         contentUrls: [],

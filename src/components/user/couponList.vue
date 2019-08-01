@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="myCouponList">
-    <v-header class="header">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">优惠券</h1>
     </v-header>
     <div class="couponListBody">
@@ -107,6 +107,7 @@
 
     data() {
       return {
+        showHeader: true,
         active: 0,
         swipeThreshold: 5,
         couponImg: require('@/assets/icons/ico_coupon.png'),
@@ -144,13 +145,13 @@
 
     mounted() {
       this.active = this.$store.state.appconf.currentOrderListIndex;
-      /*      setTimeout(() => {
-              if (!this.launchedLoading) {
-                  this.onLoad(this.active)
-              }
-            }, 1000);*/
     },
 
+    created() {
+      if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
+      }
+    },
 
     methods: {
       getCouponState(type) {

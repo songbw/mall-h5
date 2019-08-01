@@ -1,7 +1,7 @@
 <template lang="html">
   <!-- 在首页父组件发送http请求,后将数据通过props传递给子组件,可减少请求次数,减少服务器压力 -->
   <div class="wrap">
-    <v-header :mBackgroundColor="this.mHeader.backgroundColor">
+    <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
       <h1 slot="title">凤巢商城</h1>
     </v-header>
     <div v-if="pageloading">
@@ -41,7 +41,6 @@
       </div>
       <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
     </div>
-
     <v-footer></v-footer>
   </div>
 </template>
@@ -90,9 +89,11 @@
         next()
       } else {
         next(false)
-        /*        if(this.$api.APP_ID === "10") {
+        /*
+         if(this.$api.APP_ID === "10") {
                   this.closeWindow()
-                }*/
+         }
+       */
       }
     },
 
@@ -105,7 +106,8 @@
           backgroundColor: '#FFFFFF',
           showSearchBar: false
         },
-        pageloading: true
+        pageloading: true,
+        showHeader: true,
       }
     },
 
@@ -142,6 +144,7 @@
 
     created() {
       if (this.$api.APP_ID === "10") {
+        this.showHeader = false;
         let auth_code = this.$route.query.auth_code;
         this.$log(`auto_code$(auth_code)`)
         if (auth_code != undefined) {

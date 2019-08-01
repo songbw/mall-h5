@@ -1,7 +1,7 @@
 <template lang="html">
   <section>
     <div class="index" :style="{'background-color': mBackgroundColor}">
-      <v-header :mBackgroundColor="this.mHeader.backgroundColor">
+      <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
         <h1 slot="title">{{title}}</h1>
       </v-header>
       <div v-if="pageloading">
@@ -114,6 +114,7 @@
           backgroundColor: '#FFFFFF',
           showSearchBar:false
         },
+        showHeader: true,
       }
     },
 
