@@ -172,6 +172,7 @@ export default new VueRouter({
       component: User,
       meta: {
         requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录才能进入的
+        title: '我的',
       },
     }, {
       path: '/detail',
