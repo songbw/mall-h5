@@ -262,7 +262,7 @@
     background-color: #f8f8f8;
 
     .box {
-      padding-top: 2em;
+      padding-top: 2.1em;
       position: relative;
       width: 100%;
       line-height: 15vw;
