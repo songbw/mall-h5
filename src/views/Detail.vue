@@ -63,8 +63,8 @@
                     </div>
                     <div class="coupon-info coupon-hole coupon-info-right-dashed">
                       <div class="coupon-suppler">
-                        <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
                         <i>{{k.name}}</i>
+                        <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
                       </div>
                       <div class="coupon-price">
                         <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>

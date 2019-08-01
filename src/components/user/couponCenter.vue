@@ -8,16 +8,17 @@
               <img :src="couponCenterHeaderImg">
             </div>-->
       <div class="couponCenterMain">
-        <div v-if="couponTypes.length > 0" style="background-color: #FF4444">
-          <van-tabs sticky v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable
-                    :ellipsis=false title-active-color="#FFFFFF" title-inactive-color="#Fccccc" background="#FF4444"
-                    type="card">
+        <div v-if="couponTypes.length > 0">
+          <van-tabs sticky
+                    v-model="active"
+                    @click="onClick"
+                    :swipe-threshold=swipeThreshold swipeable
+                    :ellipsis=false
+                    title-active-color="#FFFFFF"
+                    title-inactive-color="#Fccccc"
+                    color="#FFFFFF"
+                    background="#FF4444">
             <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
-              <div slot="title" style="min-width: 70px;">
-                        <span style="font-size: medium;font-weight: bold">
-                          {{item.title}}
-                        </span>
-              </div>
               <van-list v-model="item.loading"
                         :finished="item.finished"
                         @load="onLoad(active)">
@@ -32,13 +33,13 @@
                       </div>
                       <div class="coupon-info coupon-hole coupon-info-right-dashed">
                         <div class="coupon-suppler">
-                          <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
                           <i>{{k.name}}</i>
+                          <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
                         </div>
                         <!--                      <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
                                               <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>-->
                         <div class="coupon-price">
-                          <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                          <span v-if="k.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
                           {{formateCouponPrice(k.rules.couponRules)}}
                           <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
                         </div>
@@ -389,11 +390,14 @@
       formateCouponPrice(rules) {
         switch (rules.type) {
           case 0://满减券
-            return rules.fullReduceCoupon.reducePrice;
+            return rules.fullReduceCoupon.reducePrice.toFixed(2);
           case 1://代金券
-            return rules.cashCoupon.amount;
+            return rules.cashCoupon.amount.toFixed(2);
           case 2://折扣券
             return rules.discountCoupon.discountRatio * 10 + ' 折';
+          case 3://服务券
+            this.$log(rules)
+            return rules.serviceCoupon.price.toFixed(2)
           default:
             return ""
         }
@@ -613,15 +617,21 @@
               .coupon-desc {
                 margin-left: 3px;
                 min-height: 1em;
-                .fz(font-size, 25);
+                .fz(font-size, 22);
                 font-weight: lighter;
                 color: #323233;
               }
 
               .coupon-price {
-                font-size: 150%;
+                font-size: 120%;
                 font-weight: bold;
                 color: #FF4444;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
               }
 
               .coupon-price > span {
