@@ -1330,44 +1330,49 @@
                     data: options,
                   }).then((response) => {
                     that.$log("onSubmit:" + JSON.stringify(response.data));
-                    let result = response.data.data.result;
-                    that.$log("result:" + JSON.stringify(result))
-                    let orderNo = ""
-                    let amount = 0;
-                    let merchantNo = ""
-                    let orderNos = ""
-                    this.$log(result.length)
-                    this.$log(result[0].tradeNo)
-                    if (result != undefined && result.length > 0 && result[0].tradeNo.length > 8) {
-                      let len = result[0].tradeNo.length;
-                      orderNos = JSON.stringify(result[0].tradeNo.substr(len - 8)).replace(/\"/g, "");
-                      if (options.merchants.length == 1) {//单商户
-                        merchantNo = options.merchants[0].merchantNo;
+                    if(response.data.code === 200) {
+                      let result = response.data.data.result;
+                      that.$log("result:" + JSON.stringify(result))
+                      let orderNo = ""
+                      let amount = 0;
+                      let merchantNo = ""
+                      let orderNos = ""
+                      this.$log(result.length)
+                      this.$log(result[0].tradeNo)
+                      if (result != undefined && result.length > 0 && result[0].tradeNo.length > 8) {
+                        let len = result[0].tradeNo.length;
+                        orderNos = JSON.stringify(result[0].tradeNo.substr(len - 8)).replace(/\"/g, "");
+                        if (options.merchants.length == 1) {//单商户
+                          merchantNo = options.merchants[0].merchantNo;
+                        }
+                        orderNo = this.$api.APP_ID + merchantNo + user.openId + orderNos
                       }
-                      orderNo = this.$api.APP_ID + merchantNo + user.openId + orderNos
-                    }
-                    if (orderNo.length > 0) {
-                      that.$log("orderNo is:" + orderNo)
-                      options.merchants.forEach(item => {
-                        amount += item.saleAmount;
-                      })
-                      let pAnOrderInfo = {
-                        "accessToken": user.accessToken,
-                        "orderNo": '',// orderNo,
-                        "orderAmount": amount * 100,//分
-                        "openId": user.openId,
-                        "businessType": "11"
-                      }
-                      if (that.pageAction == "direct") {
-                        this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
+                      if (orderNo.length > 0) {
+                        that.$log("orderNo is:" + orderNo)
+                        options.merchants.forEach(item => {
+                          amount += item.saleAmount;
+                        })
+                        let pAnOrderInfo = {
+                          "accessToken": user.accessToken,
+                          "orderNo": '',// orderNo,
+                          "orderAmount": amount * 100,//分
+                          "openId": user.openId,
+                          "businessType": "11"
+                        }
+                        if (that.pageAction == "direct") {
+                          this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
+                        } else {
+                          that.deleteOrderedGoodsInCar();
+                        }
+                        that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
                       } else {
-                        that.deleteOrderedGoodsInCar();
+                        that.$log("can not get correct orderNo");
+                        that.$toast("服务器失败")
                       }
-                      that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
                     } else {
-                      that.$log("can not get correct orderNo");
-                      that.$toast("服务器失败")
+                      that.$toast(response.data.msg)
                     }
+
 
                   }).catch(function (error) {
                     that.$log(error)

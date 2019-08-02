@@ -6,13 +6,16 @@
     <div class="promotionTitle">
       <van-cell>
         <span class="promotionTag">{{detail.tag}}</span>
-        <v-countdown class="promotionCountDown" v-if="PromotionStartTime != 0 && PromotionEndTime !=0"
+        <v-countdown class="promotionCountDown" v-if="this.detail.status < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
                      :start_callback="countDownS_cb(1)"
                      :end_callback="countDownE_cb(1)"
                      :startTime="PromotionStartTime"
                      :endTime="PromotionEndTime"
-                     :secondsTxt="''">
+                     :secondsTxt="''" >
         </v-countdown>
+        <div class="promotionStatus" v-else>
+           <span>已结束</span>
+        </div>
       </van-cell>
     </div>
     <div class="promotionBody">
@@ -61,7 +64,7 @@
         detail: {},
         PromotionStartTime: 0,
         PromotionEndTime: 0,
-        showHeader: true
+        showHeader: true,
       }
     },
 
@@ -214,6 +217,10 @@
       }
 
       .promotionCountDown {
+        float: right;
+      }
+
+      .promotionStatus {
         float: right;
       }
     }
