@@ -437,7 +437,6 @@
       margin: .5rem;
       overflow: hidden;
       border-radius: 10px;
-      height: 100px;
 
       .title {
         width: 30%;
@@ -465,14 +464,14 @@
         }
 
         .reasonBox{
-          margin-top: 8px;
+          margin-top: 3px;
           color: #FF4444;
           margin-left: -5px;
            .fz(font-size, 40)
         }
 
         .statusBox{
-          margin-top: 8px;
+          margin-top: 3px;
           color: #8c8c8c;
         }
       }

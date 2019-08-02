@@ -27,15 +27,15 @@
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
                           <div class="coupon-suppler" v-if="type === 0">
                             <i>{{k.couponInfo.name}}</i>
-                            <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                            <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                           </div>
                           <div class="coupon-suppler-deactive" v-else>
                             <i>{{k.couponInfo.name}}</i>
-                            <span>{{k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                            <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                           </div>
                           <div v-if="k.type === 0">
-                            <div class="coupon-price" v-if="type === 0">
-                              <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                            <div class="coupon-price" v-if="type === 0" >
+                              <span v-if="k.couponInfo.rules.couponRules.type != 2" style="margin-right: -7px">￥</span>
                               {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
                               <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
                             </div>
@@ -308,6 +308,9 @@
         if (ret == "success") { //未使用
           let couponInfo = coupon.couponInfo;
           let url = couponInfo.url;
+          if(couponInfo.supplierMerchantId === '3') {//第三方优惠券 头食的
+            url = coupon.url
+          }
           if (url.startsWith("aggregation://")) {
             let id = url.substr(14);
             this.$router.push({path: '/index/' + id});
@@ -408,6 +411,9 @@
             return rules.cashCoupon.amount;
           case 2://折扣券
             return rules.discountCoupon.discountRatio * 10 + ' 折';
+          case 3://服务券
+            this.$log(rules)
+            return rules.serviceCoupon.price.toFixed(2)
           default:
             return ""
         }
