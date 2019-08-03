@@ -79,6 +79,7 @@
 
     created() {
       let id = this.$route.params.id;
+      let that = this
       this.$log("promotion:" + id)
       if (this.$api.APP_ID === "10") {
         this.showHeader = false;
@@ -97,7 +98,7 @@
         this.PromotionStartTime = new Date(this.detail.startDate.replace(/-/g,'/')).getTime()
         this.PromotionEndTime = new Date(this.detail.endDate.replace(/-/g,'/')).getTime()
       }).catch(function (error) {
-        alert(error)
+        that.$log(error)
       })
     },
 

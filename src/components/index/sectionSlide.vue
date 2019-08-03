@@ -18,8 +18,12 @@
               :endTime="PromotionEndTime"
               :secondsTxt="''"
               backgroundColor="#FFFFFF"
-              textColor="#FF4444">
+              textColor="#FF4444"
+               v-if="promotionStatus.status < 5 && PromotionStartTime != 0 && PromotionEndTime !=0">
             </v-countdown>
+          </div>
+          <div class="promotionStatusText">
+            <span style="color: white">已结束</span>
           </div>
         </van-cell>
         <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
@@ -71,6 +75,7 @@
         PromotionStartTime: 0,
         PromotionEndTime: 0,
         promotionActivityId: 0,
+        promotionStatus: -1,
         decorateBgColor: '#FF4444'
       }
     },
@@ -81,19 +86,39 @@
         this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate.replace(/-/g,'/')).getTime()
         this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g,'/')).getTime()
         this.promotionActivityId = this.datas.settings.title.promotionActivityId
-
-/*        this.$toast("this.startTime:"+this.PromotionStartTime+"，this.endTime:"+this.PromotionEndTime)*/
+        this.updatePromotionInfo();
       }
+
     },
 
     activated() {
       if (this.datas.settings.title.hasPromotionActivity) {
-        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate.replace(/-/g,'/')).getTime()
-        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g,'/')).getTime()
+        this.updatePromotionInfo()
       }
     },
 
     methods: {
+      updatePromotionInfo() {
+        if(this.promotionActivityId > 0) {
+          let that = this
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.EQUITY_BASE_URL,
+            url: '/promotion/findPromotion',
+            params: {
+              id: this.promotionActivityId,
+            },
+          }).then((response) => {
+            this.$log(response.data.data.result)
+            let detail = response.data.data.result
+            this.PromotionStartTime = new Date(detail.startDate.replace(/-/g,'/')).getTime()
+            this.PromotionEndTime = new Date(detail.endDate.replace(/-/g,'/')).getTime()
+            this.PromotionStatus = detail.status;
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
+      },
       isDeepColor(hexColor) {
         this.$log("isDeepColor:" + hexColor)
         /*        if(hexColor == undefined)
