@@ -1152,6 +1152,7 @@
                   "mpu": sku.product.baseInfo.mpu,
                   "merchantId": sku.product.baseInfo.merchantId,
                   "num": sku.product.baseInfo.count,
+                  "checkedPrice": sku.checkedPrice,
                   "unitPrice": unitPrice,
                   "salePrice": salePrice,
                   "promotionId": promotionId,
@@ -1201,7 +1202,6 @@
           "invoiceEnterpriseNumber ": invoiceEnterpriseNumber,
           "merchants": merchants
         }
-
 
         if (couponInfo != null) {
           options['coupon'] = couponInfo;
