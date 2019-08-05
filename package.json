@@ -25,7 +25,8 @@
     "vue-ba": "^1.2.5",
     "vue-logger": "0.0.4",
     "vue-wechat-title": "^2.0.5",
-    "vuex-persistedstate": "^2.5.4"
+    "vuex-persistedstate": "^2.5.4",
+    "weixin-js-sdk": "^1.4.0-test"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
