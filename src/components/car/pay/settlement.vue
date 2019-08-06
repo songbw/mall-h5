@@ -88,7 +88,6 @@
             button-text="提交订单"
             @submit="onSubmit"
             :tip=tip
-            v-track-event="{category:'提交订单', action:'click'}"
           />
         </div>
         <div class="pay-info">
@@ -1192,9 +1191,13 @@
             })
           }
         })
+        let companyCustNo = "11"
+        if(this.$api.APP_ID === "10") {
+          companyCustNo = "1001"
+        }
         let options = {
           "openId": user.userId,
-          "companyCustNo": "11",
+          "companyCustNo": companyCustNo,
           "receiverId": receiverId,//接收地址ID
           "remark": "",//用户自填字段，比如周末不配送
           "invoiceType": invoiceType,
@@ -1310,6 +1313,8 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (!this.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
+          let event = "userId="+ user.userId + "&" + "dataTime:"+new Date().getTime()
+          window._hmt.push(['_trackEvent', '下订单' ,'click',event]);
           let receiverId = this.$store.state.appconf.usedAddressId;
           that.$log("onSubmit receiverId is:" + receiverId)
           if (receiverId == undefined || receiverId == -1) {
@@ -1516,10 +1521,14 @@
               "skus": skus,
             }
             this.$log("价格 options:" + JSON.stringify(options));
+            let url = '/prod/price';
+            if (this.$api.APP_ID === "10") {
+              url = '/prod/priceGAT';
+            }
             this.$api.xapi({
               method: 'post',
               baseURL: this.$api.PRODUCT_BASE_URL,
-              url: '/prod/price',
+              url: url,
               data: options,
             }).then((response) => {
               let result = response.data.data.result;

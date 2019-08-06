@@ -151,6 +151,7 @@
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
+        //this.testGAT();
       } else {
         this.initJsNativeCb();
         setTimeout(() => {
@@ -172,7 +173,7 @@
       isValidLeavedPath(to) {
         let path = to.path;
         // if("/category/all | /car | ^/index/ | /detail".match(path))
-        if (path.match('(^/index/)|(/user)|(/category/all)|(/car)|(/detail)|(/search)|(^/category/goods/promotion/)'))
+        if (path.match('(^/index/)|(/user)|(category/goods/seckill)|(/category/all)|(/car)|(/detail)|(/search)|(^/category/goods/promotion/)'))
           return true;
         return false;
       },
@@ -199,6 +200,26 @@
           return "ok";
         });
 
+      },
+      testGAT() {
+        //  let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
+        let openId = "e85a4074de506df69915f6954d808974"
+        //let openId = "46e794551c9144be82cc86c25703b936" //贺总
+        this.$log("openId:" + openId);
+        if (openId != undefined) {
+          let userId = this.$api.APP_ID + openId;
+          //let auth_code = "12345678"
+          //this.getThirdPartyAccessTokenInfo(auth_code)
+          let accessToken = "TTTTTTTTTTTT"
+          let userInfo = {
+            openId: openId,
+            accessToken: accessToken,
+            userId: userId
+          }
+          this.$log(userInfo)
+          this.$store.commit('SET_USER', JSON.stringify(userInfo));
+          this.thirdPartLogined(openId, accessToken);
+        }
       },
       test() {
         //  let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
@@ -408,6 +429,7 @@
       onSearchInputClick() {
         this.$log("onSearchInputClick")
         this.$router.push({name: '搜索页'})
+       // this.$router.push({name: '凤巢秒杀页'})
       }
     }
   }

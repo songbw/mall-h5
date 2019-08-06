@@ -9,7 +9,6 @@
         <header class="userHeader" @click="onUserInfoClick()">
           <div class="headerTitle">
             <div class="header-icon">
-              <!--  <span class="icon2-user"></span>-->
               <img :src="avatarDefaultImg">
             </div>
             <span v-if="user.nickname !=undefined && user.nickname.length > 0">{{user.nickname}}</span>
@@ -55,19 +54,6 @@
           </van-row>
         </div>
       </div>
-<!--      <div class="couponBox">
-        <div>
-          <van-cell value="更多" is-link to="/user/couponList">
-            <template slot="title">
-              <span class="couponTitle">我的优惠券</span>
-            </template>
-          </van-cell>
-        </div>
-        <div class="couponCategory">
-          <img :src="couponCenterImg" @click="onCouponCenterClick()">
-        </div>
-
-      </div>-->
       <div class="settingsBox">
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon"/>

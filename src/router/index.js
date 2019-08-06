@@ -3,6 +3,7 @@ const IndexSub = resolve => require(['@/components/index/sub/main.vue'], resolve
 const Category = resolve => require(['@/views/Category.vue'], resolve)
 const CategoryMain = resolve => require(['@/components/category/main.vue'], resolve)
 const CategoryList = resolve => require(['@/components/category/goods/list.vue'], resolve)
+const Seckill = resolve => require(['@/components/category/goods/seckill.vue'], resolve)
 const Cart = resolve => require(['@/views/Cart.vue'], resolve)
 const User = resolve => require(['@/views/User.vue'], resolve)
 const Detail = resolve => require(['@/views/Detail.vue'], resolve)
@@ -69,6 +70,14 @@ export default new VueRouter({
       component: CategoryList,
       meta: {
         title: '商品列表',
+      }
+    },
+    {
+      path: '/category/goods/seckill',
+      name: '凤巢秒杀页',
+      component: Seckill,
+      meta: {
+        title: '凤巢秒杀',
       }
     },
     {
