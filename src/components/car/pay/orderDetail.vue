@@ -408,6 +408,11 @@
       },
 
       getDisplayOderNo(orderNo) {
+        if(this.$api.APP_ID === "10") {
+          if(this.detail.aoyiId != undefined && this.detail.aoyiId  > 0) {
+            return this.detail.aoyiId
+          }
+        }
         if (orderNo.length > 8)
           return orderNo.substr(orderNo.length - 8).replace(/\"/g, "")
         else
