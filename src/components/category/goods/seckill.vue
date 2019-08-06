@@ -10,8 +10,7 @@
                 swipeabl
                 background="#FF4444">
         <van-tab v-for="(item,type) in seckillTypes" :key="type" >
-          <div slot="title" style="height: 500px;color: white;font-size: xx-large">
-            <van-icon name="more-o" />选项
+          <div slot="title">
             <div>选项</div>
           </div>
           内容 {{ item.title }}
@@ -88,36 +87,10 @@
   @import "../../../assets/fz.less";
   .seckill{
     .seckillBody {
-/*      .van-tab {
-        position: relative;
-        flex: 1;
-        box-sizing: border-box;
-        min-width: 0; // hack for flex ellipsis
-        padding: 0 5px;
-        color: @tab-text-color;
-        font-size: @tab-font-size;
-        line-height: @tabs-line-height;
-        text-align: center;
-        cursor: pointer;
-
-        span {
-          display: block;
-        }
-
-        &--active {
-          color: @tab-active-text-color;
-          font-weight: 500;
-        }
-
-        &--disabled {
-          color: @tab-disabled-text-color;
-        }
-      }*/
-
       .van-tabs {
-        position: relative;
-/*        margin-top: -20px;*/
-
+        &__nav {
+          background-color: #1989fa;
+        }
       }
     }
   }
