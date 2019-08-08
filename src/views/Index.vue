@@ -428,8 +428,8 @@
 
       onSearchInputClick() {
         this.$log("onSearchInputClick")
-        this.$router.push({name: '搜索页'})
-       // this.$router.push({name: '凤巢秒杀页'})
+       // this.$router.push({name: '搜索页'})
+        this.$router.push({name: '凤巢秒杀页'})
       }
     }
   }

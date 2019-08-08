@@ -5,17 +5,23 @@
     </v-header>
 
     <div class="seckillBody">
-      <van-tabs v-model="active"
-                @click="onClick"
-                swipeabl
-                background="#FF4444">
-        <van-tab v-for="(item,type) in seckillTypes" :key="type" >
-          <div slot="title">
-            <div>选项</div>
+      <div class="seckillNavTitle">
+        <div v-for="(item,type) in seckillTypes" :key="type" class="seckilltab" @click="onTabClick(type)">
+          <div class="tab-item">
+            <span :class="active == type? 'title_active' : 'title_norm'">{{item.title}}</span>
+            <span :class="active == type? 'title_active' : 'title_norm'">xxxx</span>
           </div>
-          内容 {{ item.title }}
-        </van-tab>
-      </van-tabs>
+        </div>
+        <div>
+        </div>
+      </div>
+      <div class="seckillBody">
+        <div v-for="(k,index) in seckillTypes" :key="index">
+          <div v-if="active===index">
+            {{index}}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -78,7 +84,10 @@
       }
     },
     methods: {
-
+      onTabClick(type) {
+        this.$log("tab:"+type)
+        this.active = type
+      }
     }
   }
 </script>
@@ -87,10 +96,30 @@
   @import "../../../assets/fz.less";
   .seckill{
     .seckillBody {
-      .van-tabs {
-        &__nav {
-          background-color: #1989fa;
+      .seckillNavTitle{
+        display: flex;
+        justify-items: center;
+        .seckilltab{
+          display: flex;
+          justify-content: center;
+          align-items: Center;
+          width: 50%;
+          background-color: #ff4444;
+          color: #ffaaaa;
         }
+        .tab-item{
+          display: flex;
+          flex-direction: column;
+          align-items: Center;
+          height: 40px;
+        }
+        .title_active {
+          color: white;
+        }
+        .title_norm{
+          color: #ffaaaa;
+        }
+
       }
     }
   }

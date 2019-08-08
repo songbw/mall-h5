@@ -1,27 +1,78 @@
 <template lang="html">
   <section class="promotion">
-    <v-header v-if="showHeader">
+    <v-header v-if="showHeader" class="header">
       <h1 slot="title">{{detail.name}}</h1>
     </v-header>
-    <div class="promotionTitle">
-      <van-cell>
-        <span class="promotionTag">{{detail.tag}}</span>
-        <v-countdown class="promotionCountDown" v-if="this.detail.status < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
-                     :start_callback="countDownS_cb(1)"
-                     :end_callback="countDownE_cb(1)"
-                     :startTime="PromotionStartTime"
-                     :endTime="PromotionEndTime"
-                     :secondsTxt="''" >
-        </v-countdown>
-        <div class="promotionStatus" v-else>
-           <span>已结束</span>
+    <div v-if="this.dailySchedule" class="seckillBody">
+      <div class="seckillNavTitle">
+        <div v-for="(item,type) in seckillTypes" :key="type" class="seckilltab" @click="onTabClick(type)">
+          <div class="tab-item">
+            <span :class="active == type? 'title_active' : 'title_norm'">{{item.title}}</span>
+            <span :class="active == type? 'title_active' : 'title_norm'" style="font-size: x-small">{{item.status}}</span>
+          </div>
         </div>
-      </van-cell>
+        <div>
+        </div>
+      </div>
+      <div class="seckillList">
+        <div v-for="(promotionActive,index) in seckillTypes" :key="index">
+          <div v-if="active===index">
+            <van-cell>
+               xxxx
+            </van-cell>
+            <ul>
+              <li  v-for="(k,i) in seckillTypes[index].list" :key="i">
+                <div class="goodsCard" @click="onGoodsClick(k)">
+                  <van-col span="8" class="cardImg">
+                    <img v-lazy="k.image">
+                  </van-col>
+                  <van-col span="16" class="cardInfo">
+                    <div class="cardTitle">
+                      <span>{{k.name}}</span>
+                    </div>
+                    <div class="cardTag">
+                      <span></span>
+                    </div>
+                    <div class="cardFooter">
+                      <van-col span="12" class="priceBox">
+                        <div class="salePrice">￥{{k.price-k.discount}}</div>
+                        <div class="originPrice">￥{{k.price}}</div>
+                      </van-col>
+                      <van-col span="12" class="actionBox">
+                        <van-button type="danger"  @click.stop="" size="small" @click="onAdd2carBtnClick(k)">立即抢购
+                        </van-button>
+                      </van-col>
+                    </div>
+                  </van-col>
+                </div>
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="promotionBody">
-      <ul>
-        <li v-for="(k,index) in detail.promotionSkus" :key="index">
-          <div class="goodsCard" @click="onGoodsClick(k)">
+    <div v-else>
+      <div class="promotionTitle">
+        <van-cell>
+          <span class="promotionTag">{{detail.tag}}</span>
+          <v-countdown class="promotionCountDown"
+                       v-if="this.detail.status < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
+                       :start_callback="countDownS_cb(1)"
+                       :end_callback="countDownE_cb(1)"
+                       :startTime="PromotionStartTime"
+                       :endTime="PromotionEndTime"
+                       :secondsTxt="''">
+          </v-countdown>
+          <div class="promotionStatus" v-else>
+            <span>已结束</span>
+          </div>
+        </van-cell>
+      </div>
+      <div class="promotionBody">
+        <ul>
+          <li v-for="(k,index) in detail.promotionSkus" :key="index">
+            <div class="goodsCard" @click="onGoodsClick(k)">
               <van-col span="8" class="cardImg">
                 <img v-lazy="k.image">
               </van-col>
@@ -34,17 +85,19 @@
                 </div>
                 <div class="cardFooter">
                   <van-col span="12" class="priceBox">
-                    <div class="salePrice">￥{{k.price-k.discount}} </div>
+                    <div class="salePrice">￥{{k.price-k.discount}}</div>
                     <div class="originPrice">￥{{k.price}}</div>
                   </van-col>
                   <van-col span="12" class="actionBox">
-                    <van-button type="primary"  @click.stop="" size="small" @click="onAdd2carBtnClick(k)">立即抢购</van-button>
+                    <van-button type="danger" @click.stop="" size="small" @click="onAdd2carBtnClick(k)">立即抢购
+                    </van-button>
                   </van-col>
                 </div>
               </van-col>
-          </div>
-        </li>
-      </ul>
+            </div>
+          </li>
+        </ul>
+      </div>
     </div>
   </section>
 </template>
@@ -65,6 +118,9 @@
         PromotionStartTime: 0,
         PromotionEndTime: 0,
         showHeader: true,
+        dailySchedule: false,
+        seckillTypes: [],
+        active: 0,
       }
     },
 
@@ -95,8 +151,30 @@
       }).then((response) => {
         this.$log(response.data.data.result)
         this.detail = response.data.data.result
-        this.PromotionStartTime = new Date(this.detail.startDate.replace(/-/g,'/')).getTime()
-        this.PromotionEndTime = new Date(this.detail.endDate.replace(/-/g,'/')).getTime()
+        if (this.detail.dailySchedule != undefined) {
+          this.dailySchedule = this.detail.dailySchedule
+        }
+        if (this.dailySchedule) {
+          this.detail.promotionSchedules.forEach(item => {
+            let promotionActivity = {
+              id: item.id,
+              title: item.schedule,
+              list: this.detail.promotionSkus.filter((v) => {
+                if (v.scheduleId === item.id)
+                  return v;
+              }),
+              status: "即将开始",
+              startTime: item.startTime,
+              endTime: item.endTime
+            }
+            this.seckillTypes.push(promotionActivity)
+          })
+          this.$log(this.seckillTypes)
+
+        } else {
+          this.PromotionStartTime = new Date(this.detail.startDate.replace(/-/g, '/')).getTime()
+          this.PromotionEndTime = new Date(this.detail.endDate.replace(/-/g, '/')).getTime()
+        }
       }).catch(function (error) {
         that.$log(error)
       })
@@ -105,12 +183,16 @@
     computed: {},
 
     methods: {
+      onTabClick(type) {
+        this.$log("tab:"+type)
+        this.active = type
+      },
       add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         this.$log(goods)
         let userId = user.userId;
         let mpu = goods.mpu;
-        if(mpu == null) {
+        if (mpu == null) {
           mpu = goods.skuid;
         }
         let addtoCar = {
@@ -143,7 +225,7 @@
         this.$log("onGoodsClick Enter")
         this.$log(goods)
         let mpu = goods.mpu
-        if(mpu == null) {
+        if (mpu == null) {
           mpu = goods.skuid;
         }
         try {
@@ -210,9 +292,122 @@
     height: 100%;
     top: 0px;
 
+    .header {
+      width: 100%;
+      position: fixed;
+      z-index: 5;
+      top: 0;
+    }
+
+    .seckillBody {
+      background-color: #f8f8f8;
+      .seckillNavTitle{
+        display: flex;
+        justify-items: center;
+        width: 100%;
+        position: fixed;
+        top: 3em;
+        z-index: 5;
+        left:0;
+        .seckilltab{
+          display: flex;
+          justify-content: center;
+          align-items: Center;
+          width: 50%;
+          background-color: #ff4444;
+          color: #ffaaaa;
+        }
+        .tab-item{
+          display: flex;
+          flex-direction: column;
+          align-items: Center;
+          height: 40px;
+        }
+        .title_active {
+          color: white;
+        }
+        .title_norm{
+          color: #ffaaaa;
+        }
+
+      }
+      .seckillList{
+          padding-top: 5.6em;
+          li {
+          border-bottom: 1px solid #f0f0f0;
+
+          .goodsCard {
+            width: 100%;
+            height: 8em;
+
+            .cardImg {
+              height: 100%;
+              text-align: center;
+
+              img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            .cardInfo {
+              height: 100%;
+              padding: 15px;
+
+              .cardTitle {
+                .fz(font-size, 30);
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                word-break: break-all;
+              }
+
+              .cardTag {
+                height: 15%;
+              }
+
+              .cardFooter {
+                height: 50%;
+
+                .priceBox {
+                  height: 100%;
+                  text-align: left;
+                  line-height: 1.5em;
+                  padding: 10px;
+
+                  .salePrice {
+                    color: #ff4444;
+                    .fz(font-size, 32);
+                    font-weight: bold;
+                  }
+
+                  .originPrice {
+                    color: #707070;
+                    .fz(font-size, 25);
+                    text-decoration: line-through
+                  }
+                }
+
+                .actionBox {
+                  height: 100%;
+                  text-align: center;
+                  line-height: 3em;
+                }
+              }
+
+            }
+          }
+        }
+      }
+    }
+
     .promotionTitle {
       color: black;
       font-weight: bold;
+
       .promotionTag {
         float: left;
       }
@@ -227,54 +422,65 @@
     }
 
     .promotionBody {
-      li{
+      li {
         border-bottom: 1px solid #f0f0f0;
-        .goodsCard{
+
+        .goodsCard {
           width: 100%;
           height: 8em;
-          .cardImg{
+
+          .cardImg {
             height: 100%;
             text-align: center;
+
             img {
               width: 100%;
               height: 100%;
             }
           }
-          .cardInfo{
+
+          .cardInfo {
             height: 100%;
             padding: 15px;
-            .cardTitle{
-              .fz(font-size,30);
+
+            .cardTitle {
+              .fz(font-size, 30);
               font-weight: bold;
               overflow: hidden;
               text-overflow: ellipsis;
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 2;
-              word-break:break-all;
+              word-break: break-all;
             }
-            .cardTag{
+
+            .cardTag {
               height: 15%;
             }
-            .cardFooter{
+
+            .cardFooter {
               height: 50%;
-              .priceBox{
+
+              .priceBox {
                 height: 100%;
                 text-align: left;
                 line-height: 1.5em;
                 padding: 10px;
-                .salePrice{
-                   color: #ff4444;
-                  .fz(font-size,32);
+
+                .salePrice {
+                  color: #ff4444;
+                  .fz(font-size, 32);
                   font-weight: bold;
                 }
-                .originPrice{
+
+                .originPrice {
                   color: #707070;
                   .fz(font-size, 25);
-                  text-decoration:line-through
+                  text-decoration: line-through
                 }
               }
-              .actionBox{
+
+              .actionBox {
                 height: 100%;
                 text-align: center;
                 line-height: 3em;
@@ -284,7 +490,6 @@
           }
         }
       }
-
     }
   }
 </style>
