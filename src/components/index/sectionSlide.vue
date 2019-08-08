@@ -5,7 +5,7 @@
         <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()"
                   :style="{'background-color':decorateBgColor}">
           <div slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
-            <span :style="isDeepColor(decorateBgColor)? 'color:white':'color:blank'">
+            <span style="color:white">
                {{datas.settings.title.textValue}}
             </span>
           </div>
@@ -85,9 +85,18 @@
         promotionStatus: -1,
         decorateBgColor: '#FF4444',
         isDailySchedule: false,
+        dailyEndTime: "",
         dailyScheduleInfo: [],
         dailyScheduleText: '',
         timer: null,
+        isExceedTodayMaxTime: false,
+        msTime: {
+          show: false,
+          day: "",
+          hour: "",
+          minutes: "",
+          seconds: "",
+        },
       }
     },
     watch: {
@@ -98,7 +107,12 @@
         if (newValue) {
           this.timer = setInterval(this.updateDailyScheduleText, 1000);
         }
-      }
+      },
+      isExceedTodayMaxTime(newValue,oldValue) {
+         if(newValue) {
+           this.updatePromotionInfo()
+         }
+      },
     },
 
       created() {
@@ -125,27 +139,67 @@
       },
 
       methods: {
+        updateTimer(startTime, endTime) {
+          let timeDistance = endTime - startTime;
+          if (timeDistance > 0) {
+            this.msTime.show = true;
+            this.msTime.day = Math.floor(timeDistance / 86400000);
+            timeDistance -= this.msTime.day * 86400000;
+            this.msTime.hour = Math.floor(timeDistance / 3600000);
+            timeDistance -= this.msTime.hour * 3600000;
+            this.msTime.minutes = Math.floor(timeDistance / 60000);
+            timeDistance -= this.msTime.minutes * 60000;
+            //是否开启秒表倒计,未完成
+//                    this.secondsFixed ? msTime.seconds = new Number(timeDistance / 1000).toFixed(2) : msTime.seconds = Math.floor( timeDistance / 1000 ).toFixed(0);
+            this.msTime.seconds = Math.floor(timeDistance / 1000).toFixed(0);
+            timeDistance -= this.msTime.seconds * 1000;
+
+            if (this.msTime.hour < 10) {
+              this.msTime.hour = "0" + this.msTime.hour;
+            }
+            if (this.msTime.minutes < 10) {
+              this.msTime.minutes = "0" + this.msTime.minutes;
+            }
+            if (this.msTime.seconds < 10) {
+              this.msTime.seconds = "0" + this.msTime.seconds;
+            }
+          }
+        },
+
         updateDailyScheduleText() {
           let currentTime = new Date().getTime();
-          if (currentTime < this.dailyScheduleInfo[0].starTime) {
-            this.dailyScheduleText = this.dailyScheduleInfo[0].schedule + "场即将开始"
-          } else {
-            let found = -1;
-            for (let i = 0; i < this.dailyScheduleInfo.length - 1; i++) {
-              if (currentTime >= this.dailyScheduleInfo[i].starTime &&
-                currentTime < this.dailyScheduleInfo[i + 1].starTime) {
-                found = i;
-                break;
+          if( currentTime < this.dailyEndTime) {
+            this.isExceedTodayMaxTime = false;
+            if (currentTime < this.dailyScheduleInfo[0].starTime) {
+              this.updateTimer(currentTime, this.dailyScheduleInfo[0].starTime)
+              this.dailyScheduleText = this.dailyScheduleInfo[0].schedule + "场"
+              if( this.msTime.show) {
+                this.dailyScheduleText += " 据下场 "+this.msTime.hour+":"+this.msTime.minutes+":"+this.msTime.seconds
               }
-            }
-            if (found != -1) {
-              this.dailyScheduleText = this.dailyScheduleInfo[found].schedule + "场正在疯抢"
             } else {
-              if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length]) {
-                this.dailyScheduleText = this.dailyScheduleInfo[this.dailyScheduleInfo.length].schedule + "场正在疯抢"
+              let found = -1;
+              for (let i = 0; i < this.dailyScheduleInfo.length - 1; i++) {
+                if (currentTime >= this.dailyScheduleInfo[i].starTime &&
+                  currentTime < this.dailyScheduleInfo[i + 1].starTime) {
+                  found = i;
+                  break;
+                }
+              }
+              if (found != -1) {
+                this.updateTimer(currentTime, this.dailyScheduleInfo[found+1].starTime)
+                this.dailyScheduleText = this.dailyScheduleInfo[found].schedule + "场"
+                if( this.msTime.show) {
+                  this.dailyScheduleText += " 据下场 "+this.msTime.hour+":"+this.msTime.minutes+":"+this.msTime.seconds
+                }
               } else {
+                if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length]) {
+                  this.dailyScheduleText = this.dailyScheduleInfo[this.dailyScheduleInfo.length].schedule + "场正在疯抢"
+                } else {
+                }
               }
             }
+          } else {
+            this.isExceedTodayMaxTime = true;
           }
         },
         updatePromotionInfo() {
@@ -163,6 +217,7 @@
               let detail = response.data.data.result
               if (detail.dailySchedule != undefined) {
                 this.isDailySchedule = detail.dailySchedule
+                this.dailyEndTime =  new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
               }
               if (this.isDailySchedule) {
                 // this.dailyScheduleInfo = detail.promotionSchedules
@@ -186,7 +241,7 @@
           }
         },
         isDeepColor(hexColor) {
-          this.$log("isDeepColor:" + hexColor)
+         // this.$log("isDeepColor:" + hexColor)
           /*        if(hexColor == undefined)
                     return false;*/
           if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
