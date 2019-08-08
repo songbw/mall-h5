@@ -17,9 +17,6 @@
       <div class="seckillList">
         <div v-for="(promotionActive,index) in seckillTypes" :key="index">
           <div v-if="active===index">
-            <van-cell>
-               xxxx
-            </van-cell>
             <ul>
               <li  v-for="(k,i) in seckillTypes[index].list" :key="i">
                 <div class="goodsCard" @click="onGoodsClick(k)">
@@ -121,6 +118,7 @@
         dailySchedule: false,
         seckillTypes: [],
         active: 0,
+        timer: null,
       }
     },
 
@@ -132,6 +130,16 @@
       })
     },
 
+    watch: {
+      dailySchedule(newValue, oldvalue) {
+         if(this.timer) {
+           clearInterval(this.timer)
+         }
+         if(newValue) {
+           this.timer = setInterval(this.updateDaylySheduleActivityStatus,1000);
+         }
+      }
+    },
 
     created() {
       let id = this.$route.params.id;
@@ -164,13 +172,13 @@
                   return v;
               }),
               status: "即将开始",
-              startTime: item.startTime,
-              endTime: item.endTime
+              startTime:  new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
+              endTime: new Date(this.$moment(item.endTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
             }
             this.seckillTypes.push(promotionActivity)
+            this.updateDaylySheduleActivityStatus();
           })
           this.$log(this.seckillTypes)
-
         } else {
           this.PromotionStartTime = new Date(this.detail.startDate.replace(/-/g, '/')).getTime()
           this.PromotionEndTime = new Date(this.detail.endDate.replace(/-/g, '/')).getTime()
@@ -178,11 +186,40 @@
       }).catch(function (error) {
         that.$log(error)
       })
+
+    },
+
+
+
+    beforeDestroy() {
+      if(this.timer) {
+        clearInterval(this.timer);
+        this.timer = null;
+      }
     },
 
     computed: {},
 
     methods: {
+      updateDaylySheduleActivityStatus() {
+          for(let i = 0; i < this.seckillTypes.length ; i++) {
+            this.isOnGoingActivity(i)
+          }
+      },
+      isOnGoingActivity(index) {
+        let currentTime = new Date().getTime()
+        //this.$log("startTime:"+this.seckillTypes[index].startTime+",endTime:"+this.seckillTypes[index].endTime+",currentTime:"+currentTime)
+        if(currentTime < this.seckillTypes[index].startTime ) {
+          this.seckillTypes[index].status = "即将开抢"
+          return false
+        } else if(currentTime >= this.seckillTypes[index].startTime && currentTime < this.seckillTypes[index].endTime){
+          this.seckillTypes[index].status = "正在疯抢"
+          return true
+        } else {
+          this.seckillTypes[index].status = "已开抢"
+          return false
+        }
+      },
       onTabClick(type) {
         this.$log("tab:"+type)
         this.active = type

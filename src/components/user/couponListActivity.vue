@@ -191,8 +191,6 @@
       },
     },
 
-    watch: {}
-    ,
 
     mounted() {
       setTimeout(() => {
