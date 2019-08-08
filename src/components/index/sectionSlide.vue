@@ -9,22 +9,29 @@
                {{datas.settings.title.textValue}}
             </span>
           </div>
-          <div v-if="datas.settings.title.hasPromotionActivity" class="countdownBox"
-               :style="isDeepColor(decorateBgColor)? 'color:white':'color:blank'">
-            <v-countdown
-              @start_callback="countDownS_cb"
-              @end_callback="countDownE_cb"
-              :startTime="PromotionStartTime"
-              :endTime="PromotionEndTime"
-              :secondsTxt="''"
-              backgroundColor="#FFFFFF"
-              textColor="#FF4444"
-               v-if="promotionStatus.status < 5 && PromotionStartTime != 0 && PromotionEndTime !=0">
-            </v-countdown>
+
+          <div v-if="datas.settings.title.hasPromotionActivity && PromotionStatus != -1">
+            <div v-if="isDailySchedule">
+              <span :style="isDeepColor(decorateBgColor)? 'color:white':'color:blank'">{{dailyScheduleText}}</span>
+            </div>
+            <div v-else>
+              <v-countdown v-if="promotionStatus.status < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
+                           class="countdownBox"
+                           :style="isDeepColor(decorateBgColor)? 'color:white':'color:blank'"
+                           @start_callback="countDownS_cb"
+                           @end_callback="countDownE_cb"
+                           :startTime="PromotionStartTime"
+                           :endTime="PromotionEndTime"
+                           :secondsTxt="''"
+                           backgroundColor="#FFFFFF"
+                           textColor="#FF4444">
+              </v-countdown>
+              <div class="promotionStatusText" v-if="promotionStatus.status === 5">
+                <span style="color: white">已结束</span>
+              </div>
+            </div>
           </div>
-          <div class="promotionStatusText">
-            <span style="color: white">已结束</span>
-          </div>
+
         </van-cell>
         <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
           <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
@@ -76,163 +83,222 @@
         PromotionEndTime: 0,
         promotionActivityId: 0,
         promotionStatus: -1,
-        decorateBgColor: '#FF4444'
+        decorateBgColor: '#FF4444',
+        isDailySchedule: false,
+        dailyScheduleInfo: [],
+        dailyScheduleText: '',
+        timer: null,
       }
     },
-    created() {
-      if (this.datas.settings.title.hasPromotionActivity) {
-/*        this.$toast("this.datas.settings.title.promotionActivityStartDate:"+this.datas.settings.title.promotionActivityStartDate+"，" +
-          "this.datas.settings.title.promotionActivityEndDate:"+this.datas.settings.title.promotionActivityEndDate)*/
-        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate.replace(/-/g,'/')).getTime()
-        this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g,'/')).getTime()
-        this.promotionActivityId = this.datas.settings.title.promotionActivityId
-        this.updatePromotionInfo();
-      }
-
-    },
-
-    activated() {
-      if (this.datas.settings.title.hasPromotionActivity) {
-        this.updatePromotionInfo()
+    watch: {
+      isDailySchedule(newValue, oldvalue) {
+        if (this.timer) {
+          clearInterval(this.timer)
+        }
+        if (newValue) {
+          this.timer = setInterval(this.updateDailyScheduleText, 1000);
+        }
       }
     },
 
-    methods: {
-      updatePromotionInfo() {
-        if(this.promotionActivityId > 0) {
-          let that = this
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.EQUITY_BASE_URL,
-            url: '/promotion/findPromotion',
-            params: {
-              id: this.promotionActivityId,
-            },
-          }).then((response) => {
-            this.$log(response.data.data.result)
-            let detail = response.data.data.result
-            this.PromotionStartTime = new Date(detail.startDate.replace(/-/g,'/')).getTime()
-            this.PromotionEndTime = new Date(detail.endDate.replace(/-/g,'/')).getTime()
-            this.PromotionStatus = detail.status;
-          }).catch(function (error) {
-            that.$log(error)
-          })
+      created() {
+        if (this.datas.settings.title.hasPromotionActivity) {
+          this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate.replace(/-/g, '/')).getTime()
+          this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g, '/')).getTime()
+          this.promotionActivityId = this.datas.settings.title.promotionActivityId
+          this.updatePromotionInfo();
         }
-      },
-      isDeepColor(hexColor) {
-        this.$log("isDeepColor:" + hexColor)
-        /*        if(hexColor == undefined)
-                  return false;*/
-        if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
-        hexColor = hexColor.toLowerCase();
-        let b = new Array();
-        for (let x = 0; x < 3; x++) {
-          b[0] = hexColor.substr(x * 2, 2)
-          b[3] = "0123456789abcdef";
-          b[1] = b[0].substr(0, 1)
-          b[2] = b[0].substr(1, 1)
-          b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
-        }
-        let grayLevel = b[20] * 0.299 + b[21] * 0.587 + b[22] * 0.114
-        if (grayLevel >= 192)
-          return false
-        else
-          return true;
-      },
-      countDownS_cb(data) {
-        // this.$log("Start #################")
-      },
-      countDownE_cb(data) {
-        // this.$log("End   #################")
-      },
-      updateCurrentGoods(goods) {
-        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
-      },
-      See(e) {
-        window.location.href = e
-      },
-      gotoPromotionPage(promotionId) {
-        this.$router.push({path: '/category/goods/promotion/' + promotionId});
-      },
-      gotoGoodsPage(mpu) {
-        try {
-          //获取goods信息，update current googds
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
 
+      },
+
+      activated() {
+        if (this.datas.settings.title.hasPromotionActivity) {
+          this.isDailySchedule = false;
+          this.updatePromotionInfo()
         }
       },
-      gotoTargetUrl() {
-        let targetId = this.datas.settings.title.targetUrl
-        if (targetId.startsWith("aggregation://")) {
-          let id = targetId.substr(14);
-          this.$router.push({path: '/index/' + id});
-        } else if (targetId.startsWith("route://")) {
-          let target = targetId.substr(8);
-          let paths = target.split("/");
-          this.$log(paths);
-          if (paths[0] === 'category') {
-            this.$router.push({path: '/category'})
-          } else  if (paths[0] === 'coupon_center') {
-            this.$router.push({path:'/user/couponCenter'})
-          } else if (paths[0] === 'commodity') {
-            try {
-              if (paths[1] != null)
-                this.gotoGoodsPage(paths[1]);
-            } catch (e) {
-            }
-          } else if (paths[0] === 'promotion') {
-            try {
-              if (paths[1] != null) {
-                //this.gotoGoodsPage(paths[1]);
-                //this.$log("promotion:"+paths[1])
-                this.gotoPromotionPage(paths[1]);
+
+      deactivated() {
+        if (this.timer) {
+          clearInterval(this.timer)
+        }
+      },
+
+      methods: {
+        updateDailyScheduleText() {
+          let currentTime = new Date().getTime();
+          if (currentTime < this.dailyScheduleInfo[0].starTime) {
+            this.dailyScheduleText = this.dailyScheduleInfo[0].schedule + "场即将开始"
+          } else {
+            let found = -1;
+            for (let i = 0; i < this.dailyScheduleInfo.length - 1; i++) {
+              if (currentTime >= this.dailyScheduleInfo[i].starTime &&
+                currentTime < this.dailyScheduleInfo[i + 1].starTime) {
+                found = i;
+                break;
               }
-            } catch (e) {
+            }
+            if (found != -1) {
+              this.dailyScheduleText = this.dailyScheduleInfo[found].schedule + "场正在疯抢"
+            } else {
+              if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length]) {
+                this.dailyScheduleText = this.dailyScheduleInfo[this.dailyScheduleInfo.length].schedule + "场正在疯抢"
+              } else {
+              }
             }
           }
-        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
-          this.See(targetId);
-        }
-      },
-      onGoodsClick(goods) {
-        let mpu = goods.mpu
-        if(mpu == null) {
-          mpu = goods.skuid;
-        }
-        try {
-          //获取goods信息，update current googds
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
+        },
+        updatePromotionInfo() {
+          if (this.promotionActivityId > 0) {
+            let that = this
+            this.$api.xapi({
+              method: 'get',
+              baseURL: this.$api.EQUITY_BASE_URL,
+              url: '/promotion/findPromotion',
+              params: {
+                id: this.promotionActivityId,
+              },
+            }).then((response) => {
+              this.$log(response.data.data.result)
+              let detail = response.data.data.result
+              if (detail.dailySchedule != undefined) {
+                this.isDailySchedule = detail.dailySchedule
+              }
+              if (this.isDailySchedule) {
+                // this.dailyScheduleInfo = detail.promotionSchedules
+                detail.promotionSchedules.forEach(item => {
+                  this.$log(item)
+                  let info = {
+                    schedule: item.schedule,
+                    starTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
+                  }
+                  this.dailyScheduleInfo.push(info)
+                })
+                this.updateDailyScheduleText();
+              } else {
+                this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
+                this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
+              }
+              this.PromotionStatus = detail.status;
+            }).catch(function (error) {
+              that.$log(error)
+            })
+          }
+        },
+        isDeepColor(hexColor) {
+          this.$log("isDeepColor:" + hexColor)
+          /*        if(hexColor == undefined)
+                    return false;*/
+          if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
+          hexColor = hexColor.toLowerCase();
+          let b = new Array();
+          for (let x = 0; x < 3; x++) {
+            b[0] = hexColor.substr(x * 2, 2)
+            b[3] = "0123456789abcdef";
+            b[1] = b[0].substr(0, 1)
+            b[2] = b[0].substr(1, 1)
+            b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
+          }
+          let grayLevel = b[20] * 0.299 + b[21] * 0.587 + b[22] * 0.114
+          if (grayLevel >= 192)
+            return false
+          else
+            return true;
+        },
+        countDownS_cb(data) {
+          // this.$log("Start #################")
+        },
+        countDownE_cb(data) {
+          // this.$log("End   #################")
+        },
+        updateCurrentGoods(goods) {
+          this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
+        },
+        See(e) {
+          window.location.href = e
+        },
+        gotoPromotionPage(promotionId) {
+          this.$router.push({path: '/category/goods/promotion/' + promotionId});
+        },
+        gotoGoodsPage(mpu) {
+          try {
+            //获取goods信息，update current googds
+            this.$api.xapi({
+              method: 'get',
+              baseURL: this.$api.PRODUCT_BASE_URL,
+              url: '/prod',
+              params: {
+                mpu: mpu,
+              }
+            }).then((res) => {
+              this.updateCurrentGoods(res.data.data.result);
+              this.$router.push("/detail");
+            }).catch((error) => {
+              console.log(error)
+            })
+          } catch (e) {
 
-        }
-      },
+          }
+        },
+        gotoTargetUrl() {
+          let targetId = this.datas.settings.title.targetUrl
+          if (targetId.startsWith("aggregation://")) {
+            let id = targetId.substr(14);
+            this.$router.push({path: '/index/' + id});
+          } else if (targetId.startsWith("route://")) {
+            let target = targetId.substr(8);
+            let paths = target.split("/");
+            this.$log(paths);
+            if (paths[0] === 'category') {
+              this.$router.push({path: '/category'})
+            } else if (paths[0] === 'coupon_center') {
+              this.$router.push({path: '/user/couponCenter'})
+            } else if (paths[0] === 'commodity') {
+              try {
+                if (paths[1] != null)
+                  this.gotoGoodsPage(paths[1]);
+              } catch (e) {
+              }
+            } else if (paths[0] === 'promotion') {
+              try {
+                if (paths[1] != null) {
+                  //this.gotoGoodsPage(paths[1]);
+                  //this.$log("promotion:"+paths[1])
+                  this.gotoPromotionPage(paths[1]);
+                }
+              } catch (e) {
+              }
+            }
+          } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+            this.See(targetId);
+          }
+        },
+        onGoodsClick(goods) {
+          let mpu = goods.mpu
+          if (mpu == null) {
+            mpu = goods.skuid;
+          }
+          try {
+            //获取goods信息，update current googds
+            this.$api.xapi({
+              method: 'get',
+              baseURL: this.$api.PRODUCT_BASE_URL,
+              url: '/prod',
+              params: {
+                mpu: mpu,
+              }
+            }).then((res) => {
+              this.updateCurrentGoods(res.data.data.result);
+              this.$router.push("/detail");
+            }).catch((error) => {
+              console.log(error)
+            })
+          } catch (e) {
+
+          }
+        },
+      }
     }
-  }
 </script>
 
 <style lang="less" scoped>
@@ -257,6 +323,7 @@
         border-top-right-radius: 10px;
       }
     }
+
     .box:after {
       position: absolute;
       left: 0;
@@ -269,9 +336,11 @@
       background: linear-gradient(#ff4444, #ffcccc);
       overflow: hidden;
     }
+
     .listBox {
       width: 100%;
       justify-content: center;
+
       .sectionSlide-list {
         width: 100%;
         overflow-x: auto;
@@ -331,7 +400,8 @@
               color: #707070;
               .fz(font-size, 20);
               text-decoration: line-through;
-              span{
+
+              span {
                 .fz(font-size, 15);
               }
             }
@@ -340,7 +410,8 @@
               margin: 2px;
               color: #ff4444;
               .fz(font-size, 28);
-              span{
+
+              span {
                 .fz(font-size, 20);
               }
             }
@@ -372,7 +443,6 @@
       word-break: break-all;
     }
   }
-
 
 
 </style>

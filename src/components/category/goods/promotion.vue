@@ -8,7 +8,8 @@
         <div v-for="(item,type) in seckillTypes" :key="type" class="seckilltab" @click="onTabClick(type)">
           <div class="tab-item">
             <span :class="active == type? 'title_active' : 'title_norm'">{{item.title}}</span>
-            <span :class="active == type? 'title_active' : 'title_norm'" style="font-size: x-small">{{item.status}}</span>
+            <span :class="active == type? 'title_active' : 'title_norm'"
+                  style="font-size: x-small">{{item.status}}</span>
           </div>
         </div>
         <div>
@@ -18,7 +19,7 @@
         <div v-for="(promotionActive,index) in seckillTypes" :key="index">
           <div v-if="active===index">
             <ul>
-              <li  v-for="(k,i) in seckillTypes[index].list" :key="i">
+              <li v-for="(k,i) in seckillTypes[index].list" :key="i">
                 <div class="goodsCard" @click="onGoodsClick(k)">
                   <van-col span="8" class="cardImg">
                     <img v-lazy="k.image">
@@ -36,7 +37,7 @@
                         <div class="originPrice">￥{{k.price}}</div>
                       </van-col>
                       <van-col span="12" class="actionBox">
-                        <van-button type="danger"  @click.stop="" size="small" @click="onAdd2carBtnClick(k)">立即抢购
+                        <van-button type="danger" @click.stop="" size="small" @click="onAdd2carBtnClick(k)">立即抢购
                         </van-button>
                       </van-col>
                     </div>
@@ -132,12 +133,12 @@
 
     watch: {
       dailySchedule(newValue, oldvalue) {
-         if(this.timer) {
-           clearInterval(this.timer)
-         }
-         if(newValue) {
-           this.timer = setInterval(this.updateDaylySheduleActivityStatus,1000);
-         }
+        if (this.timer) {
+          clearInterval(this.timer)
+        }
+        if (newValue) {
+          this.timer = setInterval(this.updateDaylySheduleActivityStatus, 1000);
+        }
       }
     },
 
@@ -172,7 +173,7 @@
                   return v;
               }),
               status: "即将开始",
-              startTime:  new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
+              startTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
               endTime: new Date(this.$moment(item.endTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
             }
             this.seckillTypes.push(promotionActivity)
@@ -190,9 +191,8 @@
     },
 
 
-
     beforeDestroy() {
-      if(this.timer) {
+      if (this.timer) {
         clearInterval(this.timer);
         this.timer = null;
       }
@@ -202,26 +202,26 @@
 
     methods: {
       updateDaylySheduleActivityStatus() {
-          for(let i = 0; i < this.seckillTypes.length ; i++) {
-            this.isOnGoingActivity(i)
-          }
+        for (let i = 0; i < this.seckillTypes.length; i++) {
+          this.isOnGoingActivity(i)
+        }
       },
       isOnGoingActivity(index) {
         let currentTime = new Date().getTime()
-        //this.$log("startTime:"+this.seckillTypes[index].startTime+",endTime:"+this.seckillTypes[index].endTime+",currentTime:"+currentTime)
-        if(currentTime < this.seckillTypes[index].startTime ) {
+       //this.$log(index + ", startTime:" + this.seckillTypes[index].startTime + ",endTime:" + this.seckillTypes[index].endTime + ",currentTime:" + currentTime)
+        if (currentTime < this.seckillTypes[index].startTime) {
           this.seckillTypes[index].status = "即将开抢"
           return false
-        } else if(currentTime >= this.seckillTypes[index].startTime && currentTime < this.seckillTypes[index].endTime){
-          this.seckillTypes[index].status = "正在疯抢"
-          return true
-        } else {
+        } else if (index < (this.seckillTypes.length - 1) && currentTime > this.seckillTypes[index + 1].startTime) { //currentTime >=  this.seckillTypes[index].startTime
           this.seckillTypes[index].status = "已开抢"
           return false
+        } else {
+          this.seckillTypes[index].status = "正在疯抢"
+          return true
         }
       },
       onTabClick(type) {
-        this.$log("tab:"+type)
+        this.$log("tab:" + type)
         this.active = type
       },
       add2Car(userInfo, goods) {
@@ -338,15 +338,17 @@
 
     .seckillBody {
       background-color: #f8f8f8;
-      .seckillNavTitle{
+
+      .seckillNavTitle {
         display: flex;
         justify-items: center;
         width: 100%;
         position: fixed;
         top: 3em;
         z-index: 5;
-        left:0;
-        .seckilltab{
+        left: 0;
+
+        .seckilltab {
           display: flex;
           justify-content: center;
           align-items: Center;
@@ -354,23 +356,28 @@
           background-color: #ff4444;
           color: #ffaaaa;
         }
-        .tab-item{
+
+        .tab-item {
           display: flex;
           flex-direction: column;
           align-items: Center;
           height: 40px;
         }
+
         .title_active {
           color: white;
         }
-        .title_norm{
+
+        .title_norm {
           color: #ffaaaa;
         }
 
       }
-      .seckillList{
-          padding-top: 5.6em;
-          li {
+
+      .seckillList {
+        padding-top: 5.6em;
+
+        li {
           border-bottom: 1px solid #f0f0f0;
 
           .goodsCard {
