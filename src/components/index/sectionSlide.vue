@@ -108,101 +108,147 @@
           this.timer = setInterval(this.updateDailyScheduleText, 1000);
         }
       },
-      isExceedTodayMaxTime(newValue,oldValue) {
-         if(newValue) {
-           this.updatePromotionInfo()
-         }
-      },
-    },
-
-      created() {
-        if (this.datas.settings.title.hasPromotionActivity) {
-          this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate.replace(/-/g, '/')).getTime()
-          this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g, '/')).getTime()
-          this.promotionActivityId = this.datas.settings.title.promotionActivityId
-          this.updatePromotionInfo();
-        }
-
-      },
-
-      activated() {
-        if (this.datas.settings.title.hasPromotionActivity) {
-          this.isDailySchedule = false;
+      isExceedTodayMaxTime(newValue, oldValue) {
+        if (newValue) {
           this.updatePromotionInfo()
         }
       },
+    },
 
-      deactivated() {
-        if (this.timer) {
-          clearInterval(this.timer)
+    created() {
+      if (this.datas.settings.title.hasPromotionActivity) {
+        /*        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate.replace(/-/g, '/')).getTime()
+                  this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g, '/')).getTime()*/
+        this.promotionActivityId = this.datas.settings.title.promotionActivityId
+        this.updatePromotionInfo();
+      }
+    },
+
+    activated() {
+      if (this.datas.settings.title.hasPromotionActivity) {
+        this.isDailySchedule = false;
+        this.updatePromotionInfo()
+      }
+    },
+
+    deactivated() {
+      if (this.timer) {
+        clearInterval(this.timer)
+      }
+    },
+
+    methods: {
+      updateTimer(startTime, endTime) {
+        let timeDistance = endTime - startTime;
+        if (timeDistance > 0) {
+          this.msTime.show = true;
+          this.msTime.day = Math.floor(timeDistance / 86400000);
+          timeDistance -= this.msTime.day * 86400000;
+          this.msTime.hour = Math.floor(timeDistance / 3600000);
+          timeDistance -= this.msTime.hour * 3600000;
+          this.msTime.minutes = Math.floor(timeDistance / 60000);
+          timeDistance -= this.msTime.minutes * 60000;
+          //是否开启秒表倒计,未完成
+//                    this.secondsFixed ? msTime.seconds = new Number(timeDistance / 1000).toFixed(2) : msTime.seconds = Math.floor( timeDistance / 1000 ).toFixed(0);
+          this.msTime.seconds = Math.floor(timeDistance / 1000).toFixed(0);
+          timeDistance -= this.msTime.seconds * 1000;
+
+          if (this.msTime.hour < 10) {
+            this.msTime.hour = "0" + this.msTime.hour;
+          }
+          if (this.msTime.minutes < 10) {
+            this.msTime.minutes = "0" + this.msTime.minutes;
+          }
+          if (this.msTime.seconds < 10) {
+            this.msTime.seconds = "0" + this.msTime.seconds;
+          }
         }
       },
 
-      methods: {
-        updateTimer(startTime, endTime) {
-          let timeDistance = endTime - startTime;
-          if (timeDistance > 0) {
-            this.msTime.show = true;
-            this.msTime.day = Math.floor(timeDistance / 86400000);
-            timeDistance -= this.msTime.day * 86400000;
-            this.msTime.hour = Math.floor(timeDistance / 3600000);
-            timeDistance -= this.msTime.hour * 3600000;
-            this.msTime.minutes = Math.floor(timeDistance / 60000);
-            timeDistance -= this.msTime.minutes * 60000;
-            //是否开启秒表倒计,未完成
-//                    this.secondsFixed ? msTime.seconds = new Number(timeDistance / 1000).toFixed(2) : msTime.seconds = Math.floor( timeDistance / 1000 ).toFixed(0);
-            this.msTime.seconds = Math.floor(timeDistance / 1000).toFixed(0);
-            timeDistance -= this.msTime.seconds * 1000;
-
-            if (this.msTime.hour < 10) {
-              this.msTime.hour = "0" + this.msTime.hour;
-            }
-            if (this.msTime.minutes < 10) {
-              this.msTime.minutes = "0" + this.msTime.minutes;
-            }
-            if (this.msTime.seconds < 10) {
-              this.msTime.seconds = "0" + this.msTime.seconds;
-            }
-          }
-        },
-
-        updateDailyScheduleText() {
-          let currentTime = new Date().getTime();
-          if( currentTime < this.dailyEndTime) {
-            this.isExceedTodayMaxTime = false;
-            if (currentTime < this.dailyScheduleInfo[0].starTime) {
-              this.updateTimer(currentTime, this.dailyScheduleInfo[0].starTime)
-              this.dailyScheduleText = this.dailyScheduleInfo[0].schedule + "场"
-              if( this.msTime.show) {
-                this.dailyScheduleText += " 据下场 "+this.msTime.hour+":"+this.msTime.minutes+":"+this.msTime.seconds
-              }
-            } else {
-              let found = -1;
-              for (let i = 0; i < this.dailyScheduleInfo.length - 1; i++) {
-                if (currentTime >= this.dailyScheduleInfo[i].starTime &&
-                  currentTime < this.dailyScheduleInfo[i + 1].starTime) {
-                  found = i;
-                  break;
-                }
-              }
-              if (found != -1) {
-                this.updateTimer(currentTime, this.dailyScheduleInfo[found+1].starTime)
-                this.dailyScheduleText = this.dailyScheduleInfo[found].schedule + "场"
-                if( this.msTime.show) {
-                  this.dailyScheduleText += " 据下场 "+this.msTime.hour+":"+this.msTime.minutes+":"+this.msTime.seconds
-                }
-              } else {
-                if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length]) {
-                  this.dailyScheduleText = this.dailyScheduleInfo[this.dailyScheduleInfo.length].schedule + "场正在疯抢"
-                } else {
-                }
-              }
+      updateDailyScheduleText() {
+        let currentTime = new Date().getTime();
+        if (currentTime < this.dailyEndTime) {
+          this.isExceedTodayMaxTime = false;
+          if (currentTime < this.dailyScheduleInfo[0].starTime) {
+            this.updateTimer(currentTime, this.dailyScheduleInfo[0].starTime)
+            this.dailyScheduleText = this.dailyScheduleInfo[0].schedule + "场"
+            if (this.msTime.show) {
+              this.dailyScheduleText += " 距下场 " + this.msTime.hour + ":" + this.msTime.minutes + ":" + this.msTime.seconds
             }
           } else {
-            this.isExceedTodayMaxTime = true;
+            let found = -1;
+            for (let i = 0; i < this.dailyScheduleInfo.length - 1; i++) {
+              if (currentTime >= this.dailyScheduleInfo[i].starTime &&
+                currentTime < this.dailyScheduleInfo[i + 1].starTime) {
+                found = i;
+                break;
+              }
+            }
+            if (found != -1) {
+              this.updateTimer(currentTime, this.dailyScheduleInfo[found + 1].starTime)
+              this.dailyScheduleText = this.dailyScheduleInfo[found].schedule + "场"
+              if (this.msTime.show) {
+                this.dailyScheduleText += " 距下场 " + this.msTime.hour + ":" + this.msTime.minutes + ":" + this.msTime.seconds
+              }
+            } else {
+              if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length]) {
+                this.dailyScheduleText = this.dailyScheduleInfo[this.dailyScheduleInfo.length].schedule + "场正在疯抢"
+              } else {
+              }
+            }
           }
-        },
-        updatePromotionInfo() {
+        } else {
+          this.isExceedTodayMaxTime = true;
+        }
+      },
+      updatePromotionInfo() {
+        if (this.datas.settings.title.promotionDailySchedule != undefined && this.datas.settings.title.promotionDailySchedule) {
+          let that = this
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.EQUITY_BASE_URL,
+            url: '/promotion/getCurrentScheduleMpu',
+            params: {
+              num: 10,
+            },
+          }).then((response) => {
+            this.$log(response.data.data.result)
+            let detail = response.data.data.result
+            this.promotionActivityId = detail.id
+            if (detail.dailySchedule != undefined) {
+              this.isDailySchedule = detail.dailySchedule
+              this.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+            }
+            if (this.isDailySchedule) {
+              this.datas.list= [];
+              detail.promotionSkus.forEach(item => {
+                let product = {
+                  brand: item.brand,
+                  discount: item.discount,
+                  imagePath: item.image,
+                  intro: item.name,
+                  mpu: item.mpu,
+                  name: item.name,
+                  price: item.price,
+                  skuid: item.skuid
+                }
+                this.datas.list.push(product)
+              })
+              this.$log(this.datas.list)
+              detail.promotionSchedules.forEach(item => {
+                this.$log(item)
+                let info = {
+                  schedule: item.schedule,
+                  starTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
+                }
+                this.dailyScheduleInfo.push(info)
+              })
+              this.updateDailyScheduleText();
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        } else {
           if (this.promotionActivityId > 0) {
             let that = this
             this.$api.xapi({
@@ -214,146 +260,130 @@
               },
             }).then((response) => {
               this.$log(response.data.data.result)
-              let detail = response.data.data.result
-              if (detail.dailySchedule != undefined) {
-                this.isDailySchedule = detail.dailySchedule
-                this.dailyEndTime =  new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
-              }
-              if (this.isDailySchedule) {
-                // this.dailyScheduleInfo = detail.promotionSchedules
-                detail.promotionSchedules.forEach(item => {
-                  this.$log(item)
-                  let info = {
-                    schedule: item.schedule,
-                    starTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
-                  }
-                  this.dailyScheduleInfo.push(info)
-                })
-                this.updateDailyScheduleText();
-              } else {
-                this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
-                this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
-              }
+              this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
+              this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
               this.PromotionStatus = detail.status;
             }).catch(function (error) {
               that.$log(error)
             })
           }
-        },
-        isDeepColor(hexColor) {
-         // this.$log("isDeepColor:" + hexColor)
-          /*        if(hexColor == undefined)
-                    return false;*/
-          if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
-          hexColor = hexColor.toLowerCase();
-          let b = new Array();
-          for (let x = 0; x < 3; x++) {
-            b[0] = hexColor.substr(x * 2, 2)
-            b[3] = "0123456789abcdef";
-            b[1] = b[0].substr(0, 1)
-            b[2] = b[0].substr(1, 1)
-            b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
-          }
-          let grayLevel = b[20] * 0.299 + b[21] * 0.587 + b[22] * 0.114
-          if (grayLevel >= 192)
-            return false
-          else
-            return true;
-        },
-        countDownS_cb(data) {
-          // this.$log("Start #################")
-        },
-        countDownE_cb(data) {
-          // this.$log("End   #################")
-        },
-        updateCurrentGoods(goods) {
-          this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
-        },
-        See(e) {
-          window.location.href = e
-        },
-        gotoPromotionPage(promotionId) {
-          this.$router.push({path: '/category/goods/promotion/' + promotionId});
-        },
-        gotoGoodsPage(mpu) {
-          try {
-            //获取goods信息，update current googds
-            this.$api.xapi({
-              method: 'get',
-              baseURL: this.$api.PRODUCT_BASE_URL,
-              url: '/prod',
-              params: {
-                mpu: mpu,
-              }
-            }).then((res) => {
-              this.updateCurrentGoods(res.data.data.result);
-              this.$router.push("/detail");
-            }).catch((error) => {
-              console.log(error)
-            })
-          } catch (e) {
-
-          }
-        },
-        gotoTargetUrl() {
-          let targetId = this.datas.settings.title.targetUrl
-          if (targetId.startsWith("aggregation://")) {
-            let id = targetId.substr(14);
-            this.$router.push({path: '/index/' + id});
-          } else if (targetId.startsWith("route://")) {
-            let target = targetId.substr(8);
-            let paths = target.split("/");
-            this.$log(paths);
-            if (paths[0] === 'category') {
-              this.$router.push({path: '/category'})
-            } else if (paths[0] === 'coupon_center') {
-              this.$router.push({path: '/user/couponCenter'})
-            } else if (paths[0] === 'commodity') {
-              try {
-                if (paths[1] != null)
-                  this.gotoGoodsPage(paths[1]);
-              } catch (e) {
-              }
-            } else if (paths[0] === 'promotion') {
-              try {
-                if (paths[1] != null) {
-                  //this.gotoGoodsPage(paths[1]);
-                  //this.$log("promotion:"+paths[1])
-                  this.gotoPromotionPage(paths[1]);
-                }
-              } catch (e) {
-              }
+        }
+      },
+      isDeepColor(hexColor) {
+        // this.$log("isDeepColor:" + hexColor)
+        /*        if(hexColor == undefined)
+                  return false;*/
+        if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
+        hexColor = hexColor.toLowerCase();
+        let b = new Array();
+        for (let x = 0; x < 3; x++) {
+          b[0] = hexColor.substr(x * 2, 2)
+          b[3] = "0123456789abcdef";
+          b[1] = b[0].substr(0, 1)
+          b[2] = b[0].substr(1, 1)
+          b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
+        }
+        let grayLevel = b[20] * 0.299 + b[21] * 0.587 + b[22] * 0.114
+        if (grayLevel >= 192)
+          return false
+        else
+          return true;
+      },
+      countDownS_cb(data) {
+        // this.$log("Start #################")
+      },
+      countDownE_cb(data) {
+        // this.$log("End   #################")
+      },
+      updateCurrentGoods(goods) {
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
+      },
+      See(e) {
+        window.location.href = e
+      },
+      gotoPromotionPage(promotionId) {
+        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+      },
+      gotoGoodsPage(mpu) {
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.PRODUCT_BASE_URL,
+            url: '/prod',
+            params: {
+              mpu: mpu,
             }
-          } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
-            this.See(targetId);
-          }
-        },
-        onGoodsClick(goods) {
-          let mpu = goods.mpu
-          if (mpu == null) {
-            mpu = goods.skuid;
-          }
-          try {
-            //获取goods信息，update current googds
-            this.$api.xapi({
-              method: 'get',
-              baseURL: this.$api.PRODUCT_BASE_URL,
-              url: '/prod',
-              params: {
-                mpu: mpu,
-              }
-            }).then((res) => {
-              this.updateCurrentGoods(res.data.data.result);
-              this.$router.push("/detail");
-            }).catch((error) => {
-              console.log(error)
-            })
-          } catch (e) {
+          }).then((res) => {
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
 
+        }
+      },
+      gotoTargetUrl() {
+        let targetId = this.datas.settings.title.targetUrl
+        if (targetId.startsWith("aggregation://")) {
+          let id = targetId.substr(14);
+          this.$router.push({path: '/index/' + id});
+        } else if (targetId.startsWith("route://")) {
+          let target = targetId.substr(8);
+          let paths = target.split("/");
+          this.$log(paths);
+          if (paths[0] === 'category') {
+            this.$router.push({path: '/category'})
+          } else if (paths[0] === 'coupon_center') {
+            this.$router.push({path: '/user/couponCenter'})
+          } else if (paths[0] === 'commodity') {
+            try {
+              if (paths[1] != null)
+                this.gotoGoodsPage(paths[1]);
+            } catch (e) {
+            }
+          } else if (paths[0] === 'promotion') {
+            try {
+              if (paths[1] != null) {
+                //this.gotoGoodsPage(paths[1]);
+                //this.$log("promotion:"+paths[1])
+                //this.gotoPromotionPage(paths[1]);
+                 this.gotoPromotionPage(this.promotionActivityId)
+              }
+            } catch (e) {
+            }
           }
-        },
-      }
+        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+          this.See(targetId);
+        }
+      },
+      onGoodsClick(goods) {
+        let mpu = goods.mpu
+        if (mpu == null) {
+          mpu = goods.skuid;
+        }
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.PRODUCT_BASE_URL,
+            url: '/prod',
+            params: {
+              mpu: mpu,
+            }
+          }).then((res) => {
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
+      },
     }
+  }
 </script>
 
 <style lang="less" scoped>

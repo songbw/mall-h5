@@ -173,7 +173,7 @@
       isValidLeavedPath(to) {
         let path = to.path;
         // if("/category/all | /car | ^/index/ | /detail".match(path))
-        if (path.match('(^/index/)|(/user)|(category/goods/seckill)|(/category/all)|(/car)|(/detail)|(/search)|(^/category/goods/promotion/)'))
+        if (path.match('(^/index/)|(/user)|(/category/all)|(/car)|(/detail)|(/search)|(^/category/goods/promotion/)'))
           return true;
         return false;
       },
@@ -428,8 +428,7 @@
 
       onSearchInputClick() {
         this.$log("onSearchInputClick")
-       // this.$router.push({name: '搜索页'})
-        this.$router.push({name: '凤巢秒杀页'})
+        this.$router.push({name: '搜索页'})
       }
     }
   }

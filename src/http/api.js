@@ -44,8 +44,8 @@ xapi.defaults.headers.post['Content-Type'] = 'application/json';
 // 请求拦截
 xapi.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-  if (store.state.login.token) {
-    config.headers.Authorization = `token ${store.state.login.token}`;
+  if (store.state.appconf.token) {
+    config.headers.Authorization = `token ${store.state.appconf.token}`;
   }
   return config;
 
