@@ -45,13 +45,12 @@
                 </div>
               </li>
             </ul>
-
           </div>
         </div>
       </div>
     </div>
     <div v-else>
-      <div class="promotionTitle">
+      <div class="promotionTitle" :style="showHeader?'padding-top:3em': 'padding-top: 0em'">
         <van-cell>
           <span class="promotionTag">{{detail.tag}}</span>
           <v-countdown class="promotionCountDown"

@@ -9,7 +9,6 @@
                {{datas.settings.title.textValue}}
             </span>
           </div>
-
           <div v-if="datas.settings.title.hasPromotionActivity && PromotionStatus != -1">
             <div v-if="isDailySchedule" style="font-size: x-small">
               <span style="color:white">{{dailyScheduleText}}</span>
@@ -21,7 +20,7 @@
               <span style="color:white;background-color: black;padding: 2px">{{msTime.seconds}}</span>
             </div>
             <div v-else>
-              <v-countdown v-if="promotionStatus.status < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
+              <v-countdown v-if="promotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
                            class="countdownBox"
                            :style="isDeepColor(decorateBgColor)? 'color:white':'color:blank'"
                            @start_callback="countDownS_cb"
@@ -29,15 +28,14 @@
                            :startTime="PromotionStartTime"
                            :endTime="PromotionEndTime"
                            :secondsTxt="''"
-                           backgroundColor="#FFFFFF"
-                           textColor="#FF4444">
+                           backgroundColor="#000000"
+                           textColor="#FFFFFF">
               </v-countdown>
-              <div class="promotionStatusText" v-if="promotionStatus.status === 5">
+              <div class="promotionStatusText" v-if="promotionStatus === 5">
                 <span style="color: white">已结束</span>
               </div>
             </div>
           </div>
-
         </van-cell>
         <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
           <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
@@ -287,9 +285,13 @@
               this.$log(response.data.data.result)
               let detail = response.data.data.result
               if(detail != null) {
+                this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+                this.$log(detail)
                 this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
                 this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
                 this.PromotionStatus = detail.status;
+                this.$log(this.PromotionStartTime)
+                this.$log(this.PromotionEndTime)
                 this.show = true;
               } else {
                 this.show = false;

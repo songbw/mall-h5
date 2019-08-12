@@ -6,7 +6,7 @@
     <div v-if="pageloading" style="padding-top: 2.3em">
       <v-loading></v-loading>
     </div>
-    <div class="detail-body" :style="{'padding-top':showHeader? '2em':'0px'}"  v-else>
+    <div class="detail-body" :style="{'padding-top':showHeader? '2.6em':'0px'}"  v-else>
       <v-swiper :swiperData=swiperUrls></v-swiper>
       <div>
         <div class="promotion-price" v-if="hasPromotion">

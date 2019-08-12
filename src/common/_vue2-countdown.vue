@@ -1,12 +1,12 @@
 <template>
   <div>
-    <p v-if="msTime.show">
+    <p v-if="msTime.show" style="font-size: x-small;font-weight: lighter">
       <span v-if="tipShow">{{tipText}}:</span>
       <span v-if="!tipShow">{{tipTextEnd}}:</span>
-      <span v-if="msTime.day>0"><span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.day}}</span><i class="timeSplitText">{{dayTxt}}</i></span>
-      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.hour}}</span><i class="timeSplitText">{{hourTxt}}</i>
-      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.minutes}}</span><i class="timeSplitText">{{minutesTxt}}</i>
-      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px','border-radius': '3px'}">{{msTime.seconds}}</span><i class="timeSplitText">{{secondsTxt}}</i>
+      <span v-if="msTime.day>0"><span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px'}">{{msTime.day}}</span><i class="timeSplitText">{{dayTxt}}</i></span>
+      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px'}">{{msTime.hour}}</span><i class="timeSplitText">{{hourTxt}}</i>
+      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px'}">{{msTime.minutes}}</span><i class="timeSplitText">{{minutesTxt}}</i>
+      <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '2px'}">{{msTime.seconds}}</span><i class="timeSplitText">{{secondsTxt}}</i>
     </p>
     <p v-if="!msTime.show">{{endText}}</p>
   </div>
