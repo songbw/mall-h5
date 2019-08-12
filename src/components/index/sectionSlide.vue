@@ -1,5 +1,5 @@
 <template>
-  <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
+  <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}"  v-if="show">
     <div class="wrap">
       <div class='box' :style="{'background-color': decorateBgColor}">
         <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()"
@@ -11,8 +11,14 @@
           </div>
 
           <div v-if="datas.settings.title.hasPromotionActivity && PromotionStatus != -1">
-            <div v-if="isDailySchedule">
-              <span :style="isDeepColor(decorateBgColor)? 'color:white':'color:blank'">{{dailyScheduleText}}</span>
+            <div v-if="isDailySchedule" style="font-size: x-small">
+              <span style="color:white">{{dailyScheduleText}}</span>
+              <span style="color:white"> {{dailyScheduleDetail}}</span>
+              <span style="color:white;background-color: black;padding: 2px">{{msTime.hour}}</span>
+              <span style="color: white">:</span>
+              <span style="color:white;background-color: black;padding: 2px">{{msTime.minutes}}</span>
+              <span style="color: white">:</span>
+              <span style="color:white;background-color: black;padding: 2px">{{msTime.seconds}}</span>
             </div>
             <div v-else>
               <v-countdown v-if="promotionStatus.status < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
@@ -88,6 +94,7 @@
         dailyEndTime: "",
         dailyScheduleInfo: [],
         dailyScheduleText: '',
+        dailyScheduleDetail: '',
         timer: null,
         isExceedTodayMaxTime: false,
         msTime: {
@@ -97,6 +104,8 @@
           minutes: "",
           seconds: "",
         },
+        show: false,
+
       }
     },
     watch: {
@@ -165,15 +174,20 @@
         }
       },
 
+      getClockString(schedule) {
+        let clock = schedule.substr(0,2);
+        return clock + "点场"
+      },
       updateDailyScheduleText() {
         let currentTime = new Date().getTime();
         if (currentTime < this.dailyEndTime) {
           this.isExceedTodayMaxTime = false;
           if (currentTime < this.dailyScheduleInfo[0].starTime) {
             this.updateTimer(currentTime, this.dailyScheduleInfo[0].starTime)
-            this.dailyScheduleText = this.dailyScheduleInfo[0].schedule + "场"
+
+            this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[0].schedule)
             if (this.msTime.show) {
-              this.dailyScheduleText += " 距下场 " + this.msTime.hour + ":" + this.msTime.minutes + ":" + this.msTime.seconds
+              this.dailyScheduleDetail = " 距下场 "
             }
           } else {
             let found = -1;
@@ -186,13 +200,17 @@
             }
             if (found != -1) {
               this.updateTimer(currentTime, this.dailyScheduleInfo[found + 1].starTime)
-              this.dailyScheduleText = this.dailyScheduleInfo[found].schedule + "场"
+              this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[found].schedule)
               if (this.msTime.show) {
-                this.dailyScheduleText += " 距下场 " + this.msTime.hour + ":" + this.msTime.minutes + ":" + this.msTime.seconds
+                this.dailyScheduleDetail = " 距下场 "
               }
             } else {
               if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length]) {
-                this.dailyScheduleText = this.dailyScheduleInfo[this.dailyScheduleInfo.length].schedule + "场正在疯抢"
+                this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[this.dailyScheduleInfo.length].schedule) + "正在疯抢"
+                this.updateTimer(currentTime, this.dailyEndTime)
+                if (this.msTime.show) {
+                  this.dailyScheduleDetail = " 距结束 "
+                }
               } else {
               }
             }
@@ -214,39 +232,46 @@
           }).then((response) => {
             this.$log(response.data.data.result)
             let detail = response.data.data.result
-            this.promotionActivityId = detail.id
-            if (detail.dailySchedule != undefined) {
-              this.isDailySchedule = detail.dailySchedule
-              this.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+            if(detail != null) {
+              this.promotionActivityId = detail.id
+              if (detail.dailySchedule != undefined) {
+                this.isDailySchedule = detail.dailySchedule
+                this.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+              }
+              if (this.isDailySchedule) {
+                this.datas.list= [];
+                detail.promotionSkus.forEach(item => {
+                  let product = {
+                    brand: item.brand,
+                    discount: item.discount,
+                    imagePath: item.image,
+                    intro: item.name,
+                    mpu: item.mpu,
+                    name: item.name,
+                    price: item.price,
+                    skuid: item.skuid
+                  }
+                  this.datas.list.push(product)
+                })
+                this.$log(this.datas.list)
+                detail.promotionSchedules.forEach(item => {
+                  this.$log(item)
+                  let info = {
+                    schedule: item.schedule,
+                    starTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
+                  }
+                  this.dailyScheduleInfo.push(info)
+                })
+                this.updateDailyScheduleText();
+                this.show = true;
+              }
+            } else {
+              this.show = false;
             }
-            if (this.isDailySchedule) {
-              this.datas.list= [];
-              detail.promotionSkus.forEach(item => {
-                let product = {
-                  brand: item.brand,
-                  discount: item.discount,
-                  imagePath: item.image,
-                  intro: item.name,
-                  mpu: item.mpu,
-                  name: item.name,
-                  price: item.price,
-                  skuid: item.skuid
-                }
-                this.datas.list.push(product)
-              })
-              this.$log(this.datas.list)
-              detail.promotionSchedules.forEach(item => {
-                this.$log(item)
-                let info = {
-                  schedule: item.schedule,
-                  starTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
-                }
-                this.dailyScheduleInfo.push(info)
-              })
-              this.updateDailyScheduleText();
-            }
+
           }).catch(function (error) {
             that.$log(error)
+            that.show = false;
           })
         } else {
           if (this.promotionActivityId > 0) {
@@ -260,11 +285,18 @@
               },
             }).then((response) => {
               this.$log(response.data.data.result)
-              this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
-              this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
-              this.PromotionStatus = detail.status;
+              let detail = response.data.data.result
+              if(detail != null) {
+                this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
+                this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
+                this.PromotionStatus = detail.status;
+                this.show = true;
+              } else {
+                this.show = false;
+              }
             }).catch(function (error) {
               that.$log(error)
+              that.show = false;
             })
           }
         }
