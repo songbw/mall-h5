@@ -1050,11 +1050,18 @@
             }
           } else {
             if (this.addressCount > 0) {
+              let found = -1;
               for (let i = 0; i < list.length; i++) {
                 if (id == list[i].id) {
-                  address = list[i]
+                  found = i;
                   break;
                 }
+              }
+              if(found != -1) {
+                address = list[found]
+              } else {
+                id = list[0].id
+                address = list[0]
               }
             }
           }

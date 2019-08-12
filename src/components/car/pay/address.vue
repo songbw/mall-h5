@@ -99,6 +99,10 @@
             let userInfo = this.$store.state.appconf.userInfo
             if (!this.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
+              if (!receiverInfo.tel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+                this.$toast("请输入正确的电话号码")
+                return
+              }
               let options = {
                 "openId": user.userId,
                 "receiverName": receiverInfo.name,
@@ -157,6 +161,11 @@
             if (!this.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
               this.$store.commit('SET_USED_ADDRESS_ID', id);
+              if (!receiverInfo.tel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+                this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxx")
+                this.$toast("请输入正确的电话号码")
+                return
+              }
               let options = {
                 "id": id,
                 "receiverName": receiverInfo.name,
