@@ -22,13 +22,16 @@
             </div>
           </van-col>
           <van-col span="16" class="promotionBox">
-            <v-countdown
+            <v-countdown   v-if="PromotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
               @start_callback="countDownS_cb"
               @end_callback="countDownE_cb"
               :startTime="PromotionStartTime"
               :endTime="PromotionEndTime"
               :secondsTxt="''">
             </v-countdown>
+            <div class="promotionStatusText" v-if="PromotionStatus === 5">
+              <span style="color: white">已结束</span>
+            </div>
           </van-col>
         </div>
         <p class="price-title" v-else>
@@ -199,12 +202,13 @@
             }
           }
           if (this.goods.promotion != undefined && this.goods.promotion.length > 0) {
-            this.PromotionStartTime = new Date(this.goods.promotion[0].startDate.replace(/-/g,'/')).getTime()
-            this.PromotionEndTime = new Date(this.goods.promotion[0].endDate.replace(/-/g,'/')).getTime()
+            this.PromotionStartTime =  new Date(this.$moment(this.goods.promotion[0].startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+            this.PromotionEndTime = new Date(this.$moment(this.goods.promotion[0].endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
             this.promotionType = this.goods.promotion[0].promotionType
             this.discount = this.goods.promotion[0].discount
             this.promotionId = this.goods.promotion[0].id
             this.hasPromotion = true;
+            this.PromotionStatus = this.goods.promotion[0].status;
           }
         }
         if (this.hasPromotion) {
@@ -264,6 +268,7 @@
         swiperUrls: [],
         contentUrls: [],
         hasPromotion: false,
+        PromotionStatus: -1,
         PromotionStartTime: 0,
         PromotionEndTime: 0,
         promotionType: -1,
