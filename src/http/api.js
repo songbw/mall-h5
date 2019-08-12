@@ -15,11 +15,11 @@ const T_APP_ID ="20110843" //20110843:关爱通*/
 const SERVR_PHONE_NUM= "4000797717";
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 
-let SERVICE_URL = "https://api.weesharing.com"
-let TESTSTUB_PAYMENT_URL = "http://119.3.111.161:8088"
+/*let SERVICE_URL = "https://api.weesharing.com"
+let TESTSTUB_PAYMENT_URL = "http://119.3.111.161:8088"*/
 
-/*let SERVICE_URL = "http://192.168.200.37:8000";
-let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"*/
+let SERVICE_URL = "http://192.168.200.37:8000";
+let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"
 
 if (process.env.NODE_ENV === 'development') { //生产环境走的地址
   SERVICE_URL = "http://192.168.200.37:8000";

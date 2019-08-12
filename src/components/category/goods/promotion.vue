@@ -4,7 +4,7 @@
       <h1 slot="title">{{detail.name}}</h1>
     </v-header>
     <div v-if="this.dailySchedule" class="seckillBody">
-      <div class="seckillNavTitle">
+      <div class="seckillNavTitle" :style="showHeader?'top:3em': 'top: 0em'">
         <div v-for="(item,type) in seckillTypes" :key="type" class="seckilltab" @click="onTabClick(type)">
           <div class="tab-item">
             <span :class="active == type? 'title_active' : 'title_norm'">{{item.title}}</span>
@@ -15,7 +15,7 @@
         <div>
         </div>
       </div>
-      <div class="seckillList">
+      <div class="seckillList" :style="showHeader?'padding-top:5.6em':'padding-top:2.6em'">
         <div v-for="(promotionActive,index) in seckillTypes" :key="index">
           <div v-if="active===index">
             <ul>
@@ -361,7 +361,8 @@
           display: flex;
           flex-direction: column;
           align-items: Center;
-          height: 40px;
+          padding-top: 5px;
+          padding-bottom: 5px;
         }
 
         .title_active {
