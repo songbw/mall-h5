@@ -181,7 +181,7 @@
         if (currentTime < this.dailyEndTime) {
           this.isExceedTodayMaxTime = false;
           if (currentTime < this.dailyScheduleInfo[0].starTime) {
-            this.updateTimer(currentTime, this.dailyScheduleInfo[0].starTime)
+            this.updateTimer(currentTime, this.dailyScheduleInfo[0].starTime-1)
 
             this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[0].schedule)
             if (this.msTime.show) {
@@ -197,7 +197,7 @@
               }
             }
             if (found != -1) {
-              this.updateTimer(currentTime, this.dailyScheduleInfo[found + 1].starTime)
+              this.updateTimer(currentTime, this.dailyScheduleInfo[found + 1].starTime-1)
               this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[found].schedule)
               if (this.msTime.show) {
                 this.dailyScheduleDetail = " 距下场 "
@@ -205,7 +205,7 @@
             } else {
               if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length]) {
                 this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[this.dailyScheduleInfo.length].schedule) + "正在疯抢"
-                this.updateTimer(currentTime, this.dailyEndTime)
+                this.updateTimer(currentTime, this.dailyEndTime-1)
                 if (this.msTime.show) {
                   this.dailyScheduleDetail = " 距结束 "
                 }
