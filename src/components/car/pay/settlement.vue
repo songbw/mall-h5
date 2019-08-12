@@ -41,8 +41,8 @@
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
                                    @end_callback="countDownE_cb(index,k)"
-                                   :startTime="new Date(k.product.promotionInfo.promotion[0].startDate.replace(/-/g,'/')).getTime()"
-                                   :endTime="new Date(k.product.promotionInfo.promotion[0].endDate.replace(/-/g,'/')).getTime()"
+                                   :startTime="getDateTime(k.product.promotionInfo.promotion[0].startDate)"
+                                   :endTime="getDateTime(k.product.promotionInfo.promotion[0].endDate)"
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>
@@ -647,6 +647,9 @@
     },
 
     methods: {
+      getDateTime(time) {
+        return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
+      },
       isCouponActivied(coupon) {
         let ret = false;
         if (coupon.status === 1) {

@@ -29,7 +29,8 @@
                            :endTime="PromotionEndTime"
                            :secondsTxt="''"
                            backgroundColor="#000000"
-                           textColor="#FFFFFF">
+                           textColor="#FFFFFF"
+                           style="font-size: x-small;font-weight: lighter">
               </v-countdown>
               <div class="promotionStatusText" v-if="promotionStatus === 5">
                 <span style="color: white">已结束</span>

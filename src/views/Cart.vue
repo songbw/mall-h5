@@ -35,8 +35,8 @@
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
                                    @end_callback="countDownE_cb(index,k)"
-                                   :startTime="new Date(k.promotionInfo.promotion[0].startDate.replace(/-/g,'/')).getTime()"
-                                   :endTime="new Date(k.promotionInfo.promotion[0].endDate.replace(/-/g,'/')).getTime()"
+                                   :startTime="getDateTime(k.promotionInfo.promotion[0].startDate)"
+                                   :endTime="getDateTime(k.promotionInfo.promotion[0].endDate)"
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>
@@ -121,6 +121,9 @@
     },
 
     methods: {
+      getDateTime(time) {
+        return   new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
+      },
       gotoCategoryPage(){
         this.$router.replace({'name': '分类页'})
       },
