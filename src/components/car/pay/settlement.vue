@@ -84,6 +84,7 @@
           </div>
           <div class="pay-footer"></div>
           <van-submit-bar
+            :loading = "isOnSummitting"
             :price="allpay"
             button-text="提交订单"
             @submit="onSubmit"
@@ -304,6 +305,7 @@
     data() {
       return {
         showHeader: true,
+        isOnSummitting: false,
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
         icon_conatct_address: require('@/assets/icons/ico_contact_address.png'),
         couponImg: require('@/assets/icons/ico_coupon.png'),
@@ -1338,6 +1340,7 @@
               this.$log(JSON.stringify(options))
               if (this.isValidOrder(options)) {
                 if (options != null) {
+                  this.isOnSummitting = true;
                   that.$api.xapi({
                     method: 'post',
                     baseURL: this.$api.ORDER_BASE_URL,
@@ -1380,17 +1383,23 @@
                           that.deleteOrderedGoodsInCar();
                         }
                         that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
+                        setTimeout(() => {
+                          that.isOnSummitting = false;
+                        }, 1000);
                       } else {
                         that.$log("can not get correct orderNo");
                         that.$toast("服务器失败")
+                        that.isOnSummitting = false;
                       }
                     } else {
                       that.$toast(response.data.msg)
+                      that.isOnSummitting = false;
                     }
 
 
                   }).catch(function (error) {
                     that.$log(error)
+                    that.isOnSummitting = false;
                   })
 
                 }

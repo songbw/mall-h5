@@ -61,23 +61,23 @@
     },
     methods: {
       isDeepColor(hexColor) {
-        this.$log(" HEADER, isDeepColor:"+hexColor)
-        if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
-        hexColor = hexColor.toLowerCase();
-        let b = new Array();
-        for (let x = 0; x < 3; x++) {
-          b[0] = hexColor.substr(x * 2, 2)
-          b[3] = "0123456789abcdef";
-          b[1] = b[0].substr(0, 1)
-          b[2] = b[0].substr(1, 1)
-          b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
+        if(hexColor != null) {
+          if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
+          hexColor = hexColor.toLowerCase();
+          let b = new Array();
+          for (let x = 0; x < 3; x++) {
+            b[0] = hexColor.substr(x * 2, 2)
+            b[3] = "0123456789abcdef";
+            b[1] = b[0].substr(0, 1)
+            b[2] = b[0].substr(1, 1)
+            b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
+          }
+          let grayLevel  =  b[20] * 0.299 +  b[21] * 0.587 +  b[22]* 0.114
+          if(grayLevel >= 192)
+            this.backIsDeepColor = false
+          else
+            this.backIsDeepColor = true
         }
-        let grayLevel  =  b[20] * 0.299 +  b[21] * 0.587 +  b[22]* 0.114
-        this.$log(grayLevel)
-        if(grayLevel >= 192)
-          this.backIsDeepColor = false
-        else
-          this.backIsDeepColor = true
       },
       closeWindow() {
         if(this.$api.APP_ID != "10") {
