@@ -129,6 +129,8 @@
                   this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g, '/')).getTime()*/
         this.promotionActivityId = this.datas.settings.title.promotionActivityId
         this.updatePromotionInfo();
+      } else {
+        this.show = true;
       }
     },
 
