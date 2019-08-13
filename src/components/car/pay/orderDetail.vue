@@ -35,7 +35,7 @@
               <div slot="footer">
                 <van-button plain round size="small" type="primary"
                             style="background-color: white;color: black;border-color: #dedede "
-                            @click="onAfterSalesServiceBtnClick(sku)" v-if="detail.status==2">
+                            @click="onAfterSalesServiceBtnClick(sku)" v-if="status==2">
                   申请售后
                 </van-button>
               </div>
@@ -49,22 +49,22 @@
         <div class="orderDetailAction">
           <van-button plain round size="small" type="primary"
                       style="background-color: #f44336;color: white;border-color: #f44336"
-                      @click="onCancelBtnClick(detail)" v-show="detail.status==0">
+                      @click="onCancelBtnClick(detail)" v-show="status==0">
             取消订单
           </van-button>
           <van-button plain round size="small" type="primary"
                       style="background-color: #26a2ff;color: white;border-color: #26a2ff"
-                      @click="onPayBtnClick(detail)" v-show="detail.status==0">
+                      @click="onPayBtnClick(detail)" v-show="status==0">
             去支付
           </van-button>
           <van-button plain round size="small" type="primary"
                       style="background-color: #26a2ff;color: white;border-color: #26a2ff "
-                      @click="onLogisticsBtnClick(detail)" v-show="detail.status==1">
+                      @click="onLogisticsBtnClick(detail)" v-show="status==1">
             查询物流
           </van-button>
           <van-button plain round size="small" type="primary"
                       style="background-color: #f44336;color: white;border-color: #f44336 "
-                      @click="onConfirmBtnClick(detail)" v-show="detail.status==1">
+                      @click="onConfirmBtnClick(detail)" v-show="status==1">
             确认收货
           </van-button>
         </div>
@@ -321,24 +321,29 @@
         })
       },
       onConfirmBtnClick(detail) {
-        let id = detail.id
-        let options = {
-          "id": id,
-          "status": 2
-        }
-        this.$api.xapi({
-          method: 'put',
-          baseURL: this.$api.ORDER_BASE_URL,
-          url: '/order/status',
-          data: options,
-        }).then((response) => {
-          if (response.data.code == 200) {
-            this.status = 2;
+        this.$dialog.confirm({
+          message: '确认收货?'
+        }).then(() => {
+          let id = detail.id
+          let options = {
+            "id": id,
+            "status": 2
           }
-          //已取消
-        }).catch(function (error) {
-          console.log(error)
-        })
+          this.$api.xapi({
+            method: 'put',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/order/status',
+            data: options,
+          }).then((response) => {
+            if (response.data.code == 200) {
+              this.status = 2;
+            }
+            //已取消
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }).catch(() => {
+        });
       },
       onPayBtnClick(listItem) {
         this.$log(listItem);

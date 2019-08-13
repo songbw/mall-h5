@@ -436,72 +436,84 @@
 
       onConfirmBtnClick(listItem, i) {
         this.$log("onConfirmBtnClick Enter")
-        let id = listItem.id
-        let index = this.active
-        this.reload = true;
-        let options = {
-          "id": id,
-          "status": 2
-        }
-        this.$api.xapi({
-          method: 'put',
-          baseURL: this.$api.ORDER_BASE_URL,
-          url: '/order/status',
-          data: options,
-        }).then((response) => {
-          if (response.data.code == 200) {
-            listItem.status = 2;
+        this.$dialog.confirm({
+          message: '确认收货?'
+        }).then(() => {
+          let id = listItem.id
+          let index = this.active
+          this.reload = true;
+          let options = {
+            "id": id,
+            "status": 2
+          }
+          this.$api.xapi({
+            method: 'put',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/order/status',
+            data: options,
+          }).then((response) => {
+            if (response.data.code == 200) {
+              listItem.status = 2;
+              if(this.active != 0) {
+                let found = -1;
+                for (let i = 0; i < this.orderTypes[index].list.length; i++) {
+                  this.$log("listItem.id:"+listItem.id)
+                  this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
+                  if (listItem.id === this.orderTypes[index].list[i].id) {
+                    found = i;
+                    break;
+                  }
+                }
+                this.$log("found is:"+found)
+                if (found != -1) {
+                  this.orderTypes[index].list.splice(found, 1)
+                  this.orderTypes[index].total--;
+                }
+              }
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }).catch(() => {
+        });
+      },
+
+      onDelBtnClick(listItem, i) {
+        this.$log("onCancelBtnClick Enter")
+        this.$dialog.confirm({
+          message: '确定删除订单?'
+        }).then(() => {
+          let that = this;
+          that.reload = true;
+          that.orderTypes.forEach(orderTypeItem => {
             let found = -1;
-            for (let i = 0; i < this.orderTypes[index].list.length; i++) {
-              this.$log("listItem.id:"+listItem.id)
-              this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
-              if (listItem.id === this.orderTypes[index].list[i].id) {
+            that.$log(orderTypeItem)
+            for (let i = 0; i < orderTypeItem.list.length; i++) {
+              if (listItem.id === orderTypeItem.list[i].id) {
                 found = i;
                 break;
               }
             }
-            this.$log("found is:"+found)
+            that.$log("title is:" + orderTypeItem.title + ",found is:" + found);
             if (found != -1) {
-              this.orderTypes[index].list.splice(found, 1)
-              this.orderTypes[index].total--;
+              orderTypeItem.list.splice(found, 1)
+              orderTypeItem.total--;
             }
-          }
-        }).catch(function (error) {
-          console.log(error)
-        })
-      },
-
-      onDelBtnClick(listItem, i) {
-        let that = this;
-        that.reload = true;
-        that.orderTypes.forEach(orderTypeItem => {
-          let found = -1;
-          that.$log(orderTypeItem)
-          for (let i = 0; i < orderTypeItem.list.length; i++) {
-            if (listItem.id === orderTypeItem.list[i].id) {
-              found = i;
-              break;
+          })
+          that.$api.xapi({
+            method: 'delete',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/order',
+            params: {
+              id: listItem.id,
             }
-          }
-          that.$log("title is:" + orderTypeItem.title + ",found is:" + found);
-          if (found != -1) {
-            orderTypeItem.list.splice(found, 1)
-            orderTypeItem.total--;
-          }
-        })
-        that.$api.xapi({
-          method: 'delete',
-          baseURL: this.$api.ORDER_BASE_URL,
-          url: '/order',
-          params: {
-            id: listItem.id,
-          }
-        }).then((response) => {
-          that.$log("onDelBtnClick success, response is:" + JSON.stringify(response.data))
-        }).catch(function (error) {
-          that.$log(error)
-        })
-
+          }).then((response) => {
+            that.$log("onDelBtnClick success, response is:" + JSON.stringify(response.data))
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }).catch(() => {
+        });
       },
 
       onListClick(listItem, i) {
