@@ -33,11 +33,13 @@
                       </div>
                       <div class="coupon-info coupon-hole coupon-info-right-dashed">
                         <div class="coupon-suppler">
-                          <i>{{k.name}}</i>
-                          <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
+                          <div class="coupon-name">
+                            <i>{{k.name}}</i>
+                          </div>
+                          <div class="supply-name">
+                            <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
+                          </div>
                         </div>
-                        <!--                      <div class="coupon-price">{{formateCouponPrice(k.rules.couponRules)}}</div>
-                                              <div class="coupon-desc">{{formateCouponDescription(k.rules.couponRules)}}</div>-->
                         <div class="coupon-price">
                           <span v-if="k.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
                           {{formateCouponPrice(k.rules.couponRules)}}
@@ -650,28 +652,40 @@
               .coupon-progress {
                 margin-top: 10px;
               }
-
               .coupon-suppler {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 1;
-                word-break: break-all;
-
-                span {
-                  background-color: #ff4444;
-                  padding: 2px 5px;
-                  color: white;
-                  border-radius: 8px;
-                  .fz(font-size, 25);
+                display: flex;
+                .fz(font-size, 25);
+                .coupon-name{
+                  width: 60%;
+                  min-width: 100px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
+                  word-break: break-all;
                 }
-
-                i {
-                  .fz(font-size, 28);
+                .supply-name{
+                  margin-right: 5px;
+                  text-align: center;
+                  span {
+                    width: 80%;
+                    margin-top: 1px;
+                    background-color: #ff4444;
+                    color: white;
+                    padding: 1px 5px 2px 5px;
+                    border-radius: 8px;
+                    .fz(font-size, 20);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    word-break: break-all;
+                    margin-left: 5px;
+                  }
                 }
               }
-
             }
 
             .coupon-get {

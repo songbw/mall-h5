@@ -34,8 +34,12 @@
                             </div>
                           </div>
                           <div class="coupon-suppler-deactive" v-else>
-                            <i>{{k.couponInfo.name}}</i>
-                            <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                            <div class="coupon-name">
+                              <i>{{k.couponInfo.name}}</i>
+                            </div>
+                            <div class="supply-name">
+                              <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                            </div>
                           </div>
                           <div v-if="k.type === 0">
                             <div class="coupon-price" v-if="type === 0" >
@@ -659,48 +663,42 @@
                     margin-left: 5px;
                   }
                 }
-/*                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 1;
-                word-break: break-all;*/
-
-              /*  span {
-                  display: inline;
-                  background-color: #ff4444;
-                  padding: 2px 5px;
-                  color: white;
-                  border-radius: 8px;
-                  .fz(font-size, 25);
-                }
-
-                i {
-                  .fz(font-size, 28);
-                }*/
               }
 
               .coupon-suppler-deactive {
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 1;
-                word-break: break-all;
-
-                span {
-                  background-color: #8c8c8c;
-                  padding: 2px 5px;
-                  color: white;
-                  border-radius: 8px;
-                  .fz(font-size, 25);
+                display: flex;
+                .fz(font-size, 25);
+                .coupon-name{
+                  width: 60%;
+                  min-width: 100px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
+                  word-break: break-all;
                 }
-
-                i {
-                  .fz(font-size, 28);
+                .supply-name{
+                  margin-right: 5px;
+                  text-align: center;
+                  span {
+                    width: 80%;
+                    margin-top: 1px;
+                    background-color: #8c8c8c;
+                    color: white;
+                    padding: 1px 5px 2px 5px;
+                    border-radius: 8px;
+                    .fz(font-size, 20);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    word-break: break-all;
+                    margin-left: 5px;
+                  }
                 }
               }
-
             }
 
             .coupon-get {
