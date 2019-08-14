@@ -26,8 +26,12 @@
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
                           <div class="coupon-suppler" v-if="type === 0">
-                            <i>{{k.couponInfo.name}}</i>
-                            <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                            <div class="coupon-name">
+                              <i>{{k.couponInfo.name}}</i>
+                            </div>
+                            <div class="supply-name">
+                              <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                            </div>
                           </div>
                           <div class="coupon-suppler-deactive" v-else>
                             <i>{{k.couponInfo.name}}</i>
@@ -623,14 +627,47 @@
 
 
               .coupon-suppler {
-                overflow: hidden;
+                display: flex;
+                .fz(font-size, 25);
+                .coupon-name{
+                  width: 60%;
+                  min-width: 100px;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
+                  word-break: break-all;
+                }
+                .supply-name{
+                  margin-right: 5px;
+                  text-align: center;
+                  span {
+                    width: 80%;
+                    margin-top: 1px;
+                    background-color: #ff4444;
+                    color: white;
+                    padding: 1px 5px 2px 5px;
+                    border-radius: 8px;
+                    .fz(font-size, 20);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    word-break: break-all;
+                    margin-left: 5px;
+                  }
+                }
+/*                overflow: hidden;
                 text-overflow: ellipsis;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
-                word-break: break-all;
+                word-break: break-all;*/
 
-                span {
+              /*  span {
+                  display: inline;
                   background-color: #ff4444;
                   padding: 2px 5px;
                   color: white;
@@ -640,7 +677,7 @@
 
                 i {
                   .fz(font-size, 28);
-                }
+                }*/
               }
 
               .coupon-suppler-deactive {
