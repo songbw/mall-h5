@@ -146,7 +146,7 @@
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
-        this.testGAT();
+        //this.testGAT();
       } else {
         this.initJsNativeCb();
         setTimeout(() => {
