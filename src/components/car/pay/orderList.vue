@@ -95,16 +95,6 @@
       'v-footer':Footer
     },
 
-    beforeRouteLeave(to, from, next) {
-      // 必须调用next(),next(true)进入原计划的下个页面
-      // next(false)进入from页面(即原本的页面)
-      //let isValidPath = this.isValidLeavedPath(to);
-      //console.log("isValidPath:" + isValidPath + ",path:" + to.path)
-     // if (isValidPath) {
-      this.$toast(to.path)
-      next()
-    },
-
     data() {
       return {
         showHeader: true,

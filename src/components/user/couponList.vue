@@ -17,7 +17,7 @@
               <div class="couponList" v-if="item.list.length > 0">
                 <li v-for="(k,i) in item.list" :key=i style="list-style: none">
                   <div style="padding:2px;background-color: #f8f8f8">
-                    <div class="coupon coupon-white">
+                    <div class="coupon coupon-white" v-if="k.couponInfo.rules != null">
                       <div @touchmove="gtouchmove()" @touchstart="touchEvtStart(k,type,i)" @touchend="touchEvtEnd()"
                            class="coupon-main">
                         <div class="coupon-img">
