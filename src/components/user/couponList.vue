@@ -25,22 +25,22 @@
                             :src="(k.couponInfo.imageUrl != undefined && k.couponInfo.imageUrl.length > 0)?k.couponInfo.imageUrl : couponImg">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                          <div class="coupon-suppler" v-if="type === 0">
+<!--                          <div class="coupon-suppler" v-if="type === 0">
                             <div class="coupon-name">
                               <i>{{k.couponInfo.name}}</i>
                             </div>
                             <div class="supply-name">
                               <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                             </div>
-                          </div>
-                          <div class="coupon-suppler-deactive" v-else>
+                          </div>-->
+<!--                          <div class="coupon-suppler-deactive" v-else>
                             <div class="coupon-name">
                               <i>{{k.couponInfo.name}}</i>
                             </div>
                             <div class="supply-name">
                               <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
                             </div>
-                          </div>
+                          </div>-->
                           <div v-if="k.type === 0">
                             <div class="coupon-price" v-if="type === 0" >
                               <span v-if="k.couponInfo.rules.couponRules.type != 2" style="margin-right: -7px">￥</span>

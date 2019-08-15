@@ -148,6 +148,8 @@
         }
         //this.testGAT();
       } else {
+        let dsBridge = require("dsbridge");
+        Vue.prototype.$jsbridge = dsBridge;
         this.initJsNativeCb();
         setTimeout(() => {
           this.test();
