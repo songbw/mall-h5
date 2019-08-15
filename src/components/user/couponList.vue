@@ -79,10 +79,12 @@
                   </div>
                 </li>
               </div>
-              <div  class="noCoupon" v-else>
+              <div v-else>
+                <div v-if="launchedLoaded && !item.loading"  class="noCoupon">
                   <img :src="icon_noCoupon">
                   <span class="noCoupon_line1">没有券?</span>
                   <span class="noCoupon_line2">去领券中心看看吧</span>
+                </div>
               </div>
             </van-list>
           </van-tab>
@@ -120,6 +122,8 @@
 
     data() {
       return {
+        loadingText:"",
+        launchedLoaded: false,
         showHeader: true,
         active: 0,
         swipeThreshold: 5,
@@ -159,6 +163,11 @@
 
     mounted() {
       this.active = this.$store.state.appconf.currentOrderListIndex;
+      setTimeout(() => {
+        if (!this.launchedLoaded) {
+          this.onLoad(this.active)
+        }
+      }, 1000);
     },
 
     created() {
@@ -304,15 +313,18 @@
                 that.$log("index:" + index);
                 that.$log(that.couponTypes[index]);
               }
+              this.launchedLoaded = true;
             }).catch(function (error) {
               that.$log(error)
               that.couponTypes[index].loading = false;
               that.couponTypes[index].finished = true;
+              this.launchedLoaded = true;
             })
           }
         } else {
           that.couponTypes[index].loading = false;
           that.couponTypes[index].finished = true;
+          this.launchedLoaded = true;
         }
       },
 
