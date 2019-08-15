@@ -37,7 +37,7 @@
     },
 
     mounted() {
-      this.timer = setInterval(this.checkPaymentStatus, 5000);
+      this.timer = setInterval(this.checkPaymentStatus, 1000);
     },
 
     created() {

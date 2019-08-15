@@ -13,7 +13,7 @@
 <style lang="less" scoped>
   .spinner {
     width: 100%;
-    padding-top: 300px;
+    padding-top: 200px;
     justify-content: center;
     align-items: Center;
     text-align: center;

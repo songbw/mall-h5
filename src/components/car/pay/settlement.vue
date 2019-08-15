@@ -1000,8 +1000,8 @@
 
       See(e) {
         this.$log("jump to:" + e)
-        window.location.href = e
-        //window.location.replace(e)
+        //window.location.href = e
+        window.location.replace(e)
       },
 
       gotoCasherPage(merchantNo, userId, orderNo, amount) {
