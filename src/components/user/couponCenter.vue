@@ -4,81 +4,83 @@
       <h1 slot="title">领券中心</h1>
     </v-header>
     <div class="couponCenterBody">
-      <!--      <div class="couponCenterHeader">
-              <img :src="couponCenterHeaderImg">
-            </div>-->
       <div class="couponCenterMain">
-        <div v-if="couponTypes.length > 0">
-          <van-tabs sticky
-                    v-model="active"
-                    @click="onClick"
-                    :swipe-threshold=swipeThreshold swipeable
-                    :ellipsis=false
-                    title-active-color="#FFFFFF"
-                    title-inactive-color="#Fccccc"
-                    color="#FFFFFF"
-                    background="#FF4444">
-            <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
-              <van-list v-model="item.loading"
-                        :finished="item.finished"
-                        @load="onLoad(active)">
-                <div class="couponList">
-                  <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
-                    <div class="coupon-main">
-                      <div class="coupon-img" v-if="k.releaseTotal > k.releaseNum">
-                        <img :src="k.imageUrl.length?k.imageUrl: couponImg">
-                      </div>
-                      <div class="coupon-img coupon-img-allreleased" v-else>
-                        <img :src="k.imageUrl.length?k.imageUrl: couponImg">
-                      </div>
-                      <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                        <div class="coupon-suppler">
-                          <div class="coupon-name">
-                            <i>{{k.name}}</i>
+        <div v-if="launchedLoading">
+          <v-loading></v-loading>
+        </div>
+        <div v-else>
+          <div v-if="couponTypes.length > 0">
+            <van-tabs sticky
+                      v-model="active"
+                      @click="onClick"
+                      :swipe-threshold=swipeThreshold swipeable
+                      :ellipsis=false
+                      title-active-color="#FFFFFF"
+                      title-inactive-color="#Fccccc"
+                      color="#FFFFFF"
+                      background="#FF4444">
+              <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
+                <van-list v-model="item.loading"
+                          :finished="item.finished"
+                          @load="onLoad(active)">
+                  <div class="couponList">
+                    <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
+                      <div class="coupon-main">
+                        <div class="coupon-img" v-if="k.releaseTotal > k.releaseNum">
+                          <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+                        </div>
+                        <div class="coupon-img coupon-img-allreleased" v-else>
+                          <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+                        </div>
+                        <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                          <div class="coupon-suppler">
+                            <div class="coupon-name">
+                              <i>{{k.name}}</i>
+                            </div>
+                            <div class="supply-name">
+                              <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
+                            </div>
                           </div>
-                          <div class="supply-name">
-                            <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
+                          <div class="coupon-price">
+                            <span v-if="k.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
+                            {{formateCouponPrice(k.rules.couponRules)}}
+                            <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+                          </div>
+                          <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
+                          <div class="coupon-expire-date">
+                            {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+                          </div>
+                          <div class="coupon-progress">
+                            <van-progress
+                              color="#f44"
+                              :percentage=formateReleasePercentage(k)
+                            />
                           </div>
                         </div>
-                        <div class="coupon-price">
-                          <span v-if="k.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
-                          {{formateCouponPrice(k.rules.couponRules)}}
-                          <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
-                        </div>
-                        <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
-                        <div class="coupon-expire-date">
-                          {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
-                        </div>
-                        <div class="coupon-progress">
-                          <van-progress
-                            color="#f44"
-                            :percentage=formateReleasePercentage(k)
-                          />
+                      </div>
+                      <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
+                           @click="onConponUseClick(k,i)">
+                        <div>
+                          <span class="coupon-action" v-if="k.url != undefined && k.url.length > 0">立即使用</span>
                         </div>
                       </div>
-                    </div>
-                    <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
-                         @click="onConponUseClick(k,i)">
-                      <div>
-                        <span class="coupon-action" v-if="k.url != undefined && k.url.length > 0">立即使用</span>
-                      </div>
-                    </div>
-                    <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
-                      <div>
-                        <span class="coupon-action">立即领取</span>
+                      <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
+                        <div>
+                          <span class="coupon-action">立即领取</span>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-              </van-list>
-            </van-tab>
-          </van-tabs>
-        </div>
-        <div class="noCoupon" v-else>
-          <img :src="icon_noCoupon">
-          <span class="noCoupon_line1">很遗憾</span>
-          <span class="noCoupon_line2">暂时还没有可领取优惠券</span>
+                </van-list>
+              </van-tab>
+            </van-tabs>
+          </div>
+          <div class="noCoupon" v-else>
+            <img :src="icon_noCoupon">
+            <span class="noCoupon_line1">很遗憾</span>
+            <span class="noCoupon_line2">暂时还没有可领取优惠券</span>
+          </div>
         </div>
       </div>
     </div>
@@ -89,12 +91,13 @@
   import Header from '@/common/_header.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
-
+  import Loading from '@/common/_loading.vue'
   export default {
     components: {
       'v-header': Header,
       'v-baseline': Baseline,
-      'v-footer': Footer
+      'v-footer': Footer,
+      'v-loading': Loading,
     },
 
     data() {
@@ -107,13 +110,15 @@
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
         headerColor: "#FFFFFF",
         reload: false,
-        showHeader: true
+        showHeader: true,
+        launchedLoading: false,
       }
     },
 
     beforeCreate() {
       this.$log("beforeCreate Enter xxxx");
       let that = this;
+      this.launchedLoading = true;
       that.$api.xapi({
         method: 'get',
         baseURL: this.$api.EQUITY_BASE_URL,
@@ -156,9 +161,10 @@
           }
         })
         that.$log(that.couponTypes)
-
+        this.launchedLoading = false;
       }).catch(function (error) {
         that.$log(error)
+        this.launchedLoading = false;
       })
     },
 
@@ -472,7 +478,7 @@
 
         .noCoupon {
           width: 100%;
-          margin-top: 50px;
+          margin-top: 100px;
           background-color: #f8f8f8;
           display: flex;
           flex-direction: column;

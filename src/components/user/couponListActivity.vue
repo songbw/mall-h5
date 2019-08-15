@@ -646,6 +646,7 @@
                 padding: 5px;
 
                 .cardTitle {
+                  height: 60%;
                   .fz(font-size, 30);
                   font-weight: bold;
                   overflow: hidden;
@@ -661,6 +662,7 @@
                 }
 
                 .cardFooter {
+                  height: 25%;
                   width: 100%;
                   display: flex;
                   .priceBox {

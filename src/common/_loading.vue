@@ -12,10 +12,16 @@
 
 <style lang="less" scoped>
   .spinner {
+    width: 100%;
+    padding-top: 300px;
+    justify-content: center;
+    align-items: Center;
+    text-align: center;
+/*    height: 100%;
     margin: 100px auto 0;
     width: 100px;
     text-align: center;
-    line-height: 20em;
+    line-height: 20em;*/
   }
 
   .spinner > div {
