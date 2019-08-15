@@ -61,8 +61,10 @@
                        :endTime="PromotionEndTime"
                        :secondsTxt="''">
           </v-countdown>
-          <div class="promotionStatus" v-else>
-            <span>已结束</span>
+          <div v-else>
+            <div class="promotionStatus" v-if="this.detail.status === 5 ">
+              <span>已结束</span>
+            </div>
           </div>
         </van-cell>
       </div>

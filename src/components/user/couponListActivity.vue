@@ -39,8 +39,8 @@
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
                                    @end_callback="countDownE_cb(index,k)"
-                                   :startTime="new Date(k.promotion[0].startDate.replace(/-/g,'/')).getTime()"
-                                   :endTime="new Date(k.promotion[0].endDate.replace(/-/g,'/')).getTime()"
+                                   :startTime="getDateTime(k.promotion[0].startDate)"
+                                   :endTime="getDateTime(k.promotion[0].endDate)"
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>
@@ -51,13 +51,14 @@
                       <span></span>
                     </div>
                     <div class="cardFooter">
-                      <van-col span="12" class="priceBox">
+                      <div  class="priceBox">
                         <div class="salePrice">￥{{k.dprice}}</div>
-                      </van-col>
-                      <van-col span="12" class="actionBox">
-                        <van-button type="primary" size="small" @click.stop="" @click="onBuyBtnClick(k)">加入购物车
-                        </van-button>
-                      </van-col>
+                      </div>
+                      <div class="goodsBuyBox">
+                          <van-button size="mini" @click.stop="" @click="onBuyBtnClick(k)"></van-button>
+<!--                        <van-button type="primary" size="small" @click.stop="" @click="onBuyBtnClick(k)">加入购物车
+                        </van-button>-->
+                      </div>
                     </div>
                   </van-col>
                 </div>
@@ -202,6 +203,9 @@
     ,
 
     methods: {
+      getDateTime(time) {
+        return   new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
+      },
       countDownS_cb(index, k) {
         k['promotionState'] = Util.getPromotionState(k)
         k['dprice']=Util.getDisplayPrice(k.price,k)
@@ -657,13 +661,12 @@
                 }
 
                 .cardFooter {
-                  height: 45%;
-
+                  width: 100%;
+                  display: flex;
                   .priceBox {
-                    height: 100%;
+                    width: 80%;
                     text-align: left;
-                    line-height: 3em;
-
+                    margin-top: 4px;
                     .salePrice {
                       color: #ff4444;
                       .fz(font-size, 32);
@@ -677,10 +680,26 @@
                     }
                   }
 
-                  .actionBox {
+  /*                .actionBox {
                     height: 100%;
                     text-align: center;
                     line-height: 3em;
+                  }*/
+                  .goodsBuyBox {
+                    justify-content: center;
+                    float: right;
+
+                    .van-button {
+                      margin: 1vw;
+                      background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+                      background-size: 15px 15px;
+                      border: none;
+                      float: right;
+                    }
+
+                    .van-button:active {
+                      opacity: 0;
+                    }
                   }
                 }
               }
@@ -716,7 +735,7 @@
 
       .gotoCar {
         height: 100%;
-        background-color: #ee892f;
+        background-color: #FF4444;
         text-align: center;
         line-height: 3em;
         color: white;

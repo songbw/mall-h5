@@ -1535,7 +1535,7 @@
               }
             })
             //////////////////////查询价格//////////////////
-            options = {
+ /*           options = {
               "cityId": locationCode.cityId,
               "skus": skus,
             }
@@ -1571,7 +1571,9 @@
               if (that.pageLoadTimerId != -1) {
                 clearTimeout(that.pageLoadTimerId)
               }
-            })
+            })*/
+            //获取运费
+            this.getfreightPay();
           }).catch(function (error) {
             that.$log(error)
             that.$store.commit('SET_PAGE_LOADING', false);

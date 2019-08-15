@@ -14,7 +14,7 @@
             <van-list v-model="item.loading"
                       :finished="item.finished"
                       @load="onLoad(active)">
-              <div class="couponList">
+              <div class="couponList" v-if="item.list.length > 0">
                 <li v-for="(k,i) in item.list" :key=i style="list-style: none">
                   <div style="padding:2px;background-color: #f8f8f8">
                     <div class="coupon coupon-white">
@@ -79,6 +79,11 @@
                   </div>
                 </li>
               </div>
+              <div  class="noCoupon" v-else>
+                  <img :src="icon_noCoupon">
+                  <span class="noCoupon_line1">没有券?</span>
+                  <span class="noCoupon_line2">去领券中心看看吧</span>
+              </div>
             </van-list>
           </van-tab>
         </van-tabs>
@@ -119,6 +124,7 @@
         active: 0,
         swipeThreshold: 5,
         couponImg: require('@/assets/icons/ico_coupon.png'),
+        icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
         couponTypes: [
           {
             "title": "未使用",
@@ -486,6 +492,37 @@
       .couponListMain {
         width: 100%;
         margin-bottom: 3em;
+        .noCoupon {
+          width: 100%;
+          background-color: #f8f8f8;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
+          height: 500px;
+
+          img {
+            height: 130px;
+            width: 130px;
+          }
+
+          span {
+            margin: 2vw;
+          }
+
+          .noCoupon_line1 {
+            font-weight: lighter;
+            color: black;
+            .fz(font-size, 35);
+          }
+
+          .noCoupon_line2 {
+            font-weight: lighter;
+            color: #8c8c8c;
+            .fz(font-size, 28);
+          }
+
+        }
 
         .couponList {
           display: flex;
@@ -817,13 +854,13 @@
         background-color: white;
         text-align: center;
         line-height: 3em;
-        color: #ee892f;
+        color: #FF4444;
         font-weight: bold;
       }
 
       .change {
         height: 100%;
-        background-color: #ee892f;
+        background-color: #FF4444;
         text-align: center;
         line-height: 3em;
         color: white;
