@@ -95,6 +95,16 @@
       'v-footer':Footer
     },
 
+    beforeRouteLeave(to, from, next) {
+      // 必须调用next(),next(true)进入原计划的下个页面
+      // next(false)进入from页面(即原本的页面)
+      //let isValidPath = this.isValidLeavedPath(to);
+      //console.log("isValidPath:" + isValidPath + ",path:" + to.path)
+     // if (isValidPath) {
+      this.$toast(to.path)
+      next()
+    },
+
     data() {
       return {
         showHeader: true,
@@ -516,13 +526,6 @@
           name: "订单详情页",
         })
         this.$store.commit('SET_CURRENT_ORDER_INFO', JSON.stringify(listItem));
-
-        /*        this.$router.push({
-                  path: "/car/oderDetail",
-                  query: {
-                    detail: encodeURIComponent(JSON.stringify(listItem))
-                  }
-                })*/
       },
 
       onLogisticsBtnClick(listItem, i) {
@@ -548,6 +551,7 @@
         let that = this;
         that.launchedLoading = true;
         let userInfo = this.$store.state.appconf.userInfo;
+        this.$log("*************  userInfo is:" + userInfo);
         if(this.reload) {
           this.resetOrderTypeList();
           this.reload = false;

@@ -27,7 +27,7 @@
         ico_clock: require('@/assets/icons/ico_clock.png'),
         timer: '',
         value: 0,
-        payInfoText:'支付完成，页面自动跳转'
+        payInfoText:'支付完成，页面自动跳转...'
       }
     },
     computed: {
@@ -60,7 +60,7 @@
       checkPaymentStatus() {
         this.value++;
         let that = this;
-        if(this.value < 10) {
+        if(this.value < 50) {
           this.$api.xapi({
             method: 'get',
             baseURL: this.$api.ORDER_BASE_URL,
@@ -80,7 +80,7 @@
             that.$log(error)
             that.pageloading = false;
             this.payInfoText = "网络错误!"
-            this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+            this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0)
             this.$router.replace({path: '/car/orderList'})
           })
         } else {

@@ -174,16 +174,16 @@
                   return v;
               }),
               status: "即将开始",
-              startTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
-              endTime: new Date(this.$moment(item.endTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
+              startTime: this.getDateTime(item.startTime),
+              endTime: this.getDateTime(item.endTime),
             }
             this.seckillTypes.push(promotionActivity)
             this.updateDaylySheduleActivityStatus();
           })
           this.$log(this.seckillTypes)
         } else {
-          this.PromotionStartTime = new Date(this.detail.startDate.replace(/-/g, '/')).getTime()
-          this.PromotionEndTime = new Date(this.detail.endDate.replace(/-/g, '/')).getTime()
+          this.PromotionStartTime =  this.getDateTime(this.detail.startDate)
+          this.PromotionEndTime = this.getDateTime(this.detail.endDate)
         }
       }).catch(function (error) {
         that.$log(error)
@@ -202,6 +202,9 @@
     computed: {},
 
     methods: {
+      getDateTime(time) {
+        return   new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
+      },
       updateDaylySheduleActivityStatus() {
         for (let i = 0; i < this.seckillTypes.length; i++) {
           this.isOnGoingActivity(i)

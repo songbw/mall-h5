@@ -2,9 +2,6 @@
   <div class="detaillist">
     <v-header class="header" v-if="showHeader">
       <h1 slot="title">商品列表</h1>
-      <router-link :to="{name:'购物车页'}" slot="right">
-        <van-icon color="white" name="shopping-cart-o" size="1.2em"/>
-      </router-link>
     </v-header>
     <div class="productList">
       <div class="box"></div>
@@ -27,7 +24,11 @@
         </li>
       </van-list>
     </div>
-
+    <div>
+      <img :src="icon_shopCart"
+           @click="gotoCart()"
+           style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;" />
+    </div>
   </div>
 </template>
 
@@ -45,7 +46,8 @@
         loading: false,
         finished: false,
         launchedLoading: false,
-        showHeader: true
+        showHeader: true,
+        icon_shopCart: require('@/assets/icons/ico_cart-circle.png'),
       }
     },
 
@@ -66,6 +68,9 @@
     },
 
     methods: {
+      gotoCart(){
+         this.$router.push({name:'购物车页'})
+      },
       onLoad() {
         let category = this.$route.query.category;
         let search = this.$route.query.search;

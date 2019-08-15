@@ -89,11 +89,6 @@
         next()
       } else {
         next(false)
-        /*
-         if(this.$api.APP_ID === "10") {
-                  this.closeWindow()
-         }
-       */
       }
     },
 
@@ -151,7 +146,7 @@
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
-      //  this.testGAT();
+        this.testGAT();
       } else {
         this.initJsNativeCb();
         setTimeout(() => {
