@@ -356,7 +356,7 @@
           display: flex;
           justify-content: center;
           align-items: Center;
-          width: 50%;
+          width: 100%;
           background-color: #ff4444;
           color: #ffaaaa;
         }

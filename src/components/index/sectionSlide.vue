@@ -206,8 +206,8 @@
                 this.dailyScheduleDetail = " 距下场 "
               }
             } else {
-              if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length]) {
-                this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[this.dailyScheduleInfo.length].schedule) + "正在疯抢"
+              if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length-1].starTime) {
+                this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[this.dailyScheduleInfo.length-1].schedule)
                 this.updateTimer(currentTime, this.dailyEndTime-1)
                 if (this.msTime.show) {
                   this.dailyScheduleDetail = " 距结束 "
