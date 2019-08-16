@@ -141,7 +141,24 @@
           </div>
         </van-actionsheet>
       </div>
-      <v-content :contentData=contentUrls class="contentBox"></v-content>
+      <div class="serviceBox">
+        <div class="serviceTitle">
+          <span>店铺公告</span>
+          <img :src="seriviceIcon">
+        </div>
+        <div class="serviceDetail">
+          <span>1、本商品由苏宁易购发货并提供售后服务，苏宁易购服务电话4008516516</span>
+          <span>2、退货完成后，积分会在3个工作日内退回，如有延误，请联络关爱通客服进行处理。</span>
+          <span>3、关爱通苏宁易购的商品不享受价保服务，不享受苏宁官网活动或优惠。请谨慎下单。</span>
+          <span>4、若该商品主图或详情包含赠品信息,赠品赠完即止，不保证您的订单一定有赠品,请知悉。</span>
+        </div>
+      </div>
+      <div class="contentBox">
+        <div class="contentTitle">
+          <span>商品详情</span>
+        </div>
+        <v-content :contentData=contentUrls></v-content>
+      </div>
       <v-baseline/>
     </div>
     <v-action :datas="this.goods"/>
@@ -292,6 +309,7 @@
         userCouponList: [],
         avaliableCouponList: [],
         couponImg: require('@/assets/icons/ico_coupon.png'),
+        seriviceIcon: require('@/assets/icons/ico_prod_service.jpg'),
       }
     },
     methods: {
@@ -1082,8 +1100,41 @@
 
       }
 
-      .contentBox {
+      .serviceBox {
+        display: flex;
         margin-top: 10px;
+        //border-radius: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: white;
+        flex-direction: column;
+        .serviceTitle{
+          display: flex;
+          flex-direction: column;
+          text-align: center;
+          .fz(font-size,40);
+          font-weight: bold;
+          img{
+            width: 100%;
+            height: 40px;
+          }
+        }
+        .serviceDetail{
+          display: flex;
+          flex-direction: column;
+          padding: 5px;
+          color: black;
+        }
+      }
+
+      .contentBox {
+        .contentTitle{
+          margin-top: 10px;
+          background-color: white;
+          text-align: center;
+          .fz(font-size,40);
+          font-weight: bold;
+        }
       }
 
       .price-title {
