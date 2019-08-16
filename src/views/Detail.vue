@@ -364,6 +364,7 @@
             that.$log(result)
             if (result != undefined) {
               that.avaliableCouponList[index].userCollectNum = result.couponCollectNum;
+              that.avaliableCouponList[index].releaseNum++;
             }
           }).catch(function (error) {
             that.$log(error)

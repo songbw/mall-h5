@@ -10,7 +10,7 @@
       </van-list>
       <div v-if="finished">
         <div class="emptyCart" v-if="finished && cartList.length === 0">
-          <div class="nothingInCar" v-if="finished && cartList.length === 0">
+          <div class="nothingInCar">
             <img :src="nothingInCar_bg"/>
             <span>您的购物车还没有商品，快去挑选吧</span>
             <van-button round type="danger" style="width:35%;font-size: medium" @click="gotoCategoryPage()">去逛逛</van-button>
