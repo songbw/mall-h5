@@ -14,11 +14,7 @@
                       v-model="active"
                       @click="onClick"
                       :swipe-threshold=swipeThreshold swipeable
-                      :ellipsis=false
-                      title-active-color="#FFFFFF"
-                      title-inactive-color="#Fccccc"
-                      color="#FFFFFF"
-                      background="#FF4444">
+                      :ellipsis=false>
               <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
                 <van-list v-model="item.loading"
                           :finished="item.finished"
