@@ -745,6 +745,7 @@
           this.usedCoupon = coupon;
         }
         this.lastRadio = this.radio
+        this.showCoupon = false
       },
 
       getUsedCouponDetail4Order(coupon) {
@@ -876,6 +877,7 @@
         }
         this.lastRadio = this.radio
         this.$log(this.radio)
+        this.showCoupon = false
       },
 
       onCouponLoad(index) {

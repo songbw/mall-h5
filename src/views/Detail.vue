@@ -66,10 +66,10 @@
                         <img :src="k.imageUrl.length?k.imageUrl: couponImg">
                       </div>
                       <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                        <div class="coupon-suppler">
+<!--                        <div class="coupon-suppler">
                           <i>{{k.name}}</i>
                           <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
-                        </div>
+                        </div>-->
                         <div class="coupon-price">
                           <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
                           {{formateCouponPrice(k.rules.couponRules)}}
@@ -108,10 +108,10 @@
                         <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg">
                       </div>
                       <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                        <div class="coupon-suppler">
+<!--                        <div class="coupon-suppler">
                           <span>{{(coupon.couponInfo.supplierMerchantName!=undefined &&  coupon.couponInfo.supplierMerchantName.length) > 0? coupon.couponInfo.supplierMerchantName:'凤巢'}}</span>
                           <i>{{coupon.couponInfo.name}}</i>
-                        </div>
+                        </div>-->
                         <div class="coupon-price">
                           <span v-if="coupon.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
                           {{formateCouponPrice(coupon.couponInfo.rules.couponRules)}}
@@ -590,7 +590,7 @@
                 }
 
                 .coupon-expire-date {
-                  margin-left: 5px;
+                  margin: 5px;
                   .fz(font-size, 22);
                   font-weight: lighter;
                   color: #8c8c8c;
@@ -710,6 +710,9 @@
 
             }
 
+            .coupon-progress {
+              margin-top: 10px;
+            }
             /* 左边框的波浪 */
 
             .coupon-wave-left::before, .coupon-wave-right::after {
@@ -876,7 +879,7 @@
                 }
 
                 .coupon-expire-date {
-                  margin-left: 5px;
+                  margin: 5px;
                   .fz(font-size, 22);
                   font-weight: lighter;
                   color: #8c8c8c;
