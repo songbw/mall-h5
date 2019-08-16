@@ -55,7 +55,8 @@ import {
   Actionsheet,
   Progress,
   DatetimePicker,
-  Popup
+  Popup,
+  Circle
 } from 'vant';
 
 Vue.use(Button)
@@ -96,7 +97,8 @@ Vue.use(Button)
   .use(Actionsheet)
   .use(Progress)
   .use(DatetimePicker)
-  .use(Popup);
+  .use(Popup)
+  .use(Circle);
 
 
 ///////////////////////////////////////////////////////////////////////
