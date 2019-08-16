@@ -64,7 +64,7 @@
         </van-dialog>
         <van-cell title="生日" :value=birthDay isLink="true" @click="onBirthClick()"></van-cell>
         <div class="birthSelector">
-          <van-popup v-model="birthDlgShow" position="bottom" :overlay="false">
+          <van-popup v-model="birthDlgShow" position="bottom">
             <van-datetime-picker
               title="修改生日"
               v-model="birthDayValue"
