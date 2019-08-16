@@ -6,7 +6,7 @@
     <div v-if="pageloading" style="padding-top: 2.3em">
       <v-loading></v-loading>
     </div>
-    <div class="detail-body" :style="{'padding-top':showHeader? '2.6em':'0px'}"  v-else>
+    <div class="detail-body" :style="{'padding-top':showHeader? '2.6em':'0px'}" v-else>
       <v-swiper :swiperData=swiperUrls></v-swiper>
       <div>
         <div class="promotion-price" v-if="hasPromotion">
@@ -15,19 +15,19 @@
               <span>￥</span>{{parseFloat(this.goods.dprice).toFixed(2)}}
             </p>
             <div>
-              <p >
+              <p>
                 <span class="origin-price-title">原价</span>
                 <span class="origin-price">￥{{parseFloat(this.goods.price).toFixed(2)}}</span>
               </p>
             </div>
           </van-col>
           <van-col span="16" class="promotionBox">
-            <v-countdown   v-if="PromotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
-              @start_callback="countDownS_cb"
-              @end_callback="countDownE_cb"
-              :startTime="PromotionStartTime"
-              :endTime="PromotionEndTime"
-              :secondsTxt="''">
+            <v-countdown v-if="PromotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
+                         @start_callback="countDownS_cb"
+                         @end_callback="countDownE_cb"
+                         :startTime="PromotionStartTime"
+                         :endTime="PromotionEndTime"
+                         :secondsTxt="''">
             </v-countdown>
             <div class="promotionStatusText" v-if="PromotionStatus === 5">
               <span style="color: white">已结束</span>
@@ -54,75 +54,77 @@
           <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                     @click="showCouponSelector()"/>
         </van-cell>
-        <van-actionsheet v-model="showCoupon" title="优惠券">
-          <div class="avaliableCoupon">
-            <div v-if="avaliableCouponList.length > 0">
-              <van-cell title="可领取的券"></van-cell>
-              <div class="couponList">
-                <div class="coupon coupon-white"  v-for="(k,index) in avaliableCouponList" :key="index">
-                  <div class="coupon-main">
-                    <div class="coupon-img">
-                      <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+        <van-actionsheet v-model="showCoupon" title="优惠券" style="background-color: white" >
+          <div class="couponLayout">
+            <div class="avaliableCoupon">
+              <div v-if="avaliableCouponList.length > 0">
+                <van-cell title="可领取的券" style="background-color: #f8f8f8; margin-top: -1px"></van-cell>
+                <div class="couponList">
+                  <div class="coupon coupon-white" v-for="(k,index) in avaliableCouponList" :key="index">
+                    <div class="coupon-main">
+                      <div class="coupon-img">
+                        <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+                      </div>
+                      <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                        <div class="coupon-suppler">
+                          <i>{{k.name}}</i>
+                          <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
+                        </div>
+                        <div class="coupon-price">
+                          <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                          {{formateCouponPrice(k.rules.couponRules)}}
+                          <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+                        </div>
+                        <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
+                        <div class="coupon-expire-date">
+                          {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+                        </div>
+                        <div class="coupon-progress">
+                          <van-progress
+                            color="#f44"
+                            :percentage=formateReleasePercentage(k)
+                          />
+                        </div>
+                      </div>
                     </div>
-                    <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                      <div class="coupon-suppler">
-                        <i>{{k.name}}</i>
-                        <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
-                      </div>
-                      <div class="coupon-price">
-                        <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
-                        {{formateCouponPrice(k.rules.couponRules)}}
-                        <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
-                      </div>
-                      <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
-                      <div class="coupon-expire-date">
-                        {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
-                      </div>
-                      <div class="coupon-progress">
-                        <van-progress
-                          color="#f44"
-                          :percentage=formateReleasePercentage(k)
-                        />
-                      </div>
+                    <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already">
                     </div>
-                  </div>
-                  <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already">
-                  </div>
-                  <div v-else class="coupon-get" @click="onAvaliableCouponClick(k,index)">
-                    <div>
-                      <span class="coupon-action">立即领取</span>
+                    <div v-else class="coupon-get" @click="onAvaliableCouponClick(k,index)">
+                      <div>
+                        <span class="coupon-action">立即领取</span>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="gottedCoupon">
-            <div v-if="userCouponList.length > 0">
-              <van-cell title="已领取的券"></van-cell>
-              <div class="couponList">
-                <div class="coupon coupon-white"  v-for="(coupon,index) in userCouponList" :key="index">
-                  <div class="coupon-main">
-                    <div class="coupon-img">
-                      <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg">
+            <div class="gottedCoupon">
+              <div v-if="userCouponList.length > 0">
+                <van-cell title="已领取的券" style="background-color: #f8f8f8"></van-cell>
+                <div class="couponList">
+                  <div class="coupon coupon-white" v-for="(coupon,index) in userCouponList" :key="index">
+                    <div class="coupon-main">
+                      <div class="coupon-img">
+                        <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg">
+                      </div>
+                      <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                        <div class="coupon-suppler">
+                          <span>{{(coupon.couponInfo.supplierMerchantName!=undefined &&  coupon.couponInfo.supplierMerchantName.length) > 0? coupon.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                          <i>{{coupon.couponInfo.name}}</i>
+                        </div>
+                        <div class="coupon-price">
+                          <span v-if="coupon.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                          {{formateCouponPrice(coupon.couponInfo.rules.couponRules)}}
+                          <span>{{formateCouponDetail(coupon.couponInfo.rules.couponRules)}}</span>
+                        </div>
+                        <div class="coupon-desc">{{formateCouponDescription(coupon.couponInfo)}}</div>
+                        <div class="coupon-expire-date">
+                          {{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}
+                        </div>
+                      </div>
                     </div>
-                    <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                      <div class="coupon-suppler">
-                        <span>{{(coupon.couponInfo.supplierMerchantName!=undefined &&  coupon.couponInfo.supplierMerchantName.length) > 0? coupon.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                        <i>{{coupon.couponInfo.name}}</i>
-                      </div>
-                      <div class="coupon-price">
-                        <span v-if="coupon.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
-                        {{formateCouponPrice(coupon.couponInfo.rules.couponRules)}}
-                        <span>{{formateCouponDetail(coupon.couponInfo.rules.couponRules)}}</span>
-                      </div>
-                      <div class="coupon-desc">{{formateCouponDescription(coupon.couponInfo)}}</div>
-                      <div class="coupon-expire-date">
-                        {{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}
-                      </div>
+                    <div class="coupon-get  coupon-get-already">
                     </div>
-                  </div>
-                  <div class="coupon-get  coupon-get-already">
                   </div>
                 </div>
               </div>
@@ -177,7 +179,7 @@
       let that = this;
       if (this.$store.state.appconf.currentGoods != undefined && this.$store.state.appconf.currentGoods.length > 0) {
         this.goods = JSON.parse(this.$store.state.appconf.currentGoods);
-        this.$log(this.goods)
+        // this.$log(this.goods)
         if (!(JSON.stringify(this.goods) == "{}")) {
           let imagesUrls = this.goods.imagesUrl;
           if (imagesUrls != null && imagesUrls.length > 0) {
@@ -202,7 +204,7 @@
             }
           }
           if (this.goods.promotion != undefined && this.goods.promotion.length > 0) {
-            this.PromotionStartTime =  new Date(this.$moment(this.goods.promotion[0].startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+            this.PromotionStartTime = new Date(this.$moment(this.goods.promotion[0].startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
             this.PromotionEndTime = new Date(this.$moment(this.goods.promotion[0].endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
             this.promotionType = this.goods.promotion[0].promotionType
             this.discount = this.goods.promotion[0].discount
@@ -222,7 +224,7 @@
           let user = JSON.parse(userInfo)
           if (this.goods.coupon != undefined) {
             this.goods.coupon.forEach(item => {
-              this.$log(item)
+              // this.$log(item)
               let options = {
                 userOpenId: user.userId,
                 couponId: item.id
@@ -235,19 +237,19 @@
               }).then((response) => {
                 let result = response.data.data.result;
                 result.couponUseInfo.forEach(coupon => {
-                  if (item.rules.couponRules.type < 3  && coupon.status === 1) {
-                    this.$log("已领券") //已领取券，未使用
+                  if (item.rules.couponRules.type < 3 && coupon.status === 1) {
+                    // this.$log("已领券") //已领取券，未使用
                     coupon["couponInfo"] = item
                     this.userCouponList.push(coupon)
-                    this.$log(coupon)
+                    //this.$log(coupon)
                   }
                 })
                 if (item.rules.couponRules.type < 3 &&
-                    item.rules.perLimited > result.couponUseInfo.length) {
-                  this.$log("还有券可领")
+                  item.rules.perLimited > result.couponUseInfo.length) {
+                  //this.$log("还有券可领")
                   item.userCollectNum = result.couponUseInfo.length
                   this.avaliableCouponList.push(item);
-                  this.$log(item)
+                  //this.$log(item)
                 }
               }).catch(function (error) {
                 that.$log(error)
@@ -340,7 +342,7 @@
 
       onAvaliableCouponClick(couponInfo, index) {
         this.$log("onAvaliableCouponClick Enter")
-        this.$log(couponInfo)
+        // this.$log(couponInfo)
         if (couponInfo.userCollectNum >= couponInfo.rules.perLimited)
           return;
         let that = this
@@ -444,11 +446,14 @@
           border-top-right-radius: 10px;
           min-height: 500px;
           background-color: #f8f8f8;
+          .couponLayout{
+          }
         }
 
         .avaliableCoupon {
           display: block;
           background-color: #f0f0f0;
+
           .couponList {
             display: flex;
             flex-direction: column;
@@ -563,6 +568,7 @@
                   font-size: 150%;
                   font-weight: bold;
                   color: #FF4444;
+
                   span {
                     font-size: 60%;
                     margin-left: .5rem;
@@ -574,6 +580,7 @@
                   font-size: 150%;
                   font-weight: bold;
                   color: #8c8c8c;
+
                   span {
                     font-size: 60%;
                     margin-left: .5rem;
@@ -596,6 +603,7 @@
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 1;
                   word-break: break-all;
+
                   span {
                     background-color: #ff4444;
                     padding: 2px 5px;
@@ -616,6 +624,7 @@
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 1;
                   word-break: break-all;
+
                   span {
                     background-color: #8c8c8c;
                     padding: 2px 5px;
@@ -623,6 +632,7 @@
                     border-radius: 8px;
                     .fz(font-size, 25);
                   }
+
                   i {
                     .fz(font-size, 28);
                   }
@@ -729,6 +739,7 @@
         .gottedCoupon {
           display: block;
           background-color: #f0f0f0;
+
           .couponList {
             display: flex;
             flex-direction: column;
@@ -843,6 +854,7 @@
                   font-size: 150%;
                   font-weight: bold;
                   color: #FF4444;
+
                   span {
                     font-size: 60%;
                     margin-left: .5rem;
@@ -854,6 +866,7 @@
                   font-size: 150%;
                   font-weight: bold;
                   color: #8c8c8c;
+
                   span {
                     font-size: 60%;
                     margin-left: .5rem;
@@ -876,6 +889,7 @@
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 1;
                   word-break: break-all;
+
                   span {
                     background-color: #ff4444;
                     padding: 2px 5px;
@@ -897,6 +911,7 @@
                     border-radius: 8px;
                     .fz(font-size, 25);
                   }
+
                   i {
                     .fz(font-size, 28);
                   }
@@ -1037,7 +1052,7 @@
 
       }
 
-      .contentBox{
+      .contentBox {
         margin-top: 10px;
       }
 
@@ -1049,6 +1064,7 @@
         padding: 2vw;
         position: relative;
         background-color: #ffffff;
+
         > span {
           .fz(font-size, 20);
         }
@@ -1109,6 +1125,7 @@
         .goods-disciption {
           color: black;
           background-color: white;
+
           .goods-area {
             background-color: #ff4444;
             .fz(font-size, 26);
