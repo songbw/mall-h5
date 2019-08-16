@@ -424,6 +424,7 @@
           flex-direction: row;
           justify-items: center;
           height: 2em;
+          padding-bottom: 4px;
 
           .goodsPriceBox {
             width: 80%;
