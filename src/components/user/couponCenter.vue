@@ -74,7 +74,7 @@
                             :stroke-width="50"/>
                         </div>
                         <div>
-                          <span class="coupon-action" style="margin-top:5px;">立即领取</span>
+                          <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
                         </div>
                       </div>
                     </div>
@@ -456,14 +456,13 @@
       },
       formateReleasePercentageText(coupon) {
         if (coupon.releaseTotal == 0)
-          return 100;
+          return '已领取'+'100%';
         let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
-        return '已领\n'+percentage+'%';
+        return '已领取'+percentage+'%';
       },
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
       },
-
     }
   }
 </script>

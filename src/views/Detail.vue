@@ -82,17 +82,23 @@
                         <div class="coupon-expire-date">
                           {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
                         </div>
-                        <div class="coupon-progress">
-                          <van-progress
-                            color="#f44"
-                            :percentage=formateReleasePercentage(k)
-                          />
-                        </div>
                       </div>
                     </div>
                     <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already">
                     </div>
                     <div v-else class="coupon-get" @click="onAvaliableCouponClick(k,index)">
+                      <div>
+                        <van-circle
+                          :value="formateReleasePercentage(k)"
+                          color="#FF4444"
+                          fill="#fff"
+                          size="55px"
+                          layer-color="#cccccc"
+                          :text="formateReleasePercentageText(k)"
+                          :rate="100"
+                          :speed="100"
+                          :stroke-width="50"/>
+                      </div>
                       <div>
                         <span class="coupon-action">立即领取</span>
                       </div>
@@ -300,6 +306,12 @@
         let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
         return percentage;
       },
+      formateReleasePercentageText(coupon) {
+        if (coupon.releaseTotal == 0)
+          return '已领取'+'100%';
+        let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
+        return '已领取'+percentage+'%';
+      },
       formateCouponPrice(rules) {
         switch (rules.type) {
           case 0://满减券
@@ -307,7 +319,7 @@
           case 1://代金券
             return rules.cashCoupon.amount;
           case 2://折扣券
-            return rules.discountCoupon.discountRatio * 10 + ' 折';
+            return rules.discountCoupon.discountRatio * 10 + '折';
           default:
             return ""
         }
@@ -604,8 +616,8 @@
                 }
 
                 .coupon-expire-date {
-                  margin: 5px;
-                  .fz(font-size, 22);
+                  margin: 15px 10px;
+                  .fz(font-size, 25);
                   font-weight: lighter;
                   color: #8c8c8c;
                 }
@@ -893,7 +905,7 @@
                 }
 
                 .coupon-expire-date {
-                  margin: 5px;
+                  margin: 15px 10px;
                   .fz(font-size, 22);
                   font-weight: lighter;
                   color: #8c8c8c;
