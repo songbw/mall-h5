@@ -1114,9 +1114,10 @@
           text-align: center;
           .fz(font-size,40);
           font-weight: bold;
+          padding-left: 2px;
+          padding-right: 2px;
           img{
             width: 100%;
-            height: 40px;
           }
         }
         .serviceDetail{
