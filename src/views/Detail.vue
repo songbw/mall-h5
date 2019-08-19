@@ -93,7 +93,7 @@
                           :stroke-width="50"/>
                       </div>
                       <div>
-                        <span class="coupon-action">立即领取</span>
+                        <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
                       </div>
                     </div>
                   </div>
@@ -264,7 +264,8 @@
                   }
                 })
                 if (item.rules.couponRules.type < 3 &&
-                  item.rules.perLimited > result.couponUseInfo.length) {
+                  item.rules.perLimited > result.couponUseInfo.length &&
+                  item.releaseNum < item.releaseTotal ) {
                   //this.$log("还有券可领")
                   item.userCollectNum = result.couponUseInfo.length
                   this.avaliableCouponList.push(item);
