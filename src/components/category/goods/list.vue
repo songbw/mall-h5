@@ -29,7 +29,6 @@
                 @load="onLoad">
         <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
           <div class="goods-detail" @click="onListClick(k)">
-            <span>{{k.price}}</span>
             <van-card
               :price="k.price"
               desc="南京"
