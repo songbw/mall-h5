@@ -3,12 +3,14 @@
     <v-header class="header" v-if="showHeader">
       <h1 slot="title">商品列表</h1>
     </v-header>
-    <div class="box" v-if="active === 0" :style="{'top':showHeader? '2.6em':'0px'}"  >
+    <div class="box" v-if="active === 0" :style="{'top':showHeader? '2.6em':'0px'}">
       <div class="orderBySelected actived" @click="onSelectedBtnClick">
         <span>精选</span>
       </div>
       <div class="orderByPrice" @click="onPriceBtnClick">
         <span>按价格排序</span>
+        <img :src="icon_select_top" v-if="tagPrice === 0">
+        <img :src="icon_select_btm" v-else>
       </div>
     </div>
     <div class="box" :style="{'top':showHeader? '2.6em':'0px'}" v-else>
@@ -17,14 +19,17 @@
       </div>
       <div class="orderByPrice actived" @click="onPriceBtnClick">
         <span>按价格排序</span>
+        <img :src="icon_select_top" v-if="tagPrice === 0">
+        <img :src="icon_select_btm" v-else>
       </div>
     </div>
-    <div class="productList"  :style="{'padding-top':showHeader? '3.6em':'1em'}" >
+    <div class="productList" :style="{'padding-top':showHeader? '3.6em':'1em'}">
       <van-list v-model="loading"
                 :finished="finished"
                 @load="onLoad">
         <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
           <div class="goods-detail" @click="onListClick(k)">
+            <span>{{k.price}}</span>
             <van-card
               :price="k.price"
               desc="南京"
@@ -42,7 +47,7 @@
     <div>
       <img :src="icon_shopCart"
            @click="gotoCart()"
-           style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;" />
+           style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;"/>
     </div>
   </div>
 </template>
@@ -63,6 +68,8 @@
         launchedLoading: false,
         showHeader: true,
         icon_shopCart: require('@/assets/icons/ico_cart-circle.png'),
+        icon_select_top: require('@/assets/icons/ico_select_top.png'),
+        icon_select_btm: require('@/assets/icons/ico_select_btm.png'),
         active: 0,
         tagPrice: 0, //0 升序 1 降序
       }
@@ -78,31 +85,46 @@
     },
     mounted() {
       setTimeout(() => {
-        if(!this.launchedLoading) {
+        if (!this.launchedLoading) {
           this.onLoad()
         }
       }, 1000);
     },
 
     methods: {
+      resetList() {
+        this.list = [];
+        this.pageNo = 1;
+        this.total = -1;
+        this.loading = false;
+        this.finished = false;
+      },
       onSelectedBtnClick() {
-        if(this.active === 1) {
+        if (this.active === 1) {
           this.active = 0;
+          this.resetList();
+          this.onLoad();
         }
       },
       onPriceBtnClick() {
-        if(this.active === 0) {
+        if (this.active === 0) {
           this.active = 1;
+          this.resetList();
+          this.onLoad();
         } else {
-          if(this.tagPrice === 0) {
+          if (this.tagPrice === 0) {
             this.tagPrice = 1
+            this.resetList();
+            this.onLoad();
           } else {
             this.tagPrice = 0
+            this.resetList();
+            this.onLoad();
           }
         }
       },
-      gotoCart(){
-         this.$router.push({name:'购物车页'})
+      gotoCart() {
+        this.$router.push({name: '购物车页'})
       },
       onLoad() {
         let category = this.$route.query.category;
@@ -115,6 +137,13 @@
               "category": category,
               "pageNo": this.pageNo++
             }
+            if(this.active === 1) {
+              if(this.tagPrice === 0) { //升序
+                options['priceOrder'] = "ASC"
+              } else { //降序
+                options['priceOrder'] = "DESC"
+              }
+            }
             this.$api.xapi({
               method: 'post',
               baseURL: this.$api.PRODUCT_BASE_URL,
@@ -124,7 +153,7 @@
               this.result = response.data.data.result;
               this.$log(this.result)
               this.total = this.result.total;
-              if(this.result.list.length == 0) {
+              if (this.result.list.length == 0) {
                 this.loading = false;
                 this.finished = true;
               } else {
@@ -145,6 +174,13 @@
             "keyword": search,
             "pageNo": this.pageNo++
           }
+          if(this.active === 1) {
+            if(this.tagPrice === 0) { //升序
+              options['priceOrder'] = "ASC"
+            } else { //降序
+              options['priceOrder'] = "DESC"
+            }
+          }
           this.$api.xapi({
             method: 'post',
             baseURL: this.$api.ES_BASE_URL,
@@ -153,7 +189,7 @@
           }).then((response) => {
             this.result = response.data.data.result;
             this.total = this.result.total;
-            if(this.result.list == undefined || this.result.list.length == 0) {
+            if (this.result.list == undefined || this.result.list.length == 0) {
               this.loading = false;
               this.finished = true;
             } else {
@@ -174,7 +210,7 @@
         }
       },
       composeGoodsTitle(goods) {
-         return  goods.name
+        return goods.name
       },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
@@ -182,7 +218,7 @@
       onListClick(goods) {
         this.$log("onListClick Enter")
         let mpu = goods.mpu
-        if(mpu == null) {
+        if (mpu == null) {
           mpu = goods.skuid;
         }
         try {
@@ -300,42 +336,54 @@
     background-color: #f8f8f8;
 
     .box {
-      width:100%;
-      position:fixed;
-      z-index:5;
+      width: 100%;
+      position: fixed;
+      z-index: 5;
       background-color: #ff4444;
       display: flex;
       color: #ffcccc;
-      .actived{
+
+      .actived {
         color: white;
       }
-      .orderBySelected{
+
+      .orderBySelected {
         width: 50%;
         display: flex;
         justify-content: center;
-        span{
+
+        span {
           margin: 4px;
           .fz(font-size, 22);
         }
       }
+
       .orderByPrice {
         width: 50%;
         display: flex;
         justify-content: center;
-        span{
+
+        span {
           margin: 4px;
           .fz(font-size, 22);
+        }
+
+        img {
+          width: 10px;
+          height: 10px;
+          margin: 6px;
         }
       }
     }
 
-    .header{
-      width:100%;
-      position:fixed;
-      z-index:5;
-      top:0;
+    .header {
+      width: 100%;
+      position: fixed;
+      z-index: 5;
+      top: 0;
     }
-    .productList{
+
+    .productList {
       .van-list {
         margin-top: 5px;
         background-color: #f8f8f8;
@@ -343,6 +391,7 @@
         .van-card {
           background-color: #ffffff;
           margin-top: 1em;
+
           &__price {
             margin-top: 0.5em;
             margin-top: 18px;
