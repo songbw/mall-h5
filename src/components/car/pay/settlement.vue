@@ -174,46 +174,6 @@
                   <van-button type="danger" size="large" round @click="confirmedInvoiceSelector">确定</van-button>
                 </div>
               </div>
-              <!--              <h1 class="section-title">
-                              发票类型
-                            </h1>
-                            <div class="RadioStyle">
-                              <input type="radio" id="eInvoice" value="eInvoice" v-model="invoiceType">
-                              <label for="eInvoice">电子普通发票</label>
-                            </div>
-                            <h1 class="section-title">
-                              发票抬头
-                            </h1>
-                            <div class="RadioStyle">
-                              <input type="radio" id="personalInvoice" value="personal" v-model="invoiceTitleType">
-                              <label for="personalInvoice">个人</label>
-                              <input type="radio" id="enterpriseInvoice" value="enterprise" v-model="invoiceTitleType">
-                              <label for="enterpriseInvoice">企业</label>
-                            </div>
-                            <div class="enterpriseInfo" v-if="invoiceTitleType==='enterprise'">
-                              <van-cell-group>
-                                <van-field
-                                  v-model="invoiceEnterpriseName"
-                                  required
-                                  placeholder="请填写单位名称"
-                                />
-
-                                <van-field
-                                  v-model="invoiceEnterpriseNumber"
-                                  required
-                                  placeholder="请填写纳税人识别号"
-                                />
-                              </van-cell-group>
-                            </div>
-                            <div class="tip">
-                              <p>
-                                温馨提示： 电子发票与纸票具有相同的法律效力，可以做为维权,保修，报销的有效凭据，且不存在损毁丢失的情况，您永远也不必担心发票损失。
-                                订单签收后可在订单详情下载您的电子普通发票。
-                              </p>
-                            </div>
-                            <div class="footer_layout">
-                              <van-button type="primary" size="large" @click="confirmedInvoiceSelector">确定</van-button>
-                            </div>-->
             </div>
           </van-actionsheet>
           <van-actionsheet v-model="showCoupon" title="优惠券" class="coupon_layout">

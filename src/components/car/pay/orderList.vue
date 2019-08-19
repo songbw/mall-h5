@@ -35,6 +35,14 @@
                           <img :src="tag_promotion"  v-if="sku.promotionDiscount > 0"/>
                           <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />
                         </div>
+                        <div slot="footer" class="card_footer">
+                          <van-button plain round size="small" type="primary"
+                                      style="background-color: white;color: black;border-color: #dedede "
+                                      @click.stop=""
+                                      @click="onAfterSalesServiceBtnClick(k,sku)" v-if="k.status==2">
+                            申请售后
+                          </van-button>
+                        </div>
                       </van-card>
                     </li>
                   </ul>
@@ -181,6 +189,22 @@
     },
 
     methods: {
+      onAfterSalesServiceBtnClick(k,sku) {
+        this.$log("onAfterSalesServiceBtnClick Enter")
+        this.$router.push({
+          name: "售后服务页",
+          params: {
+            openId: k.openId,
+            tradeNo: k.tradeNo,
+            goods: sku,
+            contact: {
+              name: k.receiverName,
+              mobile: k.mobile,
+              address: k.provinceName + k.cityName + k.countyName + k.address
+            },
+          }
+        })
+      },
       See(e) {
         this.$log("jump to:" + e)
         window.location.href = e
@@ -687,6 +711,10 @@
             &__price {
               margin-top: 0.5em;
               .fz(font-size, 40);
+            }
+
+            .card_footer{
+
             }
           }
         }
