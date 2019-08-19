@@ -702,10 +702,10 @@
         } else {
           this.radio = coupon.userCouponCode
           this.usedCoupon = coupon;
+          this.showCoupon = false
         }
-        this.lastRadio = this.radio
-        this.$log(this.radio)
-        this.showCoupon = false
+        //this.lastRadio = this.radio
+
       },
 
       getUsedCouponDetail4Order(coupon) {
@@ -834,10 +834,10 @@
         } else {
           this.radio = coupon.userCouponCode
           this.usedCoupon = coupon;
+          this.showCoupon = false
         }
-        this.lastRadio = this.radio
-        this.$log(this.radio)
-        this.showCoupon = false
+       // this.lastRadio = this.radio
+       // this.$log(this.radio)
       },
 
       onCouponLoad(index) {
