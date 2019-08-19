@@ -77,6 +77,9 @@
             this.backIsDeepColor = false
           else
             this.backIsDeepColor = true
+        } else {
+          //default is #FF44444
+          this.backIsDeepColor = true
         }
       },
       closeWindow() {
