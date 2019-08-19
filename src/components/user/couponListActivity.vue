@@ -28,7 +28,6 @@
                     @load="onLoad">
             <li v-for="(k,index) in list" :key="index">
               <div class="goodsCard" @click="onGoodCardClick(k)">
-
                 <div class="card-layout">
                   <van-col span="8" class="cardImg">
                     <img v-lazy="k.image">
@@ -600,16 +599,14 @@
       .couponActivityList {
         text-align: left;
         width: 100%;
-        background-color: #f0f0f0;
+        background-color: #f8f8f8;
         display: flex;
         flex-direction: column;
         margin-bottom: 3em;
-
         li {
           list-style: none;
-          margin: 10px;
           border-radius: 10px;
-
+          margin: 5px;
           .goodsCard {
             width: 100%;
             .card-layout{
@@ -682,11 +679,6 @@
                     }
                   }
 
-  /*                .actionBox {
-                    height: 100%;
-                    text-align: center;
-                    line-height: 3em;
-                  }*/
                   .goodsBuyBox {
                     justify-content: center;
                     float: right;
