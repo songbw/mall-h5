@@ -210,7 +210,7 @@
                         </div>
                       </div>
                       <div class="coupon-get">
-                        <van-radio :name=k.userCouponCode @click="onRadioBtnClick(k)"
+                        <van-radio :name=k.userCouponCode @click.stop="" @click="onRadioBtnClick(k)"
                                    checked-color="#FF4444"></van-radio>
                       </div>
                     </div>
@@ -696,7 +696,7 @@
       },
       onRadioBtnClick(coupon) {
         this.$log("onRadioBtnClick Enter")
-        if (this.radio === coupon.userCouponCode) {
+        if (this.radio === this.lastRadio) {
           this.radio = ''
           this.usedCoupon = null;
         } else {
@@ -704,7 +704,7 @@
           this.usedCoupon = coupon;
           this.showCoupon = false
         }
-        //this.lastRadio = this.radio
+        this.lastRadio = this.radio
 
       },
 
