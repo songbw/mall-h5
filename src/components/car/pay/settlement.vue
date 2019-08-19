@@ -696,15 +696,15 @@
       },
       onRadioBtnClick(coupon) {
         this.$log("onRadioBtnClick Enter")
-        this.$log(this.radio)
-        this.$log(this.lastRadio)
-        if (this.lastRadio == this.radio) {
+        if (this.radio === coupon.userCouponCode) {
           this.radio = ''
           this.usedCoupon = null;
         } else {
+          this.radio = coupon.userCouponCode
           this.usedCoupon = coupon;
         }
         this.lastRadio = this.radio
+        this.$log(this.radio)
         this.showCoupon = false
       },
 
