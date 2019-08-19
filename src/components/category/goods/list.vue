@@ -3,8 +3,23 @@
     <v-header class="header" v-if="showHeader">
       <h1 slot="title">商品列表</h1>
     </v-header>
-    <div class="productList">
-      <div class="box"></div>
+    <div class="box" v-if="active === 0" :style="{'top':showHeader? '2.6em':'0px'}"  >
+      <div class="orderBySelected actived" @click="onSelectedBtnClick">
+        <span>精选</span>
+      </div>
+      <div class="orderByPrice" @click="onPriceBtnClick">
+        <span>按价格排序</span>
+      </div>
+    </div>
+    <div class="box" :style="{'top':showHeader? '2.6em':'0px'}" v-else>
+      <div class="orderBySelected" @click="onSelectedBtnClick">
+        <span>精选</span>
+      </div>
+      <div class="orderByPrice actived" @click="onPriceBtnClick">
+        <span>按价格排序</span>
+      </div>
+    </div>
+    <div class="productList"  :style="{'padding-top':showHeader? '3.6em':'1em'}" >
       <van-list v-model="loading"
                 :finished="finished"
                 @load="onLoad">
@@ -48,6 +63,8 @@
         launchedLoading: false,
         showHeader: true,
         icon_shopCart: require('@/assets/icons/ico_cart-circle.png'),
+        active: 0,
+        tagPrice: 0, //0 升序 1 降序
       }
     },
 
@@ -68,6 +85,22 @@
     },
 
     methods: {
+      onSelectedBtnClick() {
+        if(this.active === 1) {
+          this.active = 0;
+        }
+      },
+      onPriceBtnClick() {
+        if(this.active === 0) {
+          this.active = 1;
+        } else {
+          if(this.tagPrice === 0) {
+            this.tagPrice = 1
+          } else {
+            this.tagPrice = 0
+          }
+        }
+      },
       gotoCart(){
          this.$router.push({name:'购物车页'})
       },
@@ -267,23 +300,33 @@
     background-color: #f8f8f8;
 
     .box {
-      padding-top: 2.1em;
-      position: relative;
-      width: 100%;
-      line-height: 15vw;
+      width:100%;
+      position:fixed;
+      z-index:5;
       background-color: #ff4444;
-    }
-    .box:after {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -60px;
-      content: ' ';
-      height: 60px;
-      width: 100%;
-      border-radius: 0 0 30% 30%;
-      background-color:  #ff4444;
-      overflow: hidden;
+      display: flex;
+      color: #ffcccc;
+      .actived{
+        color: white;
+      }
+      .orderBySelected{
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        span{
+          margin: 4px;
+          .fz(font-size, 22);
+        }
+      }
+      .orderByPrice {
+        width: 50%;
+        display: flex;
+        justify-content: center;
+        span{
+          margin: 4px;
+          .fz(font-size, 22);
+        }
+      }
     }
 
     .header{

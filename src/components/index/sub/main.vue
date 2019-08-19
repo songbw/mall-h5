@@ -70,7 +70,7 @@
       'v-loading': Loading,
       'v-imgmap': sectionImgMap
     },
-/*    watch: {
+    watch: {
       '$route' (to, from) {
         if (to.name === '活动页') {
           let id = this.$route.params.id;
@@ -102,7 +102,7 @@
 
         }
       }
-    },*/
+    },
       data() {
       return {
         datas: {},
