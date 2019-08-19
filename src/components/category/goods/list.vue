@@ -23,7 +23,7 @@
         <img :src="icon_select_btm" v-else>
       </div>
     </div>
-    <div class="productList" :style="{'padding-top':showHeader? '3.6em':'1em'}">
+    <div class="productList" :style="{'padding-top':showHeader? '4em':'1.5em'}">
       <van-list v-model="loading"
                 :finished="finished"
                 @load="onLoad">
@@ -353,7 +353,7 @@
 
         span {
           margin: 4px;
-          .fz(font-size, 22);
+          .fz(font-size, 30);
         }
       }
 
@@ -364,12 +364,12 @@
 
         span {
           margin: 4px;
-          .fz(font-size, 22);
+          .fz(font-size, 30);
         }
 
         img {
-          width: 10px;
-          height: 10px;
+          width: 18px;
+          height: 18px;
           margin: 6px;
         }
       }

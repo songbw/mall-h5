@@ -22,21 +22,10 @@
                   <div class="couponList">
                     <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
                       <div class="coupon-main">
-                        <div class="coupon-img" v-if="k.releaseTotal > k.releaseNum">
-                          <img :src="k.imageUrl.length?k.imageUrl: couponImg">
-                        </div>
-                        <div class="coupon-img coupon-img-allreleased" v-else>
+                        <div class="coupon-img">
                           <img :src="k.imageUrl.length?k.imageUrl: couponImg">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
-<!--                          <div class="coupon-suppler">
-                            <div class="coupon-name">
-                              <i>{{k.name}}</i>
-                            </div>
-                            <div class="supply-name">
-                              <span>{{(k.supplierMerchantName!=undefined &&  k.supplierMerchantName.length) > 0? k.supplierMerchantName:'凤巢'}}</span>
-                            </div>
-                          </div>-->
                           <div class="coupon-price">
                             <span v-if="k.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
                             {{formateCouponPrice(k.rules.couponRules)}}
