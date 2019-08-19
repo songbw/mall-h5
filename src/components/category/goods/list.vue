@@ -9,8 +9,7 @@
       </div>
       <div class="orderByPrice" @click="onPriceBtnClick">
         <span>按价格排序</span>
-        <img :src="icon_select_top" v-if="tagPrice === 0">
-        <img :src="icon_select_btm" v-else>
+        <img :src="icon_select_none">
       </div>
     </div>
     <div class="box" :style="{'top':showHeader? '2.6em':'0px'}" v-else>
@@ -69,6 +68,7 @@
         icon_shopCart: require('@/assets/icons/ico_cart-circle.png'),
         icon_select_top: require('@/assets/icons/ico_select_top.png'),
         icon_select_btm: require('@/assets/icons/ico_select_btm.png'),
+        icon_select_none: require('@/assets/icons/ico_select_none.png'),
         active: 0,
         tagPrice: 0, //0 升序 1 降序
       }
