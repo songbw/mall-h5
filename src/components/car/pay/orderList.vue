@@ -37,7 +37,7 @@
                         </div>
                         <div slot="footer" class="card_footer">
                           <van-button plain round size="small" type="primary"
-                                      style="background-color: white;color: black;border-color: #dedede "
+                                      style="background-color: white;color: #ff4444;border-color: #ffcccc "
                                       @click.stop=""
                                       @click="onAfterSalesServiceBtnClick(k,sku)" v-if="k.status==2">
                             申请售后
@@ -714,7 +714,9 @@
             }
 
             .card_footer{
-
+              span {
+                .fz(font-size, 22);
+              }
             }
           }
         }
