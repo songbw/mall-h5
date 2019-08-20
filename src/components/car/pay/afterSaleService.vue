@@ -309,6 +309,8 @@
           title: this.getRequestReason(),
           typeId: this.getRequestType(),
           num: this.count,
+          iAppId: this.$api.APP_ID,
+          tAppId: this.$api.T_APP_ID,
         }
         this.$api.xapi({
           method: 'post',
