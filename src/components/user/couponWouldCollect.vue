@@ -1,82 +1,52 @@
 <template lang="html">
-  <section class="couponCenter">
+  <section class="couponWouleCollect">
     <v-header class="header" v-if="showHeader">
       <h1 slot="title">待领取券</h1>
     </v-header>
-    <div class="couponCenterBody">
-      <div class="couponCenterMain">
-        <div v-if="launchedLoading">
-          <v-loading></v-loading>
-        </div>
-        <div v-else>
-          <div v-if="couponTypes.length > 0">
-            <van-tabs sticky
-                      v-model="active"
-                      @click="onClick"
-                      :swipe-threshold=swipeThreshold swipeable
-                      :ellipsis=false>
-              <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
-                <van-list v-model="item.loading"
-                          :finished="item.finished"
-                          @load="onLoad(active)">
-                  <div class="couponList">
-                    <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
-                      <div class="coupon-main">
-                        <div class="coupon-img">
-                          <img :src="k.imageUrl.length?k.imageUrl: couponImg">
-                        </div>
-                        <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                          <div class="coupon-price">
-                            <span v-if="k.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
-                            {{formateCouponPrice(k.rules.couponRules)}}
-                            <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
-                          </div>
-                          <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
-                          <div class="coupon-expire-date">
-                            {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
-                          </div>
-<!--                          <div class="coupon-progress">
-                            <van-progress
-                              color="#f44"
-                              :percentage=formateReleasePercentage(k)
-                            />
-                          </div>-->
-                        </div>
-                      </div>
-                      <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
-                           @click="onConponUseClick(k,i)">
-                        <div>
-                          <span class="coupon-action" style="margin-top:50px;" v-if="k.url != undefined && k.url.length > 0">立即使用</span>
-                        </div>
-                      </div>
-                      <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
-                        <div>
-                          <van-circle
-                            :value="formateReleasePercentage(k)"
-                            color="#FF4444"
-                            fill="#fff"
-                            size="55px"
-                            layer-color="#cccccc"
-                            :text="formateReleasePercentageText(k)"
-                            :rate="100"
-                            :speed="100"
-                            :stroke-width="50"/>
-                        </div>
-                        <div>
-                          <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                </van-list>
-              </van-tab>
-            </van-tabs>
-          </div>
-          <div class="noCoupon" v-else>
-            <img :src="icon_noCoupon">
-            <span class="noCoupon_line1">很遗憾</span>
-            <span class="noCoupon_line2">暂时还没有可领取优惠券</span>
+    <div class="couponWouleCollectBody">
+      <div class="couponWouleCollectMain">
+        <div class="couponList">
+          <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
+            <div class="coupon-main">
+              <div class="coupon-img">
+                <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+              </div>
+              <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                <div class="coupon-price">
+                  <span v-if="k.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
+                  {{formateCouponPrice(k.rules.couponRules)}}
+                  <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+                </div>
+                <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
+                <div class="coupon-expire-date">
+                  {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+                </div>
+              </div>
+            </div>
+            <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
+                 @click="onConponUseClick(k,i)">
+              <div>
+                        <span class="coupon-action" style="margin-top:50px;"
+                              v-if="k.url != undefined && k.url.length > 0">立即使用</span>
+              </div>
+            </div>
+            <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
+              <div>
+                <van-circle
+                  :value="formateReleasePercentage(k)"
+                  color="#FF4444"
+                  fill="#fff"
+                  size="55px"
+                  layer-color="#cccccc"
+                  :text="formateReleasePercentageText(k)"
+                  :rate="100"
+                  :speed="100"
+                  :stroke-width="50"/>
+              </div>
+              <div>
+                <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -89,6 +59,7 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Loading from '@/common/_loading.vue'
+
   export default {
     components: {
       'v-header': Header,
@@ -99,70 +70,10 @@
 
     data() {
       return {
-        active: 0,
-        swipeThreshold: 5,
         couponImg: require('@/assets/icons/ico_coupon.png'),
-        couponTypes: [],
-        couponCenterHeaderImg: require('@/assets/icons/ico_couponCenterHeader.jpg'),
-        icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
-        headerColor: "#FFFFFF",
-        reload: false,
+        couponList: [],
         showHeader: true,
-        launchedLoading: false,
       }
-    },
-
-    beforeCreate() {
-      this.$log("beforeCreate Enter xxxx");
-      let that = this;
-      this.launchedLoading = true;
-      that.$api.xapi({
-        method: 'get',
-        baseURL: this.$api.EQUITY_BASE_URL,
-        url: '/coupon/activeCategories',
-      }).then((response) => {
-        let result = response.data.data.result;
-        that.$log(result)
-        let tags = result.tags;
-        if (tags != null) {
-          tags.forEach(item => {
-            let type = {
-              "title": item.name,
-              "type": "tag",
-              "id": item.id,
-              "list": [],
-              "total": -1,
-              "pageNo": 1,
-              "status": -1,
-              "loading": false,
-              "finished": false,
-            }
-            that.couponTypes.push(type);
-          })
-        }
-        let categories = result.categorys;
-        categories.forEach(item => {
-          if (item.id != null && item.name != null) {
-            let type = {
-              "title": item.name,
-              "type": "category",
-              "id": item.id,
-              "list": [],
-              "total": -1,
-              "pageNo": 1,
-              "status": -1,
-              "loading": false,
-              "finished": false,
-            }
-            that.couponTypes.push(type);
-          }
-        })
-        that.$log(that.couponTypes)
-        this.launchedLoading = false;
-      }).catch(function (error) {
-        that.$log(error)
-        this.launchedLoading = false;
-      })
     },
 
     created() {
@@ -195,9 +106,7 @@
 
         }
       },
-      setCouponToLimited(k, i) {
 
-      },
       isCouponUptoLimited(k, i) {
         if (k.userCollectNum < k.rules.perLimited)
           return false;
@@ -207,92 +116,11 @@
         return (userInfo == undefined || userInfo.length === 0)
       },
 
-      resetCouponTypeList() {
-        /*        for(let i = 0 ; i< this.couponTypes.length ; i++) {
-                  this.couponTypes[i].list.splice(0,1);
-                }
-                this.couponTypes.splice(0,1);*/
-        for (let i = 0; i < this.couponTypes.length; i++) {
-          this.couponTypes[i].list = [];
-          this.couponTypes[i].total = -1;
-          this.couponTypes[i].status = -1;
-          this.couponTypes[i].pageNo = 1;
-          this.couponTypes[i].loading = false;
-          this.couponTypes[i].finished = false;
-        }
-      },
-      onClick(index, title) {
-        this.$log("onClick Enter, index is:" + index + ",title is:" + title)
-        this.onLoad(index)
-      },
-
-      onLoad(index) {
-        this.$log("onLoad:" + index)
-        let that = this
-        this.$log(this.reload)
-        if (this.reload) {
-          this.resetCouponTypeList();
-          this.reload = false;
-        }
-        this.$log(that.couponTypes[index])
-        if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list.length) {
-          that.couponTypes[index].loading = true;
-          let params = {
-            offset: that.couponTypes[index].pageNo++,
-            limit: 5,
-          }
-          let userInfo = this.$store.state.appconf.userInfo;
-          if (!that.isUserEmpty(userInfo)) {
-            let user = JSON.parse(userInfo);
-            params["userOpenId"] = user.userId
-          }
-          that.$log(that.couponTypes[index])
-          if (that.couponTypes[index].type == 'category') {
-            params["categoryId"] = that.couponTypes[index].id
-            params["categoryName"] = that.couponTypes[index].title
-          }
-          if (that.couponTypes[index].type == 'tag') {
-            params["tagId"] = that.couponTypes[index].id
-            params["tagName"] = that.couponTypes[index].title
-          }
-          that.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.EQUITY_BASE_URL,
-            url: '/coupon/activeCoupon',
-            params: params
-          }).then((response) => {
-            let result = response.data.data.result;
-            // that.$log(result)
-            that.couponTypes[index].total = result.total;
-            if (result.list == undefined || result.list.length == 0) {
-              that.couponTypes[index].loading = false;
-              that.couponTypes[index].finished = true;
-            } else {
-              result.list.forEach(item => {
-                that.couponTypes[index].list.push(item);
-              })
-              that.couponTypes[index].loading = false;
-              if (that.couponTypes[index].list.length >= that.couponTypes[index].total) {
-                that.couponTypes[index].finished = true;
-              }
-            }
-          }).catch(function (error) {
-            that.$log(error)
-            that.couponTypes[index].loading = false;
-            that.couponTypes[index].finished = true;
-          })
-        }
-
-      },
-      getCouponClick() {
-        this.$log("getCouponClick Enter")
-      },
-
       isCouponActivied(couponInfo) {
         this.$log(couponInfo)
         let ret = "";
-        let startTime = new Date(couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
-        let endTime = new Date(couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
+        let startTime = new Date(couponInfo.effectiveStartDate.replace(/-/g, '/')).getTime()
+        let endTime = new Date(couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
         let current = new Date().getTime()
         if (current < startTime) {
           ret = "优惠券活动未开始"//券活动未开始
@@ -383,10 +211,9 @@
           }).then((response) => {
             let result = response.data.data;
             that.$log(result)
-            that.$log(that.couponTypes[that.active].list[i])
-            that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
-            that.couponTypes[that.active].list[i].releaseNum++;
-            that.reload = true;
+           // that.$log(that.couponTypes[that.active].list[i])
+           // that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
+           // that.couponTypes[that.active].list[i].releaseNum++;
           }).catch(function (error) {
             that.$log(error)
           })
@@ -445,9 +272,9 @@
       },
       formateReleasePercentageText(coupon) {
         if (coupon.releaseTotal == 0)
-          return '已领取'+'100%';
+          return '已领取' + '100%';
         let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
-        return '已领取'+percentage+'%';
+        return '已领取' + percentage + '%';
       },
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
@@ -461,21 +288,21 @@
   @import '../../assets/index/style.css';
   @import '../../assets/user/icon/carstyle.css';
 
-  .couponCenter {
+  .couponWouleCollect {
     width: 100%;
     height: 100%;
     top: 0px;
     background-color: #f8f8f8;
 
-    .couponCenterBody {
-      .couponCenterHeader {
+    .couponWouleCollectBody {
+      .couponWouleCollectHeader {
         img {
           width: 100%;
           display: inline-block;
         }
       }
 
-      .couponCenterMain {
+      .couponWouleCollectMain {
         width: 100%;
 
         .noCoupon {
@@ -661,10 +488,12 @@
               .coupon-progress {
                 margin-top: 10px;
               }
+
               .coupon-suppler {
                 display: flex;
                 .fz(font-size, 25);
-                .coupon-name{
+
+                .coupon-name {
                   width: 60%;
                   min-width: 100px;
                   overflow: hidden;
@@ -674,9 +503,11 @@
                   -webkit-line-clamp: 1;
                   word-break: break-all;
                 }
-                .supply-name{
+
+                .supply-name {
                   margin-right: 5px;
                   text-align: center;
+
                   span {
                     width: 80%;
                     margin-top: 1px;

@@ -12,7 +12,7 @@
                   swipeabl>
           <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
             <div style="margin: .5rem;">
-              <van-cell  icon="coupon-o"  is-link @click="onGrantCounponClick" v-if="avaliableGrantCouponNumber > 0">您有
+              <van-cell  icon="coupon-o"  is-link @click="onGrantCounponClick" v-if="avaliableGrantCouponNumber > 0 && active === 0">您有
                 <i style="color: #ff4444">{{avaliableGrantCouponNumber}}</i>张待领取的优惠券哦</van-cell>
             </div>
             <van-list v-model="item.loading"
