@@ -81,7 +81,7 @@
         this.showHeader = false;
       }
       this.couponList = this.$route.params.grantCoupons;
-      this.$log(this.couponList)
+     // this.$log(this.couponList)
     },
 
     methods: {
