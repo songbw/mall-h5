@@ -81,7 +81,6 @@
         this.showHeader = false;
       }
       this.couponList = this.$route.params.grantCoupons;
-      this.$log("XXXXXXXXXXXXXXXXXXXx")
       this.$log(this.couponList)
     },
 
@@ -101,7 +100,7 @@
             }
           }).then((res) => {
             this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
+            this.$router.replace("/detail");
           }).catch((error) => {
             console.log(error)
           })
@@ -142,13 +141,13 @@
           let url = couponInfo.url;
           if (url.startsWith("aggregation://")) {
             let id = url.substr(14);
-            this.$router.push({path: '/index/' + id});
+            this.$router.replace({path: '/index/' + id});
           } else if (url.startsWith("route://")) {
             let target = url.substr(8);
             let paths = target.split("/");
             this.$log(paths);
             if (paths[0] === 'category') {
-              this.$router.push({path: '/category'})
+              this.$router.replace({path: '/category'})
             } else if (paths[0] === 'commodity') {
               try {
                 if (paths[1] != null)
@@ -162,15 +161,15 @@
                     "couponInfo": couponInfo
                   }
                   this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
-                  this.$router.push("/user/couponListActivity");
+                  this.$router.replace("/user/couponListActivity");
                   return;
                 }
                 case 2: {
-                  this.$router.push({path: "/category"});
+                  this.$router.replace({path: "/category"});
                   return
                 }
                 case 3: {
-                  this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
+                  this.$router.replace({path: "/category/" + couponInfo.rules.scenario.categories[0]});
                   return
                 }
                 default: {
@@ -202,7 +201,6 @@
           coupon.releaseTotal > coupon.releaseNum) {
           let user = JSON.parse(userInfo);
           let options = {
-            // userOpenId:"1044391000fd194ab888b1aa81c03c3710",//user.userId,
             userOpenId: user.userId,
             code: coupon.rules.code
           }
@@ -217,6 +215,10 @@
            // that.$log(that.couponTypes[that.active].list[i])
            // that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
            // that.couponTypes[that.active].list[i].releaseNum++;
+            that.couponList[i].userCollectNum = result.couponCollectNum;
+            that.couponList[i].releaseNum++;
+            that.$log(that.couponList[i].userCollectNum)
+            that.$log(that.couponList[i].releaseNum)
           }).catch(function (error) {
             that.$log(error)
           })
@@ -268,12 +270,16 @@
         }
       },
       formateReleasePercentage(coupon) {
+        this.$log("formateReleasePercentage Enter")
+        this.$log(coupon)
         if (coupon.releaseTotal == 0)
           return 100;
         let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
         return percentage;
       },
       formateReleasePercentageText(coupon) {
+        this.$log("formateReleasePercentageText Enter")
+        this.$log(coupon)
         if (coupon.releaseTotal == 0)
           return '已领取' + '100%';
         let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
