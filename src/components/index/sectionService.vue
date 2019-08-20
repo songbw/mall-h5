@@ -154,13 +154,13 @@
           img {
             display: block;
             object-fit: cover;
-            height: 3rem;
+            height: 2.5rem;
           }
 
           h2 {
             .fz(font-size, 26);
             color: #333;
-            padding: 2vw 1.2vw;
+            padding: 1vw 1.2vw;
             width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -171,6 +171,7 @@
       }
     }
     .section1-list {
+      margin-top: 10px;
       ul {
         display: -webkit-flex;
         display: -ms-flex;
@@ -189,13 +190,13 @@
           img {
             display: block;
             object-fit: cover;
-            height: 3rem;
+            height: 2.5rem;
           }
 
           h2 {
             .fz(font-size, 26);
             color: #333;
-            padding: 2vw 1.2vw;
+            padding: 1vw 1.2vw;
             width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
