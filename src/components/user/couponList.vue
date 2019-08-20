@@ -185,7 +185,12 @@
     methods: {
       onGrantCounponClick() {
         this.$log("onGrantCounponClick Enter")
-
+        this.$router.push({
+          name: "待领取券页",
+          params: {
+            grantCoupons: this.grantCoupons
+          }
+        })
       },
       getCouponState(type) {
         //  this.$log("type:"+type)

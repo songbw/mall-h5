@@ -6,7 +6,7 @@
     <div class="couponWouleCollectBody">
       <div class="couponWouleCollectMain">
         <div class="couponList">
-          <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
+          <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i">
             <div class="coupon-main">
               <div class="coupon-img">
                 <img :src="k.imageUrl.length?k.imageUrl: couponImg">
@@ -80,6 +80,9 @@
       if (this.$api.APP_ID === "10") {
         this.showHeader = false;
       }
+      this.couponList = this.$route.params.grantCoupons;
+      this.$log("XXXXXXXXXXXXXXXXXXXx")
+      this.$log(this.couponList)
     },
 
     methods: {
