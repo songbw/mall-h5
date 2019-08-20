@@ -23,6 +23,8 @@ const CouponList = resolve => require(['@/components/user/couponList.vue'], reso
 const UserInfo = resolve => require(['@/components/user/userInfo.vue'], resolve)
 const CouponChange = resolve => require(['@/components/user/couponChange.vue'], resolve)
 const CouponListActivity = resolve => require(['@/components/user/couponListActivity.vue'], resolve)
+const CouponWouldCollect = resolve => require(['@/components/user/couponWouldCollect.vue'], resolve)
+
 
 export default new VueRouter({
   mode: 'history',
@@ -243,6 +245,14 @@ export default new VueRouter({
       component: CouponListActivity,
       meta: {
         title: '优惠活动',
+      }
+    },
+    {
+      path: '/user/couponWouldCollect',
+      name: '待领取券页',
+      component: CouponWouldCollect,
+      meta: {
+        title: '待领取券',
       }
     }
   ]

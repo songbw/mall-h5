@@ -11,6 +11,10 @@
                   :swipe-threshold=swipeThreshold
                   swipeabl>
           <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
+            <div style="margin: .5rem;">
+              <van-cell  icon="coupon-o"  is-link @click="onGrantCounponClick" v-if="avaliableGrantCouponNumber > 0">您有
+                <i style="color: #ff4444">{{avaliableGrantCouponNumber}}</i>张待领取的优惠券哦</van-cell>
+            </div>
             <van-list v-model="item.loading"
                       :finished="item.finished"
                       @load="onLoad(active)">
@@ -158,6 +162,8 @@
             "finished": false,
           },
         ],
+        grantCoupons: [],
+        avaliableGrantCouponNumber: 0,
       }
     },
 
@@ -177,6 +183,10 @@
     },
 
     methods: {
+      onGrantCounponClick() {
+        this.$log("onGrantCounponClick Enter")
+
+      },
       getCouponState(type) {
         //  this.$log("type:"+type)
         switch (type) {
@@ -296,6 +306,27 @@
             }).then((response) => {
               let result = response.data.data.result;
               that.$log(result)
+              if(result.grantCoupons != undefined) {
+                //that.grantCoupons=result.grantCoupons;
+                let avaliableGrantCoupons = [];
+                result.grantCoupons.forEach(item => {
+                  let userCollectNum = 0;
+                  if(item.userCollectNum != null) {
+                    userCollectNum = item.userCollectNum;
+                  }
+                  let remainNum = item.releaseTotal - item.releaseNum;
+                  let remainUserCollectNumber = item.rules.perLimited - userCollectNum;
+                  if(remainNum > 0 && remainUserCollectNumber > 0) {
+                    if(remainUserCollectNumber > remainNum) {
+                      this.avaliableGrantCouponNumber += remainNum;
+                    } else {
+                      this.avaliableGrantCouponNumber += remainUserCollectNumber;
+                    }
+                    avaliableGrantCoupons.push(item);
+                  }
+                });
+                this.grantCoupons = avaliableGrantCoupons;
+              }
               that.couponTypes[index].total = result.total;
               if (result.list == undefined || result.list.length == 0) {
                 that.couponTypes[index].loading = false;
