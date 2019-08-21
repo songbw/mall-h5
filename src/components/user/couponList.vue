@@ -400,7 +400,8 @@
                   return
                 }
                 case 3: {
-                  this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
+                  //this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
+                  this.$router.push({path: "/category/goods/list?category=" + couponInfo.rules.scenario.categories[0]});
                   return
                 }
                 default: {
