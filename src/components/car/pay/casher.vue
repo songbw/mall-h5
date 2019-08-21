@@ -4,7 +4,7 @@
       <h1 slot="title">订单支付</h1>
     </v-header>
     <div class="pay-order">
-      <van-cell title="订单单号:">
+      <van-cell title="支付单号:">
         <div slot="default">
           <span>{{this.orderInfo.orderNo}}</span>
         </div>
