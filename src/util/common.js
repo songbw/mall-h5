@@ -199,7 +199,7 @@ export default {
       }
       env.$log(cartItem)
       if (found == -1) {
-        cartList.push(cartItem) //添加一个新的
+        cartList.unshift(cartItem) //添加一个新的
       } else {
         //update baseInfo
         cartList[found] = cartItem;
