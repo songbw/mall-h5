@@ -105,13 +105,6 @@
       'v-footer':Footer
     },
 
-    beforeRouteLeave(to, from, next) {
-      // 必须调用next(),next(true)进入原计划的下个页面
-      console.log("beforeRouteLeave xxxxxxxxxxxxxxxxxxxxxxxxx")
-      console.log(to)
-      console.log(from)
-      next();
-    },
 
     data() {
       return {

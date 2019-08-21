@@ -373,30 +373,53 @@
           }
           if (found != -1 && item.couponInfo.rules.couponRules.type != 3) {
             couponList.push(item)
+          } else {
+            if (item.couponInfo.rules !=null && item.couponInfo.rules.scenario.type === 3) { //类别券单独处理
+              for (let i = 0; i < allPayList.length; i++) {
+                if (allPayList[i].valid) {
+                  for (let j = 0; j < item.couponInfo.rules.scenario.categories.length; j++) {
+                    if (item.couponInfo.rules.scenario.categories[j] === allPayList[i].product.goodsInfo.category) {
+                      couponList.push(item)
+                      break;
+                    }
+                  }
+                }
+              }
+            }
           }
-          /*          this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-                    this.$log(couponList)*/
         })
 
         //已经选出选购商品所有对应的优惠券
         //判断优惠券是否满足条件
         let avaliableCouponList = []
-        //this.$log(couponList)
         couponList.forEach(coupon => {
           if(this.isCouponActivied(coupon)) {
             if (coupon.couponInfo.rules.couponRules.type === 0 ||
               coupon.couponInfo.rules.couponRules.type == 2) {
               let fullPrice = 0;
-              allPayList.forEach(payItem => {
-                if (payItem.valid) {
-                  for (let i = 0; i < payItem.product.couponList.length; i++) {
-                    if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                      fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                      break;
+              if(coupon.couponInfo.rules.scenario.type === 3) {
+                allPayList.forEach(payItem => {
+                  if (payItem.valid) {
+                    for(let i = 0 ; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
+                      if(coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
+                        fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                        break;
+                      }
                     }
                   }
-                }
-              })
+                })
+              } else {
+                allPayList.forEach(payItem => {
+                  if (payItem.valid) {
+                    for (let i = 0; i < payItem.product.couponList.length; i++) {
+                      if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
+                        fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                        break;
+                      }
+                    }
+                  }
+                })
+              }
               switch (coupon.couponInfo.rules.couponRules.type) {
                 case 0:
                   if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice) {
@@ -729,6 +752,16 @@
                       break;
                     }
                   }
+                  if(found === -1) {
+                    if(coupon.couponInfo.rules.scenario.type === 3) {
+                        for(let i = 0 ; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
+                          if(coupon.couponInfo.rules.scenario.categories[i] === sku.product.goodsInfo.category) {
+                            found = 1;//找到
+                            break;
+                          }
+                        }
+                    }
+                  }
                   if (found != -1) {
                     let unitCouponDiscount =  Math.floor((this.reducedPriceOfCoupon * sku.product.goodsInfo.dprice / this.totalSkuPriceOfCoupon) * 100) / 100;
                     let skuCouponDiscount = unitCouponDiscount* sku.product.baseInfo.count;
@@ -798,16 +831,29 @@
         let fullPrice = 0;
         if (coupon != null) {
           let allPayList = this.$store.state.appconf.payList;
-          allPayList.forEach(payItem => {
-            if (payItem.valid) {
-              for (let i = 0; i < payItem.product.couponList.length; i++) {
-                if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                  fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                  break;
+          if(coupon.couponInfo.rules.scenario.type === 3) {
+            allPayList.forEach(payItem => {
+              if (payItem.valid) {
+                for(let i = 0 ; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
+                  if(coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
+                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                    break;
+                  }
                 }
               }
-            }
-          })
+            })
+          } else {
+            allPayList.forEach(payItem => {
+              if (payItem.valid) {
+                for (let i = 0; i < payItem.product.couponList.length; i++) {
+                  if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
+                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                    break;
+                  }
+                }
+              }
+            })
+          }
           switch (coupon.couponInfo.rules.couponRules.type) {
             case 0:
               reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
