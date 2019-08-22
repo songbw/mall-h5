@@ -94,10 +94,10 @@
         <div class="pay-info">
           <van-cell title="支付方式:" value="现金支付">
           </van-cell>
-          <van-cell title="发票:" :value="invoiceDetail">
+<!--          <van-cell title="发票:" :value="invoiceDetail">
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                       @click="showInvoiceSelector()"/>
-          </van-cell>
+          </van-cell>-->
           <van-cell title="优惠券:">
             <div slot="default">
               <span>{{couponUsedTip}}</span>
@@ -1657,7 +1657,7 @@
       width: 100%;
       top: 0px;
       background-color: #f8f8f8;
-      padding-bottom: 10px;
+      padding-bottom: 50px;
 
       .box {
         padding-top: 1.8em;
