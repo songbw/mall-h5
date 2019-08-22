@@ -5,19 +5,21 @@
       {{_datas.title}}
     </h1>  
     <li v-for="item in subClassData" style="list-style: none">
-      <h1 class="class2-title">
-        {{item.categoryName}}
-      </h1>
-      <ul class="class3-list">
-        <li v-for="(k,i) in item.subs" :key='i'>
-          <router-link :to="{name:'商品列表页',query: {'category': k.categoryId.toString()}}">
-            <img v-lazy="k.categoryIcon">
-          </router-link>
-          <span>
+      <div  v-if="item.subs.length > 0">
+        <h1 class="class2-title">
+          {{item.categoryName}}
+        </h1>
+        <ul class="class3-list">
+          <li v-for="(k,i) in item.subs" :key='i'>
+            <router-link :to="{name:'商品列表页',query: {'category': k.categoryId.toString()}}">
+              <img v-lazy="k.categoryIcon">
+            </router-link>
+            <span>
             {{k.categoryName}}
           </span>
-        </li>
-      </ul>
+          </li>
+        </ul>
+      </div>
     </li>
   </div>
 </template>
