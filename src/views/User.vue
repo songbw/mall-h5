@@ -12,7 +12,6 @@
               <img :src="avatarDefaultImg">
             </div>
             <span v-if="user.nickname !=undefined && user.nickname.length > 0">{{user.nickname}}</span>
-            <span v-else>登录/注册</span>
           </div>
           <div class="header-right">
             <van-icon name="arrow"/>
