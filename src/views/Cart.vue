@@ -5,7 +5,7 @@
     </v-header>
 
     <div class="cartBody">
-      <div class="box"></div>
+      <div class="box" :style="{'padding-top':showHeader? '3em':'1em'}"></div>
       <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
       </van-list>
       <div v-if="finished">
@@ -336,7 +336,7 @@
     background-color: #f8f8f8;
 
     .box {
-           padding-top: 2em;
+           padding-top: 3em;
            position: relative;
            width: 100%;
            line-height: 15vw;
@@ -367,16 +367,14 @@
         display: flex;
         position: fixed;
         width:100%;
-        height: 80%;
+        height: 82%;
         justify-content: center;
         justify-items: center;
         .nothingInCar {
-          z-index: 1;
           width: 96%;
           background-color: white;
           border-radius: 5px;
           height: 100%;
-          top: 0;
           display: flex;
           flex-direction: column;
           justify-content: center;

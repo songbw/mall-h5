@@ -471,13 +471,15 @@
               item.product.goodsInfo['dprice'] = Util.getDisplayPrice(item.checkedPrice, item.product.promotionInfo)
             }
             if (item.product.baseInfo.merchantId = 2) {//aoyi
-              let itemMerchantCode = item.product.baseInfo.mpu.substring(0, 2)
-              arregationPayList.forEach(merchant => {
-                  if (itemMerchantCode === merchant.merchantCode) {
-                    merchant.goods.push(item)
+              if(item.product.baseInfo.mpu != null) {
+                let itemMerchantCode = item.product.baseInfo.mpu.substring(0, 2)
+                arregationPayList.forEach(merchant => {
+                    if (itemMerchantCode === merchant.merchantCode) {
+                      merchant.goods.push(item)
+                    }
                   }
-                }
-              )
+                )
+              }
             } else {
               arregationPayList.forEach(merchant => {
                   if (item.product.baseInfo.merchantId === merchant.merchantId) {
@@ -875,8 +877,6 @@
         }
         this.reducedPriceOfCoupon = reducePrice.toFixed(2)
         this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
-        this.$log(this.totalSkuPriceOfCoupon)
-        this.$log(this.reducedPriceOfCoupon)
         return this.reducedPriceOfCoupon;
       },
       onCouponListClick(coupon) {
@@ -1497,8 +1497,8 @@
         this.payCarList = [];
         if (this.pageAction == "direct") {
           let payDirectProduct = this.$store.state.appconf.payDirectProduct;
-          this.$log("+++++++++++++++++++++");
-          this.$log(payDirectProduct);
+        //  this.$log("+++++++++++++++++++++");
+        //  this.$log(payDirectProduct);
           if (payDirectProduct.length > 0) {
             let item = JSON.parse(payDirectProduct);
             if (item.baseInfo.merchantId === 2) { //aoyi
@@ -1509,7 +1509,7 @@
           }
         } else {
           this.selectedCarList.forEach(item => {
-            this.$log(item)
+           // this.$log(item)
             if (item.baseInfo.merchantId === 2) { //aoyi
               inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
               skus.push({"skuId": item.baseInfo.skuId})
