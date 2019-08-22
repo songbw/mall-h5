@@ -105,6 +105,14 @@ Vue.use(Button)
 Vue.config.productionTip = false
 //增加全局Service变量
 Vue.prototype.$api = services;
+
+Vue.prototype.getConfigJson=function(){
+  this.$api.xapi.get("serverconfig.json").then((result)=>{
+    //用一个全局字段保存ApiUrl 也可以用sessionStorage存储
+    console.log("getConfigJson"+result.body.ApiUrl)
+    Vue.prototype.ApiUrl=result.body.ApiUrl;
+  }).catch((error)=>{console.log(error)});
+}
 ////////////////////////////////////////////////////////////////////////
 //增加Android/ios bridge 全局变量
 //let dsBridge = require("dsbridge");

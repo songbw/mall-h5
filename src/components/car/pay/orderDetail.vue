@@ -366,23 +366,28 @@
       },
       onCancelBtnClick(detail) {
         let id = detail.id
-        let options = {
-          "id": id,
-          "status": 3
-        }
-        this.$api.xapi({
-          method: 'put',
-          baseURL: this.$api.ORDER_BASE_URL,
-          url: '/order/status',
-          data: options,
-        }).then((response) => {
-          if (response.data.code == 200) {
-            this.status = 3;
-          }
-          //已取消
-        }).catch(function (error) {
-          console.log(error)
-        })
+        this.$dialog.confirm({
+          message: '确定取消订单?'
+        }).then(() => {
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/order/cancel',
+            params: {
+              id: id,
+            }
+          }).then((response) => {
+            if (response.data.code == 200) {
+              this.status = 3;
+            }
+            //已取消
+          }).catch(function (error) {
+            console.log(error)
+          })
+
+        }).catch(() => {
+          console.log("不删")
+        });
       }
       ,
       getOrderStatus() {

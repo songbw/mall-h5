@@ -11,6 +11,12 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 
 var env = config.build.env
 
+var GenerateAssetPlugin = require('generate-asset-webpack-plugin');
+var createServerConfig = function(compilation){
+  let cfgJson={ApiUrl:"http://198.129.31.108:8080"};
+  return JSON.stringify(cfgJson);
+}
+
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
     rules: utils.styleLoaders({
@@ -84,6 +90,13 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.optimize.CommonsChunkPlugin({
       name: 'manifest',
       chunks: ['vendor']
+    }),
+    new GenerateAssetPlugin({
+      filename: 'serverconfig.json',
+      fn: (compilation, cb) => {
+        cb(null, createServerConfig(compilation));
+      },
+      extraFiles: []
     }),
     // copy custom static assets
     new CopyWebpackPlugin([

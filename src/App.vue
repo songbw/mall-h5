@@ -38,6 +38,10 @@
       fetchLoading() {
         return this.$store.state.detail.fetchLoading
       }
+    },
+    mounted() {
+      //this.getConfigJson();
+      //this.$log(this.ApiUrl)
     }
   }
 </script>

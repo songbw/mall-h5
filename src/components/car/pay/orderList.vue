@@ -397,15 +397,13 @@
           let id = listItem.id
           let index = this.active
           this.reload = true;
-          let options = {
-            "id": id,
-            "status": 3
-          }
           this.$api.xapi({
-            method: 'put',
+            method: 'get',
             baseURL: this.$api.ORDER_BASE_URL,
-            url: '/order/status',
-            data: options,
+            url: '/order/cancel',
+            params: {
+              id: id,
+            }
           }).then((response) => {
             if (response.data.code == 200) {
               listItem.status = 3;
@@ -500,7 +498,7 @@
       },
 
       onDelBtnClick(listItem, i) {
-        this.$log("onCancelBtnClick Enter")
+        this.$log("onDelBtnClick Enter")
         this.$dialog.confirm({
           message: '确定删除订单?'
         }).then(() => {
