@@ -533,6 +533,8 @@
       allpay() {
         let all = 0;
         all = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100
+        if(all < 0)
+          all = 0
         return all;
       },
     },
@@ -868,9 +870,14 @@
               break;
           }
         }
+        if(reducePrice > fullPrice) {
+          reducePrice = fullPrice;
+        }
         this.reducedPriceOfCoupon = reducePrice.toFixed(2)
         this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
-        return reducePrice.toFixed(2);
+        this.$log(this.totalSkuPriceOfCoupon)
+        this.$log(this.reducedPriceOfCoupon)
+        return this.reducedPriceOfCoupon;
       },
       onCouponListClick(coupon) {
         this.$log("onCouponListClick Enter")
