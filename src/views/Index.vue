@@ -41,6 +41,17 @@
       </div>
       <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
     </div>
+    <van-dialog
+      v-model="showDialog"
+      :showConfirmButton="false"
+      :closeOnClickOverlay="true"
+      style="background-color: transparent"
+    >
+      <div class="gitDialog">
+        <img :src="icon_git" @click="onGiftDialogImgClick">
+        <van-icon name="close" @click="onGiftDialogCloseBtnClicks"/>
+      </div>
+    </van-dialog>
     <v-footer></v-footer>
   </div>
 </template>
@@ -103,6 +114,8 @@
         },
         pageloading: true,
         showHeader: true,
+        showDialog: false,
+        icon_git: require('@/assets/icons/ico_gift.png'),
       }
     },
 
@@ -426,7 +439,17 @@
       onSearchInputClick() {
         this.$log("onSearchInputClick")
         this.$router.push({name: '搜索页'})
-      }
+      },
+
+      onGiftDialogImgClick() {
+          this.$log("onGiftDialogImgClick Enter")
+      },
+
+      onGiftDialogCloseBtnClicks() {
+        this.$log("onGiftDialogCloseBtnClicks Enter")
+        this.showDialog = false
+      },
+
     }
   }
 </script>
@@ -462,6 +485,23 @@
 
       .index_main {
         margin-top: -50px;
+      }
+    }
+
+    .gitDialog{
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      color: white;
+      background-color: transparent;
+      align-items: center;
+      img{
+         width: 100%;
+
+      }
+      .van-icon{
+        margin-top: 20px;
+        font-size: xx-large;
       }
     }
   }
