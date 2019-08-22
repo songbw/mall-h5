@@ -4,8 +4,8 @@
     <h1 class="class1-title">
       {{_datas.title}}
     </h1>  
-    <li v-for="item in subClassData" style="list-style: none">
-      <div  v-if="item.subs.length > 0">
+    <div v-for="item in subClassData">
+      <div  v-if="item.subs.length > 0" class="category2Box">
         <h1 class="class2-title">
           {{item.categoryName}}
         </h1>
@@ -20,7 +20,7 @@
           </li>
         </ul>
       </div>
-    </li>
+    </div>
   </div>
 </template>
 
@@ -124,63 +124,77 @@
       }
     }
 
-    .class3-list {
-      width: 100%;
-      display: -ms-flex;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
-      justify-content: flex-start;
-      -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-      overflow: hidden;
-
-      li {
-        width: 33%;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        padding: 0 3vw;
+    .category2Box{
+      border-radius: 10px;
+      margin: 8px;
+      .class2-title {
+        text-align: left;
+        .fz(font-size, 30);
+        padding: 2vw;
+        position: relative;
+        background-color: #ffffff;
+        font-weight: bold;
+      }
+      .class3-list {
+        width: 100%;
+        display: -ms-flex;
+        display: -webkit-box;
+        display: -ms-flexbox;
         display: flex;
-        flex-flow: column;
-        height: 7em;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: flex-start;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        overflow: hidden;
 
-        > a {
-          display: block;
-          width: 100%;
-          position: relative;
+        li {
+          width: 33%;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          padding: 0 3vw;
+          display: flex;
+          flex-flow: column;
+          height: 7em;
 
-          img {
+          > a {
             display: block;
             width: 100%;
-            height: 4em;
+            position: relative;
+
+            img {
+              display: block;
+              width: 100%;
+              height: 4em;
+            }
+
+            p {
+              position: absolute;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+              padding: 1.2vw 2vw;
+            }
           }
 
-          p {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            padding: 1.2vw 2vw;
+          > h3 {
+            padding-top: 3vw;
+            .fz(font-size, 40);
           }
-        }
 
-        > h3 {
-          padding-top: 3vw;
-          .fz(font-size, 40);
-        }
-
-        > span {
-          .fz(font-size, 25);
-          display: inline-block;
-          padding-bottom: 3vw;
-          text-align: center;
+          > span {
+            .fz(font-size, 25);
+            display: inline-block;
+            padding-bottom: 3vw;
+            text-align: center;
+          }
         }
       }
     }
+
+
 
     .class1-title {
       .bt();
@@ -192,14 +206,7 @@
       background-color: #ffffff;
     }
 
-    .class2-title {
-      text-align: left;
-      .fz(font-size, 30);
-      padding: 2vw;
-      position: relative;
-      background-color: #ffffff;
-      font-weight: bold;
-    }
+
   }
 
 
