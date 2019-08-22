@@ -2,16 +2,19 @@
   <section class="search">
     <header v-if="showHeader">
       <van-icon class="arrowback" name="arrow-left" size="1.2em" @click="$router.go(-1)" slot="left" v-if="showBackArrow"/>
-      <van-search
-        background=#ffffff
-        v-model="value"
-        placeholder="请输入搜索关键词"
-        show-action
-        @search="onSearch"
-        slot="Title"
-      >
-        <div slot="action" @click="onSearch">搜索</div>
-      </van-search>
+      <form action="" style="width: 100%">
+        <van-search
+          background=#ffffff
+          v-model="value"
+          placeholder="请输入搜索关键词"
+          show-action
+          @search="onSearch"
+          slot="Title"
+          type="search"
+        >
+          <div slot="action" @click="onSearch">搜索</div>
+        </van-search>
+      </form>
     </header>
     <h1 class="hotSearchtitle">
       热门搜索
