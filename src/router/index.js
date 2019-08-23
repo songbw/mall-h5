@@ -24,7 +24,7 @@ const UserInfo = resolve => require(['@/components/user/userInfo.vue'], resolve)
 const CouponChange = resolve => require(['@/components/user/couponChange.vue'], resolve)
 const CouponListActivity = resolve => require(['@/components/user/couponListActivity.vue'], resolve)
 const CouponWouldCollect = resolve => require(['@/components/user/couponWouldCollect.vue'], resolve)
-
+const CouponGift = resolve => require(['@/components/user/couponGift.vue'], resolve)
 
 export default new VueRouter({
   mode: 'history',
@@ -43,7 +43,6 @@ export default new VueRouter({
       name: '活动页',
       component: IndexSub,
       meta: {
-    //    keepAlive: true, //此组件需要被缓存
         title: '苏宁易购',
       }
     },
@@ -254,6 +253,15 @@ export default new VueRouter({
       meta: {
         title: '待领取券',
       }
-    }
+    },
+    {
+      path: '/user/couponGift',
+      name: '新人礼包页',
+      component: CouponGift,
+      meta: {
+        title: '新人礼包',
+      }
+    },
+
   ]
 })

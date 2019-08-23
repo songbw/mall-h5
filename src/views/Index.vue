@@ -328,6 +328,10 @@
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
           }
+          if(rt.newUser !=undefined && rt.newUser) {
+            this.showDialog = true;
+          }
+          this.showDialog = true;//test
 
         }).catch(function (error) {
           that.$log(error)
@@ -444,7 +448,16 @@
       },
 
       onGiftDialogImgClick() {
-          this.$log("onGiftDialogImgClick Enter")
+        this.$log("onGiftDialogImgClick Enter")
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          this.$router.push({
+            name: "新人礼包页"
+          })
+        } else {
+          this.$log("无法获得用户信息，请重新登录授权")
+        }
       },
 
       onGiftDialogCloseBtnClicks() {

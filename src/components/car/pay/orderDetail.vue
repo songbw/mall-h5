@@ -155,6 +155,10 @@
       this.detail = JSON.parse(this.$store.state.appconf.currentOrderInfo);
       this.$log(this.detail)
       this.status = this.detail.status;
+/*      if(this.status == 0) {
+        let endTime = new Date(this.$moment(detail.createdAt).format('YYYY/MM/DD HH:mm:ss')).getTime() + 1000*60*30;
+        let current = new Date().getTime();
+      }*/
     },
 
 
@@ -393,8 +397,9 @@
       getOrderStatus() {
         let status = this.status;
         switch (status) {
-          case 0:
+          case 0: {
             return "待支付";
+          }
           case 1:
             return "待收货";
           case 2:
