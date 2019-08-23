@@ -12,10 +12,18 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var env = config.build.env
 
 var GenerateAssetPlugin = require('generate-asset-webpack-plugin');
-var createServerConfig = function(compilation){
-  let cfgJson={ApiUrl:"http://198.129.31.108:8080"};
-  return JSON.stringify(cfgJson);
+
+var createServerConfig = function (compilation) {
+  //Step1:先复制原对象
+  var parseEnv = Object.assign({ _hash: compilation.hash}, env)
+  //Step2:去除配置文件中的引号
+  Object.keys(parseEnv).forEach(function (key) {
+    parseEnv[key] = parseEnv[key].replace(/"/g, "");
+  });
+  return JSON.stringify(parseEnv, null, 2);
 }
+
+
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -92,7 +100,7 @@ var webpackConfig = merge(baseWebpackConfig, {
       chunks: ['vendor']
     }),
     new GenerateAssetPlugin({
-      filename: 'serverconfig.json',
+      filename: utils.assetsPath('../static/serverConfig.json'),
       fn: (compilation, cb) => {
         cb(null, createServerConfig(compilation));
       },

@@ -40,7 +40,7 @@
       }
     },
     mounted() {
-      //this.getConfigJson();
+      this.getConfigJson();
       //this.$log(this.ApiUrl)
     }
   }

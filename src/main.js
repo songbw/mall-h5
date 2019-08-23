@@ -106,11 +106,29 @@ Vue.config.productionTip = false
 //增加全局Service变量
 Vue.prototype.$api = services;
 
+
 Vue.prototype.getConfigJson=function(){
-  this.$api.xapi.get("serverconfig.json").then((result)=>{
+  this.$api.xapi({
+    method: 'get',
+    url: '/static/serverConfig.json'
+  }).then((result)=>{
     //用一个全局字段保存ApiUrl 也可以用sessionStorage存储
-    console.log("getConfigJson"+result.body.ApiUrl)
-    Vue.prototype.ApiUrl=result.body.ApiUrl;
+    console.log("getConfigJson"+ JSON.stringify(result.data))
+    let serverUrl = result.data.SERVICE_URL;
+    let testPaymentUrl = result.data.TESTSTUB_PAYMENT_URL
+    this.$api.GOODS_URL_PREFIX = result.data.GOODS_URL_PREFIX
+    this.$api.APP_ID = result.data.iAppID
+    this.$api.T_APP_ID = result.data.tAppID
+    this.$api.SERVR_PHONE_NUM = result.data.SERVR_PHONE_NUM
+    this.$api.PRODUCT_BASE_URL = serverUrl+"/v2/products/"
+    this.$api.AGGREGATION_BASE_URL = serverUrl+"/v2/aggregations/"
+    this.$api.ORDER_BASE_URL = serverUrl+"/v2/orders/"
+    this.$api.EQUITY_BASE_URL = serverUrl+"/v2/equities/"
+    this.$api.SSO_BASE_URL = serverUrl+"/v2/ssoes/"
+    this.$api.WORKER_ORDER_BASE_URL = serverUrl+"/v2/workorders"
+    this.$api.TESTSTUB_PAYMENT_BASE_URL = testPaymentUrl+"/v1/"
+    this.$api.BASE_BASE_URL =  serverUrl+"/v2/bases/"
+    this.$api.ES_BASE_URL = serverUrl+ "/v2/elasticsearches/"
   }).catch((error)=>{console.log(error)});
 }
 ////////////////////////////////////////////////////////////////////////
