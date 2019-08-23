@@ -6,7 +6,7 @@ import store from '@/vuex/store.js'
 /*const APP_ID = "11"
 const T_APP_ID =""*/
 const APP_ID = "10" //10:关爱通
-const T_APP_ID ="20091390" //20091390:关爱通
+const T_APP_ID ="20091390" //20091390:关爱通苏宁
 
 const SERVR_PHONE_NUM= "4000797717";
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
