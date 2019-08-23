@@ -5,7 +5,7 @@
         <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()"
                   :style="{'background-color':decorateBgColor}">
           <div slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
-            <span style="color:white">
+            <span>
                {{datas.settings.title.textValue}}
             </span>
           </div>
@@ -288,7 +288,6 @@
               this.$log(response.data.data.result)
               let detail = response.data.data.result
               if(detail != null) {
-                this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
                 this.$log(detail)
                 this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
                 this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
@@ -443,6 +442,12 @@
       .van-cell {
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
+      }
+      .sectionSlide-title{
+        .fz(font-size,35);
+        font-weight: bold;
+        color: white;
+        //text-shadow:5px 2px 6px #000
       }
     }
 
