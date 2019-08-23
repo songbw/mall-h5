@@ -331,7 +331,7 @@
           if(rt.newUser !=undefined && rt.newUser) {
             this.showDialog = true;
           }
-          this.showDialog = true;//test
+          //this.showDialog = true;//test
 
         }).catch(function (error) {
           that.$log(error)
