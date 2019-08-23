@@ -116,6 +116,7 @@ Vue.prototype.getConfigJson=function(){
     console.log("getConfigJson"+ JSON.stringify(result.data))
     let serverUrl = result.data.SERVICE_URL;
     let testPaymentUrl = result.data.TESTSTUB_PAYMENT_URL
+    let testUser = result.data.TEST_USER
     this.$api.GOODS_URL_PREFIX = result.data.GOODS_URL_PREFIX
     this.$api.APP_ID = result.data.iAppID
     this.$api.T_APP_ID = result.data.tAppID
@@ -129,6 +130,8 @@ Vue.prototype.getConfigJson=function(){
     this.$api.TESTSTUB_PAYMENT_BASE_URL = testPaymentUrl+"/v1/"
     this.$api.BASE_BASE_URL =  serverUrl+"/v2/bases/"
     this.$api.ES_BASE_URL = serverUrl+ "/v2/elasticsearches/"
+    if(testUser != undefined && testUser.length > 0)
+      this.$api.TEST_USER = testUser
   }).catch((error)=>{console.log(error)});
 }
 ////////////////////////////////////////////////////////////////////////

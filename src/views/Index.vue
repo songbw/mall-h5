@@ -234,6 +234,8 @@
       test() {
         //  let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
         let openId = "44391000fd194ab888b1aa81c03c3710"
+        if(this.$api.TEST_USER.length > 0)
+          openId = this.$api.TEST_USER
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
         this.$log("openId:" + openId);
         if (openId != undefined) {

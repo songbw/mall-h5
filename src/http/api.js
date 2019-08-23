@@ -1,27 +1,16 @@
 import store from '@/vuex/store.js'
 
-//const SERVER_BASE_URL = "http://119.3.111.161:8080"
-//const USER_BASE_URL="http://119.3.3.226:8081/";
 
-/*const APP_ID = "11"
-const T_APP_ID =""*/
-const APP_ID = "10" //10:关爱通
-const T_APP_ID ="20091390" //20091390:关爱通苏宁
+const APP_ID = "11"
+const T_APP_ID =""
+const TEST_USER = ""
 
 const SERVR_PHONE_NUM= "4000797717";
 const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
 
 let SERVICE_URL = "https://api.weesharing.com"
-/*let SERVICE_URL = "https://openapi.weesharing.com"*/
 let TESTSTUB_PAYMENT_URL = "http://119.3.111.161:8088"
 
-/*let SERVICE_URL = "http://192.168.200.37:8000";
-let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"
-
-if (process.env.NODE_ENV === 'development') { //生产环境走的地址
-  SERVICE_URL = "http://192.168.200.37:8000";
-  TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"
-}*/
 
 const ES_BASE_URL = SERVICE_URL+ "/v2/elasticsearches/"
 const TESTSTUB_PAYMENT_BASE_URL = TESTSTUB_PAYMENT_URL+"/v1/";
@@ -82,7 +71,6 @@ export default {
   APP_ID,
   T_APP_ID,
   SERVR_PHONE_NUM,
-//  USER_BASE_URL,
   PRODUCT_BASE_URL,
   AGGREGATION_BASE_URL,
   ORDER_BASE_URL,
@@ -91,5 +79,6 @@ export default {
   WORKER_ORDER_BASE_URL,
   TESTSTUB_PAYMENT_BASE_URL,
   BASE_BASE_URL,
-  ES_BASE_URL
+  ES_BASE_URL,
+  TEST_USER
 }
