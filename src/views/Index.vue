@@ -47,8 +47,8 @@
       :closeOnClickOverlay="true"
       style="background-color: transparent"
     >
-      <div class="gitDialog">
-        <img :src="icon_git" @click="onGiftDialogImgClick">
+      <div class="gitDialog" v-if="icon_git.length > 0">
+        <img :src=icon_git @click="onGiftDialogImgClick">
         <van-icon name="close" @click="onGiftDialogCloseBtnClicks"/>
       </div>
     </van-dialog>
@@ -115,7 +115,8 @@
         pageloading: true,
         showHeader: true,
         showDialog: false,
-        icon_git: require('@/assets/icons/ico_gift.png'),
+        //icon_git: require('@/assets/icons/ico_gift.png'),
+        icon_git: "",
       }
     },
 
@@ -136,10 +137,16 @@
             this.datas[i].data.id = 0;
         }
         this.$log(this.datas);
+        this.$log(response.data.data.result)
         this.mBackgroundColor = response.data.data.result.backgroundColor
+
+
         if (response.data.data.result.header != undefined) {
           let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
+          if(this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
+            this.icon_git = this.mHeader.novicePackUrl
+          }
         }
         this.$log(this.mHeader);
         this.pageloading = false;
