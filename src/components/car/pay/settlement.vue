@@ -470,7 +470,7 @@
               item.product.promotionInfo['promotionState'] = Util.getPromotionState(item.product.promotionInfo)
               item.product.goodsInfo['dprice'] = Util.getDisplayPrice(item.checkedPrice, item.product.promotionInfo)
             }
-            if (item.product.baseInfo.merchantId = 2) {//aoyi
+            if (item.product.baseInfo.merchantId === 2) {//aoyi
               if(item.product.baseInfo.mpu != null) {
                 let itemMerchantCode = item.product.baseInfo.mpu.substring(0, 2)
                 arregationPayList.forEach(merchant => {
