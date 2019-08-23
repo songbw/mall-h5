@@ -195,9 +195,7 @@
 
         }
       },
-      setCouponToLimited(k, i) {
 
-      },
       isCouponUptoLimited(k, i) {
         if (k.userCollectNum < k.rules.perLimited)
           return false;
