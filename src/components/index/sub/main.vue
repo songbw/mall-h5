@@ -1,6 +1,5 @@
 <template lang="html">
-  <section>
-    <div class="index" :style="{'background-color': mBackgroundColor}">
+  <section class="submain"  :style="{'background-color': mBackgroundColor}">
       <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
         <h1 slot="title">{{title}}</h1>
       </v-header>
@@ -44,7 +43,6 @@
         </div>
         <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
       </div>
-    </div>
   </section>
 </template>
 
@@ -178,34 +176,36 @@
 
 
 <style lang="less" scoped>
-  .index {
-    width: 100%;
-    padding-bottom: 4vw;
-    background-color: #F8FCFF;
-
-    .home-body {
+    .submain {
       width: 100%;
-      top: 0px;
-      background-color: #f8f8f8;
+      height: 100%;
+      padding-bottom: 4vw;
+      background-color: #F8FCFF;
 
-      .box {
-        position: relative;
+      .home-body {
         width: 100%;
-        line-height: 15vw;
-        background-color: #ff4444;
+        height: 100%;
+        top: 0px;
+        background-color: #f8f8f8;
 
-      }
-      .box_after{
-        bottom: -60px;
-        height: 60px;
-        border-radius: 0 0 30% 30%;
-        background-color:  #ff4444;
-        overflow: hidden;
-        z-index: -1;
-      }
-      .index_main{
-        margin-top: -50px;
+        .box {
+          position: relative;
+          width: 100%;
+          line-height: 15vw;
+          background-color: #ff4444;
+
+        }
+        .box_after{
+          bottom: -60px;
+          height: 60px;
+          border-radius: 0 0 30% 30%;
+          background-color:  #ff4444;
+          overflow: hidden;
+          z-index: -1;
+        }
+        .index_main{
+          margin-top: -50px;
+        }
       }
     }
-  }
 </style>
