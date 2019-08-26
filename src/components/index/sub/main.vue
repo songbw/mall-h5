@@ -37,6 +37,9 @@
             <div v-else-if="item.type==='4'">
               <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
             </div>
+            <div v-else-if="item.type==='6'">
+              <v-sectionCoupon :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
           </div>
         </div>
         <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
@@ -53,6 +56,7 @@
   import sectionSlide from '@/components/index/sectionSlide.vue'
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import sectionImgMap from '@/components/index/sectionImgMap.vue'
+  import sectionCoupon from '@/components/index/sectionCoupon.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Loading from '@/common/_loading.vue'
@@ -68,7 +72,8 @@
       'v-baseline': Baseline,
       'v-footer': Footer,
       'v-loading': Loading,
-      'v-imgmap': sectionImgMap
+      'v-imgmap': sectionImgMap,
+      'v-sectionCoupon': sectionCoupon,
     },
     watch: {
       '$route' (to, from) {
