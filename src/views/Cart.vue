@@ -245,6 +245,7 @@
       getCarListWithoutUser() {
         this.loading = false;
         this.finished = true;
+        this.dataLoaded = true;
       },
 
 
