@@ -53,6 +53,7 @@
 
 <script>
   import Header from '@/common/_header.vue'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -72,21 +73,133 @@
         this.showHeader = false;
       }
       let that = this
-      this.$api.xapi({
-        method: 'get',
-        baseURL: this.$api.EQUITY_BASE_URL,
-        url: '/coupon/giftCoupon'
-      }).then((response) => {
-        let ret = response.data.data.result;
-        if(ret != undefined) {
-          this.couponList = ret;
-        }
-      }).catch(function (error) {
-        that.$log(error)
-      })
+      let userInfo = this.$store.state.appconf.userInfo;
+      if (!Util.isUserEmpty(userInfo)) {
+        let user = JSON.parse(userInfo);
+        this.$log()
+        this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.EQUITY_BASE_URL,
+          url: '/coupon/giftCoupon',
+          params: {
+            openId: user.userId,
+            iAppId : this.$api.APP_ID,
+          }
+        }).then((response) => {
+          let ret = response.data.data.result;
+          if(ret != undefined) {
+            this.couponList = ret;
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      }
+
     },
 
     methods: {
+      isCouponActivied(couponInfo) {
+        this.$log(couponInfo)
+        let ret = "";
+        let startTime = new Date(couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
+        let endTime = new Date(couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
+        let current = new Date().getTime()
+        if (current < startTime) {
+          ret = "优惠券活动未开始"//券活动未开始
+        } else if (current <= endTime) {
+          ret = "success" //活动开始
+        } else {
+          ret = "优惠券已无效"// 活动已经结束
+        }
+        return ret
+      },
+      onConponUseClick(couponInfo, i) {
+        this.$log("onConponUseClick Enter")
+        let ret = this.isCouponActivied(couponInfo);
+        if (ret == "success") {
+          let url = couponInfo.url;
+          if (url.startsWith("aggregation://")) {
+            let id = url.substr(14);
+            this.$router.push({path: '/index/' + id});
+          } else if (url.startsWith("route://")) {
+            let target = url.substr(8);
+            let paths = target.split("/");
+            this.$log(paths);
+            if (paths[0] === 'category') {
+              this.$router.push({path: '/category'})
+            } else if (paths[0] === 'commodity') {
+              try {
+                if (paths[1] != null)
+                  this.gotoGoodsPage(paths[1]);
+              } catch (e) {
+              }
+            } else if (paths[0] === 'listing') {
+              switch (couponInfo.rules.scenario.type) {
+                case 1: {
+                  let coupon = {
+                    "couponInfo": couponInfo
+                  }
+                  this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
+                  this.$router.push("/user/couponListActivity");
+                  return;
+                }
+                case 2: {
+                  this.$router.push({path: "/category"});
+                  return
+                }
+                case 3: {
+                  this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
+                  return
+                }
+                default: {
+                  if (url.startsWith("http://") || url.startsWith("http://")) {
+                    this.See(url);
+                  }
+                  return
+                }
+              }
+            }
+          } else if (url.startsWith("http://") || url.startsWith("http://")) {
+            this.See(url);
+          }
+        } else {
+          if (ret.length > 0) {
+            this.$toast(ret)
+          }
+        }
+
+      },
+      onConponCollectClick(coupon, i) {
+        this.$log("onConponCollectClick Enter");
+        this.$log(coupon)
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        that.$log(userInfo)
+        if (!Util.isUserEmpty(userInfo) &&
+          coupon.releaseTotal > coupon.releaseNum) {
+          let user = JSON.parse(userInfo);
+          let options = {
+            // userOpenId:"1044391000fd194ab888b1aa81c03c3710",//user.userId,
+            userOpenId: user.userId,
+            code: coupon.rules.code
+          }
+          that.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.EQUITY_BASE_URL,
+            url: '/coupon/collect',
+            data: options,
+          }).then((response) => {
+            let result = response.data.data;
+            that.$log(result)
+            that.$log(that.couponList[i])
+            that.couponList[i].userCollectNum = result.couponCollectNum;
+            that.couponList[i].releaseNum++;
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
+      },
+
       isCouponUptoLimited(k, i) {
         if (k.userCollectNum < k.rules.perLimited)
           return false;

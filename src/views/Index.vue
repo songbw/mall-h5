@@ -336,6 +336,7 @@
             that.$store.commit('SET_TOKEN', rt.token);
           }
           if(rt.newUser !=undefined && rt.newUser) {
+            if(this.$api.APP_ID === "11")
             this.showDialog = true;
           }
           //this.showDialog = true;//test
