@@ -345,6 +345,8 @@
         })
       },
 
+
+
       setStatusBarColor(color) {
         this.$jsbridge.call("initStatusBarColor", color);
       },

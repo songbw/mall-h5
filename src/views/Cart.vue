@@ -9,7 +9,7 @@
       <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
       </van-list>
       <div v-if="finished">
-        <div class="emptyCart" v-if="finished && cartList.length === 0">
+        <div class="emptyCart" v-if="dataLoaded && cartList.length === 0">
           <div class="nothingInCar">
             <img :src="nothingInCar_bg"/>
             <span>您的购物车还没有商品，快去挑选吧</span>
@@ -104,7 +104,8 @@
         finished: false,
         nothingInCar_bg: require('@/assets/icons/ico_empty_cart.png'),
         launchedLoading: false,
-        showHeader: true
+        showHeader: true,
+        dataLoaded: false,
       }
     },
 
@@ -198,13 +199,12 @@
             this.total = this.result.total;
             this.$log("load from network car list is:" + JSON.stringify(this.result.list));
             if (this.result.list === undefined || this.result.list.length === 0) {
-              this.$store.commit('SET_SELECTED_CARLIST', []);
+             // this.$store.commit('SET_SELECTED_CARLIST', []);
               this.loading = false;
               this.finished = true;
+              this.dataLoaded = true;
             } else {
               this.result.list.forEach(item => {
-/*                this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-                this.$log(item)*/
                 this.list.push(item);
                 this.getSkuInfoBy(item, userInfo);
               })
@@ -213,7 +213,8 @@
             if (this.list.length >= this.total) {
               setTimeout(() => {
                 this.finished = true;
-              }, 500);
+                this.dataLoaded = true;
+              }, 1000);
             }
           }).catch(function (error) {
             console.log(error)
@@ -223,7 +224,9 @@
         } else {
           //load finished
           this.loading = false;
-          this.finished = true;
+          if( !this.finished ) {
+            this.finished = true;
+          }
         }
       },
 
@@ -307,14 +310,18 @@
             mpu: item.mpu,
           }
         }).then((res) => {
-          let product = res.data.data.result;
-          if (product != null) {
-            this.updateCarList(item,product,user)
-          } else {
-            this.$log("product:" + JSON.stringify(product) + ",mpu:" + item.mpu)
+          if(res.data != null) {
+            let product = res.data.data.result;
+            if (product != null) {
+              this.updateCarList(item,product,user)
+              this.dataLoaded = true
+            } else {
+              this.$log("product:" + JSON.stringify(product) + ",mpu:" + item.mpu)
+            }
           }
         }).catch((error) => {
           console.log(error)
+          this.dataLoaded = true
         })
       },
 
