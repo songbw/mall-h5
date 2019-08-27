@@ -34,6 +34,7 @@
       }
     },
     created() {
+      this.test();
       if (this.$api.APP_ID === "10") {
         this.showHeader = false;
       }
@@ -57,14 +58,27 @@
             break;
           }
         }
-        try {
-
-        } catch (e) {
-
-        }
       }
     },
     methods: {
+      test() {
+        let options = {
+          "level": "1",
+          "pid": "CN",
+          "cityId":""
+        }
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
+          url: '/address/level',
+          data: options,
+        }).then((response) => {
+          this.$log(response.data.data.list)
+        }).catch(function (error) {
+        })
+
+
+      },
       getAddressCode(province, city, county) {
         let code = ""
         for (var key in areaList.province_list) {
