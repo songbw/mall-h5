@@ -74,6 +74,7 @@
   import Header from '@/common/_header.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -92,7 +93,7 @@
       if (this.$api.APP_ID === "10") {
         this.showHeader = false;
       }
-      if (!this.isUserEmpty(userInfo)) {
+      if (!Util.isUserEmpty(userInfo)) {
         let user = JSON.parse(userInfo);
         this.$api.xapi({
           method: 'get',
@@ -164,9 +165,7 @@
       onMyCouponClick() {
         this.$router.push({path: '/user/couponList'})
       },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
+
       onOrderListBarClick(type) {
         //订单类型
         this.$log("onOrderListBarClick:" + type);

@@ -89,6 +89,8 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Loading from '@/common/_loading.vue'
+  import  Util from '@/util/common'
+
   export default {
     components: {
       'v-header': Header,
@@ -201,9 +203,6 @@
           return false;
         return true;
       },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
 
       resetCouponTypeList() {
         /*        for(let i = 0 ; i< this.couponTypes.length ; i++) {
@@ -240,7 +239,7 @@
             limit: 5,
           }
           let userInfo = this.$store.state.appconf.userInfo;
-          if (!that.isUserEmpty(userInfo)) {
+          if (!Util.isUserEmpty(userInfo)) {
             let user = JSON.parse(userInfo);
             params["userOpenId"] = user.userId
           }
@@ -365,7 +364,7 @@
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         that.$log(userInfo)
-        if (!that.isUserEmpty(userInfo) &&
+        if (!Util.isUserEmpty(userInfo) &&
           coupon.releaseTotal > coupon.releaseNum) {
           let user = JSON.parse(userInfo);
           let options = {

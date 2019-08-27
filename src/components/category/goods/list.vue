@@ -242,14 +242,11 @@
         //this.$log("onAdd2carBtnClick Enter",goods)
         let userInfo = this.$store.state.appconf.userInfo;
         //this.$log("userInfo:" + userInfo);
-        if (!this.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           this.add2Car(userInfo, goods);
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
         }
-      },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length == 0)
       },
 
       add2Car(userInfo, goods) {

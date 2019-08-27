@@ -96,7 +96,7 @@
 <script>
   import Header from '@/common/_header.vue'
   import Footer from '@/common/_footer.vue'
-
+  import Util from '@/util/common'
 
 
   export default {
@@ -436,7 +436,7 @@
       onPayBtnClick(listItem, i) {
         this.$log(listItem);
         let userInfo = this.$store.state.appconf.userInfo;
-        if (this.isUserEmpty(userInfo)) {
+        if (Util.isUserEmpty(userInfo)) {
           return;
         }
         let user = JSON.parse(userInfo);
@@ -558,9 +558,7 @@
         this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', index);
         this.onLoad(index)
       },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
+
       onLoad(index) {
         this.$log("onLoad is:" + index);
         let that = this;
@@ -572,7 +570,7 @@
           this.reload = false;
         }
         //  that.$log("userInfo:"+userInfo)
-        if (that.isUserEmpty(userInfo)) {
+        if (Util.isUserEmpty(userInfo)) {
           that.orderTypes[index].loading = false;
           return;
         }

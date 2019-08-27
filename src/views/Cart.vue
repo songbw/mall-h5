@@ -142,9 +142,6 @@
         Util.updateCartItem(this,  k);
       },
 
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
 
       onDeleteBtnClick(k,index) {
         Util.deletCartItem(this,k)
@@ -235,7 +232,7 @@
         this.$log("launchedLoading:" + this.launchedLoading)
         // let userInfo=this.$jsbridge.call("getUserInfo");
         let userInfo = this.$store.state.appconf.userInfo;
-        if (!this.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           this.loadCartListBy(userInfo);
         } else {
           this.getCarListWithoutUser();

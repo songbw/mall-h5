@@ -897,7 +897,7 @@
         this.$log("onCouponLoad:" + index)
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
-        if (!that.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list.length) {
             that.couponTypes[index].loading = true;
@@ -1038,9 +1038,6 @@
         this.$log("save Merchant List Enter")
         this.$log(this.merchantList)
         this.$store.commit('SET_MERCHANT_LIST', this.merchantList);
-      },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
       },
 
       updateUsedAddress() {
@@ -1338,7 +1335,7 @@
         let that = this
         that.$log("onSubmit Enter!!!")
         let userInfo = this.$store.state.appconf.userInfo;
-        if (!this.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let event = "userId="+ user.userId + "&" + "dataTime:"+new Date().getTime()
           window._hmt.push(['_trackEvent', '下订单' ,'click',event]);

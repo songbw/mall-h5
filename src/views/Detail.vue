@@ -167,6 +167,7 @@
   import Action from '@/components/detail/action.vue'
   import CountDown from '@/common/_vue2-countdown.vue'
   import Loading from '@/common/_loading.vue'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -238,7 +239,7 @@
           this.goods['dprice'] = this.goods.price
         }
         let userInfo = this.$store.state.appconf.userInfo;
-        if (!this.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           this.userCouponList = []
           let user = JSON.parse(userInfo)
           if (this.goods.coupon != undefined) {
@@ -375,7 +376,7 @@
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         that.$log(userInfo)
-        if (!that.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let options = {
             userOpenId: user.userId,
@@ -419,9 +420,7 @@
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
       },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
+
       confirmedCouponSeletor() {
         this.$log(this.radio);
         this.showCoupon = false

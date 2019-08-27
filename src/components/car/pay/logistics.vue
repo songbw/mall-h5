@@ -140,9 +140,7 @@
         })
         return matchedGoods
       },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
+
       formatTime(timeString) {
         //2019-01-27T07:56:27.000+0000
         if (timeString == null)

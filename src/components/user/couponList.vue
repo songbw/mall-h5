@@ -272,10 +272,6 @@
         }
       },
 
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
-
       onLoad(index) {
         this.$log("onLoad:" + index)
         let that = this
@@ -292,7 +288,7 @@
             status = 4; //过期
             break;
         }
-        if (!that.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list.length) {
             that.couponTypes[index].loading = true;

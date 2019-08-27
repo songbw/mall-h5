@@ -19,6 +19,7 @@
 <script>
   import Header from '@/common/_header.vue'
   import areaList from '@/assets/area.js'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -64,9 +65,6 @@
       }
     },
     methods: {
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || JSON.stringify(userInfo) == "{}")
-      },
       getAddressCode(province, city, county) {
         let code = ""
         for (var key in areaList.province_list) {
@@ -97,7 +95,7 @@
         if (id == 'new') {
           try {
             let userInfo = this.$store.state.appconf.userInfo
-            if (!this.isUserEmpty(userInfo)) {
+            if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
               if (!receiverInfo.tel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
                 this.$toast("请输入正确的电话号码")
@@ -158,7 +156,7 @@
         } else {
           try {
             let userInfo = this.$store.state.appconf.userInfo
-            if (!this.isUserEmpty(userInfo)) {
+            if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
               this.$store.commit('SET_USED_ADDRESS_ID', id);
               if (!receiverInfo.tel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {

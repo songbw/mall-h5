@@ -15,6 +15,7 @@
 </template>
 
 <script>
+  import Util from '@/util/common'
 
   export default {
     data() {
@@ -44,7 +45,7 @@
         let selCount = 0;
         let userInfo = this.$store.state.appconf.userInfo;
         try {
-          if (!this.isUserEmpty(userInfo)) {
+          if (!Util.isUserEmpty(userInfo)) {
             let user = JSON.parse(userInfo);
             let cartList = this.$store.state.appconf.cartList;
             cartList.forEach(item => {
@@ -65,7 +66,7 @@
         let userInfo = this.$store.state.appconf.userInfo;
         console.log("allpay Enter")
         try {
-          if (!this.isUserEmpty(userInfo)) {
+          if (!Util.isUserEmpty(userInfo)) {
             let user = JSON.parse(userInfo)
             let cartList = this.$store.state.appconf.cartList;
             cartList.forEach(item => {
@@ -98,15 +99,13 @@
           })
         }
       },
-      isUserEmpty(userInfo) {
-        return (userInfo == null || userInfo == undefined || userInfo.length == 0)
-      },
+
       goPay() {
         // 如果有选择商品才能跳转
         if (this.allpay) {
           let userInfo = this.$store.state.appconf.userInfo;
           try {
-            if (!this.isUserEmpty(userInfo)) {
+            if (!Util.isUserEmpty(userInfo)) {
               this.$router.push({name: '支付页'})
             } else {
               //no mobile App

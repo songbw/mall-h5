@@ -129,6 +129,7 @@
 
 <script>
   import Header from '@/common/_header.vue'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -220,9 +221,7 @@
           return listItem.paymentNo;
         }
       },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
-      },
+
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
         let returnUrl = ""
@@ -352,7 +351,7 @@
       onPayBtnClick(listItem) {
         this.$log(listItem);
         let userInfo = this.$store.state.appconf.userInfo;
-        if (this.isUserEmpty(userInfo)) {
+        if (Util.isUserEmpty(userInfo)) {
           return;
         }
         let user = JSON.parse(userInfo);

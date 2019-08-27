@@ -59,6 +59,7 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Loading from '@/common/_loading.vue'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -113,9 +114,6 @@
         if (k.userCollectNum < k.rules.perLimited)
           return false;
         return true;
-      },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length === 0)
       },
 
       isCouponActivied(couponInfo) {
@@ -197,7 +195,7 @@
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         that.$log(userInfo)
-        if (!that.isUserEmpty(userInfo) &&
+        if (!Util.isUserEmpty(userInfo) &&
           coupon.releaseTotal > coupon.releaseNum) {
           let user = JSON.parse(userInfo);
           let options = {

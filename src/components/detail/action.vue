@@ -48,9 +48,7 @@
         this.$log("onCustomerSvBtnClick Enter")
         _MEIQIA('showPanel');
       },
-      isUserEmpty(userInfo) {
-        return (userInfo == undefined || userInfo.length == 0)
-      },
+
       add2SelectedCarlistWithoutUser() {//
         this.selStateInCarList = this.$store.state.appconf.selStateInCarList;
         let choose = true;
@@ -83,7 +81,7 @@
 
       addGoodsCar() {
         let userInfo = this.$store.state.appconf.userInfo;
-        if (!this.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           this.add2Car(userInfo, this.datas);
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
@@ -164,7 +162,7 @@
         this.$log("gotoPay Enter")
         this.$log(this.datas);
         let userInfo = this.$store.state.appconf.userInfo;
-        if (!this.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let goods = this.datas
           let baseInfo = {

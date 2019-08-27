@@ -133,7 +133,7 @@ export default {
   },
 
   isUserEmpty(userInfo) {
-    return (userInfo == undefined || userInfo.length === 0)
+    return (userInfo === undefined || userInfo === null|| userInfo.length === 0 )
   },
 
   getCartItem(env, userId, mpu) {
