@@ -1138,10 +1138,11 @@
         font-weight: bold;
         padding: 2vw;
         position: relative;
-        background-color: #ffffff;
+        background-color: white;
+        line-height: 100%;
 
         > span {
-          .fz(font-size, 20);
+          .fz(font-size, 25);
         }
       }
 
