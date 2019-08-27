@@ -39,7 +39,7 @@
         </p>
         <div class="goods-detail">
         <span class="goods-disciption">
-          <i class="goods-area">南京</i>
+<!--          <i class="goods-area">南京</i>-->
           {{this.goods.brand}} {{this.goods.name}}
         </span>
         </div>
@@ -1200,13 +1200,12 @@
         .goods-disciption {
           color: black;
           background-color: white;
-
+          .fz(font-size, 30);
           .goods-area {
             background-color: #ff4444;
             .fz(font-size, 26);
             border-radius: 4px;
             padding: 2px;
-
             color: white;
           }
         }

@@ -1,20 +1,16 @@
 import store from '@/vuex/store.js'
 
-
-const APP_ID = "11"
+const APP_ID = ""
 const T_APP_ID =""
 const TEST_USER = ""
-
-const SERVR_PHONE_NUM= "4000797717";
-const GOODS_URL_PREFIX = "https://iwallet-1258175138.file.myqcloud.com"
-
-let SERVICE_URL = "https://api.weesharing.com"
-let TESTSTUB_PAYMENT_URL = "http://119.3.111.161:8088"
+const SERVICE_URL = ""
+const TESTSTUB_PAYMENT_URL = ""
+const SERVR_PHONE_NUM= ""
+const GOODS_URL_PREFIX = ""
 
 
 const ES_BASE_URL = SERVICE_URL+ "/v2/elasticsearches/"
 const TESTSTUB_PAYMENT_BASE_URL = TESTSTUB_PAYMENT_URL+"/v1/";
-
 const PRODUCT_BASE_URL = SERVICE_URL+"/v2/products/";
 const AGGREGATION_BASE_URL = SERVICE_URL+"/v2/aggregations/"
 const ORDER_BASE_URL = SERVICE_URL+"/v2/orders/"
