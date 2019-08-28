@@ -149,7 +149,7 @@
 
     created() {
       this.$log("order detail created Enter");
-      if (this.$api.APP_ID === "10") {
+      if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
       }
       //this.detail = this.$route.params.detail;
@@ -225,7 +225,7 @@
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
         let returnUrl = ""
-        if(this.$api.APP_ID === "10")
+        if(this.$api.IS_GAT_APP)
         {
           returnUrl  =   "https://mall.weesharing.com/pay/cashering";
           let options = {

@@ -112,7 +112,7 @@
     created() {
       let that = this;
       that.$log("userInfo created Enter")
-      if (this.$api.APP_ID === "10") {
+      if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
       }
       that.user = this.$route.params.user;

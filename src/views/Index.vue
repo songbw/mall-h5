@@ -158,7 +158,7 @@
     },
 
     created() {
-      if (this.$api.APP_ID === "10") {
+      if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
         let auth_code = this.$route.query.auth_code;
         this.$log(`auto_code$(auth_code)`)
@@ -261,7 +261,7 @@
         }
       },
       closeWindow() {
-        if (this.$api.APP_ID != "10") {
+        if (!this.$api.IS_GAT_APP) {
           this.$jsbridge.call("closeWindow");
         }
       },
@@ -336,7 +336,7 @@
             that.$store.commit('SET_TOKEN', rt.token);
           }
           if(rt.newUser !=undefined && rt.newUser) {
-            if(this.$api.APP_ID === "11")
+            if(!this.$api.IS_GAT_APP)
             this.showDialog = true;
           }
           //this.showDialog = true;//test

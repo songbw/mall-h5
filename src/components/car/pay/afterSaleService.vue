@@ -164,7 +164,7 @@
 
     created() {
       let that = this
-      if (this.$api.APP_ID === "10") {
+      if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
       }
       this.goods = this.$route.params.goods;

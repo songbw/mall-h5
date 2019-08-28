@@ -7,6 +7,7 @@ const SERVICE_URL = ""
 const TESTSTUB_PAYMENT_URL = ""
 const SERVR_PHONE_NUM= ""
 const GOODS_URL_PREFIX = ""
+const IS_GAT_APP = false
 
 
 const ES_BASE_URL = SERVICE_URL+ "/v2/elasticsearches/"
@@ -76,5 +77,6 @@ export default {
   TESTSTUB_PAYMENT_BASE_URL,
   BASE_BASE_URL,
   ES_BASE_URL,
+  IS_GAT_APP,
   TEST_USER
 }

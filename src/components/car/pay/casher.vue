@@ -47,7 +47,7 @@
 
     created() {
       this.$log("cashser created Enter")
-      if (this.$api.APP_ID === "10") {
+      if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
       }
       this.orderInfo = this.$route.params.orderInfo;

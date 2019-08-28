@@ -542,7 +542,7 @@
     },
 
     created() {
-      if (this.$api.APP_ID === "10") {
+      if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
       }
       this.obtainMerchantArray();
@@ -1216,7 +1216,7 @@
           }
         })
         let companyCustNo = "11"
-        if(this.$api.APP_ID === "10") {
+        if(this.$api.IS_GAT_APP) {
           companyCustNo = "1001"
         }
         let options = {
@@ -1243,7 +1243,7 @@
         let that = this;
         //pAnOrderInfo.orderAmount = 1 //for test
         let returnUrl = ""
-        if(this.$api.APP_ID === "10")
+        if(this.$api.IS_GAT_APP)
         {
           returnUrl  =   "https://mall.weesharing.com/pay/cashering";
           let options = {

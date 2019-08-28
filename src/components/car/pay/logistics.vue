@@ -78,7 +78,7 @@
 
     created() {
       let that = this;
-      if (that.$api.APP_ID === "10") {
+      if (this.$api.IS_GAT_APP) {
         that.showHeader = false;
       }
       that.$log("logistics created Enter")

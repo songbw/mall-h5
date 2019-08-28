@@ -1,5 +1,5 @@
 {
-  "NODE_ENV": "development",
+  "NODE_ENV": "gatsn",
   "iAppID": "09",
   "tAppID": "20110867",
   "SERVICE_URL":"https://openapi.weesharing.com/gatzy",
@@ -7,4 +7,3 @@
   "SERVR_PHONE_NUM": "4000797717",
   "GOODS_URL_PREFIX": "https://iwallet-1258175138.file.myqcloud.com"
 }
-

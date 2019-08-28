@@ -69,6 +69,8 @@
         this.$api.ES_BASE_URL = serverUrl+ "/v2/elasticsearches/"
         if(testUser != undefined && testUser.length > 0)
           this.$api.TEST_USER = testUser
+        if(this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
+          this.$api.IS_GAT_APP = true;
         this.configured = true
       }).catch((error)=>{console.log(error)});
     }
