@@ -1,12 +1,12 @@
 <template>
   <div id="app" v-if="configured">
-    <transition name="fade">
+    <transition name="fadeIn">
       <keep-alive>
-        <router-view v-if="$route.meta.keepAlive" v-wechat-title='$route.meta.title'></router-view>
+        <router-view v-if="$route.meta.keepAlive" v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
       </keep-alive>
     </transition>
-    <transition name="fade">
-      <router-view v-if="!$route.meta.keepAlive" v-wechat-title='$route.meta.title'></router-view>
+    <transition name="fadeIn">
+      <router-view v-if="!$route.meta.keepAlive" v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
     </transition>
   </div>
 </template>
@@ -41,6 +41,7 @@
     },
     data() {
       return {
+        title:"",
         configured:false
       }
     },
@@ -54,6 +55,7 @@
         let serverUrl = result.data.SERVICE_URL;
         let testPaymentUrl = result.data.TESTSTUB_PAYMENT_URL
         let testUser = result.data.TEST_USER
+        let title = result.data.MALL_TITLE
         this.$api.GOODS_URL_PREFIX = result.data.GOODS_URL_PREFIX
         this.$api.APP_ID = result.data.iAppID
         this.$api.T_APP_ID = result.data.tAppID
@@ -69,6 +71,8 @@
         this.$api.ES_BASE_URL = serverUrl+ "/v2/elasticsearches/"
         if(testUser != undefined && testUser.length > 0)
           this.$api.TEST_USER = testUser
+        if(title !=undefined && title.length > 0)
+          this.title = title
         if(this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
           this.$api.IS_GAT_APP = true;
         this.configured = true

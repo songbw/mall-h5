@@ -35,7 +35,6 @@ export default new VueRouter({
       component: Index,
       meta: {
         keepAlive: true, //此组件需要被缓存
-        title: '苏宁易购',
       }
     },
     {
@@ -43,7 +42,6 @@ export default new VueRouter({
       name: '活动页',
       component: IndexSub,
       meta: {
-        title: '苏宁易购',
       }
     },
 
