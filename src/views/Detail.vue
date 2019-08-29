@@ -194,6 +194,7 @@
         if(this.$api.APP_ID === '10') {
           this.showServiceBox = true;
         }
+        this.$log("detail created:"+this.$api.APP_ID+",showServiceBox:"+this.showServiceBox)
       }
     },
 
