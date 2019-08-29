@@ -121,7 +121,7 @@
       display: flex;
       -ms-flex-wrap: wrap;
       list-style: none;
-      margin-bottom: 1px;
+     // margin-bottom: 1px;
       background-color: transparent;
 
       li:first-child:nth-last-child(1) {
