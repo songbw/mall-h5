@@ -59,6 +59,7 @@
         this.$api.GOODS_URL_PREFIX = result.data.GOODS_URL_PREFIX
         this.$api.APP_ID = result.data.iAppID
         this.$api.T_APP_ID = result.data.tAppID
+        this.$api.SERVICE_URL = serverUrl;
         this.$api.SERVR_PHONE_NUM = result.data.SERVR_PHONE_NUM
         this.$api.PRODUCT_BASE_URL = serverUrl+"/v2/products/"
         this.$api.AGGREGATION_BASE_URL = serverUrl+"/v2/aggregations/"

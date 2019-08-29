@@ -357,7 +357,7 @@
         that.$api.xapi({
           method: 'get',
           baseURL: this.$api.SSO_BASE_URL,
-          url: '/sso/thirdParty/token',
+          url: '/sso/thirdParty/token/gat',
           params: {
             iAppId: this.$api.APP_ID,
             initCode: authCode,

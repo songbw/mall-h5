@@ -1245,7 +1245,7 @@
         let returnUrl = ""
         if(this.$api.IS_GAT_APP)
         {
-          returnUrl  =   "https://mall.weesharing.com/pay/cashering";
+          returnUrl  =   this.$api.SERVICE_URL +"/pay/cashering";
           let options = {
             "iAppId": this.$api.APP_ID,
             "tAppId": this.$api.T_APP_ID,
