@@ -134,7 +134,7 @@
           </div>
         </van-actionsheet>
       </div>
-      <div class="serviceBox">
+      <div class="serviceBox" v-if="showServiceBox">
         <div class="serviceTitle">
           <span>店铺公告</span>
           <img :src="seriviceIcon">
@@ -191,6 +191,9 @@
     created() {
       if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
+        if(this.$api.APP_ID === '10') {
+          this.showServiceBox = true;
+        }
       }
     },
 
@@ -305,6 +308,7 @@
         avaliableCouponList: [],
         couponImg: require('@/assets/icons/ico_coupon.png'),
         seriviceIcon: require('@/assets/icons/ico_prod_service.jpg'),
+        showServiceBox: false
       }
     },
     methods: {
