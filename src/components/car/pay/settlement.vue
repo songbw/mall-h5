@@ -1261,7 +1261,7 @@
           that.$api.xapi({
             method: 'post',
             baseURL: this.$api.SSO_BASE_URL,
-            url: '/payment',
+            url: '/payment/gat',
             data: options,
           }).then((response) => {
             that.$log("预下单返回 :" + JSON.stringify(response.data))

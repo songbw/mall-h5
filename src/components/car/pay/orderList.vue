@@ -299,7 +299,7 @@
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
         let returnUrl = ""
-        if(this.$api.APP_ID === "10")
+        if(this.$api.IS_GAT_APP)
         {
           returnUrl  =   "https://mall.weesharing.com/pay/cashering";
           let options = {
@@ -317,7 +317,7 @@
           that.$api.xapi({
             method: 'post',
             baseURL: this.$api.SSO_BASE_URL,
-            url: '/payment',
+            url: '/payment/gat',
             data: options,
           }).then((response) => {
             that.$log("预下单返回 :" + JSON.stringify(response.data))
