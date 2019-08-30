@@ -288,6 +288,8 @@
         } else {
           cartItem.baseInfo.count = item.count
           cartItem.baseInfo.cartId =  item.id
+          cartItem.baseInfo.merchantId = product.merchantId
+          cartItem.goodsInfo.merchantId = product.merchantId
           cartItem.couponList = product.coupon
           cartItem.promotionInfo = {
             "promotion": product.promotion,
