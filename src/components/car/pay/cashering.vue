@@ -8,6 +8,7 @@
       <div class="casheringBoxCard">
         <img :src="ico_clock"/>
         <span>{{payInfoText}}</span>
+        <van-button @click="onJumpOutBtnClick">直接跳出</van-button>
       </div>
     </div>
   </div>
@@ -22,7 +23,7 @@
     },
     data() {
       return {
-        showHeader: true,
+        showHeader: false,
         payInfo: {},
         ico_clock: require('@/assets/icons/ico_clock.png'),
         timer: '',
@@ -41,9 +42,6 @@
     },
 
     created() {
-      if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
-      }
     },
 
     beforeDestroy() {
@@ -57,6 +55,10 @@
     },
 
     methods: {
+      onJumpOutBtnClick() {
+        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+        this.$router.replace({path: '/car/orderList'})
+      },
       checkPaymentStatus() {
         this.value++;
         let that = this;
@@ -127,9 +129,10 @@
       display: flex;
       position: fixed;
       width: 100%;
-      height: 85%;
+      height: 90%;
       justify-content: center;
       justify-items: center;
+      margin-top: 20px;
 
       .casheringBoxCard {
         z-index: 1;
