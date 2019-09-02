@@ -66,9 +66,93 @@
       this.$log(this.datas)
       this.$log(this.mBackgroundColor)
     //  this.couponList = this.datas.list
+      let that = this
+      let params = {
+        offset: 1,
+        limit: 5,
+        tagId: 7,
+        tagName: '夏季尊享',
+        userOpenId: '1144391000fd194ab888b1aa81c03c3710'
+      }
+      that.$api.xapi({
+        method: 'get',
+        baseURL: this.$api.EQUITY_BASE_URL,
+        url: '/coupon/activeCoupon',
+        params: params
+      }).then((response) => {
+        let result = response.data.data.result;
+         that.$log(result)
+        this.couponList = result.list
+      }).catch(function (error) {
+        that.$log(error)
+      })
     },
     methods: {
+      formateCouponPrice(rules) {
+        switch (rules.type) {
+          case 0://满减券
+            return rules.fullReduceCoupon.reducePrice.toFixed(2);
+          case 1://代金券
+            return rules.cashCoupon.amount.toFixed(2);
+          case 2://折扣券
+            return rules.discountCoupon.discountRatio * 10 + ' 折';
+          case 3://服务券
+            this.$log(rules)
+            return rules.serviceCoupon.price.toFixed(2)
+          default:
+            return ""
+        }
+      },
 
+      formateCouponDescription(couponInfo) {
+        switch (couponInfo.rules.scenario.type) {
+          case 1:
+            return "仅限某些指定的商品可用";
+          case 2:
+            return "全场商品可用";
+          case 3:
+            return "仅限定某些品牌类商品可用";
+          default:
+            return "限提供所描述特定的服务可用"
+        }
+      },
+
+      formateCouponDetail(rules) {
+        switch (rules.type) {
+          case 0://满减券
+            return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
+          case 1://代金券
+            return '代金券';
+          case 2://折扣券
+            if (rules.discountCoupon.fullPrice > 0) {
+              return '满' + rules.discountCoupon.fullPrice + '元可用';
+            } else {
+              return '折扣券 ';
+            }
+          default:
+            return ""
+        }
+      },
+      formateReleasePercentage(coupon) {
+        if (coupon.releaseTotal == 0)
+          return 100;
+        let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
+        return percentage;
+      },
+      formateReleasePercentageText(coupon) {
+        if (coupon.releaseTotal == 0)
+          return '已领取'+'100%';
+        let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
+        return '已领取'+percentage+'%';
+      },
+      formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
+      },
+      isCouponUptoLimited(k, i) {
+        if (k.userCollectNum < k.rules.perLimited)
+          return false;
+        return true;
+      },
     }
   }
 </script>
