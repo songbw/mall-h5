@@ -9,6 +9,8 @@ const SERVR_PHONE_NUM= ""
 const GOODS_URL_PREFIX = ""
 const IS_GAT_APP = false
 
+/*let SERVICE_URL = "http://192.168.200.37:8000";
+let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"*/
 
 const ES_BASE_URL = SERVICE_URL+ "/v2/elasticsearches/"
 const TESTSTUB_PAYMENT_BASE_URL = TESTSTUB_PAYMENT_URL+"/v1/";

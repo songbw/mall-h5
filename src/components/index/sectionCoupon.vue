@@ -5,7 +5,7 @@
           <img :src="datas.settings.title.imageUrl">
         </div>
         <div>
-          <div class="couponList">
+          <div class="couponList"  :style="{'background-color':mBackgroundColor}">
             <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i">
               <div class="coupon-main">
                 <div class="coupon-img">
@@ -58,7 +58,8 @@
     props: ['datas', 'mBackgroundColor'],
     data() {
       return {
-        couponList:[]
+        couponList:[],
+        couponImg: require('@/assets/icons/ico_coupon.png'),
       }
     },
     created() {
@@ -183,8 +184,7 @@
           padding-right: .5rem;
           margin: .5rem;
           /** 这里不能用百分号，因为百分号是分别相对宽和高计算的，会导致弧度不同  */
-          border-top-right-radius: .3rem;
-          border-bottom-right-radius: .3rem;
+          border-radius: .3rem;
           overflow: hidden;
 
           .coupon-white {
@@ -255,15 +255,15 @@
 
             /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
 
-            .coupon-hole::before, .coupon-hole::after {
+/*            .coupon-hole::before, .coupon-hole::after {
               content: '';
               width: 1rem;
               height: 1rem;
-              background-color: #f8f8f8;
+              background-color: #ff4444;
               border-radius: 50%;
               position: absolute;
               right: -.5rem;
-            }
+            }*/
 
             .coupon-info {
               padding: 0.5rem 0.5rem 0.5rem;
