@@ -157,6 +157,12 @@
       })
     },
 
+    created() {
+      if (this.$api.IS_GAT_APP) {
+        this.showHeader = false;
+      }
+    },
+
     methods: {
       gotoShoppingCart() {
         this.$log("gotoShoppingCart Enter")
