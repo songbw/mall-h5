@@ -1219,7 +1219,11 @@
         })
         let companyCustNo = "11"
         if(this.$api.IS_GAT_APP) {
-          companyCustNo = "1001"
+          if(this.$api.APP_ID === '10') {
+            companyCustNo = "1001"
+          } else if(this.$api.APP_ID === '09') {
+            companyCustNo = "1002"
+          }
         }
         let options = {
           "openId": user.userId,
