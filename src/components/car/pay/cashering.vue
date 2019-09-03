@@ -31,17 +31,9 @@
         payInfoText:'支付完成，页面自动跳转...'
       }
     },
-    computed: {
-      amount() {
-        /*        return (this.orderInfo.orderAmount/100).toFixed(2)*/
-      }
-    },
 
     mounted() {
       this.timer = setInterval(this.checkPaymentStatus, 1000);
-    },
-
-    created() {
     },
 
     beforeDestroy() {

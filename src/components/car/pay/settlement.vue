@@ -92,7 +92,7 @@
           />
         </div>
         <div class="pay-info">
-          <van-cell title="支付方式:" value="现金支付">
+          <van-cell title="支付方式:" :value="payway">
           </van-cell>
 <!--          <van-cell title="发票:" :value="invoiceDetail">
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
@@ -264,6 +264,7 @@
     },
     data() {
       return {
+        payway:'现金支付',
         showHeader: true,
         isOnSummitting: false,
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
@@ -544,6 +545,7 @@
     created() {
       if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
+        this.payway = '关爱通支付'
       }
       this.obtainMerchantArray();
       let action = this.$route.params.action;
