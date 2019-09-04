@@ -57,7 +57,7 @@
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon"/>
         </van-cell>
-        <van-cell title="我的客服" value="4000797717" is-link>
+        <van-cell title="我的客服" :value="this.$api.SERVR_PHONE_NUM" is-link>
           <img slot="icon" :src="customServiceIcon"/>
         </van-cell>
         <van-cell title="关于凤巢" value="版本号 V1.0">
