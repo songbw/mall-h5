@@ -234,7 +234,7 @@
             status = "审核通过"
             break;
           case 4:
-            status = "审核有问题"
+            status = "审核未通过"
             break;
           case 5:
             status = "处理中"
