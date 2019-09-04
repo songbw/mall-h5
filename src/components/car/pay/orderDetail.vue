@@ -35,7 +35,7 @@
               <div slot="footer">
                 <van-button plain round size="small" type="primary"
                             style="background-color: white;color: black;border-color: #dedede "
-                            @click="onAfterSalesServiceBtnClick(sku)" v-if="status==2">
+                            @click="onAfterSalesServiceBtnClick(sku)" v-if="k.status==1||k.status==2"">
                   申请售后
                 </van-button>
               </div>
