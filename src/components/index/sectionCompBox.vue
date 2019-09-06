@@ -21,19 +21,19 @@
                 <span>{{left.msTime.seconds}}</span>
               </div>
             </div>
-            <div v-else>
-              <v-countdown v-if="left.promotionStatus < 5 && left.PromotionStartTime != 0 && left.PromotionEndTime !=0"
+            <div v-else style="margin-top: 2px">
+              <v-countdown v-if="left.PromotionStatus  < 5 && left.PromotionStartTime != 0 && left.PromotionEndTime !=0"
                            class="countdownBox"
                            @start_callback="countDownS_cb"
                            @end_callback="countDownE_cb"
                            :startTime="left.PromotionStartTime"
                            :endTime="left.PromotionEndTime"
                            :secondsTxt="''"
-                           backgroundColor="#FFFFFF"
-                           textColor="#FF4444"
-                           style="font-size: x-small;font-weight: lighter">
+                           backgroundColor="#FF4444"
+                           textColor="#FFFFFF"
+                           style="font-size:10%;;font-weight: lighter">
               </v-countdown>
-              <div class="promotionStatusText" v-if="left.promotionStatus === 5">
+              <div class="promotionStatusText" v-if="left.PromotionStatus  === 5">
                 <span style="color: white">已结束</span>
               </div>
             </div>
@@ -53,20 +53,90 @@
                     {{k.price}}
                   </p>
                 </div>
+                <div class="goodsPromotionPriceBox">
+                  <p>
+                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                    {{k.price}}
+                  </p>
+                </div>
               </div>
             </li>
           </ul>
         </div>
       </div>
       <div class="right">
-
+        <div v-if="datas.settings.right.textValue.length" @click="gotoRightTargetUrl()" class="boxTitle">
+          <div slot="title" class="titleText">
+            <span>
+               {{datas.settings.right.textValue}}
+            </span>
+          </div>
+          <div v-if="datas.settings.right.hasPromotionActivity && right.PromotionStatus != -1" class="titleDetail">
+            <div v-if="right.isDailySchedule" class="dailyDetail">
+              <div class="dailyTitleBox">
+                <span>{{right.dailyScheduleText}}</span>
+              </div>
+              <div class="dailyTimeBox">
+                <span>{{right.msTime.hour}}</span>
+                <span>:</span>
+                <span>{{right.msTime.minutes}}</span>
+                <span>:</span>
+                <span>{{right.msTime.seconds}}</span>
+              </div>
+            </div>
+            <div v-else style="margin-top: 2px">
+              <v-countdown v-if="right.PromotionStatus < 5 && right.PromotionStartTime != 0 && right.PromotionEndTime !=0"
+                           class="countdownBox"
+                           @start_callback="countDownS_cb"
+                           @end_callback="countDownE_cb"
+                           :startTime="right.PromotionStartTime"
+                           :endTime="right.PromotionEndTime"
+                           :secondsTxt="''"
+                           backgroundColor="#FF4444"
+                           textColor="#FFFFFF"
+                           style="font-size:10%;;font-weight: lighter">
+              </v-countdown>
+              <div class="promotionStatusText" v-if="right.PromotionStatus === 5">
+                <span style="color: white">已结束</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sectionSlide-banner" v-if="datas.settings.right.hasImage">
+          <img v-lazy="datas.settings.right.imageUrl" @click="gotoLeftTargetUrl() ">
+        </div>
+        <div>
+          <ul class="sectionGoods-list2">
+            <li v-for="(k,index) in right.list" @click="onGoodsClick(k)" :key="index">
+              <img v-lazy="k.imagePath || k.image">
+              <div class="goodsFooter">
+                <div class="goodsPriceBox">
+                  <p>
+                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                    {{k.price}}
+                  </p>
+                </div>
+                <div class="goodsPromotionPriceBox">
+                  <p>
+                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                    {{k.price}}
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
 </template>
 
 <script>
+  import CountDown from '@/common/_vue2-countdown.vue'
   export default {
+    components: {
+      "v-countdown": CountDown
+    },
     props: ['datas', 'mBackgroundColor'],
 
     computed: {
@@ -75,6 +145,12 @@
       },
       leftIsExceedTodayMaxTime() {
         return this.left.isExceedTodayMaxTime
+      },
+      rightIsDailySchedule() {
+        return this.right.isDailySchedule
+      },
+      rightIsExceedTodayMaxTime() {
+        return this.right.isExceedTodayMaxTime
       }
     },
 
@@ -93,6 +169,20 @@
           this.updateLeftPromotionInfo()
         }
       },
+      rightIsDailySchedule(newValue, oldVal) {
+        if (this.right.timer) {
+          clearInterval(this.right.timer)
+        }
+        if (newValue) {
+          this.right.timer = setInterval(this.updateRightDailyScheduleText, 1000);
+        }
+      },
+      rightIsExceedTodayMaxTime(newValue, oldValue) {
+        this.$log("right.isExceedTodayMaxTime Changed，newValue:" + newValue)
+        if (newValue) {
+          this.updateRightPromotionInfo()
+        }
+      },
     },
 
     activated() {
@@ -100,11 +190,18 @@
         this.left.isDailySchedule = false;
         this.updateLeftPromotionInfo()
       }
+      if (this.datas.settings.right.hasPromotionActivity) {
+        this.right.isDailySchedule = false;
+        this.updateRightPromotionInfo()
+      }
     },
 
     deactivated() {
       if (this.left.timer) {
         clearInterval(this.left.timer)
+      }
+      if (this.right.timer) {
+        clearInterval(this.right.timer)
       }
     },
 
@@ -148,13 +245,40 @@
           return item
       })
       this.countPerLine = this.datas.settings.countPerLine;
-
-//      this.left.hasPromotionActivity =
-
       this.updateLeftPromotionInfo();
+      this.updateRightPromotionInfo();
 
     },
     methods: {
+      updateCurrentGoods(goods) {
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
+      },
+      onGoodsClick(goods) {
+        this.$log("onGoodsClick Enter")
+        this.$log(goods)
+        let mpu = goods.mpu
+        if(mpu == null) {
+          mpu = goods.skuid;
+        }
+        try {
+          //获取goods信息，update current googds
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.PRODUCT_BASE_URL,
+            url: '/prod',
+            params: {
+              mpu: mpu,
+            }
+          }).then((res) => {
+            this.updateCurrentGoods(res.data.data.result);
+            this.$router.push("/detail");
+          }).catch((error) => {
+            console.log(error)
+          })
+        } catch (e) {
+
+        }
+      },
       gotoPromotionPage(promotionId) {
         this.$router.push({path: '/category/goods/promotion/' + promotionId});
       },
@@ -197,6 +321,38 @@
           this.See(targetId);
         }
       },
+      gotoRightTargetUrl() {
+        let targetId = this.right.targetUrl
+        this.$log(this.datas.settings.right)
+        if (targetId.startsWith("aggregation://")) {
+          let id = targetId.substr(14);
+          this.$router.push({path: '/index/' + id});
+        } else if (targetId.startsWith("route://")) {
+          let target = targetId.substr(8);
+          let paths = target.split("/");
+          this.$log(paths);
+          if (paths[0] === 'category') {
+            this.$router.push({path: '/category'})
+          } else if (paths[0] === 'coupon_center') {
+            this.$router.push({path: '/user/couponCenter'})
+          } else if (paths[0] === 'commodity') {
+            try {
+              if (paths[1] != null)
+                this.gotoGoodsPage(paths[1]);
+            } catch (e) {
+            }
+          } else if (paths[0] === 'promotion') {
+            try {
+              if (paths[1] != null) {
+                this.gotoPromotionPage(this.right.promotionActivityId)
+              }
+            } catch (e) {
+            }
+          }
+        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+          this.See(targetId);
+        }
+      },
       updateLeftTimer(startTime, endTime) {
         let timeDistance = endTime - startTime;
         if (timeDistance > 0) {
@@ -218,6 +374,30 @@
           }
           if (this.left.msTime.seconds < 10) {
             this.left.msTime.seconds = "0" + this.left.msTime.seconds;
+          }
+        }
+      },
+      updateRightTimer(startTime, endTime) {
+        let timeDistance = endTime - startTime;
+        if (timeDistance > 0) {
+          this.right.msTime.show = true;
+          this.right.msTime.day = Math.floor(timeDistance / 86400000);
+          timeDistance -= this.right.msTime.day * 86400000;
+          this.right.msTime.hour = Math.floor(timeDistance / 3600000);
+          timeDistance -= this.right.msTime.hour * 3600000;
+          this.right.msTime.minutes = Math.floor(timeDistance / 60000);
+          timeDistance -= this.right.msTime.minutes * 60000;
+          this.right.msTime.seconds = Math.floor(timeDistance / 1000).toFixed(0);
+          timeDistance -= this.right.msTime.seconds * 1000;
+
+          if (this.right.msTime.hour < 10) {
+            this.right.msTime.hour = "0" + this.right.msTime.hour;
+          }
+          if (this.right.msTime.minutes < 10) {
+            this.right.msTime.minutes = "0" + this.right.msTime.minutes;
+          }
+          if (this.right.msTime.seconds < 10) {
+            this.right.msTime.seconds = "0" + this.right.msTime.seconds;
           }
         }
       },
@@ -262,6 +442,47 @@
           this.left.isExceedTodayMaxTime = true;
         }
       },
+      updateRightDailyScheduleText() {
+        let currentTime = new Date().getTime();
+        if (currentTime < this.right.dailyEndTime) {
+          this.right.isExceedTodayMaxTime = false;
+          if (currentTime < this.right.dailyScheduleInfo[0].starTime) {
+            this.updateRightTimer(currentTime, this.right.dailyScheduleInfo[0].starTime - 1)
+
+            this.right.dailyScheduleText = this.getClockString(this.right.dailyScheduleInfo[0].schedule)
+            if (this.right.msTime.show) {
+              this.right.dailyScheduleDetail = " 距下场 "
+            }
+          } else {
+            let found = -1;
+            for (let i = 0; i < this.right.dailyScheduleInfo.length - 1; i++) {
+              if (currentTime >= this.right.dailyScheduleInfo[i].starTime &&
+                currentTime < this.right.dailyScheduleInfo[i + 1].starTime) {
+                found = i;
+                break;
+              }
+            }
+            if (found != -1) {
+              this.updateRightTimer(currentTime, this.right.dailyScheduleInfo[found + 1].starTime - 1)
+              this.right.dailyScheduleText = this.getClockString(this.right.dailyScheduleInfo[found].schedule)
+              if (this.right.msTime.show) {
+                this.right.dailyScheduleDetail = " 距下场 "
+              }
+            } else {
+              if (currentTime > this.right.dailyScheduleInfo[this.right.dailyScheduleInfo.length - 1].starTime) {
+                this.right.dailyScheduleText = this.getClockString(this.right.dailyScheduleInfo[this.right.dailyScheduleInfo.length - 1].schedule)
+                this.updateRightTimer(currentTime, this.right.dailyEndTime - 1)
+                if (this.right.msTime.show) {
+                  this.right.dailyScheduleDetail = " 距结束 "
+                }
+              } else {
+              }
+            }
+          }
+        } else {
+          this.right.isExceedTodayMaxTime = true;
+        }
+      },
       updateLeftPromotionInfo() {
         this.left.targetUrl = this.datas.settings.left.targetUrl
         if (this.datas.settings.left.promotionDailySchedule != undefined && this.datas.settings.left.promotionDailySchedule) {
@@ -274,13 +495,11 @@
               num: 10,
             },
           }).then((response) => {
-            this.$log("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%")
             this.$log(response.data.data.result)
             let detail = response.data.data.result
             if (detail != null) {
               this.left.promotionActivityId = detail.id
               this.left.PromotionStatus = detail.status;
-              this.$log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
               this.$log(detail.dailySchedule)
               if (detail.dailySchedule != undefined) {
                 this.left.isDailySchedule = detail.dailySchedule
@@ -313,7 +532,6 @@
                 })
                 this.updateLeftDailyScheduleText();
                 this.left.show = true;
-                this.$log("11111111111111111111111111")
                 this.$log(this.left)
               }
             } else {
@@ -326,6 +544,7 @@
         } else {
           if (this.datas.settings.left.promotionActivityId > 0) {
             let that = this
+            this.left.promotionActivityId = this.datas.settings.left.promotionActivityId
             this.$api.xapi({
               method: 'get',
               baseURL: this.$api.EQUITY_BASE_URL,
@@ -347,11 +566,104 @@
               } else {
                 this.left.show = false;
               }
-              this.$log("2222222222222222222222")
               this.$log(this.left)
             }).catch(function (error) {
               that.$log(error)
               that.left.show = false;
+            })
+          }
+        }
+      },
+      updateRightPromotionInfo() {
+        this.right.targetUrl = this.datas.settings.right.targetUrl
+        if (this.datas.settings.right.promotionDailySchedule != undefined && this.datas.settings.right.promotionDailySchedule) {
+          let that = this
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.EQUITY_BASE_URL,
+            url: '/promotion/getCurrentScheduleMpu',
+            params: {
+              num: 10,
+            },
+          }).then((response) => {
+            this.$log(response.data.data.result)
+            let detail = response.data.data.result
+            if (detail != null) {
+              this.right.promotionActivityId = detail.id
+              this.right.PromotionStatus = detail.status;
+              this.$log(detail.dailySchedule)
+              if (detail.dailySchedule != undefined) {
+                this.right.isDailySchedule = detail.dailySchedule
+                this.right.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+              }
+              if (this.right.isDailySchedule) {
+                this.right.targetUrl = "route://promotion/" + this.right.promotionActivityId
+                this.right.list = [];
+                detail.promotionSkus.forEach(item => {
+                  let product = {
+                    brand: item.brand,
+                    discount: item.discount,
+                    imagePath: item.image,
+                    intro: item.name,
+                    mpu: item.mpu,
+                    name: item.name,
+                    price: item.price,
+                    skuid: item.skuid
+                  }
+                  this.right.list.push(product)
+                })
+                this.right.dailyScheduleInfo = []
+                detail.promotionSchedules.forEach(item => {
+                  this.$log(item)
+                  let info = {
+                    schedule: item.schedule,
+                    starTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
+                  }
+                  this.right.dailyScheduleInfo.push(info)
+                })
+                this.updateRightDailyScheduleText();
+                this.right.show = true;
+                this.$log(this.right)
+              }
+            } else {
+              this.right.show = false;
+            }
+          }).catch(function (error) {
+            that.$log(error)
+            that.right.show = false;
+          })
+        } else {
+          if (this.datas.settings.right.promotionActivityId > 0) {
+            let that = this
+            this.right.promotionActivityId = this.datas.settings.right.promotionActivityId
+            this.$api.xapi({
+              method: 'get',
+              baseURL: this.$api.EQUITY_BASE_URL,
+              url: '/promotion/findPromotion',
+              params: {
+                id: this.datas.settings.right.promotionActivityId,
+              },
+            }).then((response) => {
+              this.$log(response.data.data.result)
+              let detail = response.data.data.result
+              if (detail != null) {
+                this.$log(detail)
+                this.right.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
+                this.right.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
+                this.right.PromotionStatus = detail.status;
+                this.$log("11111111111111111111111111111111111111111")
+                this.$log(this.right.PromotionStatus)
+                this.$log(this.right.PromotionStartTime)
+                this.$log(this.right.PromotionEndTime)
+                this.right.show = true;
+              } else {
+                this.right.show = false;
+              }
+              this.$log("2222222222222222222222")
+              this.$log(this.right)
+            }).catch(function (error) {
+              that.$log(error)
+              that.right.show = false;
             })
           }
         }
@@ -380,14 +692,14 @@
       width: 100%;
 
       .titleText {
-        width: 40%;
-        .fz(font-size, 28);
+        width: 30%;
+        .fz(font-size, 20);
         font-weight: bold;
       }
 
       .titleDetail {
-        width: 60%;
-        padding: 2px 2px;
+        width: 70%;
+        padding: 0px 2px;
 
         .dailyDetail {
           display: flex;
@@ -409,12 +721,16 @@
             text-align: center;
             justify-items: center;
             color: #ff4444;
+            .fz(font-size, 17);
           }
         }
 
       }
     }
 
+    .countdownStyle{
+       .fz(font-size,10)
+    }
     .sectionGoods-list2 {
       width: 100%;
       display: -ms-flex;
@@ -429,10 +745,11 @@
       overflow: hidden;
 
       li {
-        width: 50%;
+        width: 47%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         border-radius: 15px;
+        margin: 3px 2px;
 
         img {
           width: 100%;
@@ -465,20 +782,44 @@
               .fz(font-size, 30);
             }
           }
+
+          .goodsPromotionPriceBox {
+            color: #8c8c8c;
+            text-decoration: line-through;
+            .fz(font-size, 28);
+            > span {
+              display: inline-block;
+              align-content: center;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
+            }
+          }
         }
+      }
+    }
+
+    .sectionSlide-banner {
+      display: block;
+      width: 100%;
+
+      img {
+        display: block;
+        width: 100%
       }
     }
 
     .left {
       width: 50%;
       height: 100%;
-      background-color: red;
     }
 
     .right {
       width: 50%;
       height: 100%;
-      background-color: #1989fa;
       margin-left: 1px;
     }
   }
