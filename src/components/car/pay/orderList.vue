@@ -301,7 +301,11 @@
         let returnUrl = ""
         if(this.$api.IS_GAT_APP)
         {
-          returnUrl  =   "https://mall.weesharing.com/pay/cashering";
+          if(this.$api.APP_ID==='10') {
+            returnUrl  =   "https://gatsn.weesharing.com/pay/cashering";
+          } else if(this.$api.APP_ID==='09') {
+            returnUrl  =   "https://gatzy.weesharing.com/pay/cashering";
+          }
           let options = {
             "iAppId": this.$api.APP_ID,
             "tAppId": this.$api.T_APP_ID,
