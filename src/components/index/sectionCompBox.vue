@@ -9,15 +9,18 @@
             </span>
           </div>
           <div v-if="datas.settings.left.hasPromotionActivity && left.PromotionStatus != -1" class="titleDetail">
-            <div>{{left.msTime.hour}}</div>
-            <div v-if="left.isDailySchedule" style="font-size: x-small">
-              <span>{{left.dailyScheduleText}}</span>
-              <span> {{left.dailyScheduleDetail}}</span>
-              <span style="color:#ff4444;background-color: white;padding: 2px">{{left.msTime.hour}}</span>
-              <span style="color: white">:</span>
-              <span style="color:#ff4444;background-color: white;padding: 2px">{{left.msTime.minutes}}</span>
-              <span style="color: white">:</span>
-              <span style="color:#ff4444;background-color: white;padding: 2px">{{left.msTime.seconds}}</span>
+            <div v-if="left.isDailySchedule" class="dailyDetail">
+              <div class="dailyTitleBox">
+                <span >{{left.dailyScheduleText}}</span>
+              </div>
+              <div class="dailyTimeBox">
+                <span> {{left.dailyScheduleDetail}}</span>
+                <span style="color:#ff4444;background-color: white;padding: 1px">{{left.msTime.hour}}</span>
+                <span>:</span>
+                <span style="color:#ff4444;background-color: white;padding: 1px">{{left.msTime.minutes}}</span>
+                <span>:</span>
+                <span style="color:#ff4444;background-color: white;padding: 1px">{{left.msTime.seconds}}</span>
+              </div>
             </div>
             <div v-else>
               <v-countdown v-if="left.promotionStatus < 5 && left.PromotionStartTime != 0 && left.PromotionEndTime !=0"
@@ -52,20 +55,43 @@
   export default {
     props: ['datas', 'mBackgroundColor'],
 
+    computed: {
+      leftIsDailySchedule() {
+        return this.left.isDailySchedule
+      },
+      leftIsExceedTodayMaxTime() {
+        return this.left.isExceedTodayMaxTime
+      }
+    },
+
     watch: {
-/*      left:isDailySchedule(newValue, oldvalue) {
+      leftIsDailySchedule(newValue,oldVal){
         if (this.left.timer) {
-          clearInterval(this.timer)
+          clearInterval(this.left.timer)
         }
         if (newValue) {
-          this.timer = setInterval(this.updateDailyScheduleText, 1000);
+          this.left.timer = setInterval(this.updateLeftDailyScheduleText, 1000);
         }
       },
-     left:isExceedTodayMaxTime(newValue, oldValue) {
+      leftIsExceedTodayMaxTime (newValue, oldValue) {
+       this.$log("left.isExceedTodayMaxTime Changed，newValue:"+newValue)
         if (newValue) {
-          this.updatePromotionInfo()
+          this.updateLeftPromotionInfo()
         }
-      },*/
+      },
+    },
+
+    activated() {
+      if (this.datas.settings.left.hasPromotionActivity) {
+        this.left.isDailySchedule = false;
+        this.updateLeftPromotionInfo()
+      }
+    },
+
+    deactivated() {
+      if (this.left.timer) {
+        clearInterval(this.left.timer)
+      }
     },
 
     data() {
@@ -159,7 +185,7 @@
           this.left.msTime.show = true;
           this.left.msTime.day = Math.floor(timeDistance / 86400000);
           timeDistance -= this.left.msTime.day * 86400000;
-          thisleft.msTime.hour = Math.floor(timeDistance / 3600000);
+          this.left.msTime.hour = Math.floor(timeDistance / 3600000);
           timeDistance -= this.left.msTime.hour * 3600000;
           this.left.msTime.minutes = Math.floor(timeDistance / 60000);
           timeDistance -= this.left.msTime.minutes * 60000;
@@ -235,6 +261,8 @@
             if(detail != null) {
               this.left.promotionActivityId = detail.id
               this.left.PromotionStatus = detail.status;
+              this.$log("&&&&&&&&&&&&&&&&&&&&&&&&&&&&")
+              this.$log(detail.dailySchedule)
               if (detail.dailySchedule != undefined) {
                 this.left.isDailySchedule = detail.dailySchedule
                 this.left.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
@@ -330,12 +358,35 @@
       display: flex;
       background-color: white;
       padding: 3px;
-      .tilteText{
-        .fz(font-size,25);
+      width: 100%;
+      .titleText{
+        width: 30%;
+        .fz(font-size,20);
         font-weight: bold;
       }
       .titleDetail{
-        float: right;
+        width: 70%;
+        .dailyDetail {
+          display: flex;
+          width: 100%;
+          .fz(font-size, 15);
+          .dailyTitleBox{
+            width: 25%;
+            background-color: red;
+            color: white;
+            text-align: center;
+            justify-items: center;
+            padding: 2px 0px;
+          }
+          .dailyTimeBox{
+            padding: 1px;
+            border:1px red solid;
+            text-align: center;
+            justify-items: center;
+
+          }
+        }
+
       }
     }
 
