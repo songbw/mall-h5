@@ -15,11 +15,11 @@
               </div>
               <div class="dailyTimeBox">
                 <span> {{left.dailyScheduleDetail}}</span>
-                <span style="color:#ff4444;background-color: white;padding: 1px">{{left.msTime.hour}}</span>
+                <span>{{left.msTime.hour}}</span>
                 <span>:</span>
-                <span style="color:#ff4444;background-color: white;padding: 1px">{{left.msTime.minutes}}</span>
+                <span>{{left.msTime.minutes}}</span>
                 <span>:</span>
-                <span style="color:#ff4444;background-color: white;padding: 1px">{{left.msTime.seconds}}</span>
+                <span>{{left.msTime.seconds}}</span>
               </div>
             </div>
             <div v-else>
@@ -150,6 +150,7 @@
       },
       gotoLeftTargetUrl() {
         let targetId = this.datas.settings.left.targetUrl
+        this.$log(this.datas.settings.left)
         if (targetId.startsWith("aggregation://")) {
           let id = targetId.substr(14);
           this.$router.push({path: '/index/' + id});
@@ -345,15 +346,14 @@
   @import "../../assets/index/style.css";
 
   .compbox{
+    display: flex;
     background-color: white;
     border-radius: 10px;
     padding: 5px;
-    background-color: #c8c9cc;
+    background-color:white;
     margin-left: 5px;
     margin-right: 5px;
-    height: 300px;
-    display: flex;
-
+    height: 200px;
     .boxTitle{
       display: flex;
       background-color: white;
@@ -372,17 +372,18 @@
           .fz(font-size, 15);
           .dailyTitleBox{
             width: 25%;
-            background-color: red;
+            background-color: #ff4444;
             color: white;
             text-align: center;
             justify-items: center;
             padding: 2px 0px;
           }
           .dailyTimeBox{
-            padding: 1px;
+            padding: 1px 2px;
             border:1px red solid;
             text-align: center;
             justify-items: center;
+            color: #ff4444;
 
           }
         }
@@ -399,6 +400,7 @@
       width: 50%;
       height: 100%;
       background-color: #1989fa;
+      margin-left: 1px;
     }
   }
 
