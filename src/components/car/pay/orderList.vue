@@ -36,12 +36,21 @@
                           <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />
                         </div>
                         <div slot="footer" class="card_footer">
-                          <van-button plain round size="small" type="primary"
-                                      style="background-color: white;color: #ff4444;border-color: #ffcccc "
-                                      @click.stop=""
-                                      @click="onAfterSalesServiceBtnClick(k,sku)" v-if="k.status==1||k.status==2">
-                            申请售后
-                          </van-button>
+                          <div v-if="sku.status < 4">
+                            <van-button plain round size="small" type="primary"
+                                        style="background-color: white;color: #ff4444;border-color: #ffcccc "
+                                        @click.stop=""
+                                        @click="onAfterSalesServiceBtnClick(k,sku)" v-if="k.status==1||k.status==2">
+                              申请售后
+                            </van-button>
+                          </div>
+                          <div v-else-if="sku.status == 5">
+                            <van-button plain round size="small" type="primary"
+                                        style="background-color: white;color: #888888;border-color: #f0f0f0 "
+                                        @click.stop="">
+                              查看售后
+                            </van-button>
+                          </div>
                         </div>
                       </van-card>
                     </li>
@@ -266,6 +275,25 @@
             "finished": false,
           },
         ]
+      },
+      /*statue: Number 子订单状态（0：已下单；1：待发货；2：已发货（15天后自动变为已完成）；3：已完成；4：已取消；5：失败）*/
+      getSubOrderStatus(status) {
+        switch(status) {
+          case 0:
+            return "已下单";
+          case 1:
+            return "待发货";
+          case 2:
+            return "已发货";
+          case 3:
+            return "已完成";
+          case 4:
+            return "已取消";
+          case 5:
+            return "失败"
+          default:
+            return ""
+        }
       },
 
       getOrderStatus(status) {

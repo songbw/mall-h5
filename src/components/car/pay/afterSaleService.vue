@@ -297,6 +297,23 @@
         }
         return reason;
       },
+
+      cancelSubOrder() {
+        let options = {
+          "id": this.goods.id
+        }
+        this.$api.xapi({
+          method: 'put',
+          baseURL: this.$api.ORDER_BASE_URL,
+          url: '/order/subOrder/cancel',
+          data: options,
+        }).then((response) => {
+          this.$log(response)
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+
       onCommitClick() {
         this.$log("onCommitClick Enter")
         let that = this
@@ -322,6 +339,7 @@
           if (response.status == 201) {
             this.$toast("申请已经成功提交，请等待客服人员联系")
             this.requestState = 0;
+            this.cancelSubOrder();
           } else {
             this.$toast("申请提交失败，请联系客服人员")
           }

@@ -29,15 +29,24 @@
               :num="sku.num"
               :thumb="sku.image">
               <div slot="tags" v-if="sku.salePrice != sku.unitPrice" class="cardtags">
-                <img :src="tag_promotion"  v-if="sku.promotionDiscount > 0"/>
-                <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />
+                <img :src="tag_promotion" v-if="sku.promotionDiscount > 0"/>
+                <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0"/>
               </div>
               <div slot="footer">
-                <van-button plain round size="small" type="primary"
-                            style="background-color: white;color: black;border-color: #dedede "
-                            @click="onAfterSalesServiceBtnClick(sku)" v-if="status==1||status==2">
-                  申请售后
-                </van-button>
+                <div v-if="sku.status < 4">
+                  <van-button plain round size="small" type="primary"
+                              style="background-color: white;color: black;border-color: #dedede "
+                              @click="onAfterSalesServiceBtnClick(sku)" v-if="status==1||status==2">
+                    申请售后
+                  </van-button>
+                </div>
+                <div v-else-if="sku.status == 5">
+                  <van-button plain round size="small" type="primary"
+                              style="background-color: white;color: #888888;border-color: #f0f0f0 "
+                              @click.stop="">
+                    查看售后
+                  </van-button>
+                </div>
               </div>
             </van-card>
           </li>
@@ -80,11 +89,11 @@
             <span style="color: #ff4444">+￥{{freightFee}}</span>
           </div>
         </van-cell>
-<!--        <van-cell title="活动优惠:">
-          <div slot="default">
-            <span style="color: #ff4444">-￥{{promotionDiscout}}</span>
-          </div>
-        </van-cell>-->
+        <!--        <van-cell title="活动优惠:">
+                  <div slot="default">
+                    <span style="color: #ff4444">-￥{{promotionDiscout}}</span>
+                  </div>
+                </van-cell>-->
         <van-cell title="优惠券:">
           <div slot="default">
             <span style="color: #ff4444">-￥{{couponDiscount}}</span>
@@ -143,7 +152,7 @@
         orderIcon: require('@/assets/images/order.png'),
         tag_coupon: require('@/assets/icons/ico_lab_coupon.png'),
         tag_promotion: require('@/assets/icons/ico_lab_promotion.png'),
-        coupon:{},
+        coupon: {},
       }
     },
 
@@ -156,29 +165,29 @@
       this.detail = JSON.parse(this.$store.state.appconf.currentOrderInfo);
       this.$log(this.detail)
       this.status = this.detail.status;
-/*      if(this.status == 0) {
-        let endTime = new Date(this.$moment(detail.createdAt).format('YYYY/MM/DD HH:mm:ss')).getTime() + 1000*60*30;
-        let current = new Date().getTime();
-      }*/
+      /*      if(this.status == 0) {
+              let endTime = new Date(this.$moment(detail.createdAt).format('YYYY/MM/DD HH:mm:ss')).getTime() + 1000*60*30;
+              let current = new Date().getTime();
+            }*/
     },
 
 
     computed: {
       productPrice() {
-         let productPrice = 0;
-         this.detail.skus.forEach(sku =>{
-           productPrice += sku.unitPrice * sku.num;
-         })
-         return productPrice.toFixed(2)
+        let productPrice = 0;
+        this.detail.skus.forEach(sku => {
+          productPrice += sku.unitPrice * sku.num;
+        })
+        return productPrice.toFixed(2)
       },
 
       freightFee() {
-        return  this.detail.servFee.toFixed(2)
+        return this.detail.servFee.toFixed(2)
       },
 
       promotionDiscout() {
         let promotionDiscount = 0;
-        this.detail.skus.forEach(sku =>{
+        this.detail.skus.forEach(sku => {
           promotionDiscount += sku.promotionDiscount * sku.num;
         })
         return promotionDiscount.toFixed(2)
@@ -186,7 +195,7 @@
 
       couponDiscount() {
         let couponDiscount = 0;
-        if(this.detail.couponDiscount != null) {
+        if (this.detail.couponDiscount != null) {
           couponDiscount = this.detail.couponDiscount
         }
         return couponDiscount.toFixed(2)
@@ -225,12 +234,11 @@
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
         let returnUrl = ""
-        if(this.$api.IS_GAT_APP)
-        {
-          if(this.$api.APP_ID==='10') {
-            returnUrl  =   "https://gatsn.weesharing.com/pay/cashering";
-          } else if(this.$api.APP_ID==='09') {
-            returnUrl  =   "https://gatzy.weesharing.com/pay/cashering";
+        if (this.$api.IS_GAT_APP) {
+          if (this.$api.APP_ID === '10') {
+            returnUrl = "https://gatsn.weesharing.com/pay/cashering";
+          } else if (this.$api.APP_ID === '09') {
+            returnUrl = "https://gatzy.weesharing.com/pay/cashering";
           }
           let options = {
             "iAppId": this.$api.APP_ID,
@@ -426,8 +434,8 @@
       },
 
       getDisplayOderNo(orderNo) {
-        if(this.$api.APP_ID === "10") {
-          if(this.detail.aoyiId != undefined && this.detail.aoyiId  > 0) {
+        if (this.$api.APP_ID === "10") {
+          if (this.detail.aoyiId != undefined && this.detail.aoyiId > 0) {
             return this.detail.aoyiId
           }
         }
@@ -531,6 +539,7 @@
 
           .cardtags {
             margin-top: 10px;
+
             > img {
               width: 30px;
               height: 30px;
