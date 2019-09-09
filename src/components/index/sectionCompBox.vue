@@ -34,7 +34,7 @@
                            style="font-size:10%;;font-weight: lighter">
               </v-countdown>
               <div class="promotionStatusText" v-if="left.PromotionStatus  === 5">
-                <span style="color: white">已结束</span>
+                <span>已结束</span>
               </div>
             </div>
           </div>
@@ -97,7 +97,7 @@
                            style="font-size:10%;;font-weight: lighter">
               </v-countdown>
               <div class="promotionStatusText" v-if="right.PromotionStatus === 5">
-                <span style="color: white">已结束</span>
+                <span>已结束</span>
               </div>
             </div>
           </div>
@@ -140,6 +140,10 @@
     props: ['datas', 'mBackgroundColor'],
 
     computed: {
+      show() {
+        this.$log("left show:"+this.left.show+",right show:"+this.right.show)
+        return this.left.show && this.right.show
+      },
       leftIsDailySchedule() {
         return this.left.isDailySchedule
       },
@@ -208,7 +212,6 @@
     data() {
       return {
         countPerLine: 2,
-        show: true,
         left: {
           list: [],
           isDailySchedule: false,
@@ -218,6 +221,7 @@
           dailyScheduleDetail: '',
           timer: null,
           isExceedTodayMaxTime: false,
+          PromotionStatus: -1,
           msTime: {
             show: false,
             day: "",
@@ -229,6 +233,21 @@
         },
         right: {
           list: [],
+          isDailySchedule: false,
+          dailyEndTime: "",
+          dailyScheduleInfo: [],
+          dailyScheduleText: '',
+          dailyScheduleDetail: '',
+          timer: null,
+          isExceedTodayMaxTime: false,
+          PromotionStatus: -1,
+          msTime: {
+            show: false,
+            day: "",
+            hour: "",
+            minutes: "",
+            seconds: "",
+          },
           show: false,
         }
       }
@@ -562,6 +581,7 @@
                 this.left.PromotionStatus = detail.status;
                 this.$log(this.left.PromotionStartTime)
                 this.$log(this.left.PromotionEndTime)
+                this.$log(this.left.PromotionStatus)
                 this.left.show = true;
               } else {
                 this.left.show = false;
@@ -571,6 +591,10 @@
               that.$log(error)
               that.left.show = false;
             })
+          } else {
+            if(this.left.list.length > 0) {
+              this.left.show = true;
+            }
           }
         }
       },
@@ -665,6 +689,10 @@
               that.$log(error)
               that.right.show = false;
             })
+          } else {
+            if(this.right.list.length > 0) {
+              this.right.show = true;
+            }
           }
         }
       },
@@ -731,76 +759,7 @@
     .countdownStyle{
        .fz(font-size,10)
     }
-    .sectionGoods-list2 {
-      width: 100%;
-      display: -ms-flex;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
-      justify-content: flex-start;
-      -ms-flex-wrap: wrap;
-      flex-wrap: wrap;
-      overflow: hidden;
 
-      li {
-        width: 47%;
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
-        border-radius: 15px;
-        margin: 3px 2px;
-
-        img {
-          width: 100%;
-          display: inline-block;
-          border-top-left-radius: 10px;
-          border-top-right-radius: 10px;
-        }
-        .goodsFooter {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: Center;
-          border-bottom-left-radius: 10px;
-          border-bottom-right-radius: 10px;
-          padding-bottom: 3px;
-          width: 100%;
-
-          .goodsPriceBox {
-            color: #ff4444;
-            > span {
-              display: inline-block;
-              align-content: center;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
-              word-break: break-all;
-              color: #ff4444;
-              .fz(font-size, 30);
-            }
-          }
-
-          .goodsPromotionPriceBox {
-            color: #8c8c8c;
-            text-decoration: line-through;
-            .fz(font-size, 28);
-            > span {
-              display: inline-block;
-              align-content: center;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
-              word-break: break-all;
-            }
-          }
-        }
-      }
-    }
 
     .sectionSlide-banner {
       display: block;
@@ -815,12 +774,152 @@
     .left {
       width: 50%;
       height: 100%;
+      .sectionGoods-list2 {
+        width: 100%;
+        display: -ms-flex;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: flex-start;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        overflow: hidden;
+
+        li {
+          width: 47%;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          border-radius: 15px;
+          margin: 3px 2px;
+
+          img {
+            width: 100%;
+            display: inline-block;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+          }
+          .goodsFooter {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: Center;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding-bottom: 3px;
+            width: 100%;
+
+            .goodsPriceBox {
+              color: #ff4444;
+              > span {
+                display: inline-block;
+                align-content: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+                color: #ff4444;
+                .fz(font-size, 30);
+              }
+            }
+
+            .goodsPromotionPriceBox {
+              color: #8c8c8c;
+              text-decoration: line-through;
+              .fz(font-size, 28);
+              > span {
+                display: inline-block;
+                align-content: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+              }
+            }
+          }
+        }
+      }
     }
 
     .right {
       width: 50%;
       height: 100%;
       margin-left: 1px;
+      .sectionGoods-list2 {
+        width: 100%;
+        display: -ms-flex;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: flex-start;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        overflow: hidden;
+
+        li {
+          width: 47%;
+          -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+          border-radius: 15px;
+          margin: 3px 2px;
+
+          img {
+            width: 100%;
+            display: inline-block;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+          }
+          .goodsFooter {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: Center;
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding-bottom: 3px;
+            width: 100%;
+
+            .goodsPriceBox {
+              color: #ff4444;
+              > span {
+                display: inline-block;
+                align-content: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+                color: #ff4444;
+                .fz(font-size, 30);
+              }
+            }
+
+            .goodsPromotionPriceBox {
+              color: #8c8c8c;
+              text-decoration: line-through;
+              .fz(font-size, 28);
+              > span {
+                display: inline-block;
+                align-content: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+              }
+            }
+          }
+        }
+      }
     }
   }
 
