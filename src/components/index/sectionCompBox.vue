@@ -50,7 +50,7 @@
                 <div class="goodsPriceBox">
                   <p>
                     <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{k.price}}
+                    {{k.price-k.discount}}
                   </p>
                 </div>
                 <div class="goodsPromotionPriceBox">
@@ -113,7 +113,7 @@
                 <div class="goodsPriceBox">
                   <p>
                     <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{k.price}}
+                    {{k.price-k.discount}}
                   </p>
                 </div>
                 <div class="goodsPromotionPriceBox">
