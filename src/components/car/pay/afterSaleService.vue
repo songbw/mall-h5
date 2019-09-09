@@ -20,12 +20,12 @@
         </van-cell>
         <van-cell title="状态" title-class="CellTitle" :value="requestStateValue"></van-cell>
         <div slot="footer">
-          <van-cell title="申请数量" title-class="CellTitle">
+<!--          <van-cell title="申请数量" title-class="CellTitle">
             <van-stepper
               v-model="count"
               :max="goods.num"
               @change="onCountChange"/>
-          </van-cell>
+          </van-cell>-->
           <van-cell title="历史工单" :value=this.history_list.length title-class="CellTitle" isLink="true"
                     @click="onHistListClick">
           </van-cell>
@@ -175,7 +175,7 @@
       this.requestState = -1;
 
       this.$log(this.goods)
-
+      this.count = this.goods.num
       this.$api.xapi({
         method: 'get',
         baseURL: this.$api.WORKER_ORDER_BASE_URL,
