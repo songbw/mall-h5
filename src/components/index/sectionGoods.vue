@@ -17,11 +17,18 @@
               </div>
               <div class="goodsFooter">
                 <div class="goodsPriceBox">
-                 <p
+                 <p   v-if="k.discount != undefined && datas.settings.countPerLine == 2"
                    :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                   {{k.price}}
+                   {{k.price - k.discount}}
+                   <span style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                   <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
                 </p>
+                  <p   v-else
+                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                    {{k.price}}
+                  </p>
                 </div>
                 <div class="goodsBuyBox">
                   <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>

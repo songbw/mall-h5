@@ -1169,12 +1169,12 @@
           .origin-price-title {
             padding: 2px;
             color: #c8c8cd;
-            .fz(font-size, 25);
+            .fz(font-size, 22);
           }
 
           .origin-price {
             color: #c8c8cd;
-            .fz(font-size, 25);
+            .fz(font-size, 22);
             text-decoration: line-through
           }
 
