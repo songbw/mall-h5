@@ -34,7 +34,7 @@
       }
     },
     created() {
-      this.test();
+     // this.test();
       if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
       }
@@ -61,7 +61,7 @@
       }
     },
     methods: {
-      test() {
+/*      test() {
         let options = {
           "level": "1",
           "pid": "CN",
@@ -78,7 +78,7 @@
         })
 
 
-      },
+      },*/
       getAddressCode(province, city, county) {
         let code = ""
         for (var key in areaList.province_list) {
@@ -174,7 +174,6 @@
               let user = JSON.parse(userInfo);
               this.$store.commit('SET_USED_ADDRESS_ID', id);
               if (!receiverInfo.tel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
-                this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxx")
                 this.$toast("请输入正确的电话号码")
                 return
               }

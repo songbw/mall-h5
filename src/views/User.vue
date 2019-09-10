@@ -141,7 +141,7 @@
             img: require('@/assets/icons/ico_complete_order.png'),
           },
           {
-            title: "已取消",
+            title: "售后/退货",
             key: 4,
             img: require('@/assets/icons/ico_order_cancel.png')
           }
@@ -169,8 +169,13 @@
       onOrderListBarClick(type) {
         //订单类型
         this.$log("onOrderListBarClick:" + type);
-        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
-        this.$router.push({name: '订单列表页'})
+        if(type < 4) {
+          this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
+          this.$router.push({name: '订单列表页'})
+        } else {
+          this.$router.push({name: '售后工单页'})
+        }
+
       },
       onCouponCenterClick() {
         this.$log("onCouponCenterClick Enter")
