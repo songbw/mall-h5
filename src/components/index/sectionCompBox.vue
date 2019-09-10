@@ -47,17 +47,29 @@
             <li v-for="(k,index) in left.list" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <div class="goodsFooter">
-                <div class="goodsPriceBox">
-                  <p>
-                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{k.price-k.discount}}
-                  </p>
+                <div v-if="k.discount != undefined">
+                  <div class="goodsPriceBox">
+                    <p>
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{k.price-k.discount}}
+                    </p>
+                  </div>
+                  <div class="goodsPromotionPriceBox">
+                    <p>
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{k.price}}
+                    </p>
+                  </div>
                 </div>
-                <div class="goodsPromotionPriceBox">
-                  <p>
-                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{k.price}}
-                  </p>
+                <div v-else>
+                  <div class="goodsPriceBox">
+                    <p>
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{k.price}}
+                    </p>
+                  </div>
+                  <div style="height: .9em">
+                  </div>
                 </div>
               </div>
             </li>
@@ -110,17 +122,30 @@
             <li v-for="(k,index) in right.list" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <div class="goodsFooter">
-                <div class="goodsPriceBox">
-                  <p>
-                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{k.price-k.discount}}
-                  </p>
+                <div v-if="k.discount != undefined">
+                  <div class="goodsPriceBox">
+                    <p>
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{k.price-k.discount}}
+                    </p>
+                  </div>
+                  <div class="goodsPromotionPriceBox">
+                    <p>
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{k.price}}
+                    </p>
+                  </div>
                 </div>
-                <div class="goodsPromotionPriceBox">
-                  <p>
-                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{k.price}}
-                  </p>
+                <div v-else>
+                  <div class="goodsPriceBox">
+                    <p>
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{k.price}}
+                    </p>
+                  </div>
+                  <div style="height: .9em">
+
+                  </div>
                 </div>
               </div>
             </li>
@@ -527,19 +552,21 @@
               if (this.left.isDailySchedule) {
                 this.left.targetUrl = "route://promotion/" + this.left.promotionActivityId
                 this.left.list = [];
-                detail.promotionSkus.forEach(item => {
-                  let product = {
-                    brand: item.brand,
-                    discount: item.discount,
-                    imagePath: item.image,
-                    intro: item.name,
-                    mpu: item.mpu,
-                    name: item.name,
-                    price: item.price,
-                    skuid: item.skuid
-                  }
-                  this.left.list.push(product)
-                })
+                if(detail.promotionSkus != null)  {
+                  detail.promotionSkus.forEach(item => {
+                    let product = {
+                      brand: item.brand,
+                      discount: item.discount,
+                      imagePath: item.image,
+                      intro: item.name,
+                      mpu: item.mpu,
+                      name: item.name,
+                      price: item.price,
+                      skuid: item.skuid
+                    }
+                    this.left.list.push(product)
+                  })
+                }
                 this.left.dailyScheduleInfo = []
                 detail.promotionSchedules.forEach(item => {
                   this.$log(item)
@@ -579,6 +606,22 @@
                 this.left.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
                 this.left.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
                 this.left.PromotionStatus = detail.status;
+                if(detail.promotionSkus != null)  {
+                  this.left.list = [];
+                  detail.promotionSkus.forEach(item => {
+                    let product = {
+                      brand: item.brand,
+                      discount: item.discount,
+                      imagePath: item.image,
+                      intro: item.name,
+                      mpu: item.mpu,
+                      name: item.name,
+                      price: item.price,
+                      skuid: item.skuid
+                    }
+                    this.left.list.push(product)
+                  })
+                }
                 this.$log(this.left.PromotionStartTime)
                 this.$log(this.left.PromotionEndTime)
                 this.$log(this.left.PromotionStatus)
@@ -623,19 +666,21 @@
               if (this.right.isDailySchedule) {
                 this.right.targetUrl = "route://promotion/" + this.right.promotionActivityId
                 this.right.list = [];
-                detail.promotionSkus.forEach(item => {
-                  let product = {
-                    brand: item.brand,
-                    discount: item.discount,
-                    imagePath: item.image,
-                    intro: item.name,
-                    mpu: item.mpu,
-                    name: item.name,
-                    price: item.price,
-                    skuid: item.skuid
-                  }
-                  this.right.list.push(product)
-                })
+                if(detail.promotionSkus != null)  {
+                  detail.promotionSkus.forEach(item => {
+                    let product = {
+                      brand: item.brand,
+                      discount: item.discount,
+                      imagePath: item.image,
+                      intro: item.name,
+                      mpu: item.mpu,
+                      name: item.name,
+                      price: item.price,
+                      skuid: item.skuid
+                    }
+                    this.right.list.push(product)
+                  })
+                }
                 this.right.dailyScheduleInfo = []
                 detail.promotionSchedules.forEach(item => {
                   this.$log(item)
@@ -675,7 +720,22 @@
                 this.right.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
                 this.right.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
                 this.right.PromotionStatus = detail.status;
-                this.$log("11111111111111111111111111111111111111111")
+                if(detail.promotionSkus != null)  {
+                  this.right.list = [];
+                  detail.promotionSkus.forEach(item => {
+                    let product = {
+                      brand: item.brand,
+                      discount: item.discount,
+                      imagePath: item.image,
+                      intro: item.name,
+                      mpu: item.mpu,
+                      name: item.name,
+                      price: item.price,
+                      skuid: item.skuid
+                    }
+                    this.right.list.push(product)
+                  })
+                }
                 this.$log(this.right.PromotionStatus)
                 this.$log(this.right.PromotionStartTime)
                 this.$log(this.right.PromotionEndTime)
@@ -683,7 +743,6 @@
               } else {
                 this.right.show = false;
               }
-              this.$log("2222222222222222222222")
               this.$log(this.right)
             }).catch(function (error) {
               that.$log(error)
