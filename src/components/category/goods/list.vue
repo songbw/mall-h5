@@ -26,20 +26,29 @@
       <van-list v-model="loading"
                 :finished="finished"
                 @load="onLoad">
-        <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
-          <div class="goods-detail" @click="onListClick(k)">
-            <van-card
-              :price="k.price"
-              desc="南京"
-              :title=composeGoodsTitle(k)
-              :thumb="k.image"
-              centered>
-            </van-card>
+        <div v-if="list.length > 0">
+          <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
+            <div class="goods-detail" @click="onListClick(k)">
+              <van-card
+                :price="k.price"
+                desc="南京"
+                :title=composeGoodsTitle(k)
+                :thumb="k.image"
+                centered>
+              </van-card>
+            </div>
+            <div class="goods-action">
+              <van-button size="mini" @click="onAdd2carBtnClick(k)"></van-button>
+            </div>
+          </li>
+        </div>
+        <div v-else>
+          <div v-if="finished && !loading"  class="noGoodsList">
+            <img :src="icon_empty_search">
+            <span class="noGoodsList_text">暂无搜索结果...</span>
           </div>
-          <div class="goods-action">
-            <van-button size="mini" @click="onAdd2carBtnClick(k)"></van-button>
-          </div>
-        </li>
+        </div>
+
       </van-list>
     </div>
     <div>
@@ -69,6 +78,7 @@
         icon_select_top: require('@/assets/icons/ico_select_top.png'),
         icon_select_btm: require('@/assets/icons/ico_select_btm.png'),
         icon_select_none: require('@/assets/icons/ico_select_none.png'),
+        icon_empty_search: require('@/assets/icons/ico_empty_search.png'),
         active: 0,
         tagPrice: 0, //0 升序 1 降序
       }
@@ -165,6 +175,7 @@
               }
             }).catch(function (error) {
               console.log(error)
+              that.loading = false;
               that.finished = true;
             })
           }
@@ -201,10 +212,12 @@
             }
           }).catch(function (error) {
             console.log(error)
+            that.loading = false;
             that.finished = true;
           })
         } else {
           //error
+          this.loading = false;
           this.finished = true;
         }
       },
@@ -381,6 +394,30 @@
     }
 
     .productList {
+      .noGoodsList {
+        width: 100%;
+        background-color: #f8f8f8;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
+        height: 500px;
+
+        img {
+          height: 130px;
+          width: 130px;
+        }
+
+        span {
+          margin: 2vw;
+        }
+
+        .noGoodsList_text {
+          font-weight: lighter;
+          color: black;
+          .fz(font-size, 35);
+        }
+      }
       .van-list {
         margin-top: 5px;
         background-color: #f8f8f8;
