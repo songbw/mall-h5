@@ -214,9 +214,10 @@
               }, 1000);
             }
           }).catch(function (error) {
-            console.log(error)
+            that.$log(error)
             that.loading = false;
             that.finished = true;
+            that.dataLoaded = true;
           })
         } else {
           //load finished

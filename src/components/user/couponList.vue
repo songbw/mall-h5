@@ -350,7 +350,7 @@
               that.$log(error)
               that.couponTypes[index].loading = false;
               that.couponTypes[index].finished = true;
-              this.launchedLoaded = true;
+              that.launchedLoaded = true;
             })
           }
         } else {

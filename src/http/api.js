@@ -1,4 +1,5 @@
 import store from '@/vuex/store.js'
+import router from '../router'
 
 const APP_ID = ""
 const T_APP_ID =""
@@ -52,6 +53,8 @@ xapi.interceptors.response.use(function (response) {
     if (error.response.status == 401) {
       // 如果返回401 即没有权限，跳到登录页重新登录
       console.log("401, 请重新登录")
+     // router.push({name: '登录页'})
+      //alert('登录已失效，请重新登录');
 /*      store.commit('CHANGE_TOKEN', 0);
       alert('请重新登录');
       router.replace({

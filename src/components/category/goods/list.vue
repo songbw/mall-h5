@@ -253,6 +253,7 @@
         let user = JSON.parse(userInfo);
         let userId = user.userId;
         let mpu = goods.mpu;
+        let that = this
         let addtoCar = {
           "openId": userId,
           "mpu": mpu
