@@ -84,7 +84,7 @@
           </div>
           <div class="pay-footer"></div>
           <van-submit-bar
-            :loading = "isOnSummitting"
+            :loading="isOnSummitting"
             :price="allpay"
             button-text="提交订单"
             @submit="onSubmit"
@@ -94,10 +94,10 @@
         <div class="pay-info">
           <van-cell title="支付方式:" :value="payway">
           </van-cell>
-<!--          <van-cell title="发票:" :value="invoiceDetail">
-            <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
-                      @click="showInvoiceSelector()"/>
-          </van-cell>-->
+          <!--          <van-cell title="发票:" :value="invoiceDetail">
+                      <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
+                                @click="showInvoiceSelector()"/>
+                    </van-cell>-->
           <van-cell title="优惠券:">
             <div slot="default">
               <span>{{couponUsedTip}}</span>
@@ -264,7 +264,7 @@
     },
     data() {
       return {
-        payway:'现金支付',
+        payway: '现金支付',
         showHeader: true,
         isOnSummitting: false,
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
@@ -375,7 +375,7 @@
           if (found != -1 && item.couponInfo.rules.couponRules.type != 3) {
             couponList.push(item)
           } else {
-            if (item.couponInfo.rules !=null && item.couponInfo.rules.scenario.type === 3) { //类别券单独处理
+            if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 3) { //类别券单独处理
               for (let i = 0; i < allPayList.length; i++) {
                 if (allPayList[i].valid) {
                   for (let j = 0; j < item.couponInfo.rules.scenario.categories.length; j++) {
@@ -394,15 +394,15 @@
         //判断优惠券是否满足条件
         let avaliableCouponList = []
         couponList.forEach(coupon => {
-          if(this.isCouponActivied(coupon)) {
+          if (this.isCouponActivied(coupon)) {
             if (coupon.couponInfo.rules.couponRules.type === 0 ||
               coupon.couponInfo.rules.couponRules.type == 2) {
               let fullPrice = 0;
-              if(coupon.couponInfo.rules.scenario.type === 3) {
+              if (coupon.couponInfo.rules.scenario.type === 3) {
                 allPayList.forEach(payItem => {
                   if (payItem.valid) {
-                    for(let i = 0 ; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
-                      if(coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
+                    for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
+                      if (coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
                         fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                         break;
                       }
@@ -472,7 +472,7 @@
               item.product.goodsInfo['dprice'] = Util.getDisplayPrice(item.checkedPrice, item.product.promotionInfo)
             }
             if (item.product.baseInfo.merchantId === 2) {//aoyi
-              if(item.product.baseInfo.mpu != null) {
+              if (item.product.baseInfo.mpu != null) {
                 let itemMerchantCode = item.product.baseInfo.mpu.substring(0, 2)
                 arregationPayList.forEach(merchant => {
                     if (itemMerchantCode === merchant.merchantCode) {
@@ -536,7 +536,7 @@
       allpay() {
         let all = 0;
         all = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100
-        if(all < 0)
+        if (all < 0)
           all = 0
         return all;
       },
@@ -575,7 +575,7 @@
           "invoiceTitleType": "personal",
           "invoiceEnterpriseName": "",
           "invoiceEnterpriseNumber": "",
-          "invoiceReceiverMobile":  "",
+          "invoiceReceiverMobile": "",
           "invoiceReceiverEmail": "",
         }
         this.$store.dispatch('setInvoicdInfo', JSON.stringify(invoice));
@@ -644,15 +644,15 @@
       isCouponActivied(coupon) {
         let ret = false;
         if (coupon.status === 1) {
-          let startTime = new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
-          let endTime = new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
+          let startTime = new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g, '/')).getTime()
+          let endTime = new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
           let current = new Date().getTime()
           if (current < startTime) {
-            ret =  false//券活动未开始
+            ret = false//券活动未开始
           } else if (current <= endTime) {
-            ret =  true //活动开始
+            ret = true //活动开始
           } else {
-            ret =  false // 活动已经结束
+            ret = false // 活动已经结束
           }
         }
         return ret
@@ -758,19 +758,19 @@
                       break;
                     }
                   }
-                  if(found === -1) {
-                    if(coupon.couponInfo.rules.scenario.type === 3) {
-                        for(let i = 0 ; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
-                          if(coupon.couponInfo.rules.scenario.categories[i] === sku.product.goodsInfo.category) {
-                            found = 1;//找到
-                            break;
-                          }
+                  if (found === -1) {
+                    if (coupon.couponInfo.rules.scenario.type === 3) {
+                      for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
+                        if (coupon.couponInfo.rules.scenario.categories[i] === sku.product.goodsInfo.category) {
+                          found = 1;//找到
+                          break;
                         }
+                      }
                     }
                   }
                   if (found != -1) {
-                    let unitCouponDiscount =  Math.floor((this.reducedPriceOfCoupon * sku.product.goodsInfo.dprice / this.totalSkuPriceOfCoupon) * 100) / 100;
-                    let skuCouponDiscount = unitCouponDiscount* sku.product.baseInfo.count;
+                    let unitCouponDiscount = Math.floor((this.reducedPriceOfCoupon * sku.product.goodsInfo.dprice / this.totalSkuPriceOfCoupon) * 100) / 100;
+                    let skuCouponDiscount = unitCouponDiscount * sku.product.baseInfo.count;
                     skus.push({
                       "skuId": sku.product.baseInfo.skuId,
                       "mpu": sku.product.baseInfo.mpu,
@@ -779,7 +779,7 @@
                       "salePrice": (sku.product.goodsInfo.dprice - unitCouponDiscount).toFixed(2),
                       "skuCouponDiscount": skuCouponDiscount
                     })
-                   // couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice * sku.product.baseInfo.count
+                    // couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice * sku.product.baseInfo.count
                     couponDiscountOfMerchant += skuCouponDiscount
                   }
                 }
@@ -788,13 +788,13 @@
               merchants.push({
                 "merchantNo": item.merchantCode,
                 "skus": skus,
-             //   "couponOccupiedPrice": couponOccupiedPrice4OnPerMerchant,
+                //   "couponOccupiedPrice": couponOccupiedPrice4OnPerMerchant,
                 "couponDiscountOfMerchant": couponDiscountOfMerchant
               })
               totalCouponDiscount += couponDiscountOfMerchant;
             }
           })
-          if(totalCouponDiscount != this.reducedPriceOfCoupon) {
+          if (totalCouponDiscount != this.reducedPriceOfCoupon) {
             // coupon 价格不平， 重新分配,由于coupon 单价计算是舍去2位后的数据，所以reducedPriceOfCoupon大于等于totalCouponDiscount
             // 把多余的优惠差价给最大的优惠价格拥有的商户
             if (merchants.length > 0) {
@@ -806,17 +806,17 @@
                   }
                 }
               }
-              merchants[maxMerchants].couponDiscountOfMerchant +=  (this.reducedPriceOfCoupon-totalCouponDiscount) //把多余的优惠差价给最大的优惠价格拥有的商户
+              merchants[maxMerchants].couponDiscountOfMerchant += (this.reducedPriceOfCoupon - totalCouponDiscount) //把多余的优惠差价给最大的优惠价格拥有的商户
               //找到maxMerchants这个商户的有最大优惠券价值的SKU，把多余的券值赋给这个SKU
               let maxMpu = 0;
               if (merchants[maxMerchants].skus.length > 1) {
                 for (let i = 1; i < merchants[maxMerchants].skus.length; i++) {
-                  if (merchants[maxMerchants].skus[i].skuCouponDiscount > merchants[maxMerchants].skus[maxMpu].skuCouponDiscount ) {
+                  if (merchants[maxMerchants].skus[i].skuCouponDiscount > merchants[maxMerchants].skus[maxMpu].skuCouponDiscount) {
                     maxMpu = i;
                   }
                 }
               }
-              merchants[maxMerchants].skus[maxMpu].skuCouponDiscount +=  (this.reducedPriceOfCoupon-totalCouponDiscount) //把多余的券值赋给这个SKU
+              merchants[maxMerchants].skus[maxMpu].skuCouponDiscount += (this.reducedPriceOfCoupon - totalCouponDiscount) //把多余的券值赋给这个SKU
             }
           }
           let couponDiscount = parseFloat(this.reducedPriceOfCoupon)
@@ -837,11 +837,11 @@
         let fullPrice = 0;
         if (coupon != null) {
           let allPayList = this.$store.state.appconf.payList;
-          if(coupon.couponInfo.rules.scenario.type === 3) {
+          if (coupon.couponInfo.rules.scenario.type === 3) {
             allPayList.forEach(payItem => {
               if (payItem.valid) {
-                for(let i = 0 ; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
-                  if(coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
+                for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
+                  if (coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
                     fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                     break;
                   }
@@ -874,7 +874,7 @@
               break;
           }
         }
-        if(reducePrice > fullPrice) {
+        if (reducePrice > fullPrice) {
           reducePrice = fullPrice;
         }
         this.reducedPriceOfCoupon = reducePrice.toFixed(2)
@@ -891,8 +891,8 @@
           this.usedCoupon = coupon;
           this.showCoupon = false
         }
-       // this.lastRadio = this.radio
-       // this.$log(this.radio)
+        // this.lastRadio = this.radio
+        // this.$log(this.radio)
       },
 
       onCouponLoad(index) {
@@ -1073,7 +1073,7 @@
                   break;
                 }
               }
-              if(found != -1) {
+              if (found != -1) {
                 address = list[found]
               } else {
                 id = list[0].id
@@ -1156,11 +1156,10 @@
                 let salePrice = unitPrice;
                 let skuCouponDiscount = 0;
                 if (this.usedCoupon != null) {
-                  if(couponInfo != null) {
-                    for (let i=0 ; i < couponInfo.merchants.length; i++) {
-                      for(let j = 0; j < couponInfo.merchants[i].skus.length; j++) {
-                        if(couponInfo.merchants[i].skus[j].mpu === sku.product.goodsInfo.mpu)
-                        {
+                  if (couponInfo != null) {
+                    for (let i = 0; i < couponInfo.merchants.length; i++) {
+                      for (let j = 0; j < couponInfo.merchants[i].skus.length; j++) {
+                        if (couponInfo.merchants[i].skus[j].mpu === sku.product.goodsInfo.mpu) {
                           salePrice = couponInfo.merchants[i].skus[j].salePrice;
                           skuCouponDiscount = couponInfo.merchants[i].skus[j].skuCouponDiscount
                           break;
@@ -1218,10 +1217,10 @@
           }
         })
         let companyCustNo = "11"
-        if(this.$api.IS_GAT_APP) {
-          if(this.$api.APP_ID === '10') {
+        if (this.$api.IS_GAT_APP) {
+          if (this.$api.APP_ID === '10') {
             companyCustNo = "1001"
-          } else if(this.$api.APP_ID === '09') {
+          } else if (this.$api.APP_ID === '09') {
             companyCustNo = "1002"
           }
         }
@@ -1249,12 +1248,11 @@
         let that = this;
         //pAnOrderInfo.orderAmount = 1 //for test
         let returnUrl = ""
-        if(this.$api.IS_GAT_APP)
-        {
-          if(this.$api.APP_ID==='10') {
-            returnUrl  =   "https://gatsn.weesharing.com/pay/cashering";
-          } else if(this.$api.APP_ID==='09') {
-            returnUrl  =   "https://gatzy.weesharing.com/pay/cashering";
+        if (this.$api.IS_GAT_APP) {
+          if (this.$api.APP_ID === '10') {
+            returnUrl = "https://gatsn.weesharing.com/pay/cashering";
+          } else if (this.$api.APP_ID === '09') {
+            returnUrl = "https://gatzy.weesharing.com/pay/cashering";
           }
 
 
@@ -1349,8 +1347,8 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
-          let event = "userId="+ user.userId + "&" + "dataTime:"+new Date().getTime()
-          window._hmt.push(['_trackEvent', '下订单' ,'click',event]);
+          let event = "userId=" + user.userId + "&" + "dataTime:" + new Date().getTime()
+          window._hmt.push(['_trackEvent', '下订单', 'click', event]);
           let receiverId = this.$store.state.appconf.usedAddressId;
           that.$log("onSubmit receiverId is:" + receiverId)
           if (receiverId == undefined || receiverId == -1) {
@@ -1372,10 +1370,10 @@
                     data: options,
                   }).then((response) => {
                     that.$log("onSubmit:" + JSON.stringify(response.data));
-                    if(response.data.code === 200) {
+                    if (response.data.code === 200) {
                       let result = response.data.data.result;
                       that.$log("result:" + JSON.stringify(result))
-                      if(result.length > 0) {
+                      if (result.length > 0) {
                         let orderNo = ""
                         let amount = 0;
                         let merchantNo = ""
@@ -1503,25 +1501,35 @@
         let that = this;
         let inventorySkus = [];
         let skus = [];
+
+        let inventorySkusOfZy = [];
+        let skusOfZy = [];
+
         this.payCarList = [];
         if (this.pageAction == "direct") {
           let payDirectProduct = this.$store.state.appconf.payDirectProduct;
-        //  this.$log("+++++++++++++++++++++");
-        //  this.$log(payDirectProduct);
+          //  this.$log("+++++++++++++++++++++");
+          //  this.$log(payDirectProduct);
           if (payDirectProduct.length > 0) {
             let item = JSON.parse(payDirectProduct);
             if (item.baseInfo.merchantId === 2) { //aoyi
               inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
               skus.push({"skuId": item.baseInfo.skuId})
+            } else {
+              inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
+              skusOfZy.push({"mpu": item.baseInfo.mpu})
             }
             this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.price})
           }
         } else {
           this.selectedCarList.forEach(item => {
-           // this.$log(item)
+            // this.$log(item)
             if (item.baseInfo.merchantId === 2) { //aoyi
               inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
               skus.push({"skuId": item.baseInfo.skuId})
+            } else {
+              inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
+              skusOfZy.push({"mpu": item.baseInfo.mpu})
             }
             if (item.promotionInfo.promotion != null && item.promotionInfo.promotion.length > 0) {
               item.promotionInfo.promotionState = Util.getPromotionState(item.promotionInfo);
@@ -1537,8 +1545,7 @@
         this.savePayList();
         this.getUserCouponList();
 
-        if (skus.length > 0) { //has aoyi product
-          //////////////////////查询库存//////////////////
+        if (skus.length > 0) { //has aoyi product           //////////////////////查询库存//////////////////
           let options = {
             "cityId": locationCode.cityId,
             "countyId": locationCode.countyId,
@@ -1565,43 +1572,43 @@
               }
             })
             //////////////////////查询价格//////////////////
- /*           options = {
-              "cityId": locationCode.cityId,
-              "skus": skus,
-            }
-            this.$log("价格 options:" + JSON.stringify(options));
-            let url = '/prod/price';
-            if (this.$api.APP_ID === "10") {
-              url = '/prod/priceGAT';
-            }
-            this.$api.xapi({
-              method: 'post',
-              baseURL: this.$api.PRODUCT_BASE_URL,
-              url: url,
-              data: options,
-            }).then((response) => {
-              let result = response.data.data.result;
-              this.$log("价格 result is:" + JSON.stringify(result));
-              result.forEach(item => {
-                for (let i = 0; i < this.payCarList.length; i++) {
-                  // this.$log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
-                  if (item != null && this.payCarList[i].valid && this.payCarList[i].product.baseInfo.skuId == item.skuId
-                  ) {
-                    //this.$log("价格 change true");
-                    this.payCarList[i].checkedPrice = item.price
-                  }
-                }
-              })
-              //开始聚合不同商家
-              this.getfreightPay();
-            }).catch(function (error) {
-              that.$log(error)
-              that.$store.commit('SET_PAGE_LOADING', false);
-              that.$log("page loading end");
-              if (that.pageLoadTimerId != -1) {
-                clearTimeout(that.pageLoadTimerId)
-              }
-            })*/
+            /*           options = {
+                         "cityId": locationCode.cityId,
+                         "skus": skus,
+                       }
+                       this.$log("价格 options:" + JSON.stringify(options));
+                       let url = '/prod/price';
+                       if (this.$api.APP_ID === "10") {
+                         url = '/prod/priceGAT';
+                       }
+                       this.$api.xapi({
+                         method: 'post',
+                         baseURL: this.$api.PRODUCT_BASE_URL,
+                         url: url,
+                         data: options,
+                       }).then((response) => {
+                         let result = response.data.data.result;
+                         this.$log("价格 result is:" + JSON.stringify(result));
+                         result.forEach(item => {
+                           for (let i = 0; i < this.payCarList.length; i++) {
+                             // this.$log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
+                             if (item != null && this.payCarList[i].valid && this.payCarList[i].product.baseInfo.skuId == item.skuId
+                             ) {
+                               //this.$log("价格 change true");
+                               this.payCarList[i].checkedPrice = item.price
+                             }
+                           }
+                         })
+                         //开始聚合不同商家
+                         this.getfreightPay();
+                       }).catch(function (error) {
+                         that.$log(error)
+                         that.$store.commit('SET_PAGE_LOADING', false);
+                         that.$log("page loading end");
+                         if (that.pageLoadTimerId != -1) {
+                           clearTimeout(that.pageLoadTimerId)
+                         }
+                       })*/
             //获取运费
             this.getfreightPay();
           }).catch(function (error) {
@@ -1613,6 +1620,33 @@
             }
           })
         } else {//other merchant
+          if(skusOfZy.length > 0) {
+            this.$log("settlement other merchant #################################")
+            let options = {
+              "inventories": inventorySkusOfZy
+            }
+            this.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.PRODUCT_BASE_URL,
+              url: '/prod/inventory/self',
+              data: options,
+            }).then((response) => {
+              let result = response.data.data.result;
+              this.$log("自营库存 result is:" + JSON.stringify(result));
+              result.forEach(item => {
+                for (let i = 0; i < this.payCarList.length; i++) {
+                  if (this.payCarList[i].product.baseInfo.mpu === item.mpu) {
+                    if ("1" === item.state) {
+                      this.payCarList[i].valid = true
+                    } else {
+                      this.payCarList[i].valid = false
+                    }
+                  }
+                }
+              })
+            }).catch(function (error) {
+            })
+          }
           this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
           if (this.pageLoadTimerId != -1) {
