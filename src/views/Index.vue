@@ -171,7 +171,7 @@
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
-       // this.testGAT();
+        this.testGAT();
       } else {
         let dsBridge = require("dsbridge");
         Vue.prototype.$jsbridge = dsBridge;

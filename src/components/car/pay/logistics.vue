@@ -3,7 +3,7 @@
     <v-header class="header" v-if="showHeader">
       <h1 slot="title">物流信息</h1>
     </v-header>
-    <div class="logistics-body">
+    <div class="logistics-body"  :style="{'padding-top':showHeader? '3em':'0px'}">
       <div class="noneInfo" v-if="loading">
         <v-loading></v-loading>
       </div>
