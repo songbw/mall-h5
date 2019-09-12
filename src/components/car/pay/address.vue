@@ -34,7 +34,7 @@
       }
     },
     created() {
-     // this.test();
+   //   this.test();
       if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
       }
@@ -61,23 +61,50 @@
       }
     },
     methods: {
-/*      test() {
+/*       testGetCode(province,city,county) {
+        this.$log("省:"+province+",市:"+city+",县:"+county)
         let options = {
-          "level": "1",
-          "pid": "CN",
-          "cityId":""
+          "country": "中国",
+          "province": province,
+          "city": city,
+          "county": county
         }
-        this.$api.xapi({
+        return  this.$api.xapi({
           method: 'post',
           baseURL: this.$api.ORDER_BASE_URL,
-          url: '/address/level',
+          url: '/address/code',
           data: options,
-        }).then((response) => {
-          this.$log(response.data.data.list)
-        }).catch(function (error) {
         })
-
-
+      },
+      async test() {
+        this.$log(areaList.city_list)
+        this.$log(areaList.county_list)
+        this.$log(areaList.province_list)
+        let province_name = "";
+        let city_name = "";
+        let county_name = "";
+        for (var province_key in areaList.province_list) {
+          let code = province_key
+          province_name = areaList.province_list[province_key]
+          for (var city_key in areaList.city_list) {
+            if (city_key.substr(0, 2) == code.substr(0, 2)) {
+              code = city_key
+              city_name = areaList.city_list[city_key]
+              for (var county_key in areaList.county_list) {
+                if (county_key.substr(0, 4) == code.substr(0, 4) ) {
+                  code = county_key
+                  county_name = areaList.county_list[county_key];
+                  try{
+                    let result =  await  this.testGetCode(province_name,city_name,county_name)
+                  } catch (e) {
+                    console.log("################################")
+                    console.log(e)
+                  }
+                }
+              }
+            }
+          }
+        }
       },*/
       getAddressCode(province, city, county) {
         let code = ""

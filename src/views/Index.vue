@@ -171,7 +171,7 @@
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
-        //this.testGAT();
+       // this.testGAT();
       } else {
         let dsBridge = require("dsbridge");
         Vue.prototype.$jsbridge = dsBridge;
@@ -225,7 +225,7 @@
       },
       testGAT() {
         //  let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
-        let openId = "e85a4074de506df69915f6954d808974"
+        let openId = "52d7fd1f46e55ac6a2435818a00c06c0"
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
         this.$log("openId:" + openId);
         if (openId != undefined) {

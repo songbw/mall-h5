@@ -768,7 +768,6 @@
     background-color: white;
     border-radius: 10px;
     padding: 5px;
-    background-color: white;
     margin-left: 5px;
     margin-right: 5px;
 
@@ -814,7 +813,9 @@
 
       }
     }
-
+    .promotionStatusText{
+      .fz(font-size,10)
+    }
     .countdownStyle{
        .fz(font-size,10)
     }
@@ -908,7 +909,7 @@
     .right {
       width: 50%;
       height: 100%;
-      margin-left: 1px;
+      border-left: 1px solid #f0f0f0;
       .sectionGoods-list2 {
         width: 100%;
         display: -ms-flex;

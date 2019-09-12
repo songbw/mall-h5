@@ -142,11 +142,9 @@
       },
 
       formatTime(timeString) {
-        //2019-01-27T07:56:27.000+0000
         if (timeString == null)
           return null
-        let dateee = new Date(timeString).toJSON();
-        return new Date(+new Date(dateee) + 8 * 3600 * 1000).toISOString().replace(/T/g, ' ').replace(/\.[\d]{3}Z/, '')
+        return this.$moment(timeString).format('YYYY/MM/DD HH:mm:ss')
       },
     }
   }
