@@ -32,7 +32,7 @@
           checked = false;
         else {
           for (let i = 0; i < cartList.length; i++) {
-            if (!cartList[i].baseInfo.choosed) {
+            if (!cartList[i].baseInfo.choosed && cartList[i].valid) {
               checked = false;
               break;
             }
@@ -64,14 +64,17 @@
       allpay() {
         let all = 0;
         let userInfo = this.$store.state.appconf.userInfo;
-        console.log("allpay Enter")
+        console.log("allpay Enter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         try {
           if (!Util.isUserEmpty(userInfo)) {
             let user = JSON.parse(userInfo)
             let cartList = this.$store.state.appconf.cartList;
             cartList.forEach(item => {
-
+              console.log("allpay Enterxxxxxxxxxxxx")
+              console.log(item.baseInfo.userId )
+              console.log(user.userId)
               if (item.baseInfo.userId == user.userId) {
+
                 if (item.baseInfo.choosed) {
                   all += item.goodsInfo.dprice * item.baseInfo.count
                 }
@@ -95,7 +98,10 @@
           })
         } else {
           cartList.forEach(item => {
-            item.baseInfo.choosed = true
+            if(item.valid)
+              item.baseInfo.choosed = true
+            else
+              item.baseInfo.choosed = false
           })
         }
       },

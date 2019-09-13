@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="car">
-    <v-header class="header"  v-if="showHeader">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">购物车</h1>
     </v-header>
 
@@ -13,7 +13,8 @@
           <div class="nothingInCar">
             <img :src="nothingInCar_bg"/>
             <span>您的购物车还没有商品，快去挑选吧</span>
-            <van-button round type="danger" style="width:35%;font-size: medium" @click="gotoCategoryPage()">去逛逛</van-button>
+            <van-button round type="danger" style="width:35%;font-size: medium" @click="gotoCategoryPage()">去逛逛
+            </van-button>
           </div>
         </div>
         <div v-else>
@@ -21,16 +22,26 @@
             <div class="prodInCart" v-for="(k,index) in cartList" :key="index">
               <van-swipe-cell :right-width="60">
                 <div style="display: flex;justify-content: left;background-color: #ffffff">
-                  <div
-                    style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                  <div v-if="k.valid"
+                       style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
                     <van-checkbox
                       v-model="k.baseInfo.choosed"
                       checked-color="#FF4444"
                       @change="singleChecked(index,k)">
                     </van-checkbox>
                   </div>
+                  <div v-else
+                       style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                    <van-checkbox
+                      disabled
+                      v-model="k.baseInfo.choosed"
+                      checked-color="#FF4444"
+                      @change="singleChecked(index,k)">
+                    </van-checkbox>
+                  </div>
                   <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                    <div class="promotionBox" v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
+                    <div class="promotionBox"
+                         v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
                       <span class="promotionTitle">{{k.promotionInfo.promotion[0].tag}}</span>
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
@@ -40,7 +51,18 @@
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>
-                    <div>
+                    <div class="goodsValid" v-if="k.valid">
+                      <van-card
+                        desc="南京"
+                        :price="k.goodsInfo.dprice"
+                        :title="k.goodsInfo.name"
+                        :thumb="k.goodsInfo.image">
+                        <div slot="footer">
+                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k)"/>
+                        </div>
+                      </van-card>
+                    </div>
+                    <div class="goodsInvalid" v-else>
                       <van-card
                         desc="南京"
                         :price="k.goodsInfo.dprice"
@@ -90,7 +112,14 @@
 
     computed: {
       cartList() {
-         return this.$store.state.appconf.cartList
+        let i = 0
+        this.$store.state.appconf.cartList.forEach(item => {
+          if(i == 0) {
+            item['valid'] = true
+          }
+          i++;
+        })
+        return this.$store.state.appconf.cartList
       },
     },
 
@@ -123,28 +152,28 @@
 
     methods: {
       getDateTime(time) {
-        return   new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
+        return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },
-      gotoCategoryPage(){
+      gotoCategoryPage() {
         this.$router.replace({'name': '分类页'})
       },
       composeGoodsTitle(goods) {
-        return (goods.brand==null?'':goods.brand) + ' '+ goods.name + ' '+ (goods.model==null? '': goods.model)
+        return (goods.brand == null ? '' : goods.brand) + ' ' + goods.name + ' ' + (goods.model == null ? '' : goods.model)
       },
       countDownS_cb(index, k) {
         k.promotionInfo.promotionState = Util.getPromotionState(k)
-        Util.updateCartItem(this,  k);
+        Util.updateCartItem(this, k);
       },
       countDownE_cb(index, k) {
         k.promotionInfo.promotionState = Util.getPromotionState(k)
         let len = k.promotionInfo.promotion.length;
         k.promotionInfo.promotion.splice(0, len);
-        Util.updateCartItem(this,  k);
+        Util.updateCartItem(this, k);
       },
 
 
-      onDeleteBtnClick(k,index) {
-        Util.deletCartItem(this,k)
+      onDeleteBtnClick(k, index) {
+        Util.deletCartItem(this, k)
         let that = this;
         this.$api.xapi({
           method: 'delete',
@@ -161,7 +190,7 @@
       },
 
       onCountChange(k) {
-        Util.updateCartItem(this,  k);
+        Util.updateCartItem(this, k);
         let options = {
           "id": k.baseInfo.cartId,
           "count": k.baseInfo.count
@@ -196,7 +225,7 @@
             this.total = this.result.total;
             this.$log("load from network car list is:" + JSON.stringify(this.result.list));
             if (this.result.list === undefined || this.result.list.length === 0) {
-             // this.$store.commit('SET_SELECTED_CARLIST', []);
+              // this.$store.commit('SET_SELECTED_CARLIST', []);
               this.loading = false;
               this.finished = true;
               this.dataLoaded = true;
@@ -222,7 +251,7 @@
         } else {
           //load finished
           this.loading = false;
-          if( !this.finished ) {
+          if (!this.finished) {
             this.finished = true;
           }
         }
@@ -247,9 +276,9 @@
       },
 
 
-      updateCarList(item,product,user) {
-       // this.carList = this.$store.state.appconf.cartList;
-       // let goods = Object();
+      updateCarList(item, product, user) {
+        // this.carList = this.$store.state.appconf.cartList;
+        // let goods = Object();
         this.$log(item)
         this.$log(product)
         let cartItem = Util.getCartItem(this, user.userId, item.mpu)
@@ -288,7 +317,7 @@
           }
         } else {
           cartItem.baseInfo.count = item.count
-          cartItem.baseInfo.cartId =  item.id
+          cartItem.baseInfo.cartId = item.id
           cartItem.baseInfo.merchantId = product.merchantId
           cartItem.goodsInfo.merchantId = product.merchantId
           cartItem.couponList = product.coupon
@@ -311,10 +340,10 @@
             mpu: item.mpu,
           }
         }).then((res) => {
-          if(res.data != null) {
+          if (res.data != null) {
             let product = res.data.data.result;
             if (product != null) {
-              this.updateCarList(item,product,user)
+              this.updateCarList(item, product, user)
               this.dataLoaded = true
             } else {
               this.$log("product:" + JSON.stringify(product) + ",mpu:" + item.mpu)
@@ -327,7 +356,7 @@
       },
 
       singleChecked(index, k) {
-        Util.updateCartItem(this,  k)
+        Util.updateCartItem(this, k)
       }
     },
   }
@@ -344,12 +373,13 @@
     background-color: #f8f8f8;
 
     .box {
-           padding-top: 3em;
-           position: relative;
-           width: 100%;
-           line-height: 15vw;
-           background-color: #ff4444;
+      padding-top: 3em;
+      position: relative;
+      width: 100%;
+      line-height: 15vw;
+      background-color: #ff4444;
     }
+
     .box:after {
       position: absolute;
       left: 0;
@@ -359,7 +389,7 @@
       height: 60px;
       width: 100%;
       border-radius: 0 0 30% 30%;
-      background-color:  #ff4444;
+      background-color: #ff4444;
       overflow: hidden;
     }
 
@@ -371,13 +401,14 @@
     }
 
     .cartBody {
-      .emptyCart{
+      .emptyCart {
         display: flex;
         position: fixed;
-        width:100%;
+        width: 100%;
         height: 82%;
         justify-content: center;
         justify-items: center;
+
         .nothingInCar {
           width: 96%;
           background-color: white;
@@ -387,6 +418,7 @@
           flex-direction: column;
           justify-content: center;
           align-items: Center;
+
           img {
             height: 150px;
           }
@@ -407,18 +439,35 @@
         justify-content: center;
         justify-items: center;
         background-color: #f8f8f8;
+
         .prodInCart {
           margin: 10px;
 
-          .van-card {
-            background-color: #ffffff;
-            margin-top: 10px;
+          .goodsValid {
+            .van-card {
+              background-color: #ffffff;
+              margin-top: 10px;
 
-            &__price {
-              margin-top: 0.5em;
-              .fz(font-size, 40);
+              &__price {
+                margin-top: 0.5em;
+                .fz(font-size, 40);
+              }
             }
           }
+
+          .goodsInvalid {
+            .van-card {
+              background-color: #ffffff;
+              margin-top: 10px;
+
+              &__price {
+                margin-top: 0.5em;
+                .fz(font-size, 40);
+                color: #515151;
+              }
+            }
+          }
+
 
           .van-card__footer > div {
             display: flex !important;
