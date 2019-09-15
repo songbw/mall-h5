@@ -64,7 +64,7 @@
                     </div>
                     <div class="goodsInvalid" v-else>
                       <van-card
-                        desc="南京"
+                        desc="无货"
                         :price="k.goodsInfo.dprice"
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image">
@@ -114,8 +114,11 @@
       cartList() {
         let i = 0
         this.$store.state.appconf.cartList.forEach(item => {
-          if(i == 0) {
+          if (i == 0) {
             item['valid'] = true
+          } else {
+            item['valid'] = false
+            item.baseInfo.choosed = false
           }
           i++;
         })
@@ -135,6 +138,7 @@
         launchedLoading: false,
         showHeader: true,
         dataLoaded: false,
+        addressCode: {"provinceId": "100", "cityId": "510", "countyId": "06"}
       }
     },
 
@@ -151,6 +155,102 @@
     },
 
     methods: {
+      async updateAoyiInventory(skus){
+      },
+      async updateOtherInventory(skus) {
+
+      },
+
+      updateInventorList(list) {
+        let inventorySkus = [];
+        let inventorySkusOfZy = [];
+        list.forEach(item => {
+          this.$log(item.mpu)
+          if(item.mpu.substr(0,2) === "20" || item.mpu.substr(0,2) === "10") {
+            inventorySkus.push({"skuId": item.mpu, "remainNum": item.count})
+          } else {
+            inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.baseInfo.count})
+          }
+        })
+        if(inventorySkus.length > 0) {
+           this.updateAoyiInventory(inventorySkus)
+        }
+        if(inventorySkusOfZy.length > 0) {
+           this.updateOtherInventory(inventorySkusOfZy)
+        }
+      },
+
+      getAdressList() {
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          let options = {
+            "openId": user.userId,
+            "pageNo": 1,
+            "pageSize": "20",
+          }
+          return this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/receiver/all',
+            data: options,
+          })
+        } else {
+          //{"provinceId": "100", "cityId": "510", "countyId": "06"}
+          return null
+        }
+
+      },
+
+      async updateUsedAddressCode() {
+        let list = this.$store.state.appconf.addressList;
+        let address = {"provinceId": "100", "cityId": "510", "countyId": "06"}
+        if (list != null || list != undefined) {
+          let resp = await this.getAdressList()
+          if (resp != null || resp != undefined) {
+            list = resp.data.data.result.list
+          }
+        }
+        let id = this.$store.state.appconf.usedAddressId;
+        try {
+          if (id == undefined || id == -1) {
+            if (list != undefined && list.length > 0) {
+              for (let i = 0; i < list.length; i++) {
+                if (list[i].state == 1) {
+                  id = i;
+                  address = list[i]
+                  break;
+                }
+              }
+              if (id == undefined || id == -1) {
+                id = list[0].id;
+                address = list[0]
+              }
+            }
+          } else {
+            let found = -1;
+            for (let i = 0; i < list.length; i++) {
+              if (id == list[i].id) {
+                found = i;
+                break;
+              }
+            }
+            if (found != -1) {
+              address = list[found]
+            } else {
+              id = list[0].id
+              address = list[0]
+            }
+          }
+
+        } catch (e) {
+        }
+        this.$log(address)
+        this.addressCode = address
+        return address
+      },
+
+
       getDateTime(time) {
         return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },
@@ -206,7 +306,7 @@
         })
       },
 
-      loadCartListBy(user) {
+      async loadCartListBy(user) {
         let userInfo = JSON.parse(user);
         let that = this
         if (this.total == -1 || this.total > this.list.length) {
@@ -220,7 +320,7 @@
             baseURL: this.$api.ORDER_BASE_URL,
             url: '/cart/all',
             data: options,
-          }).then((response) => {
+          }).then(async (response) => {
             this.result = response.data.data.result;
             this.total = this.result.total;
             this.$log("load from network car list is:" + JSON.stringify(this.result.list));
@@ -230,6 +330,7 @@
               this.finished = true;
               this.dataLoaded = true;
             } else {
+              let res = await this.updateInventorList(this.result.list)
               this.result.list.forEach(item => {
                 this.list.push(item);
                 this.getSkuInfoBy(item, userInfo);
@@ -260,6 +361,7 @@
       onLoad() {
         this.launchedLoading = true;
         this.$log("launchedLoading:" + this.launchedLoading)
+        this.updateUsedAddressCode();
         // let userInfo=this.$jsbridge.call("getUserInfo");
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {

@@ -64,18 +64,13 @@
       allpay() {
         let all = 0;
         let userInfo = this.$store.state.appconf.userInfo;
-        console.log("allpay Enter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
         try {
           if (!Util.isUserEmpty(userInfo)) {
             let user = JSON.parse(userInfo)
             let cartList = this.$store.state.appconf.cartList;
             cartList.forEach(item => {
-              console.log("allpay Enterxxxxxxxxxxxx")
-              console.log(item.baseInfo.userId )
-              console.log(user.userId)
               if (item.baseInfo.userId == user.userId) {
-
-                if (item.baseInfo.choosed) {
+                if (item.baseInfo.choosed && item.valid) {
                   all += item.goodsInfo.dprice * item.baseInfo.count
                 }
               }
