@@ -105,6 +105,16 @@
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                       @click="showCouponSelector()"/>
           </van-cell>
+          <van-cell>
+            <div slot="title">
+              <span>我的余额:剩余{{mCoinAmount}}元</span>
+            </div>
+            <div slot="default">
+              <span>提取{{mCoinAmountUsed}}元支付</span>
+            </div>
+            <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
+                      @click="showCouponSelector()"/>
+          </van-cell>
           <van-actionsheet v-model="showInvoice" title="发票" class="invoice_layout">
             <div>
               <div class="invoiceTip">
@@ -243,6 +253,11 @@
               <span style="color: #ff4444">-￥{{couponReducedPrice(this.usedCoupon)}}</span>
             </div>
           </van-cell>
+          <van-cell title="我的余额:">
+            <div slot="default">
+              <span style="color: #ff4444">-￥{{mCoinAmountUsed.toFixed(2)}}</span>
+            </div>
+          </van-cell>
         </div>
       </div>
     </div>
@@ -271,6 +286,8 @@
         icon_conatct_address: require('@/assets/icons/ico_contact_address.png'),
         couponImg: require('@/assets/icons/ico_coupon.png'),
         addressCount: 0,
+        mCoinAmount: 0, //余额
+        mCoinAmountUsed: 0,
         freight: 0,
         payCarList: [],
         receiverName: '',
