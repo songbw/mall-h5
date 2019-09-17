@@ -38,6 +38,8 @@
             }
           }
         }
+        if(this.count == 0)
+          checked = false;
         return checked;
       },
       count() {
@@ -50,7 +52,7 @@
             let cartList = this.$store.state.appconf.cartList;
             cartList.forEach(item => {
               if (item.baseInfo.userId == user.userId) {
-                if (item.baseInfo.choosed)
+                if (item.baseInfo.choosed && item.valid)
                   selCount += item.baseInfo.count;
               }
             });

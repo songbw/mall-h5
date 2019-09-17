@@ -53,7 +53,7 @@
                     </div>
                     <div class="goodsValid" v-if="k.valid">
                       <van-card
-                        desc="南京"
+                        :desc="addressCode.cityName != undefined ? addressCode.cityName: '南京'"
                         :price="k.goodsInfo.dprice"
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image">
@@ -69,7 +69,7 @@
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image">
                         <div slot="footer">
-                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k)"/>
+                          <van-stepper v-model="k.baseInfo.count" disabled  @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -112,16 +112,39 @@
 
     computed: {
       cartList() {
-        let i = 0
         this.$store.state.appconf.cartList.forEach(item => {
-          if (i == 0) {
-            item['valid'] = true
+          if(item.baseInfo.merchantId === 2) {
+            item['valid'] = false;
+            for(let i = 0 ;i < this.inventoryListOfAoyi.length; i++) {
+              this.$log(this.inventoryListOfAoyi[i])
+              if(this.inventoryListOfAoyi[i].state == 0) {
+                item.choosed = false;
+              }
+            }
+            for(let i = 0 ;i < this.inventoryListOfAoyi.length; i++) {
+              if(this.inventoryListOfAoyi[i].state == 1 && this.inventoryListOfAoyi[i].skuId === item.baseInfo.skuId) {
+                item['valid'] = true;
+                break;
+              }
+            }
           } else {
-            item['valid'] = false
-            item.baseInfo.choosed = false
+            item['valid'] = false;
+            for(let i = 0 ;i < this.inventoryListOfZy.length; i++) {
+              if(this.inventoryListOfZy[i].state == 0) {
+                item.choosed = false;
+              }
+            }
+            for(let i = 0 ;i < this.inventoryListOfZy.length; i++) {
+              if(this.inventoryListOfZy[i].state == 1 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
+                item['valid'] = true;
+                break;
+              }
+            }
           }
-          i++;
+          if(item['valid'] == false)
+            item.baseInfo.choosed = false;
         })
+        this.$log(this.$store.state.appconf.cartList)
         return this.$store.state.appconf.cartList
       },
     },
@@ -132,6 +155,8 @@
         total: -1,
         result: {},
         list: [],
+        inventoryListOfAoyi: [],
+        inventoryListOfZy: [],
         loading: false,
         finished: false,
         nothingInCar_bg: require('@/assets/icons/ico_empty_cart.png'),
@@ -155,13 +180,78 @@
     },
 
     methods: {
-      async updateAoyiInventory(skus){
+      updateAoyiInventory(skus){
+        this.$log(this.addressCode)
+        let options = {
+          "cityId": this.addressCode.cityId,
+          "countyId": this.addressCode.countyId,
+          "skus": skus,
+        }
+        this.$log("updateAoyiInventory options:" + JSON.stringify(options));
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/prod/inventory',
+          data: options,
+        })
       },
-      async updateOtherInventory(skus) {
-
+      updateOtherInventory(skus) {
+        let options = {
+          "inventories": skus
+        }
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/prod/inventory/self',
+          data: options,
+        })
       },
 
-      updateInventorList(list) {
+      async updateInventorList(list) {
+        let addressList = this.$store.state.appconf.addressList;
+        let address = {"provinceId": "100", "cityId": "510", "countyId": "06"}
+        if (addressList != null || addressList != undefined) {
+          let resp = await this.getAdressList()
+          if (resp != null || resp != undefined) {
+            addressList = resp.data.data.result.list
+          }
+        }
+        let id = this.$store.state.appconf.usedAddressId;
+        try {
+          if (id == undefined || id == -1) {
+            if (addressList != undefined && addressList.length > 0) {
+              for (let i = 0; i < addressList.length; i++) {
+                if (addressList[i].state == 1) {
+                  id = i;
+                  address = addressList[i]
+                  break;
+                }
+              }
+              if (id == undefined || id == -1) {
+                id = addressList[0].id;
+                address = addressList[0]
+              }
+            }
+          } else {
+            let found = -1;
+            for (let i = 0; i < addressList.length; i++) {
+              if (id == addressList[i].id) {
+                found = i;
+                break;
+              }
+            }
+            if (found != -1) {
+              address = addressList[found]
+            } else {
+              id = addressList[0].id
+              address = addressList[0]
+            }
+          }
+        } catch (e) {
+        }
+        this.addressCode = address
+   //     this.$log(this.addressCode)
+
         let inventorySkus = [];
         let inventorySkusOfZy = [];
         list.forEach(item => {
@@ -172,11 +262,16 @@
             inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.baseInfo.count})
           }
         })
+
         if(inventorySkus.length > 0) {
-           this.updateAoyiInventory(inventorySkus)
+          let resp = await this.updateAoyiInventory(inventorySkus)
+          this.inventoryListOfAoyi = resp.data.data.result
+         // this.$log(this.inventoryListOfAoyi)
         }
         if(inventorySkusOfZy.length > 0) {
-           this.updateOtherInventory(inventorySkusOfZy)
+          let resp = await  this.updateOtherInventory(inventorySkusOfZy)
+          this.inventoryListOfZy = resp.data.data.result
+          this.$log(this.inventoryListOfZy)
         }
       },
 
@@ -202,53 +297,6 @@
 
       },
 
-      async updateUsedAddressCode() {
-        let list = this.$store.state.appconf.addressList;
-        let address = {"provinceId": "100", "cityId": "510", "countyId": "06"}
-        if (list != null || list != undefined) {
-          let resp = await this.getAdressList()
-          if (resp != null || resp != undefined) {
-            list = resp.data.data.result.list
-          }
-        }
-        let id = this.$store.state.appconf.usedAddressId;
-        try {
-          if (id == undefined || id == -1) {
-            if (list != undefined && list.length > 0) {
-              for (let i = 0; i < list.length; i++) {
-                if (list[i].state == 1) {
-                  id = i;
-                  address = list[i]
-                  break;
-                }
-              }
-              if (id == undefined || id == -1) {
-                id = list[0].id;
-                address = list[0]
-              }
-            }
-          } else {
-            let found = -1;
-            for (let i = 0; i < list.length; i++) {
-              if (id == list[i].id) {
-                found = i;
-                break;
-              }
-            }
-            if (found != -1) {
-              address = list[found]
-            } else {
-              id = list[0].id
-              address = list[0]
-            }
-          }
-
-        } catch (e) {
-        }
-        this.$log(address)
-        this.addressCode = address
-        return address
-      },
 
 
       getDateTime(time) {
@@ -361,7 +409,6 @@
       onLoad() {
         this.launchedLoading = true;
         this.$log("launchedLoading:" + this.launchedLoading)
-        this.updateUsedAddressCode();
         // let userInfo=this.$jsbridge.call("getUserInfo");
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
