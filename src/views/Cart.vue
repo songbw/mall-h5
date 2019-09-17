@@ -209,8 +209,8 @@
 
       async updateInventorList(list) {
         let addressList = this.$store.state.appconf.addressList;
-        let address = {"provinceId": "100", "cityId": "510", "countyId": "06"}
-        if (addressList != null || addressList != undefined) {
+        let address = this.addressCode;
+        if (addressList == null || addressList == undefined) {
           let resp = await this.getAdressList()
           if (resp != null || resp != undefined) {
             addressList = resp.data.data.result.list
@@ -613,6 +613,10 @@
                 margin-top: 0.5em;
                 .fz(font-size, 40);
                 color: #515151;
+              }
+
+              &__desc {
+                color: #ff4444;
               }
             }
           }
