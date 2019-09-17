@@ -18,7 +18,7 @@
           </div>
         </header>
       </div>
-      <div class="coupon-box">
+      <div class="coupon-box" v-if="this.$api.IS_GAT_APP">
         <div class="coupon-info">
           <div class="my-coupon" @click="onMyCouponClick">
               <img :src="myCouponIcon"/>
@@ -30,6 +30,23 @@
           </div>
         </div>
       </div>
+      <div class="wealth-box" v-else-if="this.$api.APP_ID == '11'">
+        <div class="coupon-info">
+          <div class="my-coupon" @click="onMyCoinAccountClick">
+            <img :src="myCoinAccountIcon"/>
+            <span>我的余额</span>
+          </div>
+          <div class="my-coupon" @click="onMyCouponClick">
+            <img :src="myCouponIcon"/>
+            <span>我的优惠券</span>
+          </div>
+          <div class="coupon-change" @click="onChangeCouponClick">
+            <img :src="chCouponIcon"/>
+            <span>兑换优惠券</span>
+          </div>
+        </div>
+      </div>
+
       <div class="orderListBox">
         <div>
           <van-cell value="查看全部 " is-link @click=onOrderListBarClick(0)>
@@ -48,7 +65,6 @@
                 <img :src=" item.img">
                 <span>{{item.title}}</span>
               </div>
-
             </van-col>
           </van-row>
         </div>
@@ -149,6 +165,7 @@
         couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),
         avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
         myCouponIcon: require('@/assets/icons/ico_mycoupon.png'),
+        myCoinAccountIcon: require('@/assets/icons/ico_coin_account.png'),
         chCouponIcon: require('@/assets/icons/ico_changecoupon.png'),
 
         receriverAddressIcon: require('@/assets/icons/ico_receiveraddress.png'),
@@ -164,6 +181,10 @@
       },
       onMyCouponClick() {
         this.$router.push({path: '/user/couponList'})
+      },
+
+      onMyCoinAccountClick() {
+        this.$log("onMyCoinAccountClick Enter")
       },
 
       onOrderListBarClick(type) {
@@ -289,6 +310,54 @@
       margin-bottom: 5em;
 
       .coupon-box {
+                      display: flex;
+                      width: 100%;
+                      justify-content: center;
+                      justify-items: center;
+                      height: 50px;
+                      .coupon-info {
+                        z-index: 1;
+                        width: 100%;
+                        margin: 10px;
+                        background-color: white;
+                        border-radius: 5px;
+                        height: 100%;
+                        display: flex;
+                        align-items: Center;
+                        color: black;
+                        .my-coupon{
+                          width: 50%;
+                          display: flex;
+                          justify-content: center;
+                          img{
+                            height:22px;
+                            width: 22px;
+                          }
+                          span{
+                            margin: 4px;
+                            .fz(font-size, 22);
+                          }
+                        }
+
+                        .coupon-change {
+                          width: 50%;
+                          display: flex;
+                          justify-content: center;
+                          img{
+                            height:22px;
+                            width: 22px;
+                          }
+                          span{
+                            margin: 4px;
+                            .fz(font-size, 22);
+                          }
+                        }
+
+
+                      }
+                    }
+
+      .wealth-box {
         display: flex;
         width: 100%;
         justify-content: center;
@@ -316,7 +385,7 @@
               margin: 4px;
               .fz(font-size, 22);
             }
-         }
+          }
 
           .coupon-change {
             width: 50%;
@@ -331,7 +400,6 @@
               .fz(font-size, 22);
             }
           }
-
 
         }
       }
