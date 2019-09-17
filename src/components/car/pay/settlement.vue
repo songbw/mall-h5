@@ -1664,7 +1664,8 @@
       },
 
       getLocationCode() {
-        let code = {"provinceId": "100", "cityId": "510", "countyId": "06"}//江苏无锡市滨湖区
+        //let code = {"provinceId": "100", "cityId": "510", "countyId": "06"}//江苏无锡市滨湖区
+        let code =  {"provinceName":"上海","provinceId": "20","cityName": "上海市","cityId": "021", "countyName":"徐汇区","countyId": "03"}
         if (/*送货地址*/JSON.stringify(this.usedAddress) != "{}") {
           code = this.usedAddress;
           this.locationCity = this.usedAddress.cityName;
