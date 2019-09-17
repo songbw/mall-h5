@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="car">
-    <v-header class="header"  v-if="showHeader">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">购物车</h1>
     </v-header>
 
@@ -13,7 +13,8 @@
           <div class="nothingInCar">
             <img :src="nothingInCar_bg"/>
             <span>您的购物车还没有商品，快去挑选吧</span>
-            <van-button round type="danger" style="width:35%;font-size: medium" @click="gotoCategoryPage()">去逛逛</van-button>
+            <van-button round type="danger" style="width:35%;font-size: medium" @click="gotoCategoryPage()">去逛逛
+            </van-button>
           </div>
         </div>
         <div v-else>
@@ -21,16 +22,26 @@
             <div class="prodInCart" v-for="(k,index) in cartList" :key="index">
               <van-swipe-cell :right-width="60">
                 <div style="display: flex;justify-content: left;background-color: #ffffff">
-                  <div
-                    style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                  <div v-if="k.valid"
+                       style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
                     <van-checkbox
                       v-model="k.baseInfo.choosed"
                       checked-color="#FF4444"
                       @change="singleChecked(index,k)">
                     </van-checkbox>
                   </div>
+                  <div v-else
+                       style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                    <van-checkbox
+                      disabled
+                      v-model="k.baseInfo.choosed"
+                      checked-color="#FF4444"
+                      @change="singleChecked(index,k)">
+                    </van-checkbox>
+                  </div>
                   <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
-                    <div class="promotionBox" v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
+                    <div class="promotionBox"
+                         v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
                       <span class="promotionTitle">{{k.promotionInfo.promotion[0].tag}}</span>
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
@@ -40,14 +51,25 @@
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>
-                    <div>
+                    <div class="goodsValid" v-if="k.valid">
                       <van-card
-                        desc="南京"
+                        :desc="addressCode.cityName != undefined ? addressCode.cityName: '南京'"
                         :price="k.goodsInfo.dprice"
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image">
                         <div slot="footer">
                           <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k)"/>
+                        </div>
+                      </van-card>
+                    </div>
+                    <div class="goodsInvalid" v-else>
+                      <van-card
+                        desc="无货"
+                        :price="k.goodsInfo.dprice"
+                        :title="k.goodsInfo.name"
+                        :thumb="k.goodsInfo.image">
+                        <div slot="footer">
+                          <van-stepper v-model="k.baseInfo.count" disabled  @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -90,7 +112,40 @@
 
     computed: {
       cartList() {
-         return this.$store.state.appconf.cartList
+        this.$store.state.appconf.cartList.forEach(item => {
+          if(item.baseInfo.merchantId === 2) {
+            item['valid'] = false;
+            for(let i = 0 ;i < this.inventoryListOfAoyi.length; i++) {
+              this.$log(this.inventoryListOfAoyi[i])
+              if(this.inventoryListOfAoyi[i].state == 0) {
+                item.choosed = false;
+              }
+            }
+            for(let i = 0 ;i < this.inventoryListOfAoyi.length; i++) {
+              if(this.inventoryListOfAoyi[i].state == 1 && this.inventoryListOfAoyi[i].skuId === item.baseInfo.skuId) {
+                item['valid'] = true;
+                break;
+              }
+            }
+          } else {
+            item['valid'] = false;
+            for(let i = 0 ;i < this.inventoryListOfZy.length; i++) {
+              if(this.inventoryListOfZy[i].state == 0) {
+                item.choosed = false;
+              }
+            }
+            for(let i = 0 ;i < this.inventoryListOfZy.length; i++) {
+              if(this.inventoryListOfZy[i].state == 1 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
+                item['valid'] = true;
+                break;
+              }
+            }
+          }
+          if(item['valid'] == false)
+            item.baseInfo.choosed = false;
+        })
+        this.$log(this.$store.state.appconf.cartList)
+        return this.$store.state.appconf.cartList
       },
     },
 
@@ -100,12 +155,15 @@
         total: -1,
         result: {},
         list: [],
+        inventoryListOfAoyi: [],
+        inventoryListOfZy: [],
         loading: false,
         finished: false,
         nothingInCar_bg: require('@/assets/icons/ico_empty_cart.png'),
         launchedLoading: false,
         showHeader: true,
         dataLoaded: false,
+        addressCode: {"provinceName":"上海","provinceId": "20","cityName": "上海市","cityId": "021", "countyName":"徐汇区","countyId": "03"}
       }
     },
 
@@ -122,29 +180,148 @@
     },
 
     methods: {
-      getDateTime(time) {
-        return   new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
+      updateAoyiInventory(skus){
+        this.$log(this.addressCode)
+        let options = {
+          "cityId": this.addressCode.cityId,
+          "countyId": this.addressCode.countyId,
+          "skus": skus,
+        }
+        this.$log("updateAoyiInventory options:" + JSON.stringify(options));
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/prod/inventory',
+          data: options,
+        })
       },
-      gotoCategoryPage(){
+      updateOtherInventory(skus) {
+        let options = {
+          "inventories": skus
+        }
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/prod/inventory/self',
+          data: options,
+        })
+      },
+
+      async updateInventorList(list) {
+        let addressList = this.$store.state.appconf.addressList;
+        let address = this.addressCode;
+        if (addressList == null || addressList == undefined) {
+          let resp = await this.getAdressList()
+          if (resp != null || resp != undefined) {
+            addressList = resp.data.data.result.list
+          }
+        }
+        let id = this.$store.state.appconf.usedAddressId;
+        try {
+          if (id == undefined || id == -1) {
+            if (addressList != undefined && addressList.length > 0) {
+              for (let i = 0; i < addressList.length; i++) {
+                if (addressList[i].state == 1) {
+                  id = i;
+                  address = addressList[i]
+                  break;
+                }
+              }
+              if (id == undefined || id == -1) {
+                id = addressList[0].id;
+                address = addressList[0]
+              }
+            }
+          } else {
+            let found = -1;
+            for (let i = 0; i < addressList.length; i++) {
+              if (id == addressList[i].id) {
+                found = i;
+                break;
+              }
+            }
+            if (found != -1) {
+              address = addressList[found]
+            } else {
+              id = addressList[0].id
+              address = addressList[0]
+            }
+          }
+        } catch (e) {
+        }
+        this.addressCode = address
+   //     this.$log(this.addressCode)
+
+        let inventorySkus = [];
+        let inventorySkusOfZy = [];
+        list.forEach(item => {
+          this.$log(item.mpu)
+          if(item.mpu.substr(0,2) === "20" || item.mpu.substr(0,2) === "10") {
+            inventorySkus.push({"skuId": item.mpu, "remainNum": item.count})
+          } else {
+            inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.baseInfo.count})
+          }
+        })
+
+        if(inventorySkus.length > 0) {
+          let resp = await this.updateAoyiInventory(inventorySkus)
+          this.inventoryListOfAoyi = resp.data.data.result
+         // this.$log(this.inventoryListOfAoyi)
+        }
+        if(inventorySkusOfZy.length > 0) {
+          let resp = await  this.updateOtherInventory(inventorySkusOfZy)
+          this.inventoryListOfZy = resp.data.data.result
+          this.$log(this.inventoryListOfZy)
+        }
+      },
+
+      getAdressList() {
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          let options = {
+            "openId": user.userId,
+            "pageNo": 1,
+            "pageSize": "20",
+          }
+          return this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/receiver/all',
+            data: options,
+          })
+        } else {
+          //{"provinceId": "100", "cityId": "510", "countyId": "06"}
+          return null
+        }
+
+      },
+
+
+
+      getDateTime(time) {
+        return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
+      },
+      gotoCategoryPage() {
         this.$router.replace({'name': '分类页'})
       },
       composeGoodsTitle(goods) {
-        return (goods.brand==null?'':goods.brand) + ' '+ goods.name + ' '+ (goods.model==null? '': goods.model)
+        return (goods.brand == null ? '' : goods.brand) + ' ' + goods.name + ' ' + (goods.model == null ? '' : goods.model)
       },
       countDownS_cb(index, k) {
         k.promotionInfo.promotionState = Util.getPromotionState(k)
-        Util.updateCartItem(this,  k);
+        Util.updateCartItem(this, k);
       },
       countDownE_cb(index, k) {
         k.promotionInfo.promotionState = Util.getPromotionState(k)
         let len = k.promotionInfo.promotion.length;
         k.promotionInfo.promotion.splice(0, len);
-        Util.updateCartItem(this,  k);
+        Util.updateCartItem(this, k);
       },
 
 
-      onDeleteBtnClick(k,index) {
-        Util.deletCartItem(this,k)
+      onDeleteBtnClick(k, index) {
+        Util.deletCartItem(this, k)
         let that = this;
         this.$api.xapi({
           method: 'delete',
@@ -161,7 +338,7 @@
       },
 
       onCountChange(k) {
-        Util.updateCartItem(this,  k);
+        Util.updateCartItem(this, k);
         let options = {
           "id": k.baseInfo.cartId,
           "count": k.baseInfo.count
@@ -177,7 +354,7 @@
         })
       },
 
-      loadCartListBy(user) {
+      async loadCartListBy(user) {
         let userInfo = JSON.parse(user);
         let that = this
         if (this.total == -1 || this.total > this.list.length) {
@@ -191,16 +368,17 @@
             baseURL: this.$api.ORDER_BASE_URL,
             url: '/cart/all',
             data: options,
-          }).then((response) => {
+          }).then(async (response) => {
             this.result = response.data.data.result;
             this.total = this.result.total;
             this.$log("load from network car list is:" + JSON.stringify(this.result.list));
             if (this.result.list === undefined || this.result.list.length === 0) {
-             // this.$store.commit('SET_SELECTED_CARLIST', []);
+              // this.$store.commit('SET_SELECTED_CARLIST', []);
               this.loading = false;
               this.finished = true;
               this.dataLoaded = true;
             } else {
+              let res = await this.updateInventorList(this.result.list)
               this.result.list.forEach(item => {
                 this.list.push(item);
                 this.getSkuInfoBy(item, userInfo);
@@ -222,7 +400,7 @@
         } else {
           //load finished
           this.loading = false;
-          if( !this.finished ) {
+          if (!this.finished) {
             this.finished = true;
           }
         }
@@ -247,9 +425,9 @@
       },
 
 
-      updateCarList(item,product,user) {
-       // this.carList = this.$store.state.appconf.cartList;
-       // let goods = Object();
+      updateCarList(item, product, user) {
+        // this.carList = this.$store.state.appconf.cartList;
+        // let goods = Object();
         this.$log(item)
         this.$log(product)
         let cartItem = Util.getCartItem(this, user.userId, item.mpu)
@@ -288,7 +466,7 @@
           }
         } else {
           cartItem.baseInfo.count = item.count
-          cartItem.baseInfo.cartId =  item.id
+          cartItem.baseInfo.cartId = item.id
           cartItem.baseInfo.merchantId = product.merchantId
           cartItem.goodsInfo.merchantId = product.merchantId
           cartItem.couponList = product.coupon
@@ -311,10 +489,10 @@
             mpu: item.mpu,
           }
         }).then((res) => {
-          if(res.data != null) {
+          if (res.data != null) {
             let product = res.data.data.result;
             if (product != null) {
-              this.updateCarList(item,product,user)
+              this.updateCarList(item, product, user)
               this.dataLoaded = true
             } else {
               this.$log("product:" + JSON.stringify(product) + ",mpu:" + item.mpu)
@@ -327,7 +505,7 @@
       },
 
       singleChecked(index, k) {
-        Util.updateCartItem(this,  k)
+        Util.updateCartItem(this, k)
       }
     },
   }
@@ -344,12 +522,13 @@
     background-color: #f8f8f8;
 
     .box {
-           padding-top: 3em;
-           position: relative;
-           width: 100%;
-           line-height: 15vw;
-           background-color: #ff4444;
+      padding-top: 3em;
+      position: relative;
+      width: 100%;
+      line-height: 15vw;
+      background-color: #ff4444;
     }
+
     .box:after {
       position: absolute;
       left: 0;
@@ -359,7 +538,7 @@
       height: 60px;
       width: 100%;
       border-radius: 0 0 30% 30%;
-      background-color:  #ff4444;
+      background-color: #ff4444;
       overflow: hidden;
     }
 
@@ -371,13 +550,14 @@
     }
 
     .cartBody {
-      .emptyCart{
+      .emptyCart {
         display: flex;
         position: fixed;
-        width:100%;
+        width: 100%;
         height: 82%;
         justify-content: center;
         justify-items: center;
+
         .nothingInCar {
           width: 96%;
           background-color: white;
@@ -387,6 +567,7 @@
           flex-direction: column;
           justify-content: center;
           align-items: Center;
+
           img {
             height: 150px;
           }
@@ -407,18 +588,39 @@
         justify-content: center;
         justify-items: center;
         background-color: #f8f8f8;
+
         .prodInCart {
           margin: 10px;
 
-          .van-card {
-            background-color: #ffffff;
-            margin-top: 10px;
+          .goodsValid {
+            .van-card {
+              background-color: #ffffff;
+              margin-top: 10px;
 
-            &__price {
-              margin-top: 0.5em;
-              .fz(font-size, 40);
+              &__price {
+                margin-top: 0.5em;
+                .fz(font-size, 40);
+              }
             }
           }
+
+          .goodsInvalid {
+            .van-card {
+              background-color: #ffffff;
+              margin-top: 10px;
+
+              &__price {
+                margin-top: 0.5em;
+                .fz(font-size, 40);
+                color: #515151;
+              }
+
+              &__desc {
+                color: #ff4444;
+              }
+            }
+          }
+
 
           .van-card__footer > div {
             display: flex !important;

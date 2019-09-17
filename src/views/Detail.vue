@@ -134,6 +134,19 @@
           </div>
         </van-actionsheet>
       </div>
+      <div class="inventoryBox">
+        <div>
+          <p style="color: black">送至:
+            <van-icon name="location" size="14px" color="#FF4444"/>
+            <span  style="color: #8c8c8c ">{{addressCode.provinceName}}</span>
+            <span  style="color: #8c8c8c ">{{addressCode.cityName}}</span>
+            <span  style="color: #8c8c8c ">{{addressCode.countyName}}</span>
+          </p>
+        </div>
+        <div>
+          <span style="color: #ff4444;font-size: medium;font-weight: bold">{{hasInventory?'有货':'无货'}}</span>
+        </div>
+      </div>
       <div class="serviceBox" v-if="showServiceBox">
         <div class="serviceTitle">
           <span>店铺公告</span>
@@ -203,7 +216,6 @@
       let that = this;
       if (this.$store.state.appconf.currentGoods != undefined && this.$store.state.appconf.currentGoods.length > 0) {
         this.goods = JSON.parse(this.$store.state.appconf.currentGoods);
-        // this.$log(this.goods)
         if (!(JSON.stringify(this.goods) == "{}")) {
           let imagesUrls = this.goods.imagesUrl;
           if (imagesUrls != null && imagesUrls.length > 0) {
@@ -285,6 +297,7 @@
           //no user
         }
       }
+      this.updateInventor(this.goods)
       this.pageloading = false;
     },
 
@@ -301,7 +314,8 @@
         promotionType: -1,
         discount: 0,
         promotionId: -1,
-        defaultLocation: '南京',
+        addressCode: {"provinceName":"上海","provinceId": "20","cityName": "上海市","cityId": "021", "countyName":"徐汇区","countyId": "03"},
+        hasInventory: false,
         pageloading: true,
         showCoupon: false,
         radio: '',
@@ -313,6 +327,132 @@
       }
     },
     methods: {
+      getAdressList() {
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          let options = {
+            "openId": user.userId,
+            "pageNo": 1,
+            "pageSize": "20",
+          }
+          return this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/receiver/all',
+            data: options,
+          })
+        } else {
+          return null
+        }
+
+      },
+      async updateInventor(goods) {
+        if(goods != null || goods != undefined) {
+          let addressList = this.$store.state.appconf.addressList;
+          let address = this.addressCode;
+          if (addressList == null || addressList == undefined) {
+            let resp = await this.getAdressList()
+            if (resp != null || resp != undefined) {
+              addressList = resp.data.data.result.list
+            }
+          }
+          let id = this.$store.state.appconf.usedAddressId;
+          try {
+            if (id == undefined || id == -1) {
+              if (addressList != undefined && addressList.length > 0) {
+                for (let i = 0; i < addressList.length; i++) {
+                  if (addressList[i].state == 1) {
+                    id = i;
+                    address = addressList[i]
+                    break;
+                  }
+                }
+                if (id == undefined || id == -1) {
+                  id = addressList[0].id;
+                  address = addressList[0]
+                }
+              }
+            } else {
+              let found = -1;
+              for (let i = 0; i < addressList.length; i++) {
+                if (id == addressList[i].id) {
+                  found = i;
+                  break;
+                }
+              }
+              if (found != -1) {
+                address = addressList[found]
+              } else {
+                id = addressList[0].id
+                address = addressList[0]
+              }
+            }
+          } catch (e) {
+          }
+          this.addressCode = address
+          //     this.$log(this.addressCode)
+
+          let inventorySkus = [];
+          let inventorySkusOfZy = [];
+          if(goods.merchantId === 2) {
+            inventorySkus.push({"skuId": goods.mpu, "remainNum": 1})
+          } else {
+            inventorySkusOfZy.push({"skuId": goods.mpu, "remainNum": 1})
+          }
+
+          if(inventorySkus.length > 0) {
+            let resp = await this.updateAoyiInventory(inventorySkus)
+            let inventoryListOfAoyi = resp.data.data.result
+            this.$log(inventoryListOfAoyi)
+            inventoryListOfAoyi.forEach(item=>{
+              if(item.skuId === goods.skuid && item.state === '1') {
+                  this.hasInventory = true;
+              }
+            })
+          }
+          if(inventorySkusOfZy.length > 0) {
+            let resp = await  this.updateOtherInventory(inventorySkusOfZy)
+            let inventoryListOfZy = resp.data.data.result
+            inventoryListOfZy.forEach(item=>{
+              if(item.mpu === goods.mpu && item.state === '1') {
+                this.hasInventory = true;
+              }
+            })
+          }
+        }
+
+      },
+
+
+      updateAoyiInventory(skus){
+        this.$log(this.addressCode)
+        let options = {
+          "cityId": this.addressCode.cityId,
+          "countyId": this.addressCode.countyId,
+          "skus": skus,
+        }
+        this.$log("updateAoyiInventory options:" + JSON.stringify(options));
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/prod/inventory',
+          data: options,
+        })
+      },
+      updateOtherInventory(skus) {
+        let options = {
+          "inventories": skus
+        }
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/prod/inventory/self',
+          data: options,
+        })
+      },
+
+
       isCouponUptoLimited(k, i) {
         if (k.userCollectNum < k.rules.perLimited)
           return false;
@@ -1095,6 +1235,17 @@
             right: -1rem;
           }
         }
+
+      }
+
+      .inventoryBox {
+        display: flex;
+        flex-direction: column;
+        margin-top: 10px;
+        padding: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: white;
 
       }
 
