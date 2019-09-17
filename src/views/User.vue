@@ -21,8 +21,8 @@
       <div class="coupon-box" v-if="this.$api.IS_GAT_APP">
         <div class="coupon-info">
           <div class="my-coupon" @click="onMyCouponClick">
-              <img :src="myCouponIcon"/>
-              <span>我的优惠券</span>
+            <img :src="myCouponIcon"/>
+            <span>我的优惠券</span>
           </div>
           <div class="coupon-change" @click="onChangeCouponClick">
             <img :src="chCouponIcon"/>
@@ -185,12 +185,25 @@
 
       onMyCoinAccountClick() {
         this.$log("onMyCoinAccountClick Enter")
+        let pAnOrderInfo = {
+          "accessToken": "xxxxxxxxxxxxxxxxx",
+          "orderNo": '0000000000000000000000',// orderNo,
+          "orderAmount": 1 * 100,//分
+          "openId": "2312312323231234234",
+          "businessType": "11"
+        }
+        this.$router.replace({
+          name: "收银台页",
+          params: {
+            orderInfo: pAnOrderInfo
+          }
+        })
       },
 
       onOrderListBarClick(type) {
         //订单类型
         this.$log("onOrderListBarClick:" + type);
-        if(type < 4) {
+        if (type < 4) {
           this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
           this.$router.push({name: '订单列表页'})
         } else {
@@ -230,6 +243,7 @@
       width: 100%;
       line-height: 12vw;
       background-color: #ff4444;
+
       .userHeader {
         width: 100%;
         line-height: 12vw;
@@ -242,7 +256,7 @@
         -ms-flex-align: center;
         align-items: center;
 
-        .headerTitle{
+        .headerTitle {
           display: flex;
           flex-direction: row;
           width: 90%;
@@ -273,7 +287,7 @@
           }
         }
 
-        .header-right{
+        .header-right {
           width: 10%;
           display: flex;
           flex-direction: row;
@@ -310,59 +324,12 @@
       margin-bottom: 5em;
 
       .coupon-box {
-                      display: flex;
-                      width: 100%;
-                      justify-content: center;
-                      justify-items: center;
-                      height: 50px;
-                      .coupon-info {
-                        z-index: 1;
-                        width: 100%;
-                        margin: 10px;
-                        background-color: white;
-                        border-radius: 5px;
-                        height: 100%;
-                        display: flex;
-                        align-items: Center;
-                        color: black;
-                        .my-coupon{
-                          width: 50%;
-                          display: flex;
-                          justify-content: center;
-                          img{
-                            height:22px;
-                            width: 22px;
-                          }
-                          span{
-                            margin: 4px;
-                            .fz(font-size, 22);
-                          }
-                        }
-
-                        .coupon-change {
-                          width: 50%;
-                          display: flex;
-                          justify-content: center;
-                          img{
-                            height:22px;
-                            width: 22px;
-                          }
-                          span{
-                            margin: 4px;
-                            .fz(font-size, 22);
-                          }
-                        }
-
-
-                      }
-                    }
-
-      .wealth-box {
         display: flex;
         width: 100%;
         justify-content: center;
         justify-items: center;
         height: 50px;
+
         .coupon-info {
           z-index: 1;
           width: 100%;
@@ -373,15 +340,18 @@
           display: flex;
           align-items: Center;
           color: black;
-          .my-coupon{
+
+          .my-coupon {
             width: 50%;
             display: flex;
             justify-content: center;
-            img{
-              height:22px;
+
+            img {
+              height: 22px;
               width: 22px;
             }
-            span{
+
+            span {
               margin: 4px;
               .fz(font-size, 22);
             }
@@ -391,11 +361,65 @@
             width: 50%;
             display: flex;
             justify-content: center;
-            img{
-              height:22px;
+
+            img {
+              height: 22px;
               width: 22px;
             }
-            span{
+
+            span {
+              margin: 4px;
+              .fz(font-size, 22);
+            }
+          }
+        }
+      }
+
+      .wealth-box {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        justify-items: center;
+        height: 50px;
+
+        .coupon-info {
+          z-index: 1;
+          width: 100%;
+          margin: 10px;
+          background-color: white;
+          border-radius: 5px;
+          height: 100%;
+          display: flex;
+          align-items: Center;
+          color: black;
+
+          .my-coupon {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+
+            img {
+              height: 22px;
+              width: 22px;
+            }
+
+            span {
+              margin: 4px;
+              .fz(font-size, 22);
+            }
+          }
+
+          .coupon-change {
+            width: 50%;
+            display: flex;
+            justify-content: center;
+
+            img {
+              height: 22px;
+              width: 22px;
+            }
+
+            span {
               margin: 4px;
               .fz(font-size, 22);
             }
@@ -405,7 +429,7 @@
       }
 
       .orderListBox {
-        margin: 20px  10px 10px 10px;
+        margin: 20px 10px 10px 10px;
         background-color: white;
         border: 4px solid white;
         border-radius: 10px;
@@ -475,8 +499,9 @@
         padding: 10px;
         border-radius: 10px;
         background-color: white;
-        .van-cell{
-          img{
+
+        .van-cell {
+          img {
             height: 16px;
             width: 16px;
             margin: 3px;
