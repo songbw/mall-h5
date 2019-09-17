@@ -301,7 +301,7 @@
         promotionType: -1,
         discount: 0,
         promotionId: -1,
-        defaultLocation: '南京',
+        addressCode: {"provinceName":"上海","provinceId": "20","cityName": "上海市","cityId": "021", "countyName":"徐汇区","countyId": "03"},
         pageloading: true,
         showCoupon: false,
         radio: '',

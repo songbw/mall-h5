@@ -163,7 +163,7 @@
         launchedLoading: false,
         showHeader: true,
         dataLoaded: false,
-        addressCode: {"provinceId": "100", "cityId": "510", "countyId": "06"}
+        addressCode: {"provinceName":"上海","provinceId": "20","cityName": "上海市","cityId": "021", "countyName":"徐汇区","countyId": "03"}
       }
     },
 
