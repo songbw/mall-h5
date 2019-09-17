@@ -135,16 +135,23 @@
         </van-actionsheet>
       </div>
       <div class="inventoryBox">
-        <div>
-          <p style="color: black">送至:
-            <van-icon name="location" size="14px" color="#FF4444"/>
-            <span  style="color: #8c8c8c ">{{addressCode.provinceName}}</span>
-            <span  style="color: #8c8c8c ">{{addressCode.cityName}}</span>
-            <span  style="color: #8c8c8c ">{{addressCode.countyName}}</span>
-          </p>
+        <div style="display: flex">
+          <div style="width: 90%; font-size: medium;font-weight: bold;padding: 3px;">
+            <p style="color: black">送至:
+              <van-icon name="location" size="14px" color="#FF4444"/>
+              <span  style="color: #8c8c8c ">{{addressCode.provinceName}}</span>
+              <span  style="color: #8c8c8c ">{{addressCode.cityName}}</span>
+              <span  style="color: #8c8c8c ">{{addressCode.countyName}}</span>
+            </p>
+          </div>
+          <div style="width: 10%;">
+            <van-icon style="float: right;padding: 3px;margin-right: 7px;margin-top: 3px" name="weapp-nav" class="custom-icon" size="14px" color="#000000"
+                       @click="showAddressSelector()"></van-icon>
+          </div>
         </div>
-        <div>
-          <span style="color: #ff4444;font-size: medium;font-weight: bold">{{hasInventory?'有货':'无货'}}</span>
+        <div style="padding: 3px">
+          <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;font-weight: bold">获取库存...</span>
+          <span v-else style="color: #ff4444;font-size: medium;font-weight: bold">{{hasInventory?'有货':'无货'}}</span>
         </div>
       </div>
       <div class="serviceBox" v-if="showServiceBox">
@@ -304,6 +311,7 @@
     data() {
       return {
         showHeader: true,
+        updatedInventor: false,
         goods: {},
         swiperUrls: [],
         contentUrls: [],
@@ -327,6 +335,14 @@
       }
     },
     methods: {
+      showAddressSelector() {
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          this.$router.push({"name":"地址列表页"})
+        } else {
+          this.$toast("没有用户信息，请先登录")
+        }
+      },
       getAdressList() {
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
@@ -421,7 +437,7 @@
             })
           }
         }
-
+        this.updatedInventor = true;
       },
 
 
