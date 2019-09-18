@@ -7,7 +7,7 @@
       <van-list v-model="loading"
                 :finished="finished"
                 @load="onLoad">
-        <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
+        <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px" v-if="list.length > 0 && finished">
           <div class="goods-detail">
             <van-card
               :price="k.unitPrice"
@@ -21,8 +21,13 @@
               <span style="float: right;padding: 10px"  @click="onListClick(k)">查看详情 ></span>
             </div>
           </div>
-
         </li>
+        <div v-else>
+          <div class="noContext">
+            <img :src="icon_noContext">
+            <span class="noContext_line1">亲，没有任何内容!</span>
+          </div>
+        </div>
       </van-list>
     </div>
   </div>
@@ -43,6 +48,7 @@
         list: [],
         loading: false,
         finished: false,
+        icon_noContext: require('@/assets/icons/ico_empty_box.png'),
       }
     },
 
@@ -64,7 +70,8 @@
         this.$router.push({
           name: "工单详情页",
           params: {
-             id:k.id
+             id:k.id,
+            expressNo: k.expressNo
           }
         })
       },
@@ -156,6 +163,32 @@
         .van-card{
           background-color: white;
         }
+      }
+
+      .noContext {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
+        height: 500px;
+
+        img {
+          height: 130px;
+          width: 130px;
+        }
+
+        span {
+          margin: 2vw;
+        }
+
+        .noContext_line1 {
+          font-weight: lighter;
+          color: black;
+          .fz(font-size, 35);
+        }
+
+
       }
 
     }

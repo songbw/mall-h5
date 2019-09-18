@@ -8,7 +8,19 @@
         <v-loading></v-loading>
       </div>
       <div class="workOrderInfo" v-else>
+        <div class="expressNoBox">
+          <van-field
+            v-model="expressNo"
+            clearable
+            label="单号"
+            size="large"
+            label-width="50px"
+            placeholder="请输入退货物流单号"
+          />
+          <van-button size="large" round type="danger" @click="onExpressNoSubmit">提交</van-button>
+        </div>
         <div class="workerOrderDetailBox" v-if="list.length >0">
+          <span style="margin: 10px;font-weight: bold">工单详情</span>
           <van-steps direction="vertical" active-color="#000000" >
             <van-step v-for="(item,k)  in list" :key='k'>
               <h3>{{getComment(item)}}</h3>
@@ -40,6 +52,7 @@
       return {
         showHeader: true,
         id: -1,
+        expressNo:"",
         loading: false,
         list: [],
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
@@ -54,27 +67,54 @@
       }
       that.$log("workerOrder created Enter")
       that.id = this.$route.params.id;
+      this.expressNo = this.$route.params.expressNo == null? "":this.$route.params.expressNo
       that.loading = true;
-      that.$api.xapi({
-        method: 'get',
-        baseURL: this.$api.WORKER_ORDER_BASE_URL,
-        url: '/customers/work_flows',
-        params: {
-          workOrderId: this.id
-        }
-      }).then((response) => {
-        that.list = response.data.data.result;
-        that.$log(that.list);
-        that.loading = false;
-      }).catch(function (error) {
-        that.$log(error)
-        that.loading = false;
-      })
+      this.updateWorkerFlow()
     },
 
     computed: {},
 
     methods: {
+      updateWorkerFlow() {
+        let that =this
+        that.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.WORKER_ORDER_BASE_URL,
+          url: '/customers/work_flows',
+          params: {
+            workOrderId: this.id
+          }
+        }).then((response) => {
+          that.list = response.data.data.result;
+          that.loading = false;
+        }).catch(function (error) {
+          that.$log(error)
+          that.loading = false;
+        })
+      },
+      onExpressNoSubmit() {
+        let logisticsInfo = {com: '', order: this.expressNo}
+        const comments = { logisticsInfo:logisticsInfo}
+        let str = JSON.stringify(comments)
+        this.$log(str)
+        let options = {
+          comments:str,
+          status: 5,
+          operator: "用户",
+          workOrderId: this.id,
+          expressNo:this.expressNo,
+        }
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.WORKER_ORDER_BASE_URL,
+          url: '/customers/work_flows',
+          data: options,
+        }).then((response) => {
+          this.$log(response)
+          this.updateWorkerFlow()
+        }).catch(function (error) {
+        })
+      },
       formatWOrderStatus(statusType) {
         let status = ""
         switch (statusType) {
@@ -166,7 +206,11 @@
       }
 
       .workOrderInfo {
+        .expressNoBox{
+           font-weight: bold;
+        }
         .workerOrderDetailBox {
+          margin-top: 10px;
         }
 
         .noContext {
