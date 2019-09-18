@@ -33,8 +33,15 @@
         </div>
       </div>
       <div class="footer_layout">
-        <van-button type="danger" round size="large" @click="onPayBtnClick">支付</van-button>
+        <van-button type="danger" round size="large" @click="onPayBtnClick">
+          确认支付￥{{amount}}
+        </van-button>
       </div>
+      <van-actionsheet v-model="showLinkPayDialog"  title="联机账户支付" class="linkPayDialog">
+        <div>
+
+        </div>
+      </van-actionsheet>
     </div>
   </div>
 </template>
@@ -52,7 +59,8 @@
         orderInfo: {},
         icon_wechatpay: require('@/assets/icons/ico_wechatpay.png'),
         icon_linkpay: require('@/assets/icons/ico_linkpay.png'),
-        radio: -1
+        radio: -1,
+        showLinkPayDialog: false
       }
     },
     computed: {
@@ -77,17 +85,22 @@
       },
       onPayBtnClick() {
         this.$log("onPayBtnClick Enter")
-        this.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
-          url: '/payment',
-          data: this.orderInfo,
-        }).then((response) => {
-          this.$log(response)
-          this.onPayResult()
-        }).catch(function (error) {
+        if(this.radio == '1') {
+           this.$log("link pay clicked")
+           this.showLinkPayDialog = true;
+        } else if(this.radio == '2') {
+          this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
+            url: '/payment',
+            data: this.orderInfo,
+          }).then((response) => {
+            this.$log(response)
+            this.onPayResult()
+          }).catch(function (error) {
 
-        })
+          })
+        }
       }
     }
   }
@@ -104,6 +117,17 @@
     background-color: #f8f8f8;
 
     .payBody {
+      .linkPayDialog{
+
+      }
+
+      .van-actionsheet {
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        min-height: 500px;
+        background-color: #f8f8f8;
+      }
+
       .box {
         padding-top: 1em;
         position: relative;

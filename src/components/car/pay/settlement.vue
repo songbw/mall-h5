@@ -204,10 +204,6 @@
                           <img :src="k.couponInfo.imageUrl.length?k.couponInfo.imageUrl: couponImg">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                          <!--                          <div class="coupon-suppler">
-                                                      <span>{{(k.couponInfo.supplierMerchantName!=undefined &&  k.couponInfo.supplierMerchantName.length) > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                                                      <i>{{k.name}}</i>
-                                                    </div>-->
                           <div class="coupon-price">
                             <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
                             {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
