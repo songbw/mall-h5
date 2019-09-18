@@ -131,6 +131,9 @@
               that.finished = true;
             })
           }
+        } else {
+          this.loading = false;
+          this.finished = true;
         }
       },
     }
