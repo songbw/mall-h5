@@ -37,8 +37,32 @@
           确认支付￥{{amount}}
         </van-button>
       </div>
-      <van-actionsheet v-model="showLinkPayDialog"  title="联机账户支付" class="linkPayDialog">
-        <div>
+      <van-actionsheet v-model="showLinkPayDialog"  title="联机账户支付">
+        <div  class="linkPayDialog">
+            <van-field
+              v-model="linkPayAccount"
+              required
+              clearable
+              label="卡号"
+              maxlength="30"
+              label-width="40px"
+              placeholder="请输入卡号"
+            />
+
+            <van-field
+              v-model="linkPayPwd"
+              type="password"
+              maxlength="30"
+              clearable
+              label="密码"
+              label-width="40px"
+              placeholder="请输入密码"
+              right-icon="question-o"
+              required
+            />
+          <div style=" width: 100%;position: fixed;bottom: 10px;">
+            <van-button type="danger" size="large" round @click="confirmedInvoiceSelector">去支付</van-button>
+          </div>
 
         </div>
       </van-actionsheet>
@@ -60,7 +84,9 @@
         icon_wechatpay: require('@/assets/icons/ico_wechatpay.png'),
         icon_linkpay: require('@/assets/icons/ico_linkpay.png'),
         radio: -1,
-        showLinkPayDialog: false
+        showLinkPayDialog: false,
+        linkPayAccount:"",
+        linkPayPwd:""
       }
     },
     computed: {
@@ -118,14 +144,14 @@
 
     .payBody {
       .linkPayDialog{
-
+        width: 100%;
+        align-items: center;
       }
 
       .van-actionsheet {
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
-        min-height: 500px;
-        background-color: #f8f8f8;
+        min-height: 400px;
       }
 
       .box {
