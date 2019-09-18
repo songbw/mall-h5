@@ -12,7 +12,7 @@
           </div>
           <van-cell title="支付单号:">
             <div slot="default">
-              <span>{{this.orderInfo.orderNo}}</span>
+              <span style="font-size: x-small">{{this.orderInfo.orderNo}}</span>
             </div>
           </van-cell>
           <van-cell title="订单详情:">
@@ -22,42 +22,20 @@
           </van-cell>
         </div>
         <div class="pathBox">
-          <van-cell title="联机账户">
-            <div slot="default">
-              <span>联机账户</span>
-            </div>
-          </van-cell>
-          <van-cell title="微信支付">
-            <div slot="default">
-              <span>订单支付</span>
-            </div>
-          </van-cell>
+          <van-radio-group v-model="radio">
+              <van-cell title="联机账户"  :icon="icon_linkpay" clickable @click="radio = '1'">
+                <van-radio slot="right-icon" name="1" />
+              </van-cell>
+              <van-cell title="微信支付"  :icon="icon_wechatpay" clickable @click="radio = '2'">
+                <van-radio slot="right-icon" name="2" />
+              </van-cell>
+          </van-radio-group>
         </div>
       </div>
       <div class="footer_layout">
-        <van-button type="primary" size="large" @click="onPayBtnClick">支付</van-button>
+        <van-button type="danger" round size="large" @click="onPayBtnClick">支付</van-button>
       </div>
     </div>
-    <!--    <div class="pay-order">
-          <van-cell title="支付单号:">
-            <div slot="default">
-              <span>{{this.orderInfo.orderNo}}</span>
-            </div>
-          </van-cell>
-          <van-cell title="订单详情:">
-            <div slot="default">
-              <span>订单支付</span>
-            </div>
-          </van-cell>
-        </div>
-        <div class="pay-amount">
-          <span>
-            ￥{{amount}}
-          </span>
-        </div>
-        <div class="footer_layout">
-          <van-button type="primary" size="large" @click="onPayBtnClick">支付</van-button>
-        </div>-->
   </div>
 </template>
 
@@ -71,7 +49,10 @@
     data() {
       return {
         showHeader: true,
-        orderInfo: {}
+        orderInfo: {},
+        icon_wechatpay: require('@/assets/icons/ico_wechatpay.png'),
+        icon_linkpay: require('@/assets/icons/ico_linkpay.png'),
+        radio: -1
       }
     },
     computed: {
@@ -190,7 +171,9 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
-          align-items: Center;
+          .van-cell{
+            margin-top: -1px;
+          }
         }
       }
 
@@ -220,8 +203,11 @@
         display: flex;
         align-items: center;
         position: fixed;
-        bottom: 0;
+        bottom: 10px;
         left: 0;
+        .van-button{
+          margin: 10px;
+        }
       }
     }
 
