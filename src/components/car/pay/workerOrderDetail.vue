@@ -3,7 +3,7 @@
     <v-header class="header" v-if="showHeader">
       <h1 slot="title">工单详情</h1>
     </v-header>
-    <div class="workerOrderDetail-body" :style="{'padding-top':showHeader? '3em':'0px'}">
+    <div class="workerOrderDetail-body">
       <div class="noneInfo" v-if="loading">
         <v-loading></v-loading>
       </div>
@@ -148,16 +148,8 @@
   @import "../../../assets/index/style.css";
 
   .workerOrderDetail {
-    .header {
-      width: 100%;
-      position: fixed;
-      z-index: 5;
-      top: 0;
-    }
 
     .workerOrderDetail-body {
-      padding-top: 3em;
-
       .noneInfo {
         display: flex;
         flex-direction: column;
