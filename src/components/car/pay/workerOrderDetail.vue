@@ -1,20 +1,26 @@
 <template lang="html">
   <section class="workerOrderDetail">
     <v-header class="header" v-if="showHeader">
-      <h1 slot="title">工单信息</h1>
+      <h1 slot="title">工单详情</h1>
     </v-header>
     <div class="workerOrderDetail-body" :style="{'padding-top':showHeader? '3em':'0px'}">
       <div class="noneInfo" v-if="loading">
         <v-loading></v-loading>
       </div>
-      <div class="logisticsInfo" v-else>
-        <div class="workerOrderDetailBox">
-          <van-steps direction="vertical" active-color="#000000">
+      <div class="workOrderInfo" v-else>
+        <div class="workerOrderDetailBox" v-if="list.length >0">
+          <van-steps direction="vertical" active-color="#000000" >
             <van-step v-for="(item,k)  in list" :key='k'>
               <h3>{{getComment(item)}}</h3>
               <p>{{formatTime(item.createTime)}}</p>
             </van-step>
           </van-steps>
+        </div>
+        <div v-else>
+          <div class="noContext">
+            <img :src="icon_noContext">
+            <span class="noContext_line1">亲，没有任何内容!</span>
+          </div>
         </div>
       </div>
     </div>
@@ -35,7 +41,8 @@
         showHeader: true,
         id: -1,
         loading: false,
-        list: []
+        list: [],
+        icon_noContext: require('@/assets/icons/ico_empty_box.png'),
       }
     },
     computed: {},
@@ -166,8 +173,34 @@
         }
       }
 
-      .logisticsInfo {
+      .workOrderInfo {
         .workerOrderDetailBox {
+        }
+
+        .noContext {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
+          height: 500px;
+
+          img {
+            height: 130px;
+            width: 130px;
+          }
+
+          span {
+            margin: 2vw;
+          }
+
+          .noContext_line1 {
+            font-weight: lighter;
+            color: black;
+            .fz(font-size, 35);
+          }
+
+
         }
       }
 
