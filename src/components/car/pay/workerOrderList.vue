@@ -8,7 +8,7 @@
                 :finished="finished"
                 @load="onLoad">
         <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
-          <div class="goods-detail" @click="onListClick(k)">
+          <div class="goods-detail">
             <van-card
               :price="k.unitPrice"
               :desc=formatWOrderStatus(k)
@@ -17,7 +17,11 @@
               :num="k.returnedNum"
               centered>
             </van-card>
+            <div>
+              <span style="float: right;padding: 10px"  @click="onListClick(k)">查看详情 ></span>
+            </div>
           </div>
+
         </li>
       </van-list>
     </div>
@@ -54,6 +58,16 @@
     },
 
     methods: {
+      onListClick(k) {
+        this.$log("onListClick Enter")
+        this.$log(k)
+        this.$router.push({
+          name: "工单详情页",
+          params: {
+             id:k.id
+          }
+        })
+      },
       formatWOrderStatus(k) {
         let statusType = k.status
         let status = ""
@@ -128,12 +142,18 @@
   @import "../../../assets/index/style.css";
 
   .workorder {
-    width: 100%;
-    height: 100%;
-    top: 0px;
-    background-color: #f8f8f8;
-
     .workorderList {
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      background-color: #f8f8f8;
+      .goods-detail{
+        display: flex;
+        flex-direction: column;
+        .van-card{
+          background-color: white;
+        }
+      }
 
     }
   }
