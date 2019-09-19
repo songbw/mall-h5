@@ -26,6 +26,7 @@ const CouponListActivity = resolve => require(['@/components/user/couponListActi
 const CouponWouldCollect = resolve => require(['@/components/user/couponWouldCollect.vue'], resolve)
 const CouponGift = resolve => require(['@/components/user/couponGift.vue'], resolve)
 const WorkerOrderList = resolve => require(['@/components/car/pay/workerOrderList.vue'], resolve)
+const WorkerOrderDetail = resolve => require(['@/components/car/pay/workerOrderDetail.vue'], resolve)
 
 export default new VueRouter({
   mode: 'history',
@@ -267,6 +268,14 @@ export default new VueRouter({
       component: WorkerOrderList,
       meta: {
         title: '售后工单',
+      }
+    },
+    {
+      path: '/pay/workerOrderDetail',
+      name: '工单详情页',
+      component: WorkerOrderDetail,
+      meta: {
+        title: '工单详情',
       }
     },
 

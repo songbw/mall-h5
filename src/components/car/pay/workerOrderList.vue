@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="workorder">
+  <section class="workorder">
     <v-header v-if="showHeader">
       <h1 slot="title">售后工单</h1>
     </v-header>
@@ -7,26 +7,38 @@
       <van-list v-model="loading"
                 :finished="finished"
                 @load="onLoad">
-        <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
-          <div class="goods-detail" @click="onListClick(k)">
-            <van-card
-              :price="k.unitPrice"
-              :desc=formatWOrderStatus(k)
-              :title= "k.name"
-              :thumb="k.image"
-              :num="k.returnedNum"
-              centered>
-            </van-card>
+        <div v-if="list.length > 0 && finished">
+          <div v-for="k in list" :key="k.id" style="background-color: white;margin: 10px" >
+            <div class="goods-detail">
+              <van-card
+                :price="k.unitPrice"
+                :desc=formatWOrderStatus(k)
+                :title= "k.name"
+                :thumb="k.image"
+                :num="k.returnedNum"
+                centered>
+              </van-card>
+              <div>
+                <span style="float: right;padding: 10px"  @click="onListClick(k)">查看详情 ></span>
+              </div>
+            </div>
           </div>
-        </li>
+        </div>
+       <div v-else-if="finished">
+          <div class="noContext">
+            <img :src="icon_noContext">
+            <span class="noContext_line1">亲，没有任何内容!</span>
+          </div>
+        </div>
       </van-list>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
   import Header from '@/common/_header.vue'
   import Util from '@/util/common'
+
   export default {
     components: {
       'v-header': Header,
@@ -39,10 +51,17 @@
         list: [],
         loading: false,
         finished: false,
+        icon_noContext: require('@/assets/icons/ico_empty_box.png'),
+        launchedLoading: false,
       }
     },
 
     mounted() {
+      setTimeout(() => {
+        if (!this.launchedLoading) {
+          this.onLoad(this.active)
+        }
+      }, 1000);
     },
 
 
@@ -54,6 +73,17 @@
     },
 
     methods: {
+      onListClick(k) {
+        this.$log("onListClick Enter")
+        this.$log(k)
+        this.$router.push({
+          name: "工单详情页",
+          params: {
+             id:k.id,
+            expressNo: k.expressNo
+          }
+        })
+      },
       formatWOrderStatus(k) {
         let statusType = k.status
         let status = ""
@@ -83,6 +113,8 @@
       },
       onLoad() {
         this.$log("onLoad Enter")
+        let that = this
+        this.launchedLoading = true;
         let userInfo = this.$store.state.appconf.userInfo
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
@@ -114,9 +146,13 @@
               }
             }).catch(function (error) {
               console.log(error)
+              that.loading = false;
               that.finished = true;
             })
           }
+        } else {
+          this.loading = false;
+          this.finished = true;
         }
       },
     }
@@ -134,7 +170,38 @@
     background-color: #f8f8f8;
 
     .workorderList {
+      background-color: #f8f8f8;
+      .goods-detail{
+        display: flex;
+        flex-direction: column;
+        .van-card{
+          background-color: white;
+        }
+      }
 
+      .noContext {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
+        height: 500px;
+
+        img {
+          height: 130px;
+          width: 130px;
+        }
+
+        span {
+          margin: 2vw;
+        }
+
+        .noContext_line1 {
+          font-weight: lighter;
+          color: black;
+          .fz(font-size, 35);
+        }
+      }
     }
   }
 </style>

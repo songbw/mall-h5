@@ -414,7 +414,7 @@
           if(goods.merchantId === 2) {
             inventorySkus.push({"skuId": goods.mpu, "remainNum": 1})
           } else {
-            inventorySkusOfZy.push({"skuId": goods.mpu, "remainNum": 1})
+            inventorySkusOfZy.push({"mpu": goods.mpu, "remainNum": 1})
           }
 
           if(inventorySkus.length > 0) {

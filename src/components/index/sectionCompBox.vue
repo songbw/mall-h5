@@ -21,7 +21,7 @@
                 <span>{{left.msTime.seconds}}</span>
               </div>
             </div>
-            <div v-else style="margin-top: 2px">
+            <div v-else style="margin-top: 2px;float: right;margin-right: 2px">
               <v-countdown v-if="left.PromotionStatus  < 5 && left.PromotionStartTime != 0 && left.PromotionEndTime !=0"
                            class="countdownBox"
                            @start_callback="countDownS_cb"
@@ -29,6 +29,8 @@
                            :startTime="left.PromotionStartTime"
                            :endTime="left.PromotionEndTime"
                            :secondsTxt="''"
+                           tipText=""
+                           tipTextEnd=""
                            backgroundColor="#FF4444"
                            textColor="#FFFFFF"
                            style="font-size:10%;;font-weight: lighter">
@@ -96,7 +98,7 @@
                 <span>{{right.msTime.seconds}}</span>
               </div>
             </div>
-            <div v-else style="margin-top: 2px">
+<!--            <div v-else style="margin-top: 2px;float: right;margin-right: 2px">
               <v-countdown v-if="right.PromotionStatus < 5 && right.PromotionStartTime != 0 && right.PromotionEndTime !=0"
                            class="countdownBox"
                            @start_callback="countDownS_cb"
@@ -104,6 +106,8 @@
                            :startTime="right.PromotionStartTime"
                            :endTime="right.PromotionEndTime"
                            :secondsTxt="''"
+                           tipText=""
+                           tipTextEnd=""
                            backgroundColor="#FF4444"
                            textColor="#FFFFFF"
                            style="font-size:10%;;font-weight: lighter">
@@ -111,7 +115,7 @@
               <div class="promotionStatusText" v-if="right.PromotionStatus === 5">
                 <span>已结束</span>
               </div>
-            </div>
+            </div>-->
           </div>
         </div>
         <div class="sectionSlide-banner" v-if="datas.settings.right.hasImage">
@@ -778,14 +782,15 @@
       width: 100%;
 
       .titleText {
-        width: 30%;
-        .fz(font-size, 20);
+        width: 45%;
+        .fz(font-size, 30);
         font-weight: bold;
+        color: #333333
       }
 
       .titleDetail {
-        width: 70%;
-        padding: 0px 2px;
+        width: 55%;
+        padding: 3px 2px;
 
         .dailyDetail {
           display: flex;

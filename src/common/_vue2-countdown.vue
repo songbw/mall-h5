@@ -1,8 +1,8 @@
 <template>
   <div>
     <p v-if="msTime.show">
-      <span v-if="tipShow">{{tipText}}:</span>
-      <span v-if="!tipShow">{{tipTextEnd}}:</span>
+      <span v-if="tipShow">{{tipText}}</span>
+      <span v-if="!tipShow">{{tipTextEnd}}</span>
       <span v-if="msTime.day>0"><span :style="{'background-color':backgroundColor,'color':textColor,'padding': '1px'}">{{msTime.day}}</span><i class="timeSplitText">{{dayTxt}}</i></span>
       <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '1px'}">{{msTime.hour}}</span><i class="timeSplitText">{{hourTxt}}</i>
       <span :style="{'background-color':backgroundColor,'color':textColor,'padding': '1px'}">{{msTime.minutes}}</span><i class="timeSplitText">{{minutesTxt}}</i>
