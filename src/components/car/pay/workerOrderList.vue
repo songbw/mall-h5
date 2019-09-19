@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="workorder">
-    <v-header v-if="showHeader">
+  <section class="workorder">
+    <v-header class="header" v-if="showHeader">
       <h1 slot="title">售后工单</h1>
     </v-header>
     <div class="workorderList">
@@ -30,12 +30,13 @@
         </div>
       </van-list>
     </div>
-  </div>
+  </section>
 </template>
 
 <script>
   import Header from '@/common/_header.vue'
   import Util from '@/util/common'
+
   export default {
     components: {
       'v-header': Header,
@@ -49,10 +50,16 @@
         loading: false,
         finished: false,
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
+        launchedLoading: false,
       }
     },
 
     mounted() {
+      setTimeout(() => {
+        if (!this.launchedLoading) {
+          this.onLoad(this.active)
+        }
+      }, 1000);
     },
 
 
@@ -104,6 +111,7 @@
       },
       onLoad() {
         this.$log("onLoad Enter")
+        this.launchedLoading = true;
         let userInfo = this.$store.state.appconf.userInfo
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
@@ -152,10 +160,17 @@
   @import "../../../assets/index/style.css";
 
   .workorder {
-    .workorderList {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
+    text-align: left;
+
+    .header {
       width: 100%;
-      height: 100%;
-      top: 0px;
+    }
+    .workorderList {
+      margin-bottom: 3em;
       background-color: #f8f8f8;
       .goods-detail{
         display: flex;

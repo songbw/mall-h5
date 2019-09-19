@@ -8,18 +8,18 @@
         <v-loading></v-loading>
       </div>
       <div class="workOrderInfo" v-else>
-        <div class="expressNoBox">
-          <van-field
-            v-model="expressNo"
-            clearable
-            label="单号"
-            size="large"
-            label-width="50px"
-            placeholder="请输入退货物流单号"
-          />
-          <van-button size="large" round type="danger" @click="onExpressNoSubmit">提交</van-button>
-        </div>
         <div class="workerOrderDetailBox" v-if="list.length >0">
+          <div class="expressNoBox" v-if="status == 3 || status == 5">
+            <van-field
+              v-model="expressNo"
+              clearable
+              label="单号"
+              size="large"
+              label-width="50px"
+              placeholder="请输入退货物流单号"
+            />
+            <van-button size="large" round type="danger" @click="onExpressNoSubmit">提交</van-button>
+          </div>
           <span style="margin: 10px;font-weight: bold">工单详情</span>
           <van-steps direction="vertical" active-color="#000000" >
             <van-step v-for="(item,k)  in list" :key='k'>
@@ -56,6 +56,7 @@
         loading: false,
         list: [],
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
+        status: -1,
       }
     },
     computed: {},
@@ -87,6 +88,9 @@
         }).then((response) => {
           that.list = response.data.data.result;
           that.loading = false;
+          if(that.list.length > 0) {
+            that.status = that.list[0].status
+          }
         }).catch(function (error) {
           that.$log(error)
           that.loading = false;
@@ -147,6 +151,13 @@
 
           try {
             let comments = JSON.parse(item.comments)
+            let jsonlogisticsInfo = comments.logisticsInfo
+            if(jsonlogisticsInfo != undefined) {
+              if (jsonlogisticsInfo.com != undefined && jsonlogisticsInfo.com.length > 0)
+                ret += " 物流公司:" + jsonlogisticsInfo.com
+              if (jsonlogisticsInfo.order != undefined && jsonlogisticsInfo.order.length > 0)
+                ret += " 退货单号:" + jsonlogisticsInfo.order
+            }
             let jsonRefund = comments.refund
             if (jsonRefund != undefined) {
               ret += " 退款金额:" + jsonRefund
@@ -208,9 +219,9 @@
       .workOrderInfo {
         .expressNoBox{
            font-weight: bold;
+           margin: 10px 0px;
         }
         .workerOrderDetailBox {
-          margin-top: 10px;
         }
 
         .noContext {
@@ -235,8 +246,6 @@
             color: black;
             .fz(font-size, 35);
           }
-
-
         }
       }
 
