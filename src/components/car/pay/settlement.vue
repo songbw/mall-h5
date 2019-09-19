@@ -113,8 +113,30 @@
               <span>提取{{mCoinBalanceUsed}}元</span>
             </div>
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
-                      @click="showCouponSelector()"/>
+                      @click="showBalanceAmountSelector()"/>
           </van-cell>
+          <van-actionsheet v-model="showBalance" title="提取余额" class="invoice_layout">
+            <div style="font-weight: lighter">
+              <div>
+                <van-field
+                  v-model="mCoinBalanceUsed"
+                  clearable
+                  type="number"
+                  size="large"
+                  label="提取金额(元):"
+                  label-width="120px"
+                  maxlength="11"
+                  @input="onCoinBalanceInputChanged"
+                />
+                <div style="text-align: left;margin: 10px 25px; color: #ff4444">
+                  <span>剩余可提取金额: ￥{{this.mCoinBalance - this.mCoinBalanceUsed}} </span>
+                </div>
+                <div class="footer_layout">
+                  <van-button type="danger" size="large" round @click="confirmedBalanceSelector">确定</van-button>
+                </div>
+              </div>
+            </div>
+          </van-actionsheet>
           <van-actionsheet v-model="showInvoice" title="发票" class="invoice_layout">
             <div>
               <div class="invoiceTip">
@@ -251,7 +273,7 @@
           </van-cell>
           <van-cell title="我的余额:">
             <div slot="default">
-              <span style="color: #ff4444">-￥{{mCoinBalanceUsed.toFixed(2)}}</span>
+              <span style="color: #ff4444">-￥{{mCoinBalanceUsed}}</span>
             </div>
           </van-cell>
         </div>
@@ -295,6 +317,7 @@
         locationCity: "南京",
         showCoupon: false,
         showInvoice: false,
+        showBalance: false,
         radio: '',
         invoiceRadio: '',
         lastRadio: '',
@@ -549,7 +572,7 @@
 
       allpay() {
         let all = 0;
-        all = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100
+        all = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100 - this.mCoinBalanceUsed * 100
         if (all < 0)
           all = 0
         return all;
@@ -654,8 +677,16 @@
     },
 
     methods: {
+      onCoinBalanceInputChanged(value) {
+        let newValue = Math.floor(value * 100) / 100;
+        if (this.mCoinBalance - newValue > 0) {
+          this.mCoinBalanceUsed = newValue
+        } else {
+          this.mCoinBalanceUsed = this.mCoinBalance
+        }
+      },
       updateBalanceAmount() {
-        let that =this
+        let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
@@ -664,7 +695,7 @@
             baseURL: this.$api.SSO_BASE_URL,
             url: '/balance',
             params: {
-              openId:user.openId
+              openId: user.openId
             }
           }).then((response) => {
             this.mCoinBalance = response.data.data.amount
@@ -980,6 +1011,10 @@
         }
       },
 
+      showBalanceAmountSelector() {
+        this.showBalance = true
+      },
+
       showCouponSelector() {
         this.showCoupon = true
       },
@@ -991,6 +1026,10 @@
         this.$log(this.radio);
 
         this.showCoupon = false
+      },
+
+      confirmedBalanceSelector() {
+        this.showBalance = false
       },
 
       confirmedInvoiceSelector() {
@@ -1655,7 +1694,7 @@
             }
           })
         } else {//other merchant
-          if(skusOfZy.length > 0) {
+          if (skusOfZy.length > 0) {
             this.$log("settlement other merchant #################################")
             let options = {
               "inventories": inventorySkusOfZy
@@ -1700,7 +1739,14 @@
 
       getLocationCode() {
         //let code = {"provinceId": "100", "cityId": "510", "countyId": "06"}//江苏无锡市滨湖区
-        let code =  {"provinceName":"上海","provinceId": "20","cityName": "上海市","cityId": "021", "countyName":"徐汇区","countyId": "03"}
+        let code = {
+          "provinceName": "上海",
+          "provinceId": "20",
+          "cityName": "上海市",
+          "cityId": "021",
+          "countyName": "徐汇区",
+          "countyId": "03"
+        }
         if (/*送货地址*/JSON.stringify(this.usedAddress) != "{}") {
           code = this.usedAddress;
           this.locationCity = this.usedAddress.cityName;
