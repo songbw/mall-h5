@@ -10,12 +10,21 @@
       <div class="workOrderInfo" v-else>
         <div class="workerOrderDetailBox" v-if="list.length >0">
           <div class="expressNoBox" v-if="status == 3 || status == 5">
+            <span style="margin: 10px;font-weight: bold">填写退货物流信息</span>
+            <van-field
+              v-model="expressCom"
+              clearable
+              label="物流公司"
+              size="large"
+              label-width="80px"
+              placeholder="请输入物流公司"
+            />
             <van-field
               v-model="expressNo"
               clearable
-              label="单号"
+              label="退货单号"
               size="large"
-              label-width="50px"
+              label-width="80px"
               placeholder="请输入退货物流单号"
             />
             <van-button size="large" round type="danger" @click="onExpressNoSubmit">提交</van-button>
@@ -53,6 +62,7 @@
         showHeader: true,
         id: -1,
         expressNo:"",
+        expressCom:"",
         loading: false,
         list: [],
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
@@ -97,7 +107,7 @@
         })
       },
       onExpressNoSubmit() {
-        let logisticsInfo = {com: '', order: this.expressNo}
+        let logisticsInfo = {com: this.expressCom, order: this.expressNo}
         const comments = { logisticsInfo:logisticsInfo}
         let str = JSON.stringify(comments)
         this.$log(str)
@@ -155,8 +165,10 @@
             if(jsonlogisticsInfo != undefined) {
               if (jsonlogisticsInfo.com != undefined && jsonlogisticsInfo.com.length > 0)
                 ret += " 物流公司:" + jsonlogisticsInfo.com
+                this.expressCom = jsonlogisticsInfo.com
               if (jsonlogisticsInfo.order != undefined && jsonlogisticsInfo.order.length > 0)
                 ret += " 退货单号:" + jsonlogisticsInfo.order
+                this.expressNo = jsonlogisticsInfo.order
             }
             let jsonRefund = comments.refund
             if (jsonRefund != undefined) {

@@ -1,28 +1,30 @@
 <template lang="html">
   <section class="workorder">
-    <v-header class="header" v-if="showHeader">
+    <v-header v-if="showHeader">
       <h1 slot="title">售后工单</h1>
     </v-header>
     <div class="workorderList">
       <van-list v-model="loading"
                 :finished="finished"
                 @load="onLoad">
-        <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px" v-if="list.length > 0 && finished">
-          <div class="goods-detail">
-            <van-card
-              :price="k.unitPrice"
-              :desc=formatWOrderStatus(k)
-              :title= "k.name"
-              :thumb="k.image"
-              :num="k.returnedNum"
-              centered>
-            </van-card>
-            <div>
-              <span style="float: right;padding: 10px"  @click="onListClick(k)">查看详情 ></span>
+        <div v-if="list.length > 0 && finished">
+          <div v-for="k in list" :key="k.id" style="background-color: white;margin: 10px" >
+            <div class="goods-detail">
+              <van-card
+                :price="k.unitPrice"
+                :desc=formatWOrderStatus(k)
+                :title= "k.name"
+                :thumb="k.image"
+                :num="k.returnedNum"
+                centered>
+              </van-card>
+              <div>
+                <span style="float: right;padding: 10px"  @click="onListClick(k)">查看详情 ></span>
+              </div>
             </div>
           </div>
-        </li>
-        <div v-else>
+        </div>
+       <div v-else-if="finished">
           <div class="noContext">
             <img :src="icon_noContext">
             <span class="noContext_line1">亲，没有任何内容!</span>
@@ -111,6 +113,7 @@
       },
       onLoad() {
         this.$log("onLoad Enter")
+        let that = this
         this.launchedLoading = true;
         let userInfo = this.$store.state.appconf.userInfo
         if (!Util.isUserEmpty(userInfo)) {
@@ -143,6 +146,7 @@
               }
             }).catch(function (error) {
               console.log(error)
+              that.loading = false;
               that.finished = true;
             })
           }
@@ -166,7 +170,6 @@
     background-color: #f8f8f8;
 
     .workorderList {
-      margin-bottom: 3em;
       background-color: #f8f8f8;
       .goods-detail{
         display: flex;
@@ -198,10 +201,7 @@
           color: black;
           .fz(font-size, 35);
         }
-
-
       }
-
     }
   }
 </style>
