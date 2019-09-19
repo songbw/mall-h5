@@ -193,7 +193,7 @@
           "businessType": "11"
         }
         this.$router.replace({
-          name: "收银台页",
+          name: "余额账户",
           params: {
             orderInfo: pAnOrderInfo
           }

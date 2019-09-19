@@ -25,6 +25,7 @@ const CouponChange = resolve => require(['@/components/user/couponChange.vue'], 
 const CouponListActivity = resolve => require(['@/components/user/couponListActivity.vue'], resolve)
 const CouponWouldCollect = resolve => require(['@/components/user/couponWouldCollect.vue'], resolve)
 const CouponGift = resolve => require(['@/components/user/couponGift.vue'], resolve)
+const CoinBalance = resolve => require(['@/components/user/coinBalance.vue'], resolve)
 const WorkerOrderList = resolve => require(['@/components/car/pay/workerOrderList.vue'], resolve)
 const WorkerOrderDetail = resolve => require(['@/components/car/pay/workerOrderDetail.vue'], resolve)
 
@@ -260,6 +261,14 @@ export default new VueRouter({
       component: CouponGift,
       meta: {
         title: '新人礼包',
+      }
+    },
+    {
+      path: '/user/coinBalance',
+      name: '余额账户',
+      component: CoinBalance,
+      meta: {
+        title: '余额账户',
       }
     },
     {
