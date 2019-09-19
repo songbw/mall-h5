@@ -164,11 +164,7 @@
     height: 100%;
     top: 0px;
     background-color: #f8f8f8;
-    text-align: left;
 
-    .header {
-      width: 100%;
-    }
     .workorderList {
       margin-bottom: 3em;
       background-color: #f8f8f8;
