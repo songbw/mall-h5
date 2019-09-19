@@ -39,27 +39,29 @@
       if (this.$api.IS_GAT_APP) {
         this.showHeader = false;
       }
-      let that =this
-      let userInfo = this.$store.state.appconf.userInfo;
-
-      if (!Util.isUserEmpty(userInfo)) {
-        let user = JSON.parse(userInfo)
-        that.$api.xapi({
-          method: 'get',
-          baseURL: this.$api.SSO_BASE_URL,
-          url: '/balance',
-          params: {
-            openId:user.openId
-          }
-        }).then((response) => {
-          this.amount = response.data.data.amount
-        }).catch(function (error) {
-          that.$log(error)
-        })
-      }
+      this.updateBalanceAmount()
     },
 
     methods: {
+      updateBalanceAmount() {
+        let that =this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: '/balance',
+            params: {
+              openId:user.openId
+            }
+          }).then((response) => {
+            this.amount = response.data.data.amount
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
+      }
     }
   }
 </script>

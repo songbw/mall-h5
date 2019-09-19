@@ -185,19 +185,7 @@
 
       onMyCoinAccountClick() {
         this.$log("onMyCoinAccountClick Enter")
-        let pAnOrderInfo = {
-          "accessToken": "xxxxxxxxxxxxxxxxx",
-          "orderNo": '0000000000000000000000',// orderNo,
-          "orderAmount": 1 * 100,//分
-          "openId": "2312312323231234234",
-          "businessType": "11"
-        }
-        this.$router.replace({
-          name: "余额账户",
-          params: {
-            orderInfo: pAnOrderInfo
-          }
-        })
+        this.$router.push({name: "余额账户"})
       },
 
       onOrderListBarClick(type) {

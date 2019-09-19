@@ -107,10 +107,10 @@
           </van-cell>
           <van-cell>
             <div slot="title">
-              <span>我的余额:剩余{{mCoinAmount}}元</span>
+              <span>我的余额:(剩余{{mCoinBalance}}元)</span>
             </div>
             <div slot="default">
-              <span>提取{{mCoinAmountUsed}}元支付</span>
+              <span>提取{{mCoinBalanceUsed}}元</span>
             </div>
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                       @click="showCouponSelector()"/>
@@ -251,7 +251,7 @@
           </van-cell>
           <van-cell title="我的余额:">
             <div slot="default">
-              <span style="color: #ff4444">-￥{{mCoinAmountUsed.toFixed(2)}}</span>
+              <span style="color: #ff4444">-￥{{mCoinBalanceUsed.toFixed(2)}}</span>
             </div>
           </van-cell>
         </div>
@@ -282,8 +282,6 @@
         icon_conatct_address: require('@/assets/icons/ico_contact_address.png'),
         couponImg: require('@/assets/icons/ico_coupon.png'),
         addressCount: 0,
-        mCoinAmount: 0, //余额
-        mCoinAmountUsed: 0,
         freight: 0,
         payCarList: [],
         receiverName: '',
@@ -320,7 +318,10 @@
         invoiceEnterpriseNumber: '',
         invoiceReceiverMobile: '',
         invoiceReceiverEmail: '',
-        merchantList: []
+        merchantList: [],
+        mCoinBalance: 0, //余额
+        mCoinBalanceUsed: 0,
+
       }
     },
 
@@ -628,11 +629,13 @@
               this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
               this.$store.commit('SET_USED_ADDRESS_ID', -1);
               this.updateUsedAddress();
+              this.updateBalanceAmount();
               this.getCarList();
             } else {
               // this.$log("ADDRESS LIST is:" + JSON.stringify(result.list))
               this.$store.commit('SET_ADDRESS_LIST', result.list);
               this.updateUsedAddress();
+              this.updateBalanceAmount();
               this.getCarList();
             }
           }).catch(function (error) {
@@ -651,6 +654,25 @@
     },
 
     methods: {
+      updateBalanceAmount() {
+        let that =this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: '/balance',
+            params: {
+              openId:user.openId
+            }
+          }).then((response) => {
+            this.mCoinBalance = response.data.data.amount
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
+      },
       getDateTime(time) {
         return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },
