@@ -573,8 +573,17 @@
       allpay() {
         let all = 0;
         all = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100 - this.mCoinBalanceUsed * 100
-        if (all < 0)
+        if (all < 0) {
           all = 0
+          let onlyUsedCoupon = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon)* 100
+          if(onlyUsedCoupon < 0) {
+            this.mCoinBalanceUsed = 0;
+          }
+          else {
+            this.mCoinBalanceUsed = onlyUsedCoupon / 100
+          }
+        }
+
         return all;
       },
     },
@@ -803,6 +812,73 @@
 
       },
 
+      getUsedCoinBalanceDetail4Order() {
+        this.$log("getUsedCoinBalanceDetail4Order Enter")
+
+        let merchants = []
+        let totalCoinBalanceDiscount = 0
+        this.arregationList.forEach(item => {
+          if (item.goods.length > 0) {
+            let skus = []
+            let coinBalanceDiscountOfMerchant = 0;
+            item.goods.forEach(sku => {
+              if (sku.valid) {
+                this.$log(sku)
+                let unitCoinBalanceDiscount = Math.floor((this.mCoinBalanceUsed * sku.product.goodsInfo.dprice / this.productPay) * 100) / 100;
+                let skuCoinBalanceDiscount = unitCoinBalanceDiscount * sku.product.baseInfo.count;
+                skus.push({
+                  "skuId": sku.product.baseInfo.skuId,
+                  "mpu": sku.product.baseInfo.mpu,
+                  "num": sku.product.baseInfo.count,
+                  "dprice": sku.product.goodsInfo.dprice,
+                  "unitCoinBalanceDiscount": unitCoinBalanceDiscount,
+                  "skuCoinBalanceDiscount": skuCoinBalanceDiscount
+                })
+                // couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice * sku.product.baseInfo.count
+                coinBalanceDiscountOfMerchant += skuCoinBalanceDiscount
+              }
+            })
+            this.$log(skus)
+            merchants.push({
+              "merchantNo": item.merchantCode,
+              "skus": skus,
+              "coinBalanceDiscountOfMerchant": coinBalanceDiscountOfMerchant
+            })
+            totalCoinBalanceDiscount += coinBalanceDiscountOfMerchant;
+          }
+        })
+        if (totalCoinBalanceDiscount != this.mCoinBalanceUsed) {
+          // coupon 价格不平， 重新分配,由于coupon 单价计算是舍去2位后的数据，所以reducedPriceOfCoupon大于等于totalCouponDiscount
+          // 把多余的优惠差价给最大的优惠价格拥有的商户
+          if (merchants.length > 0) {
+            let maxMerchants = 0;
+            if (merchants.length > 1) {
+              for (let i = 1; i < merchants.length; i++) {
+                if (merchants[i].coinBalanceDiscountOfMerchant > merchants[maxMerchants].coinBalanceDiscountOfMerchant) {
+                  maxMerchants = i;
+                }
+              }
+            }
+            merchants[maxMerchants].coinBalanceDiscountOfMerchant += (this.mCoinBalanceUsed - totalCoinBalanceDiscount) //把多余的优惠差价给最大的优惠价格拥有的商户
+            //找到maxMerchants这个商户的有最大优惠券价值的SKU，把多余的券值赋给这个SKU
+            let maxMpu = 0;
+            if (merchants[maxMerchants].skus.length > 1) {
+              for (let i = 1; i < merchants[maxMerchants].skus.length; i++) {
+                if (merchants[maxMerchants].skus[i].skuCoinBalanceDiscount > merchants[maxMerchants].skus[maxMpu].skuCoinBalanceDiscount) {
+                  maxMpu = i;
+                }
+              }
+            }
+            merchants[maxMerchants].skus[maxMpu].skuCoinBalanceDiscount += (this.mCoinBalanceUsed - totalCoinBalanceDiscount) //把多余的券值赋给这个SKU
+          }
+        }
+        let coinBalanceInfo = {
+          'coinbalanceUsed': this.mCoinBalanceUsed,
+          "merchants": merchants
+        }
+        return coinBalanceInfo
+      },
+
       getUsedCouponDetail4Order(coupon) {
         this.$log("getUsedCouponDetail4Order Enter")
         this.$log(coupon)
@@ -842,7 +918,7 @@
                       "mpu": sku.product.baseInfo.mpu,
                       "num": sku.product.baseInfo.count,
                       "dprice": sku.product.goodsInfo.dprice,
-                      "salePrice": (sku.product.goodsInfo.dprice - unitCouponDiscount).toFixed(2),
+                      "unitCouponDiscount": unitCouponDiscount,
                       "skuCouponDiscount": skuCouponDiscount
                     })
                     // couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice * sku.product.baseInfo.count
@@ -1213,6 +1289,7 @@
           }
         }
         let couponInfo = this.getUsedCouponDetail4Order(this.usedCoupon)
+        let coinBalanceInfo = this.getUsedCoinBalanceDetail4Order()
 
         this.arregationList.forEach(item => {
           if (item.goods.length > 0) {
@@ -1228,13 +1305,14 @@
                 //SKU 单价为货物原价 - 活动优惠价格
                 let unitPrice = parseFloat(sku.product.goodsInfo.dprice).toFixed(2)
                 let salePrice = unitPrice;
+                //CouponDiscont
                 let skuCouponDiscount = 0;
                 if (this.usedCoupon != null) {
                   if (couponInfo != null) {
                     for (let i = 0; i < couponInfo.merchants.length; i++) {
                       for (let j = 0; j < couponInfo.merchants[i].skus.length; j++) {
                         if (couponInfo.merchants[i].skus[j].mpu === sku.product.goodsInfo.mpu) {
-                          salePrice = couponInfo.merchants[i].skus[j].salePrice;
+                          salePrice -= couponInfo.merchants[i].skus[j].unitCouponDiscount;
                           skuCouponDiscount = couponInfo.merchants[i].skus[j].skuCouponDiscount
                           break;
                         }
@@ -1242,6 +1320,19 @@
                     }
                   }
                 }
+
+                //CoinBalance
+                let skuCoinBalanceDiscount = 0;
+                for (let i = 0; i < coinBalanceInfo.merchants.length; i++) {
+                  for (let j = 0; j < coinBalanceInfo.merchants[i].skus.length; j++) {
+                    if (coinBalanceInfo.merchants[i].skus[j].mpu === sku.product.goodsInfo.mpu) {
+                      salePrice -= coinBalanceInfo.merchants[i].skus[j].unitCoinBalanceDiscount;
+                      skuCoinBalanceDiscount = coinBalanceInfo.merchants[i].skus[j].skuCoinBalanceDiscount;
+                      break;
+                    }
+                  }
+                }
+
                 let promotionDiscount = (sku.checkedPrice - sku.product.goodsInfo.dprice)
                 amount += unitPrice * sku.product.baseInfo.count
                 promotionDiscountOfMerchant += promotionDiscount
@@ -1255,7 +1346,8 @@
                   "salePrice": salePrice,
                   "promotionId": promotionId,
                   "promotionDiscount": promotionDiscount.toFixed(2),
-                  "skuCouponDiscount": skuCouponDiscount
+                  "skuCouponDiscount": skuCouponDiscount,
+                  "skuCoinBalanceDiscount": skuCoinBalanceDiscount
                 })
               }
             })
@@ -1277,6 +1369,9 @@
               couponDiscountOfMerchant = couponInfo.merchants[found].couponDiscountOfMerchant;
             }
             let saleAmount = amount - couponDiscountOfMerchant;
+
+            //add CoinBalance
+            saleAmount -= this.mCoinBalanceUsed
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.merchantCode, //商户号
