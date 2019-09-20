@@ -575,11 +575,10 @@
         all = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100 - this.mCoinBalanceUsed * 100
         if (all < 0) {
           all = 0
-          let onlyUsedCoupon = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon)* 100
-          if(onlyUsedCoupon < 0) {
+          let onlyUsedCoupon = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100
+          if (onlyUsedCoupon < 0) {
             this.mCoinBalanceUsed = 0;
-          }
-          else {
+          } else {
             this.mCoinBalanceUsed = onlyUsedCoupon / 100
           }
         }
@@ -823,7 +822,6 @@
             let coinBalanceDiscountOfMerchant = 0;
             item.goods.forEach(sku => {
               if (sku.valid) {
-                this.$log(sku)
                 let unitCoinBalanceDiscount = Math.floor((this.mCoinBalanceUsed * sku.product.goodsInfo.dprice / this.productPay) * 100) / 100;
                 let skuCoinBalanceDiscount = unitCoinBalanceDiscount * sku.product.baseInfo.count;
                 skus.push({
@@ -835,7 +833,7 @@
                   "skuCoinBalanceDiscount": skuCoinBalanceDiscount
                 })
                 // couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice * sku.product.baseInfo.count
-                coinBalanceDiscountOfMerchant += skuCoinBalanceDiscount
+                coinBalanceDiscountOfMerchant = parseFloat((coinBalanceDiscountOfMerchant + skuCoinBalanceDiscount).toFixed(2))
               }
             })
             this.$log(skus)
@@ -844,10 +842,11 @@
               "skus": skus,
               "coinBalanceDiscountOfMerchant": coinBalanceDiscountOfMerchant
             })
-            totalCoinBalanceDiscount += coinBalanceDiscountOfMerchant;
+            totalCoinBalanceDiscount = parseFloat((totalCoinBalanceDiscount + coinBalanceDiscountOfMerchant).toFixed(2));
           }
         })
         if (totalCoinBalanceDiscount != this.mCoinBalanceUsed) {
+
           // coupon 价格不平， 重新分配,由于coupon 单价计算是舍去2位后的数据，所以reducedPriceOfCoupon大于等于totalCouponDiscount
           // 把多余的优惠差价给最大的优惠价格拥有的商户
           if (merchants.length > 0) {
@@ -859,7 +858,8 @@
                 }
               }
             }
-            merchants[maxMerchants].coinBalanceDiscountOfMerchant += (this.mCoinBalanceUsed - totalCoinBalanceDiscount) //把多余的优惠差价给最大的优惠价格拥有的商户
+            let diff = parseFloat((this.mCoinBalanceUsed - totalCoinBalanceDiscount).toFixed(2))
+            merchants[maxMerchants].coinBalanceDiscountOfMerchant = parseFloat((merchants[maxMerchants].coinBalanceDiscountOfMerchant + diff).toFixed(2))  //把多余的优惠差价给最大的优惠价格拥有的商户
             //找到maxMerchants这个商户的有最大优惠券价值的SKU，把多余的券值赋给这个SKU
             let maxMpu = 0;
             if (merchants[maxMerchants].skus.length > 1) {
@@ -869,13 +869,15 @@
                 }
               }
             }
-            merchants[maxMerchants].skus[maxMpu].skuCoinBalanceDiscount += (this.mCoinBalanceUsed - totalCoinBalanceDiscount) //把多余的券值赋给这个SKU
+            merchants[maxMerchants].skus[maxMpu].skuCoinBalanceDiscount =  parseFloat((merchants[maxMerchants].skus[maxMpu].skuCoinBalanceDiscount + diff).toFixed(2))//把多余的券值赋给这个SKU
+
           }
         }
         let coinBalanceInfo = {
           'coinbalanceUsed': this.mCoinBalanceUsed,
           "merchants": merchants
         }
+        this.$log(coinBalanceInfo)
         return coinBalanceInfo
       },
 
@@ -1312,7 +1314,8 @@
                     for (let i = 0; i < couponInfo.merchants.length; i++) {
                       for (let j = 0; j < couponInfo.merchants[i].skus.length; j++) {
                         if (couponInfo.merchants[i].skus[j].mpu === sku.product.goodsInfo.mpu) {
-                          salePrice -= couponInfo.merchants[i].skus[j].unitCouponDiscount;
+                          salePrice = (salePrice - couponInfo.merchants[i].skus[j].unitCouponDiscount).toFixed(2);
+                          //this.$log("==" + salePrice + "==")
                           skuCouponDiscount = couponInfo.merchants[i].skus[j].skuCouponDiscount
                           break;
                         }
@@ -1326,13 +1329,14 @@
                 for (let i = 0; i < coinBalanceInfo.merchants.length; i++) {
                   for (let j = 0; j < coinBalanceInfo.merchants[i].skus.length; j++) {
                     if (coinBalanceInfo.merchants[i].skus[j].mpu === sku.product.goodsInfo.mpu) {
-                      salePrice -= coinBalanceInfo.merchants[i].skus[j].unitCoinBalanceDiscount;
+                      salePrice = (salePrice - coinBalanceInfo.merchants[i].skus[j].unitCoinBalanceDiscount).toFixed(2);
+                   //   this.$log("--" + salePrice + "--")
                       skuCoinBalanceDiscount = coinBalanceInfo.merchants[i].skus[j].skuCoinBalanceDiscount;
                       break;
                     }
                   }
                 }
-
+               // this.$log("salePrice:" + salePrice)
                 let promotionDiscount = (sku.checkedPrice - sku.product.goodsInfo.dprice)
                 amount += unitPrice * sku.product.baseInfo.count
                 promotionDiscountOfMerchant += promotionDiscount
@@ -1368,10 +1372,28 @@
             if (found != -1) {
               couponDiscountOfMerchant = couponInfo.merchants[found].couponDiscountOfMerchant;
             }
-            let saleAmount = amount - couponDiscountOfMerchant;
+            this.$log("++++++++++++++++++++++++++++++++++++")
+            this.$log("amount:"+amount)
+            let saleAmount = parseFloat((amount - couponDiscountOfMerchant).toFixed(2));
+            this.$log("couponDiscountOfMerchant:"+couponDiscountOfMerchant)
 
             //add CoinBalance
-            saleAmount -= this.mCoinBalanceUsed
+            let coinBalanceDiscountOfMerchant = 0;
+            for (let i = 0; i < coinBalanceInfo.merchants.length; i++) {
+                if (coinBalanceInfo.merchants[i].merchantNo === item.merchantCode) {
+                  found = i;
+                  break;
+                }
+            }
+            if (found != -1) {
+              this.$log(coinBalanceInfo)
+              coinBalanceDiscountOfMerchant = coinBalanceInfo.merchants[found].coinBalanceDiscountOfMerchant;
+              this.$log("!!!"+coinBalanceDiscountOfMerchant+"!!!")
+            }
+            saleAmount = parseFloat((saleAmount - coinBalanceDiscountOfMerchant).toFixed(2))
+            this.$log("coinBalanceDiscountOfMerchant:"+coinBalanceDiscountOfMerchant)
+            this.$log("saleAmount:"+saleAmount)
+            this.$log("---------------------------------")
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.merchantCode, //商户号
@@ -1407,6 +1429,9 @@
         if (couponInfo != null) {
           options['coupon'] = couponInfo;
         }
+
+        options['coinBalance'] = coinBalanceInfo;
+
 
         this.$log("Order options:")
         this.$log(options)
@@ -1572,7 +1597,7 @@
                           if (that.pageAction == "direct") {
                             this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
                           } else {
-                            that.deleteOrderedGoodsInCar();
+                            //that.deleteOrderedGoodsInCar();
                           }
                           that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
                           setTimeout(() => {

@@ -113,36 +113,26 @@
     computed: {
       cartList() {
         this.$store.state.appconf.cartList.forEach(item => {
+          this.$log(item)
           if(item.baseInfo.merchantId === 2) {
-            item['valid'] = false;
+            item['valid'] = true;
             for(let i = 0 ;i < this.inventoryListOfAoyi.length; i++) {
-              this.$log(this.inventoryListOfAoyi[i])
-              if(this.inventoryListOfAoyi[i].state == 0) {
-                item.choosed = false;
-              }
-            }
-            for(let i = 0 ;i < this.inventoryListOfAoyi.length; i++) {
-              if(this.inventoryListOfAoyi[i].state == 1 && this.inventoryListOfAoyi[i].skuId === item.baseInfo.skuId) {
-                item['valid'] = true;
+              if(this.inventoryListOfAoyi[i].state == 0 && this.inventoryListOfAoyi[i].skuId === item.baseInfo.skuId) {
+                item['valid'] = false;
+                item.baseInfo.choosed = false;
                 break;
               }
             }
           } else {
-            item['valid'] = false;
+            item['valid'] = true;
             for(let i = 0 ;i < this.inventoryListOfZy.length; i++) {
-              if(this.inventoryListOfZy[i].state == 0) {
-                item.choosed = false;
-              }
-            }
-            for(let i = 0 ;i < this.inventoryListOfZy.length; i++) {
-              if(this.inventoryListOfZy[i].state == 1 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
-                item['valid'] = true;
+              if(this.inventoryListOfZy[i].state == 0 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
+                item['valid'] = false;
+                item.baseInfo.choosed = false;
                 break;
               }
             }
           }
-          if(item['valid'] == false)
-            item.baseInfo.choosed = false;
         })
         this.$log(this.$store.state.appconf.cartList)
         return this.$store.state.appconf.cartList
@@ -427,11 +417,8 @@
 
 
       updateCarList(item, product, user) {
-        // this.carList = this.$store.state.appconf.cartList;
-        // let goods = Object();
-        this.$log(item)
-        this.$log(product)
         let cartItem = Util.getCartItem(this, user.userId, item.mpu)
+        this.$log(cartItem)
         if (cartItem == null) {
           let baseInfo = {
             "userId": user.userId,
