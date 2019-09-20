@@ -208,6 +208,7 @@
       },
 
       async updateInventorList(list) {
+        this.$log("updateInventorList Enter")
         let addressList = this.$store.state.appconf.addressList;
         let address = this.addressCode;
         if (addressList == null || addressList == undefined) {
@@ -255,11 +256,11 @@
         let inventorySkus = [];
         let inventorySkusOfZy = [];
         list.forEach(item => {
-          this.$log(item.mpu)
+          this.$log(item)
           if(item.mpu.substr(0,2) === "20" || item.mpu.substr(0,2) === "10") {
             inventorySkus.push({"skuId": item.mpu, "remainNum": item.count})
           } else {
-            inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.baseInfo.count})
+            inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})
           }
         })
 
