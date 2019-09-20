@@ -51,14 +51,15 @@
 
             <van-field
               v-model="linkPayPwd"
-              type="password"
+              :type="isLinkPwdVisable?'number':'password'"
               maxlength="30"
               clearable
               label="密码"
               label-width="40px"
               placeholder="请输入密码"
-              right-icon="question-o"
+              :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
               required
+              @click-right-icon="togLinkPayPwdVisable()"
             />
           <div style=" width: 100%;position: fixed;bottom: 10px;">
             <van-button type="danger" size="large" round @click="confirmedInvoiceSelector">去支付</van-button>
@@ -86,7 +87,8 @@
         radio: -1,
         showLinkPayDialog: false,
         linkPayAccount:"",
-        linkPayPwd:""
+        linkPayPwd:"",
+        isLinkPwdVisable:false,
       }
     },
     computed: {
@@ -105,6 +107,9 @@
     },
 
     methods: {
+      togLinkPayPwdVisable() {
+         this.isLinkPwdVisable = !this.isLinkPwdVisable
+      },
       onPayResult() {
         this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
         this.$router.replace({path: '/car/orderList'})
