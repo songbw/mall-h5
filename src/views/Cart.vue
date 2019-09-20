@@ -259,7 +259,7 @@
           if(item.mpu.substr(0,2) === "20" || item.mpu.substr(0,2) === "10") {
             inventorySkus.push({"skuId": item.mpu, "remainNum": item.count})
           } else {
-            inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.baseInfo.count})
+            inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})
           }
         })
 
