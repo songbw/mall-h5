@@ -128,8 +128,8 @@
                   maxlength="11"
                   @input="onCoinBalanceInputChanged"
                 />
-                <div style="text-align: left;margin: 10px 25px; color: #ff4444">
-                  <span>剩余可提取金额: ￥{{this.mCoinBalance - this.mCoinBalanceUsed}} </span>
+                <div style="font-size:x-small;text-align: left;margin: 10px 25px; color: #ff4444">
+                  <span>提示：余额只能用于支付商品价格，不支持支付运费,剩余可提取金额: ￥{{this.mCoinBalance - this.mCoinBalanceUsed}} </span>
                 </div>
                 <div class="footer_layout">
                   <van-button type="danger" size="large" round @click="confirmedBalanceSelector">确定</van-button>
@@ -573,9 +573,9 @@
       allpay() {
         let all = 0;
         all = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100 - this.mCoinBalanceUsed * 100
-        if (all < 0) {
+        if (all < this.freightPay * 100) {
           all = 0
-          let onlyUsedCoupon = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100
+          let onlyUsedCoupon = this.productPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100
           if (onlyUsedCoupon < 0) {
             this.mCoinBalanceUsed = 0;
           } else {

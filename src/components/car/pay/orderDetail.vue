@@ -43,7 +43,8 @@
                 <div v-else-if="sku.status == 5">
                   <van-button plain round size="small" type="primary"
                               style="background-color: white;color: #888888;border-color: #f0f0f0 "
-                              @click.stop="">
+                              @click.stop=""
+                              @click="onQuerySalesServiceBtnClick(k,sku)">
                     查看售后
                   </van-button>
                 </div>
@@ -202,6 +203,9 @@
     },
 
     methods: {
+      onQuerySalesServiceBtnClick(k,sku) {
+        this.$router.push({name: '售后工单页'})
+      },
       onAfterSalesServiceBtnClick(sku) {
         this.$log("onAfterSalesServiceBtnClick Enter")
         this.$router.push({
@@ -306,7 +310,9 @@
               } else {
                 if (response.data.data.result != undefined) {
                   let orderNo = response.data.data.result.orderNo
-                  pAnOrderInfo.orderNo = orderNo
+                  let outTradeNo =  response.data.data.result.outTradeNo
+                  pAnOrderInfo['orderNo'] = orderNo
+                  pAnOrderInfo['outTradeNo'] = outTradeNo
                   that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                   that.$jsbridge.call("openCashPage", pAnOrderInfo);
                   this.$router.replace({

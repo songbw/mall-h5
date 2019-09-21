@@ -12,7 +12,7 @@
           </div>
           <div style="width: 100%;display: flex">
             <span style="margin:10px;font-size: small;text-align: left;width: 100%" >支付订单:</span>
-            <span style="margin-top:15px;margin-right:5px; font-size: xx-small;text-align: left;width: 100%">{{this.orderInfo.outTradeNo}}</span>
+            <span style="margin-top:15px;margin-right:5px; font-size: xx-small;text-align: left;width: 100%">{{this.orderInfo.orderNo}}</span>
           </div>
           <div style="  width: 100%;
           display: flex;

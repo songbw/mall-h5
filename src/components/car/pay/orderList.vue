@@ -404,7 +404,9 @@
               } else {
                 if (response.data.data.result != undefined) {
                   let orderNo = response.data.data.result.orderNo
-                  pAnOrderInfo.orderNo = orderNo
+                  let outTradeNo =  response.data.data.result.outTradeNo
+                  pAnOrderInfo['orderNo'] = orderNo
+                  pAnOrderInfo['outTradeNo'] = outTradeNo
                   that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                   that.$jsbridge.call("openCashPage", pAnOrderInfo);
                   this.$router.replace({
