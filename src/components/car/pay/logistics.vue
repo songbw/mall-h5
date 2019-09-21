@@ -78,9 +78,7 @@
 
     created() {
       let that = this;
-      if (this.$api.IS_GAT_APP) {
-        that.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
       that.$log("logistics created Enter")
       that.detail = this.$route.params.detail;
       that.loading = true;

@@ -99,9 +99,7 @@
 
     created() {
       this.$log("cashser created Enter")
-      if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
       this.orderInfo = this.$route.params.orderInfo;
       this.$log(this.orderInfo);
     },

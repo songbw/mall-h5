@@ -158,9 +158,7 @@
 
     created() {
       this.$log("order detail created Enter");
-      if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
       //this.detail = this.$route.params.detail;
       this.detail = JSON.parse(this.$store.state.appconf.currentOrderInfo);
       this.$log(this.detail)

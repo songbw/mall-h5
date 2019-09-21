@@ -73,9 +73,7 @@
 
     created() {
       let that = this;
-      if (this.$api.IS_GAT_APP) {
-        that.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
       that.$log("workerOrder created Enter")
       that.id = this.$route.params.id;
       this.expressNo = this.$route.params.expressNo == null? "":this.$route.params.expressNo

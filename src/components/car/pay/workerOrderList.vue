@@ -67,9 +67,7 @@
 
     created() {
       this.$log("workorderList created Enter")
-      if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
     },
 
     methods: {

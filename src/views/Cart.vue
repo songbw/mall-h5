@@ -158,9 +158,7 @@
     },
 
     created() {
-      if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
       setTimeout(() => {
         this.$log("setTimeout launchedLoading:" + this.launchedLoading)
         if (!this.launchedLoading) {

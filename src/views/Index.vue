@@ -163,8 +163,8 @@
     },
 
     created() {
+      this.showHeader = this.$api.HAS_HEADER;
       if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
         let auth_code = this.$route.query.auth_code;
         this.$log(`auto_code$(auth_code)`)
         if (auth_code != undefined) {

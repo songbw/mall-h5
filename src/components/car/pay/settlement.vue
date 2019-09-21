@@ -588,8 +588,8 @@
     },
 
     created() {
+      this.showHeader = this.$api.HAS_HEADER;
       if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
         this.payway = '关爱通支付'
       }
       this.obtainMerchantArray();
@@ -1477,6 +1477,7 @@
             that.$log(error)
           })
         } else {
+          //returnUrl = "https://mall.weesharing.com/pay/cashering";
           let options = {
             "iAppId": this.$api.APP_ID,
             "tAppId": this.$api.T_APP_ID,

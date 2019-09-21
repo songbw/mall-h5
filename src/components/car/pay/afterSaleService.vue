@@ -164,9 +164,7 @@
 
     created() {
       let that = this
-      if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
       this.goods = this.$route.params.goods;
       this.contact = this.$route.params.contact;
       this.openId = this.$route.params.openId;

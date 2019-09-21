@@ -9,6 +9,7 @@ const TESTSTUB_PAYMENT_URL = ""
 const SERVR_PHONE_NUM= ""
 const GOODS_URL_PREFIX = ""
 const IS_GAT_APP = false
+const HAS_HEADER = false
 
 /*let SERVICE_URL = "http://192.168.200.37:8000";
 let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"*/
@@ -83,5 +84,6 @@ export default {
   BASE_BASE_URL,
   ES_BASE_URL,
   IS_GAT_APP,
+  HAS_HEADER,
   TEST_USER
 }

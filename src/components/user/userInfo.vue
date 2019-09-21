@@ -112,9 +112,7 @@
     created() {
       let that = this;
       that.$log("userInfo created Enter")
-      if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
       that.user = this.$route.params.user;
       that.$log(that.user);
       if (that.user.birth != null) {

@@ -106,9 +106,7 @@
     created() {
       let userInfo = this.$store.state.appconf.userInfo;
       let that = this
-      if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
       if (!Util.isUserEmpty(userInfo)) {
         let user = JSON.parse(userInfo);
         this.$api.xapi({

@@ -35,9 +35,7 @@
     },
     created() {
    //   this.test();
-      if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
-      }
+      this.showHeader = this.$api.HAS_HEADER;
       let id = this.$route.params.id
       if (id != "new") {
         //获取id 相关的地址数据

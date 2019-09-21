@@ -209,8 +209,8 @@
     },
 
     created() {
+      this.showHeader = this.$api.HAS_HEADER;
       if (this.$api.IS_GAT_APP) {
-        this.showHeader = false;
         if(this.$api.APP_ID === '10') {
           this.showServiceBox = true;
         }
