@@ -67,7 +67,7 @@
   import sectionSlide from '@/components/index/sectionSlide.vue'
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import sectionImgMap from '@/components/index/sectionImgMap.vue'
-  import sectionCompBox from  '@/components/index/sectionCompBox.vue'
+  import sectionCompBox from '@/components/index/sectionCompBox.vue'
   import Baseline from '@/common/_baseline.vue'
   import Loading from '@/common/_loading.vue'
   import Footer from '@/common/_footer.vue'
@@ -149,7 +149,7 @@
         if (response.data.data.result.header != undefined) {
           let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
-          if(this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
+          if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
             this.icon_git = this.mHeader.novicePackUrl
           }
         }
@@ -173,12 +173,13 @@
         }
         //this.testGAT();
       } else {
-        let dsBridge = require("dsbridge");
-        Vue.prototype.$jsbridge = dsBridge;
-        this.initJsNativeCb();
+
+/*        window.onload = () => {
+          this.getLoginAuthInfo();
+        }*/
         setTimeout(() => {
           this.test();
-          this.getAccessTokenInfo();
+          //this.getAccessTokenInfo();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
           //this.getUserInfo();
@@ -244,9 +245,12 @@
         }
       },
       test() {
+        let dsBridge = require("dsbridge");
+        Vue.prototype.$jsbridge = dsBridge;
+        this.initJsNativeCb();
         //let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
         let openId = "44391000fd194ab888b1aa81c03c3710"
-        if(this.$api.TEST_USER.length > 0)
+        if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
         this.$log("openId:" + openId);
@@ -340,9 +344,9 @@
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
           }
-          if(rt.newUser !=undefined && rt.newUser) {
-            if(!this.$api.IS_GAT_APP)
-            this.showDialog = true;
+          if (rt.newUser != undefined && rt.newUser) {
+            if (!this.$api.IS_GAT_APP)
+              this.showDialog = true;
           }
           //this.showDialog = true;//test
 
@@ -350,7 +354,6 @@
           that.$log(error)
         })
       },
-
 
 
       setStatusBarColor(color) {
@@ -386,6 +389,84 @@
         }).catch(function (error) {
           that.$log(error)
         })
+      },
+
+      getInitCode() {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.PINGAN_AUTH_URL,
+          url: '/pingan/initCode',
+        })
+      },
+
+      fetchUserInfo(requestCode) {
+      //  this.$toast("requestCode:" + requestCode)
+        this.$toast("baseURL:" + this.$api.SSO_BASE_URL)
+      //  this.$toast("baseURL:" + "/sso/thirdParty/token")
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/thirdParty/token',
+          params: {
+            iAppId: this.$api.APP_ID,
+            requestCode: requestCode,
+          }
+        })
+
+        /*        return this.$api.xapi({
+                  method: 'get',
+                  baseURL: this.$api.PINGAN_AUTH_URL,
+                  url: '/pingan/checkRequestCode',
+                  params: {
+                    requestCode:requestCode
+                  }
+                })*/
+      },
+
+      onFetchUserInfoCompled(userInfo) {
+        this.$toast(userInfo)
+      },
+
+      async getLoginAuthInfo() {
+        this.$toast("getLoginAuthInfo Enter")
+        try {
+          let ret = await this.getInitCode()
+          this.$log(ret)
+          let initCode = ret.data.data.initCode
+          if (!initCode)
+            return
+          this.$toast("initCode:" + initCode)
+          sc.config({
+            debug: false,   // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
+            appId: this.$api.T_APP_ID,  // 在统一 APP 开放平台服务器申请的 appId
+            initCode,
+            nativeApis: ['userAuth']
+          })
+
+          sc.ready(() => {
+            sc.userAuth(
+              {appId: this.$api.T_APP_ID},
+              res => {  /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
+                if (res.code === 0) { //    用户同意授权
+                  const requestCode = res.data.requestCode;
+                  // console.log(requestCode)
+                  this.fetchUserInfo(requestCode).then(info => {
+                    this.onFetchUserInfoCompled(info)
+                  })
+                } else {  /* 用户拒绝授权或其它失败情况
+                               code: - 1 默认失败
+                               code: - 10001    没有初始化 JSSDK
+                               code: - 10002    用户点击拒绝授权
+                                code: - 10003    用户未登录 */
+                  console.warning(res.message)
+                }
+              })
+          })
+          sc.error((res) => {
+            console.error({res})
+          })
+        } catch (e) {
+        }
       },
 
       getAccessTokenInfo() {
@@ -518,18 +599,20 @@
       }
     }
 
-    .gitDialog{
+    .gitDialog {
       width: 100%;
       display: flex;
       flex-direction: column;
       color: white;
       background-color: transparent;
       align-items: center;
-      img{
-         width: 100%;
+
+      img {
+        width: 100%;
 
       }
-      .van-icon{
+
+      .van-icon {
         margin-top: 20px;
         font-size: xx-large;
       }
