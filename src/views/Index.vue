@@ -173,12 +173,11 @@
         }
         //this.testGAT();
       } else {
-
-/*        window.onload = () => {
+        window.onload = () => {
           this.getLoginAuthInfo();
-        }*/
+        }
         setTimeout(() => {
-          this.test();
+          //this.test();
           //this.getAccessTokenInfo();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
@@ -329,6 +328,7 @@
 
       thirdPartLogined(openId, accessToken) {
         let that = this;
+        this.$toast("thirdPartLogined Enter")
         this.$api.xapi({
           method: 'post',
           baseURL: this.$api.SSO_BASE_URL,
@@ -343,13 +343,12 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
+            this.$toast("token:"+rt.token)
           }
-          if (rt.newUser != undefined && rt.newUser) {
-            if (!this.$api.IS_GAT_APP)
-              this.showDialog = true;
-          }
-          //this.showDialog = true;//test
-
+          //if (rt.newUser != undefined && rt.newUser) {
+            //if (!this.$api.IS_GAT_APP)
+            //  this.showDialog = true;
+          //}
         }).catch(function (error) {
           that.$log(error)
         })
@@ -392,6 +391,7 @@
       },
 
       getInitCode() {
+        this.$toast("baseURL:"+this.$api.PINGAN_AUTH_URL)
         return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.PINGAN_AUTH_URL,
@@ -399,11 +399,10 @@
         })
       },
 
-      fetchUserInfo(requestCode) {
-      //  this.$toast("requestCode:" + requestCode)
-        this.$toast("baseURL:" + this.$api.SSO_BASE_URL)
-      //  this.$toast("baseURL:" + "/sso/thirdParty/token")
-        return this.$api.xapi({
+
+      getPingAnThirdPartyAccessTokenInfo(requestCode) {
+        let that = this;
+        that.$api.xapi({
           method: 'get',
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/thirdParty/token',
@@ -411,26 +410,57 @@
             iAppId: this.$api.APP_ID,
             requestCode: requestCode,
           }
+        }).then((response) => {
+          let rt = response.data.data.result
+          that.$log("rt:" + JSON.stringify(rt));
+          let openId = rt.openId;
+          let accessToken = rt.accessToken;
+          if (openId != undefined) {
+            let userId = that.$api.APP_ID + openId;
+            let userInfo = {
+              openId: openId,
+              accessToken: rt.accessToken,
+              userId: userId
+            }
+            that.$log("userInfo  is:" + JSON.stringify(userInfo));
+            that.$store.commit('SET_USER', JSON.stringify(userInfo));
+            that.thirdPartLogined(openId, accessToken)
+          }
+        }).catch(function (error) {
+          that.$log(error)
         })
-
-        /*        return this.$api.xapi({
-                  method: 'get',
-                  baseURL: this.$api.PINGAN_AUTH_URL,
-                  url: '/pingan/checkRequestCode',
-                  params: {
-                    requestCode:requestCode
-                  }
-                })*/
       },
 
-      onFetchUserInfoCompled(userInfo) {
-        this.$toast(userInfo)
+      onFetchUserInfoCompled(response) {
+        let that = this
+    //    this.$toast("rt:" + JSON.stringify(response.data.data.resut));
+        if (userInfo != undefined) {
+          this.$toast("xxxxxxxxxxxxxxxxxxxxx");
+          let rt = response.data.data
+          this.$toast("rt:" + JSON.stringify(rt));
+          let openId = rt.openId;
+          let accessToken = rt.accessToken;
+          if (openId != undefined) {
+            let userId = that.$api.APP_ID + openId;
+            let userInfo = {
+              openId: openId,
+              accessToken: rt.accessToken,
+              userId: userId
+            }
+            that.$log("userInfo  is:" + JSON.stringify(userInfo));
+            that.$store.commit('SET_USER', JSON.stringify(userInfo));
+            that.thirdPartLogined(openId, accessToken)
+          } else {
+            that.$log(response.data.msg);
+          }
+        }
       },
 
       async getLoginAuthInfo() {
         this.$toast("getLoginAuthInfo Enter")
         try {
           let ret = await this.getInitCode()
+          this.$toast("getInitCode:" + ret)
           this.$log(ret)
           let initCode = ret.data.data.initCode
           if (!initCode)
@@ -449,10 +479,7 @@
               res => {  /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
                 if (res.code === 0) { //    用户同意授权
                   const requestCode = res.data.requestCode;
-                  // console.log(requestCode)
-                  this.fetchUserInfo(requestCode).then(info => {
-                    this.onFetchUserInfoCompled(info)
-                  })
+                  this.getPingAnThirdPartyAccessTokenInfo(requestCode);
                 } else {  /* 用户拒绝授权或其它失败情况
                                code: - 1 默认失败
                                code: - 10001    没有初始化 JSSDK
@@ -500,15 +527,6 @@
       startLocation() {
         this.$jsbridge.call("startLoaction");
       },
-
-      /*      updateLocation() {
-              let locationInfo = this.$jsbridge.call("getLocation");
-              this.$log("updateLocation getLocation ret is:" + locationInfo);
-              if (locationInfo != null && locationInfo.length > 0) {
-                this.$store.commit('SET_LOCATION', locationInfo);
-                this.getLocationCode(locationInfo)
-              }
-            },*/
 
       getLocationCode(locationInfo) {
         let that = this;
