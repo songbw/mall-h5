@@ -24,6 +24,7 @@ const SSO_BASE_URL = SERVICE_URL+"/v2/ssoes/"
 const WORKER_ORDER_BASE_URL = SERVICE_URL+"/v2/workorders"
 const BASE_BASE_URL = SERVICE_URL+"/v2/bases/"
 const AGGREGATE_PAY_URL = SERVICE_URL + "/v2/aggpays/"
+const LINKPAY_ACCOUNT_URL = SERVICE_URL + "/v2/woas/"
 
 const xapi = axios.create();
 //xapi.defaults.baseURL = SERVER_BASE_URL;
@@ -85,6 +86,7 @@ export default {
   BASE_BASE_URL,
   ES_BASE_URL,
   AGGREGATE_PAY_URL,
+  LINKPAY_ACCOUNT_URL,
   IS_GAT_APP,
   HAS_HEADER,
   TEST_USER

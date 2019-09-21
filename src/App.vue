@@ -71,6 +71,7 @@
         this.$api.BASE_BASE_URL =  serverUrl+"/v2/bases/"
         this.$api.ES_BASE_URL = serverUrl+ "/v2/elasticsearches/"
         this.$api.AGGREGATE_PAY_URL = serverUrl + "/v2/aggpays/"
+        this.$api.LINKPAY_ACCOUNT_URL = serverUrl + "/v2/woas/"
         if(testUser != undefined && testUser.length > 0)
           this.$api.TEST_USER = testUser
         if(title !=undefined && title.length > 0)

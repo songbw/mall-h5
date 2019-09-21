@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="coinBalance" v-if="showHeader">
-    <v-header>
+  <div class="coinBalance" >
+    <v-header v-if="showHeader">
       <h1 slot="title">余额账户</h1>
     </v-header>
     <div class="coinBalanceBody">

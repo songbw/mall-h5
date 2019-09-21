@@ -136,7 +136,11 @@
         }).then((response) => {
           this.$log(response)
           if(response.data.code == 200) {
-            this.$router.replace({path: '/pay/cashering'})
+            this.$router.replace({
+              path: '/pay/cashering',
+              query:{
+                outer_trade_no:this.orderInfo.orderNo
+              }})
           } else {
             this.$toast(response.data.message)
           }
