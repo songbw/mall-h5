@@ -1,6 +1,6 @@
 <template lang="html">
-  <div class="casher" v-if="showHeader">
-    <v-header>
+  <div class="casher">
+    <v-header  v-if="showHeader">
       <h1 slot="title">订单支付</h1>
     </v-header>
     <div class="payBody">
@@ -10,16 +10,20 @@
           <div class="payAmount">
             <p><span>￥</span>{{amount}}</p>
           </div>
-          <van-cell title="支付单号:">
-            <div slot="default">
-              <span style="font-size: x-small">{{this.orderInfo.orderNo}}</span>
+          <div style="width: 100%;display: flex">
+            <span style="margin:10px;font-size: small;text-align: left;width: 100%" >支付订单:</span>
+            <span style="margin-top:15px;margin-right:5px; font-size: xx-small;text-align: left;width: 100%">{{this.orderInfo.outTradeNo}}</span>
+          </div>
+          <div style="  width: 100%;
+          display: flex;
+          flex-direction: row;">
+            <div style="width: 70%">
+              <span style="margin:10px;font-size: small;float: left" >订单详情:</span>
             </div>
-          </van-cell>
-          <van-cell title="订单详情:">
-            <div slot="default">
-              <span>订单支付</span>
+            <div style="width: 30%">
+              <span style="margin:10px;font-size: small;float: right" >订单支付</span>
             </div>
-          </van-cell>
+          </div>
         </div>
         <div class="pathBox">
           <van-radio-group v-model="radio">

@@ -1448,8 +1448,6 @@
           } else if (this.$api.APP_ID === '09') {
             returnUrl = "https://gatzy.weesharing.com/pay/cashering";
           }
-
-
           let options = {
             "iAppId": this.$api.APP_ID,
             "tAppId": this.$api.T_APP_ID,
@@ -1508,7 +1506,9 @@
             } else {
               if (response.data.data.result != undefined) {
                 let orderNo = response.data.data.result.orderNo
-                pAnOrderInfo.orderNo = orderNo
+                let outTradeNo =  response.data.data.result.outTradeNo
+                pAnOrderInfo['orderNo'] = orderNo
+                pAnOrderInfo['outTradeNo'] = outTradeNo
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                 that.$jsbridge.call("openCashPage", pAnOrderInfo);
                 this.$router.replace({
