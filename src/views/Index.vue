@@ -328,7 +328,6 @@
 
       thirdPartLogined(openId, accessToken) {
         let that = this;
-        this.$toast("thirdPartLogined Enter")
         this.$api.xapi({
           method: 'post',
           baseURL: this.$api.SSO_BASE_URL,
@@ -343,7 +342,6 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
-            this.$toast("token:"+rt.token)
           }
           //if (rt.newUser != undefined && rt.newUser) {
             //if (!this.$api.IS_GAT_APP)
@@ -391,7 +389,6 @@
       },
 
       getInitCode() {
-        this.$toast("baseURL:"+this.$api.PINGAN_AUTH_URL)
         return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.PINGAN_AUTH_URL,
@@ -431,41 +428,12 @@
         })
       },
 
-      onFetchUserInfoCompled(response) {
-        let that = this
-    //    this.$toast("rt:" + JSON.stringify(response.data.data.resut));
-        if (userInfo != undefined) {
-          this.$toast("xxxxxxxxxxxxxxxxxxxxx");
-          let rt = response.data.data
-          this.$toast("rt:" + JSON.stringify(rt));
-          let openId = rt.openId;
-          let accessToken = rt.accessToken;
-          if (openId != undefined) {
-            let userId = that.$api.APP_ID + openId;
-            let userInfo = {
-              openId: openId,
-              accessToken: rt.accessToken,
-              userId: userId
-            }
-            that.$log("userInfo  is:" + JSON.stringify(userInfo));
-            that.$store.commit('SET_USER', JSON.stringify(userInfo));
-            that.thirdPartLogined(openId, accessToken)
-          } else {
-            that.$log(response.data.msg);
-          }
-        }
-      },
-
       async getLoginAuthInfo() {
-        this.$toast("getLoginAuthInfo Enter")
         try {
           let ret = await this.getInitCode()
-          this.$toast("getInitCode:" + ret)
-          this.$log(ret)
           let initCode = ret.data.data.initCode
           if (!initCode)
             return
-          this.$toast("initCode:" + initCode)
           sc.config({
             debug: false,   // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
             appId: this.$api.T_APP_ID,  // 在统一 APP 开放平台服务器申请的 appId

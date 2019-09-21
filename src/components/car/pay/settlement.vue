@@ -1502,7 +1502,7 @@
                 openId: user.openId,
               }
               that.$log("walletInfo:" + JSON.stringify(walletInfo))
-              that.$jsbridge.call("dredgeWallet", walletInfo);
+            //  that.$jsbridge.call("dredgeWallet", walletInfo);
             } else {
               if (response.data.data.result != undefined) {
                 let orderNo = response.data.data.result.orderNo
@@ -1510,7 +1510,7 @@
                 pAnOrderInfo['orderNo'] = orderNo
                 pAnOrderInfo['outTradeNo'] = outTradeNo
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-                that.$jsbridge.call("openCashPage", pAnOrderInfo);
+               // that.$jsbridge.call("openCashPage", pAnOrderInfo);
                 this.$router.replace({
                   name: "收银台页",
                   params: {
