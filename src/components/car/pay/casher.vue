@@ -66,9 +66,8 @@
               @click-right-icon="togLinkPayPwdVisable()"
             />
           <div style=" width: 100%;position: fixed;bottom: 10px;">
-            <van-button type="danger" size="large" round @click="confirmedInvoiceSelector">去支付</van-button>
+            <van-button type="danger" size="large" round @click="gotoLinkPay">去支付</van-button>
           </div>
-
         </div>
       </van-actionsheet>
     </div>
@@ -109,6 +108,44 @@
     },
 
     methods: {
+      gotoLinkPay() {
+        this.$log("gotoLinkPay Enter")
+        this.$log(this.linkPayAccount)
+        this.$log(this.linkPayPwd)
+        if(this.linkPayAccount.length == 0) {
+          this.$toast("请输入卡号")
+          return
+        }
+        if(this.linkPayPwd.length == 0) {
+          this.$toast("请输入卡密码")
+          return
+        }
+        let options = {
+          "payType": "pos",
+          "orderNo": this.orderInfo.orderNo,
+          "actPayFree": this.orderInfo.orderAmount,
+          "cardNo":this.linkPayAccount,
+          "cardPwd":this.linkPayPwd
+        }
+        this.$log(options)
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AGGREGATE_PAY_URL,
+          url: '/wspay/pay',
+          data: options,
+        }).then((response) => {
+          this.$log(response)
+          if(response.data.code == 200) {
+            this.$router.replace({path: '/car/cashering'})
+          } else {
+            this.$toast(response.data.message)
+          }
+
+          //this.onPayResult()
+        }).catch(function (error) {
+
+        })
+      },
       togLinkPayPwdVisable() {
          this.isLinkPwdVisable = !this.isLinkPwdVisable
       },
@@ -133,6 +170,8 @@
           }).catch(function (error) {
 
           })
+        } else {
+          this.$toast("请选择支付方式")
         }
       }
     }
@@ -267,7 +306,5 @@
         }
       }
     }
-
-
   }
 </style>

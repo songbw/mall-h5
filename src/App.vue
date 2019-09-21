@@ -70,6 +70,7 @@
         this.$api.TESTSTUB_PAYMENT_BASE_URL = testPaymentUrl+"/v1/"
         this.$api.BASE_BASE_URL =  serverUrl+"/v2/bases/"
         this.$api.ES_BASE_URL = serverUrl+ "/v2/elasticsearches/"
+        this.$api.AGGREGATE_PAY_URL = serverUrl + "/v2/aggpays/"
         if(testUser != undefined && testUser.length > 0)
           this.$api.TEST_USER = testUser
         if(title !=undefined && title.length > 0)
