@@ -30,8 +30,8 @@
               <van-cell title="联机账户"  :icon="icon_linkpay" clickable @click="radio = '1'">
                 <van-radio slot="right-icon" name="1" />
               </van-cell>
-              <van-cell title="微信支付"  :icon="icon_wechatpay" clickable @click="radio = '2'">
-                <van-radio slot="right-icon" name="2" />
+              <van-cell title="微信支付"  :icon="icon_wechatpay" >
+                <van-radio slot="right-icon" disabled name="2"/>
               </van-cell>
           </van-radio-group>
         </div>
@@ -136,12 +136,10 @@
         }).then((response) => {
           this.$log(response)
           if(response.data.code == 200) {
-            this.$router.replace({path: '/car/cashering'})
+            this.$router.replace({path: '/pay/cashering'})
           } else {
             this.$toast(response.data.message)
           }
-
-          //this.onPayResult()
         }).catch(function (error) {
 
         })
