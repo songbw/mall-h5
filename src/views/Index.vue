@@ -177,7 +177,7 @@
           this.getLoginAuthInfo();
         }
         setTimeout(() => {
-          //this.test();
+          this.test();
           //this.getAccessTokenInfo();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景

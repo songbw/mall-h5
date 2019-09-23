@@ -11,8 +11,8 @@
             <p><span>￥</span>{{amount}}</p>
           </div>
           <div style="width: 100%;display: flex">
-            <span style="margin:10px;font-size: small;text-align: left;width: 100%" >支付订单:</span>
-            <span style="margin-top:15px;margin-right:5px; font-size: xx-small;text-align: left;width: 100%">{{this.orderInfo.orderNo}}</span>
+            <span class="orderNo_title">支付订单:</span>
+            <span class="orderNo">{{this.orderInfo.orderNo}}</span>
           </div>
           <div style="  width: 100%;
           display: flex;
@@ -30,47 +30,48 @@
               <van-cell title="联机账户"  :icon="icon_linkpay" clickable @click="radio = '1'">
                 <van-radio slot="right-icon" name="1" />
               </van-cell>
+            <div  class="linkPayDialog" v-if="radio == '1'">
+              <van-field
+                v-model="linkPayAccount"
+                required
+                clearable
+                label="卡号"
+                maxlength="30"
+                label-width="40px"
+                placeholder="请输入卡号"
+              />
+
+              <van-field
+                v-model="linkPayPwd"
+                :type="isLinkPwdVisable?'number':'password'"
+                maxlength="30"
+                clearable
+                label="密码"
+                label-width="40px"
+                placeholder="请输入密码"
+                :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
+                required
+                @click-right-icon="togLinkPayPwdVisable()"
+              />
+            </div>
               <van-cell title="微信支付"  :icon="icon_wechatpay" >
                 <van-radio slot="right-icon" disabled name="2"/>
               </van-cell>
           </van-radio-group>
         </div>
-      </div>
-      <div class="footer_layout">
-        <van-button type="danger" round size="large" @click="onPayBtnClick">
-          确认支付￥{{amount}}
-        </van-button>
-      </div>
-      <van-actionsheet v-model="showLinkPayDialog"  title="联机账户支付">
-        <div  class="linkPayDialog">
-            <van-field
-              v-model="linkPayAccount"
-              required
-              clearable
-              label="卡号"
-              maxlength="30"
-              label-width="40px"
-              placeholder="请输入卡号"
-            />
 
-            <van-field
-              v-model="linkPayPwd"
-              :type="isLinkPwdVisable?'number':'password'"
-              maxlength="30"
-              clearable
-              label="密码"
-              label-width="40px"
-              placeholder="请输入密码"
-              :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
-              required
-              @click-right-icon="togLinkPayPwdVisable()"
-            />
-          <div style=" width: 100%;position: fixed;bottom: 10px;">
-            <van-button type="danger" size="large" round @click="gotoLinkPay">去支付</van-button>
-          </div>
+        <div class="footer_layout">
+          <van-button type="danger" round size="large" @click="onPayBtnClick">
+            确认支付￥{{amount}}
+          </van-button>
         </div>
-      </van-actionsheet>
+      </div>
     </div>
+<!--    <div class="footer_layout">
+      <van-button type="danger" round size="large" @click="onPayBtnClick">
+        确认支付￥{{amount}}
+      </van-button>
+    </div>-->
   </div>
 </template>
 
@@ -88,7 +89,6 @@
         icon_wechatpay: require('@/assets/icons/ico_wechatpay.png'),
         icon_linkpay: require('@/assets/icons/ico_linkpay.png'),
         radio: -1,
-        showLinkPayDialog: false,
         linkPayAccount:"",
         linkPayPwd:"",
         isLinkPwdVisable:false,
@@ -159,7 +159,7 @@
         this.$log("onPayBtnClick Enter")
         if(this.radio == '1') {
            this.$log("link pay clicked")
-           this.showLinkPayDialog = true;
+           this.gotoLinkPay()
         } else if(this.radio == '2') {
           this.$api.xapi({
             method: 'post',
@@ -257,6 +257,20 @@
           .van-cell{
             margin-top: -1px;
           }
+
+          .orderNo_title{
+            margin:10px;
+            font-size: small;
+            text-align: left;
+            width: 30%;
+          }
+          .orderNo{
+            margin-top:15px;
+            margin-right:5px;
+            width: 70%;
+            text-align: right;
+            .fz(font-size, 12)
+          }
         }
 
         .pathBox {
@@ -272,6 +286,17 @@
           .van-cell{
             margin-top: -1px;
           }
+        }
+
+        .footer_layout{
+          margin-top: 10px;
+          padding: 10px 0px;
+          width: 96%;
+          min-height: 100px;
+          border-radius: 5px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
         }
       }
 
@@ -291,21 +316,6 @@
         color: #ff4444;
         font-size: xx-large;
         font-weight: bold;
-      }
-
-      .footer_layout {
-        width: 100%;
-        height: 16vw;
-        display: -webkit-flex;
-        display: -ms-flex;
-        display: flex;
-        align-items: center;
-        position: fixed;
-        bottom: 10px;
-        left: 0;
-        .van-button{
-          margin: 10px;
-        }
       }
     }
   }

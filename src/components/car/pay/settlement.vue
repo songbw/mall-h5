@@ -107,15 +107,18 @@
           </van-cell>
           <van-cell>
             <div slot="title">
-              <span>我的余额:(剩余{{mCoinBalance}}元)</span>
+              <span>我的余额:</span>
+            </div>
+            <div slot="label">
+              <span>(可用{{mCoinBalance}}元)</span>
             </div>
             <div slot="default">
-              <span>提取{{mCoinBalanceUsed}}元</span>
+              <span>支付{{mCoinBalanceUsed}}元</span>
             </div>
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                       @click="showBalanceAmountSelector()"/>
           </van-cell>
-          <van-actionsheet v-model="showBalance" title="提取余额" class="invoice_layout">
+          <van-actionsheet v-model="showBalance" title="提取余额" class="balance_layout">
             <div style="font-weight: lighter">
               <div>
                 <van-field
@@ -128,8 +131,8 @@
                   maxlength="11"
                   @input="onCoinBalanceInputChanged"
                 />
-                <div style="font-size:x-small;text-align: left;margin: 10px 25px; color: #ff4444">
-                  <span>提示：余额只能用于支付商品价格，不支持支付运费,剩余可提取金额: ￥{{this.mCoinBalance - this.mCoinBalanceUsed}} </span>
+                <div style="font-size:small;text-align: left;margin: 10px 25px; color: #ff4444">
+                  <span>提示：余额只能用于支付商品价格，不支持支付运费,剩余可用金额: ￥{{this.mCoinBalance - this.mCoinBalanceUsed}} </span>
                 </div>
                 <div class="footer_layout">
                   <van-button type="danger" size="large" round @click="confirmedBalanceSelector">确定</van-button>
@@ -2082,6 +2085,13 @@
             margin-top: -1px;
           }
 
+          .balance_layout{
+            width: 100%;
+            text-align: center;
+            font-weight: bolder;
+            background-color: white;
+            min-height: 250px;
+          }
           .invoice_layout {
             width: 100%;
             text-align: center;
