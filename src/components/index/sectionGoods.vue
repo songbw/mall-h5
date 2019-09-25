@@ -20,14 +20,14 @@
                  <p   v-if="k.discount != undefined && datas.settings.countPerLine == 2"
                    :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                   {{k.price - k.discount}}
+                   {{(k.price - k.discount).toFixed(2)}}
                    <span style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                   <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                   <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price.toFixed(2)}}</span>
                 </p>
                   <p   v-else
                        :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                     <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{k.price}}
+                    {{k.price.toFixed(2)}}
                   </p>
                 </div>
                 <div class="goodsBuyBox">
@@ -83,6 +83,8 @@
       this.datas.list.forEach(item => {
         this.items.push({label: item.title})
       });
+      this.$log("################################## ")
+      this.$log(this.datas)
     },
 
     mounted() {
