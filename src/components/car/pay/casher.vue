@@ -27,30 +27,6 @@
         </div>
 
         <div class="composeBox">
-          <van-checkbox-group v-model="composeResult">
-            <van-cell
-              v-for="(item, index) in composedList"
-              clickable
-              :icon="item.icon"
-              :key="item.title"
-              :title="` ${item.title}`"
-              @click="toggle(index)"
-            >
-              <van-checkbox
-                :name="item.title"
-                ref="composeboxs"
-                slot="right-icon"
-              />
-            </van-cell>
-          </van-checkbox-group>
-          <!--          <van-checkbox-group v-model="composeRadio">
-                      <van-checkbox title="我的余额"  :icon="icon_coin_balance" clickable @click="composeRadio = '1'">
-                        <van-radio slot="right-icon" name="1" />
-                      </van-checkbox>
-                      <van-cell title="慧民优选卡"  :icon="icon_linkpay" clickable @click="composeRadio = '2'">
-                        <van-radio slot="right-icon" name="1" />
-                      </van-cell>
-                    </van-checkbox-group>-->
         </div>
 
         <div class="pathBox">
@@ -95,17 +71,12 @@
         </div>
       </div>
     </div>
-    <!--    <div class="footer_layout">
-          <van-button type="danger" round size="large" @click="onPayBtnClick">
-            确认支付￥{{amount}}
-          </van-button>
-        </div>-->
   </div>
 </template>
 
 <script>
   import Header from '@/common/_header.vue'
-
+  import Util from '@/util/common'
   export default {
     components: {
       'v-header': Header,
@@ -121,21 +92,11 @@
         linkPayAccount: "",
         linkPayPwd: "",
         isLinkPwdVisable: false,
-        composeList: [
-          '我的余额', '慧民优选卡'
-        ],
-        composedList: [
-          {
+        mCoinBalance: {
             title: "我的余额",
             icon: require('@/assets/icons/ico_coin_balance.png'),
+            amount: 0
           },
-          {
-            title: "慧民优选卡",
-            icon: require('@/assets/icons/ico_card.png'),
-          }
-        ],
-
-        composeResult: []
       }
     },
     computed: {
@@ -149,11 +110,28 @@
       this.showHeader = this.$api.HAS_HEADER;
       this.orderInfo = this.$route.params.orderInfo;
       this.$log(this.orderInfo);
+      this.updateBalanceAmount();
     },
 
     methods: {
-      toggle(index) {
-        this.$refs.composeboxs[index].toggle();
+      updateBalanceAmount() {
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: '/balance',
+            params: {
+              openId: user.openId
+            }
+          }).then((response) => {
+            this.mCoinBalance.amount = response.data.data.amount
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
       },
       gotoLinkPay() {
         this.$log("gotoLinkPay Enter")

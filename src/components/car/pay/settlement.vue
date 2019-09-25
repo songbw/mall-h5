@@ -1402,7 +1402,7 @@
                           if (that.pageAction == "direct") {
                             this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
                           } else {
-                            that.deleteOrderedGoodsInCar();
+                            //that.deleteOrderedGoodsInCar();
                           }
                           that.openCashPage(user, merchantNo, orderNos, pAnOrderInfo)
                           setTimeout(() => {
