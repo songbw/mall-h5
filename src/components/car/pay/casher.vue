@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="casher">
-    <v-header  v-if="showHeader">
+    <v-header v-if="showHeader">
       <h1 slot="title">订单支付</h1>
     </v-header>
     <div class="payBody">
@@ -18,19 +18,47 @@
           display: flex;
           flex-direction: row;">
             <div style="width: 70%">
-              <span style="margin:10px;font-size: small;float: left" >订单详情:</span>
+              <span style="margin:10px;font-size: small;float: left">订单详情:</span>
             </div>
             <div style="width: 30%">
-              <span style="margin:10px;font-size: small;float: right" >订单支付</span>
+              <span style="margin:10px;font-size: small;float: right">订单支付</span>
             </div>
           </div>
         </div>
+
+        <div class="composeBox">
+          <van-checkbox-group v-model="composeResult">
+            <van-cell
+              v-for="(item, index) in composedList"
+              clickable
+              :icon="item.icon"
+              :key="item.title"
+              :title="` ${item.title}`"
+              @click="toggle(index)"
+            >
+              <van-checkbox
+                :name="item.title"
+                ref="composeboxs"
+                slot="right-icon"
+              />
+            </van-cell>
+          </van-checkbox-group>
+          <!--          <van-checkbox-group v-model="composeRadio">
+                      <van-checkbox title="我的余额"  :icon="icon_coin_balance" clickable @click="composeRadio = '1'">
+                        <van-radio slot="right-icon" name="1" />
+                      </van-checkbox>
+                      <van-cell title="慧民优选卡"  :icon="icon_linkpay" clickable @click="composeRadio = '2'">
+                        <van-radio slot="right-icon" name="1" />
+                      </van-cell>
+                    </van-checkbox-group>-->
+        </div>
+
         <div class="pathBox">
           <van-radio-group v-model="radio">
-              <van-cell title="联机账户"  :icon="icon_linkpay" clickable @click="radio = '1'">
-                <van-radio slot="right-icon" name="1" />
-              </van-cell>
-            <div  class="linkPayDialog" v-if="radio == '1'">
+            <van-cell title="联机账户" :icon="icon_linkpay" clickable @click="radio = '1'">
+              <van-radio slot="right-icon" name="1"/>
+            </van-cell>
+            <div class="linkPayDialog" v-if="radio == '1'">
               <van-field
                 v-model="linkPayAccount"
                 required
@@ -54,9 +82,9 @@
                 @click-right-icon="togLinkPayPwdVisable()"
               />
             </div>
-              <van-cell title="微信支付"  :icon="icon_wechatpay" >
-                <van-radio slot="right-icon" disabled name="2"/>
-              </van-cell>
+            <van-cell title="微信支付" :icon="icon_wechatpay">
+              <van-radio slot="right-icon" disabled name="2"/>
+            </van-cell>
           </van-radio-group>
         </div>
 
@@ -67,11 +95,11 @@
         </div>
       </div>
     </div>
-<!--    <div class="footer_layout">
-      <van-button type="danger" round size="large" @click="onPayBtnClick">
-        确认支付￥{{amount}}
-      </van-button>
-    </div>-->
+    <!--    <div class="footer_layout">
+          <van-button type="danger" round size="large" @click="onPayBtnClick">
+            确认支付￥{{amount}}
+          </van-button>
+        </div>-->
   </div>
 </template>
 
@@ -88,10 +116,26 @@
         orderInfo: {},
         icon_wechatpay: require('@/assets/icons/ico_wechatpay.png'),
         icon_linkpay: require('@/assets/icons/ico_linkpay.png'),
+        icon_coin_balance: require('@/assets/icons/ico_coin_balance.png'),
         radio: -1,
-        linkPayAccount:"",
-        linkPayPwd:"",
-        isLinkPwdVisable:false,
+        linkPayAccount: "",
+        linkPayPwd: "",
+        isLinkPwdVisable: false,
+        composeList: [
+          '我的余额', '慧民优选卡'
+        ],
+        composedList: [
+          {
+            title: "我的余额",
+            icon: require('@/assets/icons/ico_coin_balance.png'),
+          },
+          {
+            title: "慧民优选卡",
+            icon: require('@/assets/icons/ico_card.png'),
+          }
+        ],
+
+        composeResult: []
       }
     },
     computed: {
@@ -108,15 +152,18 @@
     },
 
     methods: {
+      toggle(index) {
+        this.$refs.composeboxs[index].toggle();
+      },
       gotoLinkPay() {
         this.$log("gotoLinkPay Enter")
         this.$log(this.linkPayAccount)
         this.$log(this.linkPayPwd)
-        if(this.linkPayAccount.length == 0) {
+        if (this.linkPayAccount.length == 0) {
           this.$toast("请输入卡号")
           return
         }
-        if(this.linkPayPwd.length == 0) {
+        if (this.linkPayPwd.length == 0) {
           this.$toast("请输入卡密码")
           return
         }
@@ -124,8 +171,8 @@
           "payType": "pos",
           "orderNo": this.orderInfo.orderNo,
           "actPayFree": this.orderInfo.orderAmount,
-          "cardNo":this.linkPayAccount,
-          "cardPwd":this.linkPayPwd
+          "cardNo": this.linkPayAccount,
+          "cardPwd": this.linkPayPwd
         }
         this.$log(options)
         this.$api.xapi({
@@ -135,12 +182,13 @@
           data: options,
         }).then((response) => {
           this.$log(response)
-          if(response.data.code == 200) {
+          if (response.data.code == 200) {
             this.$router.replace({
               path: '/pay/cashering',
-              query:{
-                outer_trade_no:this.orderInfo.orderNo
-              }})
+              query: {
+                outer_trade_no: this.orderInfo.orderNo
+              }
+            })
           } else {
             this.$toast(response.data.message)
           }
@@ -149,7 +197,7 @@
         })
       },
       togLinkPayPwdVisable() {
-         this.isLinkPwdVisable = !this.isLinkPwdVisable
+        this.isLinkPwdVisable = !this.isLinkPwdVisable
       },
       onPayResult() {
         this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
@@ -157,10 +205,10 @@
       },
       onPayBtnClick() {
         this.$log("onPayBtnClick Enter")
-        if(this.radio == '1') {
-           this.$log("link pay clicked")
-           this.gotoLinkPay()
-        } else if(this.radio == '2') {
+        if (this.radio == '1') {
+          this.$log("link pay clicked")
+          this.gotoLinkPay()
+        } else if (this.radio == '2') {
           this.$api.xapi({
             method: 'post',
             baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
@@ -191,7 +239,7 @@
     background-color: #f8f8f8;
 
     .payBody {
-      .linkPayDialog{
+      .linkPayDialog {
         width: 100%;
         align-items: center;
       }
@@ -254,22 +302,39 @@
             }
           }
 
-          .van-cell{
+          .van-cell {
             margin-top: -1px;
           }
 
-          .orderNo_title{
-            margin:10px;
+          .orderNo_title {
+            margin: 10px;
             font-size: small;
             text-align: left;
             width: 30%;
           }
-          .orderNo{
-            margin-top:15px;
-            margin-right:5px;
+
+          .orderNo {
+            margin-top: 15px;
+            margin-right: 5px;
             width: 70%;
             text-align: right;
             .fz(font-size, 12)
+          }
+        }
+
+        .composeBox {
+          margin-top: 10px;
+          padding: 10px 0px;
+          width: 96%;
+          min-height: 100px;
+          background-color: white;
+          border-radius: 5px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+
+          .van-cell {
+            margin-top: -1px;
           }
         }
 
@@ -283,12 +348,13 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
-          .van-cell{
+
+          .van-cell {
             margin-top: -1px;
           }
         }
 
-        .footer_layout{
+        .footer_layout {
           margin-top: 10px;
           padding: 10px 0px;
           width: 96%;
