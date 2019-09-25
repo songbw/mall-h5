@@ -33,7 +33,7 @@
                     </div>
                     <div class="cardFooter">
                       <van-col span="12" class="priceBox">
-                        <div class="salePrice">￥{{k.price-k.discount}}</div>
+                        <div class="salePrice">￥{{(k.price-k.discount).toFixed(2)}}</div>
                         <div class="originPrice">￥{{k.price}}</div>
                       </van-col>
                       <van-col span="12" class="actionBox">
@@ -84,7 +84,7 @@
                 </div>
                 <div class="cardFooter">
                   <van-col span="12" class="priceBox">
-                    <div class="salePrice">￥{{k.price-k.discount}}</div>
+                    <div class="salePrice">￥{{(k.price-k.discount).toFixed(2)}}</div>
                     <div class="originPrice">￥{{k.price}}</div>
                   </van-col>
                   <van-col span="12" class="actionBox">
