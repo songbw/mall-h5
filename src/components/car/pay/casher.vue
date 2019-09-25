@@ -26,7 +26,27 @@
           </div>
         </div>
 
-        <div class="composeBox">
+        <div class="coinBalanceBox">
+          <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
+            <van-checkbox slot="right-icon" v-model="mCoinBalance.checked"></van-checkbox>
+            <span slot="label" style="color:black">可用余额: ￥{{mCoinBalance.amount.toFixed(2)}}</span>
+          </van-cell>
+        </div>
+
+        <div class="optCardBox">
+          <van-cell :title="mOptCards.title" :icon="mOptCards.icon"
+                    value="查看可用的优选卡"
+                    clickable
+                    @click="onOptCardCellClick()">
+          </van-cell>
+        </div>
+
+        <div class="composePayBox">
+          <van-cell title="还需支付" :icon="mCoinBalance.icon"
+                    clickable
+                    @click="onOptCardCellClick()">
+            <span slot="default">￥{{remainPayAmount}}</span>
+          </van-cell>
         </div>
 
         <div class="pathBox">
@@ -93,15 +113,28 @@
         linkPayPwd: "",
         isLinkPwdVisable: false,
         mCoinBalance: {
-            title: "我的余额",
+            title: "余额支付",
             icon: require('@/assets/icons/ico_coin_balance.png'),
-            amount: 0
-          },
+            amount: 0,
+            checked: false,
+            payAmount: 0,
+        },
+        mOptCards:{
+          title: "惠民优选卡支付",
+          icon: require('@/assets/icons/ico_card.png'),
+          list: [],
+          show: false,
+          payAmount: 0,
+        },
       }
     },
     computed: {
       amount() {
         return (this.orderInfo.orderAmount / 100).toFixed(2)
+      },
+
+      remainPayAmount() {
+        return (this.amount - this.mCoinBalance.payAmount - this.mOptCards.payAmount).toFixed(2)
       }
     },
 
@@ -114,6 +147,16 @@
     },
 
     methods: {
+      onOptCardCellClick() {
+        this.$log("onOptCardCellClick Enter")
+        this.mOptCards.show = !this.mOptCards.show
+
+      },
+      onCoinBalanceSelector() {
+        this.$log("onCoinBalanceSelector Enter")
+        this.mCoinBalance.checked = !this.mCoinBalance.checked
+
+      },
       updateBalanceAmount() {
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
@@ -300,11 +343,10 @@
           }
         }
 
-        .composeBox {
+        .coinBalanceBox {
           margin-top: 10px;
           padding: 10px 0px;
           width: 96%;
-          min-height: 100px;
           background-color: white;
           border-radius: 5px;
           display: flex;
@@ -315,6 +357,37 @@
             margin-top: -1px;
           }
         }
+
+        .composePayBox {
+          margin-top: 10px;
+          padding: 10px 0px;
+          width: 96%;
+          background-color: white;
+          border-radius: 5px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+
+          .van-cell {
+            margin-top: -1px;
+          }
+        }
+
+        .optCardBox {
+          margin-top: 10px;
+          padding: 10px 0px;
+          width: 96%;
+          background-color: white;
+          border-radius: 5px;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+
+          .van-cell {
+            margin-top: -1px;
+          }
+        }
+
 
         .pathBox {
           margin-top: 10px;
