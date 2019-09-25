@@ -22,14 +22,14 @@
             <div v-else>
               <v-countdown v-if="promotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
                            class="countdownBox"
-                           :style="isDeepColor(decorateBgColor)? 'color:white':'color:blank'"
+                           :style="'color:blank'"
                            @start_callback="countDownS_cb"
                            @end_callback="countDownE_cb"
                            :startTime="PromotionStartTime"
                            :endTime="PromotionEndTime"
                            :secondsTxt="''"
-                           backgroundColor="#FFFFFF"
-                           textColor="#FF4444"
+                           backgroundColor="#000000"
+                           textColor="#FFFFFF"
                            style="font-size: x-small;font-weight: lighter">
               </v-countdown>
               <div class="promotionStatusText" v-if="promotionStatus === 5">
@@ -88,7 +88,7 @@
         PromotionEndTime: 0,
         promotionActivityId: 0,
         promotionStatus: -1,
-        decorateBgColor: '#FF4444',
+        decorateBgColor: '#FFFFFF',
         isDailySchedule: false,
         dailyEndTime: "",
         dailyScheduleInfo: [],
@@ -435,7 +435,7 @@
       position: relative;
       width: 100%;
       line-height: 15vw;
-      background: #ff4444;
+      background: #ffffff;
       border-top-left-radius: 10px;
       border-top-right-radius: 10px;
 
@@ -446,12 +446,12 @@
       .sectionSlide-title{
         .fz(font-size,35);
         font-weight: bold;
-        color: white;
+        color: #333333;
         //text-shadow:5px 2px 6px #000
       }
     }
 
-    .box:after {
+/*    .box:after {
       position: absolute;
       left: 0;
       right: 0;
@@ -460,9 +460,9 @@
       height: 60px;
       width: 100%;
       border-radius: 0 0 30% 30%;
-      background: linear-gradient(#ff4444, #ffcccc);
+      background: linear-gradient(#ffffff, #ffcccc);
       overflow: hidden;
-    }
+    }*/
 
     .listBox {
       width: 100%;
