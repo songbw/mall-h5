@@ -155,7 +155,17 @@
       onCoinBalanceSelector() {
         this.$log("onCoinBalanceSelector Enter")
         this.mCoinBalance.checked = !this.mCoinBalance.checked
-
+        if(this.mCoinBalance.checked) {
+           let remainPayAmount = this.remainPayAmount;
+          if(this.mCoinBalance.amount*100 >= remainPayAmount *100) {
+             this.mCoinBalance.payAmount = remainPayAmount;
+            this.$log( this.mCoinBalance.payAmount )
+           } else {
+            this.mCoinBalance.payAmount = this.mCoinBalance.amount
+           }
+        } else {
+           this.mCoinBalance.payAmount = 0;
+        }
       },
       updateBalanceAmount() {
         let that = this
