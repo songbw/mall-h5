@@ -234,7 +234,7 @@
         .infoBox {
           padding: 10px 0px;
           width: 96%;
-          min-height: 150px;
+          min-height: 120px;
           background-color: white;
           border-radius: 5px;
           display: flex;
@@ -243,11 +243,11 @@
           align-items: Center;
 
           .payAmount {
-            line-height: 100px;
+            line-height: 80px;
             .fz(font-size, 80);
             color: #FF4444;
             font-weight: bold;
-            min-height: 100px;
+            min-height: 80px;
 
             span {
               .fz(font-size, 50);
