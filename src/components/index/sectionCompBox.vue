@@ -53,7 +53,7 @@
                   <div class="goodsPriceBox">
                     <p>
                       <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                      {{k.price-k.discount}}
+                      {{(k.price-k.discount).toFixed(2)}}
                     </p>
                   </div>
                   <div class="goodsPromotionPriceBox">
@@ -130,7 +130,7 @@
                   <div class="goodsPriceBox">
                     <p>
                       <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                      {{k.price-k.discount}}
+                      {{(k.price-k.discount).toFixed(2)}}
                     </p>
                   </div>
                   <div class="goodsPromotionPriceBox">
