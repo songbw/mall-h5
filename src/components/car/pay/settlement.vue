@@ -260,6 +260,7 @@
     },
     data() {
       return {
+        freightPay: 0,
         payway: '现金支付',
         showHeader: true,
         isOnSummitting: false,
@@ -507,16 +508,6 @@
         return this.receiverAddress
       },
 
-      freightPay() {
-        let freightPay = 0;
-        try {
-          this.arregationList.forEach(item => {
-            freightPay += item.freight;
-          })
-        } catch (e) {
-        }
-        return freightPay.toFixed(2)
-      },
 
       productPay() {
         let productPay = 0;
@@ -634,6 +625,20 @@
     },
 
     methods: {
+      upDatefreightPay() {
+        this.freightPay = 0;
+        try {
+          this.arregationList.forEach(item => {
+            if(item.freight > 0) {
+              this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+              this.$log(item)
+              this.freightPay += item.freight;
+            }
+
+          })
+        } catch (e) {
+        }
+      },
       getDateTime(time) {
         return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },
@@ -1042,9 +1047,9 @@
         this.$log("updateUsedAddress Enter!")
         let address = {};
         let list = this.$store.state.appconf.addressList;
-        this.$log("list:" + JSON.stringify(list))
+        //this.$log("list:" + JSON.stringify(list))
         let id = this.$store.state.appconf.usedAddressId;
-        this.$log("updateUsedAddress id:" + id)
+        //this.$log("updateUsedAddress id:" + id)
         try {
           if (id == undefined || id == -1) {
             if (this.addressCount > 0) {
@@ -1490,6 +1495,7 @@
               }
             })
           });
+          this.upDatefreightPay();
         }).catch(function (error) {
           that.$log(error)
           that.$log("无法获取到运费")
@@ -1527,6 +1533,7 @@
               }
             })
           });
+          this.upDatefreightPay();
           this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
           if (this.pageLoadTimerId != -1) {
