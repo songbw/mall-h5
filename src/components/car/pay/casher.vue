@@ -67,6 +67,28 @@
               <span>绑定惠民优选卡</span>
             </div>
           </div>
+          <van-dialog
+            v-model="addNewOptCardDlgShow"
+            title="绑定惠民优选卡"
+            show-cancel-button="true"
+            confirm-button-text="绑定"
+            :beforeClose="beforeCloseAddNewOptCardDlg"
+          >
+            <van-field
+              v-model="newOptCardNumber"
+              rows="1"
+              maxlength="20"
+              placeholder="请输入卡号"
+              clearable
+            />
+            <van-field
+              v-model="newOptCardPwd"
+              rows="1"
+              maxlength="20"
+              placeholder="请输入密码"
+              clearable
+            />
+          </van-dialog>
         </div>
 
         <div class="composePayBox">
@@ -172,7 +194,10 @@
         mComposePay: {
           title: "还需支付",
           icon:require('@/assets/icons/ico_menu.png'),
-        }
+        },
+        addNewOptCardDlgShow: false,
+        newOptCardNumber: "",
+        newOptCardPwd: ""
       }
     },
     computed: {
@@ -194,8 +219,19 @@
     },
 
     methods: {
+      beforeCloseAddNewOptCardDlg(action, done) {
+        this.$log("beforeCloseAddNewOptCardDlg Enter");
+        if (action === 'confirm') {
+         // this.user.nickname = this.inputNickName
+         // this.saveUserInfo();
+          done()
+        } else if (action === 'cancel') {
+          done() //关闭
+        }
+      },
       onAddNewOptCardClick() {
         this.$log("onAddNewOptCardClick Enter")
+        this.addNewOptCardDlgShow = true
       },
       optCardsToggle(index) {
         this.$refs.optCardsCheckboxes[index].toggle();
