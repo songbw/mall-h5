@@ -73,6 +73,7 @@
         this.$api.AGGREGATE_PAY_URL = serverUrl + "/v2/aggpays/"
         this.$api.LINKPAY_ACCOUNT_URL = serverUrl + "/v2/woas/"
         this.$api.PINGAN_AUTH_URL = serverUrl + "/v2/pingans/"
+        this.$api.FREIGHTS_URL = serverUrl + "/v2/freights/"
         if(testUser != undefined && testUser.length > 0)
           this.$api.TEST_USER = testUser
         if(title !=undefined && title.length > 0)

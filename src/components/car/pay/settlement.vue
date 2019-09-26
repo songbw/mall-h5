@@ -1445,7 +1445,7 @@
         }
 
       },
-      getfreightPay() {
+      getPlatformFreightPay(){
         /////////////查询运费////////////////////////
         let that = this;
         let all = 0;
@@ -1454,7 +1454,54 @@
           "carriages": carriges,
         }
         this.arregationList.forEach(item => {
-          if (item.price > 0) {
+          if (item.price > 0 && item.merchantId != 2) { //aoyi
+            carriges.push({
+              "amount": item.price,
+              "merchantNo": item.merchantCode
+            })
+          }
+        })
+        that.$log("options is:" + JSON.stringify(options))
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.FREIGHTS_URL,
+          url: '/ship',
+          data: options,
+        }).then((response) => {
+          let result = response.data.data.result;
+          this.$log("运费  result is:" + JSON.stringify(result));
+         /* result.forEach(iFreight => {
+            this.arregationList.forEach(item => {
+              if (iFreight.merchantNo === item.merchantCode) {
+                item.freight = parseFloat(iFreight.freightFare);
+              }
+            })
+          });
+          this.$store.commit('SET_PAGE_LOADING', false);
+          this.$log("page loading end");
+          if (this.pageLoadTimerId != -1) {
+            clearTimeout(this.pageLoadTimerId)
+          }*/
+        }).catch(function (error) {
+          that.$log(error)
+/*          that.$store.commit('SET_PAGE_LOADING', false);
+          that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
+          that.$log("无法获取到运费")
+          if (that.pageLoadTimerId != -1) {
+            clearTimeout(that.pageLoadTimerId)
+          }*/
+        })
+      },
+      getAoyifreightPay() {
+        /////////////查询运费////////////////////////
+        let that = this;
+        let all = 0;
+        let carriges = [];
+        let options = {
+          "carriages": carriges,
+        }
+        this.arregationList.forEach(item => {
+          if (item.price > 0 && item.merchantId == 2) { //aoyi
             carriges.push({
               "amount": item.price,
               "merchantNo": item.merchantCode
@@ -1609,7 +1656,7 @@
                          }
                        })*/
             //获取运费
-            this.getfreightPay();
+            this.getAoyifreightPay();//获取奥弋商品库存
           }).catch(function (error) {
             that.$log(error)
             that.$store.commit('SET_PAGE_LOADING', false);
@@ -1646,6 +1693,7 @@
             }).catch(function (error) {
             })
           }
+          this.getPlatformFreightPay();//获取平台商品库存
           this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
           if (this.pageLoadTimerId != -1) {

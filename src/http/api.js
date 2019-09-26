@@ -26,6 +26,7 @@ const BASE_BASE_URL = SERVICE_URL+"/v2/bases/"
 const AGGREGATE_PAY_URL = SERVICE_URL + "/v2/aggpays/"
 const LINKPAY_ACCOUNT_URL = SERVICE_URL + "/v2/woas/"
 const PINGAN_AUTH_URL = SERVICE_URL + "/v2/pingans/"
+const FREIGHTS_URL = SERVICE_URL + "/v2/freights/"
 
 const xapi = axios.create();
 //xapi.defaults.baseURL = SERVER_BASE_URL;
@@ -89,6 +90,7 @@ export default {
   AGGREGATE_PAY_URL,
   LINKPAY_ACCOUNT_URL,
   PINGAN_AUTH_URL,
+  FREIGHTS_URL,
   IS_GAT_APP,
   HAS_HEADER,
   TEST_USER

@@ -18,7 +18,7 @@
         <van-cell title="实际销售单价" title-class="CellTitle" v-if="goods.unitPrice != goods.salePrice">
           ￥{{goods.salePrice.toFixed(2)}}元
         </van-cell>
-        <van-cell title="状态" title-class="CellTitle" :value="requestStateValue"></van-cell>
+        <van-cell title="状态" title-class="CellTitle" :value="formatWOrderStatus(requestState)"></van-cell>
         <div slot="footer">
 <!--          <van-cell title="申请数量" title-class="CellTitle">
             <van-stepper
@@ -118,7 +118,7 @@
       </div>
     </div>
     <div class="footer">
-      <van-button type="warning" size="large" :disabled="commitDisabled" @click="onCommitClick()">提交</van-button>
+      <van-button type="warning" size="large" :disabled="commitDisabled"  :loading="isOnSummitting" @click="onCommitClick()">提交</van-button>
     </div>
   </section>
 </template>
@@ -142,6 +142,7 @@
     },
     data() {
       return {
+        isOnSummitting: false,
         showHeader: true,
         goods: {},
         contact: {},
@@ -151,7 +152,7 @@
         showReason: false,
         radio: '6',
         typeRadio: 'type1',
-        requestState: -1,// 1:编辑中 2.正在审核中 3.审核通过 4.审核有问题 5.处理中 6.处理完成
+        requestState: 0,//
         requestStateValue: "编辑中",
         commitDisabled: false,
         requestDescible: '',
@@ -170,7 +171,7 @@
       this.openId = this.$route.params.openId;
       this.tradeNo = this.$route.params.tradeNo;
       this.count = 0;
-      this.requestState = -1;
+      this.requestState = 0;
 
       this.$log(this.goods)
       this.count = this.goods.num
@@ -210,7 +211,7 @@
         }
       }).catch(function (error) {
         that.$log(error)
-        that.requestState = -1;
+        that.requestState = 0;
       })
     },
 
@@ -241,6 +242,7 @@
             status = "处理完成"
             break;
           default:
+            status = "编辑中"
             break;
         }
         return status;
@@ -327,16 +329,19 @@
           iAppId: this.$api.APP_ID,
           tAppId: this.$api.T_APP_ID,
         }
+        this.isOnSummitting = true;
         this.$api.xapi({
           method: 'post',
           baseURL: this.$api.WORKER_ORDER_BASE_URL,
           url: '/customers/work_orders',
           data: options,
         }).then((response) => {
+          this.isOnSummitting = false;
           this.$log(response)
           if (response.status == 201) {
             this.$toast("申请已经成功提交，请等待客服人员联系")
-            this.requestState = 0;
+            this.requestState = 1;
+            this.count = 0;
             this.cancelSubOrder();
           } else {
             this.$toast("申请提交失败，请联系客服人员")
@@ -344,6 +349,7 @@
         }).catch(function (error) {
           that.$log(error)
           that.$toast("申请提交失败，请联系客服人员")
+          that.isOnSummitting = false;
         })
       },
       showReasonSelector() {
