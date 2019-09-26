@@ -6,7 +6,7 @@
     <div class="payBody">
       <div class="box"></div>
       <div class="payBox">
-        <div class="infoBox">
+        <div class="infoBox" style="z-index: 1">
           <div class="payAmount">
             <p><span>￥</span>{{amount}}</p>
           </div>
@@ -39,6 +39,28 @@
                     clickable
                     @click="onOptCardCellClick()">
           </van-cell>
+          <div>
+            <van-checkbox-group v-model="mOptCards.result">
+              <van-cell-group>
+                <van-cell
+                  v-for="(item, index) in mOptCards.list"
+                  clickable
+                  :key="index"
+                  @click="optCardsToggle(index)"
+                >
+                  <div slot="default" class="optCard">
+
+                  </div>
+                  <div  slot="right-icon" class="optCardCheckBox">
+                    <van-checkbox
+                      :name="item.name"
+                      ref="optCardsCheckboxes"
+                    />
+                  </div>
+                </van-cell>
+              </van-cell-group>
+            </van-checkbox-group>
+          </div>
         </div>
 
         <div class="composePayBox">
@@ -125,7 +147,19 @@
         mOptCards: {
           title: "惠民优选卡支付",
           icon: require('@/assets/icons/ico_card.png'),
-          list: [],
+          list: [
+            {
+              name:"11111111111111",
+              amount: 10,
+              payAmount: 0,
+            },
+            {
+              name:"22222222222222",
+              amount: 10,
+              payAmount: 0,
+            }
+          ],
+          result:[],
           show: false,
           payAmount: 0,
         },
@@ -154,6 +188,10 @@
     },
 
     methods: {
+      optCardsToggle(index) {
+        this.$refs.optCardsCheckboxes[index].toggle();
+      },
+
       onOptCardCellClick() {
         this.$log("onOptCardCellClick Enter")
         this.mOptCards.show = !this.mOptCards.show
@@ -316,7 +354,6 @@
       .payBox {
         display: flex;
         flex-direction: column;
-        position: fixed;
         width: 100%;
         justify-content: center;
         justify-items: center;
@@ -332,7 +369,6 @@
           flex-direction: column;
           justify-content: center;
           align-items: Center;
-
           .payAmount {
             line-height: 80px;
             .fz(font-size, 80);
@@ -407,6 +443,18 @@
 
           .van-cell {
             margin-top: -1px;
+          }
+
+          .optCard{
+            border: 1px solid #3dd5c8;
+            height: 80px;
+            margin: 10px;
+          }
+
+          .optCardCheckBox{
+            height: 100px;
+            align-items: center;
+            display: flex;
           }
         }
 
