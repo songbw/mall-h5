@@ -55,13 +55,17 @@
                   <div  slot="right-icon" class="optCardCheckBox">
                     <van-checkbox
                       :name="item.name"
-                      checked-color="#FF4444"
+                      checked-color="#3dd5c8"
                       ref="optCardsCheckboxes"
                     />
                   </div>
                 </van-cell>
               </van-cell-group>
             </van-checkbox-group>
+            <div class="addNewOptCard" @click="onAddNewOptCardClick">
+              <van-icon name="plus" color="#FF4444"></van-icon>
+              <span>绑定惠民优选卡</span>
+            </div>
           </div>
         </div>
 
@@ -104,7 +108,7 @@
                 @click-right-icon="togLinkPayPwdVisable()"
               />
             </div>
-            <van-cell title="微信支付" :icon="icon_wechatpay">
+            <van-cell title="快捷支付" :icon="icon_quicklypay">
               <van-radio slot="right-icon" disabled name="2"/>
             </van-cell>
           </van-radio-group>
@@ -132,7 +136,7 @@
       return {
         showHeader: true,
         orderInfo: {},
-        icon_wechatpay: require('@/assets/icons/ico_wechatpay.png'),
+        icon_quicklypay: require('@/assets/icons/ico_quicklypay.png'),
         icon_linkpay: require('@/assets/icons/ico_linkpay.png'),
         icon_coin_balance: require('@/assets/icons/ico_coin_balance.png'),
         radio: -1,
@@ -190,6 +194,9 @@
     },
 
     methods: {
+      onAddNewOptCardClick() {
+        this.$log("onAddNewOptCardClick Enter")
+      },
       optCardsToggle(index) {
         this.$refs.optCardsCheckboxes[index].toggle();
       },
@@ -449,8 +456,9 @@
 
           .optCard{
             border: 1px solid #3dd5c8;
+            border-radius: 5px;
             height: 60px;
-            margin: 2px 20px;
+            margin: 2px 25px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -463,6 +471,18 @@
             height: 64px;
             align-items: center;
             display: flex;
+          }
+
+          .addNewOptCard{
+            display: flex;
+            align-items: center;
+            padding-left: 40px;
+            padding-top: 10px;
+            color: #ff4444;
+            font-size: x-large;
+            span{
+              margin: 5px;
+            }
           }
         }
 
