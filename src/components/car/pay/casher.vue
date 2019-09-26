@@ -27,8 +27,8 @@
         </div>
 
         <div class="coinBalanceBox">
-          <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
-            <van-checkbox slot="right-icon" v-model="mCoinBalance.checked"></van-checkbox>
+          <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable  @click="onCoinBalanceSelector()">
+            <van-checkbox slot="right-icon" v-model="mCoinBalance.checked"  checked-color="#FF4444" ></van-checkbox>
             <span slot="label" style="color:black">可用余额: ￥{{mCoinBalance.amount.toFixed(2)}}</span>
           </van-cell>
         </div>
@@ -49,11 +49,13 @@
                   @click="optCardsToggle(index)"
                 >
                   <div slot="default" class="optCard">
-
+                      <span>{{item.amount}}元</span>
+                      <span>惠民优选卡支付</span>
                   </div>
                   <div  slot="right-icon" class="optCardCheckBox">
                     <van-checkbox
                       :name="item.name"
+                      checked-color="#FF4444"
                       ref="optCardsCheckboxes"
                     />
                   </div>
@@ -447,12 +449,18 @@
 
           .optCard{
             border: 1px solid #3dd5c8;
-            height: 80px;
-            margin: 10px;
+            height: 60px;
+            margin: 2px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 30px;
+            color: #3dd5c8;
+            font-size: large;
           }
 
           .optCardCheckBox{
-            height: 100px;
+            height: 64px;
             align-items: center;
             display: flex;
           }
