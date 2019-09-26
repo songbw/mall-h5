@@ -42,10 +42,12 @@
         </div>
 
         <div class="composePayBox">
-          <van-cell title="还需支付" :icon="mCoinBalance.icon"
-                    clickable
-                    @click="onOptCardCellClick()">
-            <span slot="default">￥{{remainPayAmount}}</span>
+          <van-cell :title="mComposePay.title" :icon="mComposePay.icon">
+            <span slot="default" style="font-size: large;color: #ff4444">￥{{remainPayAmount}}</span>
+          </van-cell>
+          <van-cell :icon="mCoinBalance.icon" v-if="mCoinBalance.payAmount > 0">
+            <span slot="title">余额(剩余￥{{(mCoinBalance.amount - mCoinBalance.payAmount).toFixed(2)}})</span>
+            <span slot="default" style="font-size: medium;color: #ff4444">-￥{{mCoinBalance.payAmount}}</span>
           </van-cell>
         </div>
 
@@ -86,7 +88,7 @@
 
         <div class="footer_layout">
           <van-button type="danger" round size="large" @click="onPayBtnClick">
-            确认支付￥{{amount}}
+            确认支付￥{{remainPayAmount}}
           </van-button>
         </div>
       </div>
@@ -97,6 +99,7 @@
 <script>
   import Header from '@/common/_header.vue'
   import Util from '@/util/common'
+
   export default {
     components: {
       'v-header': Header,
@@ -113,19 +116,23 @@
         linkPayPwd: "",
         isLinkPwdVisable: false,
         mCoinBalance: {
-            title: "余额支付",
-            icon: require('@/assets/icons/ico_coin_balance.png'),
-            amount: 0,
-            checked: false,
-            payAmount: 0,
+          title: "余额支付",
+          icon: require('@/assets/icons/ico_coin_balance.png'),
+          amount: 0,
+          checked: false,
+          payAmount: 0,
         },
-        mOptCards:{
+        mOptCards: {
           title: "惠民优选卡支付",
           icon: require('@/assets/icons/ico_card.png'),
           list: [],
           show: false,
           payAmount: 0,
         },
+        mComposePay: {
+          title: "还需支付",
+          icon:require('@/assets/icons/ico_menu.png'),
+        }
       }
     },
     computed: {
@@ -155,16 +162,16 @@
       onCoinBalanceSelector() {
         this.$log("onCoinBalanceSelector Enter")
         this.mCoinBalance.checked = !this.mCoinBalance.checked
-        if(this.mCoinBalance.checked) {
-           let remainPayAmount = this.remainPayAmount;
-          if(this.mCoinBalance.amount*100 >= remainPayAmount *100) {
-             this.mCoinBalance.payAmount = remainPayAmount;
-            this.$log( this.mCoinBalance.payAmount )
-           } else {
+        if (this.mCoinBalance.checked) {
+          let remainPayAmount = this.remainPayAmount;
+          if (this.mCoinBalance.amount * 100 >= remainPayAmount * 100) {
+            this.mCoinBalance.payAmount = remainPayAmount;
+            this.$log(this.mCoinBalance.payAmount)
+          } else {
             this.mCoinBalance.payAmount = this.mCoinBalance.amount
-           }
+          }
         } else {
-           this.mCoinBalance.payAmount = 0;
+          this.mCoinBalance.payAmount = 0;
         }
       },
       updateBalanceAmount() {
@@ -236,24 +243,29 @@
       },
       onPayBtnClick() {
         this.$log("onPayBtnClick Enter")
-        if (this.radio == '1') {
-          this.$log("link pay clicked")
-          this.gotoLinkPay()
-        } else if (this.radio == '2') {
-          this.$api.xapi({
-            method: 'post',
-            baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
-            url: '/payment',
-            data: this.orderInfo,
-          }).then((response) => {
-            this.$log(response)
-            this.onPayResult()
-          }).catch(function (error) {
+        if(this.remainPayAmount > 0) {
+          if (this.radio == '1') {
+            this.$log("link pay clicked")
+            this.gotoLinkPay()
+          } else if (this.radio == '2') {
+            this.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
+              url: '/payment',
+              data: this.orderInfo,
+            }).then((response) => {
+              this.$log(response)
+              this.onPayResult()
+            }).catch(function (error) {
 
-          })
+            })
+          } else {
+            this.$toast("请选择支付方式")
+          }
         } else {
-          this.$toast("请选择支付方式")
+          this.$log("0元支付，无需其他支付方式补充")
         }
+
       }
     }
   }
