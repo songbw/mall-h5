@@ -780,7 +780,7 @@
                       "skuCouponDiscount": skuCouponDiscount
                     })
                     // couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice * sku.product.baseInfo.count
-                    couponDiscountOfMerchant += skuCouponDiscount
+                    couponDiscountOfMerchant = parseFloat((couponDiscountOfMerchant + skuCouponDiscount).toFixed(2))
                   }
                 }
               })
@@ -791,7 +791,8 @@
                 //   "couponOccupiedPrice": couponOccupiedPrice4OnPerMerchant,
                 "couponDiscountOfMerchant": couponDiscountOfMerchant
               })
-              totalCouponDiscount += couponDiscountOfMerchant;
+
+              totalCouponDiscount =  parseFloat((totalCouponDiscount + couponDiscountOfMerchant).toFixed(2))
             }
           })
           if (totalCouponDiscount != this.reducedPriceOfCoupon) {
@@ -801,12 +802,14 @@
               let maxMerchants = 0;
               if (merchants.length > 1) {
                 for (let i = 1; i < merchants.length; i++) {
-                  if (merchants[i].couponOccupiedPrice > merchants[minId].couponOccupiedPrice) {
+                  if (merchants[i].couponOccupiedPrice > merchants[maxMerchants].couponOccupiedPrice) {
                     maxMerchants = i;
                   }
                 }
               }
-              merchants[maxMerchants].couponDiscountOfMerchant += (this.reducedPriceOfCoupon - totalCouponDiscount) //把多余的优惠差价给最大的优惠价格拥有的商户
+              let diff = parseFloat((this.reducedPriceOfCoupon - totalCouponDiscount).toFixed(2))
+               //把多余的优惠差价给最大的优惠价格拥有的商户
+              merchants[maxMerchants].couponDiscountOfMerchant = parseFloat((merchants[maxMerchants].couponDiscountOfMerchant + diff).toFixed(2))
               //找到maxMerchants这个商户的有最大优惠券价值的SKU，把多余的券值赋给这个SKU
               let maxMpu = 0;
               if (merchants[maxMerchants].skus.length > 1) {
@@ -816,7 +819,8 @@
                   }
                 }
               }
-              merchants[maxMerchants].skus[maxMpu].skuCouponDiscount += (this.reducedPriceOfCoupon - totalCouponDiscount) //把多余的券值赋给这个SKU
+              //把多余的券值赋给这个SKU
+              merchants[maxMerchants].skus[maxMpu].skuCouponDiscount = parseFloat((merchants[maxMerchants].skus[maxMpu].skuCouponDiscount + diff).toFixed(2))
             }
           }
           let couponDiscount = parseFloat(this.reducedPriceOfCoupon)
@@ -1202,7 +1206,8 @@
             if (found != -1) {
               couponDiscountOfMerchant = couponInfo.merchants[found].couponDiscountOfMerchant;
             }
-            let saleAmount = amount - couponDiscountOfMerchant;
+            this.$log("amount:" + amount)
+            let saleAmount = parseFloat((amount - couponDiscountOfMerchant).toFixed(2));
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.merchantCode, //商户号
