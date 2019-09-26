@@ -630,8 +630,6 @@
         try {
           this.arregationList.forEach(item => {
             if(item.freight > 0) {
-              this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-              this.$log(item)
               this.freightPay += item.freight;
             }
 
