@@ -1198,8 +1198,8 @@
             if (found != -1) {
               couponDiscountOfMerchant = couponInfo.merchants[found].couponDiscountOfMerchant;
             }
-            this.$log("amount:"+amount)
-            let saleAmount =  parseFloat((amount - couponDiscountOfMerchant).toFixed(2));
+            this.$log("amount:" + amount)
+            let saleAmount = parseFloat((amount - couponDiscountOfMerchant).toFixed(2));
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.merchantCode, //商户号
@@ -1306,15 +1306,15 @@
                 openId: user.openId,
               }
               that.$log("walletInfo:" + JSON.stringify(walletInfo))
-            //  that.$jsbridge.call("dredgeWallet", walletInfo);
+              //  that.$jsbridge.call("dredgeWallet", walletInfo);
             } else {
               if (response.data.data.result != undefined) {
                 let orderNo = response.data.data.result.orderNo
-                let outTradeNo =  response.data.data.result.outTradeNo
+                let outTradeNo = response.data.data.result.outTradeNo
                 pAnOrderInfo['orderNo'] = orderNo
                 pAnOrderInfo['outTradeNo'] = outTradeNo
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-               // that.$jsbridge.call("openCashPage", pAnOrderInfo);
+                // that.$jsbridge.call("openCashPage", pAnOrderInfo);
                 this.$router.replace({
                   name: "收银台页",
                   params: {
@@ -1445,19 +1445,30 @@
         }
 
       },
-      getPlatformFreightPay(){
-        /////////////查询运费////////////////////////
+      getPlatformFreightPay() {
+        /////////////查询平台运费////////////////////////
         let that = this;
         let all = 0;
-        let carriges = [];
-        let options = {
-          "carriages": carriges,
-        }
+        let options = [];
+        let locationCode = this.getLocationCode()
         this.arregationList.forEach(item => {
           if (item.price > 0 && item.merchantId != 2) { //aoyi
-            carriges.push({
-              "amount": item.price,
-              "merchantNo": item.merchantCode
+            let mpuParams = []
+            item.goods.forEach(goods => {
+              if (goods.valid) {
+                mpuParams.push(
+                  {
+                    mpu: goods.product.baseInfo.mpu,
+                    num: goods.product.baseInfo.count
+                  }
+                )
+              }
+            })
+            options.push({
+              merchantId: item.merchantId,
+              provinceId: locationCode.provinceId,
+              totalPrice: item.price,
+              mpuParams: mpuParams
             })
           }
         })
@@ -1469,27 +1480,19 @@
           data: options,
         }).then((response) => {
           let result = response.data.data.result;
-          this.$log("运费  result is:" + JSON.stringify(result));
-         /* result.forEach(iFreight => {
+          this.$log("平台运费  result is:" + JSON.stringify(result));
+          result.forEach(iFreight => {
             this.arregationList.forEach(item => {
-              if (iFreight.merchantNo === item.merchantCode) {
-                item.freight = parseFloat(iFreight.freightFare);
+              if (item.price > 0 && item.merchantId != 2) {
+                if (iFreight.merchantId === item.merchantId) {
+                  item.freight = parseFloat(iFreight.shipPrice);
+                }
               }
             })
           });
-          this.$store.commit('SET_PAGE_LOADING', false);
-          this.$log("page loading end");
-          if (this.pageLoadTimerId != -1) {
-            clearTimeout(this.pageLoadTimerId)
-          }*/
         }).catch(function (error) {
           that.$log(error)
-/*          that.$store.commit('SET_PAGE_LOADING', false);
-          that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
           that.$log("无法获取到运费")
-          if (that.pageLoadTimerId != -1) {
-            clearTimeout(that.pageLoadTimerId)
-          }*/
         })
       },
       getAoyifreightPay() {
@@ -1665,34 +1668,33 @@
               clearTimeout(that.pageLoadTimerId)
             }
           })
-        } else {//other merchant
-          if(skusOfZy.length > 0) {
-            this.$log("settlement other merchant #################################")
-            let options = {
-              "inventories": inventorySkusOfZy
-            }
-            this.$api.xapi({
-              method: 'post',
-              baseURL: this.$api.PRODUCT_BASE_URL,
-              url: '/prod/inventory/self',
-              data: options,
-            }).then((response) => {
-              let result = response.data.data.result;
-              this.$log("自营库存 result is:" + JSON.stringify(result));
-              result.forEach(item => {
-                for (let i = 0; i < this.payCarList.length; i++) {
-                  if (this.payCarList[i].product.baseInfo.mpu === item.mpu) {
-                    if ("1" === item.state) {
-                      this.payCarList[i].valid = true
-                    } else {
-                      this.payCarList[i].valid = false
-                    }
+        }
+        if (skusOfZy.length > 0) {//other merchant
+          this.$log("settlement other merchant #################################")
+          let options = {
+            "inventories": inventorySkusOfZy
+          }
+          this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.PRODUCT_BASE_URL,
+            url: '/prod/inventory/self',
+            data: options,
+          }).then((response) => {
+            let result = response.data.data.result;
+            this.$log("自营库存 result is:" + JSON.stringify(result));
+            result.forEach(item => {
+              for (let i = 0; i < this.payCarList.length; i++) {
+                if (this.payCarList[i].product.baseInfo.mpu === item.mpu) {
+                  if ("1" === item.state) {
+                    this.payCarList[i].valid = true
+                  } else {
+                    this.payCarList[i].valid = false
                   }
                 }
-              })
-            }).catch(function (error) {
+              }
             })
-          }
+          }).catch(function (error) {
+          })
           this.getPlatformFreightPay();//获取平台商品库存
           this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
