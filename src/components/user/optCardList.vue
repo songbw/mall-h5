@@ -67,10 +67,13 @@
       this.showHeader = this.$api.HAS_HEADER;
       let that = this
       that.user = this.$route.params.user;
-      this.$log(this.user)
+      let phonenum = ""
+      if(this.user.telephone != null){
+        phonenum = this.user.telephone
+      }
       let options = {
         "isvalid": true,
-        "phonenum": "18801011130"//"13810864380"
+        "phonenum": phonenum
       }
       that.$api.xapi({
         method: 'post',
