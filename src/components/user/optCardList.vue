@@ -35,6 +35,28 @@
         <span>绑定惠民优选卡</span>
       </div>
     </div>
+    <van-dialog
+      v-model="addNewOptCardDlgShow"
+      title="绑定惠民优选卡"
+      show-cancel-button="true"
+      confirm-button-text="绑定"
+      :beforeClose="beforeCloseAddNewOptCardDlg"
+    >
+      <van-field
+        v-model="newOptCardNumber"
+        rows="1"
+        maxlength="20"
+        placeholder="请输入卡号"
+        clearable
+      />
+      <van-field
+        v-model="newOptCardPwd"
+        rows="1"
+        maxlength="20"
+        placeholder="请输入密码"
+        clearable
+      />
+    </van-dialog>
   </section>
 </template>
 
@@ -59,6 +81,10 @@
         optCardList: [],
         icon_noCards: require('@/assets/icons/ico_empty_card.png'),
         icon_optCardsReal: require('@/assets/icons/ico_optCards_real.png'),
+        addNewOptCardDlgShow: false,
+        newOptCardNumber:"",
+        newOptCardPwd:"",
+        mTelphoneNumber:""
       }
     },
 
@@ -67,13 +93,12 @@
       this.showHeader = this.$api.HAS_HEADER;
       let that = this
       that.user = this.$route.params.user;
-      let phonenum = ""
       if(this.user.telephone != null){
-        phonenum = this.user.telephone
+        this.mTelphoneNumber = this.user.telephone
       }
       let options = {
         "isvalid": true,
-        "phonenum": phonenum
+        "phonenum": this.mTelphoneNumber
       }
       that.$api.xapi({
         method: 'post',

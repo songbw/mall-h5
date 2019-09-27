@@ -163,7 +163,6 @@
         }).then((response) => {
           let user = response.data.data.user;
           if (user != null) {
-            this.$log("xxxxxxxxxxxxxxxxxx")
             this.user = user;
             this.$log(this.user)
             this.$log(this.user.nickname);
