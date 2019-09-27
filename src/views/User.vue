@@ -225,6 +225,7 @@
     methods: {
       onOptCardBtnClick() {
         this.$log("opt Card clicked")
+        this.$router.push({name:'惠民优选卡列表页'})
       },
       onQueryLinkPayBtnClick() {
         this.$log("link pay account btn clicked")

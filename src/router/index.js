@@ -28,6 +28,7 @@ const CouponGift = resolve => require(['@/components/user/couponGift.vue'], reso
 const CoinBalance = resolve => require(['@/components/user/coinBalance.vue'], resolve)
 const WorkerOrderList = resolve => require(['@/components/car/pay/workerOrderList.vue'], resolve)
 const WorkerOrderDetail = resolve => require(['@/components/car/pay/workerOrderDetail.vue'], resolve)
+const OptCardList = resolve => require(['@/components/user/optCardList.vue'], resolve)
 
 export default new VueRouter({
   mode: 'history',
@@ -285,6 +286,14 @@ export default new VueRouter({
       component: WorkerOrderDetail,
       meta: {
         title: '工单详情',
+      }
+    },
+    {
+      path: '/user/optCardList',
+      name: '惠民优选卡列表页',
+      component: OptCardList,
+      meta: {
+        title: '我的惠民优选卡',
       }
     },
 
