@@ -28,6 +28,8 @@ const LINKPAY_ACCOUNT_URL = SERVICE_URL + "/v2/woas/"
 const PINGAN_AUTH_URL = SERVICE_URL + "/v2/pingans/"
 const FREIGHTS_URL = SERVICE_URL + "/v2/freights/"
 
+const OPTCARDS_URL = SERVICE_URL +"/v2/wocs/"
+
 const xapi = axios.create();
 //xapi.defaults.baseURL = SERVER_BASE_URL;
 xapi.defaults.timeout = 20000;
@@ -91,6 +93,7 @@ export default {
   LINKPAY_ACCOUNT_URL,
   PINGAN_AUTH_URL,
   FREIGHTS_URL,
+  OPTCARDS_URL,
   IS_GAT_APP,
   HAS_HEADER,
   TEST_USER

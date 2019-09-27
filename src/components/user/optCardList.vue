@@ -48,7 +48,23 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
-      this.user = this.$route.params.user;
+      let that = this
+      that.user = this.$route.params.user;
+      this.$log(this.user)
+      let options = {
+        "isvalid": true,
+        "phonenum": "18801011130"//"13810864380"
+      }
+      that.$api.xapi({
+        method: 'post',
+        baseURL: this.$api.OPTCARDS_URL,
+        url: '/woc/cardinfo/getcardlist',
+        data: options
+      }).then((response) => {
+        that.$log(response)
+      }).catch(function (error) {
+
+      })
     },
 
     methods: {
