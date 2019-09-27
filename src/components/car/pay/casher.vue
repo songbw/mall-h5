@@ -195,6 +195,7 @@
           title: "还需支付",
           icon:require('@/assets/icons/ico_menu.png'),
         },
+        mPaylist:[],
         addNewOptCardDlgShow: false,
         newOptCardNumber: "",
         newOptCardPwd: ""
