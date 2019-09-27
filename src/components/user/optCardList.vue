@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="optcardListBottomFunc">
-      <div @click="onaddOptCardButtonCouponClick()" class="addOptCardButton">
+      <div @click="onAddOptCardBtnClick()" class="addOptCardButton">
         <span>绑定惠民优选卡</span>
       </div>
     </div>
@@ -42,6 +42,14 @@
       confirm-button-text="绑定"
       :beforeClose="beforeCloseAddNewOptCardDlg"
     >
+      <van-field
+        v-model="mTelphoneNumber"
+        rows="1"
+        maxlength="20"
+        placeholder="绑定用户电话号码"
+        clearable
+        v-if="this.user.telephone == null || this.user.telephone.length == 0"
+      />
       <van-field
         v-model="newOptCardNumber"
         rows="1"
@@ -122,7 +130,21 @@
       },
       onCardDetailBtnClick(){
         this.$log("onCardDetailBtnClick Enter")
-      }
+      },
+      onAddOptCardBtnClick() {
+        this.$log("onAddOptCardBtnClick Enter")
+        this.addNewOptCardDlgShow = true
+      },
+      beforeCloseAddNewOptCardDlg(action, done) {
+        this.$log("beforeCloseAddNewOptCardDlg Enter");
+        if (action === 'confirm') {
+          // this.user.nickname = this.inputNickName
+          // this.saveUserInfo();
+          done()
+        } else if (action === 'cancel') {
+          done() //关闭
+        }
+      },
     }
   }
 </script>
