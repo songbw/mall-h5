@@ -534,7 +534,7 @@
     .couponListBody {
       .couponListMain {
         width: 100%;
-        margin-bottom: 3em;
+        padding-bottom: 3em;
         .noCoupon {
           width: 100%;
           background-color: #f8f8f8;
