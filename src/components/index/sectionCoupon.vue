@@ -305,6 +305,7 @@
 
   .sectionCoupon{
     .wrap {
+
       .couponBoxTitle {
         img {
           width: 100%;
