@@ -70,6 +70,9 @@
         </div>
       </div>
       <div class="settingsBox">
+        <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
+          <img slot="icon" :src="icon_optCard"/>
+        </van-cell>
         <van-cell title="市名卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
           <img slot="icon" :src="icon_linkPayCard"/>
         </van-cell>
@@ -210,6 +213,7 @@
         aboutIcon: require('@/assets/icons/ico_info.png'),
         customServiceIcon: require('@/assets/icons/ico_customService.png'),
         icon_linkPayCard:  require('@/assets/icons/ico_card.png'),
+        icon_optCard: require('@/assets/icons/ico_optCard.png'),
         user: {},
         showLinkPayDialog: false,
         linkPayAccount:"",
@@ -219,6 +223,9 @@
       }
     },
     methods: {
+      onOptCardBtnClick() {
+        this.$log("opt Card clicked")
+      },
       onQueryLinkPayBtnClick() {
         this.$log("link pay account btn clicked")
         this.showLinkPayDialog = true;
