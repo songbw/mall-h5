@@ -35,12 +35,12 @@
 
         <div class="optCardBox">
           <van-cell :title="mOptCards.title" :icon="mOptCards.icon"
-                    value="查看可用的优选卡"
+                    :value="this.mOptCards.show?'点击隐藏优选卡':'点击查看优选卡'"
                     clickable
                     @click="onOptCardCellClick()">
           </van-cell>
-          <div>
-            <van-checkbox-group v-model="mOptCards.result">
+          <div v-if="this.mOptCards.show == true">
+            <van-checkbox-group v-model="mOptCards.result" @change="onOptCardsStatusChanged()">
               <van-cell-group>
                 <van-cell
                   v-for="(item, index) in mOptCards.list"
@@ -235,6 +235,9 @@
       },
       optCardsToggle(index) {
         this.$refs.optCardsCheckboxes[index].toggle();
+      },
+      onOptCardsStatusChanged(index) {
+         this.$log(this.mOptCards.result)
       },
 
       onOptCardCellClick() {
