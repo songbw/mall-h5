@@ -8,6 +8,7 @@ import LyTab from 'ly-tab'
 import moment from 'moment'
 import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
+import VueScroller from 'vue-scroller'
 
 Vue.use(VueWechatTitle)
 
@@ -15,6 +16,7 @@ Vue.use(ba, "03a0d710c71e9da54f17e6e0544e5030");
 Vue.use(ba, { siteId: "03a0d710c71e9da54f17e6e0544e5030" });
 
 Vue.use(LyTab)
+Vue.use(VueScroller)
 
 import {
   Button,
