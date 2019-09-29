@@ -5,15 +5,31 @@
     </v-header>
     <div class="optCardDetailBody">
       <div class="optCardDetailMain">
-          <div v-for="(k,index) in creditList" :key="index" class="detailCard">
-            <div class="detailInfo">
-              <span >支付</span>
-              <span style="float: right;font-size: large">-{{(k.paymentamount/100).toFixed(2)}}元</span>
+        <van-tabs v-model="active">
+          <van-tab title="消费记录">
+            <div v-for="(k,index) in creditList" :key="index" class="detailCard">
+              <div class="detailInfo">
+                <span >支付</span>
+                <span style="float: right;font-size: large">-{{(k.paymentamount/100).toFixed(2)}}元</span>
+              </div>
+              <div>
+                <div class="detailDate">日期:{{formatTime(k.ordertime)}}</div>
+              </div>
             </div>
-            <div>
-              <div class="detailDate">日期:{{formatTime(k.ordertime)}}</div>
+          </van-tab>
+          <van-tab title="退款记录">
+            <div v-for="(k,index) in debitList" :key="index" class="detailCard">
+              <div class="detailInfo">
+                <span >退款</span>
+                <span style="float: right;font-size: large;color: #ff4444">+{{(k.paymentamount/100).toFixed(2)}}元</span>
+              </div>
+              <div>
+                <div class="detailDate">日期:{{formatTime(k.ordertime)}}</div>
+              </div>
             </div>
-          </div>
+          </van-tab>
+        </van-tabs>
+
       </div>
     </div>
   </section>
