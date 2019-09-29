@@ -28,7 +28,13 @@
       return {
         user: {},
         launchedLoaded: false,
-        card: {}
+        card: {},
+        pageNo: 1,
+        total: -1,
+        list: [],
+        loading: false,
+        finished: false,
+        icon_noContext: require('@/assets/icons/ico_empty_box.png'),
       }
     },
 
