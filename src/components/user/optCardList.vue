@@ -61,7 +61,6 @@
       />
       <van-field
         v-model="newOptCardPwd"
-        type="number"
         rows="1"
         maxlength="20"
         placeholder="请输入密码"
@@ -126,6 +125,24 @@
     },
 
     methods: {
+      updateOptCardList () {
+        let that = this
+        let options = {
+          "isvalid": true,
+          "phonenum": this.mTelphoneNumber
+        }
+        that.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.OPTCARDS_URL,
+          url: '/woc/cardinfo/getcardlist',
+          data: options
+        }).then((response) => {
+          that.$log(response.data.data)
+          that.optCardList = response.data.data
+        }).catch(function (error) {
+
+        })
+      },
       saveUserInfo() {
         return this.$api.xapi({
           method: 'put',
@@ -176,9 +193,26 @@
           this.$log(this.mTelphoneNumber)
           this.$log(this.newOptCardNumber)
           this.$log(this.newOptCardPwd)
-
-          done(false)
-         // done()
+          let that = this
+          let options = {
+            "cardnum": this.newOptCardNumber,
+            "password": this.newOptCardPwd,
+            "phonenum": this.mTelphoneNumber
+          }
+          that.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.OPTCARDS_URL,
+            url: '/woc/cardbind/dobind',
+            data: options
+          }).then((response) => {
+            that.$log(response.data.data)
+            that.$toast(response.data.message)
+            that.updateOptCardList()
+            done()
+          }).catch(function (error) {
+            that.$toast("绑卡失败")
+            done()
+          })
         } else if (action === 'cancel') {
           done() //关闭
         }
