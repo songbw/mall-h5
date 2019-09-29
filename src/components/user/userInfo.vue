@@ -171,7 +171,7 @@
       beforeCloseTelDialog(action, done) {
         this.$log("beforeCloseTelDialog Enter");
         if (action === 'confirm') {
-          if (!this.inputTel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+          if (this.inputTel == null || this.inputTel.length == 0 || !this.inputTel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
             this.$toast("请输入正确的电话号码")
             done(false) //不关闭弹框
           } else {

@@ -44,6 +44,7 @@
     >
       <van-field
         v-model="mTelphoneNumber"
+        type="tel"
         rows="1"
         maxlength="20"
         placeholder="绑定用户电话号码"
@@ -52,6 +53,7 @@
       />
       <van-field
         v-model="newOptCardNumber"
+        type="number"
         rows="1"
         maxlength="20"
         placeholder="请输入卡号"
@@ -59,6 +61,7 @@
       />
       <van-field
         v-model="newOptCardPwd"
+        type="number"
         rows="1"
         maxlength="20"
         placeholder="请输入密码"
@@ -123,6 +126,15 @@
     },
 
     methods: {
+      saveUserInfo() {
+        return this.$api.xapi({
+          method: 'put',
+          baseURL: this.$api.SSO_BASE_URL,
+          //url: '/user/updateProfile',
+          url: '/user',
+          data: this.user
+        })
+      },
       formatTime(timeString) {
         if (timeString == null)
           return null
@@ -135,12 +147,38 @@
         this.$log("onAddOptCardBtnClick Enter")
         this.addNewOptCardDlgShow = true
       },
-      beforeCloseAddNewOptCardDlg(action, done) {
+
+       async beforeCloseAddNewOptCardDlg(action, done) {
         this.$log("beforeCloseAddNewOptCardDlg Enter");
         if (action === 'confirm') {
           // this.user.nickname = this.inputNickName
           // this.saveUserInfo();
-          done()
+          if(this.user.telephone == null || this.user.telephone.length == 0) {
+            if(!this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+              this.$toast("请输入正确的电话号码")
+              done(false) //不关闭弹框
+              return
+            } else {
+              this.user.telephone = this.mTelphoneNumber
+              let ret = await this.saveUserInfo();
+            }
+          }
+          if(this.newOptCardNumber.length == 0) {
+            this.$toast("请输入正确的卡号")
+            done(false) //不关闭弹框
+            return
+          }
+          if(this.newOptCardPwd.length == 0) {
+            this.$toast("请输入正确的卡密码")
+            done(false) //不关闭弹框
+            return
+          }
+          this.$log(this.mTelphoneNumber)
+          this.$log(this.newOptCardNumber)
+          this.$log(this.newOptCardPwd)
+
+          done(false)
+         // done()
         } else if (action === 'cancel') {
           done() //关闭
         }
