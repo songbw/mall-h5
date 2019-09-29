@@ -159,6 +159,7 @@
       },
       onCardDetailBtnClick(){
         this.$log("onCardDetailBtnClick Enter")
+        this.$router.push({name:"惠民优选卡详情页"})
       },
       onAddOptCardBtnClick() {
         this.$log("onAddOptCardBtnClick Enter")
