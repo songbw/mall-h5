@@ -28,12 +28,17 @@
       return {
         user: {},
         launchedLoaded: false,
+        card: {}
       }
     },
 
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
+      this.user = this.$route.params.user;
+      this.card = this.$route.params.card;
+      this.$log(this.user)
+      this.$log(this.card)
     },
 
     methods: {

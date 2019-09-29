@@ -19,7 +19,7 @@
             </div>
             <div class="cardFooter">
                <span class="cardBalance">余额: {{(k.balance/100).toFixed(2)}}元</span>
-               <span class="cardDetail" @click="onCardDetailBtnClick">交易明细 ></span>
+               <span class="cardDetail" @click="onCardDetailBtnClick(k)">交易明细 ></span>
             </div>
 
           </div>
@@ -157,9 +157,15 @@
           return null
         return this.$moment(timeString,"YYYYMMDDHHmmss").format('YYYY/MM/DD')
       },
-      onCardDetailBtnClick(){
+      onCardDetailBtnClick(k){
         this.$log("onCardDetailBtnClick Enter")
-        this.$router.push({name:"惠民优选卡详情页"})
+        this.$log(k)
+        this.$router.push({
+          name:"惠民优选卡详情页",
+          params: {
+            user: this.user,
+            card: k,
+          }})
       },
       onAddOptCardBtnClick() {
         this.$log("onAddOptCardBtnClick Enter")
