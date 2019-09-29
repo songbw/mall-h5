@@ -69,8 +69,14 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
-      this.user = this.$route.params.user;
-      this.card = this.$route.params.card;
+      let userDetail = this.$store.state.appconf.userDetail;
+      if(userDetail.length > 0) {
+        this.user  = JSON.parse(userDetail)
+      }
+      let  currentOptCard = this.$store.state.appconf.currentOptCard
+      if(currentOptCard.length > 0) {
+        this.card  = JSON.parse(currentOptCard)
+      }
       this.$log(this.user)
       this.$log(this.card)
       this.getData()
@@ -82,15 +88,16 @@
           return ""
         return this.$moment(new Date(parseInt(timeString))).format('YYYY/MM/DD HH:mm:ss')
       },
-      getData(user, card) {
+      getData() {
         this.$log(this.pageNo)
+        let todayTime = this.$moment(new Date()).format('YYYYMMDDHHmmss')
         let options = {
-          "cardnum": "0218960836",
-          "fromtime": "19700101000000",
+          "cardnum": this.card.cardnum,
+          "fromtime": this.card.addDate,
           "pagenum": this.pageNo,
           "pagerecord": this.pagerecord,
-          "phonenum": "18801011130",
-          "totime": "20190929110000"
+          "phonenum": this.user.telephone,
+          "totime": todayTime
         }
         let that = this
         that.$api.xapi({

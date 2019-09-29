@@ -102,8 +102,9 @@
     created() {
       this.showHeader = this.$api.HAS_HEADER;
       let that = this
-      that.user = this.$route.params.user;
-      if(this.user.telephone != null){
+      let userDetail = this.$store.state.appconf.userDetail;
+      if(userDetail.length > 0) {
+        this.user  = JSON.parse(userDetail)
         this.mTelphoneNumber = this.user.telephone
       }
       let options = {
@@ -125,6 +126,12 @@
     },
 
     methods: {
+      updateUserDatail(userDetail) {
+        this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
+      },
+      updateCurrentOptCard(currentCard) {
+        this.$store.commit('SET_CURRENT_OPT_CARDS', JSON.stringify(currentCard));
+      },
       updateOptCardList () {
         let that = this
         let options = {
@@ -160,6 +167,7 @@
       onCardDetailBtnClick(k){
         this.$log("onCardDetailBtnClick Enter")
         this.$log(k)
+        this.updateCurrentOptCard(k);
         this.$router.push({
           name:"惠民优选卡详情页",
           params: {
@@ -185,6 +193,7 @@
             } else {
               this.user.telephone = this.mTelphoneNumber
               let ret = await this.saveUserInfo();
+              this.updateUserDatail(this.user);
             }
           }
           if(this.newOptCardNumber.length == 0) {
