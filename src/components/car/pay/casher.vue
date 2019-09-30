@@ -174,7 +174,7 @@
         },
         mOptCards: {
           title: "惠民优选卡支付",
-          icon: require('@/assets/icons/ico_card.png'),
+          icon: require('@/assets/icons/ico_linkPayCard.png'),
           list: [
             {
               name:"11111111111111",

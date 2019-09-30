@@ -212,7 +212,7 @@
         receriverAddressIcon: require('@/assets/icons/ico_receiveraddress.png'),
         aboutIcon: require('@/assets/icons/ico_info.png'),
         customServiceIcon: require('@/assets/icons/ico_customService.png'),
-        icon_linkPayCard:  require('@/assets/icons/ico_card.png'),
+        icon_linkPayCard:  require('@/assets/icons/ico_linkPayCard.png'),
         icon_optCard: require('@/assets/icons/ico_optCard.png'),
         user: {},
         showLinkPayDialog: false,
