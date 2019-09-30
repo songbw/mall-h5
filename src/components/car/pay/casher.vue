@@ -75,7 +75,17 @@
             :beforeClose="beforeCloseAddNewOptCardDlg"
           >
             <van-field
+              v-model="mTelphoneNumber"
+              type="tel"
+              rows="1"
+              maxlength="20"
+              placeholder="绑定用户电话号码"
+              clearable
+              v-if="this.userDetail.telephone == null || this.userDetail.telephone.length == 0"
+            />
+            <van-field
               v-model="newOptCardNumber"
+              type="number"
               rows="1"
               maxlength="20"
               placeholder="请输入卡号"
@@ -176,18 +186,7 @@
         mOptCards: {
           title: "惠民优选卡支付",
           icon: require('@/assets/icons/ico_linkPayCard.png'),
-          list: [
-/*            {
-              cardnum:"11111111111111",
-              balance: 10,
-              payAmount: 0,
-            },
-            {
-              cardnum:"22222222222222",
-              balance: 10,
-              payAmount: 0,
-            }*/
-          ],
+          list: [],
           result:[],
           show: false,
           payAmount: 0,
@@ -239,25 +238,17 @@
         }).then((response) => {
           that.$log(response.data.data)
           let optCardList = response.data.data
-         // this.mOptCards.list = [];
+          //this.mOptCards.list = optCardList
           optCardList.forEach(item => {
-            let found = -1;
-            for(let i = 0; i < this.mOptCards.length; i++) {
-              if(this.mOptCards.cardnum == item.cardnum) {
-                found = i;
+            item['payAmount'] = 0
+            for(let i = 0; i < this.mOptCards.list.length; i++) {
+              if (this.mOptCards.list[i].cardnum == item.cardnum) {
+                item['payAmount'] = this.mOptCards.list[i].payAmount
                 break;
               }
             }
-            if(found == -1) {
-              this.mOptCards.list.push({
-                cardnum:item.cardnum,
-                balance:item.balance/100,
-                payAmount: 0,
-              })
-            } else {
-              this.mOptCards.list[found].balance = item.balance/100
-            }
           })
+          this.mOptCards.list = optCardList;
         }).catch(function (error) {
 
         })
@@ -291,7 +282,7 @@
         }
       },
 
-      updateOptCardList () {
+/*      updateOptCardList () {
         let that = this
         let options = {
           "isvalid": true,
@@ -308,18 +299,70 @@
         }).catch(function (error) {
 
         })
+      },*/
+
+      saveUserInfo() {
+        return this.$api.xapi({
+          method: 'put',
+          baseURL: this.$api.SSO_BASE_URL,
+          //url: '/user/updateProfile',
+          url: '/user',
+          data: this.user
+        })
       },
 
-      beforeCloseAddNewOptCardDlg(action, done) {
+      async beforeCloseAddNewOptCardDlg(action, done) {
         this.$log("beforeCloseAddNewOptCardDlg Enter");
         if (action === 'confirm') {
-         // this.user.nickname = this.inputNickName
-         // this.saveUserInfo();
-          done()
+          if(this.userDetail.telephone == null || this.userDetail.telephone.length == 0) {
+            if(!this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+              this.$toast("请输入正确的电话号码")
+              done(false) //不关闭弹框
+              return
+            } else {
+              this.userDetail.telephone = this.mTelphoneNumber
+              let ret = await this.saveUserInfo();
+              this.updateUserDetail(this.user);
+            }
+          }
+          if(this.newOptCardNumber.length == 0) {
+            this.$toast("请输入正确的卡号")
+            done(false) //不关闭弹框
+            return
+          }
+          if(this.newOptCardPwd.length == 0) {
+            this.$toast("请输入正确的卡密码")
+            done(false) //不关闭弹框
+            return
+          }
+          this.$log(this.mTelphoneNumber)
+          this.$log(this.newOptCardNumber)
+          this.$log(this.newOptCardPwd)
+          let that = this
+          let options = {
+            "cardnum": this.newOptCardNumber,
+            "password": this.newOptCardPwd,
+            "phonenum": this.mTelphoneNumber
+          }
+          that.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.OPTCARDS_URL,
+            url: '/woc/cardbind/dobind',
+            data: options
+          }).then((response) => {
+            that.$log(response.data.data)
+            that.$toast(response.data.message)
+            that.getOptCardList(this.userDetail);
+            done()
+          }).catch(function (error) {
+            that.$toast("绑卡失败")
+            done()
+          })
         } else if (action === 'cancel') {
           done() //关闭
         }
       },
+
       onAddNewOptCardClick() {
         this.$log("onAddNewOptCardClick Enter")
         this.addNewOptCardDlgShow = true
@@ -364,7 +407,9 @@
               openId: user.openId
             }
           }).then((response) => {
-            this.mCoinBalance.amount = response.data.data.amount
+            if(response.data.data != null) {
+              this.mCoinBalance.amount = response.data.data.amount
+            }
           }).catch(function (error) {
             that.$log(error)
           })

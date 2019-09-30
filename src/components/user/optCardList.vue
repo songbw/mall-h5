@@ -126,7 +126,7 @@
     },
 
     methods: {
-      updateUserDatail(userDetail) {
+      updateUserDetail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
       },
       updateCurrentOptCard(currentCard) {
@@ -193,7 +193,7 @@
             } else {
               this.user.telephone = this.mTelphoneNumber
               let ret = await this.saveUserInfo();
-              this.updateUserDatail(this.user);
+              this.updateUserDetail(this.user);
             }
           }
           if(this.newOptCardNumber.length == 0) {
