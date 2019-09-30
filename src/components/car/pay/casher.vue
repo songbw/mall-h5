@@ -49,12 +49,12 @@
                   @click="optCardsToggle(index)"
                 >
                   <div slot="default" class="optCard">
-                      <span>{{item.amount}}元</span>
+                      <span>{{item.balance}}元</span>
                       <span>惠民优选卡支付</span>
                   </div>
                   <div  slot="right-icon" class="optCardCheckBox">
                     <van-checkbox
-                      :name="item.name"
+                      :name="item.cardnum"
                       checked-color="#3dd5c8"
                       ref="optCardsCheckboxes"
                     />
@@ -165,6 +165,7 @@
         linkPayAccount: "",
         linkPayPwd: "",
         isLinkPwdVisable: false,
+        userDetail: {},
         mCoinBalance: {
           title: "余额支付",
           icon: require('@/assets/icons/ico_coin_balance.png'),
@@ -176,16 +177,16 @@
           title: "惠民优选卡支付",
           icon: require('@/assets/icons/ico_linkPayCard.png'),
           list: [
-            {
-              name:"11111111111111",
-              amount: 10,
+/*            {
+              cardnum:"11111111111111",
+              balance: 10,
               payAmount: 0,
             },
             {
-              name:"22222222222222",
-              amount: 10,
+              cardnum:"22222222222222",
+              balance: 10,
               payAmount: 0,
-            }
+            }*/
           ],
           result:[],
           show: false,
@@ -216,10 +217,99 @@
       this.showHeader = this.$api.HAS_HEADER;
       this.orderInfo = this.$route.params.orderInfo;
       this.$log(this.orderInfo);
+      this.updateOptCardInfo();
       this.updateBalanceAmount();
     },
 
     methods: {
+      updateUserDetail(userDetail) {
+        this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
+      },
+      getOptCardList(userDetail) {
+        let that = this
+        let options = {
+          "isvalid": true,
+          "phonenum": this.mTelphoneNumber
+        }
+        that.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.OPTCARDS_URL,
+          url: '/woc/cardinfo/getcardlist',
+          data: options
+        }).then((response) => {
+          that.$log(response.data.data)
+          let optCardList = response.data.data
+         // this.mOptCards.list = [];
+          optCardList.forEach(item => {
+            let found = -1;
+            for(let i = 0; i < this.mOptCards.length; i++) {
+              if(this.mOptCards.cardnum == item.cardnum) {
+                found = i;
+                break;
+              }
+            }
+            if(found == -1) {
+              this.mOptCards.list.push({
+                cardnum:item.cardnum,
+                balance:item.balance/100,
+                payAmount: 0,
+              })
+            } else {
+              this.mOptCards.list[found].balance = item.balance/100
+            }
+          })
+        }).catch(function (error) {
+
+        })
+      },
+      updateOptCardInfo() {
+        let userInfo = this.$store.state.appconf.userInfo;
+        let that = this
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
+          return this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: '/user',
+            params: {
+              iAppId: this.$api.APP_ID,
+              openId: user.openId,
+            }
+          }).then((response) => {
+            let user = response.data.data.user;
+            if (user != null) {
+              this.userDetail = user;
+              this.mTelphoneNumber = this.userDetail.telephone;
+              this.updateUserDetail(this.userDetail);
+              this.getOptCardList(this.userDetail);
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        } else {
+          return null
+        }
+      },
+
+      updateOptCardList () {
+        let that = this
+        let options = {
+          "isvalid": true,
+          "phonenum": this.mTelphoneNumber
+        }
+        that.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.OPTCARDS_URL,
+          url: '/woc/cardinfo/getcardlist',
+          data: options
+        }).then((response) => {
+          that.$log(response.data.data)
+          that.optCardList = response.data.data
+        }).catch(function (error) {
+
+        })
+      },
+
       beforeCloseAddNewOptCardDlg(action, done) {
         this.$log("beforeCloseAddNewOptCardDlg Enter");
         if (action === 'confirm') {
