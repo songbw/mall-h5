@@ -49,7 +49,7 @@
                   @click="optCardsToggle(index)"
                 >
                   <div slot="default" class="optCard">
-                      <span>{{item.balance}}元</span>
+                      <span>{{item.balance/100}}元</span>
                       <span>惠民优选卡支付</span>
                   </div>
                   <div  slot="right-icon" class="optCardCheckBox">
