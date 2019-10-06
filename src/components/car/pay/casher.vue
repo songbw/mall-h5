@@ -27,8 +27,8 @@
         </div>
 
         <div class="coinBalanceBox">
-          <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable  @click="onCoinBalanceSelector()">
-            <van-checkbox slot="right-icon" v-model="mCoinBalance.checked"  checked-color="#FF4444" ></van-checkbox>
+          <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
+            <van-checkbox slot="right-icon" v-model="mCoinBalance.checked" checked-color="#FF4444"></van-checkbox>
             <span slot="label" style="color:black">可用余额: ￥{{(mCoinBalance.amount/100).toFixed(2)}}</span>
           </van-cell>
         </div>
@@ -49,10 +49,10 @@
                   @click="optCardsToggle(index)"
                 >
                   <div slot="default" class="optCard">
-                      <span>{{item.balance/100}}元</span>
-                      <span>惠民优选卡支付</span>
+                    <span>{{item.balance/100}}元</span>
+                    <span>惠民优选卡支付</span>
                   </div>
-                  <div  slot="right-icon" class="optCardCheckBox">
+                  <div slot="right-icon" class="optCardCheckBox">
                     <van-checkbox
                       :name="item.cardnum"
                       checked-color="#3dd5c8"
@@ -193,15 +193,15 @@
           title: "惠民优选卡支付",
           icon: require('@/assets/icons/ico_linkPayCard.png'),
           list: [],
-          result:[],
+          result: [],
           show: false,
           payAmount: 0,
         },
         mComposePay: {
           title: "还需支付",
-          icon:require('@/assets/icons/ico_menu.png'),
+          icon: require('@/assets/icons/ico_menu.png'),
         },
-        mPaylist:[],
+        mPaylist: [],
         addNewOptCardDlgShow: false,
         newOptCardNumber: "",
         newOptCardPwd: ""
@@ -213,7 +213,7 @@
       },
 
       remainPayAmount() {
-        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mOptCards.payAmount)/100).toFixed(2)
+        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mOptCards.payAmount) / 100).toFixed(2)
       }
     },
 
@@ -247,7 +247,7 @@
           //this.mOptCards.list = optCardList
           optCardList.forEach(item => {
             item['payAmount'] = 0
-            for(let i = 0; i < this.mOptCards.list.length; i++) {
+            for (let i = 0; i < this.mOptCards.list.length; i++) {
               if (this.mOptCards.list[i].cardnum == item.cardnum) {
                 item['payAmount'] = this.mOptCards.list[i].payAmount
                 break;
@@ -288,24 +288,24 @@
         }
       },
 
-/*      updateOptCardList () {
-        let that = this
-        let options = {
-          "isvalid": true,
-          "phonenum": this.mTelphoneNumber
-        }
-        that.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.OPTCARDS_URL,
-          url: '/woc/cardinfo/getcardlist',
-          data: options
-        }).then((response) => {
-          that.$log(response.data.data)
-          that.optCardList = response.data.data
-        }).catch(function (error) {
+      /*      updateOptCardList () {
+              let that = this
+              let options = {
+                "isvalid": true,
+                "phonenum": this.mTelphoneNumber
+              }
+              that.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.OPTCARDS_URL,
+                url: '/woc/cardinfo/getcardlist',
+                data: options
+              }).then((response) => {
+                that.$log(response.data.data)
+                that.optCardList = response.data.data
+              }).catch(function (error) {
 
-        })
-      },*/
+              })
+            },*/
 
       saveUserInfo() {
         return this.$api.xapi({
@@ -320,8 +320,8 @@
       async beforeCloseAddNewOptCardDlg(action, done) {
         this.$log("beforeCloseAddNewOptCardDlg Enter");
         if (action === 'confirm') {
-          if(this.userDetail.telephone == null || this.userDetail.telephone.length == 0) {
-            if(!this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+          if (this.userDetail.telephone == null || this.userDetail.telephone.length == 0) {
+            if (!this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
               this.$toast("请输入正确的电话号码")
               done(false) //不关闭弹框
               return
@@ -331,12 +331,12 @@
               this.updateUserDetail(this.user);
             }
           }
-          if(this.newOptCardNumber.length == 0) {
+          if (this.newOptCardNumber.length == 0) {
             this.$toast("请输入正确的卡号")
             done(false) //不关闭弹框
             return
           }
-          if(this.newOptCardPwd.length == 0) {
+          if (this.newOptCardPwd.length == 0) {
             this.$toast("请输入正确的卡密码")
             done(false) //不关闭弹框
             return
@@ -374,8 +374,8 @@
         this.addNewOptCardDlgShow = true
       },
       optCardsToggle(index) {
-        if(this.remainPayAmount == 0 && !this.$refs.optCardsCheckboxes[index].checked) {
-           //do nothing
+        if (this.remainPayAmount == 0 && !this.$refs.optCardsCheckboxes[index].checked) {
+          //do nothing
         } else {
           this.$refs.optCardsCheckboxes[index].toggle();
         }
@@ -385,35 +385,35 @@
         this.$log("onOptCardsStatusChanged Enter")
         this.$log(this.mOptCards.result)
         this.$log(this.mOptCards.list)
-        for(let i = this.mPaylist.length - 1; i >= 0; i--) {
-          if(this.mPaylist[i].payType == 'optCard')
-            this.mPaylist.splice(i,1);
+        for (let i = this.mPaylist.length - 1; i >= 0; i--) {
+          if (this.mPaylist[i].payType == 'optCard')
+            this.mPaylist.splice(i, 1);
         }
         this.mOptCards.payAmount = 0;
-        this.mOptCards.result.forEach(selectItem =>{
+        this.mOptCards.result.forEach(selectItem => {
           let found = -1;
-          for(let i = 0 ;i < this.mOptCards.list.length; i++) {
+          for (let i = 0; i < this.mOptCards.list.length; i++) {
             if (this.mOptCards.list[i].cardnum == selectItem) {
               found = i;
               break;
             }
           }
-          if(found != -1) {
-              this.$log(this.mOptCards.list[found])
-              this.$log(this.remainPayAmount)
-              let payAmount = 0;
-              if(this.remainPayAmount*100 >= this.mOptCards.list[found].balance) {
-                payAmount = this.mOptCards.list[found].balance * 1
-              } else {
-                payAmount = this.remainPayAmount * 100
-              }
-              this.mOptCards.payAmount = this.mOptCards.payAmount + payAmount;
-              this.$log("this.mOptCards.payAmount:"+this.mOptCards.payAmount)
-              this.mPaylist.push({
-                payType: 'optCard',
-                payAmount:payAmount,
-                cardnum:this.mOptCards.list[found].cardnum
-              })
+          if (found != -1) {
+            this.$log(this.mOptCards.list[found])
+            this.$log(this.remainPayAmount)
+            let payAmount = 0;
+            if (this.remainPayAmount * 100 >= this.mOptCards.list[found].balance) {
+              payAmount = this.mOptCards.list[found].balance * 1
+            } else {
+              payAmount = this.remainPayAmount * 100
+            }
+            this.mOptCards.payAmount = this.mOptCards.payAmount + payAmount;
+            this.$log("this.mOptCards.payAmount:" + this.mOptCards.payAmount)
+            this.mPaylist.push({
+              payType: 'optCard',
+              payAmount: payAmount,
+              cardnum: this.mOptCards.list[found].cardnum
+            })
           }
         })
         this.$log(this.mPaylist)
@@ -426,18 +426,18 @@
       },
       onCoinBalanceSelector() {
         this.$log("onCoinBalanceSelector Enter")
-        if(this.remainPayAmount == 0 && ! this.mCoinBalance.checked) {
+        if (this.remainPayAmount == 0 && !this.mCoinBalance.checked) {
 
         } else {
           this.mCoinBalance.checked = !this.mCoinBalance.checked
-          for(let i = this.mPaylist.length - 1; i >= 0; i--) {
-            if(this.mPaylist[i].payType == 'coinBalance')
-              this.mPaylist.splice(i,1);
+          for (let i = this.mPaylist.length - 1; i >= 0; i--) {
+            if (this.mPaylist[i].payType == 'coinBalance')
+              this.mPaylist.splice(i, 1);
           }
           this.mCoinBalance.payAmount = 0;
           if (this.mCoinBalance.checked) {
             let remainPayAmount = this.remainPayAmount;
-            if (this.mCoinBalance.amount  >= remainPayAmount * 100) {
+            if (this.mCoinBalance.amount >= remainPayAmount * 100) {
               this.mCoinBalance.payAmount = remainPayAmount * 100;
               this.$log(this.mCoinBalance.payAmount)
             } else {
@@ -445,7 +445,7 @@
             }
             this.mPaylist.push({
               payType: 'coinBalance',
-              payAmount:this.mCoinBalance.payAmount,
+              payAmount: this.mCoinBalance.payAmount,
             })
           }
         }
@@ -464,7 +464,7 @@
               openId: user.openId
             }
           }).then((response) => {
-            if(response.data.data != null) {
+            if (response.data.data != null) {
               this.mCoinBalance.amount = response.data.data.amount /*分*/
             }
           }).catch(function (error) {
@@ -522,28 +522,92 @@
       },
       onPayBtnClick() {
         this.$log("onPayBtnClick Enter")
-        if(this.remainPayAmount > 0) {
-          if (this.radio == '1') {
-            this.$log("link pay clicked")
-            this.gotoLinkPay()
-          } else if (this.radio == '2') {
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          let balancePay = null
+          let wocPays = []
+          let woaPay = null
+          let options={
+             orderNo:  this.orderInfo.orderNo
+          }
+          this.mPaylist.forEach(item => {
+            switch (item.payType) {
+              case  'coinBalance':
+                balancePay = {
+                  actPayFee: item.payAmount,
+                  openId: user.openId,
+                  orderNo: this.orderInfo.orderNo,
+                  payType: "balance"
+                }
+                break;
+              case 'optCard':
+                wocPays.push({
+                  actPayFee: item.payAmount,
+                  cardNo: item.cardnum,
+                  mobile:  this.mTelphoneNumber,
+                  orderNo: this.orderInfo.orderNo,
+                  payType: 'card'
+                })
+              case 'pos':
+                break;
+              default:
+                break;
+            }
+          })
+          if(balancePay != null)
+            options['balancePay'] = balancePay
+          if(wocPays.length > 0)
+            options['wocPays'] = wocPays
+          if(woaPay != null)
+            options['woaPay'] = woaPay
+          this.$log("pay options:");
+          this.$log(options)
+          if (this.remainPayAmount > 0) {
+            if (this.radio == '1') {
+              this.$log("link pay clicked")
+              this.gotoLinkPay()
+            } else if (this.radio == '2') {
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
+                url: '/payment',
+                data: this.orderInfo,
+              }).then((response) => {
+                this.$log(response)
+                this.onPayResult()
+              }).catch(function (error) {
+
+              })
+            } else {
+              this.$toast("请选择支付方式")
+            }
+          } else {
+            this.$log("0元支付，无需其他支付方式补充")
             this.$api.xapi({
               method: 'post',
-              baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
-              url: '/payment',
-              data: this.orderInfo,
+              baseURL: this.$api.AGGREGATE_PAY_URL,
+              url: '/wspay/pay',
+              data: options,
             }).then((response) => {
               this.$log(response)
-              this.onPayResult()
-            }).catch(function (error) {
-
+              if (response.data.code == 200) {
+                this.$router.replace({
+                  path: '/pay/cashering',
+                  query: {
+                    outer_trade_no: this.orderInfo.orderNo
+                  }
+                })
+              } else {
+                this.$toast(response.data.message)
+              }
             })
-          } else {
-            this.$toast("请选择支付方式")
           }
         } else {
-          this.$log("0元支付，无需其他支付方式补充")
+           //no userInfo
         }
+
 
       }
     }
@@ -610,6 +674,7 @@
           flex-direction: column;
           justify-content: center;
           align-items: Center;
+
           .payAmount {
             line-height: 80px;
             .fz(font-size, 80);
@@ -686,7 +751,7 @@
             margin-top: -1px;
           }
 
-          .optCard{
+          .optCard {
             border: 1px solid #3dd5c8;
             border-radius: 5px;
             height: 60px;
@@ -699,20 +764,21 @@
             font-size: large;
           }
 
-          .optCardCheckBox{
+          .optCardCheckBox {
             height: 64px;
             align-items: center;
             display: flex;
           }
 
-          .addNewOptCard{
+          .addNewOptCard {
             display: flex;
             align-items: center;
             padding-left: 40px;
             padding-top: 10px;
             color: #ff4444;
             font-size: x-large;
-            span{
+
+            span {
               margin: 5px;
             }
           }
