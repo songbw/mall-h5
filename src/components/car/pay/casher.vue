@@ -195,7 +195,14 @@
           title: "还需支付",
           icon:require('@/assets/icons/ico_menu.png'),
         },
-        mPaylist:[],
+        mPaylist:[
+
+/*       {
+             payType:"optCard"
+             payAmount: 1000
+             cardNum:""
+          }*/
+        ],
         addNewOptCardDlgShow: false,
         newOptCardNumber: "",
         newOptCardPwd: ""
@@ -207,7 +214,7 @@
       },
 
       remainPayAmount() {
-        return (this.amount - this.mCoinBalance.payAmount - this.mOptCards.payAmount).toFixed(2)
+        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mOptCards.payAmount)/100).toFixed(2)
       }
     },
 
@@ -371,7 +378,41 @@
         this.$refs.optCardsCheckboxes[index].toggle();
       },
       onOptCardsStatusChanged(index) {
-         this.$log(this.mOptCards.result)
+        this.$log("onOptCardsStatusChanged Enter")
+        this.$log(this.mOptCards.result)
+        this.$log(this.mOptCards.list)
+        for(let i = this.mPaylist.length - 1; i >= 0; i--) {
+          if(this.mPaylist[i].payType == 'optCard')
+            this.mPaylist.splice(i,1);
+        }
+        this.mOptCards.payAmount = 0;
+        this.mOptCards.result.forEach(selectItem =>{
+          let found = -1;
+          for(let i = 0 ;i < this.mOptCards.list.length; i++) {
+            if (this.mOptCards.list[i].cardnum == selectItem) {
+              found = i;
+              break;
+            }
+          }
+          if(found != -1) {
+              this.$log(this.mOptCards.list[found])
+              this.$log(this.remainPayAmount)
+              let payAmount = 0;
+              if(this.remainPayAmount*100 >= this.mOptCards.list[found].balance) {
+                payAmount = this.mOptCards.list[found].balance * 1
+              } else {
+                payAmount = this.remainPayAmount * 100
+              }
+              this.mOptCards.payAmount = this.mOptCards.payAmount + payAmount;
+              this.$log("this.mOptCards.payAmount:"+this.mOptCards.payAmount)
+              this.mPaylist.push({
+                payType: 'optCard',
+                payAmount:payAmount,
+                cardnum:this.mOptCards.list[found].cardnum
+              })
+          }
+        })
+        this.$log(this.mPaylist)
       },
 
       onOptCardCellClick() {
@@ -384,8 +425,8 @@
         this.mCoinBalance.checked = !this.mCoinBalance.checked
         if (this.mCoinBalance.checked) {
           let remainPayAmount = this.remainPayAmount;
-          if (this.mCoinBalance.amount * 100 >= remainPayAmount * 100) {
-            this.mCoinBalance.payAmount = remainPayAmount;
+          if (this.mCoinBalance.amount  >= remainPayAmount * 100) {
+            this.mCoinBalance.payAmount = remainPayAmount * 100;
             this.$log(this.mCoinBalance.payAmount)
           } else {
             this.mCoinBalance.payAmount = this.mCoinBalance.amount
@@ -408,7 +449,7 @@
             }
           }).then((response) => {
             if(response.data.data != null) {
-              this.mCoinBalance.amount = response.data.data.amount
+              this.mCoinBalance.amount = response.data.data.amount * 100 /*分*/
             }
           }).catch(function (error) {
             that.$log(error)
