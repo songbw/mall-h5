@@ -107,18 +107,14 @@
           </van-cell>
           <div v-for="(item, index) in mPaylist" :key="index">
             <van-cell v-if="item.payType == 'optCard'">
-              <span slot="title">优选卡:</span>
+              <span slot="title">优选卡支付:</span>
               <span slot="default" style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
             </van-cell>
             <van-cell v-if="item.payType == 'coinBalance'">
-              <span slot="title">余额:</span>
+              <span slot="title">余额支付:</span>
               <span slot="default" style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
             </van-cell>
           </div>
-<!--          <van-cell :icon="mCoinBalance.icon" v-if="mCoinBalance.payAmount > 0">
-            <span slot="title">余额(剩余￥{{((mCoinBalance.amount - mCoinBalance.payAmount)/100).toFixed(2)}})</span>
-            <span slot="default" style="font-size: medium;color: #ff4444">-￥{{(mCoinBalance.payAmount/100).toFixed(2)}}</span>
-          </van-cell>-->
         </div>
 
         <div class="pathBox">
@@ -205,14 +201,7 @@
           title: "还需支付",
           icon:require('@/assets/icons/ico_menu.png'),
         },
-        mPaylist:[
-
-/*       {
-             payType:"optCard"
-             payAmount: 1000
-             cardNum:""
-          }*/
-        ],
+        mPaylist:[],
         addNewOptCardDlgShow: false,
         newOptCardNumber: "",
         newOptCardPwd: ""
