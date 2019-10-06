@@ -374,7 +374,12 @@
         this.addNewOptCardDlgShow = true
       },
       optCardsToggle(index) {
-        this.$refs.optCardsCheckboxes[index].toggle();
+        if(this.remainPayAmount == 0 && !this.$refs.optCardsCheckboxes[index].checked) {
+           //do nothing
+        } else {
+          this.$refs.optCardsCheckboxes[index].toggle();
+        }
+
       },
       onOptCardsStatusChanged(index) {
         this.$log("onOptCardsStatusChanged Enter")
@@ -421,25 +426,30 @@
       },
       onCoinBalanceSelector() {
         this.$log("onCoinBalanceSelector Enter")
-        this.mCoinBalance.checked = !this.mCoinBalance.checked
-        for(let i = this.mPaylist.length - 1; i >= 0; i--) {
-          if(this.mPaylist[i].payType == 'coinBalance')
-            this.mPaylist.splice(i,1);
-        }
-        this.mCoinBalance.payAmount = 0;
-        if (this.mCoinBalance.checked) {
-          let remainPayAmount = this.remainPayAmount;
-          if (this.mCoinBalance.amount  >= remainPayAmount * 100) {
-            this.mCoinBalance.payAmount = remainPayAmount * 100;
-            this.$log(this.mCoinBalance.payAmount)
-          } else {
-            this.mCoinBalance.payAmount = this.mCoinBalance.amount
+        if(this.remainPayAmount == 0 && ! this.mCoinBalance.checked) {
+
+        } else {
+          this.mCoinBalance.checked = !this.mCoinBalance.checked
+          for(let i = this.mPaylist.length - 1; i >= 0; i--) {
+            if(this.mPaylist[i].payType == 'coinBalance')
+              this.mPaylist.splice(i,1);
           }
-          this.mPaylist.push({
-            payType: 'coinBalance',
-            payAmount:this.mCoinBalance.payAmount,
-          })
+          this.mCoinBalance.payAmount = 0;
+          if (this.mCoinBalance.checked) {
+            let remainPayAmount = this.remainPayAmount;
+            if (this.mCoinBalance.amount  >= remainPayAmount * 100) {
+              this.mCoinBalance.payAmount = remainPayAmount * 100;
+              this.$log(this.mCoinBalance.payAmount)
+            } else {
+              this.mCoinBalance.payAmount = this.mCoinBalance.amount
+            }
+            this.mPaylist.push({
+              payType: 'coinBalance',
+              payAmount:this.mCoinBalance.payAmount,
+            })
+          }
         }
+
       },
       updateBalanceAmount() {
         let that = this
