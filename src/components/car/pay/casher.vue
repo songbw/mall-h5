@@ -29,7 +29,7 @@
         <div class="coinBalanceBox">
           <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable  @click="onCoinBalanceSelector()">
             <van-checkbox slot="right-icon" v-model="mCoinBalance.checked"  checked-color="#FF4444" ></van-checkbox>
-            <span slot="label" style="color:black">可用余额: ￥{{mCoinBalance.amount.toFixed(2)}}</span>
+            <span slot="label" style="color:black">可用余额: ￥{{(mCoinBalance.amount/100).toFixed(2)}}</span>
           </van-cell>
         </div>
 
@@ -105,10 +105,20 @@
           <van-cell :title="mComposePay.title" :icon="mComposePay.icon">
             <span slot="default" style="font-size: large;color: #ff4444">￥{{remainPayAmount}}</span>
           </van-cell>
-          <van-cell :icon="mCoinBalance.icon" v-if="mCoinBalance.payAmount > 0">
-            <span slot="title">余额(剩余￥{{(mCoinBalance.amount - mCoinBalance.payAmount).toFixed(2)}})</span>
-            <span slot="default" style="font-size: medium;color: #ff4444">-￥{{mCoinBalance.payAmount}}</span>
-          </van-cell>
+          <div v-for="(item, index) in mPaylist" :key="index">
+            <van-cell v-if="item.payType == 'optCard'">
+              <span slot="title">优选卡:</span>
+              <span slot="default" style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
+            </van-cell>
+            <van-cell v-if="item.payType == 'coinBalance'">
+              <span slot="title">余额:</span>
+              <span slot="default" style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
+            </van-cell>
+          </div>
+<!--          <van-cell :icon="mCoinBalance.icon" v-if="mCoinBalance.payAmount > 0">
+            <span slot="title">余额(剩余￥{{((mCoinBalance.amount - mCoinBalance.payAmount)/100).toFixed(2)}})</span>
+            <span slot="default" style="font-size: medium;color: #ff4444">-￥{{(mCoinBalance.payAmount/100).toFixed(2)}}</span>
+          </van-cell>-->
         </div>
 
         <div class="pathBox">
@@ -423,6 +433,11 @@
       onCoinBalanceSelector() {
         this.$log("onCoinBalanceSelector Enter")
         this.mCoinBalance.checked = !this.mCoinBalance.checked
+        for(let i = this.mPaylist.length - 1; i >= 0; i--) {
+          if(this.mPaylist[i].payType == 'coinBalance')
+            this.mPaylist.splice(i,1);
+        }
+        this.mCoinBalance.payAmount = 0;
         if (this.mCoinBalance.checked) {
           let remainPayAmount = this.remainPayAmount;
           if (this.mCoinBalance.amount  >= remainPayAmount * 100) {
@@ -431,8 +446,10 @@
           } else {
             this.mCoinBalance.payAmount = this.mCoinBalance.amount
           }
-        } else {
-          this.mCoinBalance.payAmount = 0;
+          this.mPaylist.push({
+            payType: 'coinBalance',
+            payAmount:this.mCoinBalance.payAmount,
+          })
         }
       },
       updateBalanceAmount() {
@@ -449,7 +466,7 @@
             }
           }).then((response) => {
             if(response.data.data != null) {
-              this.mCoinBalance.amount = response.data.data.amount * 100 /*分*/
+              this.mCoinBalance.amount = response.data.data.amount /*分*/
             }
           }).catch(function (error) {
             that.$log(error)
