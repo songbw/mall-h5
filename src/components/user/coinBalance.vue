@@ -10,7 +10,7 @@
           <img :src="icon_coin_amount">
           <span>我的余额</span>
           <div class="amountInfo">
-            <p><span>￥</span>{{amount.toFixed(2)}}</p>
+            <p><span>￥</span>{{(amount/100).toFixed(2)}}</p>
           </div>
         </div>
       </div>
