@@ -426,7 +426,8 @@
       },
       onCoinBalanceSelector() {
         this.$log("onCoinBalanceSelector Enter")
-        if (this.remainPayAmount == 0 && !this.mCoinBalance.checked) {
+        if (this.mCoinBalance.amount == 0 && !this.mCoinBalance.checked ||
+          this.remainPayAmount == 0 && !this.mCoinBalance.checked) {
 
         } else {
           this.mCoinBalance.checked = !this.mCoinBalance.checked
@@ -536,7 +537,7 @@
             switch (item.payType) {
               case  'coinBalance':
                 balancePay = {
-                  actPayFee: item.payAmount,
+                  actPayFee: ""+item.payAmount,
                   openId: user.openId,
                   orderNo: this.orderInfo.orderNo,
                   payType: "balance"
@@ -544,8 +545,9 @@
                 break;
               case 'optCard':
                 wocPays.push({
-                  actPayFee: item.payAmount,
+                  actPayFee: ""+item.payAmount,
                   cardNo: item.cardnum,
+                  cardPwd:"",
                   mobile:  this.mTelphoneNumber,
                   orderNo: this.orderInfo.orderNo,
                   payType: 'card'
@@ -556,20 +558,31 @@
                 break;
             }
           })
-          if(balancePay != null)
-            options['balancePay'] = balancePay
-          if(wocPays.length > 0)
-            options['wocPays'] = wocPays
-          if(woaPay != null)
-            options['woaPay'] = woaPay
-          this.$log("pay options:");
-          this.$log(options)
           if (this.remainPayAmount > 0) {
             if (this.radio == '1') {
               this.$log("link pay clicked")
-              this.gotoLinkPay()
+              if(this.remainPayAmount*100 > 10) {
+                if (this.linkPayAccount.length == 0) {
+                  this.$toast("请输入卡号")
+                  return
+                }
+                if (this.linkPayPwd.length == 0) {
+                  this.$toast("请输入卡密码")
+                  return
+                }
+                woaPay = {
+                  "actPayFee": this.remainPayAmount * 100 + "",
+                  "cardNo": this.linkPayAccount,
+                  "cardPwd": this.linkPayPwd,
+                  "orderNo": this.orderInfo.orderNo,
+                  "payType": "woa"
+                }
+              } else {
+                this.$toast("抱歉，无法使用该支付方式，联机账户支付不能低于1角，")
+                return
+              }
             } else if (this.radio == '2') {
-              this.$api.xapi({
+/*              this.$api.xapi({
                 method: 'post',
                 baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
                 url: '/payment',
@@ -579,31 +592,40 @@
                 this.onPayResult()
               }).catch(function (error) {
 
-              })
+              })*/
             } else {
               this.$toast("请选择支付方式")
+              return;
             }
           } else {
             this.$log("0元支付，无需其他支付方式补充")
-            this.$api.xapi({
-              method: 'post',
-              baseURL: this.$api.AGGREGATE_PAY_URL,
-              url: '/wspay/pay',
-              data: options,
-            }).then((response) => {
-              this.$log(response)
-              if (response.data.code == 200) {
-                this.$router.replace({
-                  path: '/pay/cashering',
-                  query: {
-                    outer_trade_no: this.orderInfo.orderNo
-                  }
-                })
-              } else {
-                this.$toast(response.data.message)
-              }
-            })
           }
+          if(balancePay != null)
+            options['balancePay'] = balancePay
+          if(wocPays.length > 0)
+            options['wocPays'] = wocPays
+          if(woaPay != null)
+            options['woaPay'] = woaPay
+          this.$log("pay options:");
+          this.$log(options)
+          this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.AGGREGATE_PAY_URL,
+            url: '/wspay/pay',
+            data: options,
+          }).then((response) => {
+            this.$log(response)
+            if (response.data.code == 200) {
+              this.$router.replace({
+                path: '/pay/cashering',
+                query: {
+                  outer_trade_no: this.orderInfo.orderNo
+                }
+              })
+            } else {
+              this.$toast(response.data.message)
+            }
+          })
         } else {
            //no userInfo
         }
