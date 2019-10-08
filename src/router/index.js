@@ -30,6 +30,7 @@ const WorkerOrderList = resolve => require(['@/components/car/pay/workerOrderLis
 const WorkerOrderDetail = resolve => require(['@/components/car/pay/workerOrderDetail.vue'], resolve)
 const OptCardList = resolve => require(['@/components/user/optCardList.vue'], resolve)
 const OptCardDetail = resolve => require(['@/components/user/optCardDetail.vue'], resolve)
+const Qrcode = resolve => require(['@/views/Qrcode.vue'], resolve)
 
 export default new VueRouter({
   mode: 'history',
@@ -303,6 +304,13 @@ export default new VueRouter({
       component: OptCardDetail,
       meta: {
         title: '惠民优选卡详情',
+      }
+    },    {
+      path: '/qrcode',
+      name: '二维码页',
+      component: Qrcode,
+      meta: {
+        title: '二维码',
       }
     },
   ]

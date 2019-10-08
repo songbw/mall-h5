@@ -9,6 +9,9 @@ import moment from 'moment'
 import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueScroller from 'vue-scroller'
+import VueQRCodeComponent from 'vue-qrcode-component'
+
+Vue.component('qr-code', VueQRCodeComponent)
 
 Vue.use(VueWechatTitle)
 

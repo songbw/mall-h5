@@ -271,6 +271,12 @@
 
       onChangeCouponClick() {
         this.$router.push("/user/couponChange")
+/*        this.$router.push({
+          name: "二维码页",
+          params: {
+            text: "Jon"
+          }
+        })*/
       },
       onMyCouponClick() {
         this.$router.push({path: '/user/couponList'})
