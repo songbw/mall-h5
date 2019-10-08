@@ -283,7 +283,7 @@
           if (savedOrderNo != null) {
             pAnOrderInfo.orderNo = savedOrderNo
             that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-            that.$jsbridge.call("openCashPage", pAnOrderInfo);
+            //that.$jsbridge.call("openCashPage", pAnOrderInfo);
             this.$router.replace({
               name: "收银台页",
               params: {
@@ -291,11 +291,22 @@
               }
             })
           } else {
+            let options = {
+              "iAppId": this.$api.APP_ID,
+              "tAppId": this.$api.T_APP_ID,
+              "openId": user.userId,
+              "appId": this.$api.APP_ID,
+              "merchantNo": merchantNo,
+              "orderNos": orderNos,
+              "goodsName": "商品支付订单",
+              "amount": pAnOrderInfo.orderAmount,
+              "returnUrl": returnUrl,
+            }
             that.$log("预下单:" + JSON.stringify(options))
             that.$api.xapi({
+              method: 'post',
               baseURL: this.$api.SSO_BASE_URL,
-              // url: '/zhcs/payment',
-              url: '/payment/pingan',
+              url: '/payment',
               data: options,
             }).then((response) => {
               that.$log("预下单返回 :" + JSON.stringify(response.data))
@@ -306,15 +317,15 @@
                   openId: user.openId,
                 }
                 that.$log("walletInfo:" + JSON.stringify(walletInfo))
-                that.$jsbridge.call("dredgeWallet", walletInfo);
+                //  that.$jsbridge.call("dredgeWallet", walletInfo);
               } else {
                 if (response.data.data.result != undefined) {
                   let orderNo = response.data.data.result.orderNo
-                  let outTradeNo =  response.data.data.result.outTradeNo
+                  let outTradeNo = response.data.data.result.outTradeNo
                   pAnOrderInfo['orderNo'] = orderNo
                   pAnOrderInfo['outTradeNo'] = outTradeNo
                   that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-                  that.$jsbridge.call("openCashPage", pAnOrderInfo);
+                  // that.$jsbridge.call("openCashPage", pAnOrderInfo);
                   this.$router.replace({
                     name: "收银台页",
                     params: {
