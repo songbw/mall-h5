@@ -77,7 +77,7 @@
           <img slot="icon" :src="icon_linkPayCard"/>
         </van-cell>
         <van-cell title="上海银行钱包" is-link @click="onShangHaiBankBtnClick">
-          <img slot="icon" :src="icon_optCard"/>
+          <img slot="icon" :src="icon_bankCard"/>
         </van-cell>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon"/>
@@ -217,6 +217,7 @@
         customServiceIcon: require('@/assets/icons/ico_customService.png'),
         icon_linkPayCard:  require('@/assets/icons/ico_linkPayCard.png'),
         icon_optCard: require('@/assets/icons/ico_optCard.png'),
+        icon_bankCard: require('@/assets/icons/ico_bankCard.png'),
         user: {},
         showLinkPayDialog: false,
         linkPayAccount:"",
