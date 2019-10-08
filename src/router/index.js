@@ -317,7 +317,7 @@ export default new VueRouter({
     {
       path: '/user/shanghaiCardList',
       name: '上海银行卡列表页',
-      component: OptCardList,
+      component: ShangHaiCardList,
       meta: {
         title: '上海银行绑定卡列表',
       }
