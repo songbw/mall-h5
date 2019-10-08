@@ -405,7 +405,7 @@
             if (this.remainPayAmount * 100 >= this.mOptCards.list[found].balance) {
               payAmount = this.mOptCards.list[found].balance * 1
             } else {
-              payAmount = this.remainPayAmount * 100
+              payAmount = parseInt((this.remainPayAmount * 100).toFixed(0))
             }
             this.mOptCards.payAmount = this.mOptCards.payAmount + payAmount;
             this.$log("this.mOptCards.payAmount:" + this.mOptCards.payAmount)
