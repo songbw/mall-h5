@@ -19,7 +19,7 @@
         </header>
       </div>
       <div class="coupon-box">
-        <div class="coupon-info">
+        <div class="coupon-info" >
           <div class="my-coupon" @click="onMyCouponClick">
               <img :src="myCouponIcon"/>
               <span>我的优惠券</span>
