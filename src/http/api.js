@@ -30,6 +30,8 @@ const FREIGHTS_URL = SERVICE_URL + "/v2/freights/"
 
 const OPTCARDS_URL = SERVICE_URL +"/v2/wocs/"
 
+const SHANGHAI_BANK_URL = "http://192.168.200.122:8021"
+
 const xapi = axios.create();
 //xapi.defaults.baseURL = SERVER_BASE_URL;
 xapi.defaults.timeout = 20000;
@@ -94,6 +96,7 @@ export default {
   PINGAN_AUTH_URL,
   FREIGHTS_URL,
   OPTCARDS_URL,
+  SHANGHAI_BANK_URL,
   IS_GAT_APP,
   HAS_HEADER,
   TEST_USER

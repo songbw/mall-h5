@@ -1,10 +1,48 @@
 <template lang="html">
-  <section class="myOptCarList">
+  <section class="bankCardList">
     <v-header class="header" v-if="showHeader">
       <h1 slot="title">我的惠民优选卡</h1>
     </v-header>
-    <div class="optCardListBody">
-      <div class="optCardListMain">
+    <div class="bankCardBody">
+      <div class="bankCardBind">
+        <span class="bindBankTitle">绑定银行卡</span>
+        <van-field
+          v-model="realName"
+          required
+          clearable
+          label="姓名:"
+          maxlength="30"
+          label-width="65px"
+          placeholder="请输入真实姓名"
+        />
+        <van-field
+          v-model="idCardNo"
+          required
+          clearable
+          label="身份证号:"
+          maxlength="30"
+          label-width="65px"
+          placeholder="请输入身份证号"
+        />
+        <van-field
+          v-model="reserveMobile"
+          required
+          clearable
+          label="电话号码:"
+          maxlength="30"
+          label-width="65px"
+          placeholder="请输入银行预留电话号码"
+        />
+        <van-field
+          v-model="bankCardNo"
+          required
+          clearable
+          label="绑定卡号:"
+          maxlength="30"
+          label-width="65px"
+          placeholder="请输入绑定的银行卡号"
+        />
+        <van-button size="large" type="danger" style="margin-top: 20px" @click="onBCardBindBtnClick">绑定</van-button>
       </div>
     </div>
   </section>
@@ -28,13 +66,10 @@
       return {
         user: {},
         launchedLoaded: false,
-        optCardList: [],
-        icon_noCards: require('@/assets/icons/ico_empty_card.png'),
-        icon_optCardsReal: require('@/assets/icons/ico_optCards_real.png'),
-        addNewOptCardDlgShow: false,
-        newOptCardNumber:"",
-        newOptCardPwd:"",
-        mTelphoneNumber:""
+        idCardNo:"",
+        bankCardNo:"",
+        reserveMobile:"",
+        realName:"",
       }
     },
 
@@ -47,26 +82,13 @@
         this.user  = JSON.parse(userDetail)
         this.mTelphoneNumber = this.user.telephone
       }
-      let options = {
-        "isvalid": true,
-        "phonenum": this.mTelphoneNumber
-      }
-      that.$api.xapi({
-        method: 'post',
-        baseURL: this.$api.OPTCARDS_URL,
-        url: '/woc/cardinfo/getcardlist',
-        data: options
-      }).then((response) => {
-        that.$log(response.data.data)
-        that.optCardList = response.data.data
-        that.launchedLoaded = true
-      }).catch(function (error) {
 
-      })
     },
 
     methods: {
-
+      onBCardBindBtnClick(){
+        this.$log("onBCardBindBtnClick Enter")
+      }
     }
   }
 </script>
@@ -76,17 +98,24 @@
   @import '../../assets/index/style.css';
   @import '../../assets/user/icon/carstyle.css';
 
-  .myOptCarList {
+  .bankCardList {
     width: 100%;
     height: 100%;
     top: 0px;
-    background-color: #f8f8f8;
 
-    .optCardListBody {
-      .optCardListMain {
-        width: 100%;
-        padding-bottom: 3em;
-
+    .bankCardBody {
+      .bankCardBind {
+        padding: 20px;
+        margin: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        .bindBankTitle{
+          .fz(font-size,40);
+          align-content: center;
+          color: black;
+          padding: 10px 0px;
+        }
       }
     }
   }
