@@ -18,11 +18,11 @@
           </div>
         </header>
       </div>
-      <div class="coupon-box">
-        <div class="coupon-info" >
+      <div class="coupon-box" v-if="this.$api.APP_ID != '10'">
+        <div class="coupon-info">
           <div class="my-coupon" @click="onMyCouponClick">
-              <img :src="myCouponIcon"/>
-              <span>我的优惠券</span>
+            <img :src="myCouponIcon"/>
+            <span>我的优惠券</span>
           </div>
           <div class="coupon-change" @click="onChangeCouponClick">
             <img :src="chCouponIcon"/>
@@ -31,26 +31,28 @@
         </div>
       </div>
       <div class="orderListBox">
-        <div>
-          <van-cell value="查看全部 " is-link @click=onOrderListBarClick(0)>
-            <template slot="title">
-              <span class="orderListTitle">我的订单</span>
-            </template>
-          </van-cell>
-        </div>
-        <div class="orderCategory">
-          <van-row type="flex" justify="space-between">
-            <van-col
-              v-for="(item,index) in orderbars"
-              :key="index"
-            >
-              <div class="orderCategoryBar" @click=onOrderListBarClick(item.key)>
-                <img :src=" item.img">
-                <span>{{item.title}}</span>
-              </div>
+        <div class="orderListMain">
+          <div style="padding: 1px">
+            <van-cell value="查看全部 " is-link @click=onOrderListBarClick(0)>
+              <template slot="title">
+                <span class="orderListTitle">我的订单</span>
+              </template>
+            </van-cell>
+          </div>
+          <div class="orderCategory">
+            <van-row type="flex" justify="space-between">
+              <van-col
+                v-for="(item,index) in orderbars"
+                :key="index"
+              >
+                <div class="orderCategoryBar" @click=onOrderListBarClick(item.key)>
+                  <img :src=" item.img">
+                  <span>{{item.title}}</span>
+                </div>
 
-            </van-col>
-          </van-row>
+              </van-col>
+            </van-row>
+          </div>
         </div>
       </div>
       <div class="settingsBox">
@@ -169,7 +171,7 @@
       onOrderListBarClick(type) {
         //订单类型
         this.$log("onOrderListBarClick:" + type);
-        if(type < 4) {
+        if (type < 4) {
           this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
           this.$router.push({name: '订单列表页'})
         } else {
@@ -209,6 +211,7 @@
       width: 100%;
       line-height: 12vw;
       background-color: #ff4444;
+
       .userHeader {
         width: 100%;
         line-height: 12vw;
@@ -221,7 +224,7 @@
         -ms-flex-align: center;
         align-items: center;
 
-        .headerTitle{
+        .headerTitle {
           display: flex;
           flex-direction: row;
           width: 90%;
@@ -252,7 +255,7 @@
           }
         }
 
-        .header-right{
+        .header-right {
           width: 10%;
           display: flex;
           flex-direction: row;
@@ -294,6 +297,7 @@
         justify-content: center;
         justify-items: center;
         height: 50px;
+        margin-bottom: 10px;
         .coupon-info {
           z-index: 1;
           width: 100%;
@@ -304,29 +308,34 @@
           display: flex;
           align-items: Center;
           color: black;
-          .my-coupon{
+
+          .my-coupon {
             width: 50%;
             display: flex;
             justify-content: center;
-            img{
-              height:22px;
+
+            img {
+              height: 22px;
               width: 22px;
             }
-            span{
+
+            span {
               margin: 4px;
               .fz(font-size, 22);
             }
-         }
+          }
 
           .coupon-change {
             width: 50%;
             display: flex;
             justify-content: center;
-            img{
-              height:22px;
+
+            img {
+              height: 22px;
               width: 22px;
             }
-            span{
+
+            span {
               margin: 4px;
               .fz(font-size, 22);
             }
@@ -337,78 +346,63 @@
       }
 
       .orderListBox {
-        margin: 20px  10px 10px 10px;
-        background-color: white;
-        border: 4px solid white;
-        border-radius: 10px;
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        justify-items: center;
 
-        .orderListTitle {
-          .fz(font-size, 30);
-          color: black;
-        }
-
-
-        .orderCategory {
-          align-items: center;
-          text-align: center;
+        .orderListMain {
+          z-index: 1;
+          width: 100%;
           margin: 10px;
+          background-color: white;
+          border-radius: 5px;
+          display: flex;
+          flex-direction: column;
+          color: black;
 
-          .van-col {
-            .orderCategoryBar {
-              display: flex;
-              flex-direction: column;
-              justify-content: center;
-              align-items: Center;
+          .orderListTitle {
+            .fz(font-size, 30);
+            color: black;
+          }
 
-              img {
-                margin: 1px;
-                height: 25px;
-                width: 25px;
-              }
+          .orderCategory {
+            align-items: center;
+            text-align: center;
+            margin: 10px;
 
-              span {
-                margin: 5px;
-                .fz(font-size, 25);
+            .van-col {
+              .orderCategoryBar {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: Center;
+
+                img {
+                  margin: 1px;
+                  height: 25px;
+                  width: 25px;
+                }
+
+                span {
+                  margin: 5px;
+                  .fz(font-size, 25);
+                }
               }
             }
-
           }
+
         }
-
-      }
-
-      .couponBox {
-        margin: 10px;
-        padding: 10px;
-        background-color: white;
-        border: 4px solid white;
-        border-radius: 10px;
-
-        .couponTitle {
-          .fz(font-size, 30);
-          font-weight: bold;
-        }
-
-        .couponCategory {
-          align-items: center;
-          text-align: center;
-          margin-top: 10px;
-
-          img {
-            width: 100%;
-            display: inline-block;
-          }
-        }
-
       }
 
       .settingsBox {
-        margin: 10px;
+        margin: 0px 10px;
         padding: 10px;
         border-radius: 10px;
         background-color: white;
-        .van-cell{
-          img{
+
+        .van-cell {
+          img {
             height: 16px;
             width: 16px;
             margin: 3px;
