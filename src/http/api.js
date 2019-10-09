@@ -30,7 +30,7 @@ const FREIGHTS_URL = SERVICE_URL + "/v2/freights/"
 
 const OPTCARDS_URL = SERVICE_URL +"/v2/wocs/"
 
-const SHANGHAI_BANK_URL = "http://192.168.200.122:8021"
+const SHANGHAI_BANK_URL = "http://180.76.244.14:8021"
 
 const xapi = axios.create();
 //xapi.defaults.baseURL = SERVER_BASE_URL;

@@ -66,10 +66,10 @@
       return {
         user: {},
         launchedLoaded: false,
-        idCardNo:"",
-        bankCardNo:"",
-        reserveMobile:"",
-        realName:"",
+        idCardNo: "",
+        bankCardNo: "",
+        reserveMobile: "",
+        realName: "",
       }
     },
 
@@ -78,16 +78,71 @@
       this.showHeader = this.$api.HAS_HEADER;
       let that = this
       let userDetail = this.$store.state.appconf.userDetail;
-      if(userDetail.length > 0) {
-        this.user  = JSON.parse(userDetail)
-        this.mTelphoneNumber = this.user.telephone
+      if (userDetail.length > 0) {
+        this.user = JSON.parse(userDetail)
+        this.reserveMobile = this.user.telephone
       }
 
     },
 
     methods: {
-      onBCardBindBtnClick(){
+      onBCardBindBtnClick() {
         this.$log("onBCardBindBtnClick Enter")
+        if (this.realName.length == 0) {
+          this.$toast("请输入姓名")
+          return
+        }
+        if (this.idCardNo.length == 0) {
+          this.$toast("请输入身份证号码")
+          return
+        }
+        if (this.reserveMobile.length == 0 || !this.reserveMobile.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+          this.$toast("请输入正确的电话号码")
+          return
+        }
+        if (this.bankCardNo.length == 0) {
+          this.$toast("请输入银行卡号")
+          return
+        }
+        let that =this
+        this.$log("姓名:" + this.realName)
+        this.$log("身份证:" + this.idCardNo)
+        this.$log("电话:" + this.reserveMobile)
+        this.$log("卡号:" + this.bankCardNo)
+        this.$log(this.user)
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let customUser = JSON.parse(userInfo)
+          let options = {
+            platformUserNo: customUser.userId,
+            realName: this.realName,
+            idCardNo: this.idCardNo,
+            reserveMobile: this.reserveMobile,
+            bankCardNo: this.bankCardNo,
+            personalType: 3,
+          }
+          this.$log(options)
+          that.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.SHANGHAI_BANK_URL,
+            url: '/commission/user/direct/bindcard',
+            data: options
+          }).then((response) => {
+            this.$log(response)
+            let ret = response.data;
+            if(ret.code == 200) {
+              this.$toast("绑卡成功!")
+            } else {
+              this.$log("CCCCCCCCCCCCCCCCCCCc")
+              this.$log(ret.msg)
+              this.$toast(ret.msg)
+            }
+          }).catch(function (error) {
+            that.$toast("绑卡失败")
+          })
+        } else {
+          this.$toast("没有用户信息，请先登录")
+        }
       }
     }
   }
@@ -110,8 +165,9 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        .bindBankTitle{
-          .fz(font-size,40);
+
+        .bindBankTitle {
+          .fz(font-size, 40);
           align-content: center;
           color: black;
           padding: 10px 0px;
