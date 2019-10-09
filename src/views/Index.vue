@@ -176,14 +176,14 @@
         window.onload = () => {
           this.getLoginAuthInfo();
         }
-/*        setTimeout(() => {
+        setTimeout(() => {
           this.test();
           //this.getAccessTokenInfo();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
           //this.getUserInfo();
           //this.updateLocation();
-        }, 1000);*/
+        }, 1000);
       }
     },
     computed: {
@@ -225,8 +225,9 @@
       },
       testGAT() {
         //  let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
-        let openId = "52d7fd1f46e55ac6a2435818a00c06c0"
+        //let openId = "52d7fd1f46e55ac6a2435818a00c06c0"
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
+        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         this.$log("openId:" + openId);
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
@@ -248,7 +249,8 @@
         Vue.prototype.$jsbridge = dsBridge;
         this.initJsNativeCb();
         //let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
-        let openId = "44391000fd194ab888b1aa81c03c3710"
+       // let openId = "44391000fd194ab888b1aa81c03c3710"
+        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
