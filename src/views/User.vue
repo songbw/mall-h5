@@ -76,6 +76,9 @@
         <van-cell title="市名卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
           <img slot="icon" :src="icon_linkPayCard"/>
         </van-cell>
+        <van-cell title="上海银行钱包" is-link @click="onShangHaiBankBtnClick">
+          <img slot="icon" :src="icon_bankCard"/>
+        </van-cell>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon"/>
         </van-cell>
@@ -214,6 +217,7 @@
         customServiceIcon: require('@/assets/icons/ico_customService.png'),
         icon_linkPayCard:  require('@/assets/icons/ico_linkPayCard.png'),
         icon_optCard: require('@/assets/icons/ico_optCard.png'),
+        icon_bankCard: require('@/assets/icons/ico_bankCard.png'),
         user: {},
         showLinkPayDialog: false,
         linkPayAccount:"",
@@ -225,6 +229,14 @@
     methods: {
       updateUserDatail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
+      },
+      onShangHaiBankBtnClick() {
+        this.$log("on shanghai bank clicked")
+        this.$router.push({
+          name:'上海银行卡列表页',
+          params: {
+            user: this.user
+          }})
       },
 
       onOptCardBtnClick() {

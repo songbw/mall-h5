@@ -31,6 +31,7 @@ const WorkerOrderDetail = resolve => require(['@/components/car/pay/workerOrderD
 const OptCardList = resolve => require(['@/components/user/optCardList.vue'], resolve)
 const OptCardDetail = resolve => require(['@/components/user/optCardDetail.vue'], resolve)
 const Qrcode = resolve => require(['@/views/Qrcode.vue'], resolve)
+const ShangHaiCardList = resolve => require(['@/components/user/shanghaiBankCardList.vue'], resolve)
 
 export default new VueRouter({
   mode: 'history',
@@ -311,6 +312,14 @@ export default new VueRouter({
       component: Qrcode,
       meta: {
         title: '二维码',
+      }
+    },
+    {
+      path: '/user/shanghaiCardList',
+      name: '上海银行卡列表页',
+      component: ShangHaiCardList,
+      meta: {
+        title: '上海银行绑定卡列表',
       }
     },
   ]
