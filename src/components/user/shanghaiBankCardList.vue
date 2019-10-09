@@ -4,45 +4,67 @@
       <h1 slot="title">我的惠民优选卡</h1>
     </v-header>
     <div class="bankCardBody">
-      <div class="bankCardBind">
-        <span class="bindBankTitle">绑定银行卡</span>
-        <van-field
-          v-model="realName"
-          required
-          clearable
-          label="姓名:"
-          maxlength="30"
-          label-width="65px"
-          placeholder="请输入真实姓名"
-        />
-        <van-field
-          v-model="idCardNo"
-          required
-          clearable
-          label="身份证号:"
-          maxlength="30"
-          label-width="65px"
-          placeholder="请输入身份证号"
-        />
-        <van-field
-          v-model="reserveMobile"
-          required
-          clearable
-          label="电话号码:"
-          maxlength="30"
-          label-width="65px"
-          placeholder="请输入银行预留电话号码"
-        />
-        <van-field
-          v-model="bankCardNo"
-          required
-          clearable
-          label="绑定卡号:"
-          maxlength="30"
-          label-width="65px"
-          placeholder="请输入绑定的银行卡号"
-        />
-        <van-button size="large" type="danger" style="margin-top: 20px" @click="onBCardBindBtnClick">绑定</van-button>
+      <div v-if="launchedLoaded">
+        <div class="bankCardBind"  v-if="!hasBindedCard">
+          <span class="bindBankTitle">绑定银行卡</span>
+          <van-field
+            v-model="realName"
+            required
+            clearable
+            label="姓名:"
+            maxlength="30"
+            label-width="65px"
+            placeholder="请输入真实姓名"
+          />
+          <van-field
+            v-model="idCardNo"
+            required
+            clearable
+            label="身份证号:"
+            maxlength="30"
+            label-width="65px"
+            placeholder="请输入身份证号"
+          />
+          <van-field
+            v-model="reserveMobile"
+            required
+            clearable
+            label="电话号码:"
+            maxlength="30"
+            label-width="65px"
+            placeholder="请输入银行预留电话号码"
+          />
+          <van-field
+            v-model="bankCardNo"
+            required
+            clearable
+            label="绑定卡号:"
+            maxlength="30"
+            label-width="65px"
+            placeholder="请输入绑定的银行卡号"
+          />
+          <van-button size="large" type="danger" style="margin-top: 20px" @click="onBCardBindBtnClick">绑定</van-button>
+        </div>
+        <div v-else class="bindedCardBox">
+          <div class="bankCard">
+            <div>
+              <span>姓名:</span>
+              <span style="float: right">{{bindCardInfo.realName}}</span>
+            </div>
+            <div>
+              <span>绑卡状态:</span>
+              <span style="float: right">{{bindCardInfo.accountStatusDesc}}</span>
+            </div>
+            <div>
+              <span>绑定银行卡:</span>
+              <span style="float: right">{{bindCardInfo.bankCard}}</span>
+            </div>
+            <div>
+              <span>虚拟账户号:</span>
+              <span style="float: right">{{bindCardInfo.virtualAccount}}</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -66,10 +88,12 @@
       return {
         user: {},
         launchedLoaded: false,
+        hasBindedCard: false,
         idCardNo: "",
         bankCardNo: "",
         reserveMobile: "",
         realName: "",
+        bindCardInfo:{}
       }
     },
 
@@ -81,6 +105,32 @@
       if (userDetail.length > 0) {
         this.user = JSON.parse(userDetail)
         this.reserveMobile = this.user.telephone
+      }
+      let userInfo = this.$store.state.appconf.userInfo;
+      if (!Util.isUserEmpty(userInfo)) {
+        let customUser = JSON.parse(userInfo)
+        that.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SHANGHAI_BANK_URL,
+          url: 'commission/query/salesman',
+          params: {
+            platformUserNo: customUser.userId,
+          }
+        }).then((response) => {
+          this.$log(response)
+          let ret = response.data
+          this.launchedLoaded = true
+          if(ret.code == 200) {
+            this.hasBindedCard = true;
+            this.bindCardInfo = ret.data;
+            this.$log(this.bindCardInfo)
+          } else {
+
+          }
+
+        }).catch(function (error) {
+          that.launchedLoaded = true
+        })
       }
 
     },
@@ -165,12 +215,23 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-
         .bindBankTitle {
           .fz(font-size, 40);
           align-content: center;
           color: black;
           padding: 10px 0px;
+        }
+      }
+      .bindedCardBox{
+        display: flex;
+        justify-items: center;
+        .bankCard{
+          width: 100%;
+          border-radius: 10px;
+          margin: 10px;
+          background-color: #FFAA00;
+          color: white;
+          padding: 10px;
         }
       }
     }
