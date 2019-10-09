@@ -205,6 +205,10 @@
     },
 
     methods: {
+      See(e) {
+        this.$log("jump to:" + e)
+        window.location.href = e
+      },
       onQuerySalesServiceBtnClick(k,sku) {
         this.$router.push({name: '售后工单页'})
       },
