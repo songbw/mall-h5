@@ -358,7 +358,7 @@
           baseURL: this.$api.VENDOR_URL,
           url: '/bulletin/findByMerchantId',
           params: {
-            merchantId: 40// goods.merchantId
+            merchantId: goods.merchantId
           },
         }).then((response) => {
           that.$log(response)
