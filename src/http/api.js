@@ -29,6 +29,7 @@ const PINGAN_AUTH_URL = SERVICE_URL + "/v2/pingans/"
 const FREIGHTS_URL = SERVICE_URL + "/v2/freights/"
 
 const OPTCARDS_URL = SERVICE_URL +"/v2/wocs/"
+const VENDOR_URL = SERVICE_URL + "/v2/vendors/"
 
 const SHANGHAI_BANK_URL = "http://180.76.244.14:8021"
 
@@ -97,6 +98,7 @@ export default {
   FREIGHTS_URL,
   OPTCARDS_URL,
   SHANGHAI_BANK_URL,
+  VENDOR_URL,
   IS_GAT_APP,
   HAS_HEADER,
   TEST_USER

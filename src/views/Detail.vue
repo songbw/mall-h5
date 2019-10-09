@@ -54,7 +54,7 @@
           <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                     @click="showCouponSelector()"/>
         </van-cell>
-        <van-actionsheet v-model="showCoupon" title="优惠券" style="background-color: white" >
+        <van-actionsheet v-model="showCoupon" title="优惠券" style="background-color: white">
           <div class="couponLayout">
             <div class="avaliableCoupon">
               <div v-if="avaliableCouponList.length > 0">
@@ -110,10 +110,10 @@
                         <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg">
                       </div>
                       <div class="coupon-info coupon-hole coupon-info-right-dashed">
-<!--                        <div class="coupon-suppler">
-                          <span>{{(coupon.couponInfo.supplierMerchantName!=undefined &&  coupon.couponInfo.supplierMerchantName.length) > 0? coupon.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                          <i>{{coupon.couponInfo.name}}</i>
-                        </div>-->
+                        <!--                        <div class="coupon-suppler">
+                                                  <span>{{(coupon.couponInfo.supplierMerchantName!=undefined &&  coupon.couponInfo.supplierMerchantName.length) > 0? coupon.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                                                  <i>{{coupon.couponInfo.name}}</i>
+                                                </div>-->
                         <div class="coupon-price">
                           <span v-if="coupon.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
                           {{formateCouponPrice(coupon.couponInfo.rules.couponRules)}}
@@ -139,14 +139,15 @@
           <div style="width: 90%; font-size: medium;font-weight: bold;padding: 3px;">
             <p style="color: black">送至:
               <van-icon name="location" size="14px" color="#FF4444"/>
-              <span  style="color: #8c8c8c ">{{addressCode.provinceName}}</span>
-              <span  style="color: #8c8c8c ">{{addressCode.cityName}}</span>
-              <span  style="color: #8c8c8c ">{{addressCode.countyName}}</span>
+              <span style="color: #8c8c8c ">{{addressCode.provinceName}}</span>
+              <span style="color: #8c8c8c ">{{addressCode.cityName}}</span>
+              <span style="color: #8c8c8c ">{{addressCode.countyName}}</span>
             </p>
           </div>
           <div style="width: 10%;">
-            <van-icon style="float: right;padding: 3px;margin-right: 7px;margin-top: 3px" name="weapp-nav" class="custom-icon" size="14px" color="#000000"
-                       @click="showAddressSelector()"></van-icon>
+            <van-icon style="float: right;padding: 3px;margin-right: 7px;margin-top: 3px" name="weapp-nav"
+                      class="custom-icon" size="14px" color="#000000"
+                      @click="showAddressSelector()"></van-icon>
           </div>
         </div>
         <div style="padding: 3px">
@@ -211,11 +212,24 @@
     created() {
       this.showHeader = this.$api.HAS_HEADER;
       if (this.$api.IS_GAT_APP) {
-        if(this.$api.APP_ID === '10') {
+        if (this.$api.APP_ID === '10') {
           this.showServiceBox = true;
         }
-        //this.$log("detail created:"+this.$api.APP_ID+",showServiceBox:"+this.showServiceBox)
       }
+      let that = this
+      //this.$log("detail created:"+this.$api.APP_ID+",showServiceBox:"+this.showServiceBox)
+      that.$api.xapi({
+        method: 'get',
+        baseURL: this.$api.VENDOR_URL,
+        url: '/bulletin/findByMerchantId',
+        params: {
+          merchantId: 2
+        },
+      }).then((response) => {
+        that.$log(response)
+      }).catch(function (error) {
+        that.$log(error)
+      })
     },
 
     mounted() {
@@ -289,7 +303,7 @@
                 })
                 if (item.rules.couponRules.type < 3 &&
                   item.rules.perLimited > result.couponUseInfo.length &&
-                  item.releaseNum < item.releaseTotal ) {
+                  item.releaseNum < item.releaseTotal) {
                   //this.$log("还有券可领")
                   item.userCollectNum = result.couponUseInfo.length
                   this.avaliableCouponList.push(item);
@@ -304,6 +318,7 @@
           //no user
         }
       }
+      this.updateServiceBoxInfo(this.goods);
       this.updateInventor(this.goods)
       this.pageloading = false;
     },
@@ -322,7 +337,14 @@
         promotionType: -1,
         discount: 0,
         promotionId: -1,
-        addressCode: {"provinceName":"上海","provinceId": "20","cityName": "上海市","cityId": "021", "countyName":"徐汇区","countyId": "03"},
+        addressCode: {
+          "provinceName": "上海",
+          "provinceId": "20",
+          "cityName": "上海市",
+          "cityId": "021",
+          "countyName": "徐汇区",
+          "countyId": "03"
+        },
         hasInventory: false,
         pageloading: true,
         showCoupon: false,
@@ -335,10 +357,26 @@
       }
     },
     methods: {
+      updateServiceBoxInfo(goods) {
+        let that = this
+        this.$log("updateServiceBoxInfo Enter")
+        that.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.VENDOR_URL,
+          url: '/bulletin/findByMerchantId',
+          params: {
+            merchantId: goods.merchantId
+          },
+        }).then((response) => {
+          that.$log(response)
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
       showAddressSelector() {
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
-          this.$router.push({"name":"地址列表页"})
+          this.$router.push({"name": "地址列表页"})
         } else {
           this.$toast("没有用户信息，请先登录")
         }
@@ -364,7 +402,7 @@
 
       },
       async updateInventor(goods) {
-        if(goods != null || goods != undefined) {
+        if (goods != null || goods != undefined) {
           let addressList = this.$store.state.appconf.addressList;
           let address = this.addressCode;
           if (addressList == null || addressList == undefined) {
@@ -411,27 +449,27 @@
 
           let inventorySkus = [];
           let inventorySkusOfZy = [];
-          if(goods.merchantId === 2) {
+          if (goods.merchantId === 2) {
             inventorySkus.push({"skuId": goods.mpu, "remainNum": 1})
           } else {
             inventorySkusOfZy.push({"mpu": goods.mpu, "remainNum": 1})
           }
 
-          if(inventorySkus.length > 0) {
+          if (inventorySkus.length > 0) {
             let resp = await this.updateAoyiInventory(inventorySkus)
             let inventoryListOfAoyi = resp.data.data.result
             this.$log(inventoryListOfAoyi)
-            inventoryListOfAoyi.forEach(item=>{
-              if(item.skuId === goods.skuid && item.state === '1') {
-                  this.hasInventory = true;
+            inventoryListOfAoyi.forEach(item => {
+              if (item.skuId === goods.skuid && item.state === '1') {
+                this.hasInventory = true;
               }
             })
           }
-          if(inventorySkusOfZy.length > 0) {
-            let resp = await  this.updateOtherInventory(inventorySkusOfZy)
+          if (inventorySkusOfZy.length > 0) {
+            let resp = await this.updateOtherInventory(inventorySkusOfZy)
             let inventoryListOfZy = resp.data.data.result
-            inventoryListOfZy.forEach(item=>{
-              if(item.mpu === goods.mpu && item.state === '1') {
+            inventoryListOfZy.forEach(item => {
+              if (item.mpu === goods.mpu && item.state === '1') {
                 this.hasInventory = true;
               }
             })
@@ -441,7 +479,7 @@
       },
 
 
-      updateAoyiInventory(skus){
+      updateAoyiInventory(skus) {
         this.$log(this.addressCode)
         let options = {
           "cityId": this.addressCode.cityId,
@@ -482,9 +520,9 @@
       },
       formateReleasePercentageText(coupon) {
         if (coupon.releaseTotal == 0)
-          return '已领取'+'100%';
+          return '已领取' + '100%';
         let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
-        return '已领取'+percentage+'%';
+        return '已领取' + percentage + '%';
       },
       formateCouponPrice(rules) {
         switch (rules.type) {
@@ -634,7 +672,8 @@
           border-top-right-radius: 10px;
           min-height: 500px;
           background-color: #f8f8f8;
-          .couponLayout{
+
+          .couponLayout {
           }
         }
 
@@ -911,6 +950,7 @@
             .coupon-progress {
               margin-top: 10px;
             }
+
             /* 左边框的波浪 */
 
             .coupon-wave-left::before, .coupon-wave-right::after {
@@ -1273,19 +1313,22 @@
         border-top-right-radius: 10px;
         background-color: white;
         flex-direction: column;
-        .serviceTitle{
+
+        .serviceTitle {
           display: flex;
           flex-direction: column;
           text-align: center;
-          .fz(font-size,40);
+          .fz(font-size, 40);
           font-weight: bold;
           padding-left: 2px;
           padding-right: 2px;
-          img{
+
+          img {
             width: 100%;
           }
         }
-        .serviceDetail{
+
+        .serviceDetail {
           display: flex;
           flex-direction: column;
           padding: 5px;
@@ -1294,11 +1337,11 @@
       }
 
       .contentBox {
-        .contentTitle{
+        .contentTitle {
           margin-top: 10px;
           background-color: white;
           text-align: center;
-          .fz(font-size,40);
+          .fz(font-size, 40);
           font-weight: bold;
         }
       }
@@ -1374,6 +1417,7 @@
           color: black;
           background-color: white;
           .fz(font-size, 30);
+
           .goods-area {
             background-color: #ff4444;
             .fz(font-size, 26);
