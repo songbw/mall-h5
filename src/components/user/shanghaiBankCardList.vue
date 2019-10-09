@@ -125,6 +125,9 @@
             this.bindCardInfo = ret.data;
             this.$log(this.bindCardInfo)
           } else {
+            if(ret.code == 10001) {
+              this.hasBindedCard = false;
+            }
 
           }
 
