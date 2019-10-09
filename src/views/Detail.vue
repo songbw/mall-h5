@@ -167,11 +167,17 @@
           <span>4、若该商品主图或详情包含赠品信息,赠品赠完即止，不保证您的订单一定有赠品,请知悉。</span>
         </div>
       </div>
+      <div v-if="bulletinInfo !=nulll && bulletinInfo.position == 'top'" class="bulletin">
+        <img v-lazy="bulletinInfo.imageUrl">
+      </div>
       <div class="contentBox">
         <div class="contentTitle">
           <span>商品详情</span>
         </div>
         <v-content :contentData=contentUrls></v-content>
+      </div>
+      <div v-if="bulletinInfo !=nulll && bulletinInfo.position == 'bottom'" class="bulletin">
+        <img v-lazy="bulletinInfo.imageUrl">
       </div>
       <v-baseline/>
     </div>
@@ -216,20 +222,6 @@
           this.showServiceBox = true;
         }
       }
-      let that = this
-      //this.$log("detail created:"+this.$api.APP_ID+",showServiceBox:"+this.showServiceBox)
-      that.$api.xapi({
-        method: 'get',
-        baseURL: this.$api.VENDOR_URL,
-        url: '/bulletin/findByMerchantId',
-        params: {
-          merchantId: 2
-        },
-      }).then((response) => {
-        that.$log(response)
-      }).catch(function (error) {
-        that.$log(error)
-      })
     },
 
     mounted() {
@@ -353,7 +345,8 @@
         avaliableCouponList: [],
         couponImg: require('@/assets/icons/ico_coupon.png'),
         seriviceIcon: require('@/assets/icons/ico_prod_service.jpg'),
-        showServiceBox: false
+        showServiceBox: false,
+        bulletinInfo: null,
       }
     },
     methods: {
@@ -365,10 +358,13 @@
           baseURL: this.$api.VENDOR_URL,
           url: '/bulletin/findByMerchantId',
           params: {
-            merchantId: goods.merchantId
+            merchantId: 40// goods.merchantId
           },
         }).then((response) => {
           that.$log(response)
+          if(response.data.data.result != null) {
+            that.bulletinInfo = response.data.data.result;
+          }
         }).catch(function (error) {
           that.$log(error)
         })
@@ -1333,6 +1329,15 @@
           flex-direction: column;
           padding: 5px;
           color: black;
+        }
+      }
+
+      .bulletin {
+        width: 100%;
+        margin: 10px 0px;
+        img {
+          width: 100%;
+          display: block;
         }
       }
 
