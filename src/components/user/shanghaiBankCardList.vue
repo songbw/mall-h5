@@ -60,7 +60,7 @@
               <span style="float: right">{{bindCardInfo.bankCard}}</span>
             </div>
             <div>
-              <span>虚拟账户号:</span>
+              <span>虚拟账号:</span>
               <span style="float: right">{{bindCardInfo.virtualAccount}}</span>
             </div>
           </div>
