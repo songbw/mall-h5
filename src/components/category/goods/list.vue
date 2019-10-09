@@ -73,7 +73,7 @@
         loading: false,
         finished: false,
         launchedLoading: false,
-        showHeader: true,
+        showHeader: false,
         icon_shopCart: require('@/assets/icons/ico_cart-circle.png'),
         icon_select_top: require('@/assets/icons/ico_select_top.png'),
         icon_select_btm: require('@/assets/icons/ico_select_btm.png'),

@@ -116,7 +116,7 @@
         detail: {},
         PromotionStartTime: 0,
         PromotionEndTime: 0,
-        showHeader: true,
+        showHeader: false,
         dailySchedule: false,
         seckillTypes: [],
         active: 0,

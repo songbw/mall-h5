@@ -39,7 +39,7 @@
         value: "",
         hotSearch: [],
         showHeader: true,
-        showBackArrow: true
+        showBackArrow: false
       }
     },
     beforeCreate() {
