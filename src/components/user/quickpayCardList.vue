@@ -18,8 +18,8 @@
               </van-col>
             </div>
             <div class="cardFooter">
-               <span class="cardBalance">余额: {{(k.balance/100).toFixed(2)}}元</span>
-               <span class="cardDetail" @click="onCardDetailBtnClick(k)">交易明细 ></span>
+              <span class="cardBalance">余额: {{(k.balance/100).toFixed(2)}}元</span>
+              <span class="cardDetail" @click="onCardDetailBtnClick(k)">交易明细 ></span>
             </div>
 
           </div>
@@ -43,27 +43,41 @@
       :beforeClose="beforeCloseAddNewOptCardDlg"
     >
       <van-field
-        v-model="mTelphoneNumber"
-        type="tel"
-        rows="1"
-        maxlength="20"
-        placeholder="绑定用户电话号码"
-        clearable
-        v-if="this.user.telephone == null || this.user.telephone.length == 0"
-      />
-      <van-field
-        v-model="newOptCardNumber"
+        v-model="newCardNumber"
+        label="银行卡号:"
+        maxlength="30"
+        label-width="65px"
         type="number"
         rows="1"
-        maxlength="20"
-        placeholder="请输入卡号"
+        placeholder="请输入银行卡号"
         clearable
       />
       <van-field
-        v-model="newOptCardPwd"
+        v-model="newCustomName"
+        label="用户姓名:"
+        maxlength="30"
+        label-width="65px"
         rows="1"
-        maxlength="20"
-        placeholder="请输入密码"
+        placeholder="请输入银行卡用户姓名"
+        clearable
+      />
+      <van-field
+        v-model="mTelphoneNumber"
+        label="电话号码:"
+        maxlength="30"
+        label-width="65px"
+        type="tel"
+        rows="1"
+        placeholder="请输入银行预留电话号码"
+        clearable
+      />
+      <van-field
+        v-model="mIdNo"
+        label="身份证号:"
+        maxlength="30"
+        label-width="65px"
+        rows="1"
+        placeholder="请输入用户身份证号码"
         clearable
       />
     </van-dialog>
@@ -92,9 +106,10 @@
         icon_noCards: require('@/assets/icons/ico_empty_card.png'),
         icon_optCardsReal: require('@/assets/icons/ico_optCards_real.png'),
         addNewOptCardDlgShow: false,
-        newOptCardNumber:"",
-        newOptCardPwd:"",
-        mTelphoneNumber:""
+        newCardNumber: "",
+        newCustomName: "",
+        mTelphoneNumber: "",
+        mIdNo: ""
       }
     },
 
@@ -103,8 +118,8 @@
       this.showHeader = this.$api.HAS_HEADER;
       let that = this
       let userDetail = this.$store.state.appconf.userDetail;
-      if(userDetail.length > 0) {
-        this.user  = JSON.parse(userDetail)
+      if (userDetail.length > 0) {
+        this.user = JSON.parse(userDetail)
         this.mTelphoneNumber = this.user.telephone
       }
       let options = {
@@ -132,7 +147,7 @@
       updateCurrentOptCard(currentCard) {
         this.$store.commit('SET_CURRENT_OPT_CARDS', JSON.stringify(currentCard));
       },
-      updateOptCardList () {
+      updateOptCardList() {
         let that = this
         let options = {
           "isvalid": true,
@@ -162,31 +177,32 @@
       formatTime(timeString) {
         if (timeString == null)
           return null
-        return this.$moment(timeString,"YYYYMMDDHHmmss").format('YYYY/MM/DD')
+        return this.$moment(timeString, "YYYYMMDDHHmmss").format('YYYY/MM/DD')
       },
-      onCardDetailBtnClick(k){
+      onCardDetailBtnClick(k) {
         this.$log("onCardDetailBtnClick Enter")
         this.$log(k)
         this.updateCurrentOptCard(k);
         this.$router.push({
-          name:"惠民优选卡详情页",
+          name: "惠民优选卡详情页",
           params: {
             user: this.user,
             card: k,
-          }})
+          }
+        })
       },
       onAddOptCardBtnClick() {
         this.$log("onAddOptCardBtnClick Enter")
         this.addNewOptCardDlgShow = true
       },
 
-       async beforeCloseAddNewOptCardDlg(action, done) {
+      async beforeCloseAddNewOptCardDlg(action, done) {
         this.$log("beforeCloseAddNewOptCardDlg Enter");
         if (action === 'confirm') {
           // this.user.nickname = this.inputNickName
           // this.saveUserInfo();
-          if(this.user.telephone == null || this.user.telephone.length == 0) {
-            if(!this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+          if (this.user.telephone == null || this.user.telephone.length == 0) {
+            if (!this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
               this.$toast("请输入正确的电话号码")
               done(false) //不关闭弹框
               return
@@ -196,22 +212,22 @@
               this.updateUserDetail(this.user);
             }
           }
-          if(this.newOptCardNumber.length == 0) {
+          if (this.newCardNumber.length == 0) {
             this.$toast("请输入正确的卡号")
             done(false) //不关闭弹框
             return
           }
-          if(this.newOptCardPwd.length == 0) {
+          if (this.newOptCardPwd.length == 0) {
             this.$toast("请输入正确的卡密码")
             done(false) //不关闭弹框
             return
           }
           this.$log(this.mTelphoneNumber)
-          this.$log(this.newOptCardNumber)
+          this.$log(this.newCardNumber)
           this.$log(this.newOptCardPwd)
           let that = this
           let options = {
-            "cardnum": this.newOptCardNumber,
+            "cardnum": this.newCardNumber,
             "password": this.newOptCardPwd,
             "phonenum": this.mTelphoneNumber
           }
@@ -308,6 +324,7 @@
             .cardMain {
               .cardImg {
                 padding: 5px;
+
                 img {
                   width: 100%;
                   height: 100%;
@@ -319,7 +336,8 @@
                 flex-direction: column;
                 height: 100%;
                 padding: 5px;
-                span{
+
+                span {
                 }
               }
 
@@ -330,11 +348,13 @@
               padding: 10px;
               width: 100%;
               border-top: 1px dashed #cccccc;
-              .cardBalance{
+
+              .cardBalance {
                 width: 70%;
                 text-align: left;
               }
-              .cardDetail{
+
+              .cardDetail {
                 width: 30%;
                 text-align: center;
                 color: #ff4444;
