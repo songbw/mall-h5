@@ -31,7 +31,6 @@
             <div class="goods-detail" @click="onListClick(k)">
               <van-card
                 :price="k.price"
-                desc="南京"
                 :title=composeGoodsTitle(k)
                 :thumb="k.image"
                 centered>
