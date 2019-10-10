@@ -42,44 +42,115 @@
       confirm-button-text="添加"
       :beforeClose="beforeCloseAddNewOptCardDlg"
     >
-      <van-field
-        v-model="newCardNumber"
-        label="银行卡号:"
-        maxlength="30"
-        label-width="65px"
-        type="number"
-        rows="1"
-        placeholder="请输入银行卡号"
-        clearable
-      />
-      <van-field
-        v-model="newCustomName"
-        label="用户姓名:"
-        maxlength="30"
-        label-width="65px"
-        rows="1"
-        placeholder="请输入银行卡用户姓名"
-        clearable
-      />
-      <van-field
-        v-model="mTelphoneNumber"
-        label="电话号码:"
-        maxlength="30"
-        label-width="65px"
-        type="tel"
-        rows="1"
-        placeholder="请输入银行预留电话号码"
-        clearable
-      />
-      <van-field
-        v-model="mIdNo"
-        label="身份证号:"
-        maxlength="30"
-        label-width="65px"
-        rows="1"
-        placeholder="请输入用户身份证号码"
-        clearable
-      />
+      <div class="cardTypeBox">
+        <van-radio-group v-model="radio" style="display: flex">
+          <van-cell title="储蓄卡" :icon="icon_linkpay" clickable @click="radio = '1'">
+            <van-radio slot="right-icon" name="1"/>
+          </van-cell>
+          <van-cell title="信用卡" :icon="icon_quicklypay" @click="radio = '2'">
+            <van-radio slot="right-icon"  name="2"/>
+          </van-cell>
+        </van-radio-group>
+      </div>
+      <div v-if="radio == '1'">
+        <van-field
+          v-model="newCardNumber"
+          label="银行卡号:"
+          maxlength="30"
+          label-width="65px"
+          type="number"
+          rows="1"
+          placeholder="请输入银行卡号"
+          clearable
+        />
+        <van-field
+          v-model="newCustomName"
+          label="真实姓名:"
+          maxlength="30"
+          label-width="65px"
+          rows="1"
+          placeholder="请输入银行卡用户姓名"
+          clearable
+        />
+        <van-field
+          v-model="mTelphoneNumber"
+          label="电话号码:"
+          maxlength="30"
+          label-width="65px"
+          type="tel"
+          rows="1"
+          placeholder="请输入银行预留电话号码"
+          clearable
+        />
+        <van-field
+          v-model="mIdNo"
+          label="身份证号:"
+          maxlength="30"
+          label-width="65px"
+          rows="1"
+          placeholder="请输入用户身份证号码"
+          clearable
+        />
+      </div>
+      <div v-if="radio == '2'">
+        <van-field
+          v-model="newCardNumber"
+          label="银行卡号:"
+          maxlength="30"
+          label-width="65px"
+          type="number"
+          rows="1"
+          placeholder="请输入银行卡号"
+          clearable
+        />
+        <van-field
+          v-model="newCustomName"
+          label="真实姓名:"
+          maxlength="30"
+          label-width="65px"
+          rows="1"
+          placeholder="请输入银行卡用户姓名"
+          clearable
+        />
+        <van-field
+          v-model="mTelphoneNumber"
+          label="电话号码:"
+          maxlength="30"
+          label-width="65px"
+          type="tel"
+          rows="1"
+          placeholder="请输入银行预留电话号码"
+          clearable
+        />
+        <van-field
+          v-model="mIdNo"
+          label="身份证号:"
+          maxlength="30"
+          label-width="65px"
+          rows="1"
+          placeholder="请输入用户身份证号码"
+          clearable
+        />
+        <van-field
+          v-model="mValidDate"
+          label="有效日期:"
+          maxlength="30"
+          label-width="65px"
+          rows="1"
+          placeholder="请输入信用卡有效期"
+          clearable
+        />
+        <van-field
+          v-model="mVerifyData"
+          label="验证码:"
+          maxlength="30"
+          label-width="65px"
+          rows="1"
+          placeholder="请输入信用卡验证码"
+          clearable
+        />
+      </div>
+
     </van-dialog>
   </section>
 </template>
@@ -109,7 +180,10 @@
         newCardNumber: "",
         newCustomName: "",
         mTelphoneNumber: "",
-        mIdNo: ""
+        mIdNo: "",
+        radio: '1',
+        mValidDate:'',
+        mVerifyData:''
       }
     },
 
