@@ -253,6 +253,11 @@
       },
       onQuickPayCardBtnClick() {
         this.$log("onQuickPayCardBtnClick Enter")
+        this.$router.push({
+          name:'快捷支付银行卡列表页',
+          params: {
+            user: this.user
+          }})
 
       },
       onQueryLinkPayBtnClick() {
