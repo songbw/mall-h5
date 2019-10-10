@@ -76,13 +76,16 @@
         <van-cell title="市名卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
           <img slot="icon" :src="icon_linkPayCard"/>
         </van-cell>
+        <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
+          <img slot="icon" :src="icon_quickPayCard"/>
+        </van-cell>
         <van-cell title="上海银行钱包" is-link @click="onShangHaiBankBtnClick">
           <img slot="icon" :src="icon_bankCard"/>
         </van-cell>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon"/>
         </van-cell>
-        <van-cell title="我的客服" :value="this.$api.SERVR_PHONE_NUM" is-link>
+        <van-cell title="我的客服" :value="this.$api.SERVR_PHONE_NUM">
           <img slot="icon" :src="customServiceIcon"/>
         </van-cell>
         <van-cell title="关于凤巢" value="版本号 V1.0">
@@ -218,6 +221,7 @@
         icon_linkPayCard:  require('@/assets/icons/ico_linkPayCard.png'),
         icon_optCard: require('@/assets/icons/ico_optCard.png'),
         icon_bankCard: require('@/assets/icons/ico_bankCard.png'),
+        icon_quickPayCard: require('@/assets/icons/ico_quickpay_cards.png'),
         user: {},
         showLinkPayDialog: false,
         linkPayAccount:"",
@@ -246,6 +250,10 @@
           params: {
             user: this.user
           }})
+      },
+      onQuickPayCardBtnClick() {
+        this.$log("onQuickPayCardBtnClick Enter")
+
       },
       onQueryLinkPayBtnClick() {
         this.$log("link pay account btn clicked")
