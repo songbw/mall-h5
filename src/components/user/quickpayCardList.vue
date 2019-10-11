@@ -6,20 +6,24 @@
     <div class="bankCardListBody">
       <div class="bankCardListMain">
         <div class="bankcardList" v-if="bankcardList.length > 0">
-          <div v-for="(k,index) in bankcardList" :key="index" class="optCard">
+          <div v-for="(k,index) in bankcardList" :key="index" class="bankCard">
             <div class="cardMain">
-              <van-col span="8" class="cardImg">
-                <img :src="icon_optCardsReal">
-              </van-col>
-              <van-col span="16" class="cardInfo">
-                <span>卡号: {{k.cardnum}}</span>
-                <p style="margin-top: 3px">面值: <span>{{(k.amount/100).toFixed(2)}}元</span></p>
-                <span style="font-size: small;color: #515151;margin-top: 3px">有效期: {{formatTime(k.expiryDate)}}</span>
-              </van-col>
+              <div class="cardTitle">
+                <img :src="icon_ic_chip">
+                <span>银行卡</span>
+                <van-icon  style="float: right" name="delete" @click="onDeleteCardBtnClick(k,index)"></van-icon>
+              </div>
+              <div class="cardInfo">
+                 <span>{{k.accountId}}</span>
+              </div>
             </div>
             <div class="cardFooter">
-              <span class="cardBalance">余额: {{(k.balance/100).toFixed(2)}}元</span>
-              <span class="cardDetail" @click="onCardDetailBtnClick(k)">交易明细 ></span>
+              <div class="cardOwner">
+                <span>持卡人:{{k.accountName}}</span>
+              </div>
+              <div class="cardDetail" v-if="k.expiredDate != null">
+                <span>有效期:{{k.expiredDate}}</span>
+              </div>
             </div>
           </div>
         </div>
@@ -30,12 +34,12 @@
       </div>
     </div>
     <div class="bankcardListBottomFunc">
-      <div @click="onAddOptCardBtnClick()" class="addOptCardButton">
+      <div @click="onAddBankCardBtnClick()" class="addBankCardButton">
         <span>添加银行卡</span>
       </div>
     </div>
     <van-dialog
-      v-model="addNewOptCardDlgShow"
+      v-model="addNewBankCardDlgShow"
       title="添加银行卡"
       show-cancel-button="true"
       confirm-button-text="添加"
@@ -47,7 +51,7 @@
             <van-radio slot="right-icon" name="1"/>
           </van-cell>
           <van-cell title="信用卡" :icon="icon_quicklypay" @click="radio = '2'">
-            <van-radio slot="right-icon"  name="2"/>
+            <van-radio slot="right-icon" name="2"/>
           </van-cell>
         </van-radio-group>
       </div>
@@ -55,7 +59,7 @@
         <van-field
           v-model="newCardNumber"
           label="银行卡号:"
-          maxlength="30"
+          maxlength="32"
           label-width="65px"
           type="number"
           rows="1"
@@ -174,15 +178,15 @@
         launchedLoaded: false,
         bankcardList: [],
         icon_noCards: require('@/assets/icons/ico_empty_card.png'),
-        icon_optCardsReal: require('@/assets/icons/ico_optCards_real.png'),
-        addNewOptCardDlgShow: false,
+        icon_ic_chip: require('@/assets/icons/ico_ic_chip.png'),
+        addNewBankCardDlgShow: false,
         newCardNumber: "",
         newCustomName: "",
         mTelphoneNumber: "",
         mIdNo: "",
         radio: '1',
-        mValidDate:'',
-        mVerifyData:''
+        mExpiredDate: '',
+        mCvv2: ''
       }
     },
 
@@ -195,48 +199,54 @@
         this.user = JSON.parse(userDetail)
         this.mTelphoneNumber = this.user.telephone
       }
-      let options = {
-        "isvalid": true,
-        "phonenum": this.mTelphoneNumber
-      }
-      that.$api.xapi({
-        method: 'post',
-        baseURL: this.$api.OPTCARDS_URL,
-        url: '/woc/cardinfo/getcardlist',
-        data: options
-      }).then((response) => {
-        that.$log(response.data.data)
-        that.bankcardList = response.data.data
-        that.launchedLoaded = true
-      }).catch(function (error) {
-
-      })
+      this.updatebankcardList()
     },
 
     methods: {
+      onDeleteCardBtnClick(k,index) {
+        this.$log("onDeleteCardBtnClick Enter")
+        let that = this
+        that.$api.xapi({
+          method: 'delete',
+          baseURL: this.$api.QUICKLY_PAY_URL,
+          url: '/accounts/account/'+k.id,
+        }).then((response) => {
+          that.$log("onDelBtnClick coupon success, response is:" + JSON.stringify(response.data))
+          if (response.data.code == 200) {
+            this.bankcardList.splice(index, 1);
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
       updateUserDetail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
       },
-      updateCurrentOptCard(currentCard) {
-        this.$store.commit('SET_CURRENT_OPT_CARDS', JSON.stringify(currentCard));
-      },
       updatebankcardList() {
         let that = this
-        let options = {
-          "isvalid": true,
-          "phonenum": this.mTelphoneNumber
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let customUser = JSON.parse(userInfo)
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.QUICKLY_PAY_URL,
+            url: '/accounts/list',
+            params: {
+              "openId": customUser.userId,
+            }
+          }).then((response) => {
+            if (response.data.code == 200) {
+              this.bankcardList = response.data.data
+              this.$log(this.bankcardList)
+            }
+            if (!that.launchedLoaded)
+              that.launchedLoaded = true
+          }).catch(function (error) {
+            that.$log(error)
+            if (!that.launchedLoaded)
+              that.launchedLoaded = true
+          })
         }
-        that.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.OPTCARDS_URL,
-          url: '/woc/cardinfo/getcardlist',
-          data: options
-        }).then((response) => {
-          that.$log(response.data.data)
-          that.bankcardList = response.data.data
-        }).catch(function (error) {
-
-        })
       },
       saveUserInfo() {
         return this.$api.xapi({
@@ -252,56 +262,85 @@
           return null
         return this.$moment(timeString, "YYYYMMDDHHmmss").format('YYYY/MM/DD')
       },
-      onCardDetailBtnClick(k) {
-        this.$log("onCardDetailBtnClick Enter")
-        this.$log(k)
-        this.updateCurrentOptCard(k);
-        this.$router.push({
-          name: "惠民优选卡详情页",
-          params: {
-            user: this.user,
-            card: k,
-          }
-        })
-      },
-      onAddOptCardBtnClick() {
-        this.$log("onAddOptCardBtnClick Enter")
-        this.addNewOptCardDlgShow = true
+      onAddBankCardBtnClick() {
+        this.$log("onAddBankCardBtnClick Enter")
+        this.addNewBankCardDlgShow = true
       },
 
       async beforeCloseAddNewCardDlg(action, done) {
         this.$log("beforeCloseAddNewCardDlg Enter");
         if (action === 'confirm') {
-          if (this.newCardNumber.length == 0) {
-            this.$toast("请输入正确的卡号")
-            done(false) //不关闭弹框
-            return
-          }
-          if (this.newCustomName.length == 0) {
-            this.$toast("请输入真实姓名")
-            done(false) //不关闭弹框
-            return
-          }
-          if (this.user.telephone == null || this.user.telephone.length == 0) {
-            if (this.mTelphoneNumber == null||!this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
-              this.$toast("请输入正确的电话号码")
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+            let customUser = JSON.parse(userInfo)
+            if (this.newCardNumber.length == 0) {
+              this.$toast("请输入正确的卡号")
               done(false) //不关闭弹框
               return
-            } else {
-              this.user.telephone = this.mTelphoneNumber
-              let ret = await this.saveUserInfo();
-              this.updateUserDetail(this.user);
             }
+            if (this.newCustomName.length == 0) {
+              this.$toast("请输入真实姓名")
+              done(false) //不关闭弹框
+              return
+            }
+            if (this.user.telephone == null || this.user.telephone.length == 0) {
+              if (this.mTelphoneNumber == null || !this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+                this.$toast("请输入正确的电话号码")
+                done(false) //不关闭弹框
+                return
+              } else {
+                this.user.telephone = this.mTelphoneNumber
+                let ret = await this.saveUserInfo();
+                this.updateUserDetail(this.user);
+              }
+            }
+            if (this.mIdNo.length == 0 ||
+              !this.mIdNo.match("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$")) {
+              this.$toast("请输入正确的身份证号码")
+              done(false) //不关闭弹框
+              return
+            }
+            let that = this
+            let expiredDate = this.mExpiredDate
+            let cvv2 = this.mCvv2
+            let accountType = 1
+            if (this.radio == '1') {
+              expiredDate = ""
+              cvv2 = ""
+              accountType = 2
+            }
+            let options = {
+              "openId": customUser.userId,
+              "accountType": accountType,
+              "accountId": this.newCardNumber,
+              "accountName": this.newCustomName,
+              "mobileNo": this.mTelphoneNumber,
+              "certNo": this.mIdNo,
+              "expiredDate": expiredDate,
+              "cvv2": cvv2
+            }
+            that.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.QUICKLY_PAY_URL,
+              url: '/ztkx/cardPayment/card',
+              data: options
+            }).then((response) => {
+              that.$log(response)
+              if (response.data.code == 200) {
+                that.$toast("添加成功")
+                this.updatebankcardList()
+              } else {
+                that.$toast("添加失败")
+              }
+              done()
+            }).catch(function (error) {
+              that.$toast("绑卡失败")
+              done()
+            })
+          } else {
+            this.$log("没有用户信息，无法添加银行卡，请先登录")
+            done()
           }
-          if (this.mIdNo.length == 0 ||
-            !this.mIdNo.match("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$")) {
-            this.$toast("请输入正确的身份证号码")
-            done(false) //不关闭弹框
-            return
-          }
-
-          this.$log(this.mTelphoneNumber)
-          this.$log(this.newCardNumber)
         } else if (action === 'cancel') {
           done() //关闭
         }
@@ -343,19 +382,6 @@
           span {
             margin: 2vw;
           }
-
-          .noCoupon_line1 {
-            font-weight: lighter;
-            color: black;
-            .fz(font-size, 35);
-          }
-
-          .noCoupon_line2 {
-            font-weight: lighter;
-            color: #8c8c8c;
-            .fz(font-size, 28);
-          }
-
         }
 
         .bankcardList {
@@ -364,8 +390,9 @@
           background-color: #f8f8f8;
           justify-items: center;
 
-          .optCard {
-            background-color: white;
+          .bankCard {
+            background:-webkit-linear-gradient(to right, #0d6cda, #3bc1fc);
+            background:linear-gradient(to right,#0d6cda, #3bc1fc);
             display: flex;
             flex-direction: column;
             color: black;
@@ -374,11 +401,21 @@
             padding-right: .5rem;
             margin: .5rem;
             /** 这里不能用百分号，因为百分号是分别相对宽和高计算的，会导致弧度不同  */
-            border-top-right-radius: .3rem;
-            border-bottom-right-radius: .3rem;
+            border-radius: .3rem;
             overflow: hidden;
 
             .cardMain {
+              .cardTitle{
+                padding: 10px;
+                color: white;
+                img {
+                  width: 40px;
+                  height: 40px;
+                }
+                span{
+                  margin-left: 10px;
+                }
+              }
               .cardImg {
                 padding: 5px;
 
@@ -392,10 +429,8 @@
                 display: flex;
                 flex-direction: column;
                 height: 100%;
-                padding: 5px;
-
-                span {
-                }
+                padding: 8px;
+                color: white;
               }
 
             }
@@ -404,17 +439,18 @@
               display: flex;
               padding: 10px;
               width: 100%;
-              border-top: 1px dashed #cccccc;
 
-              .cardBalance {
-                width: 70%;
+              .cardOwner {
+                width: 50%;
                 text-align: left;
+                color: white;
               }
 
               .cardDetail {
-                width: 30%;
-                text-align: center;
-                color: #ff4444;
+                margin-right: 20px;
+                width: 50%;
+                color: white;
+                text-align: right;
               }
             }
           }
@@ -437,7 +473,7 @@
       z-index: 5;
 
 
-      .addOptCardButton {
+      .addBankCardButton {
         width: 100%;
         height: 100%;
         background-color: #FF4444;
