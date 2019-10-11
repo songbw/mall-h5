@@ -33,6 +33,8 @@ const VENDOR_URL = SERVICE_URL + "/v2/vendors/"
 
 const SHANGHAI_BANK_URL = "http://180.76.244.14:8021"
 
+const QUICKLY_PAY_URL = "http://192.168.200.122:8032/"
+
 const xapi = axios.create();
 //xapi.defaults.baseURL = SERVER_BASE_URL;
 xapi.defaults.timeout = 20000;
@@ -99,6 +101,7 @@ export default {
   OPTCARDS_URL,
   SHANGHAI_BANK_URL,
   VENDOR_URL,
+  QUICKLY_PAY_URL,
   IS_GAT_APP,
   HAS_HEADER,
   TEST_USER

@@ -1,12 +1,12 @@
 <template lang="html">
-  <section class="myOptCarList">
+  <section class="myBankCarList">
     <v-header class="header" v-if="showHeader">
       <h1 slot="title">我的快捷支付银行卡</h1>
     </v-header>
-    <div class="optCardListBody">
-      <div class="optCardListMain">
-        <div class="optcardList" v-if="optCardList.length > 0">
-          <div v-for="(k,index) in optCardList" :key="index" class="optCard">
+    <div class="bankCardListBody">
+      <div class="bankCardListMain">
+        <div class="bankcardList" v-if="bankcardList.length > 0">
+          <div v-for="(k,index) in bankcardList" :key="index" class="optCard">
             <div class="cardMain">
               <van-col span="8" class="cardImg">
                 <img :src="icon_optCardsReal">
@@ -21,16 +21,15 @@
               <span class="cardBalance">余额: {{(k.balance/100).toFixed(2)}}元</span>
               <span class="cardDetail" @click="onCardDetailBtnClick(k)">交易明细 ></span>
             </div>
-
           </div>
         </div>
-        <div v-else-if="launchedLoaded && optCardList.length == 0" class="noCards">
+        <div v-else-if="launchedLoaded && bankcardList.length == 0" class="noCards">
           <img :src="icon_noCards">
-          <span style="font-size: large;color: black">亲，卡包已空啦</span>
+          <span style="font-size: large;color: black">亲，还没有添加卡</span>
         </div>
       </div>
     </div>
-    <div class="optcardListBottomFunc">
+    <div class="bankcardListBottomFunc">
       <div @click="onAddOptCardBtnClick()" class="addOptCardButton">
         <span>添加银行卡</span>
       </div>
@@ -40,7 +39,7 @@
       title="添加银行卡"
       show-cancel-button="true"
       confirm-button-text="添加"
-      :beforeClose="beforeCloseAddNewOptCardDlg"
+      :beforeClose="beforeCloseAddNewCardDlg"
     >
       <div class="cardTypeBox">
         <van-radio-group v-model="radio" style="display: flex">
@@ -173,7 +172,7 @@
       return {
         user: {},
         launchedLoaded: false,
-        optCardList: [],
+        bankcardList: [],
         icon_noCards: require('@/assets/icons/ico_empty_card.png'),
         icon_optCardsReal: require('@/assets/icons/ico_optCards_real.png'),
         addNewOptCardDlgShow: false,
@@ -207,7 +206,7 @@
         data: options
       }).then((response) => {
         that.$log(response.data.data)
-        that.optCardList = response.data.data
+        that.bankcardList = response.data.data
         that.launchedLoaded = true
       }).catch(function (error) {
 
@@ -221,7 +220,7 @@
       updateCurrentOptCard(currentCard) {
         this.$store.commit('SET_CURRENT_OPT_CARDS', JSON.stringify(currentCard));
       },
-      updateOptCardList() {
+      updatebankcardList() {
         let that = this
         let options = {
           "isvalid": true,
@@ -234,7 +233,7 @@
           data: options
         }).then((response) => {
           that.$log(response.data.data)
-          that.optCardList = response.data.data
+          that.bankcardList = response.data.data
         }).catch(function (error) {
 
         })
@@ -270,13 +269,21 @@
         this.addNewOptCardDlgShow = true
       },
 
-      async beforeCloseAddNewOptCardDlg(action, done) {
-        this.$log("beforeCloseAddNewOptCardDlg Enter");
+      async beforeCloseAddNewCardDlg(action, done) {
+        this.$log("beforeCloseAddNewCardDlg Enter");
         if (action === 'confirm') {
-          // this.user.nickname = this.inputNickName
-          // this.saveUserInfo();
+          if (this.newCardNumber.length == 0) {
+            this.$toast("请输入正确的卡号")
+            done(false) //不关闭弹框
+            return
+          }
+          if (this.newCustomName.length == 0) {
+            this.$toast("请输入真实姓名")
+            done(false) //不关闭弹框
+            return
+          }
           if (this.user.telephone == null || this.user.telephone.length == 0) {
-            if (!this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+            if (this.mTelphoneNumber == null||!this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
               this.$toast("请输入正确的电话号码")
               done(false) //不关闭弹框
               return
@@ -286,39 +293,15 @@
               this.updateUserDetail(this.user);
             }
           }
-          if (this.newCardNumber.length == 0) {
-            this.$toast("请输入正确的卡号")
+          if (this.mIdNo.length == 0 ||
+            !this.mIdNo.match("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$")) {
+            this.$toast("请输入正确的身份证号码")
             done(false) //不关闭弹框
             return
           }
-          if (this.newOptCardPwd.length == 0) {
-            this.$toast("请输入正确的卡密码")
-            done(false) //不关闭弹框
-            return
-          }
+
           this.$log(this.mTelphoneNumber)
           this.$log(this.newCardNumber)
-          this.$log(this.newOptCardPwd)
-          let that = this
-          let options = {
-            "cardnum": this.newCardNumber,
-            "password": this.newOptCardPwd,
-            "phonenum": this.mTelphoneNumber
-          }
-          that.$api.xapi({
-            method: 'post',
-            baseURL: this.$api.OPTCARDS_URL,
-            url: '/woc/cardbind/dobind',
-            data: options
-          }).then((response) => {
-            that.$log(response.data.data)
-            that.$toast(response.data.message)
-            that.updateOptCardList()
-            done()
-          }).catch(function (error) {
-            that.$toast("绑卡失败")
-            done()
-          })
         } else if (action === 'cancel') {
           done() //关闭
         }
@@ -332,14 +315,14 @@
   @import '../../assets/index/style.css';
   @import '../../assets/user/icon/carstyle.css';
 
-  .myOptCarList {
+  .myBankCarList {
     width: 100%;
     height: 100%;
     top: 0px;
     background-color: #f8f8f8;
 
-    .optCardListBody {
-      .optCardListMain {
+    .bankCardListBody {
+      .bankCardListMain {
         width: 100%;
         padding-bottom: 3em;
 
@@ -375,7 +358,7 @@
 
         }
 
-        .optcardList {
+        .bankcardList {
           display: flex;
           flex-direction: column;
           background-color: #f8f8f8;
@@ -439,7 +422,7 @@
       }
     }
 
-    .optcardListBottomFunc {
+    .bankcardListBottomFunc {
       background-color: white;
       width: 100%;
       height: 3em;
