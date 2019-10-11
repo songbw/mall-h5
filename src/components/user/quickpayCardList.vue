@@ -135,21 +135,21 @@
           clearable
         />
         <van-field
-          v-model="mValidDate"
+          v-model="mExpiredDate"
           label="有效日期:"
-          maxlength="30"
+          maxlength="4"
           label-width="65px"
           rows="1"
-          placeholder="请输入信用卡有效期"
+          placeholder="请输入信用卡有效期(MMYY)"
           clearable
         />
         <van-field
-          v-model="mVerifyData"
+          v-model="mCvv2"
           label="验证码:"
-          maxlength="30"
+          maxlength="3"
           label-width="65px"
           rows="1"
-          placeholder="请输入信用卡验证码"
+          placeholder="请输入信用卡3位验证码"
           clearable
         />
       </div>
@@ -300,6 +300,19 @@
               done(false) //不关闭弹框
               return
             }
+            if(this.radio=='2') {
+              if(this.mExpiredDate.length == 0 ||
+                !this.mExpiredDate.match("0\\d{3}|1[12]\\d{2}")) {
+                this.$toast("请输入正确的有效日期")
+                done(false) //不关闭弹框
+                return
+              }
+              if(this.mCvv2.length < 3) {
+                this.$toast("请输入正确的验证码")
+                done(false) //不关闭弹框
+                return
+              }
+            }
             let that = this
             let expiredDate = this.mExpiredDate
             let cvv2 = this.mCvv2
@@ -330,7 +343,7 @@
                 that.$toast("添加成功")
                 this.updatebankcardList()
               } else {
-                that.$toast("添加失败")
+                that.$toast("添加失败，"+response.data.msg)
               }
               done()
             }).catch(function (error) {
