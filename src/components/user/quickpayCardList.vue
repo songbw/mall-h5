@@ -10,7 +10,8 @@
             <div class="cardMain">
               <div class="cardTitle">
                 <img :src="icon_ic_chip">
-                <span>银行卡</span>
+                <span v-if="k.accountType == 2">储蓄卡</span>
+                <span v-else>信用卡</span>
                 <van-icon  style="float: right" name="delete" @click="onDeleteCardBtnClick(k,index)"></van-icon>
               </div>
               <div class="cardInfo">
@@ -19,10 +20,10 @@
             </div>
             <div class="cardFooter">
               <div class="cardOwner">
-                <span>持卡人:{{k.accountName}}</span>
+                <span>持卡人: {{k.accountName}}</span>
               </div>
               <div class="cardDetail" v-if="k.expiredDate != null">
-                <span>有效期:{{k.expiredDate}}</span>
+                <span>有效期: {{k.expiredDate}}</span>
               </div>
             </div>
           </div>
