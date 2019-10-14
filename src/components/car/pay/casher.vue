@@ -147,8 +147,40 @@
               />
             </div>
             <van-cell title="快捷支付" :icon="icon_quicklypay" clickable @click="radio = '2'">
-              <van-radio slot="right-icon"   name="2"/>
+              <van-radio slot="right-icon" name="2"/>
             </van-cell>
+            <div class="quickPayDialog" v-if="radio == '2'">
+              <div class="bankListCheckBox">
+
+                <van-radio-group v-model="bankRadio">
+                  <van-cell-group>
+                    <van-cell
+                      v-for="(item, index) in mBankcardList"
+                      clickable
+                      :key="index"
+                      @click="BanckCardsClick(index)"
+                    >
+                      <div slot="default" class="bankCard">
+                        <span>100元</span>
+                        <span>惠民优选卡支付</span>
+                      </div>
+                      <div slot="right-icon" class="bankCardCheckBox">
+                        <van-checkbox
+                          :name="item.cardnum"
+                          checked-color="#3dd5c8"
+                          ref="optCardsCheckboxes"
+                        />
+                      </div>
+                    </van-cell>
+                  </van-cell-group>
+                </van-radio-group>
+                <div class="addNewOptCard" @click="onAddNewOptCardClick">
+                  <van-icon name="plus" color="#FF4444"></van-icon>
+                  <span>添加银行卡</span>
+                </div>
+
+              </div>
+            </div>
           </van-radio-group>
         </div>
 
@@ -201,10 +233,12 @@
           title: "还需支付",
           icon: require('@/assets/icons/ico_menu.png'),
         },
+        mBankcardList:[],
         mPaylist: [],
         addNewOptCardDlgShow: false,
         newOptCardNumber: "",
-        newOptCardPwd: ""
+        newOptCardPwd: "",
+        bankRadio:"-1"
       }
     },
     computed: {
@@ -223,13 +257,42 @@
       this.orderInfo = this.$route.params.orderInfo;
       this.$log(this.orderInfo);
       this.updateOptCardInfo();
+      this.udateBankcardList();
       this.updateBalanceAmount();
     },
 
     methods: {
+      BanckCardsClick(index) {
+        this.$log("BanckCardsClick Enter:"+index)
+
+      },
       updateUserDetail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
       },
+
+      udateBankcardList() {
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let customUser = JSON.parse(userInfo)
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.QUICKLY_PAY_URL,
+            url: '/accounts/list',
+            params: {
+              "openId": customUser.userId,
+            }
+          }).then((response) => {
+            if (response.data.code == 200) {
+              this.mBankcardList = response.data.data
+              this.$log(this.mBankcardList)
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
+      },
+
       getOptCardList(userDetail) {
         let that = this
         let options = {
@@ -530,14 +593,14 @@
           let balancePay = null
           let wocPays = []
           let woaPay = null
-          let options={
-             orderNo:  this.orderInfo.orderNo
+          let options = {
+            orderNo: this.orderInfo.orderNo
           }
           this.mPaylist.forEach(item => {
             switch (item.payType) {
               case  'coinBalance':
                 balancePay = {
-                  actPayFee: ""+item.payAmount,
+                  actPayFee: "" + item.payAmount,
                   openId: user.openId,
                   orderNo: this.orderInfo.orderNo,
                   payType: "balance"
@@ -545,10 +608,10 @@
                 break;
               case 'optCard':
                 wocPays.push({
-                  actPayFee: ""+item.payAmount,
+                  actPayFee: "" + item.payAmount,
                   cardNo: item.cardnum,
-                  cardPwd:"",
-                  mobile:  this.mTelphoneNumber,
+                  cardPwd: "",
+                  mobile: this.mTelphoneNumber,
                   orderNo: this.orderInfo.orderNo,
                   payType: 'card'
                 })
@@ -561,7 +624,7 @@
           if (this.remainPayAmount > 0) {
             if (this.radio == '1') {
               this.$log("link pay clicked")
-              if(this.remainPayAmount*100 > 10) {
+              if (this.remainPayAmount * 100 > 10) {
                 if (this.linkPayAccount.length == 0) {
                   this.$toast("请输入卡号")
                   return
@@ -582,17 +645,17 @@
                 return
               }
             } else if (this.radio == '2') {
-/*              this.$api.xapi({
-                method: 'post',
-                baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
-                url: '/payment',
-                data: this.orderInfo,
-              }).then((response) => {
-                this.$log(response)
-                this.onPayResult()
-              }).catch(function (error) {
+              /*              this.$api.xapi({
+                              method: 'post',
+                              baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
+                              url: '/payment',
+                              data: this.orderInfo,
+                            }).then((response) => {
+                              this.$log(response)
+                              this.onPayResult()
+                            }).catch(function (error) {
 
-              })*/
+                            })*/
             } else {
               this.$toast("请选择支付方式")
               return;
@@ -600,11 +663,11 @@
           } else {
             this.$log("0元支付，无需其他支付方式补充")
           }
-          if(balancePay != null)
+          if (balancePay != null)
             options['balancePay'] = balancePay
-          if(wocPays.length > 0)
+          if (wocPays.length > 0)
             options['wocPays'] = wocPays
-          if(woaPay != null)
+          if (woaPay != null)
             options['woaPay'] = woaPay
           this.$log("pay options:");
           this.$log(options)
@@ -627,7 +690,7 @@
             }
           })
         } else {
-           //no userInfo
+          //no userInfo
         }
 
 
@@ -647,6 +710,11 @@
     background-color: #f8f8f8;
 
     .payBody {
+      .quickPayDialog {
+        width: 100%;
+        align-items: center;
+      }
+
       .linkPayDialog {
         width: 100%;
         align-items: center;
@@ -820,6 +888,24 @@
 
           .van-cell {
             margin-top: -1px;
+          }
+
+          .bankCard {
+            border: 1px solid #3dd5c8;
+            border-radius: 5px;
+            height: 60px;
+            margin: 2px 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 30px;
+            color: #3dd5c8;
+            font-size: large;
+          }
+          .bankCardCheckBox {
+            height: 64px;
+            align-items: center;
+            display: flex;
           }
         }
 
