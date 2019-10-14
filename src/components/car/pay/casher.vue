@@ -146,8 +146,8 @@
                 @click-right-icon="togLinkPayPwdVisable()"
               />
             </div>
-            <van-cell title="快捷支付" :icon="icon_quicklypay">
-              <van-radio slot="right-icon" disabled name="2"/>
+            <van-cell title="快捷支付" :icon="icon_quicklypay" clickable @click="radio = '2'">
+              <van-radio slot="right-icon"   name="2"/>
             </van-cell>
           </van-radio-group>
         </div>
