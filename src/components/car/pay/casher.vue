@@ -120,7 +120,7 @@
         <div class="pathBox">
           <van-radio-group v-model="radio">
             <van-cell title="联机账户" :icon="icon_linkpay" clickable @click="radio = '1'">
-              <van-radio slot="right-icon" name="1"/>
+              <van-radio slot="right-icon" name="1"  checked-color="#FF4444"/>
             </van-cell>
             <div class="linkPayDialog" v-if="radio == '1'">
               <van-field
@@ -147,7 +147,7 @@
               />
             </div>
             <van-cell title="快捷支付" :icon="icon_quicklypay" clickable @click="radio = '2'">
-              <van-radio slot="right-icon" name="2"/>
+              <van-radio slot="right-icon" name="2"  checked-color="#FF4444"/>
             </van-cell>
             <div class="quickPayDialog" v-if="radio == '2'">
               <div class="bankListCheckBox">
@@ -381,6 +381,7 @@
         verifyBtnText: '获取验证码',
         quickPayVerifyCodeCount: 0,
         quickPayVerifyCodeTimer: 0,
+        verifyBtnTextClicked: false,
         quickPayDlgShow: false,
         payOptions: null,
         addNewBankCardDlgShow: false,
@@ -415,6 +416,7 @@
     beforeDestroy() {
       if (this.quickPayVerifyCodeTimer) {
         clearInterval(this.quickPayVerifyCodeTimer)
+        this.verifyBtnTextClicked = false
         this.quickPayVerifyCodeTimer = 0
         this.quickPayVerifyCode = ''
         this.isVerifyCodeBtnDisabled = false;
@@ -427,6 +429,7 @@
         this.quickPayVerifyCodeCount--;
         if (this.quickPayVerifyCodeCount <= 0) {
           clearInterval(this.quickPayVerifyCodeTimer)
+          this.verifyBtnTextClicked = false;
           this.quickPayVerifyCodeTimer = 0;
           this.quickPayVerifyCodeCount = 0
           this.verifyBtnText = '获取验证码'
@@ -454,6 +457,7 @@
               this.isVerifyCodeBtnDisabled = true;
               this.quickPayVerifyCodeCount = 60
               this.quickPayVerifyCodeTimer = setInterval(this.QPayBtnCountDown, 1000);
+              this.verifyBtnTextClicked = true;
               this.$log(this.mBankcardList[found])
               let payAmount = parseInt((this.remainPayAmount * 100).toFixed(0))
               let options = {
@@ -484,6 +488,7 @@
                   if (this.quickPayVerifyCodeTimer) {
                     clearInterval(this.quickPayVerifyCodeTimer)
                     this.quickPayVerifyCodeTimer = 0
+                    this.verifyBtnTextClicked = false
                     this.quickPayVerifyCode = ''
                     this.isVerifyCodeBtnDisabled = false;
                     this.verifyBtnText = "获取验证码"
@@ -690,6 +695,11 @@
       beforeCloseQuickPayDlg(action, done) {
         this.$log("beforeCloseQuickPayDlg Enter");
         if (action === 'confirm') {
+          if(!this.verifyBtnTextClicked) {
+            this.$toast("请点击获取验证码")
+            done(false)
+            return
+          }
           if(this.quickPayVerifyCode.length == 0) {
             this.$toast("请输入短信验证码")
             done(false)
@@ -707,6 +717,7 @@
               if (this.quickPayVerifyCodeTimer) {
                 clearInterval(this.quickPayVerifyCodeTimer)
                 this.quickPayVerifyCodeTimer = 0
+                this.verifyBtnTextClicked = false
                 this.quickPayVerifyCode = ''
                 this.isVerifyCodeBtnDisabled = false;
                 this.verifyBtnText = "获取验证码"
@@ -732,6 +743,7 @@
           if (this.quickPayVerifyCodeTimer) {
             clearInterval(this.quickPayVerifyCodeTimer)
             this.quickPayVerifyCodeTimer = 0
+            this.verifyBtnTextClicked = false
             this.quickPayVerifyCode = ''
             this.isVerifyCodeBtnDisabled = false;
             this.verifyBtnText = "获取验证码"
