@@ -161,7 +161,7 @@
                           @click="BanckCardsClick(item)"
                         >
                           <div slot="default" class="bankCard">
-                            <span>卡号:{{item.accountId}}</span>
+                            <span style="font-size: small">卡号:{{item.accountId}}</span>
                             <span>银行卡支付</span>
                           </div>
                           <div slot="right-icon" class="bankCardCheckBox">
@@ -690,7 +690,44 @@
       beforeCloseQuickPayDlg(action, done) {
         this.$log("beforeCloseQuickPayDlg Enter");
         if (action === 'confirm') {
-          done()
+          if(this.quickPayVerifyCode.length == 0) {
+            this.$toast("请输入短信验证码")
+            done(false)
+          } else {
+            let that = this
+            this.payOptions.bankPay.verifyCode = this.quickPayVerifyCode
+            this.$log(this.payOptions)
+            this.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.AGGREGATE_PAY_URL,
+              url: '/wspay/pay',
+              data: this.payOptions,
+            }).then((response) => {
+              this.$log(response)
+              if (this.quickPayVerifyCodeTimer) {
+                clearInterval(this.quickPayVerifyCodeTimer)
+                this.quickPayVerifyCodeTimer = 0
+                this.quickPayVerifyCode = ''
+                this.isVerifyCodeBtnDisabled = false;
+                this.verifyBtnText = "获取验证码"
+              }
+              if (response.data.code == 200) {
+                this.$router.replace({
+                  path: '/pay/cashering',
+                  query: {
+                    outer_trade_no: this.orderInfo.orderNo
+                  }
+                })
+              } else {
+                this.$toast(response.data.message)
+              }
+              done()
+            }).catch(function (error) {
+              that.$toast("请求支付失败")
+              done()
+            })
+          }
+
         } else if (action === 'cancel') {
           if (this.quickPayVerifyCodeTimer) {
             clearInterval(this.quickPayVerifyCodeTimer)
@@ -1037,6 +1074,8 @@
               } else {
                 this.$toast(response.data.message)
               }
+            }).catch(function (error) {
+              that.$toast("请求支付失败")
             })
           }
         } else {
