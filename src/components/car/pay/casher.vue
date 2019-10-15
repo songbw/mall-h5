@@ -181,6 +181,123 @@
                   <span>添加银行卡</span>
                 </div>
               </div>
+              <van-dialog
+                v-model="addNewBankCardDlgShow"
+                title="添加银行卡"
+                show-cancel-button="true"
+                confirm-button-text="添加"
+                :beforeClose="beforeCloseAddNewCardDlg"
+              >
+                <div class="cardTypeBox">
+                  <van-radio-group v-model="newCardRadio" style="display: flex">
+                    <van-cell title="储蓄卡" :icon="icon_linkpay" clickable @click="newCardRadio = '1'">
+                      <van-radio slot="right-icon" name="1"/>
+                    </van-cell>
+                    <van-cell title="信用卡" :icon="icon_quicklypay" @click="newCardRadio = '2'">
+                      <van-radio slot="right-icon" name="2"/>
+                    </van-cell>
+                  </van-radio-group>
+                </div>
+                <div v-if="newCardRadio == '1'">
+                  <van-field
+                    v-model="newCardNumber"
+                    label="银行卡号:"
+                    maxlength="32"
+                    label-width="65px"
+                    type="number"
+                    rows="1"
+                    placeholder="请输入银行卡号"
+                    clearable
+                  />
+                  <van-field
+                    v-model="newCustomName"
+                    label="真实姓名:"
+                    maxlength="30"
+                    label-width="65px"
+                    rows="1"
+                    placeholder="请输入银行卡用户姓名"
+                    clearable
+                  />
+                  <van-field
+                    v-model="mTelphoneNumber"
+                    label="电话号码:"
+                    maxlength="30"
+                    label-width="65px"
+                    type="tel"
+                    rows="1"
+                    placeholder="请输入银行预留电话号码"
+                    clearable
+                  />
+                  <van-field
+                    v-model="mIdNo"
+                    label="身份证号:"
+                    maxlength="30"
+                    label-width="65px"
+                    rows="1"
+                    placeholder="请输入用户身份证号码"
+                    clearable
+                  />
+                </div>
+                <div v-if="newCardRadio == '2'">
+                  <van-field
+                    v-model="newCardNumber"
+                    label="银行卡号:"
+                    maxlength="30"
+                    label-width="65px"
+                    type="number"
+                    rows="1"
+                    placeholder="请输入银行卡号"
+                    clearable
+                  />
+                  <van-field
+                    v-model="newCustomName"
+                    label="真实姓名:"
+                    maxlength="30"
+                    label-width="65px"
+                    rows="1"
+                    placeholder="请输入银行卡用户姓名"
+                    clearable
+                  />
+                  <van-field
+                    v-model="mTelphoneNumber"
+                    label="电话号码:"
+                    maxlength="30"
+                    label-width="65px"
+                    type="tel"
+                    rows="1"
+                    placeholder="请输入银行预留电话号码"
+                    clearable
+                  />
+                  <van-field
+                    v-model="mIdNo"
+                    label="身份证号:"
+                    maxlength="30"
+                    label-width="65px"
+                    rows="1"
+                    placeholder="请输入用户身份证号码"
+                    clearable
+                  />
+                  <van-field
+                    v-model="mExpiredDate"
+                    label="有效日期:"
+                    maxlength="4"
+                    label-width="65px"
+                    rows="1"
+                    placeholder="请输入信用卡有效期(MMYY)"
+                    clearable
+                  />
+                  <van-field
+                    v-model="mCvv2"
+                    label="验证码:"
+                    maxlength="3"
+                    label-width="65px"
+                    rows="1"
+                    placeholder="请输入信用卡3位验证码"
+                    clearable
+                  />
+                </div>
+
+              </van-dialog>
             </div>
           </van-radio-group>
         </div>
@@ -265,7 +382,14 @@
         quickPayVerifyCodeCount: 0,
         quickPayVerifyCodeTimer: 0,
         quickPayDlgShow: false,
-        payOptions: null
+        payOptions: null,
+        addNewBankCardDlgShow: false,
+        newCardRadio:"1",
+        newCardNumber:"",
+        newCustomName:"",
+        mIdNo:"",
+        mExpiredDate:"",
+        mCvv2:""
       }
     },
     computed: {
@@ -378,6 +502,7 @@
       },
       onAddNewBankCardClick() {
         this.$log("onAddNewBankCardClick Enter")
+        this.addNewBankCardDlgShow = true;
       },
       BanckCardsClick(item) {
         this.$log("BanckCardsClick Enter")
@@ -476,6 +601,14 @@
           url: '/user',
           data: this.user
         })
+      },
+      beforeCloseAddNewCardDlg(action,done) {
+        this.$log("beforeCloseAddNewCardDlg Enter")
+        if (action === 'confirm') {
+          done()
+        } else if (action === 'cancel') {
+          done()
+        }
       },
       beforeCloseQuickPayDlg(action,done) {
         this.$log("beforeCloseQuickPayDlg Enter");
