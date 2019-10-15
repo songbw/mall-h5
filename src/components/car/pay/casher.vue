@@ -384,12 +384,12 @@
         quickPayDlgShow: false,
         payOptions: null,
         addNewBankCardDlgShow: false,
-        newCardRadio:"1",
-        newCardNumber:"",
-        newCustomName:"",
-        mIdNo:"",
-        mExpiredDate:"",
-        mCvv2:""
+        newCardRadio: "1",
+        newCardNumber: "",
+        newCustomName: "",
+        mIdNo: "",
+        mExpiredDate: "",
+        mCvv2: ""
       }
     },
     computed: {
@@ -413,7 +413,7 @@
     },
 
     beforeDestroy() {
-      if(this.quickPayVerifyCodeTimer) {
+      if (this.quickPayVerifyCodeTimer) {
         clearInterval(this.quickPayVerifyCodeTimer)
         this.quickPayVerifyCodeTimer = 0
         this.quickPayVerifyCode = ''
@@ -476,12 +476,12 @@
                 url: '/wspay/fast/bank/auth',
                 data: options,
               }).then((response) => {
-                 this.$log(response)
-                if(response.data.code == 200) {
+                this.$log(response)
+                if (response.data.code == 200) {
 
                 } else {
                   this.$toast(response.data.message)
-                  if(this.quickPayVerifyCodeTimer) {
+                  if (this.quickPayVerifyCodeTimer) {
                     clearInterval(this.quickPayVerifyCodeTimer)
                     this.quickPayVerifyCodeTimer = 0
                     this.quickPayVerifyCode = ''
@@ -602,20 +602,97 @@
           data: this.user
         })
       },
-      beforeCloseAddNewCardDlg(action,done) {
+      beforeCloseAddNewCardDlg(action, done) {
         this.$log("beforeCloseAddNewCardDlg Enter")
         if (action === 'confirm') {
-          done()
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+            let customUser = JSON.parse(userInfo)
+            if (this.newCardNumber.length == 0) {
+              this.$toast("请输入正确的卡号")
+              done(false) //不关闭弹框
+              return
+            }
+            if (this.newCustomName.length == 0) {
+              this.$toast("请输入真实姓名")
+              done(false) //不关闭弹框
+              return
+            }
+            if (this.mTelphoneNumber == null || !this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+              this.$toast("请输入正确的电话号码")
+              done(false) //不关闭弹框
+              return
+            }
+            if (this.mIdNo.length == 0 ||
+              !this.mIdNo.match("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$")) {
+              this.$toast("请输入正确的身份证号码")
+              done(false) //不关闭弹框
+              return
+            }
+            if (this.newCardRadio == '2') {
+              if (this.mExpiredDate.length == 0 ||
+                !this.mExpiredDate.match("0\\d{3}|1[12]\\d{2}")) {
+                this.$toast("请输入正确的有效日期")
+                done(false) //不关闭弹框
+                return
+              }
+              if (this.mCvv2.length < 3) {
+                this.$toast("请输入正确的验证码")
+                done(false) //不关闭弹框
+                return
+              }
+            }
+            let that = this
+            let expiredDate = this.mExpiredDate
+            let cvv2 = this.mCvv2
+            let accountType = 1
+            if (this.newCardRadio == '1') {
+              expiredDate = ""
+              cvv2 = ""
+              accountType = 2
+            }
+            let options = {
+              "openId": customUser.userId,
+              "accountType": accountType,
+              "accountId": this.newCardNumber,
+              "accountName": this.newCustomName,
+              "mobileNo": this.mTelphoneNumber,
+              "certNo": this.mIdNo,
+              "expiredDate": expiredDate,
+              "cvv2": cvv2
+            }
+            that.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.QUICKLY_PAY_URL,
+              url: '/ztkx/cardPayment/card',
+              data: options
+            }).then((response) => {
+              that.$log(response)
+              if (response.data.code == 200) {
+                that.$toast("添加成功")
+                this.udateBankcardList();
+              } else {
+                that.$toast("添加失败，" + response.data.msg)
+              }
+              done()
+            }).catch(function (error) {
+              that.$toast("绑卡失败")
+              done()
+            })
+          } else {
+            this.$log("没有用户信息，无法添加银行卡，请先登录")
+            done()
+          }
         } else if (action === 'cancel') {
-          done()
+          done() //关闭
         }
       },
-      beforeCloseQuickPayDlg(action,done) {
+      beforeCloseQuickPayDlg(action, done) {
         this.$log("beforeCloseQuickPayDlg Enter");
         if (action === 'confirm') {
           done()
         } else if (action === 'cancel') {
-          if(this.quickPayVerifyCodeTimer) {
+          if (this.quickPayVerifyCodeTimer) {
             clearInterval(this.quickPayVerifyCodeTimer)
             this.quickPayVerifyCodeTimer = 0
             this.quickPayVerifyCode = ''
@@ -1230,9 +1307,10 @@
         display: flex;
         padding: 10px;
 
-        .van-field{
+        .van-field {
           width: 60%;
         }
+
         .van-button {
           width: 40%;
           margin-left: 10px;
