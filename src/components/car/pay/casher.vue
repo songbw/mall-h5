@@ -175,19 +175,6 @@
                       </div>
                     </van-cell-group>
                   </van-radio-group>
-                  <div class="verifyCodeBox">
-                    <van-field
-                      v-model="quickPayVerifyCode"
-                      label="验证码:"
-                      maxlength="10"
-                      clearable
-                      label-width="50px"
-                      placeholder="请输入验证码"
-                    />
-                    <van-button :disabled="isVerifyCodeBtnDisabled"  type="danger"
-                                @click="onGetVerifyCodeBtnClick">{{verifyBtnText}}
-                    </van-button>
-                  </div>
                 </div>
                 <div class="addNewBankCard" @click="onAddNewBankCardClick">
                   <van-icon name="plus" color="#FF4444"></van-icon>
@@ -197,6 +184,27 @@
             </div>
           </van-radio-group>
         </div>
+        <van-dialog
+          v-model="quickPayDlgShow"
+          title="绑定惠民优选卡"
+          show-cancel-button="true"
+          confirm-button-text="绑定"
+          :beforeClose="beforeCloseAddNewOptCardDlg"
+        >
+          <div class="verifyCodeBox">
+            <van-field
+              v-model="quickPayVerifyCode"
+              label="验证码:"
+              maxlength="10"
+              clearable
+              label-width="50px"
+              placeholder="请输入验证码"
+            />
+            <van-button :disabled="isVerifyCodeBtnDisabled" type="danger"
+                        @click="onGetVerifyCodeBtnClick">{{verifyBtnText}}
+            </van-button>
+          </div>
+        </van-dialog>
 
         <div class="footer_layout">
           <van-button type="danger" round size="large" @click="onPayBtnClick">
@@ -257,7 +265,9 @@
         isVerifyCodeBtnDisabled: false,
         verifyBtnText: '获取验证码',
         quickPayVerifyCodeCount: 0,
-        quickPayVerifyCodeTimer: -1
+        quickPayVerifyCodeTimer: -1,
+        quickPayDlgShow: false,
+        payOptions: null
       }
     },
     computed: {
@@ -301,13 +311,13 @@
           if (!this.isVerifyCodeBtnDisabled) {
             this.$log(this.bankRadio)
             let found = -1;
-            for(let i = 0;i < this.mBankcardList.length ;i++) {
-              if(this.mBankcardList[i].accountId == this.bankRadio) {
+            for (let i = 0; i < this.mBankcardList.length; i++) {
+              if (this.mBankcardList[i].accountId == this.bankRadio) {
                 found = i;
                 break;
               }
             }
-            if(found != -1) {
+            if (found != -1) {
               this.isVerifyCodeBtnDisabled = true;
               this.quickPayVerifyCodeCount = 60
               this.quickPayVerifyCodeTimer = setInterval(this.QPayBtnCountDown, 1000);
@@ -318,7 +328,7 @@
                 "accountName": this.mBankcardList[found].accountName,
                 "accountType": this.mBankcardList[found].accountType,
                 "certNo": this.mBankcardList[found].certNo,
-                "cvv2":  this.mBankcardList[found].cvv2,
+                "cvv2": this.mBankcardList[found].cvv2,
                 "doSaveIt": 0,
                 "expiredDate": this.mBankcardList[found].expiredDate,
                 "mobileNo": this.mBankcardList[found].mobileNo,
@@ -344,8 +354,6 @@
         } else {
           this.$log("没有用户信息，请登录")
         }
-
-
       },
       onAddNewBankCardClick() {
         this.$log("onAddNewBankCardClick Enter")
@@ -662,7 +670,8 @@
           let balancePay = null
           let wocPays = []
           let woaPay = null
-          let options = {
+          let bankPay = null
+          this.payOptions = {
             orderNo: this.orderInfo.orderNo
           }
           this.mPaylist.forEach(item => {
@@ -686,6 +695,9 @@
                 })
               case 'pos':
                 break;
+              case 'bank':
+
+                break;
               default:
                 break;
             }
@@ -703,7 +715,7 @@
                   return
                 }
                 woaPay = {
-                  "actPayFee": this.remainPayAmount * 100 + "",
+                  "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
                   "cardNo": this.linkPayAccount,
                   "cardPwd": this.linkPayPwd,
                   "orderNo": this.orderInfo.orderNo,
@@ -713,18 +725,34 @@
                 this.$toast("抱歉，无法使用该支付方式，联机账户支付不能低于1角，")
                 return
               }
-            } else if (this.radio == '2') {
-              /*              this.$api.xapi({
-                              method: 'post',
-                              baseURL: this.$api.TESTSTUB_PAYMENT_BASE_URL,
-                              url: '/payment',
-                              data: this.orderInfo,
-                            }).then((response) => {
-                              this.$log(response)
-                              this.onPayResult()
-                            }).catch(function (error) {
-
-                            })*/
+            } else if (this.radio == '2') { //bank pay
+              this.$log(this.bankRadio)
+              let found = -1;
+              this.$log(this.mBankcardList)
+              for (let i = 0; i < this.mBankcardList[i].length; i++) {
+                this.$log("111111111111111111111111111111111")
+                this.$log(this.mBankcardList[i].accountId)
+                if (this.mBankcardList[i].accountId == this.bankRadio) {
+                  found = i;
+                  break;
+                }
+              }
+              if (found != -1) {
+                this.$log("##############################")
+                bankPay = {
+                  "accountId": this.mBankcardList[found].accountId,
+                  "accountName": this.mBankcardList[found].accountName,
+                  "accountType": this.mBankcardList[found].accountType,
+                  "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
+                  "certNo": this.mBankcardList[found].certNo,
+                  "cvv2": this.mBankcardList[found].cvv2,
+                  "expiredDate": this.mBankcardList[found].expiredDate,
+                  "mobileNo": this.mBankcardList[found].mobileNo,
+                  "orderNo": this.orderInfo.orderNo,
+                  "payType": "bank",
+                  "verifyCode": ""
+                }
+              }
             } else {
               this.$toast("请选择支付方式")
               return;
@@ -733,31 +761,39 @@
             this.$log("0元支付，无需其他支付方式补充")
           }
           if (balancePay != null)
-            options['balancePay'] = balancePay
+            this.payOptions['balancePay'] = balancePay
           if (wocPays.length > 0)
-            options['wocPays'] = wocPays
+            this.payOptions['wocPays'] = wocPays
           if (woaPay != null)
-            options['woaPay'] = woaPay
-          this.$log("pay options:");
-          this.$log(options)
-/*          this.$api.xapi({
-            method: 'post',
-            baseURL: this.$api.AGGREGATE_PAY_URL,
-            url: '/wspay/pay',
-            data: options,
-          }).then((response) => {
-            this.$log(response)
-            if (response.data.code == 200) {
-              this.$router.replace({
-                path: '/pay/cashering',
-                query: {
-                  outer_trade_no: this.orderInfo.orderNo
-                }
-              })
-            } else {
-              this.$toast(response.data.message)
-            }
-          })*/
+            this.payOptions['woaPay'] = woaPay
+          this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+          this.$log(bankPay)
+          if (bankPay != null) {
+            this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+            this.payOptions['bankPay'] = bankPay
+            this.quickPayDlgShow = true
+          } else {
+            this.$log("pay options:");
+            this.$log(this.payOptions)
+            this.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.AGGREGATE_PAY_URL,
+              url: '/wspay/pay',
+              data: this.payOptions,
+            }).then((response) => {
+              this.$log(response)
+              if (response.data.code == 200) {
+                this.$router.replace({
+                  path: '/pay/cashering',
+                  query: {
+                    outer_trade_no: this.orderInfo.orderNo
+                  }
+                })
+              } else {
+                this.$toast(response.data.message)
+              }
+            })
+          }
         } else {
           //no userInfo
         }
