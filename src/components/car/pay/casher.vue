@@ -353,6 +353,18 @@
                 data: options,
               }).then((response) => {
                  this.$log(response)
+                if(response.data.code == 200) {
+
+                } else {
+                  this.$toast(response.data.message)
+                  if(this.quickPayVerifyCodeTimer) {
+                    clearInterval(this.quickPayVerifyCodeTimer)
+                    this.quickPayVerifyCodeTimer = 0
+                    this.quickPayVerifyCode = ''
+                    this.isVerifyCodeBtnDisabled = false;
+                    this.verifyBtnText = "获取验证码"
+                  }
+                }
               }).catch(function (error) {
                 that.$log(error)
               })
