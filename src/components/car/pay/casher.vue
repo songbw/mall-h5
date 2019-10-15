@@ -186,19 +186,17 @@
         </div>
         <van-dialog
           v-model="quickPayDlgShow"
-          title="绑定惠民优选卡"
+          title="快捷支付银行卡验证"
           show-cancel-button="true"
-          confirm-button-text="绑定"
-          :beforeClose="beforeCloseAddNewOptCardDlg"
+          confirm-button-text="去支付"
+          :beforeClose="beforeCloseQuickPayDlg"
         >
           <div class="verifyCodeBox">
             <van-field
               v-model="quickPayVerifyCode"
-              label="验证码:"
               maxlength="10"
               clearable
-              label-width="50px"
-              placeholder="请输入验证码"
+              placeholder="请输入短信验证码"
             />
             <van-button :disabled="isVerifyCodeBtnDisabled" type="danger"
                         @click="onGetVerifyCodeBtnClick">{{verifyBtnText}}
@@ -455,6 +453,14 @@
           url: '/user',
           data: this.user
         })
+      },
+      beforeCloseQuickPayDlg(action,done) {
+        this.$log("beforeCloseQuickPayDlg Enter");
+        if (action === 'confirm') {
+          done()
+        } else if (action === 'cancel') {
+          done() //关闭
+        }
       },
 
       async beforeCloseAddNewOptCardDlg(action, done) {
@@ -1025,18 +1031,6 @@
               margin: 5px;
             }
           }
-
-          .verifyCodeBox {
-            padding: 10px;
-            display: flex;
-            justify-content: center;
-
-            .van-button {
-              width: 40%;
-              margin-left: 10px;
-              .fz(font-size, 20)
-            }
-          }
         }
 
         .footer_layout {
@@ -1067,6 +1061,19 @@
         color: #ff4444;
         font-size: xx-large;
         font-weight: bold;
+      }
+
+      .verifyCodeBox {
+        display: flex;
+        padding: 10px;
+
+        .van-field{
+          width: 60%;
+        }
+        .van-button {
+          width: 40%;
+          margin-left: 10px;
+        }
       }
     }
   }
