@@ -151,34 +151,48 @@
             </van-cell>
             <div class="quickPayDialog" v-if="radio == '2'">
               <div class="bankListCheckBox">
-
-                <van-radio-group v-model="bankRadio">
-                  <van-cell-group>
-                    <van-cell
-                      v-for="(item, index) in mBankcardList"
-                      clickable
-                      :key="index"
-                      @click="BanckCardsClick(index)"
-                    >
-                      <div slot="default" class="bankCard">
-                        <span>100元</span>
-                        <span>惠民优选卡支付</span>
+                <div v-if="mBankcardList.length > 0">
+                  <van-radio-group v-model="bankRadio">
+                    <van-cell-group>
+                      <div v-for="(item, index) in mBankcardList">
+                        <van-cell
+                          clickable
+                          :key="index"
+                          @click="BanckCardsClick(item)"
+                        >
+                          <div slot="default" class="bankCard">
+                            <span>卡号:{{item.accountId}}</span>
+                            <span>银行卡支付</span>
+                          </div>
+                          <div slot="right-icon" class="bankCardCheckBox">
+                            <van-radio
+                              :name="item.accountId"
+                              checked-color="#3dd5c8"
+                              ref="bankCardsCheckboxes"
+                            />
+                          </div>
+                        </van-cell>
                       </div>
-                      <div slot="right-icon" class="bankCardCheckBox">
-                        <van-checkbox
-                          :name="item.cardnum"
-                          checked-color="#3dd5c8"
-                          ref="optCardsCheckboxes"
-                        />
-                      </div>
-                    </van-cell>
-                  </van-cell-group>
-                </van-radio-group>
-                <div class="addNewOptCard" @click="onAddNewOptCardClick">
+                    </van-cell-group>
+                  </van-radio-group>
+                  <div class="verifyCodeBox">
+                    <van-field
+                      v-model="quickPayVerifyCode"
+                      label="验证码:"
+                      maxlength="10"
+                      clearable
+                      label-width="50px"
+                      placeholder="请输入验证码"
+                    />
+                    <van-button :disabled="isVerifyCodeBtnDisabled"  type="danger"
+                                @click="onGetVerifyCodeBtnClick">{{verifyBtnText}}
+                    </van-button>
+                  </div>
+                </div>
+                <div class="addNewBankCard" @click="onAddNewBankCardClick">
                   <van-icon name="plus" color="#FF4444"></van-icon>
                   <span>添加银行卡</span>
                 </div>
-
               </div>
             </div>
           </van-radio-group>
@@ -233,12 +247,17 @@
           title: "还需支付",
           icon: require('@/assets/icons/ico_menu.png'),
         },
-        mBankcardList:[],
+        mBankcardList: [],
         mPaylist: [],
         addNewOptCardDlgShow: false,
         newOptCardNumber: "",
         newOptCardPwd: "",
-        bankRadio:"-1"
+        bankRadio: "-1",
+        quickPayVerifyCode: "",
+        isVerifyCodeBtnDisabled: false,
+        verifyBtnText: '获取验证码',
+        quickPayVerifyCodeCount: 0,
+        quickPayVerifyCodeTimer: -1
       }
     },
     computed: {
@@ -262,9 +281,78 @@
     },
 
     methods: {
-      BanckCardsClick(index) {
-        this.$log("BanckCardsClick Enter:"+index)
+      QPayBtnCountDown() {
+        this.quickPayVerifyCodeCount--;
+        if (this.quickPayVerifyCodeCount <= 0) {
+          clearInterval(this.quickPayVerifyCodeTimer)
+          this.quickPayVerifyCodeCount = 0
+          this.verifyBtnText = '获取验证码'
+          this.isVerifyCodeBtnDisabled = false;
+        } else {
+          this.verifyBtnText = this.quickPayVerifyCodeCount + ' s'
+        }
+      },
+      onGetVerifyCodeBtnClick() {
+        this.$log("onGetVerifyCodeBtnClick Enter")
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          if (!this.isVerifyCodeBtnDisabled) {
+            this.$log(this.bankRadio)
+            let found = -1;
+            for(let i = 0;i < this.mBankcardList.length ;i++) {
+              if(this.mBankcardList[i].accountId == this.bankRadio) {
+                found = i;
+                break;
+              }
+            }
+            if(found != -1) {
+              this.isVerifyCodeBtnDisabled = true;
+              this.quickPayVerifyCodeCount = 60
+              this.quickPayVerifyCodeTimer = setInterval(this.QPayBtnCountDown, 1000);
+              this.$log(this.mBankcardList[found])
+              let payAmount = parseInt((this.remainPayAmount * 100).toFixed(0))
+              let options = {
+                "accountId": this.mBankcardList[found].accountId,
+                "accountName": this.mBankcardList[found].accountName,
+                "accountType": this.mBankcardList[found].accountType,
+                "certNo": this.mBankcardList[found].certNo,
+                "cvv2":  this.mBankcardList[found].cvv2,
+                "doSaveIt": 0,
+                "expiredDate": this.mBankcardList[found].expiredDate,
+                "mobileNo": this.mBankcardList[found].mobileNo,
+                "openId": user.userId,
+                "orderNo": this.orderInfo.orderNo,
+                "tranAmt": payAmount
+              }
+              this.$log(options)
+              /*this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.AGGREGATE_PAY_URL,
+                url: '/wspay/fast/bank/auth',
+                data: options,
+              }).then((response) => {
 
+              }).catch(function (error) {
+                that.$log(error)
+              })*/
+            } else {
+              this.$toast("没有找到银行卡信息")
+            }
+          }
+        } else {
+          this.$log("没有用户信息，请登录")
+        }
+
+
+      },
+      onAddNewBankCardClick() {
+        this.$log("onAddNewBankCardClick Enter")
+      },
+      BanckCardsClick(item) {
+        this.$log("BanckCardsClick Enter")
+        this.bankRadio = item.accountId
       },
       updateUserDetail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
@@ -274,13 +362,13 @@
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
-          let customUser = JSON.parse(userInfo)
+          let user = JSON.parse(userInfo)
           that.$api.xapi({
             method: 'get',
             baseURL: this.$api.QUICKLY_PAY_URL,
             url: '/accounts/list',
             params: {
-              "openId": customUser.userId,
+              "openId": user.userId,
             }
           }).then((response) => {
             if (response.data.code == 200) {
@@ -902,10 +990,36 @@
             color: #3dd5c8;
             font-size: large;
           }
+
           .bankCardCheckBox {
             height: 64px;
             align-items: center;
             display: flex;
+          }
+
+          .addNewBankCard {
+            display: flex;
+            align-items: center;
+            padding-left: 40px;
+            padding-top: 10px;
+            color: #ff4444;
+            font-size: x-large;
+
+            span {
+              margin: 5px;
+            }
+          }
+
+          .verifyCodeBox {
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+
+            .van-button {
+              width: 40%;
+              margin-left: 10px;
+              .fz(font-size, 20)
+            }
           }
         }
 
