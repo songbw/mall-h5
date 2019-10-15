@@ -263,7 +263,7 @@
         isVerifyCodeBtnDisabled: false,
         verifyBtnText: '获取验证码',
         quickPayVerifyCodeCount: 0,
-        quickPayVerifyCodeTimer: -1,
+        quickPayVerifyCodeTimer: 0,
         quickPayDlgShow: false,
         payOptions: null
       }
@@ -288,11 +288,22 @@
       this.updateBalanceAmount();
     },
 
+    beforeDestroy() {
+      if(this.quickPayVerifyCodeTimer) {
+        clearInterval(this.quickPayVerifyCodeTimer)
+        this.quickPayVerifyCodeTimer = 0
+        this.quickPayVerifyCode = ''
+        this.isVerifyCodeBtnDisabled = false;
+        this.verifyBtnText = "获取验证码"
+      }
+    },
+
     methods: {
       QPayBtnCountDown() {
         this.quickPayVerifyCodeCount--;
         if (this.quickPayVerifyCodeCount <= 0) {
           clearInterval(this.quickPayVerifyCodeTimer)
+          this.quickPayVerifyCodeTimer = 0;
           this.quickPayVerifyCodeCount = 0
           this.verifyBtnText = '获取验证码'
           this.isVerifyCodeBtnDisabled = false;
@@ -335,16 +346,16 @@
                 "tranAmt": payAmount
               }
               this.$log(options)
-              /*this.$api.xapi({
+              this.$api.xapi({
                 method: 'post',
                 baseURL: this.$api.AGGREGATE_PAY_URL,
                 url: '/wspay/fast/bank/auth',
                 data: options,
               }).then((response) => {
-
+                 this.$log(response)
               }).catch(function (error) {
                 that.$log(error)
-              })*/
+              })
             } else {
               this.$toast("没有找到银行卡信息")
             }
@@ -459,6 +470,13 @@
         if (action === 'confirm') {
           done()
         } else if (action === 'cancel') {
+          if(this.quickPayVerifyCodeTimer) {
+            clearInterval(this.quickPayVerifyCodeTimer)
+            this.quickPayVerifyCodeTimer = 0
+            this.quickPayVerifyCode = ''
+            this.isVerifyCodeBtnDisabled = false;
+            this.verifyBtnText = "获取验证码"
+          }
           done() //关闭
         }
       },
