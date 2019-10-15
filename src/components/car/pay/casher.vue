@@ -439,25 +439,6 @@
         }
       },
 
-      /*      updateOptCardList () {
-              let that = this
-              let options = {
-                "isvalid": true,
-                "phonenum": this.mTelphoneNumber
-              }
-              that.$api.xapi({
-                method: 'post',
-                baseURL: this.$api.OPTCARDS_URL,
-                url: '/woc/cardinfo/getcardlist',
-                data: options
-              }).then((response) => {
-                that.$log(response.data.data)
-                that.optCardList = response.data.data
-              }).catch(function (error) {
-
-              })
-            },*/
-
       saveUserInfo() {
         return this.$api.xapi({
           method: 'put',
@@ -759,7 +740,7 @@
             options['woaPay'] = woaPay
           this.$log("pay options:");
           this.$log(options)
-          this.$api.xapi({
+/*          this.$api.xapi({
             method: 'post',
             baseURL: this.$api.AGGREGATE_PAY_URL,
             url: '/wspay/pay',
@@ -776,7 +757,7 @@
             } else {
               this.$toast(response.data.message)
             }
-          })
+          })*/
         } else {
           //no userInfo
         }
