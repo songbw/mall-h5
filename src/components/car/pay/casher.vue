@@ -728,9 +728,7 @@
             } else if (this.radio == '2') { //bank pay
               this.$log(this.bankRadio)
               let found = -1;
-              this.$log(this.mBankcardList)
-              for (let i = 0; i < this.mBankcardList[i].length; i++) {
-                this.$log("111111111111111111111111111111111")
+              for (let i = 0; i < this.mBankcardList.length; i++) {
                 this.$log(this.mBankcardList[i].accountId)
                 if (this.mBankcardList[i].accountId == this.bankRadio) {
                   found = i;
@@ -738,7 +736,6 @@
                 }
               }
               if (found != -1) {
-                this.$log("##############################")
                 bankPay = {
                   "accountId": this.mBankcardList[found].accountId,
                   "accountName": this.mBankcardList[found].accountName,
@@ -752,6 +749,9 @@
                   "payType": "bank",
                   "verifyCode": ""
                 }
+              } else {
+                this.$toast("请选择支付卡号")
+                return
               }
             } else {
               this.$toast("请选择支付方式")
@@ -769,7 +769,6 @@
           this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
           this.$log(bankPay)
           if (bankPay != null) {
-            this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
             this.payOptions['bankPay'] = bankPay
             this.quickPayDlgShow = true
           } else {
