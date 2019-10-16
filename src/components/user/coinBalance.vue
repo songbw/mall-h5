@@ -16,7 +16,7 @@
       </div>
       <div class="scrollerWrap">
         <div class="cousumeListTitle">我的消费记录</div>
-        <div v-if="launchedLoaded && list.length > 0">
+        <div v-if="launchedLoaded && list.length > 0" class="scrollerBody">
           <scroller  height="100%"
                      :on-refresh="refresh"
                      :on-infinite="infinite"
@@ -232,14 +232,21 @@
       }
 
       .scrollerWrap{
-        margin-top: 200px;
+/*        margin-top: 200px;
         width:100%;
         top:200px;//一般页面有header的时候需要留出header的高度
         bottom:20px;
-        border-radius: 10px;
-        main{
-          height:100%;
+        border-radius: 10px;*/
+        padding-top: 180px;
+        .scrollerBody{
+          margin-top: 250px;
+          main{
+            height:100%;
+            margin-top: 250px;
+            background-color: #1989fa;
+          }
         }
+
         .cousumeListTitle{
           text-align: center;
           .fz(font-size, 40);
