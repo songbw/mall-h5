@@ -16,7 +16,7 @@
       </div>
       <div class="scrollerWrap">
         <div class="cousumeListTitle">我的消费记录</div>
-        <div v-if="c && list.length > 0">
+        <div v-if="launchedLoaded && list.length > 0">
           <scroller  height="100%"
                      :on-refresh="refresh"
                      :on-infinite="infinite"
@@ -53,7 +53,7 @@
         icon_coin_amount: require('@/assets/icons/ico_coin_amount.png'),
         amount: 0,
         loadFinished: false,
-        list:[],
+        list:[1,2,3,4],
         showPage: 1,
         totalSize: 0,
         launchedLoaded: false,
@@ -97,21 +97,30 @@
 
       updateConsumeList() {
         let that = this
-        let options = {
-          "pageNo": 1,
-          "pageSize": 10
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo)
+          let options = {
+            "pageNo": 1,
+            "pageSize": 10,
+            "openId": user.openId
+          }
+          that.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: '/balance/detail/all',
+            data: options,
+          }).then((response) => {
+            this.$log(response)
+            that.launchedLoaded = true
+          }).catch(function (error) {
+            that.launchedLoaded = true
+          })
+        } else {
+          this.$toast("没有用户信息，请先登录")
+          that.launchedLoaded = true
         }
-        that.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.SSO_BASE_URL,
-          url: '/balance/detail/all',
-          data: options,
-        }).then((response) => {
 
-        }).catch(function (error) {
-            that.loadFinished = true
-
-        })
       },
       updateBalanceAmount() {
         let that =this
@@ -223,9 +232,8 @@
       }
 
       .scrollerWrap{
-        position:absolute;
+        margin-top: 200px;
         width:100%;
-        height:85%;//有header的时候可能会出现滚动条，所以最好高度是除去header的高度
         top:200px;//一般页面有header的时候需要留出header的高度
         bottom:20px;
         border-radius: 10px;
