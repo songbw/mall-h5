@@ -775,6 +775,8 @@
                           break;
                         }
                       }
+                    } else if (coupon.couponInfo.rules.scenario.type === 2) {
+                      found = 1;//找到
                     }
                   }
                   if (found != -1) {
@@ -804,7 +806,7 @@
               totalCouponDiscount =  parseFloat((totalCouponDiscount + couponDiscountOfMerchant).toFixed(2))
             }
           })
-          this.$log("####################################")
+          this.$log(this.reducedPriceOfCoupon)
           if (totalCouponDiscount != this.reducedPriceOfCoupon) {
             // coupon 价格不平， 重新分配,由于coupon 单价计算是舍去2位后的数据，所以reducedPriceOfCoupon大于等于totalCouponDiscount
             // 把多余的优惠差价给最大的优惠价格拥有的商户
@@ -840,7 +842,6 @@
             'discount': couponDiscount,
             "merchants": merchants
           }
-          this.$log("####################################")
           return couponInfo
         } else {
           return null
