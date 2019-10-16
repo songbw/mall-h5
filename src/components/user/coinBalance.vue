@@ -14,10 +14,11 @@
           </div>
         </div>
       </div>
-      <div>
-        <scroller :on-infinite="infinite"
-                  :on-refresh="refresh"
-                  ref="my_scroller">
+      <div class="scrollerWrap">
+        <scroller  height="100%" :on-refresh="refresh" :on-infinite="infinite" ref="scrollerBottom">
+          <main class="scrollerContent">
+            <div v-for="item in list">{{item}}</div>
+          </main>
         </scroller>
       </div>
     </div>
@@ -37,7 +38,7 @@
         showHeader: true,
         icon_coin_amount: require('@/assets/icons/ico_coin_amount.png'),
         amount: 0,
-        noData: true,
+        noData: false,
         list:[]
       }
     },
@@ -51,9 +52,10 @@
 
     methods: {
       infinite(done) {   //上拉加载
+        this.$log("infinite Enter")
         if(this.noData) {
           setTimeout(()=>{
-            this.$refs.my_scroller.finishInfinite(2);
+            this.$refs.scrollerBottom.finishInfinite(2);
           })
           return;
         }
@@ -62,14 +64,14 @@
 
         let start = this.list.length;
         setTimeout(() => {
-          for(var k=0;k<9;k++){
+          for(let k=0;k<9;k++){
             self.list.push(k)
           }
           i++;
           if(start/i < 9) {
             self.noData = "没有更多数据"
           }
-          self.$refs.my_scroller.resize();
+          self.$refs.scrollerBottom.resize();
           done()
         }, 1500)
       },
@@ -77,7 +79,7 @@
       refresh:function(){         //下拉刷新
         console.log('refresh')
         this.timeout = setTimeout(()=>{
-          this.$refs.my_scroller.finishPullToRefresh()
+          this.$refs.scrollerBottom.finishPullToRefresh()
         }, 1500)
       },
 
@@ -204,6 +206,18 @@
           .van-cell{
             margin-top: -1px;
           }
+        }
+      }
+
+      .scrollerWrap{
+        position:absolute;
+        width:100%;
+        height:85%;//有header的时候可能会出现滚动条，所以最好高度是除去header的高度
+        top:200px;//一般页面有header的时候需要留出header的高度
+        bottom:20px;
+        border-radius: 10px;
+        main{
+          height:100%;
         }
       }
 
