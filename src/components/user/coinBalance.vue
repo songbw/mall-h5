@@ -15,10 +15,7 @@
         </div>
       </div>
       <div class="scrollerWrap">
-        <div v-if="launchedLoaded && list.length == 0">
-
-        </div>
-        <div v-else>
+        <div v-if="c && list.length > 0">
           <scroller  height="100%"
                      :on-refresh="refresh"
                      :on-infinite="infinite"
@@ -29,6 +26,9 @@
               <div v-for="item in list" style="height: 500px">{{item}}</div>
             </main>
           </scroller>
+        </div>
+        <div v-else>
+          <span>xxxx</span>
         </div>
       </div>
     </div>
