@@ -15,9 +15,14 @@
         </div>
       </div>
       <div class="scrollerWrap">
-        <scroller  height="100%" :on-refresh="refresh" :on-infinite="infinite" ref="scrollerBottom">
+        <scroller  height="100%"
+                   :on-refresh="refresh"
+                   :on-infinite="infinite"
+                   refresh-layer-color="#FF4444"
+        　　　　　 loading-layer-color="#FF4444"
+                   ref="myscroller">
           <main class="scrollerContent">
-            <div v-for="item in list">{{item}}</div>
+            <div v-for="item in moveList" style="height: 500px">{{item}}</div>
           </main>
         </scroller>
       </div>
@@ -39,7 +44,7 @@
         icon_coin_amount: require('@/assets/icons/ico_coin_amount.png'),
         amount: 0,
         noData: false,
-        list:[]
+        moveList:[]
       }
     },
 
@@ -53,34 +58,29 @@
     methods: {
       infinite(done) {   //上拉加载
         this.$log("infinite Enter")
-        if(this.noData) {
-          setTimeout(()=>{
-            this.$refs.scrollerBottom.finishInfinite(2);
-          })
-          return;
-        }
         let self = this;
-        let i=1;
-
-        let start = this.list.length;
+        let start = this.moveList.length;
         setTimeout(() => {
-          for(let k=0;k<9;k++){
-            self.list.push(k)
+          for(let i = 0; i < 2; i++) {
+            if(start>=11){
+              self.$refs.myscroller.noDataText="没有更多数据了"//更改上拉加载的文字
+              self.$refs.myscroller.finishInfinite(true);
+              return
+            }
+            self.moveList.push(i)//这是在data里的一个数组
           }
-          i++;
-          if(start/i < 9) {
-            self.noData = "没有更多数据"
-          }
-          self.$refs.scrollerBottom.resize();
-          done()
         }, 1500)
+        setTimeout(()=>{
+          this.$refs.myscroller.finishInfinite(true);//停止上拉加载的动效，出现没有“"没有更多数据了”的提示，当传里面的布尔值代表isNoMoreData :Boolean，是否没有更多数据，true：没有更多数据，false：还有数据，至于有什么区别，传一下对比一下就行了
+        },1000)
       },
 
       refresh:function(){         //下拉刷新
-        console.log('refresh')
-        this.timeout = setTimeout(()=>{
-          this.$refs.scrollerBottom.finishPullToRefresh()
-        }, 1500)
+        let self=this;
+        console.log('refresh');
+        setTimeout(function(){
+          self.$refs.myscroller.finishPullToRefresh();//停止下拉刷新动效
+        },1500)
       },
 
       updateConsumeList() {
