@@ -384,12 +384,18 @@
                 }
               }
             }
+            else if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 2){
+              this.$log("####################")
+              couponList.push(item)
+            }
           }
         })
 
         //已经选出选购商品所有对应的优惠券
         //判断优惠券是否满足条件
         let avaliableCouponList = []
+        this.$log("####################")
+        this.$log(couponList)
         couponList.forEach(coupon => {
           if (this.isCouponActivied(coupon)) {
             if (coupon.couponInfo.rules.couponRules.type === 0 ||
@@ -409,15 +415,20 @@
               } else {
                 allPayList.forEach(payItem => {
                   if (payItem.valid) {
-                    for (let i = 0; i < payItem.product.couponList.length; i++) {
-                      if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                        fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                        break;
+                    if(coupon.couponInfo.rules.scenario.type === 2) {
+                         fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                    } else {
+                      for (let i = 0; i < payItem.product.couponList.length; i++) {
+                        if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
+                          fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                          break;
+                        }
                       }
                     }
                   }
                 })
               }
+              this.$log("fullPrice:"+fullPrice)
               switch (coupon.couponInfo.rules.couponRules.type) {
                 case 0:
                   if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice) {
@@ -851,6 +862,12 @@
                     break;
                   }
                 }
+              }
+            })
+          } else if (coupon.couponInfo.rules.scenario.type === 2){
+            allPayList.forEach(payItem => {
+              if (payItem.valid) {
+                fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
               }
             })
           } else {
