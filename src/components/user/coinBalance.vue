@@ -15,16 +15,21 @@
         </div>
       </div>
       <div class="scrollerWrap">
-        <scroller  height="100%"
-                   :on-refresh="refresh"
-                   :on-infinite="infinite"
-                   refresh-layer-color="#FF4444"
-        　　　　　 loading-layer-color="#FF4444"
-                   ref="myscroller">
-          <main class="scrollerContent">
-            <div v-for="item in moveList" style="height: 500px">{{item}}</div>
-          </main>
-        </scroller>
+        <div v-if="launchedLoaded && list.length == 0">
+
+        </div>
+        <div v-else>
+          <scroller  height="100%"
+                     :on-refresh="refresh"
+                     :on-infinite="infinite"
+                     refresh-layer-color="#FF4444"
+                     　　　　　 loading-layer-color="#FF4444"
+                     ref="myscroller">
+            <main class="scrollerContent">
+              <div v-for="item in list" style="height: 500px">{{item}}</div>
+            </main>
+          </scroller>
+        </div>
       </div>
     </div>
   </div>
@@ -44,8 +49,10 @@
         icon_coin_amount: require('@/assets/icons/ico_coin_amount.png'),
         amount: 0,
         loadFinished: false,
-        moveList:[],
+        list:[],
         showPage: 1,
+        totalSize: 0,
+        launchedLoaded: false
       }
     },
 
@@ -97,6 +104,7 @@
         }).then((response) => {
 
         }).catch(function (error) {
+            that.loadFinished = true
 
         })
       },
