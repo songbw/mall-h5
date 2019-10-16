@@ -15,6 +15,7 @@
         </div>
       </div>
       <div class="scrollerWrap">
+        <div class="cousumeListTitle">我的消费记录</div>
         <div v-if="c && list.length > 0">
           <scroller  height="100%"
                      :on-refresh="refresh"
@@ -231,7 +232,9 @@
         main{
           height:100%;
         }
-
+        .cousumeListTitle{
+          text-align: center;
+        }
         .noContext {
           width: 100%;
           display: flex;
