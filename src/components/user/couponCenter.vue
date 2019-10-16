@@ -163,7 +163,7 @@
         this.launchedLoading = false;
       }).catch(function (error) {
         that.$log(error)
-        this.launchedLoading = false;
+        that.launchedLoading = false;
       })
     },
 
