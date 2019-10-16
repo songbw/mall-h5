@@ -190,10 +190,10 @@
               >
                 <div class="cardTypeBox">
                   <van-radio-group v-model="newCardRadio" style="display: flex">
-                    <van-cell title="储蓄卡" :icon="icon_linkpay" clickable @click="newCardRadio = '1'">
+                    <van-cell title="储蓄卡" clickable @click="newCardRadio = '1'">
                       <van-radio slot="right-icon" name="1"/>
                     </van-cell>
-                    <van-cell title="信用卡" :icon="icon_quicklypay" @click="newCardRadio = '2'">
+                    <van-cell title="信用卡"  @click="newCardRadio = '2'">
                       <van-radio slot="right-icon" name="2"/>
                     </van-cell>
                   </van-radio-group>
