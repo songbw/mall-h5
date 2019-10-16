@@ -1045,7 +1045,7 @@
                   "verifyCode": ""
                 }
               } else {
-                this.$toast("请选择支付卡号")
+                this.$toast("请选择的快捷支付银行卡")
                 return
               }
             } else {
