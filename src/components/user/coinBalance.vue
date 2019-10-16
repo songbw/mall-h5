@@ -31,7 +31,7 @@
         <div v-else>
           <div class="noContext">
             <img :src="icon_noContext">
-            <span class="noContext_line1">亲，没有消费记录!</span>
+            <span class="noContext_line1">亲，还没有消费记录!</span>
           </div>
         </div>
       </div>
@@ -234,6 +234,10 @@
         }
         .cousumeListTitle{
           text-align: center;
+          .fz(font-size, 40);
+          font-weight: bold;
+          color: black;
+          margin-top: 10px;
         }
         .noContext {
           width: 100%;
@@ -241,7 +245,7 @@
           flex-direction: column;
           justify-content: center;
           align-items: Center;
-          height: 500px;
+          height: 400px;
 
           img {
             height: 130px;
