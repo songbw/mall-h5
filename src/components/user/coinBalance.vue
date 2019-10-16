@@ -43,8 +43,9 @@
         showHeader: true,
         icon_coin_amount: require('@/assets/icons/ico_coin_amount.png'),
         amount: 0,
-        noData: false,
-        moveList:[]
+        loadFinished: false,
+        moveList:[],
+        showPage: 1,
       }
     },
 
@@ -58,27 +59,26 @@
     methods: {
       infinite(done) {   //上拉加载
         this.$log("infinite Enter")
-        let self = this;
-        let start = this.moveList.length;
-        setTimeout(() => {
-          for(let i = 0; i < 2; i++) {
-            if(start>=11){
-              self.$refs.myscroller.noDataText="没有更多数据了"//更改上拉加载的文字
-              self.$refs.myscroller.finishInfinite(true);
-              return
-            }
-            self.moveList.push(i)//这是在data里的一个数组
-          }
-        }, 1500)
-        setTimeout(()=>{
-          this.$refs.myscroller.finishInfinite(true);//停止上拉加载的动效，出现没有“"没有更多数据了”的提示，当传里面的布尔值代表isNoMoreData :Boolean，是否没有更多数据，true：没有更多数据，false：还有数据，至于有什么区别，传一下对比一下就行了
-        },1000)
+        let that = this;
+        if (!that.loadFinished) {
+          setTimeout(() => {
+            that.showPage++;//下拉一次页数+1
+            that.updateConsumeList();
+            done()//进行下一次加载操作
+          }, 1500)
+        } else {
+          that.$refs.myscroller.finishInfinite(true);//这个方法是不让它加载了，显示“没有更多数据”，要不然会一直转圈圈
+        }
       },
 
       refresh:function(){         //下拉刷新
         let self=this;
         console.log('refresh');
+        let that = this
+        that.showPage = 1//重置页数刷新每次页数都是第一页
+        that.loadFinished = false//重置数据判断
         setTimeout(function(){
+          that.updateConsumeList();
           self.$refs.myscroller.finishPullToRefresh();//停止下拉刷新动效
         },1500)
       },
