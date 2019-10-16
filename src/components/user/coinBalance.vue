@@ -38,9 +38,27 @@
       this.$log("coin balance created Enter")
       this.showHeader = this.$api.HAS_HEADER;
       this.updateBalanceAmount()
+      this.updateConsumeList()
     },
 
     methods: {
+      updateConsumeList() {
+        let that = this
+        let options = {
+          "pageNo": 1,
+          "pageSize": 10
+        }
+        that.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/balance/detail/all',
+          data: options,
+        }).then((response) => {
+
+        }).catch(function (error) {
+
+        })
+      },
       updateBalanceAmount() {
         let that =this
         let userInfo = this.$store.state.appconf.userInfo;
