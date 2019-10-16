@@ -28,7 +28,10 @@
           </scroller>
         </div>
         <div v-else>
-          <span>xxxx</span>
+          <div class="noContext">
+            <img :src="icon_noContext">
+            <span class="noContext_line1">亲，没有消费记录!</span>
+          </div>
         </div>
       </div>
     </div>
@@ -52,7 +55,8 @@
         list:[],
         showPage: 1,
         totalSize: 0,
-        launchedLoaded: false
+        launchedLoaded: false,
+        icon_noContext: require('@/assets/icons/ico_empty_box.png'),
       }
     },
 
@@ -226,6 +230,30 @@
         border-radius: 10px;
         main{
           height:100%;
+        }
+
+        .noContext {
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
+          height: 500px;
+
+          img {
+            height: 130px;
+            width: 130px;
+          }
+
+          span {
+            margin: 2vw;
+          }
+
+          .noContext_line1 {
+            font-weight: lighter;
+            color: black;
+            .fz(font-size, 35);
+          }
         }
       }
 
