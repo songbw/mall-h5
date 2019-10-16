@@ -385,7 +385,6 @@
               }
             }
             else if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 2){
-              this.$log("####################")
               couponList.push(item)
             }
           }
@@ -904,7 +903,6 @@
         return this.reducedPriceOfCoupon;
       },
       onCouponListClick(coupon) {
-        this.$log("onCouponListClick Enter")
         if (this.radio === coupon.userCouponCode) {
           this.radio = ''
           this.usedCoupon = null;
