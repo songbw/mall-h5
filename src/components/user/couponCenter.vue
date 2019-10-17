@@ -397,7 +397,12 @@
             return rules.discountCoupon.discountRatio * 10 + ' 折';
           case 3://服务券
             this.$log(rules)
-            return rules.serviceCoupon.price.toFixed(2)
+            if(rules.serviceCoupon == null) {
+              return 0;
+            } else {
+              return rules.serviceCoupon.price.toFixed(2)
+            }
+
           default:
             return ""
         }
