@@ -22,8 +22,15 @@
               <div v-for="(k,index) in list" :key="index" style="background-color: white;margin: 10px">
                 <div class="consume-detail">
                   <div>
-                    <span>支付:</span>
-                    <span style="float: right;color: #ff4444">{{(k.saleAmount/100).toFixed(2)}}</span>
+                    <span v-if="k.type==0">支付:</span>
+                    <span v-if="k.type==1">退款:</span>
+                    <span v-if="k.type==2">充值:</span>
+                    <p style="float: right;color: #ff4444">
+                      <span v-if="k.type==0">-</span>
+                      <span v-else>+</span>
+                      <span>{{(k.saleAmount/100).toFixed(2)}}</span>
+                    </p>
+
                   </div>
                   <div>
                     <span>日期:{{formatTime(k.createdAt)}}</span>
