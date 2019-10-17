@@ -113,6 +113,7 @@
             }).then((response) => {
               this.$log(response)
               if(response.data.code == 200) {
+                this.total = response.data.data.total;
                 if (response.data.data.list.length == 0) {
                   this.loading = false;
                   this.finished = true;
@@ -120,6 +121,9 @@
                   response.data.data.list.forEach(item => {
                     this.list.push(item);
                   })
+                  this.$log("#################")
+                  this.$log(this.list);
+                  this.$log(this.total)
                   this.loading = false;
                   if (this.list.length >= this.total)
                     this.finished = true;
@@ -132,32 +136,6 @@
               that.loading = false;
               that.finished = true;
             })
-            /* this.$api.xapi({
-               method: 'get',
-               baseURL: this.$api.WORKER_ORDER_BASE_URL,
-               url: '/customers/work_orders',
-               data: options,
-             }).then((response) => {
-               this.result = response.data;
-               this.$log(this.result)
-               this.total = this.result.total;
-               if (this.result.rows.length == 0) {
-                 this.loading = false;
-                 this.finished = true;
-               } else {
-                 this.result.rows.forEach(item => {
-                   this.list.push(item);
-                 })
-                 this.$log(this.list)
-                 this.loading = false;
-                 if (this.list.length >= this.total)
-                   this.finished = true;
-               }
-             }).catch(function (error) {
-               console.log(error)
-               that.loading = false;
-               that.finished = true;
-             })*/
           }
         } else {
           this.loading = false;
