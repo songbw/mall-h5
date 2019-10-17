@@ -1420,7 +1420,7 @@
                           let pAnOrderInfo = {
                             "accessToken": user.accessToken,
                             "orderNo": '',// orderNo,
-                            "orderAmount": parseInt((amount * 100).toFixed(2)),//分
+                            "orderAmount": parseInt((amount * 100).toFixed(0)),//分
                             "openId": user.openId,
                             "businessType": "11"
                           }
