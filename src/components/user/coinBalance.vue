@@ -59,7 +59,7 @@
         amount: 0,
         pageNo: 1,
         total: -1,
-        list: [1, 2, 3, 4,5,6,7,8],
+        list: [],
         loading: false,
         finished: false,
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
@@ -94,7 +94,7 @@
           let user = JSON.parse(userInfo);
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
-              "pageNo": 1,
+              "pageNo": this.pageNo++,
               "pageSize": 10,
               "openId": user.openId
             }
@@ -106,11 +106,21 @@
             }).then((response) => {
               this.$log(response)
               if(response.data.code == 200) {
-                this.list = response.data.data.list
-                this.$log(this.list)
+                if (response.data.data.list.length == 0) {
+                  this.loading = false;
+                  this.finished = true;
+                } else {
+                  response.data.data.list.forEach(item => {
+                    this.list.push(item);
+                  })
+                  this.loading = false;
+                  if (this.list.length >= this.total)
+                    this.finished = true;
+                }
+              } else {
+                that.loading = false;
+                that.finished = true;
               }
-              that.loading = false;
-              that.finished = true;
             }).catch(function (error) {
               that.loading = false;
               that.finished = true;
