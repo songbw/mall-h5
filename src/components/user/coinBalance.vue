@@ -5,34 +5,39 @@
     </v-header>
     <div class="coinBalanceBody">
       <div class="box"></div>
-      <div class="balanceAmountBox">
-        <div class="infoBox">
+      <div class="balanceAmountBox" >
+        <div class="infoBox" style="z-index: 1">
           <img :src="icon_coin_amount">
           <span>我的余额</span>
           <div class="amountInfo">
             <p><span>￥</span>{{(amount/100).toFixed(2)}}</p>
           </div>
         </div>
-      </div>
-      <div class="scrollerWrap">
-        <div class="cousumeListTitle">我的消费记录</div>
-        <div v-if="launchedLoaded && list.length > 0" class="scrollerBody">
-<!--          <scroller height="100%"
-                    :on-refresh="refresh"
-                    :on-infinite="infinite"
-                    refresh-layer-color="#FF4444"
-                    loading-layer-color="#FF4444"
-                    ref="myscroller">
-            <div class="scrollerContent">
-              <div v-for="item in list" style="height: 500px">{{item}}</div>
+        <div class="scrollerWrap">
+          <div class="cousumeListTitle">我的消费记录</div>
+          <van-list v-model="loading"
+                    :finished="finished"
+                    @load="onLoad">
+            <div v-if="list.length > 0 && finished">
+              <div v-for="(k,index) in list" :key="index" style="background-color: white;margin: 10px">
+                <div class="consume-detail">
+                  <div>
+                    <span>支付:</span>
+                    <span style="float: right;color: #ff4444">{{(k.saleAmount/100).toFixed(2)}}</span>
+                  </div>
+                  <div>
+                    <span>日期:{{formatTime(k.createdAt)}}</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </scroller>-->
-        </div>
-        <div v-else>
-          <div class="noContext">
-            <img :src="icon_noContext">
-            <span class="noContext_line1">亲，还没有消费记录!</span>
-          </div>
+            <div v-else-if="finished">
+              <div class="noContext">
+                <img :src="icon_noContext">
+                <span class="noContext_line1">亲，还没有消费记录!</span>
+              </div>
+            </div>
+          </van-list>
         </div>
       </div>
     </div>
@@ -52,12 +57,13 @@
         showHeader: true,
         icon_coin_amount: require('@/assets/icons/ico_coin_amount.png'),
         amount: 0,
-        loadFinished: false,
-        list: [1, 2, 3, 4],
-        showPage: 1,
-        totalSize: 0,
-        launchedLoaded: false,
+        pageNo: 1,
+        total: -1,
+        list: [1, 2, 3, 4,5,6,7,8],
+        loading: false,
+        finished: false,
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
+        launchedLoading: false,
       }
     },
 
@@ -65,34 +71,81 @@
       this.$log("coin balance created Enter")
       this.showHeader = this.$api.HAS_HEADER;
       this.updateBalanceAmount()
-      this.updateConsumeList()
+      //  this.updateConsumeList()
+      setTimeout(() => {
+        if (!this.launchedLoading) {
+          this.onLoad(this.active)
+        }
+      }, 1000);
     },
 
     methods: {
-      infinite(done) {   //上拉加载
-        this.$log("infinite Enter")
-        let that = this;
-        if (!that.loadFinished) {
-          setTimeout(() => {
-            that.showPage++;//下拉一次页数+1
-            that.updateConsumeList();
-            done()//进行下一次加载操作
-          }, 1500)
-        } else {
-          that.$refs.myscroller.finishInfinite(true);//这个方法是不让它加载了，显示“没有更多数据”，要不然会一直转圈圈
-        }
+      formatTime(timeString) {
+        if (timeString == null)
+          return ""
+        return this.$moment(timeString).format('YYYY/MM/DD HH:mm:ss')
       },
-
-      refresh: function () {         //下拉刷新
-        let self = this;
-        console.log('refresh');
+      onLoad() {
+        this.$log("onLoad Enter")
         let that = this
-        that.showPage = 1//重置页数刷新每次页数都是第一页
-        that.loadFinished = false//重置数据判断
-        setTimeout(function () {
-          that.updateConsumeList();
-          self.$refs.myscroller.finishPullToRefresh();//停止下拉刷新动效
-        }, 1500)
+        this.launchedLoading = true;
+        let userInfo = this.$store.state.appconf.userInfo
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
+          if (this.total == -1 || this.total > this.list.length) {
+            let options = {
+              "pageNo": 1,
+              "pageSize": 10,
+              "openId": user.openId
+            }
+            that.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.SSO_BASE_URL,
+              url: '/balance/detail/all',
+              data: options,
+            }).then((response) => {
+              this.$log(response)
+              if(response.data.code == 200) {
+                this.list = response.data.data.list
+                this.$log(this.list)
+              }
+              that.loading = false;
+              that.finished = true;
+            }).catch(function (error) {
+              that.loading = false;
+              that.finished = true;
+            })
+            /* this.$api.xapi({
+               method: 'get',
+               baseURL: this.$api.WORKER_ORDER_BASE_URL,
+               url: '/customers/work_orders',
+               data: options,
+             }).then((response) => {
+               this.result = response.data;
+               this.$log(this.result)
+               this.total = this.result.total;
+               if (this.result.rows.length == 0) {
+                 this.loading = false;
+                 this.finished = true;
+               } else {
+                 this.result.rows.forEach(item => {
+                   this.list.push(item);
+                 })
+                 this.$log(this.list)
+                 this.loading = false;
+                 if (this.list.length >= this.total)
+                   this.finished = true;
+               }
+             }).catch(function (error) {
+               console.log(error)
+               that.loading = false;
+               that.finished = true;
+             })*/
+          }
+        } else {
+          this.loading = false;
+          this.finished = true;
+        }
       },
 
       updateConsumeList() {
@@ -100,22 +153,7 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
-          let options = {
-            "pageNo": 1,
-            "pageSize": 10,
-            "openId": user.openId
-          }
-          that.$api.xapi({
-            method: 'post',
-            baseURL: this.$api.SSO_BASE_URL,
-            url: '/balance/detail/all',
-            data: options,
-          }).then((response) => {
-            this.$log(response)
-            that.launchedLoaded = true
-          }).catch(function (error) {
-            that.launchedLoaded = true
-          })
+
         } else {
           this.$toast("没有用户信息，请先登录")
           that.launchedLoaded = true
@@ -179,7 +217,6 @@
       .balanceAmountBox {
         display: flex;
         flex-direction: column;
-        position: fixed;
         width: 100%;
         justify-content: center;
         justify-items: center;
@@ -188,7 +225,7 @@
         .infoBox {
           padding: 10px 0px;
           width: 96%;
-          min-height: 150px;
+          min-height: 120px;
           background-color: white;
           border-radius: 5px;
           display: flex;
@@ -215,33 +252,18 @@
             margin-top: -1px;
           }
         }
-
-        .pathBox {
-          margin-top: 10px;
-          padding: 10px 0px;
-          width: 96%;
-          min-height: 100px;
-          background-color: white;
-          border-radius: 5px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-
-          .van-cell {
-            margin-top: -1px;
-          }
-        }
       }
 
       .scrollerWrap {
-        /*        margin-top: 200px;
-                width:100%;
-                top:200px;//一般页面有header的时候需要留出header的高度
-                bottom:20px;
-                border-radius: 10px;*/
-        padding-top: 200px;
+        width: 100%;
+        height: 100%;
+        top: 0px;
+        background-color: #f8f8f8;
 
-        .scrollerBody {
+        .consume-detail{
+           padding: 10px;
+           color: black;
+           .fz(font-size,35px)
         }
 
         .cousumeListTitle {
