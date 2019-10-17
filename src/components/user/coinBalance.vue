@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="coinBalance" >
+  <div class="coinBalance">
     <v-header v-if="showHeader">
       <h1 slot="title">余额账户</h1>
     </v-header>
@@ -17,16 +17,16 @@
       <div class="scrollerWrap">
         <div class="cousumeListTitle">我的消费记录</div>
         <div v-if="launchedLoaded && list.length > 0" class="scrollerBody">
-          <scroller  height="100%"
-                     :on-refresh="refresh"
-                     :on-infinite="infinite"
-                     refresh-layer-color="#FF4444"
-                     　　　　　 loading-layer-color="#FF4444"
-                     ref="myscroller">
-            <main class="scrollerContent">
+<!--          <scroller height="100%"
+                    :on-refresh="refresh"
+                    :on-infinite="infinite"
+                    refresh-layer-color="#FF4444"
+                    loading-layer-color="#FF4444"
+                    ref="myscroller">
+            <div class="scrollerContent">
               <div v-for="item in list" style="height: 500px">{{item}}</div>
-            </main>
-          </scroller>
+            </div>
+          </scroller>-->
         </div>
         <div v-else>
           <div class="noContext">
@@ -41,7 +41,7 @@
 
 <script>
   import Header from '@/common/_header.vue'
-  import  Util from '@/util/common'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -53,7 +53,7 @@
         icon_coin_amount: require('@/assets/icons/ico_coin_amount.png'),
         amount: 0,
         loadFinished: false,
-        list:[1,2,3,4],
+        list: [1, 2, 3, 4],
         showPage: 1,
         totalSize: 0,
         launchedLoaded: false,
@@ -83,16 +83,16 @@
         }
       },
 
-      refresh:function(){         //下拉刷新
-        let self=this;
+      refresh: function () {         //下拉刷新
+        let self = this;
         console.log('refresh');
         let that = this
         that.showPage = 1//重置页数刷新每次页数都是第一页
         that.loadFinished = false//重置数据判断
-        setTimeout(function(){
+        setTimeout(function () {
           that.updateConsumeList();
           self.$refs.myscroller.finishPullToRefresh();//停止下拉刷新动效
-        },1500)
+        }, 1500)
       },
 
       updateConsumeList() {
@@ -123,7 +123,7 @@
 
       },
       updateBalanceAmount() {
-        let that =this
+        let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
@@ -132,7 +132,7 @@
             baseURL: this.$api.SSO_BASE_URL,
             url: '/balance',
             params: {
-              openId:user.openId
+              openId: user.openId
             }
           }).then((response) => {
             this.amount = response.data.data.amount
@@ -198,19 +198,20 @@
 
           img {
             height: 80px;
-            width:  80px;
+            width: 80px;
           }
 
           .amountInfo {
             .fz(font-size, 80);
             color: #333333;
             font-weight: bold;
+
             span {
               .fz(font-size, 50);
             }
           }
 
-          .van-cell{
+          .van-cell {
             margin-top: -1px;
           }
         }
@@ -225,35 +226,32 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
-          .van-cell{
+
+          .van-cell {
             margin-top: -1px;
           }
         }
       }
 
-      .scrollerWrap{
-/*        margin-top: 200px;
-        width:100%;
-        top:200px;//一般页面有header的时候需要留出header的高度
-        bottom:20px;
-        border-radius: 10px;*/
-        padding-top: 180px;
-        .scrollerBody{
-          margin-top: 250px;
-          main{
-            height:100%;
-            margin-top: 250px;
-            background-color: #1989fa;
-          }
+      .scrollerWrap {
+        /*        margin-top: 200px;
+                width:100%;
+                top:200px;//一般页面有header的时候需要留出header的高度
+                bottom:20px;
+                border-radius: 10px;*/
+        padding-top: 200px;
+
+        .scrollerBody {
         }
 
-        .cousumeListTitle{
+        .cousumeListTitle {
           text-align: center;
           .fz(font-size, 40);
           font-weight: bold;
           color: black;
           margin-top: 10px;
         }
+
         .noContext {
           width: 100%;
           display: flex;
@@ -307,7 +305,8 @@
         position: fixed;
         bottom: 10px;
         left: 0;
-        .van-button{
+
+        .van-button {
           margin: 10px;
         }
       }
