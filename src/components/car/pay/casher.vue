@@ -874,8 +874,7 @@
           if (this.mCoinBalance.checked) {
             let remainPayAmount = this.remainPayAmount;
             if (this.mCoinBalance.amount >= remainPayAmount * 100) {
-              this.mCoinBalance.payAmount = remainPayAmount * 100;
-              this.$log(this.mCoinBalance.payAmount)
+              this.mCoinBalance.payAmount = parseInt((remainPayAmount * 100).toFixed(0));
             } else {
               this.mCoinBalance.payAmount = this.mCoinBalance.amount
             }
@@ -1049,7 +1048,7 @@
                 return
               }
             } else {
-              this.$toast("请选择支付方式")
+              this.$toast("金额不够支付，请选择支付方式")
               return;
             }
           } else {
