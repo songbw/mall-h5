@@ -123,6 +123,7 @@
               <van-radio slot="right-icon" name="1"  checked-color="#FF4444"/>
             </van-cell>
             <div class="linkPayDialog" v-if="radio == '1'">
+              <span class="tip">温馨提示:联机账户支付不能低于1角</span>
               <van-field
                 v-model="linkPayAccount"
                 required
@@ -152,6 +153,7 @@
             <div class="quickPayDialog" v-if="radio == '2'">
               <div class="bankListCheckBox">
                 <div v-if="mBankcardList.length > 0">
+                  <span class="tip">温馨提示:快捷支付不能低于1元</span>
                   <van-radio-group v-model="bankRadio">
                     <van-cell-group>
                       <div v-for="(item, index) in mBankcardList">
@@ -1189,11 +1191,11 @@
           }
 
           .orderNo {
-            margin-top: 15px;
+            margin-top: 13px;
             margin-right: 5px;
             width: 70%;
             text-align: right;
-            .fz(font-size, 12)
+            .fz(font-size, 24);
           }
         }
 
@@ -1365,6 +1367,12 @@
           width: 40%;
           margin-left: 10px;
         }
+      }
+
+      .tip{
+        .fz(font-size,25px);
+        color: #ff4444;
+        padding: 10px;
       }
     }
   }
