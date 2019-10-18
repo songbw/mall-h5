@@ -163,7 +163,7 @@
                           @click="BanckCardsClick(item)"
                         >
                           <div slot="default" class="bankCard">
-                            <span style="font-size: small">卡号:{{item.accountId}}</span>
+                            <span style="font-size: small">卡号: {{formatBankNumber(item.accountId)}}</span>
                             <span>银行卡支付</span>
                           </div>
                           <div slot="right-icon" class="bankCardCheckBox">
@@ -427,6 +427,9 @@
     },
 
     methods: {
+      formatBankNumber(bankNumber){
+          return bankNumber.substr(0,4)+"********"+bankNumber.substr(-4);
+      },
       QPayBtnCountDown() {
         this.quickPayVerifyCodeCount--;
         if (this.quickPayVerifyCodeCount <= 0) {

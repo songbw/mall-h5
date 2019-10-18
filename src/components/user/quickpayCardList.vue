@@ -15,7 +15,7 @@
                 <van-icon  style="float: right" name="delete" @click="onDeleteCardBtnClick(k,index)"></van-icon>
               </div>
               <div class="cardInfo">
-                 <span>{{k.accountId}}</span>
+                 <span>{{formatBankNumber(k.accountId)}}</span>
               </div>
             </div>
             <div class="cardFooter">
@@ -204,6 +204,9 @@
     },
 
     methods: {
+      formatBankNumber(bankNumber){
+        return bankNumber.substr(0,4)+"********"+bankNumber.substr(-4);
+      },
       onDeleteCardBtnClick(k,index) {
         this.$log("onDeleteCardBtnClick Enter")
         let that = this
