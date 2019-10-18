@@ -7,7 +7,7 @@
       <van-list v-model="loading"
                 :finished="finished"
                 @load="onLoad">
-        <div v-if="list.length > 0 && finished">
+        <div v-if="launchedLoaded && list.length > 0">
           <div v-for="k in list" :key="k.id" style="background-color: white;margin: 10px" >
             <div class="goods-detail">
               <van-card
@@ -24,7 +24,7 @@
             </div>
           </div>
         </div>
-       <div v-else-if="finished">
+       <div v-else-if="launchedLoaded && list.length == 0">
           <div class="noContext">
             <img :src="icon_noContext">
             <span class="noContext_line1">亲，没有任何内容!</span>
@@ -52,14 +52,14 @@
         loading: false,
         finished: false,
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
-        launchedLoading: false,
+        launchedLoaded: false,
       }
     },
 
     mounted() {
       setTimeout(() => {
-        if (!this.launchedLoading) {
-          this.onLoad(this.active)
+        if (!this.launchedLoaded) {
+          this.onLoad()
         }
       }, 1000);
     },
@@ -112,7 +112,6 @@
       onLoad() {
         this.$log("onLoad Enter")
         let that = this
-        this.launchedLoading = true;
         let userInfo = this.$store.state.appconf.userInfo
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
@@ -128,6 +127,7 @@
               data: options,
             }).then((response) => {
               this.result = response.data;
+              this.launchedLoaded = true;
               this.$log(this.result)
               this.total = this.result.total;
               if (this.result.rows.length == 0) {
@@ -146,11 +146,13 @@
               console.log(error)
               that.loading = false;
               that.finished = true;
+              that.launchedLoaded = true;
             })
           }
         } else {
           this.loading = false;
           this.finished = true;
+          this.launchedLoaded = true;
         }
       },
     }
