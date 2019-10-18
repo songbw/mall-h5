@@ -433,7 +433,7 @@
         return BANKUtil.getBankInfoByCardNo(accoundId)
       },
       formatBankNumber(bankNumber) {
-        return bankNumber.substr(0, 4) + " ***** ***** " + bankNumber.substr(-4);
+        return bankNumber.substr(0, 4) + " **** **** " + bankNumber.substr(-4);
       },
       QPayBtnCountDown() {
         this.quickPayVerifyCodeCount--;

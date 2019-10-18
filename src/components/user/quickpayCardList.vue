@@ -210,7 +210,7 @@
          return BANKUtil.getBankInfoByCardNo(accoundId)
       },
       formatBankNumber(bankNumber){
-        return bankNumber.substr(0,4)+" ***** ***** "+bankNumber.substr(-4);
+        return bankNumber.substr(0,4)+" **** **** "+bankNumber.substr(-4);
       },
       onDeleteCardBtnClick(k,index) {
         this.$log("onDeleteCardBtnClick Enter")
