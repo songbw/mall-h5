@@ -33,7 +33,8 @@ const VENDOR_URL = SERVICE_URL + "/v2/vendors/"
 
 const SHANGHAI_BANK_URL = "http://180.76.244.14:8021"
 
-const QUICKLY_PAY_URL = "http://192.168.200.37:8000/v2/cardpayment/"
+//const QUICKLY_PAY_URL = "http://192.168.200.37:8000/v2/cardpayment/"
+const QUICKLY_PAY_URL = SERVICE_URL + "/v2/cardpayment/"
 
 const xapi = axios.create();
 //xapi.defaults.baseURL = SERVER_BASE_URL;

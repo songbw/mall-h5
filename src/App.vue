@@ -76,6 +76,7 @@
         this.$api.FREIGHTS_URL = serverUrl + "/v2/freights/"
         this.$api.OPTCARDS_URL = serverUrl +"/v2/wocs/"
         this.$api.VENDOR_URL = serverUrl + "/v2/vendors/"
+        this.$api.QUICKLY_PAY_URL = serverUrl +  "/v2/cardpayment/"
         if(testUser != undefined && testUser.length > 0)
           this.$api.TEST_USER = testUser
         if(title !=undefined && title.length > 0)

@@ -179,11 +179,22 @@
                     </van-cell-group>
                   </van-radio-group>
                 </div>
+                <div class="queryBanckSupportList">
+                  <span @click="onQuerySupportBListClick()">查看支持的银行卡</span>
+                </div>
                 <div class="addNewBankCard" @click="onAddNewBankCardClick">
                   <van-icon name="plus" color="#FF4444"></van-icon>
                   <span>添加银行卡</span>
                 </div>
               </div>
+              <van-dialog
+                v-model="showSupportList"
+                title="快捷支付银行卡列表"
+              >
+                <div class="supportBankList">
+                  <img :src="icon_support_bank_list">
+                </div>
+              </van-dialog>
               <van-dialog
                 v-model="addNewBankCardDlgShow"
                 title="添加银行卡"
@@ -394,7 +405,9 @@
         newCustomName: "",
         mIdNo: "",
         mExpiredDate: "",
-        mCvv2: ""
+        mCvv2: "",
+        showSupportList: false,
+        icon_support_bank_list: require('@/assets/icons/ico_bank_support.png'),
       }
     },
     computed: {
@@ -429,6 +442,10 @@
     },
 
     methods: {
+      onQuerySupportBListClick() {
+        this.$log("onQuerySupportBListClick Enter")
+        this.showSupportList = true
+      },
       getBankNameByAccountId(accoundId) {
         return BANKUtil.getBankInfoByCardNo(accoundId)
       },
@@ -1318,7 +1335,16 @@
             align-items: center;
             display: flex;
           }
+          .queryBanckSupportList{
+            width: 100%;
+            text-align: center;
+            color: #1989fa;
+            padding: 0.5em;
+            span{
+              text-decoration:underline
+            }
 
+          }
           .addNewBankCard {
             display: flex;
             align-items: center;
@@ -1381,6 +1407,18 @@
         .fz(font-size, 25px);
         color: #ff4444;
         padding: 10px;
+      }
+
+      .supportBankList{
+        width: 100%;
+        height: 400px;
+        overflow: scroll;
+
+        img {
+          padding: 2px;
+          width: 100%;
+          display: inline-block;
+        }
       }
     }
   }

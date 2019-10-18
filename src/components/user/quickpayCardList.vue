@@ -11,8 +11,6 @@
               <div class="cardTitle">
                 <img :src="icon_ic_chip">
                 <span>{{getBankNameByAccountId(k.accountId)}}</span>
-<!--                <span v-if="k.accountType == 2">储蓄卡</span>
-                <span v-else>信用卡</span>-->
                 <van-icon  style="float: right" name="delete" @click="onDeleteCardBtnClick(k,index)"></van-icon>
               </div>
               <div class="cardInfo">
@@ -36,10 +34,21 @@
       </div>
     </div>
     <div class="bankcardListBottomFunc">
+      <div class="queryBanckSupportList">
+        <span @click="onQuerySupportBListClick()">查看支持的银行卡</span>
+      </div>
       <div @click="onAddBankCardBtnClick()" class="addBankCardButton">
         <span>添加银行卡</span>
       </div>
     </div>
+    <van-dialog
+      v-model="showSupportList"
+      title="快捷支付银行卡列表"
+    >
+      <div class="supportBankList">
+        <img :src="icon_support_bank_list">
+      </div>
+    </van-dialog>
     <van-dialog
       v-model="addNewBankCardDlgShow"
       title="添加银行卡"
@@ -178,10 +187,12 @@
     data() {
       return {
         user: {},
+        showSupportList: false,
         launchedLoaded: false,
         bankcardList: [],
         icon_noCards: require('@/assets/icons/ico_empty_card.png'),
         icon_ic_chip: require('@/assets/icons/ico_ic_chip.png'),
+        icon_support_bank_list: require('@/assets/icons/ico_bank_support.png'),
         addNewBankCardDlgShow: false,
         newCardNumber: "",
         newCustomName: "",
@@ -206,6 +217,10 @@
     },
 
     methods: {
+      onQuerySupportBListClick() {
+        this.$log("onQuerySupportBListClick Enter")
+        this.showSupportList = true
+      },
       getBankNameByAccountId(accoundId) {
          return BANKUtil.getBankInfoByCardNo(accoundId)
       },
@@ -385,7 +400,7 @@
     .bankCardListBody {
       .bankCardListMain {
         width: 100%;
-        padding-bottom: 3em;
+        padding-bottom: 5em;
 
         .noCards {
           width: 100%;
@@ -451,7 +466,7 @@
                 display: flex;
                 flex-direction: column;
                 height: 100%;
-                padding: 8px;
+                padding: 1px 8px;
                 color: white;
               }
 
@@ -483,10 +498,11 @@
     .bankcardListBottomFunc {
       background-color: white;
       width: 100%;
-      height: 3em;
+      height: 5em;
       display: -webkit-flex;
       display: -ms-flex;
       display: flex;
+      flex-direction: column;
       align-items: center;
       position: fixed;
       bottom: 0;
@@ -494,6 +510,17 @@
       background-color: #ffffff;
       z-index: 5;
 
+      .queryBanckSupportList{
+        width: 100%;
+        background-color: #f8f8f8;
+        text-align: center;
+        color: #1989fa;
+        padding: 0.5em;
+        span{
+          text-decoration:underline
+        }
+
+      }
 
       .addBankCardButton {
         width: 100%;
@@ -502,6 +529,18 @@
         text-align: center;
         line-height: 3em;
         color: white;
+      }
+    }
+
+    .supportBankList{
+      width: 100%;
+      height: 400px;
+      overflow: scroll;
+
+      img {
+        padding: 2px;
+        width: 100%;
+        display: inline-block;
       }
     }
   }
