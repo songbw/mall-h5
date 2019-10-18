@@ -10,8 +10,9 @@
             <div class="cardMain">
               <div class="cardTitle">
                 <img :src="icon_ic_chip">
-                <span v-if="k.accountType == 2">储蓄卡</span>
-                <span v-else>信用卡</span>
+                <span>{{getBankNameByAccountId(k.accountId)}}</span>
+<!--                <span v-if="k.accountType == 2">储蓄卡</span>
+                <span v-else>信用卡</span>-->
                 <van-icon  style="float: right" name="delete" @click="onDeleteCardBtnClick(k,index)"></van-icon>
               </div>
               <div class="cardInfo">
@@ -165,6 +166,7 @@
   import Footer from '@/common/_footer.vue'
 
   import Util from '@/util/common'
+  import BANKUtil from '@/util/bank'
 
   export default {
     components: {
@@ -204,6 +206,9 @@
     },
 
     methods: {
+      getBankNameByAccountId(accoundId) {
+         return BANKUtil.getBankInfoByCardNo(accoundId)
+      },
       formatBankNumber(bankNumber){
         return bankNumber.substr(0,4)+"********"+bankNumber.substr(-4);
       },

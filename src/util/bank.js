@@ -1470,6 +1470,24 @@ let cardTypeMap = {
 
 
 export default {
+  extend(target, source) {
+    let result = {};
+    let key;
+    target = target || {};
+    source = source || {};
+    for (key in target) {
+      if (target.hasOwnProperty(key)) {
+        result[key] = target[key];
+      }
+    }
+    for (key in source) {
+      if (source.hasOwnProperty(key)) {
+        result[key] = source[key];
+      }
+    }
+    return result;
+  },
+
   getCardTypeName(cardType) {
     if (cardTypeMap[cardType]) {
       return cardTypeMap[cardType]
@@ -1484,5 +1502,19 @@ export default {
       }
     }
     return "";
+  },
+
+  getBankInfoByCardNo(cardNo) {
+  for (let i = 0, len = bankcardList.length; i < len; i++) {
+    let bankcard = bankcardList[i];
+    let patterns = bankcard.patterns;
+    for (let j = 0, jLen = patterns.length; j < jLen; j++) {
+      let pattern = patterns[j];
+      if ((new RegExp(pattern.reg)).test(cardNo)) {
+        return bankcard.bankName
+      }
+    }
   }
+  return "银行卡"
+}
 }

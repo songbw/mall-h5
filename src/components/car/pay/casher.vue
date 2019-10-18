@@ -163,7 +163,8 @@
                           @click="BanckCardsClick(item)"
                         >
                           <div slot="default" class="bankCard">
-                            <span style="font-size: small">卡号: {{formatBankNumber(item.accountId)}}</span>
+                            <span>{{getBankNameByAccountId(item.accountId)}}</span>
+                            <span>卡号: {{formatBankNumber(item.accountId)}}</span>
                             <span>银行卡支付</span>
                           </div>
                           <div slot="right-icon" class="bankCardCheckBox">
@@ -336,7 +337,7 @@
 <script>
   import Header from '@/common/_header.vue'
   import Util from '@/util/common'
-
+  import BANKUtil from '@/util/bank'
   export default {
     components: {
       'v-header': Header,
@@ -427,6 +428,9 @@
     },
 
     methods: {
+      getBankNameByAccountId(accoundId) {
+        return BANKUtil.getBankInfoByCardNo(accoundId)
+      },
       formatBankNumber(bankNumber){
           return bankNumber.substr(0,4)+"********"+bankNumber.substr(-4);
       },
@@ -1298,7 +1302,7 @@
           .bankCard {
             border: 1px solid #3dd5c8;
             border-radius: 5px;
-            height: 60px;
+            height: 90px;
             margin: 2px 25px;
             display: flex;
             flex-direction: column;
@@ -1309,7 +1313,7 @@
           }
 
           .bankCardCheckBox {
-            height: 64px;
+            height: 90px;
             align-items: center;
             display: flex;
           }
