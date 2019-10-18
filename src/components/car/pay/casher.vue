@@ -120,7 +120,7 @@
         <div class="pathBox">
           <van-radio-group v-model="radio">
             <van-cell title="联机账户" :icon="icon_linkpay" clickable @click="radio = '1'">
-              <van-radio slot="right-icon" name="1"  checked-color="#FF4444"/>
+              <van-radio slot="right-icon" name="1" checked-color="#FF4444"/>
             </van-cell>
             <div class="linkPayDialog" v-if="radio == '1'">
               <span class="tip">温馨提示:联机账户支付不能低于1角</span>
@@ -148,7 +148,7 @@
               />
             </div>
             <van-cell title="快捷支付" :icon="icon_quicklypay" clickable @click="radio = '2'">
-              <van-radio slot="right-icon" name="2"  checked-color="#FF4444"/>
+              <van-radio slot="right-icon" name="2" checked-color="#FF4444"/>
             </van-cell>
             <div class="quickPayDialog" v-if="radio == '2'">
               <div class="bankListCheckBox">
@@ -196,7 +196,7 @@
                     <van-cell title="储蓄卡" clickable @click="newCardRadio = '1'">
                       <van-radio slot="right-icon" name="1"/>
                     </van-cell>
-                    <van-cell title="信用卡"  @click="newCardRadio = '2'">
+                    <van-cell title="信用卡" @click="newCardRadio = '2'">
                       <van-radio slot="right-icon" name="2"/>
                     </van-cell>
                   </van-radio-group>
@@ -338,6 +338,7 @@
   import Header from '@/common/_header.vue'
   import Util from '@/util/common'
   import BANKUtil from '@/util/bank'
+
   export default {
     components: {
       'v-header': Header,
@@ -431,8 +432,8 @@
       getBankNameByAccountId(accoundId) {
         return BANKUtil.getBankInfoByCardNo(accoundId)
       },
-      formatBankNumber(bankNumber){
-          return bankNumber.substr(0,4)+"********"+bankNumber.substr(-4);
+      formatBankNumber(bankNumber) {
+        return bankNumber.substr(0, 4) + " ***** ***** " + bankNumber.substr(-4);
       },
       QPayBtnCountDown() {
         this.quickPayVerifyCodeCount--;
@@ -704,12 +705,12 @@
       beforeCloseQuickPayDlg(action, done) {
         this.$log("beforeCloseQuickPayDlg Enter");
         if (action === 'confirm') {
-          if(!this.verifyBtnTextClicked) {
+          if (!this.verifyBtnTextClicked) {
             this.$toast("请点击获取验证码")
             done(false)
             return
           }
-          if(this.quickPayVerifyCode.length == 0) {
+          if (this.quickPayVerifyCode.length == 0) {
             this.$toast("请输入短信验证码")
             done(false)
           } else {
@@ -1303,7 +1304,7 @@
             border: 1px solid #3dd5c8;
             border-radius: 5px;
             height: 90px;
-            margin: 2px 25px;
+            margin: 2px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -1376,8 +1377,8 @@
         }
       }
 
-      .tip{
-        .fz(font-size,25px);
+      .tip {
+        .fz(font-size, 25px);
         color: #ff4444;
         padding: 10px;
       }
