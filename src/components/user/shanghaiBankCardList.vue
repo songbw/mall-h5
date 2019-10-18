@@ -102,7 +102,7 @@
       this.showHeader = this.$api.HAS_HEADER;
       let that = this
       let userDetail = this.$store.state.appconf.userDetail;
-      if (userDetail.length > 0) {
+      if (userDetail != undefined && userDetail.length > 0) {
         this.user = JSON.parse(userDetail)
         this.reserveMobile = this.user.telephone
       }
@@ -128,12 +128,12 @@
             if(ret.code == 10001) {
               this.hasBindedCard = false;
             }
-
           }
-
         }).catch(function (error) {
           that.launchedLoaded = true
         })
+      } else {
+        that.launchedLoaded = true
       }
 
     },
