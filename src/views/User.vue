@@ -152,6 +152,40 @@
         vm.$store.commit('SET_CURRENT_NAVI_INDEX', 3);
       })
     },
+    computed: {
+       userToken() {
+          return  this.$store.state.appconf.token;
+       },
+    },
+    watch:{
+      userToken(newValue, oldVal) {
+          if (newValue && newValue.length > 0) {
+            let userInfo = this.$store.state.appconf.userInfo;
+            if (!Util.isUserEmpty(userInfo)) {
+              let that = this
+              let user = JSON.parse(userInfo);
+              this.$api.xapi({
+                method: 'get',
+                baseURL: this.$api.SSO_BASE_URL,
+                url: '/user',
+                params: {
+                  iAppId: this.$api.APP_ID,
+                  openId: user.openId,
+                }
+              }).then((response) => {
+                let user = response.data.data.user;
+                if (user != null) {
+                  this.user = user;
+                  this.updateUserDatail(this.user);
+                }
+              }).catch(function (error) {
+                that.$log(error)
+              })
+            }
+          }
+        },
+    },
+
     created() {
       let userInfo = this.$store.state.appconf.userInfo;
       let that = this

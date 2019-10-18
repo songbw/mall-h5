@@ -176,7 +176,7 @@
         window.onload = () => {
           this.getLoginAuthInfo();
         }
-/*        setTimeout(() => {
+       /* setTimeout(() => {
           this.test();
           //this.getAccessTokenInfo();
           this.startLocation();
