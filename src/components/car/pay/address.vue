@@ -34,7 +34,7 @@
       }
     },
     created() {
-      this.test();
+     // this.test();
       this.showHeader = this.$api.HAS_HEADER;
       let id = this.$route.params.id
       if (id != "new") {
@@ -59,7 +59,7 @@
       }
     },
     methods: {
-       testGetCode(province,city,county) {
+/*       testGetCode(province,city,county) {
         this.$log("省:"+province+",市:"+city+",县:"+county)
         let options = {
           "country": "中国",
@@ -108,7 +108,7 @@
             }
           }
         }
-      },
+      },*/
       getAddressCode(province, city, county) {
         let code = ""
         for (var key in areaList.province_list) {
