@@ -124,6 +124,7 @@
         })
       },
       getPingAnThirdPartyAccessTokenInfo(requestCode) {
+      //  this.$toast("requestCode:"+requestCode)
         let that = this;
         that.$api.xapi({
           method: 'get',
@@ -154,9 +155,11 @@
         })
       },
       async getLoginAuthInfo() {
+      //  this.$toast("getLoginAuthInfo Enter")
         try {
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
+       //   this.$toast("initCode:"+initCode)
           if (!initCode)
             return
           sc.config({

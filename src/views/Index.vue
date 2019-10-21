@@ -180,7 +180,7 @@
             this.$toast("获取用户信息超时!")
           }
 
-        }, 20000);
+        }, 10000);
 /*        window.onload = () => {
           this.getLoginAuthInfo();
         }*/
