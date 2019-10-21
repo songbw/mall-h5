@@ -4,7 +4,7 @@
     <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
       <h1 slot="title">凤巢商城</h1>
     </v-header>
-    <div v-if="pageloading">
+    <div v-if="pageloading || userTokenLoading">
       <v-loading></v-loading>
     </div>
     <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
@@ -122,6 +122,7 @@
         showDialog: false,
         //icon_git: require('@/assets/icons/ico_gift.png'),
         icon_git: "",
+        userTokenLoading: true,
       }
     },
 
@@ -173,9 +174,9 @@
         }
         //this.testGAT();
       } else {
-        window.onload = () => {
+/*        window.onload = () => {
           this.getLoginAuthInfo();
-        }
+        }*/
 /*        setTimeout(() => {
           this.test();
           //this.getAccessTokenInfo();
@@ -187,9 +188,22 @@
       }
     },
     computed: {
+      userToken() {
+        return  this.$store.state.appconf.token;
+      },
       mlocation() {
         return this.$store.state.appconf.location;
       }
+    },
+    watch:{
+      userToken(newValue, oldVal) {
+        if (newValue && newValue.length > 0) {
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+             this.userTokenLoading= false;
+          }
+        }
+      },
     },
     methods: {
       isValidLeavedPath(to) {

@@ -85,6 +85,109 @@
           this.$api.IS_GAT_APP = true;
         this.configured = true
       }).catch((error)=>{console.log(error)});
+    },
+    created() {
+      if(! this.$api.IS_GAT_APP) {
+        window.onload = () => {
+          this.getLoginAuthInfo();
+        }
+      }
+    },
+
+    methods: {
+      thirdPartLogined(openId, accessToken) {
+        let that = this;
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/thirdLogin',
+          data: {
+            iAppId: this.$api.APP_ID,
+            accessToken: accessToken,
+            openId: openId,
+          }
+        }).then((response) => {
+          let rt = response.data.data.result
+          this.$log("local information:" + JSON.stringify(rt));
+          if (rt.token != null) {
+            that.$store.commit('SET_TOKEN', rt.token);
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+      getInitCode() {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.PINGAN_AUTH_URL,
+          url: '/pingan/initCode',
+        })
+      },
+      getPingAnThirdPartyAccessTokenInfo(requestCode) {
+        let that = this;
+        that.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/thirdParty/token',
+          params: {
+            iAppId: this.$api.APP_ID,
+            requestCode: requestCode,
+          }
+        }).then((response) => {
+          let rt = response.data.data.result
+          that.$log("rt:" + JSON.stringify(rt));
+          let openId = rt.openId;
+          let accessToken = rt.accessToken;
+          if (openId != undefined) {
+            let userId = that.$api.APP_ID + openId;
+            let userInfo = {
+              openId: openId,
+              accessToken: rt.accessToken,
+              userId: userId
+            }
+            that.$log("userInfo  is:" + JSON.stringify(userInfo));
+            that.$store.commit('SET_USER', JSON.stringify(userInfo));
+            that.thirdPartLogined(openId, accessToken)
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+      async getLoginAuthInfo() {
+        try {
+          let ret = await this.getInitCode()
+          let initCode = ret.data.data.initCode
+          if (!initCode)
+            return
+          sc.config({
+            debug: false,   // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
+            appId: this.$api.T_APP_ID,  // 在统一 APP 开放平台服务器申请的 appId
+            initCode,
+            nativeApis: ['userAuth']
+          })
+
+          sc.ready(() => {
+            sc.userAuth(
+              {appId: this.$api.T_APP_ID},
+              res => {  /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
+                if (res.code === 0) { //    用户同意授权
+                  const requestCode = res.data.requestCode;
+                  this.getPingAnThirdPartyAccessTokenInfo(requestCode);
+                } else {  /* 用户拒绝授权或其它失败情况
+                               code: - 1 默认失败
+                               code: - 10001    没有初始化 JSSDK
+                               code: - 10002    用户点击拒绝授权
+                                code: - 10003    用户未登录 */
+                  console.warning(res.message)
+                }
+              })
+          })
+          sc.error((res) => {
+            console.error({res})
+          })
+        } catch (e) {
+        }
+      },
     }
   }
 </script>
