@@ -174,6 +174,10 @@
         }
         //this.testGAT();
       } else {
+        setTimeout(() => {
+          if(this.userTokenLoading)
+            this.userTokenLoading = false;
+        }, 5000);
 /*        window.onload = () => {
           this.getLoginAuthInfo();
         }*/
