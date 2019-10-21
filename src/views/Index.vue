@@ -176,14 +176,14 @@
         let dsBridge = require("dsbridge");
         Vue.prototype.$jsbridge = dsBridge;
         this.initJsNativeCb();
-        setTimeout(() => {
+       /* setTimeout(() => {
           this.test();
           this.getAccessTokenInfo();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
           //this.getUserInfo();
           //this.updateLocation();
-        }, 1000);
+        }, 1000);*/
       }
     },
     computed: {
