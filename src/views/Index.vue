@@ -175,9 +175,12 @@
         //this.testGAT();
       } else {
         setTimeout(() => {
-          if(this.userTokenLoading)
+          if(this.userTokenLoading) {
             this.userTokenLoading = false;
-        }, 5000);
+            this.$toast("获取用户信息超时!")
+          }
+
+        }, 20000);
 /*        window.onload = () => {
           this.getLoginAuthInfo();
         }*/
