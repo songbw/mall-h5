@@ -28,7 +28,7 @@
 
         <div class="coinBalanceBox">
           <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
-            <van-checkbox slot="right-icon" v-model="mCoinBalance.checked" checked-color="#FF4444"></van-checkbox>
+            <van-checkbox slot="right-icon" v-model="coinBalanceValue" checked-color="#FF4444" ref="coinBalanceCheckbox" @click.stop=""></van-checkbox>
             <span slot="label" style="color:black">可用余额: ￥{{(mCoinBalance.amount/100).toFixed(2)}}</span>
           </van-cell>
         </div>
@@ -417,6 +417,19 @@
 
       remainPayAmount() {
         return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mOptCards.payAmount) / 100).toFixed(2)
+      },
+
+      coinBalanceValue: {
+        get() {
+          return this.mCoinBalance.checked
+        },
+        set(value) {
+          if (this.mCoinBalance.amount == 0 && !this.mCoinBalance.checked ||
+            this.remainPayAmount == 0 && !this.mCoinBalance.checked) {
+          } else {
+            this.mCoinBalance.checked = value
+          }
+        }
       }
     },
 
@@ -442,6 +455,11 @@
     },
 
     methods: {
+      onTestClick() {
+        this.$log("onTestClick Enter")
+        this.mCoinBalance.checked = false
+        //this.$refs.coinBalanceCheckbox.toggle(false);
+      },
       onQuerySupportBListClick() {
         this.$log("onQuerySupportBListClick Enter")
         this.showSupportList = true
@@ -713,7 +731,7 @@
             })
           } else {
             this.$log("没有用户信息，无法添加银行卡，请先登录")
-            done()
+            don
           }
         } else if (action === 'cancel') {
           done() //关闭
@@ -890,7 +908,6 @@
         this.$log("onCoinBalanceSelector Enter")
         if (this.mCoinBalance.amount == 0 && !this.mCoinBalance.checked ||
           this.remainPayAmount == 0 && !this.mCoinBalance.checked) {
-
         } else {
           this.mCoinBalance.checked = !this.mCoinBalance.checked
           for (let i = this.mPaylist.length - 1; i >= 0; i--) {
