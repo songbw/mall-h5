@@ -28,7 +28,7 @@
 
         <div class="coinBalanceBox">
           <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
-            <van-checkbox slot="right-icon" v-model="coinBalanceValue" checked-color="#FF4444" ref="coinBalanceCheckbox" @click.stop=""></van-checkbox>
+            <van-checkbox slot="right-icon" v-model="coinBalanceValue" checked-color="#FF4444"></van-checkbox>
             <span slot="label" style="color:black">可用余额: ￥{{(mCoinBalance.amount/100).toFixed(2)}}</span>
           </van-cell>
         </div>
@@ -40,7 +40,7 @@
                     @click="onOptCardCellClick()">
           </van-cell>
           <div v-if="this.mOptCards.show == true">
-            <van-checkbox-group v-model="mOptCards.result" @change="onOptCardsStatusChanged()">
+            <van-checkbox-group v-model="mOptCardsResult" @change="onOptCardsStatusChanged()">
               <van-cell-group>
                 <van-cell
                   v-for="(item, index) in mOptCards.list"
@@ -430,6 +430,21 @@
             this.mCoinBalance.checked = value
           }
         }
+      },
+
+      mOptCardsResult: {
+        get() {
+          return this.mOptCards.result
+        },
+        set(value) {
+          if(value.length > this.mOptCards.result.length) {//添加
+            if(this.remainPayAmount > 0) {
+              this.mOptCards.result = value
+            }
+          } else {
+            this.mOptCards.result = value
+          }
+        }
       }
     },
 
@@ -455,11 +470,6 @@
     },
 
     methods: {
-      onTestClick() {
-        this.$log("onTestClick Enter")
-        this.mCoinBalance.checked = false
-        //this.$refs.coinBalanceCheckbox.toggle(false);
-      },
       onQuerySupportBListClick() {
         this.$log("onQuerySupportBListClick Enter")
         this.showSupportList = true
