@@ -124,7 +124,7 @@
               method: 'get',
               baseURL: this.$api.WORKER_ORDER_BASE_URL,
               url: '/customers/work_orders',
-              data: options,
+              params: options,
             }).then((response) => {
               this.result = response.data;
               this.launchedLoaded = true;
