@@ -175,6 +175,10 @@
       See(e) {
         window.location.href = e
       },
+
+      updateCurrentGoods(goods) {
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
+      },
       gotoGoodsPage(mpu) {
         try {
           //获取goods信息，update current googds
