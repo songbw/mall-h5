@@ -33,7 +33,7 @@
       <div class="linkPayAccountBox">
         <span style="font-weight: bold;font-size: x-large;color: black">我的余额</span>
         <span v-if="linkPayAmount == null " style="margin-top: 10px;color: #ff4444;font-size: medium">请输入账号，查询余额</span>
-        <span v-else class="linkPay_Amount">￥{{linkPayAmount}}</span>
+        <p v-else class="linkPay_Amount"><span style="font-size: large">￥</span>{{linkPayAmount}}</p>
       </div>
       <div style="margin-top: 40px;width: 100%">
         <van-button type="danger" size="large" round @click="queryLinkPay">查看余额</van-button>
@@ -61,7 +61,8 @@
         showHeader: false,
         isLinkPwdVisable: false,
         linkPayAccount:'',
-        linkPayPwd:''
+        linkPayPwd:'',
+        linkPayAmount: null,
       }
     },
 

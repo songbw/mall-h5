@@ -93,7 +93,7 @@
         </van-cell>
       </div>
 
-      <van-actionsheet v-model="showLinkPayDialog"  title="联机账户支付">
+<!--      <van-actionsheet v-model="showLinkPayDialog"  title="联机账户支付">
         <div  class="linkPayDialog">
           <van-field
             v-model="linkPayAccount"
@@ -128,7 +128,7 @@
             <van-button type="danger" size="large" round @click="queryLinkPay">查看余额</van-button>
           </div>
         </div>
-      </van-actionsheet>
+      </van-actionsheet>-->
     </div>
 
     <v-footer></v-footer>
@@ -257,11 +257,11 @@
         icon_bankCard: require('@/assets/icons/ico_bankCard.png'),
         icon_quickPayCard: require('@/assets/icons/ico_quickpay_cards.png'),
         user: {},
-        showLinkPayDialog: false,
+/*        showLinkPayDialog: false,
         linkPayAccount:"",
         linkPayPwd:"",
         linkPayAmount: null,
-        isLinkPwdVisable:false,
+        isLinkPwdVisable:false,*/
       }
     },
     methods: {
@@ -304,7 +304,7 @@
         this.isLinkPwdVisable = !this.isLinkPwdVisable
       },
 
-      queryLinkPay() {
+/*      queryLinkPay() {
         this.$log("queryLinkPay Enter")
         let options = {
           "cardNo":this.linkPayAccount,
@@ -327,7 +327,7 @@
         }).catch(function (error) {
           this.linkPayAmount = null
         })
-      },
+      },*/
 
       onChangeCouponClick() {
         this.$router.push("/user/couponChange")
@@ -669,7 +669,7 @@
       min-height: 400px;
     }
 
-    .linkPayAccountBox{
+/*    .linkPayAccountBox{
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -680,6 +680,6 @@
         font-weight: bold;
         .fz(font-size,80)
       }
-    }
+    }*/
   }
 </style>
