@@ -122,7 +122,12 @@
           url: '/customers/work_flows',
           data: options,
         }).then((response) => {
-          this.$log(response)
+          this.$log(response.status)
+          if(response.status == 201) {
+             this.$toast("提交成功 !")
+          } else {
+            this.$toast("提交失败! 您可以联系客服询问")
+          }
           this.updateWorkerFlow()
         }).catch(function (error) {
         })

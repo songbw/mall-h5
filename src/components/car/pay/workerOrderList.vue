@@ -19,6 +19,7 @@
                 centered>
               </van-card>
               <div>
+                <span style="float: left;padding: 10px;margin-top: 2px" >{{formatTime(k.createTime)}}</span>
                 <span style="float: right;padding: 10px"  @click="onListClick(k)">查看详情 ></span>
               </div>
             </div>
@@ -81,6 +82,11 @@
             expressNo: k.expressNo
           }
         })
+      },
+      formatTime(timeString) {
+        if (timeString == null)
+          return null
+        return this.$moment(timeString).format('YYYY/MM/DD HH:mm:ss')
       },
       formatWOrderStatus(k) {
         let statusType = k.status
