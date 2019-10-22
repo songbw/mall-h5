@@ -177,20 +177,12 @@
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
-            this.$toast("获取用户信息超时!")
           }
-
         }, 10000);
-/*        window.onload = () => {
-          this.getLoginAuthInfo();
-        }*/
         setTimeout(() => {
           this.test();
-          //this.getAccessTokenInfo();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
-          //this.getUserInfo();
-          //this.updateLocation();
         }, 1000);
       }
     },

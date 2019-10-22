@@ -296,7 +296,8 @@
       },
       onQueryLinkPayBtnClick() {
         this.$log("link pay account btn clicked")
-        this.showLinkPayDialog = true;
+      //  this.showLinkPayDialog = true;
+        this.$router.push({name:'联机账户页'})
       },
 
       togLinkPayPwdVisable() {

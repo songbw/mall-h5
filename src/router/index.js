@@ -337,7 +337,7 @@ export default new VueRouter({
       name: '联机账户页',
       component: LinkPayAccount,
       meta: {
-        title: '联机账户',
+        title: '我的联机账户',
       }
     },
   ]
