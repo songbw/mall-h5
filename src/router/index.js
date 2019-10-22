@@ -33,6 +33,7 @@ const OptCardDetail = resolve => require(['@/components/user/optCardDetail.vue']
 const Qrcode = resolve => require(['@/views/Qrcode.vue'], resolve)
 const ShangHaiCardList = resolve => require(['@/components/user/shanghaiBankCardList.vue'], resolve)
 const QuickPayCardList = resolve => require(['@/components/user/quickpayCardList.vue'], resolve)
+const LinkPayAccount = resolve => require(['@/components/user/linkPayAccount.vue'], resolve)
 
 export default new VueRouter({
   mode: 'history',
@@ -329,6 +330,14 @@ export default new VueRouter({
       component: QuickPayCardList,
       meta: {
         title: '我的快捷支付银行卡',
+      }
+    },
+    {
+      path: '/user/linkPayAccount',
+      name: '联机账户页',
+      component: LinkPayAccount,
+      meta: {
+        title: '联机账户',
       }
     },
   ]
