@@ -392,6 +392,9 @@
             } else {
               that.$toast(response.data.msg)
               that.reload = true;
+              if(response.data.code == 40011) {
+                that.couponTypes[that.active].list[i].releaseNum = that.couponTypes[that.active].list[i].releaseTotal
+              }
             }
           }).catch(function (error) {
             that.$log(error)
