@@ -1053,7 +1053,7 @@
           if (this.remainPayAmount > 0) {
             if (this.radio == '1') {
               this.$log("link pay clicked")
-              if (this.remainPayAmount * 100 >= 10) {
+              if ( parseInt((this.remainPayAmount * 100).toFixed(0)) >= 10) {
                 if (this.linkPayAccount.length == 0) {
                   this.$toast("请输入卡号")
                   return
@@ -1366,7 +1366,7 @@
             width: 100%;
             text-align: center;
             color: #1989fa;
-            padding: 0.5em;
+            padding-top: 10px;
             span{
               text-decoration:underline
             }
