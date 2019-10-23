@@ -1165,6 +1165,7 @@
           if (item.goods.length > 0) {
             let skus = []
             let amount = item.freight;
+            let unitsAmount = item.freight;
             let promotionDiscountOfMerchant = 0;
             item.goods.forEach(sku => {
               if (sku.valid) {
@@ -1190,7 +1191,8 @@
                   }
                 }
                 let promotionDiscount = (sku.checkedPrice - sku.product.goodsInfo.dprice)
-                amount += unitPrice * sku.product.baseInfo.count
+                amount += sku.checkedPrice * sku.product.baseInfo.count
+                unitsAmount += unitPrice * sku.product.baseInfo.count
                 promotionDiscountOfMerchant += promotionDiscount
                 skus.push({
                   "skuId": sku.product.baseInfo.skuId,
@@ -1223,8 +1225,8 @@
             if (found != -1) {
               couponDiscountOfMerchant = couponInfo.merchants[found].couponDiscountOfMerchant;
             }
-            this.$log("amount:" + amount)
-            let saleAmount = parseFloat((amount - couponDiscountOfMerchant).toFixed(2));
+            this.$log("unitsAmount:" + unitsAmount)
+            let saleAmount = parseFloat((unitsAmount - couponDiscountOfMerchant).toFixed(2));
             merchants.push({
               "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.merchantCode, //商户号
