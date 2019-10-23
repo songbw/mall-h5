@@ -52,7 +52,7 @@
     <div v-else>
       <div class="promotionTitle" :style="showHeader?'padding-top:3em': 'padding-top: 0em'">
         <van-cell>
-          <span class="promotionTag">{{detail.tag}}</span>
+          <span class="promotionTag">{{detail.name}}</span>
           <v-countdown class="promotionCountDown"
                        v-if="this.detail.status < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
                        :start_callback="countDownS_cb(1)"
