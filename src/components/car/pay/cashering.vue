@@ -28,7 +28,7 @@
         ico_clock: require('@/assets/icons/ico_clock.png'),
         timer: '',
         value: 0,
-        payInfoText:'支付完成，页面自动跳转...'
+        payInfoText:'完成支付后，页面将自动跳转...'
       }
     },
 

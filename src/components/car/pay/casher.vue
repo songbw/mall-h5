@@ -336,7 +336,7 @@
         </van-dialog>
 
         <div class="footer_layout">
-          <van-button type="danger" round size="large" @click="onPayBtnClick">
+          <van-button type="danger" round size="large" :loading="payBtnSubmitLoading"  @click="onPayBtnClick">
             确认支付￥{{remainPayAmount}}
           </van-button>
         </div>
@@ -408,6 +408,7 @@
         mCvv2: "",
         showSupportList: false,
         icon_support_bank_list: require('@/assets/icons/ico_bank_support.png'),
+        payBtnSubmitLoading:false
       }
     },
     computed: {
@@ -762,6 +763,7 @@
             let that = this
             this.payOptions.bankPay.verifyCode = this.quickPayVerifyCode
             this.$log(this.payOptions)
+            this.payBtnSubmitLoading = true;
             this.$api.xapi({
               method: 'post',
               baseURL: this.$api.AGGREGATE_PAY_URL,
@@ -787,9 +789,11 @@
               } else {
                 this.$toast(response.data.message)
               }
+              this.payBtnSubmitLoading = false;
               done()
             }).catch(function (error) {
               that.$toast("请求支付失败")
+              this.payBtnSubmitLoading = false;
               done()
             })
           }
@@ -927,7 +931,7 @@
           this.mCoinBalance.payAmount = 0;
           if (this.mCoinBalance.checked) {
             let remainPayAmount = this.remainPayAmount;
-            if (this.mCoinBalance.amount >= remainPayAmount * 100) {
+            if (this.mCoinBalance.amount >= parseInt((remainPayAmount * 100).toFixed(0))) {
               this.mCoinBalance.payAmount = parseInt((remainPayAmount * 100).toFixed(0));
             } else {
               this.mCoinBalance.payAmount = this.mCoinBalance.amount
@@ -1075,32 +1079,38 @@
               }
             } else if (this.radio == '2') { //bank pay
               this.$log(this.bankRadio)
-              let found = -1;
-              for (let i = 0; i < this.mBankcardList.length; i++) {
-                this.$log(this.mBankcardList[i].accountId)
-                if (this.mBankcardList[i].accountId == this.bankRadio) {
-                  found = i;
-                  break;
+              if (parseInt((this.remainPayAmount * 100).toFixed(0)) >= 100) {
+                let found = -1;
+                for (let i = 0; i < this.mBankcardList.length; i++) {
+                  this.$log(this.mBankcardList[i].accountId)
+                  if (this.mBankcardList[i].accountId == this.bankRadio) {
+                    found = i;
+                    break;
+                  }
                 }
-              }
-              if (found != -1) {
-                bankPay = {
-                  "accountId": this.mBankcardList[found].accountId,
-                  "accountName": this.mBankcardList[found].accountName,
-                  "accountType": this.mBankcardList[found].accountType,
-                  "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
-                  "certNo": this.mBankcardList[found].certNo,
-                  "cvv2": this.mBankcardList[found].cvv2,
-                  "expiredDate": this.mBankcardList[found].expiredDate,
-                  "mobileNo": this.mBankcardList[found].mobileNo,
-                  "orderNo": this.orderInfo.orderNo,
-                  "payType": "bank",
-                  "verifyCode": ""
+                if (found != -1) {
+                  bankPay = {
+                    "accountId": this.mBankcardList[found].accountId,
+                    "accountName": this.mBankcardList[found].accountName,
+                    "accountType": this.mBankcardList[found].accountType,
+                    "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
+                    "certNo": this.mBankcardList[found].certNo,
+                    "cvv2": this.mBankcardList[found].cvv2,
+                    "expiredDate": this.mBankcardList[found].expiredDate,
+                    "mobileNo": this.mBankcardList[found].mobileNo,
+                    "orderNo": this.orderInfo.orderNo,
+                    "payType": "bank",
+                    "verifyCode": ""
+                  }
+                } else {
+                  this.$toast("请选择的快捷支付银行卡")
+                  return
                 }
               } else {
-                this.$toast("请选择的快捷支付银行卡")
+                this.$toast("抱歉，无法使用该支付方式，快捷支付不能低于1元，")
                 return
               }
+
             } else {
               this.$toast("金额不够支付，请选择支付方式")
               return;
@@ -1121,6 +1131,7 @@
             this.quickPayDlgShow = true
           } else {
             this.$log("pay options:");
+            this.payBtnSubmitLoading = true;
             this.$log(this.payOptions)
             this.$api.xapi({
               method: 'post',
@@ -1136,11 +1147,14 @@
                     outer_trade_no: this.orderInfo.orderNo
                   }
                 })
+                this.payBtnSubmitLoading = false;
               } else {
                 this.$toast(response.data.message)
+                this.payBtnSubmitLoading = false;
               }
             }).catch(function (error) {
               that.$toast("请求支付失败")
+              this.payBtnSubmitLoading = false;
             })
           }
         } else {
