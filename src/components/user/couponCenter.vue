@@ -381,11 +381,18 @@
             data: options,
           }).then((response) => {
             let result = response.data.data;
+            //{"code":40011,"msg":"优惠卷已抢完","data":{}}
+            that.$log("领取优惠券.......")
             that.$log(result)
-            that.$log(that.couponTypes[that.active].list[i])
-            that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
-            that.couponTypes[that.active].list[i].releaseNum++;
-            that.reload = true;
+            if(response.data.code == 200) {
+              that.$log(that.couponTypes[that.active].list[i])
+              that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
+              that.couponTypes[that.active].list[i].releaseNum++;
+              that.reload = true;
+            } else {
+              that.$toast(response.data.msg)
+              that.reload = true;
+            }
           }).catch(function (error) {
             that.$log(error)
           })
