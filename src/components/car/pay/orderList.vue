@@ -19,9 +19,6 @@
                 <div class="orderDetail">
                   <div>
                     <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
-                      <!--                   <van-icon slot="right-icon" name="delete" style="" @click="onDelBtnClick(k,i)"
-                                                   style="margin: 0.25em 0em 0.3em 0.3em "
-                                                   v-show="k.status==2||k.status==3"/>-->
                     </van-cell>
                   </div>
                   <ul @click="onListClick(k,i)">
@@ -314,7 +311,8 @@
         }
       },
       getMerchantName(merchantNo) {
-        if (merchantNo == 20) {
+        return "凤巢商城"
+/*        if (merchantNo == 20) {
           return "苏宁易购"
         } else if (merchantNo == 30) {
           return "唯品会"
@@ -324,7 +322,7 @@
           return "京东"
         } else {
           return "商城自营"
-        }
+        }*/
       },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;

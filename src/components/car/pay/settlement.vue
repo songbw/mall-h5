@@ -30,14 +30,12 @@
         </div>
         <div class="pay-list">
           <div class="pay-product">
-            <li v-for="item in arregationList" style="list-style: none">
+            <div v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
-                <van-cell :title=item.merchantName icon="shop"/>
-                <ul>
-                  <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f8f8f8;">
+                  <div v-for="(k,index) in item.goods" :key='index'>
                     <div class="promotionBox"
                          v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
-                      <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].tag}}</span>
+                      <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].name}}</span>
                       <v-countdown class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
                                    @end_callback="countDownE_cb(index,k)"
@@ -51,12 +49,14 @@
                         <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
                       </div>
                       <van-card
-                        :desc="locationCity"
                         :num="k.product.baseInfo.count"
                         :price="k.product.goodsInfo.dprice"
                         :title="k.product.goodsInfo.name"
                         :thumb="k.product.goodsInfo.image"
                         :origin-price="k.checkedPrice">
+                        <div slot="desc">
+                          <span style="font-size: small">{{locationCity}}</span>
+                        </div>
                       </van-card>
                     </div>
                     <div v-else>
@@ -69,18 +69,13 @@
                         :title="k.product.goodsInfo.name"
                         :thumb="k.product.goodsInfo.image">
                         <div slot="desc">
-                          <span class="prodDesc">{{locationCity}}</span>
+                          <span style="font-size: small">{{locationCity}}</span>
                         </div>
                       </van-card>
                     </div>
-                  </li>
-                </ul>
-                <div class="supplyerSummery">
-                <span
-                  style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
-                </div>
+                  </div>
               </div>
-            </li>
+            </div>
           </div>
           <div class="pay-footer"></div>
           <van-submit-bar
@@ -92,8 +87,8 @@
           />
         </div>
         <div class="pay-info">
-          <van-cell title="支付方式:" :value="payway">
-          </van-cell>
+<!--          <van-cell title="支付方式:" :value="payway">
+          </van-cell>-->
           <!--          <van-cell title="发票:" :value="invoiceDetail">
                       <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                                 @click="showInvoiceSelector()"/>
@@ -2505,7 +2500,7 @@
 
               .promotionBox {
                 display: flex;
-                margin: 15px 5px 5px 15px;
+                margin-left: 10px;
                 .fz(font-size, 25);
 
                 .promotionTitle {
