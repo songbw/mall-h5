@@ -330,12 +330,12 @@
         discount: 0,
         promotionId: -1,
         addressCode: {
-          "provinceName": "上海",
-          "provinceId": "20",
-          "cityName": "上海市",
-          "cityId": "021",
-          "countyName": "徐汇区",
-          "countyId": "03"
+          "provinceName": "江苏省",
+          "provinceId": "100",
+          "cityName": "无锡市",
+          "cityId": "510",
+          "countyName": "崇安区",
+          "countyId": "01"
         },
         hasInventory: false,
         pageloading: true,
@@ -378,6 +378,7 @@
         }
       },
       getAdressList() {
+        this.$log("########################")
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
@@ -401,7 +402,8 @@
         if (goods != null || goods != undefined) {
           let addressList = this.$store.state.appconf.addressList;
           let address = this.addressCode;
-          if (addressList == null || addressList == undefined) {
+          if (addressList == null || addressList == undefined || addressList.length == 0) {
+            this.$log("@@@@@@@@@@@@@@@@@@@@@@")
             let resp = await this.getAdressList()
             if (resp != null || resp != undefined) {
               addressList = resp.data.data.result.list
