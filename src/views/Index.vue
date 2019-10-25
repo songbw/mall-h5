@@ -179,11 +179,11 @@
             this.userTokenLoading = false;
           }
         }, 10000);
-/*        setTimeout(() => {
+        setTimeout(() => {
           this.test();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
-        }, 1000);*/
+        }, 1000);
       }
     },
     computed: {
@@ -262,8 +262,8 @@
         Vue.prototype.$jsbridge = dsBridge;
         this.initJsNativeCb();
         //let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
-       // let openId = "44391000fd194ab888b1aa81c03c3710"
-        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        let openId = "44391000fd194ab888b1aa81c03c3710"
+       // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总

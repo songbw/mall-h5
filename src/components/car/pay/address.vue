@@ -141,10 +141,6 @@
             let userInfo = this.$store.state.appconf.userInfo
             if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
-              if (!receiverInfo.tel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
-                this.$toast("请输入正确的电话号码")
-                return
-              }
               let options = {
                 "openId": user.userId,
                 "receiverName": receiverInfo.name,
@@ -301,6 +297,20 @@
       },
       onSave(recerverInfo) {
         //首先获取地址编码
+        if (!recerverInfo.tel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+          this.$toast("请输入正确的电话号码")
+          return
+        }
+        this.$log("receiverInfo.name.length:"+recerverInfo.name.length)
+        if(recerverInfo.name.length > 8) {
+          this.$toast("收件人姓名长度不要超过8个字")
+          return
+        }
+        this.$log("receiverInfo.addressDetail:"+recerverInfo.addressDetail)
+        if(recerverInfo.addressDetail.match("^[0-9]*$")) {
+          this.$toast("收件人地址不能全是数字")
+          return
+        }
         let options = {
           "country": recerverInfo.country,
           "province": recerverInfo.province,

@@ -438,6 +438,7 @@
             "brand": product.brand,
             "model": product.model,
             "price": product.price,
+            "state": product.state,
           }
           let couponList = product.coupon
           let promotionInfo = {
