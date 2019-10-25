@@ -585,7 +585,7 @@
 
               &__price {
                 margin-top: 0.5em;
-                .fz(font-size, 40);
+                .fz(font-size, 35);
               }
             }
           }
@@ -597,7 +597,7 @@
 
               &__price {
                 margin-top: 0.5em;
-                .fz(font-size, 40);
+                .fz(font-size, 35);
                 color: #515151;
               }
 

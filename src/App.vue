@@ -83,15 +83,23 @@
           this.title = title
         if(this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
           this.$api.IS_GAT_APP = true;
-        this.configured = true
+        if(this.$api.APP_ID == "11") {
+          this.getLoginAuthInfo();
+          setTimeout(() => {
+            this.configured = true
+          }, 1000);
+        } else {
+          this.configured = true
+        }
+
       }).catch((error)=>{console.log(error)});
     },
     created() {
-      if(! this.$api.IS_GAT_APP) {
+/*      if(! this.$api.IS_GAT_APP) {
         window.onload = () => {
           this.getLoginAuthInfo();
         }
-      }
+      }*/
     },
 
     methods: {
@@ -155,7 +163,6 @@
         })
       },
       async getLoginAuthInfo() {
-      //  this.$toast("getLoginAuthInfo Enter")
         try {
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode

@@ -79,7 +79,7 @@
         <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
           <img slot="icon" :src="icon_quickPayCard"/>
         </van-cell>
-        <van-cell title="上海银行钱包" is-link @click="onShangHaiBankBtnClick">
+        <van-cell title="银行钱包" is-link @click="onShangHaiBankBtnClick">
           <img slot="icon" :src="icon_bankCard"/>
         </van-cell>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
