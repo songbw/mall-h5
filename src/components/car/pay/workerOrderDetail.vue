@@ -170,7 +170,7 @@
                 ret += " 物流公司:" + jsonlogisticsInfo.com
                 this.expressCom = jsonlogisticsInfo.com
               if (jsonlogisticsInfo.order != undefined && jsonlogisticsInfo.order.length > 0)
-                ret += " 退货单号:" + jsonlogisticsInfo.order
+                ret += " 物流单号:" + jsonlogisticsInfo.order
                 this.expressNo = jsonlogisticsInfo.order
             }
             let jsonRefund = comments.refund

@@ -135,6 +135,29 @@
         </van-actionsheet>
       </div>
       <div class="inventoryBox">
+        <div style="display: flex" v-if="(freeShippingTemplate != null || shippingTemplate != null)">
+          <div style="width: 15%; font-size: medium;font-weight: bold;padding: 3px;">
+            <p style="color: black">运费:</p>
+          </div>
+          <div style="width: 90%;font-size: medium;padding: 3px;font-weight: bold;color: #8c8c8c">
+            <div v-if="freeShippingTemplate != null">
+              <div v-if="freeShippingTemplate.mode == 0">
+                <span>满{{freeShippingTemplate.regions[0].fullAmount}}元享包邮</span>
+              </div>
+              <div v-else>
+                <span>满{{freeShippingTemplate.regions[0].fullAmount}}件包邮</span>
+              </div>
+            </div>
+            <div v-if="shippingTemplate != null">
+              <div>
+                <span>购买数量低于{{shippingTemplate.regions[0].baseAmount}}件，运费为{{shippingTemplate.regions[0].basePrice}}元</span>
+              </div>
+              <div>
+                <span>超过最低购买数量后,每购买{{shippingTemplate.regions[0].cumulativeUnit}}件，运费增加:{{shippingTemplate.regions[0].cumulativePrice}}元</span>
+              </div>
+            </div>
+          </div>
+        </div>
         <div style="display: flex">
           <div style="width: 90%; font-size: medium;font-weight: bold;padding: 3px;">
             <p style="color: black">送至:
@@ -347,6 +370,8 @@
         seriviceIcon: require('@/assets/icons/ico_prod_service.jpg'),
         showServiceBox: false,
         bulletinInfo: null,
+        freeShippingTemplate: null,
+        shippingTemplate: null,
       }
     },
     methods: {
@@ -362,7 +387,7 @@
           },
         }).then((response) => {
           that.$log(response)
-          if(response.data.data.result != null) {
+          if (response.data.data.result != null) {
             that.bulletinInfo = response.data.data.result;
           }
         }).catch(function (error) {
@@ -398,6 +423,30 @@
         }
 
       },
+
+      updateFreightInfo(goods) {
+        this.$log("updateFreightInfo Enter")
+        let that = this
+        let options = {
+          "merchantId": goods.merchantId,
+          "provinceId": this.addressCode.provinceId,
+          "mpu": goods.mpu
+        }
+        that.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.FREIGHTS_URL,
+          url: '/ship/template',
+          data: options,
+        }).then((response) => {
+          let result = response.data.data.result;
+          that.$log(result)
+          this.freeShippingTemplate = result.freeShippingTemplate
+          this.shippingTemplate = result.shippingTemplate
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+
       async updateInventor(goods) {
         if (goods != null || goods != undefined) {
           let addressList = this.$store.state.appconf.addressList;
@@ -472,6 +521,7 @@
               }
             })
           }
+          this.updateFreightInfo(goods);
         }
         this.updatedInventor = true;
       },
@@ -1337,6 +1387,7 @@
       .bulletin {
         width: 100%;
         margin: 10px 0px;
+
         img {
           width: 100%;
           display: block;

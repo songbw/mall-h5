@@ -178,8 +178,8 @@
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
           }
-        }, 10000);
-/*        setTimeout(() => {
+        }, 10000);/*
+        setTimeout(() => {
           this.test();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
