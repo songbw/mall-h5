@@ -245,7 +245,7 @@
         let inventorySkusOfZy = [];
         list.forEach(item => {
           this.$log(item)
-          if(item.mpu.substr(0,2) === "20" || item.mpu.substr(0,2) === "10") {
+          if(item.merchantId == 2) {
             inventorySkus.push({"skuId": item.mpu, "remainNum": item.count})
           } else {
             inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})

@@ -299,7 +299,23 @@
         invoiceEnterpriseNumber: '',
         invoiceReceiverMobile: '',
         invoiceReceiverEmail: '',
-        merchantList: []
+        merchantList: [],
+        isAoyiDataLoaded: false,
+        isOtherDataLoaded: false,
+      }
+    },
+    watch: {
+      isAoyiDataLoaded(newValue, oldVal) {
+         this.$log("isAoyiDataLoaded: newVale:"+newValue)
+         if(newValue && this.isOtherDataLoaded) {
+           this.$store.commit('SET_PAGE_LOADING', false);
+         }
+      },
+      isOtherDataLoaded(newValue, oldVal) {
+        this.$log("isOtherDataLoaded: newVale:"+newValue)
+        if(newValue && this.isAoyiDataLoaded) {
+          this.$store.commit('SET_PAGE_LOADING', false);
+        }
       }
     },
 
@@ -388,7 +404,6 @@
         //已经选出选购商品所有对应的优惠券
         //判断优惠券是否满足条件
         let avaliableCouponList = []
-        this.$log("####################")
         this.$log(couponList)
         couponList.forEach(coupon => {
           if (this.isCouponActivied(coupon)) {
@@ -1513,9 +1528,11 @@
             })
           });
           this.upDatefreightPay();
+          that.isOtherDataLoaded = true;
         }).catch(function (error) {
           that.$log(error)
           that.$log("无法获取到运费")
+          that.isOtherDataLoaded = true;
         })
       },
       getAoyifreightPay() {
@@ -1551,14 +1568,14 @@
             })
           });
           this.upDatefreightPay();
-          this.$store.commit('SET_PAGE_LOADING', false);
+          this.isAoyiDataLoaded = true
           this.$log("page loading end");
           if (this.pageLoadTimerId != -1) {
             clearTimeout(this.pageLoadTimerId)
           }
         }).catch(function (error) {
           that.$log(error)
-          that.$store.commit('SET_PAGE_LOADING', false);
+          that.isAoyiDataLoaded = true
           that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
           that.$log("无法获取到运费")
           if (that.pageLoadTimerId != -1) {
@@ -1644,57 +1661,20 @@
                 }
               }
             })
-            //////////////////////查询价格//////////////////
-            /*           options = {
-                         "cityId": locationCode.cityId,
-                         "skus": skus,
-                       }
-                       this.$log("价格 options:" + JSON.stringify(options));
-                       let url = '/prod/price';
-                       if (this.$api.APP_ID === "10") {
-                         url = '/prod/priceGAT';
-                       }
-                       this.$api.xapi({
-                         method: 'post',
-                         baseURL: this.$api.PRODUCT_BASE_URL,
-                         url: url,
-                         data: options,
-                       }).then((response) => {
-                         let result = response.data.data.result;
-                         this.$log("价格 result is:" + JSON.stringify(result));
-                         result.forEach(item => {
-                           for (let i = 0; i < this.payCarList.length; i++) {
-                             // this.$log("价格:" + JSON.stringify(item) + ",i:" + i + ",this.payCarList[i].skuId:" + this.payCarList[i].product.skuId)
-                             if (item != null && this.payCarList[i].valid && this.payCarList[i].product.baseInfo.skuId == item.skuId
-                             ) {
-                               //this.$log("价格 change true");
-                               this.payCarList[i].checkedPrice = item.price
-                             }
-                           }
-                         })
-                         //开始聚合不同商家
-                         this.getfreightPay();
-                       }).catch(function (error) {
-                         that.$log(error)
-                         that.$store.commit('SET_PAGE_LOADING', false);
-                         that.$log("page loading end");
-                         if (that.pageLoadTimerId != -1) {
-                           clearTimeout(that.pageLoadTimerId)
-                         }
-                       })*/
             //获取运费
             this.getAoyifreightPay();//获取奥弋商品库存
           }).catch(function (error) {
             that.$log(error)
-            that.$store.commit('SET_PAGE_LOADING', false);
+            that.isAoyiDataLoaded = true;
             that.$log("page loading end");
             if (that.pageLoadTimerId != -1) {
               clearTimeout(that.pageLoadTimerId)
             }
           })
+        } else {
+          this.isAoyiDataLoaded = true;
         }
         if (skusOfZy.length > 0) {//other merchant
-          this.$log("settlement other merchant #################################")
           let options = {
             "inventories": inventorySkusOfZy
           }
@@ -1720,11 +1700,12 @@
           }).catch(function (error) {
           })
           this.getPlatformFreightPay();//获取平台商品库存
-          this.$store.commit('SET_PAGE_LOADING', false);
           this.$log("page loading end");
           if (this.pageLoadTimerId != -1) {
             clearTimeout(this.pageLoadTimerId)
           }
+        }else {
+          this.isOtherDataLoaded = true;
         }
       },
       editAddressOrList() {
