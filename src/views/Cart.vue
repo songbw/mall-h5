@@ -69,7 +69,7 @@
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image">
                         <div slot="footer">
-                          <van-stepper v-model="k.baseInfo.count" disabled  @change="onCountChange(k)"/>
+                          <van-stepper v-model="k.baseInfo.count" disabled @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -114,10 +114,10 @@
       cartList() {
         this.$store.state.appconf.cartList.forEach(item => {
           this.$log(item)
-          if(item.baseInfo.merchantId === 2) {
+          if (item.baseInfo.merchantId === 2) {
             item['valid'] = true;
-            for(let i = 0 ;i < this.inventoryListOfAoyi.length; i++) {
-              if(this.inventoryListOfAoyi[i].state == 0 && this.inventoryListOfAoyi[i].skuId === item.baseInfo.skuId) {
+            for (let i = 0; i < this.inventoryListOfAoyi.length; i++) {
+              if (this.inventoryListOfAoyi[i].state == 0 && this.inventoryListOfAoyi[i].skuId === item.baseInfo.skuId) {
                 item['valid'] = false;
                 item.baseInfo.choosed = false;
                 break;
@@ -125,8 +125,8 @@
             }
           } else {
             item['valid'] = true;
-            for(let i = 0 ;i < this.inventoryListOfZy.length; i++) {
-              if(this.inventoryListOfZy[i].state == 0 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
+            for (let i = 0; i < this.inventoryListOfZy.length; i++) {
+              if (this.inventoryListOfZy[i].state == 0 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
                 item['valid'] = false;
                 item.baseInfo.choosed = false;
                 break;
@@ -153,7 +153,14 @@
         launchedLoading: false,
         showHeader: true,
         dataLoaded: false,
-        addressCode: {"provinceName":"上海","provinceId": "20","cityName": "上海市","cityId": "021", "countyName":"徐汇区","countyId": "03"}
+        addressCode: {
+          "provinceName": "上海",
+          "provinceId": "20",
+          "cityName": "上海市",
+          "cityId": "021",
+          "countyName": "徐汇区",
+          "countyId": "03"
+        }
       }
     },
 
@@ -168,7 +175,7 @@
     },
 
     methods: {
-      updateAoyiInventory(skus){
+      updateAoyiInventory(skus) {
         this.$log(this.addressCode)
         let options = {
           "cityId": this.addressCode.cityId,
@@ -239,26 +246,26 @@
         } catch (e) {
         }
         this.addressCode = address
-   //     this.$log(this.addressCode)
+        //     this.$log(this.addressCode)
 
         let inventorySkus = [];
         let inventorySkusOfZy = [];
         list.forEach(item => {
           this.$log(item)
-          if(item.merchantId == 2) {
+          if (item.merchantId == 2) {
             inventorySkus.push({"skuId": item.mpu, "remainNum": item.count})
           } else {
             inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})
           }
         })
 
-        if(inventorySkus.length > 0) {
+        if (inventorySkus.length > 0) {
           let resp = await this.updateAoyiInventory(inventorySkus)
           this.inventoryListOfAoyi = resp.data.data.result
-         // this.$log(this.inventoryListOfAoyi)
+          // this.$log(this.inventoryListOfAoyi)
         }
-        if(inventorySkusOfZy.length > 0) {
-          let resp = await  this.updateOtherInventory(inventorySkusOfZy)
+        if (inventorySkusOfZy.length > 0) {
+          let resp = await this.updateOtherInventory(inventorySkusOfZy)
           this.inventoryListOfZy = resp.data.data.result
           this.$log(this.inventoryListOfZy)
         }
@@ -285,7 +292,6 @@
         }
 
       },
-
 
 
       getDateTime(time) {
@@ -361,17 +367,20 @@
           }).then(async (response) => {
             this.result = response.data.data.result;
             this.total = this.result.total;
-            this.$log("load from network car list is:" + JSON.stringify(this.result.list));
-            if (this.result.list === undefined || this.result.list.length === 0) {
-              // this.$store.commit('SET_SELECTED_CARLIST', []);
+            this.$log("load from network car list object is:");
+            this.$log(this.result.object)
+            if (this.result.object.cart === undefined || this.result.object.cart.length === 0) {
               this.loading = false;
               this.finished = true;
               this.dataLoaded = true;
             } else {
-              let res = await this.updateInventorList(this.result.list)
-              this.result.list.forEach(item => {
+              let cartList = this.result.object.cart
+              let couponsAndProms = this.result.object.couponProm
+              //let couponList = this.result.object.
+              let res = await this.updateInventorList(cartList)
+              this.result.object.cart.forEach(item => {
                 this.list.push(item);
-                this.getSkuInfoBy(item, userInfo);
+                this.upDateSkuInfo(item, couponsAndProms, userInfo)
               })
             }
             this.loading = false;
@@ -465,6 +474,80 @@
         }
         Util.updateCartItem(this, cartItem)
         return cartItem;
+      },
+
+      upDateSkuInfo(item, couponAndProms, user) {
+        this.$log(item)
+        let cartItem = Util.getCartItem(this, user.userId, item.mpu)
+        this.$log(cartItem)
+        if (cartItem == null) {
+          let baseInfo = {
+            "userId": user.userId,
+            "skuId": item.skuid,
+            "mpu": item.mpu,
+            "merchantId": item.merchantId,
+            "count": item.count,
+            "choosed": false,
+            "cartId": item.id
+          }
+          let goodsInfo = {
+            "id": item.id,
+            "skuId": item.skuid,
+            "mpu": item.mpu,
+            "merchantId": item.merchantId,
+            "image": item.image,
+            "category": item.category,
+            "name": item.name,
+            "brand": item.brand,
+            "model": item.model,
+            "price": item.price,
+            "state": item.state,
+          }
+          let couponList = []
+          let promotion = []
+          if (couponAndProms != null) {
+            for (let i = 0; i < couponAndProms.length; i++) {
+              if (couponAndProms[i].mpu == item.mpu) {
+                couponList = couponAndProms[i].coupons
+                promotion = couponAndProms[i].promotions
+                break;
+              }
+            }
+          }
+          let promotionInfo = {
+            "promotion": promotion,
+            "promotionState": Util.getPromotionState({promotion: promotion})
+          }
+          cartItem = {
+            "baseInfo": baseInfo,
+            "goodsInfo": goodsInfo,
+            "couponList": couponList,
+            "promotionInfo": promotionInfo,
+          }
+        } else {
+          cartItem.baseInfo.count = item.count
+          cartItem.baseInfo.cartId = item.id
+          cartItem.baseInfo.merchantId = item.merchantId
+          cartItem.goodsInfo.merchantId = item.merchantId
+          let couponList = []
+          let promotion = []
+          if (couponAndProms != null) {
+            for (let i = 0; i < couponAndProms.length; i++) {
+              if (couponAndProms[i].mpu == item.mpu) {
+                couponList = couponAndProms[i].coupons
+                promotion = couponAndProms[i].promotions
+                break;
+              }
+            }
+          }
+          let promotionInfo = {
+            "promotion": promotion,
+            "promotionState": Util.getPromotionState({promotion: promotion})
+          }
+          cartItem.couponList = couponList
+          cartItem.promotionInfo = promotionInfo
+        }
+        Util.updateCartItem(this, cartItem)
       },
 
       getSkuInfoBy(item, user) {
