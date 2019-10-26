@@ -66,6 +66,7 @@
     data() {
       return {
         pageNo: 1,
+        pageSize: 30,
         total: -1,
         result: {},
         list: [],
@@ -143,7 +144,8 @@
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
               "category": category,
-              "pageNo": this.pageNo++
+              "pageNo": this.pageNo++,
+              "pageSize": this.pageSize
             }
             if(this.active === 1) {
               if(this.tagPrice === 0) { //升序
@@ -181,7 +183,8 @@
         } else if (search != undefined && search.length > 0) {
           let options = {
             "keyword": search,
-            "pageNo": this.pageNo++
+            "pageNo": this.pageNo++,
+            "pageSize": this.pageSize
           }
           if(this.active === 1) {
             if(this.tagPrice === 0) { //升序

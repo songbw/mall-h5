@@ -328,6 +328,7 @@
 
       onCountChange(k) {
         Util.updateCartItem(this, k);
+        this.$log(k)
         let options = {
           "id": k.baseInfo.cartId,
           "count": k.baseInfo.count

@@ -32,48 +32,48 @@
           <div class="pay-product">
             <div v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
-                  <div v-for="(k,index) in item.goods" :key='index'>
-                    <div class="promotionBox"
-                         v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
-                      <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].name}}</span>
-                      <v-countdown class="promotionCountDown"
-                                   @start_callback="countDownS_cb(index,k)"
-                                   @end_callback="countDownE_cb(index,k)"
-                                   :startTime="getDateTime(k.product.promotionInfo.promotion[0].startDate)"
-                                   :endTime="getDateTime(k.product.promotionInfo.promotion[0].endDate)"
-                                   :secondsTxt="''">
-                      </v-countdown>
-                    </div>
-                    <div v-if="k.product.promotionInfo.promotionState === 1">
-                      <div v-if="!k.valid">
-                        <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
-                      </div>
-                      <van-card
-                        :num="k.product.baseInfo.count"
-                        :price="k.product.goodsInfo.dprice"
-                        :title="k.product.goodsInfo.name"
-                        :thumb="k.product.goodsInfo.image"
-                        :origin-price="k.checkedPrice">
-                        <div slot="desc">
-                          <span style="font-size: small">{{locationCity}}</span>
-                        </div>
-                      </van-card>
-                    </div>
-                    <div v-else>
-                      <div v-if="!k.valid">
-                        <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
-                      </div>
-                      <van-card
-                        :num="k.product.baseInfo.count"
-                        :price="k.product.goodsInfo.dprice"
-                        :title="k.product.goodsInfo.name"
-                        :thumb="k.product.goodsInfo.image">
-                        <div slot="desc">
-                          <span style="font-size: small">{{locationCity}}</span>
-                        </div>
-                      </van-card>
-                    </div>
+                <div v-for="(k,index) in item.goods" :key='index'>
+                  <div class="promotionBox"
+                       v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
+                    <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].name}}</span>
+                    <v-countdown class="promotionCountDown"
+                                 @start_callback="countDownS_cb(index,k)"
+                                 @end_callback="countDownE_cb(index,k)"
+                                 :startTime="getDateTime(k.product.promotionInfo.promotion[0].startDate)"
+                                 :endTime="getDateTime(k.product.promotionInfo.promotion[0].endDate)"
+                                 :secondsTxt="''">
+                    </v-countdown>
                   </div>
+                  <div v-if="k.product.promotionInfo.promotionState === 1">
+                    <div v-if="!k.valid">
+                      <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                    </div>
+                    <van-card
+                      :num="k.product.baseInfo.count"
+                      :price="k.product.goodsInfo.dprice"
+                      :title="k.product.goodsInfo.name"
+                      :thumb="k.product.goodsInfo.image"
+                      :origin-price="k.checkedPrice">
+                      <div slot="desc">
+                        <span style="font-size: small">{{locationCity}}</span>
+                      </div>
+                    </van-card>
+                  </div>
+                  <div v-else>
+                    <div v-if="!k.valid">
+                      <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                    </div>
+                    <van-card
+                      :num="k.product.baseInfo.count"
+                      :price="k.product.goodsInfo.dprice"
+                      :title="k.product.goodsInfo.name"
+                      :thumb="k.product.goodsInfo.image">
+                      <div slot="desc">
+                        <span style="font-size: small">{{locationCity}}</span>
+                      </div>
+                    </van-card>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -87,8 +87,8 @@
           />
         </div>
         <div class="pay-info">
-<!--          <van-cell title="支付方式:" :value="payway">
-          </van-cell>-->
+          <!--          <van-cell title="支付方式:" :value="payway">
+                    </van-cell>-->
           <!--          <van-cell title="发票:" :value="invoiceDetail">
                       <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                                 @click="showInvoiceSelector()"/>
@@ -306,14 +306,14 @@
     },
     watch: {
       isAoyiDataLoaded(newValue, oldVal) {
-         this.$log("isAoyiDataLoaded: newVale:"+newValue)
-         if(newValue && this.isOtherDataLoaded) {
-           this.$store.commit('SET_PAGE_LOADING', false);
-         }
+        this.$log("isAoyiDataLoaded: newVale:" + newValue)
+        if (newValue && this.isOtherDataLoaded) {
+          this.$store.commit('SET_PAGE_LOADING', false);
+        }
       },
       isOtherDataLoaded(newValue, oldVal) {
-        this.$log("isOtherDataLoaded: newVale:"+newValue)
-        if(newValue && this.isAoyiDataLoaded) {
+        this.$log("isOtherDataLoaded: newVale:" + newValue)
+        if (newValue && this.isAoyiDataLoaded) {
           this.$store.commit('SET_PAGE_LOADING', false);
         }
       }
@@ -394,8 +394,7 @@
                   }
                 }
               }
-            }
-            else if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 2){
+            } else if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 2) {
               couponList.push(item)
             }
           }
@@ -424,8 +423,8 @@
               } else {
                 allPayList.forEach(payItem => {
                   if (payItem.valid) {
-                    if(coupon.couponInfo.rules.scenario.type === 2) {
-                         fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                    if (coupon.couponInfo.rules.scenario.type === 2) {
+                      fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                     } else {
                       for (let i = 0; i < payItem.product.couponList.length; i++) {
                         if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
@@ -437,7 +436,7 @@
                   }
                 })
               }
-              this.$log("fullPrice:"+fullPrice)
+              this.$log("fullPrice:" + fullPrice)
               switch (coupon.couponInfo.rules.couponRules.type) {
                 case 0:
                   if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice) {
@@ -542,7 +541,7 @@
 
       allpay() {
         let all = 0;
-        all = this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100
+        all = parseInt((this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100).toFixed(0))
         if (all < 0)
           all = 0
         return all;
@@ -649,7 +648,7 @@
         this.freightPay = 0;
         try {
           this.arregationList.forEach(item => {
-            if(item.freight > 0) {
+            if (item.freight > 0) {
               this.freightPay += item.freight;
             }
 
@@ -813,7 +812,7 @@
                 "couponDiscountOfMerchant": couponDiscountOfMerchant
               })
 
-              totalCouponDiscount =  parseFloat((totalCouponDiscount + couponDiscountOfMerchant).toFixed(2))
+              totalCouponDiscount = parseFloat((totalCouponDiscount + couponDiscountOfMerchant).toFixed(2))
             }
           })
           this.$log(this.reducedPriceOfCoupon)
@@ -830,7 +829,7 @@
                 }
               }
               let diff = parseFloat((this.reducedPriceOfCoupon - totalCouponDiscount).toFixed(2))
-               //把多余的优惠差价给最大的优惠价格拥有的商户
+              //把多余的优惠差价给最大的优惠价格拥有的商户
               merchants[maxMerchants].couponDiscountOfMerchant = parseFloat((merchants[maxMerchants].couponDiscountOfMerchant + diff).toFixed(2))
               //找到maxMerchants这个商户的有最大优惠券价值的SKU，把多余的券值赋给这个SKU
               let maxMpu = 0;
@@ -874,7 +873,7 @@
                 }
               }
             })
-          } else if (coupon.couponInfo.rules.scenario.type === 2){
+          } else if (coupon.couponInfo.rules.scenario.type === 2) {
             allPayList.forEach(payItem => {
               if (payItem.valid) {
                 fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
@@ -1704,7 +1703,7 @@
           if (this.pageLoadTimerId != -1) {
             clearTimeout(this.pageLoadTimerId)
           }
-        }else {
+        } else {
           this.isOtherDataLoaded = true;
         }
       },

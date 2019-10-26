@@ -692,7 +692,7 @@
             }
             if (this.newCardRadio == '2') {
               if (this.mExpiredDate.length == 0 ||
-                !this.mExpiredDate.match("0\\d{3}|1[12]\\d{2}")) {
+                !this.mExpiredDate.match("0\\d{3}|1[012]\\d{2}")) {
                 this.$toast("请输入正确的有效日期")
                 done(false) //不关闭弹框
                 return

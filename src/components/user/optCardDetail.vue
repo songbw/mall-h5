@@ -128,14 +128,18 @@
             this.$log("获取到全部数据")
             if(ret.creditCardConsumptionDetail != null ) {
               ret.creditCardConsumptionDetail.forEach(item =>{
+                this.$log("############")
+                this.$log(item)
                 this.creditList.push(item)
               })
             }
+            this.creditList.sort(function(a,b){return b.ordertime > a.ordertime ? 1 : -1 })
             if(ret.debitCardConsumptionDetail != null ) {
               ret.debitCardConsumptionDetail.forEach(item =>{
                 this.debitList.push(item)
               })
             }
+            this.debitList.sort(function(a,b){return b.ordertime > a.ordertime ? 1 : -1 })
           }
           that.launchedLoaded = true
         }).catch(function (error) {
