@@ -81,6 +81,7 @@
         icon_empty_search: require('@/assets/icons/ico_empty_search.png'),
         active: 0,
         tagPrice: 0, //0 升序 1 降序
+        isLoadingByNewOrder: false,
       }
     },
 
@@ -102,6 +103,7 @@
 
     methods: {
       resetList() {
+        this.isLoadingByNewOrder = true
         this.list = [];
         this.pageNo = 1;
         this.total = -1;
@@ -112,34 +114,136 @@
         if (this.active === 1) {
           this.active = 0;
           this.resetList();
-          this.onLoad();
+          this.onLoadByOrder();
         }
       },
       onPriceBtnClick() {
         if (this.active === 0) {
           this.active = 1;
           this.resetList();
-          this.onLoad();
+          this.onLoadByOrder();
         } else {
           if (this.tagPrice === 0) {
             this.tagPrice = 1
             this.resetList();
-            this.onLoad();
+            this.onLoadByOrder();
           } else {
             this.tagPrice = 0
             this.resetList();
-            this.onLoad();
+            this.onLoadByOrder();
           }
         }
       },
       gotoCart() {
         this.$router.push({name: '购物车页'})
       },
+      onLoadByOrder() {
+        let category = this.$route.query.category;
+        let search = this.$route.query.search;
+        let that = this
+        this.launchedLoading = true
+        if (category != null && category.length > 0) {
+          if (this.total == -1 || this.total > this.list.length) {
+              let options = {
+                "category": category,
+                "pageNo": this.pageNo++,
+                "pageSize": this.pageSize
+              }
+            if(this.active === 1) {
+              if(this.tagPrice === 0) { //升序
+                options['priceOrder'] = "ASC"
+              } else { //降序
+                options['priceOrder'] = "DESC"
+              }
+            }
+            this.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.PRODUCT_BASE_URL,
+              url: '/prod/all',
+              data: options,
+            }).then((response) => {
+              this.result = response.data.data.result;
+              this.$log(this.result)
+              this.total = this.result.total;
+              if (this.result.list.length == 0) {
+                this.loading = false;
+                this.isLoadingByNewOrder = false
+                this.finished = true;
+                this.list = []
+              } else {
+                this.list = []
+                this.result.list.forEach(item => {
+                  this.list.push(item);
+                })
+                this.loading = false;
+                this.isLoadingByNewOrder = false
+                if (this.list.length >= this.total)
+                  this.finished = true;
+              }
+            }).catch(function (error) {
+              console.log(error)
+              that.loading = false;
+              this.isLoadingByNewOrder = false
+              that.finished = true;
+              this.list = []
+            })
+          }
+        } else if (search != undefined && search.length > 0) {
+          let options = {
+            "keyword": search,
+            "pageNo": this.pageNo++,
+            "pageSize": this.pageSize
+          }
+          if(this.active === 1) {
+            if(this.tagPrice === 0) { //升序
+              options['priceOrder'] = "ASC"
+            } else { //降序
+              options['priceOrder'] = "DESC"
+            }
+          }
+          this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.ES_BASE_URL,
+            url: '/es/prod',
+            data: options,
+          }).then((response) => {
+            this.result = response.data.data.result;
+            this.total = this.result.total;
+            if (this.result.list == undefined || this.result.list.length == 0) {
+              this.loading = false;
+              this.isLoadingByNewOrder = false
+              this.finished = true;
+              this.list = []
+            } else {
+              this.list = []
+              this.result.list.forEach(item => {
+                this.list.push(item);
+              })
+              this.loading = false;
+              this.isLoadingByNewOrder = false
+              if (this.list.length >= this.total)
+                this.finished = true;
+            }
+          }).catch(function (error) {
+            console.log(error)
+            that.loading = false;
+            this.isLoadingByNewOrder = false
+            that.finished = true;
+          })
+        } else {
+          //error
+          this.loading = false;
+          this.isLoadingByNewOrder = false
+          this.finished = true;
+        }
+      },
       onLoad() {
         let category = this.$route.query.category;
         let search = this.$route.query.search;
         let that = this
         this.launchedLoading = true
+        if(this.isLoadingByNewOrder)
+          return
         if (category != null && category.length > 0) {
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
