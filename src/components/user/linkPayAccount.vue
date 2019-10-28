@@ -13,7 +13,7 @@
         required
         clearable
         label="卡号"
-        maxlength="30"
+        maxlength="15"
         label-width="40px"
         placeholder="请输入卡号"
       />
@@ -81,8 +81,8 @@
           this.$toast("请输入卡号")
           return
         }
-        if(this.linkPayPwd.length == 0) {
-          this.$toast("请输入密码")
+        if(this.linkPayPwd.length == 0 || !this.linkPayPwd.match("^[0-9]*$")) {
+          this.$toast("请输入正确的密码")
           return
         }
         let options = {
