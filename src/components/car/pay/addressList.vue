@@ -34,10 +34,15 @@
         this.$log("addresslist Enter")
         let list = []
         let id = this.$store.state.appconf.usedAddressId;
+        if(id == undefined) {
+          id = -1
+        }
+        this.$log(this.$store.state.appconf.usedAddressId)
         this.chosenAddressId = -1;
         try {
-          if (id != undefined || id != -1) {
+          if (id != -1) {
             this.$store.state.appconf.addressList.forEach(item => {
+              this.$log(item)
               if (item.id != id) {
                 list.push({
                   id: item.id,
@@ -63,7 +68,8 @@
             })
           } else {
             this.$store.state.appconf.addressList.forEach(item => {
-              if (item.state != 1) {
+              this.$log(item)
+              if (item.status != 1) {
                 list.push({
                   id: item.id,
                   name: item.receiverName,

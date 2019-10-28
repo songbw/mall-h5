@@ -73,7 +73,7 @@
         <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
           <img slot="icon" :src="icon_optCard"/>
         </van-cell>
-        <van-cell title="市名卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
+        <van-cell title="市民卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
           <img slot="icon" :src="icon_linkPayCard"/>
         </van-cell>
         <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">

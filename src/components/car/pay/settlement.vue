@@ -1076,20 +1076,24 @@
         this.$log("updateUsedAddress Enter!")
         let address = {};
         let list = this.$store.state.appconf.addressList;
-        //this.$log("list:" + JSON.stringify(list))
         let id = this.$store.state.appconf.usedAddressId;
-        //this.$log("updateUsedAddress id:" + id)
+        if(id == undefined) {
+          id = -1
+        }
         try {
-          if (id == undefined || id == -1) {
+          this.$log("@@@@@@@@@@@@@@@@@@@@@@@")
+          this.$log(id)
+          if (id == -1) {
             if (this.addressCount > 0) {
               for (let i = 0; i < list.length; i++) {
-                if (list[i].state == 1) {
-                  id = i;
+                this.$log(list[i])
+                if (list[i].status == 1) {
+                  id = list[i].id;
                   address = list[i]
                   break;
                 }
               }
-              if (id == undefined || id == -1) {
+              if (id == -1) {
                 id = list[0].id;
                 address = list[0]
               }
