@@ -43,7 +43,7 @@
                     <div class="promotionBox"
                          v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
                       <span class="promotionTitle">{{k.promotionInfo.promotion[0].tag}}</span>
-                      <v-countdown class="promotionCountDown"
+                      <v-countdown :key="k" class="promotionCountDown"
                                    @start_callback="countDownS_cb(index,k)"
                                    @end_callback="countDownE_cb(index,k)"
                                    :startTime="getDateTime(k.promotionInfo.promotion[0].startDate)"
