@@ -462,17 +462,20 @@
             }
           }
           let id = this.$store.state.appconf.usedAddressId;
+          if(id == undefined) {
+            id = -1
+          }
           try {
             if (id == undefined || id == -1) {
               if (addressList != undefined && addressList.length > 0) {
                 for (let i = 0; i < addressList.length; i++) {
                   if (addressList[i].state == 1) {
-                    id = i;
+                    id = addressList[i].id;
                     address = addressList[i]
                     break;
                   }
                 }
-                if (id == undefined || id == -1) {
+                if ( id == -1) {
                   id = addressList[0].id;
                   address = addressList[0]
                 }
