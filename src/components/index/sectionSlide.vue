@@ -11,13 +11,13 @@
           </div>
           <div v-if="datas.settings.title.hasPromotionActivity && promotionStatus != -1">
             <div v-if="isDailySchedule" style="font-size: x-small">
-              <span style="color:white">{{dailyScheduleText}}</span>
-              <span style="color:white"> {{dailyScheduleDetail}}</span>
-              <span style="color:#ff4444;background-color: white;padding: 2px">{{msTime.hour}}</span>
-              <span style="color: white">:</span>
-              <span style="color:#ff4444;background-color: white;padding: 2px">{{msTime.minutes}}</span>
-              <span style="color: white">:</span>
-              <span style="color:#ff4444;background-color: white;padding: 2px">{{msTime.seconds}}</span>
+              <span style="color:black">{{dailyScheduleText}}</span>
+              <span style="color:black"> {{dailyScheduleDetail}}</span>
+              <span style="color:white;background-color: black;padding: 2px">{{msTime.hour}}</span>
+              <span style="color: black">:</span>
+              <span style="color:white;background-color: black;padding: 2px">{{msTime.minutes}}</span>
+              <span style="color: black">:</span>
+              <span style="color:white;background-color: black;padding: 2px">{{msTime.seconds}}</span>
             </div>
             <div v-else>
               <v-countdown v-if="promotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"

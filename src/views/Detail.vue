@@ -454,8 +454,9 @@
         if (goods != null || goods != undefined) {
           let addressList = this.$store.state.appconf.addressList;
           let address = this.addressCode;
+          this.$log(addressList)
+          this.$log(address)
           if (addressList == null || addressList == undefined || addressList.length == 0) {
-            this.$log("@@@@@@@@@@@@@@@@@@@@@@")
             let resp = await this.getAdressList()
             if (resp != null || resp != undefined) {
               addressList = resp.data.data.result.list
@@ -466,10 +467,10 @@
             id = -1
           }
           try {
-            if (id == undefined || id == -1) {
+            if (id == -1) {
               if (addressList != undefined && addressList.length > 0) {
                 for (let i = 0; i < addressList.length; i++) {
-                  if (addressList[i].state == 1) {
+                  if (addressList[i].status == 1) {
                     id = addressList[i].id;
                     address = addressList[i]
                     break;
@@ -498,7 +499,6 @@
           } catch (e) {
           }
           this.addressCode = address
-          //     this.$log(this.addressCode)
 
           let inventorySkus = [];
           let inventorySkusOfZy = [];
