@@ -245,7 +245,7 @@
           {
             title: "历史订单",
             key: 5,
-            img: require('@/assets/icons/ico_order_cancel.png')
+            img: require('@/assets/icons/ico_history_order.png')
           }
         ],
         couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),
@@ -359,7 +359,11 @@
           this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
           this.$router.push({name: '订单列表页'})
         } else {
-          this.$router.push({name: '售后工单页'})
+          if(type == 4) {
+            this.$router.push({name: '售后工单页'})
+          } else {
+
+          }
         }
 
       },
