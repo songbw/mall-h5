@@ -28,7 +28,7 @@
                     <p style="float: right;color: #ff4444">
                       <span v-if="k.type==0">-</span>
                       <span v-else>+</span>
-                      <span>{{(k.saleAmount/100).toFixed(2)}}</span>
+                      <span>{{(k.saleAmount/100).toFixed(2)}}元</span>
                     </p>
 
                   </div>
