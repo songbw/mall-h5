@@ -126,6 +126,7 @@
               <span class="tip">温馨提示:联机账户支付不能低于1角</span>
               <van-field
                 v-model="linkPayAccount"
+                type="number"
                 required
                 clearable
                 label="卡号"

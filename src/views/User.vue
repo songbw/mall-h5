@@ -241,6 +241,11 @@
             title: "售后/退货",
             key: 4,
             img: require('@/assets/icons/ico_order_cancel.png')
+          },
+          {
+            title: "历史订单",
+            key: 5,
+            img: require('@/assets/icons/ico_order_cancel.png')
           }
         ],
         couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),

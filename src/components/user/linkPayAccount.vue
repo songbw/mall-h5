@@ -10,6 +10,7 @@
 
       <van-field
         v-model="linkPayAccount"
+        type='number'
         required
         clearable
         label="卡号"

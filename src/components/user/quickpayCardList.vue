@@ -303,7 +303,7 @@
               return
             }
             if (this.newCustomName.length == 0 || !this.newCustomName.match("^[\u4e00-\u9fa5_a-zA-Z0-9]+$")) {
-              this.$toast("请输入真实姓名")
+              this.$toast("请输入正确的姓名")
               done(false) //不关闭弹框
               return
             }
