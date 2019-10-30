@@ -136,7 +136,7 @@
       </div>
       <div class="inventoryBox">
         <div style="display: flex" v-if="(freeShippingTemplate != null || shippingTemplate != null)">
-          <div style="width: 40px; font-size: medium;font-weight: bold;padding: 3px;">
+          <div style="width: 5.2em; font-size: medium;font-weight: bold;padding: 3px;">
             <p style="color: black">运费:</p>
           </div>
           <div style="font-size: medium;padding: 3px;font-weight: bold;color: #8c8c8c">

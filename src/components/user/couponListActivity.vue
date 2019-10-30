@@ -55,8 +55,6 @@
                       </div>
                       <div class="goodsBuyBox">
                           <van-button size="mini" @click.stop="" @click="onBuyBtnClick(k)"></van-button>
-<!--                        <van-button type="primary" size="small" @click.stop="" @click="onBuyBtnClick(k)">加入购物车
-                        </van-button>-->
                       </div>
                     </div>
                   </van-col>
@@ -137,7 +135,9 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
+          this.$log("##########################")
           cartList.forEach(item => {
+            this.$log(item)
             if (item.baseInfo.userId == user.userId) {
               let found = -1
               for (let i = 0; i < item.couponList.length; i++) {
@@ -147,14 +147,14 @@
                 }
               }
               if (found != -1) {
+                this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
                 if (item.baseInfo.choosed)
                   payAmount += item.goodsInfo.dprice * item.baseInfo.count
               }
             }
           })
         }
-        this
-          .$store.commit('SET_CART_LIST', cartList);
+        this.$store.commit('SET_CART_LIST', cartList);
         return payAmount.toFixed(2);
       },
 
@@ -239,32 +239,29 @@
       add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
-        //let skuId = goods.skuid;
         let mpu = goods.mpu;
-        if(mpu == null)
-        {
-          mpu = goods.skuid;
-        }
+        let that = this
         let addtoCar = {
           "openId": userId,
           "mpu": mpu
         }
         this.$api.xapi({
           method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
           url: '/cart',
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
-          //this.$log("xxxxxxxxxxxxxxxxxxx")
-          //this.$log(this.result)
+          this.$log("xxxxxxxxxxxxxxxxxxx")
+          this.$log(this.result)
           this.$toast("添加到购物车成功！")
           let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
           if (cartItem == null) {
             let baseInfo = {
               "userId": user.userId,
               "skuId": goods.skuid,
-              "merchantId": goods.merchantId,
               "mpu": goods.mpu,
+              "merchantId": goods.merchantId,
               "count": 1,
               "choosed": true,
               "cartId": this.result,
@@ -280,25 +277,22 @@
               "brand": goods.brand,
               "model": goods.model,
               "price": goods.price,
+              "checkedPrice": goods.price
             }
-            let couponList = [this.coupon.couponInfo]
-            let promotionInfo = {
-              "promotion": goods.promotion,
-              "promotionState": Util.getPromotionState(goods)
-            }
+            let couponList = []
+            let promotionInfo = {}
             cartItem = {
               "baseInfo": baseInfo,
               "goodsInfo": goodsInfo,
               "couponList": couponList,
               "promotionInfo": promotionInfo,
             }
+            cartItem.couponList.push(this.coupon.couponInfo)
           } else {
             cartItem.baseInfo.count++;
-            cartItem.baseInfo.choosed = true;
             let found = -1;
             for (let i = 0; i < cartItem.couponList.length; i++) {
-              if (cartItem.couponList[i].coupon != undefined && cartItem.couponList[i].coupon.couponInfo != undefined &&
-                cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
+              if (cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
                 found = i;
                 break;
               }
