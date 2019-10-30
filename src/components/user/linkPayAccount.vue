@@ -77,7 +77,7 @@
       },
       queryLinkPay() {
         this.$log("queryLinkPay Enter")
-        if(this.isLinkPwdVisable.length == 0) {
+        if(this.linkPayAccount.length == 0) {
           this.$toast("请输入卡号")
           return
         }

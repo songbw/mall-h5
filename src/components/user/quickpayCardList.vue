@@ -297,12 +297,12 @@
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
             let customUser = JSON.parse(userInfo)
-            if (this.newCardNumber.length == 0) {
+            if (this.newCardNumber.length < 16 || this.newCardNumber.length > 19) {
               this.$toast("请输入正确的卡号")
               done(false) //不关闭弹框
               return
             }
-            if (this.newCustomName.length == 0) {
+            if (this.newCustomName.length == 0 || !this.newCustomName.match("^[\u4e00-\u9fa5_a-zA-Z0-9]+$")) {
               this.$toast("请输入真实姓名")
               done(false) //不关闭弹框
               return

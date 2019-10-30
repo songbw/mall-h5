@@ -306,9 +306,17 @@
           this.$toast("收件人姓名长度不要超过8个字")
           return
         }
+        if( !recerverInfo.name.match("^[\u4e00-\u9fa5_a-zA-Z0-9]+$")) {
+          this.$toast("请输入正确的姓名")
+          return
+        }
         this.$log("receiverInfo.addressDetail:"+recerverInfo.addressDetail)
         if(recerverInfo.addressDetail.match("^[0-9]*$")) {
           this.$toast("收件人地址不能全是数字")
+          return
+        }
+        if(recerverInfo.addressDetail.length > 100) {
+          this.$toast("收件人详细地址不能超过100字")
           return
         }
         let options = {

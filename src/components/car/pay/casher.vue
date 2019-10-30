@@ -973,8 +973,8 @@
           this.$toast("请输入卡号")
           return
         }
-        if (this.linkPayPwd.length == 0) {
-          this.$toast("请输入卡密码")
+        if (this.linkPayPwd.length == 0 && !this.linkPayPwd.match("^[0-9]*$")) {
+          this.$toast("请输入正确的卡密码")
           return
         }
         let options = {
