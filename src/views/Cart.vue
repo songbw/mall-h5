@@ -206,7 +206,8 @@
         this.$log("updateInventorList Enter")
         let addressList = this.$store.state.appconf.addressList;
         let address = this.addressCode;
-        if (addressList == null || addressList == undefined) {
+        this.$log(this.$store.state.appconf.addressList)
+        if (addressList == null || addressList == undefined || addressList.length == 0 ) {
           let resp = await this.getAdressList()
           if (resp != null || resp != undefined) {
             addressList = resp.data.data.result.list
@@ -250,7 +251,7 @@
         } catch (e) {
         }
         this.addressCode = address
-        //     this.$log(this.addressCode)
+        this.$log(this.addressCode)
 
         let inventorySkus = [];
         let inventorySkusOfZy = [];
