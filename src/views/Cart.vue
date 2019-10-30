@@ -154,12 +154,12 @@
         showHeader: true,
         dataLoaded: false,
         addressCode: {
-          "provinceName": "上海",
-          "provinceId": "20",
-          "cityName": "上海市",
-          "cityId": "021",
-          "countyName": "徐汇区",
-          "countyId": "03"
+          "provinceName": "江苏省",
+          "provinceId": "100",
+          "cityName": "无锡市",
+          "cityId": "510",
+          "countyName": "崇安区",
+          "countyId": "01"
         }
       }
     },
@@ -213,17 +213,21 @@
           }
         }
         let id = this.$store.state.appconf.usedAddressId;
+        if(id == undefined)
+        {
+          id = -1
+        }
         try {
-          if (id == undefined || id == -1) {
+          if (id == -1) {
             if (addressList != undefined && addressList.length > 0) {
               for (let i = 0; i < addressList.length; i++) {
-                if (addressList[i].state == 1) {
-                  id = i;
+                if (addressList[i].status == 1) {
+                  id = addressList[i].id;
                   address = addressList[i]
                   break;
                 }
               }
-              if (id == undefined || id == -1) {
+              if ( id == -1) {
                 id = addressList[0].id;
                 address = addressList[0]
               }
