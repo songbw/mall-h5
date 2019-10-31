@@ -77,40 +77,40 @@
         if(this.value < 50) {
           try{
             let orderStatusResp =  await  this.quertOrderStatus ()
-            console.log("1111111111111111111111111111111111111")
-            this.$log(orderStatusResp)
+            this.$log(orderStatusResp.data)
+            if(orderStatusResp.data.code == 200) {
+              let rt = orderStatusResp.data.data.result
+              if(rt === 'success') {
+                this.payInfoText = "支付成功!"
+                this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                this.$router.replace({path: '/car/orderList'})
+                return;
+              }
+            }
             let paymentStatusResp =  await  this.quertPaymentStatus()
-            console.log("22222222222222222222222222222222222222")
             this.$log(paymentStatusResp)
+            if(paymentStatusResp.data.code == 200) {
+              this.$log(paymentStatusResp.data.data)
+              let rt = paymentStatusResp.data.data
+              if(rt == 2) {
+                this.payInfoText = "支付失败!"
+                this.$toast("支付失败!")
+                this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                this.$router.replace({path: '/car/orderList'})
+                return;
+              }
+            }
           } catch (e) {
-            console.log("################################")
-            console.log(e)
-          }
-
-/*          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.ORDER_BASE_URL,
-            url: '/order/payment/status',
-            params: {
-              outerTradeNo: this.payInfo.outer_trade_no
-            }
-          }).then((response) => {
-            this.$log(response)
-            let rt = response.data.data.result;
-            if(rt === 'success') {
-              this.payInfoText = "支付成功!"
-              this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-              this.$router.replace({path: '/car/orderList'})
-            }
-          }).catch(function (error) {
-            that.$log(error)
+            that.$log(e)
             that.pageloading = false;
             this.payInfoText = "网络错误!"
+            this.$toast(this.payInfoText)
             this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0)
             this.$router.replace({path: '/car/orderList'})
-          })*/
+          }
         } else {
           this.payInfoText = "支付超时"
+          this.$toast(this.payInfoText)
           this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
           this.$router.replace({path: '/car/orderList'})
         }
