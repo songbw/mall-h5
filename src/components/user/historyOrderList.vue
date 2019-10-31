@@ -80,7 +80,9 @@
     created() {
       this.$log("historyOrderList created Enter")
       this.showHeader = this.$api.HAS_HEADER;
-      this.userDetail = this.$route.params.user;
+      if(this.$store.state.appconf.userDetail.length > 0) {
+        this.userDetail =  JSON.parse(this.$store.state.appconf.userDetail)
+      }
       this.$log(this.userDetail)
     },
 
@@ -143,10 +145,16 @@
         let userInfo = this.$store.state.appconf.userInfo
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
+          if(this.userDetail == null) {
+            this.loading = false;
+            this.finished = true;
+            this.launchedLoaded = true;
+            return
+          }
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
               "pageNo": this.pageNo++,
-               "mobile": this.userDetail.telephone
+              "mobile": this.userDetail.telephone
             }
             this.$api.xapi({
               method: 'post',

@@ -87,7 +87,7 @@
           this.getLoginAuthInfo();
           setTimeout(() => {
             this.configured = true
-          }, 5000);
+          }, 1000);
         } else {
           this.configured = true
         }
@@ -119,7 +119,7 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
-            this.configured = true
+            that.configured = true
           }
         }).catch(function (error) {
           that.$log(error)

@@ -160,9 +160,12 @@
     width: 100%;
     height: 100%;
     top: 0px;
-    background-color: #f8f8f8;
 
     .DetailBody {
+      width: 100%;
+      height: 100%;
+      top: 0px;
+      background-color: #f8f8f8;
       .infoBox {
         margin: 5px 0px;
 
