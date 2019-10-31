@@ -362,7 +362,7 @@
           if(type == 4) {
             this.$router.push({name: '售后工单页'})
           } else {
-
+            this.$router.push({name: '历史订单页'})
           }
         }
 

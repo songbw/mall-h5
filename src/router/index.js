@@ -35,6 +35,9 @@ const ShangHaiCardList = resolve => require(['@/components/user/shanghaiBankCard
 const QuickPayCardList = resolve => require(['@/components/user/quickpayCardList.vue'], resolve)
 const LinkPayAccount = resolve => require(['@/components/user/linkPayAccount.vue'], resolve)
 
+const HistoryOrder = resolve => require(['@/components/user/historyOrderList.vue'], resolve)
+const HistoryOrderDetail = resolve => require(['@/components/user/historyOrderDetail.vue'], resolve)
+
 export default new VueRouter({
   mode: 'history',
   routes: [
@@ -340,5 +343,21 @@ export default new VueRouter({
         title: '我的联机账户',
       }
     },
+    {
+      path: '/user/historyOrderList',
+      name: '历史订单页',
+      component: HistoryOrder,
+      meta: {
+        title: '我的历史订单',
+      }
+    },
+    {
+      path: '/user/historyOrderDetail',
+      name: '历史订单详情页',
+      component: HistoryOrderDetail,
+      meta: {
+        title: '历史订单详情',
+      }
+    }
   ]
 })

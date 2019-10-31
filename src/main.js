@@ -61,7 +61,9 @@ import {
   Progress,
   DatetimePicker,
   Popup,
-  Circle
+  Circle,
+  Collapse,
+  CollapseItem
 } from 'vant';
 
 Vue.use(Button)
@@ -103,7 +105,9 @@ Vue.use(Button)
   .use(Progress)
   .use(DatetimePicker)
   .use(Popup)
-  .use(Circle);
+  .use(Circle)
+  .use(Collapse)
+  .use(CollapseItem);
 
 
 ///////////////////////////////////////////////////////////////////////
