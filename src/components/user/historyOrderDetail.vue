@@ -31,7 +31,6 @@
           </van-card>
         </div>
       </div>
-
       <div class="detail-info">
         <div class="infoBox">
           <span class="title">订单金额:</span>
@@ -160,12 +159,10 @@
     width: 100%;
     height: 100%;
     top: 0px;
-
+    background-color: #ff4444;
     .DetailBody {
-      width: 100%;
-      height: 100%;
-      top: 0px;
-      background-color: #f8f8f8;
+      background-color: #ff4444;
+      padding-bottom: 10px;
       .infoBox {
         margin: 5px 0px;
 
