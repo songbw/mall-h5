@@ -63,7 +63,8 @@
         finished: false,
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
         launchedLoaded: false,
-        activeNames: ['1']
+        activeNames: ['1'],
+        userDetail: null
       }
     },
 
@@ -79,6 +80,8 @@
     created() {
       this.$log("historyOrderList created Enter")
       this.showHeader = this.$api.HAS_HEADER;
+      this.userDetail = this.$route.params.user;
+      this.$log(this.userDetail)
     },
 
     methods: {
@@ -143,7 +146,7 @@
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
               "pageNo": this.pageNo++,
-              "mobile" : "18075746337"
+               "mobile": this.userDetail.telephone
             }
             this.$api.xapi({
               method: 'post',

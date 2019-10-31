@@ -93,42 +93,42 @@
         </van-cell>
       </div>
 
-<!--      <van-actionsheet v-model="showLinkPayDialog"  title="联机账户支付">
-        <div  class="linkPayDialog">
-          <van-field
-            v-model="linkPayAccount"
-            required
-            clearable
-            label="卡号"
-            maxlength="30"
-            label-width="40px"
-            placeholder="请输入卡号"
-          />
+      <!--      <van-actionsheet v-model="showLinkPayDialog"  title="联机账户支付">
+              <div  class="linkPayDialog">
+                <van-field
+                  v-model="linkPayAccount"
+                  required
+                  clearable
+                  label="卡号"
+                  maxlength="30"
+                  label-width="40px"
+                  placeholder="请输入卡号"
+                />
 
-          <van-field
-            v-model="linkPayPwd"
-            :type="isLinkPwdVisable?'number':'password'"
-            maxlength="30"
-            clearable
-            label="密码"
-            label-width="40px"
-            placeholder="请输入密码"
-            :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
-            required
-            @click-right-icon="togLinkPayPwdVisable()"
-          />
-          <div class="linkPayAccountBox">
-            <span style="font-weight: bold;font-size: x-large;color: black">我的余额</span>
-            <span v-if="linkPayAmount == null " style="margin-top: 10px;color: #ff4444;font-size: medium">请输入账号，查询余额</span>
-            <span v-else class="linkPay_Amount">￥{{linkPayAmount}}</span>
-          </div>
+                <van-field
+                  v-model="linkPayPwd"
+                  :type="isLinkPwdVisable?'number':'password'"
+                  maxlength="30"
+                  clearable
+                  label="密码"
+                  label-width="40px"
+                  placeholder="请输入密码"
+                  :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
+                  required
+                  @click-right-icon="togLinkPayPwdVisable()"
+                />
+                <div class="linkPayAccountBox">
+                  <span style="font-weight: bold;font-size: x-large;color: black">我的余额</span>
+                  <span v-if="linkPayAmount == null " style="margin-top: 10px;color: #ff4444;font-size: medium">请输入账号，查询余额</span>
+                  <span v-else class="linkPay_Amount">￥{{linkPayAmount}}</span>
+                </div>
 
 
-          <div style=" width: 100%;position: fixed;bottom: 10px;">
-            <van-button type="danger" size="large" round @click="queryLinkPay">查看余额</van-button>
-          </div>
-        </div>
-      </van-actionsheet>-->
+                <div style=" width: 100%;position: fixed;bottom: 10px;">
+                  <van-button type="danger" size="large" round @click="queryLinkPay">查看余额</van-button>
+                </div>
+              </div>
+            </van-actionsheet>-->
     </div>
 
     <v-footer></v-footer>
@@ -154,10 +154,10 @@
     },
     computed: {
       userToken() {
-        return  this.$store.state.appconf.token;
+        return this.$store.state.appconf.token;
       },
     },
-    watch:{
+    watch: {
       userToken(newValue, oldVal) {
         if (newValue && newValue.length > 0) {
           let userInfo = this.$store.state.appconf.userInfo;
@@ -257,16 +257,16 @@
         receriverAddressIcon: require('@/assets/icons/ico_receiveraddress.png'),
         aboutIcon: require('@/assets/icons/ico_info.png'),
         customServiceIcon: require('@/assets/icons/ico_customService.png'),
-        icon_linkPayCard:  require('@/assets/icons/ico_linkPayCard.png'),
+        icon_linkPayCard: require('@/assets/icons/ico_linkPayCard.png'),
         icon_optCard: require('@/assets/icons/ico_optCard.png'),
         icon_bankCard: require('@/assets/icons/ico_bankCard.png'),
         icon_quickPayCard: require('@/assets/icons/ico_quickpay_cards.png'),
         user: {},
-/*        showLinkPayDialog: false,
-        linkPayAccount:"",
-        linkPayPwd:"",
-        linkPayAmount: null,
-        isLinkPwdVisable:false,*/
+        /*        showLinkPayDialog: false,
+                linkPayAccount:"",
+                linkPayPwd:"",
+                linkPayAmount: null,
+                isLinkPwdVisable:false,*/
       }
     },
     methods: {
@@ -276,72 +276,75 @@
       onShangHaiBankBtnClick() {
         this.$log("on shanghai bank clicked")
         this.$router.push({
-          name:'上海银行卡列表页',
+          name: '上海银行卡列表页',
           params: {
             user: this.user
-          }})
+          }
+        })
       },
 
       onOptCardBtnClick() {
         this.$log("opt Card clicked")
         this.$router.push({
-          name:'惠民优选卡列表页',
+          name: '惠民优选卡列表页',
           params: {
             user: this.user
-          }})
+          }
+        })
       },
       onQuickPayCardBtnClick() {
         this.$log("onQuickPayCardBtnClick Enter")
         this.$router.push({
-          name:'快捷支付银行卡列表页',
+          name: '快捷支付银行卡列表页',
           params: {
             user: this.user
-          }})
+          }
+        })
 
       },
       onQueryLinkPayBtnClick() {
         this.$log("link pay account btn clicked")
-      //  this.showLinkPayDialog = true;
-        this.$router.push({name:'联机账户页'})
+        //  this.showLinkPayDialog = true;
+        this.$router.push({name: '联机账户页'})
       },
 
       togLinkPayPwdVisable() {
         this.isLinkPwdVisable = !this.isLinkPwdVisable
       },
 
-/*      queryLinkPay() {
-        this.$log("queryLinkPay Enter")
-        let options = {
-          "cardNo":this.linkPayAccount,
-          "password":this.linkPayPwd
-        }
-        this.$log(options)
-        this.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.LINKPAY_ACCOUNT_URL,
-          url: '/wxpos/balance',
-          data: options,
-        }).then((response) => {
-          this.$log(response)
-          if(response.data.code == 200) {
-            this.linkPayAmount = (response.data.data/100).toFixed(2)
-          } else {
-            this.linkPayAmount = null
-            this.$toast(response.data.message)
-          }
-        }).catch(function (error) {
-          this.linkPayAmount = null
-        })
-      },*/
+      /*      queryLinkPay() {
+              this.$log("queryLinkPay Enter")
+              let options = {
+                "cardNo":this.linkPayAccount,
+                "password":this.linkPayPwd
+              }
+              this.$log(options)
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.LINKPAY_ACCOUNT_URL,
+                url: '/wxpos/balance',
+                data: options,
+              }).then((response) => {
+                this.$log(response)
+                if(response.data.code == 200) {
+                  this.linkPayAmount = (response.data.data/100).toFixed(2)
+                } else {
+                  this.linkPayAmount = null
+                  this.$toast(response.data.message)
+                }
+              }).catch(function (error) {
+                this.linkPayAmount = null
+              })
+            },*/
 
       onChangeCouponClick() {
         this.$router.push("/user/couponChange")
-/*        this.$router.push({
-          name: "二维码页",
-          params: {
-            text: "Jon"
-          }
-        })*/
+        /*        this.$router.push({
+                  name: "二维码页",
+                  params: {
+                    text: "Jon"
+                  }
+                })*/
       },
       onMyCouponClick() {
         this.$router.push({path: '/user/couponList'})
@@ -359,10 +362,16 @@
           this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
           this.$router.push({name: '订单列表页'})
         } else {
-          if(type == 4) {
+          if (type == 4) {
             this.$router.push({name: '售后工单页'})
           } else {
-            this.$router.push({name: '历史订单页'})
+
+            this.$router.push({
+              name: '历史订单页',
+              params: {
+                user: this.user
+              }
+            })
           }
         }
 
@@ -456,7 +465,7 @@
         }
       }
 
-      .linkPayDialog{
+      .linkPayDialog {
         width: 100%;
         align-items: center;
       }
@@ -678,17 +687,17 @@
       min-height: 400px;
     }
 
-/*    .linkPayAccountBox{
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 20px;
-      .linkPay_Amount{
-        margin-top: 10px;
-        color: #ff4444;
-        font-weight: bold;
-        .fz(font-size,80)
-      }
-    }*/
+    /*    .linkPayAccountBox{
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          margin-top: 20px;
+          .linkPay_Amount{
+            margin-top: 10px;
+            color: #ff4444;
+            font-weight: bold;
+            .fz(font-size,80)
+          }
+        }*/
   }
 </style>
