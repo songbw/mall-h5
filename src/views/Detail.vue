@@ -503,7 +503,8 @@
           let inventorySkus = [];
           let inventorySkusOfZy = [];
           if (goods.merchantId === 2) {
-            inventorySkus.push({"skuId": goods.mpu, "remainNum": 1})
+            this.$log(goods)
+            inventorySkus.push({"skuId": goods.mpu, "remainNum": 1,"price":goods.price})
           } else {
             inventorySkusOfZy.push({"mpu": goods.mpu, "remainNum": 1})
           }

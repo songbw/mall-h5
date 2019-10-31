@@ -1606,7 +1606,7 @@
           if (payDirectProduct.length > 0) {
             let item = JSON.parse(payDirectProduct);
             if (item.baseInfo.merchantId === 2) { //aoyi
-              inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
+              inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count,"price":item.goodsInfo.price})
               skus.push({"skuId": item.baseInfo.skuId})
             } else {
               inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
@@ -1618,7 +1618,7 @@
           this.selectedCarList.forEach(item => {
             // this.$log(item)
             if (item.baseInfo.merchantId === 2) { //aoyi
-              inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
+              inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count,"price":item.goodsInfo.price})
               skus.push({"skuId": item.baseInfo.skuId})
             } else {
               inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
