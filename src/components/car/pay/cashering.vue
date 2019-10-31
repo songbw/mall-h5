@@ -51,11 +51,43 @@
         this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
         this.$router.replace({path: '/car/orderList'})
       },
-      checkPaymentStatus() {
+      quertPaymentStatus() {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.AGGREGATE_PAY_URL,
+          url: '/wspay/query/prepay',
+          params: {
+            orderNo: this.payInfo.outer_trade_no
+          }
+        })
+      },
+      quertOrderStatus() {
+        return  this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.ORDER_BASE_URL,
+          url: '/order/payment/status',
+          params: {
+            outerTradeNo: this.payInfo.outer_trade_no
+          }
+        })
+      },
+      async checkPaymentStatus() {
         this.value++;
         let that = this;
         if(this.value < 50) {
-          this.$api.xapi({
+          try{
+            let orderStatusResp =  await  this.quertOrderStatus ()
+            console.log("1111111111111111111111111111111111111")
+            this.$log(orderStatusResp)
+            let paymentStatusResp =  await  this.quertPaymentStatus()
+            console.log("22222222222222222222222222222222222222")
+            this.$log(paymentStatusResp)
+          } catch (e) {
+            console.log("################################")
+            console.log(e)
+          }
+
+/*          this.$api.xapi({
             method: 'get',
             baseURL: this.$api.ORDER_BASE_URL,
             url: '/order/payment/status',
@@ -76,7 +108,7 @@
             this.payInfoText = "网络错误!"
             this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0)
             this.$router.replace({path: '/car/orderList'})
-          })
+          })*/
         } else {
           this.payInfoText = "支付超时"
           this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
