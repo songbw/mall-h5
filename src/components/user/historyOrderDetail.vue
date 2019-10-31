@@ -159,10 +159,10 @@
     width: 100%;
     height: 100%;
     top: 0px;
-    background-color: #ff4444;
+    background-color: #f8f8f8;
     .DetailBody {
-      background-color: #ff4444;
-      padding-bottom: 10px;
+      background-color: #f8f8f8;
+      padding: 5px 0px;
       .infoBox {
         margin: 5px 0px;
 
