@@ -395,7 +395,14 @@
                 }
                 case 3: {
                   //this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
-                  this.$router.push({path: "/category/goods/list?category=" + couponInfo.rules.scenario.categories[0]});
+                  if( couponInfo.rules.scenario.categories.length > 0) {
+                    let categeries = couponInfo.rules.scenario.categories[0]
+                    for( let i = 1; i < couponInfo.rules.scenario.categories.length; i++) {
+                      categeries += "_"+couponInfo.rules.scenario.categories[i]
+                    }
+                    this.$router.push({path: "/category/goods/list?category=" + categeries});
+                  }
+
                   return
                 }
                 default: {

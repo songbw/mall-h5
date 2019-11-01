@@ -138,55 +138,110 @@
         this.$router.push({name: '购物车页'})
       },
       onLoadByOrder() {
-        let category = this.$route.query.category;
+        let categories = this.$route.query.category;
         let search = this.$route.query.search;
         let that = this
         this.launchedLoading = true
-        if (category != null && category.length > 0) {
+        if (categories != null && categories.length > 0) {
+          let categoriesArray = categories.split('_');
+          this.$log(categoriesArray)
+
           if (this.total == -1 || this.total > this.list.length) {
+            if(categoriesArray.length > 1) {
+              let options = {
+                "categories": categoriesArray,
+                "pageNo": this.pageNo++,
+                "pageSize": this.pageSize
+              }
+              if(this.active === 1) {
+                if(this.tagPrice === 0) { //升序
+                  options['priceOrder'] = "ASC"
+                } else { //降序
+                  options['priceOrder'] = "DESC"
+                }
+              }
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.PRODUCT_BASE_URL,
+                url: '/prod/all/categories',
+                data: options,
+              }).then((response) => {
+                this.result = response.data.data.result;
+                this.$log(this.result)
+                this.total = this.result.total;
+                if (this.result.list.length == 0) {
+                  this.loading = false;
+                  this.isLoadingByNewOrder = false
+                  this.finished = true;
+                  this.list = []
+                } else {
+                  this.list = []
+                  this.result.list.forEach(item => {
+                    this.list.push(item);
+                  })
+                  this.loading = false;
+                  this.isLoadingByNewOrder = false
+                  if (this.list.length >= this.total)
+                    this.finished = true;
+                }
+              }).catch(function (error) {
+                console.log(error)
+                that.loading = false;
+                this.isLoadingByNewOrder = false
+                that.finished = true;
+                this.list = []
+              })
+            } else if (categoriesArray.length == 1) {
+              let category = categoriesArray[0]
               let options = {
                 "category": category,
                 "pageNo": this.pageNo++,
                 "pageSize": this.pageSize
               }
-            if(this.active === 1) {
-              if(this.tagPrice === 0) { //升序
-                options['priceOrder'] = "ASC"
-              } else { //降序
-                options['priceOrder'] = "DESC"
+              if(this.active === 1) {
+                if(this.tagPrice === 0) { //升序
+                  options['priceOrder'] = "ASC"
+                } else { //降序
+                  options['priceOrder'] = "DESC"
+                }
               }
-            }
-            this.$api.xapi({
-              method: 'post',
-              baseURL: this.$api.PRODUCT_BASE_URL,
-              url: '/prod/all',
-              data: options,
-            }).then((response) => {
-              this.result = response.data.data.result;
-              this.$log(this.result)
-              this.total = this.result.total;
-              if (this.result.list.length == 0) {
-                this.loading = false;
-                this.isLoadingByNewOrder = false
-                this.finished = true;
-                this.list = []
-              } else {
-                this.list = []
-                this.result.list.forEach(item => {
-                  this.list.push(item);
-                })
-                this.loading = false;
-                this.isLoadingByNewOrder = false
-                if (this.list.length >= this.total)
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.PRODUCT_BASE_URL,
+                url: '/prod/all',
+                data: options,
+              }).then((response) => {
+                this.result = response.data.data.result;
+                this.$log(this.result)
+                this.total = this.result.total;
+                if (this.result.list.length == 0) {
+                  this.loading = false;
+                  this.isLoadingByNewOrder = false
                   this.finished = true;
-              }
-            }).catch(function (error) {
-              console.log(error)
+                  this.list = []
+                } else {
+                  this.list = []
+                  this.result.list.forEach(item => {
+                    this.list.push(item);
+                  })
+                  this.loading = false;
+                  this.isLoadingByNewOrder = false
+                  if (this.list.length >= this.total)
+                    this.finished = true;
+                }
+              }).catch(function (error) {
+                console.log(error)
+                that.loading = false;
+                this.isLoadingByNewOrder = false
+                that.finished = true;
+                this.list = []
+              })
+            } else {
               that.loading = false;
               this.isLoadingByNewOrder = false
               that.finished = true;
               this.list = []
-            })
+            }
           }
         } else if (search != undefined && search.length > 0) {
           let options = {
@@ -238,51 +293,97 @@
         }
       },
       onLoad() {
-        let category = this.$route.query.category;
+        let categories = this.$route.query.category;
         let search = this.$route.query.search;
         let that = this
         this.launchedLoading = true
         if(this.isLoadingByNewOrder)
           return
-        if (category != null && category.length > 0) {
+        if (categories != null && categories.length > 0) {
+          let categoriesArray = categories.split('_');
+          this.$log(categoriesArray)
           if (this.total == -1 || this.total > this.list.length) {
-            let options = {
-              "category": category,
-              "pageNo": this.pageNo++,
-              "pageSize": this.pageSize
-            }
-            if(this.active === 1) {
-              if(this.tagPrice === 0) { //升序
-                options['priceOrder'] = "ASC"
-              } else { //降序
-                options['priceOrder'] = "DESC"
+            if(categoriesArray.length > 1) {
+              let options = {
+                "categories": categoriesArray,
+                "pageNo": this.pageNo++,
+                "pageSize": this.pageSize
               }
-            }
-            this.$api.xapi({
-              method: 'post',
-              baseURL: this.$api.PRODUCT_BASE_URL,
-              url: '/prod/all',
-              data: options,
-            }).then((response) => {
-              this.result = response.data.data.result;
-              this.$log(this.result)
-              this.total = this.result.total;
-              if (this.result.list.length == 0) {
-                this.loading = false;
-                this.finished = true;
-              } else {
-                this.result.list.forEach(item => {
-                  this.list.push(item);
-                })
-                this.loading = false;
-                if (this.list.length >= this.total)
+              if(this.active === 1) {
+                if(this.tagPrice === 0) { //升序
+                  options['priceOrder'] = "ASC"
+                } else { //降序
+                  options['priceOrder'] = "DESC"
+                }
+              }
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.PRODUCT_BASE_URL,
+                url: '/prod/all/categories',
+                data: options,
+              }).then((response) => {
+                this.result = response.data.data.result;
+                this.$log(this.result)
+                this.total = this.result.total;
+                if (this.result.list.length == 0) {
+                  this.loading = false;
                   this.finished = true;
+                } else {
+                  this.result.list.forEach(item => {
+                    this.list.push(item);
+                  })
+                  this.loading = false;
+                  if (this.list.length >= this.total)
+                    this.finished = true;
+                }
+              }).catch(function (error) {
+                console.log(error)
+                that.loading = false;
+                that.finished = true;
+              })
+            } else  if(categoriesArray.length == 1) {
+              let category = categoriesArray[0]
+              let options = {
+                "category": category,
+                "pageNo": this.pageNo++,
+                "pageSize": this.pageSize
               }
-            }).catch(function (error) {
-              console.log(error)
-              that.loading = false;
-              that.finished = true;
-            })
+              if(this.active === 1) {
+                if(this.tagPrice === 0) { //升序
+                  options['priceOrder'] = "ASC"
+                } else { //降序
+                  options['priceOrder'] = "DESC"
+                }
+              }
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.PRODUCT_BASE_URL,
+                url: '/prod/all',
+                data: options,
+              }).then((response) => {
+                this.result = response.data.data.result;
+                this.$log(this.result)
+                this.total = this.result.total;
+                if (this.result.list.length == 0) {
+                  this.loading = false;
+                  this.finished = true;
+                } else {
+                  this.result.list.forEach(item => {
+                    this.list.push(item);
+                  })
+                  this.loading = false;
+                  if (this.list.length >= this.total)
+                    this.finished = true;
+                }
+              }).catch(function (error) {
+                console.log(error)
+                that.loading = false;
+                that.finished = true;
+              })
+            }
+          } else {
+            that.loading = false;
+            that.finished = true;
           }
         } else if (search != undefined && search.length > 0) {
           let options = {
