@@ -59,7 +59,7 @@
               if(rt.msg == 'Success') {
                 that.$toast("兑换成功")
               } else {
-                that.$toast("兑换失败")
+                that.$toast(rt.msg)
               }
             }).catch(function (error) {
               that.$log(error)
