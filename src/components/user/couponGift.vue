@@ -210,7 +210,7 @@
           case 1://代金券
             return rules.cashCoupon.amount.toFixed(2);
           case 2://折扣券
-            return rules.discountCoupon.discountRatio * 10 + ' 折';
+            return (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折';
           case 3://服务券
             this.$log(rules)
             return rules.serviceCoupon.price.toFixed(2)
