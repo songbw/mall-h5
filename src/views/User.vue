@@ -190,32 +190,38 @@
       let userInfo = this.$store.state.appconf.userInfo;
       let that = this
       this.showHeader = this.$api.HAS_HEADER;
-      if (!Util.isUserEmpty(userInfo)) {
-        let user = JSON.parse(userInfo);
-        this.$api.xapi({
-          method: 'get',
-          baseURL: this.$api.SSO_BASE_URL,
-          url: '/user',
-          params: {
-            iAppId: this.$api.APP_ID,
-            openId: user.openId,
-          }
-        }).then((response) => {
-          let user = response.data.data.user;
-          if (user != null) {
-            this.user = user;
-            this.updateUserDatail(this.user);
-            this.$log(this.user)
-            this.$log(this.user.nickname);
-          }
-        }).catch(function (error) {
-          //alert(error)
-          that.$log(error)
-          that.pageloading = false;
-        })
+      if(this.$store.state.appconf.userDetail.length > 0) {
+        this.user  =  JSON.parse(this.$store.state.appconf.userDetail)
+        this.pageloading = false;
       } else {
-        //goto register UI
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: '/user',
+            params: {
+              iAppId: this.$api.APP_ID,
+              openId: user.openId,
+            }
+          }).then((response) => {
+            let user = response.data.data.user;
+            if (user != null) {
+              this.user = user;
+              this.updateUserDatail(this.user);
+              this.$log(this.user)
+              this.$log(this.user.nickname);
+            }
+          }).catch(function (error) {
+            //alert(error)
+            that.$log(error)
+            that.pageloading = false;
+          })
+        } else {
+          //goto register UI
+        }
       }
+
 
     },
     data() {

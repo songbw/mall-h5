@@ -122,6 +122,9 @@
     },
 
     methods: {
+      updateUserDatail(userDetail) {
+        this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
+      },
       formatDateTime(date) {
         let y = date.getFullYear();
         let m = date.getMonth() + 1;
@@ -140,6 +143,7 @@
           data: this.user
         }).then((response) => {
           that.$log(response.data)
+          this.updateUserDatail(this.user);
         }).catch(function (error) {
           that.$log(error)
         })
