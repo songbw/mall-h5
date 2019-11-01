@@ -442,22 +442,59 @@
                   if (fullPrice < coupon.couponInfo.rules.couponRules.fullReduceCoupon.fullPrice) {
                     //nothing to do
                   } else {
-                    avaliableCouponList.push(coupon)
+                    let found = -1;
+                    for (let i = 0; i < avaliableCouponList.length; i++) {
+                      if (avaliableCouponList[i].code == coupon.code) {
+                        found = 1;
+                        break;
+                      }
+                    }
+                    if (found == -1) {
+                      avaliableCouponList.push(coupon)
+                    }
                   }
                   break;
                 case 2:
                   if (fullPrice < coupon.couponInfo.rules.couponRules.discountCoupon.fullPrice) {
                     //nothing to do
                   } else {
+                    let found = -1;
+                    for (let i = 0; i < avaliableCouponList.length; i++) {
+                      if (avaliableCouponList[i].code == coupon.code) {
+                        found = 1;
+                        break;
+                      }
+                    }
+                    if (found == -1) {
+                      avaliableCouponList.push(coupon)
+                    }
+                  }
+                  break;
+                default: {
+                  let found = -1;
+                  for (let i = 0; i < avaliableCouponList.length; i++) {
+                    if (avaliableCouponList[i].code == coupon.code) {
+                      found = 1;
+                      break;
+                    }
+                  }
+                  if (found == -1) {
                     avaliableCouponList.push(coupon)
                   }
                   break;
-                default:
-                  avaliableCouponList.push(coupon)
-                  break;
+                }
               }
             } else {
-              avaliableCouponList.push(coupon)
+              let found = -1;
+              for (let i = 0; i < avaliableCouponList.length; i++) {
+                if (avaliableCouponList[i].code == coupon.code) {
+                  found = 1;
+                  break;
+                }
+              }
+              if (found == -1) {
+                avaliableCouponList.push(coupon)
+              }
             }
           }
         });
@@ -1077,7 +1114,7 @@
         let address = {};
         let list = this.$store.state.appconf.addressList;
         let id = this.$store.state.appconf.usedAddressId;
-        if(id == undefined) {
+        if (id == undefined) {
           id = -1
         }
         try {
@@ -1606,7 +1643,11 @@
           if (payDirectProduct.length > 0) {
             let item = JSON.parse(payDirectProduct);
             if (item.baseInfo.merchantId === 2) { //aoyi
-              inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count,"price":item.goodsInfo.price})
+              inventorySkus.push({
+                "skuId": item.baseInfo.skuId,
+                "remainNum": item.baseInfo.count,
+                "price": item.goodsInfo.price
+              })
               skus.push({"skuId": item.baseInfo.skuId})
             } else {
               inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
@@ -1618,7 +1659,11 @@
           this.selectedCarList.forEach(item => {
             // this.$log(item)
             if (item.baseInfo.merchantId === 2) { //aoyi
-              inventorySkus.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count,"price":item.goodsInfo.price})
+              inventorySkus.push({
+                "skuId": item.baseInfo.skuId,
+                "remainNum": item.baseInfo.count,
+                "price": item.goodsInfo.price
+              })
               skus.push({"skuId": item.baseInfo.skuId})
             } else {
               inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
