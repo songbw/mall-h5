@@ -88,7 +88,7 @@
         <van-cell title="我的客服" :value="this.$api.SERVR_PHONE_NUM">
           <img slot="icon" :src="customServiceIcon"/>
         </van-cell>
-        <van-cell title="关于凤巢" value="版本号 V1.0">
+        <van-cell title="关于我们" value="版本号 V1.0">
           <img slot="icon" :src="aboutIcon"/>
         </van-cell>
       </div>

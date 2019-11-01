@@ -103,7 +103,7 @@
           <van-actionsheet v-model="showInvoice" title="发票" class="invoice_layout">
             <div>
               <div class="invoiceTip">
-                凤巢商城启用电子普通发票，订单完成后24小时内开具，点击"我的订单"查看与下载
+                商城启用电子普通发票，订单完成后24小时内开具，点击"我的订单"查看与下载
               </div>
               <div class="invoiceTypeBox">
                 <h1 class="section-title">

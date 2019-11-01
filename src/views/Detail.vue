@@ -39,8 +39,7 @@
         </p>
         <div class="goods-detail">
         <span class="goods-disciption">
-<!--          <i class="goods-area">南京</i>-->
-          {{this.goods.brand}} {{this.goods.name}}
+          {{this.goods.name}}
         </span>
         </div>
       </div>
@@ -381,12 +380,18 @@
       updateServiceBoxInfo(goods) {
         let that = this
         this.$log("updateServiceBoxInfo Enter")
+        this.$log(goods)
+        let merchantCode = ""
+        if(goods.merchantId == 2) {
+          merchantCode = goods.mpu.substr(0,2)
+        }
         that.$api.xapi({
           method: 'get',
           baseURL: this.$api.VENDOR_URL,
           url: '/bulletin/findByMerchantId',
           params: {
-            merchantId: goods.merchantId
+            merchantId: goods.merchantId,
+            merchantCode:merchantCode
           },
         }).then((response) => {
           that.$log(response)
