@@ -180,7 +180,7 @@
                 let amount = rules.discountCoupon.fullPrice - this.allPay
                 return "再买￥" + amount + "可享受优惠"
               } else {
-                return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折' + "优惠"
+                return "已满足优惠条件，下单使用该券可" + (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折' + "优惠"
               }
             default:
               return ""
@@ -377,7 +377,7 @@
           case 1://代金券
             return '￥' + rules.cashCoupon.amount;
           case 2://折扣券
-            return rules.discountCoupon.discountRatio * 10 + ' 折';
+            return (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折';
           default:
             return ""
         }

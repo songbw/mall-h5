@@ -591,7 +591,7 @@
           case 1://代金券
             return rules.cashCoupon.amount;
           case 2://折扣券
-            return rules.discountCoupon.discountRatio * 10 + '折';
+            return (rules.discountCoupon.discountRatio * 10).toFixed(1) + '折';
           default:
             return ""
         }
