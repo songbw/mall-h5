@@ -45,7 +45,7 @@
           </ul>
           <van-steps direction="vertical" :active="0" active-color="#f44">
             <van-step>
-              <h3>商家正在准备商品，敬请等待...</h3>
+              <h3>未查询到物流信息，敬请等待...</h3>
               <p>{{formatTime(this.detail.paymentAt)}}</p>
             </van-step>
           </van-steps>
