@@ -10,6 +10,11 @@ import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueScroller from 'vue-scroller'
 import VueQRCodeComponent from 'vue-qrcode-component'
+import VConsole from 'vconsole'
+
+if (process.env.NODE_ENV === 'production') {
+  new VConsole()
+}
 
 Vue.component('qr-code', VueQRCodeComponent)
 

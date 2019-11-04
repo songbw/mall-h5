@@ -22,6 +22,7 @@
     "pako": "^1.0.7",
     "v-coupon": "^0.3.7",
     "vant": "^1.6.6",
+    "vconsole": "^3.3.4",
     "vue-ba": "^1.2.5",
     "vue-logger": "0.0.4",
     "vue-qrcode-component": "^2.1.1",
