@@ -324,7 +324,7 @@ export default new VueRouter({
       name: '上海银行卡列表页',
       component: ShangHaiCardList,
       meta: {
-        title: '上海银行绑定卡列表',
+        title: '我的钱包',
       }
     },
     {

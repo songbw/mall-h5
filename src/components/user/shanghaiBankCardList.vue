@@ -1,12 +1,12 @@
 <template lang="html">
   <section class="bankCardList">
     <v-header class="header" v-if="showHeader">
-      <h1 slot="title">我的惠民优选卡</h1>
+      <h1 slot="title">我的钱包</h1>
     </v-header>
     <div class="bankCardBody">
       <div v-if="launchedLoaded">
         <div class="bankCardBind"  v-if="!hasBindedCard">
-          <span class="bindBankTitle">绑定银行卡</span>
+          <span class="bindBankTitle">开通钱包</span>
           <van-field
             v-model="realName"
             required
@@ -112,7 +112,7 @@
         that.$api.xapi({
           method: 'get',
           baseURL: this.$api.SHANGHAI_BANK_URL,
-          url: 'commission/query/salesman',
+          url: '/commission/query/salesman',
           params: {
             platformUserNo: customUser.userId,
           }
@@ -139,6 +139,35 @@
     },
 
     methods: {
+      updateCardInfo(){
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let customUser = JSON.parse(userInfo)
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SHANGHAI_BANK_URL,
+            url: '/commission/query/salesman',
+            params: {
+              platformUserNo: customUser.userId,
+            }
+          }).then((response) => {
+            this.$log(response)
+            let ret = response.data
+            if(ret.code == 200) {
+              this.hasBindedCard = true;
+              this.bindCardInfo = ret.data;
+              this.$log(this.bindCardInfo)
+            } else {
+              if(ret.code == 10001) {
+                this.hasBindedCard = false;
+              }
+            }
+          }).catch(function (error) {
+          })
+        } else {
+        }
+      },
       onBCardBindBtnClick() {
         this.$log("onBCardBindBtnClick Enter")
         if (this.realName.length == 0) {
@@ -185,8 +214,8 @@
             let ret = response.data;
             if(ret.code == 200) {
               this.$toast("绑卡成功!")
+              this.updateCardInfo()
             } else {
-              this.$log("CCCCCCCCCCCCCCCCCCCc")
               this.$log(ret.msg)
               this.$toast(ret.msg)
             }

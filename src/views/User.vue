@@ -76,10 +76,10 @@
         <van-cell title="市民卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
           <img slot="icon" :src="icon_linkPayCard"/>
         </van-cell>
-        <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
+<!--        <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
           <img slot="icon" :src="icon_quickPayCard"/>
-        </van-cell>
-        <van-cell title="银行钱包" is-link @click="onShangHaiBankBtnClick">
+        </van-cell>-->
+        <van-cell title="我的钱包" is-link @click="onShangHaiBankBtnClick">
           <img slot="icon" :src="icon_bankCard"/>
         </van-cell>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
@@ -92,43 +92,6 @@
           <img slot="icon" :src="aboutIcon"/>
         </van-cell>
       </div>
-
-      <!--      <van-actionsheet v-model="showLinkPayDialog"  title="联机账户支付">
-              <div  class="linkPayDialog">
-                <van-field
-                  v-model="linkPayAccount"
-                  required
-                  clearable
-                  label="卡号"
-                  maxlength="30"
-                  label-width="40px"
-                  placeholder="请输入卡号"
-                />
-
-                <van-field
-                  v-model="linkPayPwd"
-                  :type="isLinkPwdVisable?'number':'password'"
-                  maxlength="30"
-                  clearable
-                  label="密码"
-                  label-width="40px"
-                  placeholder="请输入密码"
-                  :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
-                  required
-                  @click-right-icon="togLinkPayPwdVisable()"
-                />
-                <div class="linkPayAccountBox">
-                  <span style="font-weight: bold;font-size: x-large;color: black">我的余额</span>
-                  <span v-if="linkPayAmount == null " style="margin-top: 10px;color: #ff4444;font-size: medium">请输入账号，查询余额</span>
-                  <span v-else class="linkPay_Amount">￥{{linkPayAmount}}</span>
-                </div>
-
-
-                <div style=" width: 100%;position: fixed;bottom: 10px;">
-                  <van-button type="danger" size="large" round @click="queryLinkPay">查看余额</van-button>
-                </div>
-              </div>
-            </van-actionsheet>-->
     </div>
 
     <v-footer></v-footer>
