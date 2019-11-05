@@ -1330,13 +1330,12 @@
           }
 
           .addNewOptCard {
+            width: 100%;
             display: flex;
-            align-items: center;
-            padding-left: 40px;
-            padding-top: 10px;
+            justify-content: center;
+            align-items: Center;
             color: #ff4444;
-            font-size: x-large;
-
+            padding-top: 10px;
             span {
               margin: 5px;
             }
@@ -1388,12 +1387,12 @@
 
           }
           .addNewBankCard {
+            width: 100%;
             display: flex;
-            align-items: center;
-            padding-left: 40px;
-            padding-top: 10px;
+            justify-content: center;
+            align-items: Center;
             color: #ff4444;
-            font-size: x-large;
+            padding-top: 10px;
 
             span {
               margin: 5px;
