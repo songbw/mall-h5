@@ -381,18 +381,17 @@
         let that = this
         this.$log("updateServiceBoxInfo Enter")
         this.$log(goods)
-        let merchantCode = ""
+        let params = {
+          merchantId: goods.merchantId
+        }
         if(goods.merchantId == 2) {
-          merchantCode = goods.mpu.substr(0,2)
+          params['merchantCode'] = goods.mpu.substr(0,2)
         }
         that.$api.xapi({
           method: 'get',
           baseURL: this.$api.VENDOR_URL,
           url: '/bulletin/findByMerchantId',
-          params: {
-            merchantId: goods.merchantId,
-            merchantCode:merchantCode
-          },
+          params: params
         }).then((response) => {
           that.$log(response)
           if (response.data.data.result != null) {
