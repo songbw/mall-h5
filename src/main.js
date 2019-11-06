@@ -145,7 +145,7 @@ Vue.use(vueLogger, {
     second = second < 10 ? ('0' + second) : second;
     return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
   },
-  dev: false,
+  dev: true,
   levels: ["log", "warn", "debug", "error", "dir"],
   forceLevels: []
 });

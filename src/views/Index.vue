@@ -8,16 +8,18 @@
       <v-loading></v-loading>
     </div>
     <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
-      <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
-        <van-search placeholder="搜索您感兴趣的商品"
-                    shape="round"
-                    :background=this.mHeader.backgroundColor
-                    readonly
-                    @click="onSearchInputClick()"
-                    v-if="this.mHeader.showSearchBar"/>
+      <div v-if="this.mHeader.backgroundColor != null">
+        <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
+          <van-search placeholder="搜索您感兴趣的商品"
+                      shape="round"
+                      :background=this.mHeader.backgroundColor
+                      readonly
+                      @click="onSearchInputClick()"
+                      v-if="this.mHeader.showSearchBar"/>
+        </div>
+        <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
       </div>
-      <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
-      <div class="index_main">
+      <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px'">
         <div v-for="item in datas">
           <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
             <v-swiper :datas="item.data"/>
@@ -31,7 +33,7 @@
           <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
             <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
           </div>
-          <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
+          <div v-else-if="item.type==='7'" :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
             <v-imgmap :datas="item.data"/>
           </div>
           <div v-else-if="item.type==='4'">
@@ -50,7 +52,7 @@
       :closeOnClickOverlay="true"
       style="background-color: transparent"
     >
-      <div class="gitDialog" v-if="icon_git.length > 0">
+      <div class="f" v-if="icon_git.length > 0">
         <img :src=icon_git @click="onGiftDialogImgClick">
         <van-icon name="close" @click="onGiftDialogCloseBtnClicks"/>
       </div>
@@ -262,8 +264,8 @@
         Vue.prototype.$jsbridge = dsBridge;
         this.initJsNativeCb();
         //let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
-         let openId = "44391000fd194ab888b1aa81c03c3739"
-        //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        // let openId = "44391000fd194ab888b1aa81c03c3739"
+        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
@@ -595,12 +597,12 @@
         z-index: -1;
       }
 
-      .index_main {
+      .index_main_50px {
         margin-top: -50px;
       }
     }
 
-    .gitDialog {
+    .giftDialog {
       width: 100%;
       display: flex;
       flex-direction: column;
@@ -617,6 +619,11 @@
         margin-top: 20px;
         font-size: xx-large;
       }
+    }
+
+    .ltRtMargin{
+      margin-left: 5px;
+      margin-right: 5px;
     }
   }
 

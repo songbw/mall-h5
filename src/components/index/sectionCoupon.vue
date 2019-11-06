@@ -127,7 +127,10 @@
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
       gotoGoodsPage(mpu) {
-        try {
+        this.$router.push({path:"/detail",query:{
+            mpu:mpu
+          }});
+/*        try {
           //获取goods信息，update current googds
           this.$api.xapi({
             method: 'get',
@@ -144,7 +147,7 @@
           })
         } catch (e) {
 
-        }
+        }*/
       },
       isCouponActivied(couponInfo) {
         this.$log(couponInfo)

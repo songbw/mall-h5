@@ -7,16 +7,18 @@
         <v-loading></v-loading>
       </div>
       <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
-        <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
-          <van-search placeholder="搜索您感兴趣的商品"
-                      shape="round"
-                      :background=this.mHeader.backgroundColor
-                      readonly
-                      @click="onSearchInputClick()"
-                      v-if="this.mHeader.showSearchBar"/>
+        <div v-if="this.mHeader.backgroundColor != null">
+          <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
+            <van-search placeholder="搜索您感兴趣的商品"
+                        shape="round"
+                        :background=this.mHeader.backgroundColor
+                        readonly
+                        @click="onSearchInputClick()"
+                        v-if="this.mHeader.showSearchBar"/>
+          </div>
+          <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
         </div>
-        <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
-        <div class="index_main">
+        <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px' ">
           <div v-for="item in datas" >
             <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
               <v-swiper :datas="item.data"/>
@@ -30,7 +32,7 @@
             <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
               <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
             </div>
-            <div v-else-if="item.type==='7'" style="margin-left: 5px;margin-right: 5px;">
+            <div v-else-if="item.type==='7'" :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
               <v-imgmap :datas="item.data"/>
             </div>
             <div v-else-if="item.type==='4'">
@@ -202,7 +204,6 @@
           width: 100%;
           line-height: 15vw;
           background-color: #ff4444;
-
         }
         .box_after{
           bottom: -60px;
@@ -212,8 +213,15 @@
           overflow: hidden;
           z-index: -1;
         }
-        .index_main{
+        .index_main_50px{
           margin-top: -50px;
+        }
+        .index_main_60px{
+          margin-top: -60px;
+        }
+        .ltRtMargin{
+          margin-left: 5px;
+          margin-right: 5px;
         }
       }
     }

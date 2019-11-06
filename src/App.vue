@@ -2,11 +2,13 @@
   <div id="app" v-if="configured">
     <transition name="fadeIn">
       <keep-alive>
-        <router-view v-if="$route.meta.keepAlive" v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
+        <router-view v-if="$route.meta.keepAlive"
+                     v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
       </keep-alive>
     </transition>
     <transition name="fadeIn">
-      <router-view v-if="!$route.meta.keepAlive" v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
+      <router-view v-if="!$route.meta.keepAlive"
+                   v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
     </transition>
   </div>
 </template>
@@ -41,17 +43,17 @@
     },
     data() {
       return {
-        title:"",
-        configured:false
+        title: "",
+        configured: false
       }
     },
     beforeCreate() {
       this.$api.xapi({
         method: 'get',
         url: '/static/serverConfig.json'
-      }).then((result)=>{
+      }).then((result) => {
         //用一个全局字段保存ApiUrl 也可以用sessionStorage存储
-        console.log("getConfigJson"+ JSON.stringify(result.data))
+        console.log("getConfigJson" + JSON.stringify(result.data))
         let serverUrl = result.data.SERVICE_URL;
         let testPaymentUrl = result.data.TESTSTUB_PAYMENT_URL
         let testUser = result.data.TEST_USER
@@ -61,29 +63,29 @@
         this.$api.T_APP_ID = result.data.tAppID
         this.$api.SERVICE_URL = serverUrl;
         this.$api.SERVR_PHONE_NUM = result.data.SERVR_PHONE_NUM
-        this.$api.PRODUCT_BASE_URL = serverUrl+"/v2/products/"
-        this.$api.AGGREGATION_BASE_URL = serverUrl+"/v2/aggregations/"
-        this.$api.ORDER_BASE_URL = serverUrl+"/v2/orders/"
-        this.$api.EQUITY_BASE_URL = serverUrl+"/v2/equities/"
-        this.$api.SSO_BASE_URL = serverUrl+"/v2/ssoes/"
-        this.$api.WORKER_ORDER_BASE_URL = serverUrl+"/v2/workorders"
-        this.$api.TESTSTUB_PAYMENT_BASE_URL = testPaymentUrl+"/v1/"
-        this.$api.BASE_BASE_URL =  serverUrl+"/v2/bases/"
-        this.$api.ES_BASE_URL = serverUrl+ "/v2/elasticsearches/"
+        this.$api.PRODUCT_BASE_URL = serverUrl + "/v2/products/"
+        this.$api.AGGREGATION_BASE_URL = serverUrl + "/v2/aggregations/"
+        this.$api.ORDER_BASE_URL = serverUrl + "/v2/orders/"
+        this.$api.EQUITY_BASE_URL = serverUrl + "/v2/equities/"
+        this.$api.SSO_BASE_URL = serverUrl + "/v2/ssoes/"
+        this.$api.WORKER_ORDER_BASE_URL = serverUrl + "/v2/workorders"
+        this.$api.TESTSTUB_PAYMENT_BASE_URL = testPaymentUrl + "/v1/"
+        this.$api.BASE_BASE_URL = serverUrl + "/v2/bases/"
+        this.$api.ES_BASE_URL = serverUrl + "/v2/elasticsearches/"
         this.$api.AGGREGATE_PAY_URL = serverUrl + "/v2/aggpays/"
         this.$api.LINKPAY_ACCOUNT_URL = serverUrl + "/v2/woas/"
         this.$api.PINGAN_AUTH_URL = serverUrl + "/v2/pingans/"
         this.$api.FREIGHTS_URL = serverUrl + "/v2/freights/"
-        this.$api.OPTCARDS_URL = serverUrl +"/v2/wocs/"
+        this.$api.OPTCARDS_URL = serverUrl + "/v2/wocs/"
         this.$api.VENDOR_URL = serverUrl + "/v2/vendors/"
-        this.$api.QUICKLY_PAY_URL = serverUrl +  "/v2/cardpayment/"
-        if(testUser != undefined && testUser.length > 0)
+        this.$api.QUICKLY_PAY_URL = serverUrl + "/v2/cardpayment/"
+        if (testUser != undefined && testUser.length > 0)
           this.$api.TEST_USER = testUser
-        if(title !=undefined && title.length > 0)
+        if (title != undefined && title.length > 0)
           this.title = title
-        if(this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
+        if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
           this.$api.IS_GAT_APP = true;
-        if(this.$api.APP_ID == "11") {
+        if (this.$api.APP_ID == "11") {
           this.getLoginAuthInfo();
           setTimeout(() => {
             this.configured = true
@@ -92,14 +94,16 @@
           this.configured = true
         }
 
-      }).catch((error)=>{console.log(error)});
+      }).catch((error) => {
+        console.log(error)
+      });
     },
     created() {
-/*      if(! this.$api.IS_GAT_APP) {
-        window.onload = () => {
-          this.getLoginAuthInfo();
-        }
-      }*/
+      /*      if(! this.$api.IS_GAT_APP) {
+              window.onload = () => {
+                this.getLoginAuthInfo();
+              }
+            }*/
     },
 
     methods: {
@@ -133,7 +137,7 @@
         })
       },
       getPingAnThirdPartyAccessTokenInfo(requestCode) {
-      //  this.$toast("requestCode:"+requestCode)
+        //  this.$toast("requestCode:"+requestCode)
         let that = this;
         that.$api.xapi({
           method: 'get',
@@ -167,7 +171,7 @@
         try {
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
-       //   this.$toast("initCode:"+initCode)
+          //   this.$toast("initCode:"+initCode)
           if (!initCode)
             return
           sc.config({
@@ -191,7 +195,12 @@
                                 code: - 10003    用户未登录 */
                   console.warning(res.message)
                 }
-              })
+              });
+            sc.setToolBar({
+              leftBtns: [
+                {iconType: 0}
+              ]
+            });
           })
           sc.error((res) => {
             console.error({res})
@@ -346,6 +355,7 @@
   .fade-enter-active, .fade-leave-active {
     transition: opacity .4s
   }
+
   .fade-enter, .fade-leave-active {
     opacity: 0
   }

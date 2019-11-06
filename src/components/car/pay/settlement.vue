@@ -688,7 +688,6 @@
             if (item.freight > 0) {
               this.freightPay += item.freight;
             }
-
           })
         } catch (e) {
         }
@@ -1573,6 +1572,7 @@
           that.$log(error)
           that.$log("无法获取到运费")
           that.isOtherDataLoaded = true;
+          that.upDatefreightPay();
         })
       },
       getAoyifreightPay() {
@@ -1618,6 +1618,7 @@
           that.isAoyiDataLoaded = true
           that.$log("pageLoading:  error,loading is:" + that.$store.state.appconf.pageLoading)
           that.$log("无法获取到运费")
+          that.upDatefreightPay();
           if (that.pageLoadTimerId != -1) {
             clearTimeout(that.pageLoadTimerId)
           }
@@ -1714,6 +1715,7 @@
           }).catch(function (error) {
             that.$log(error)
             that.isAoyiDataLoaded = true;
+            that.getAoyifreightPay();
             that.$log("page loading end");
             if (that.pageLoadTimerId != -1) {
               clearTimeout(that.pageLoadTimerId)
@@ -1745,6 +1747,7 @@
                 }
               }
             })
+            this.getPlatformFreightPay();
           }).catch(function (error) {
           })
           this.getPlatformFreightPay();//获取平台商品库存

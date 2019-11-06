@@ -308,7 +308,10 @@
         if(mpu == null) {
           mpu = goods.skuid;
         }
-        try {
+        this.$router.push({path:"/detail",query:{
+            mpu:mpu
+          }});
+/*        try {
           //获取goods信息，update current googds
           this.$api.xapi({
             method: 'get',
@@ -325,7 +328,7 @@
           })
         } catch (e) {
 
-        }
+        }*/
       },
       gotoPromotionPage(promotionId) {
         this.$router.push({path: '/category/goods/promotion/' + promotionId});

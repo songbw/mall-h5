@@ -113,6 +113,9 @@
     beforeRouteEnter(to, from, next) {
       next(vm => {
         vm.$store.commit('SET_CURRENT_NAVI_INDEX', 3);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+        }, 20);
       })
     },
     computed: {

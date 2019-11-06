@@ -7,204 +7,215 @@
       <v-loading></v-loading>
     </div>
     <div class="detail-body" :style="{'padding-top':showHeader? '2.6em':'0px'}" v-else>
-      <v-swiper :swiperData=swiperUrls></v-swiper>
-      <div>
-        <div class="promotion-price" v-if="hasPromotion">
-          <van-col span="8" class="priceBox">
-            <p class="sales-price">
-              <span>￥</span>{{parseFloat(this.goods.dprice).toFixed(2)}}
-            </p>
-            <div>
-              <p>
-                <span class="origin-price-title">原价</span>
-                <span class="origin-price">￥{{parseFloat(this.goods.price).toFixed(2)}}</span>
+      <div v-if="goods != null">
+        <v-swiper :swiperData=swiperUrls></v-swiper>
+        <div>
+          <div class="promotion-price" v-if="hasPromotion">
+            <van-col span="8" class="priceBox">
+              <p class="sales-price">
+                <span>￥</span>{{parseFloat(this.goods.dprice).toFixed(2)}}
               </p>
-            </div>
-          </van-col>
-          <van-col span="16" class="promotionBox">
-            <v-countdown v-if="PromotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
-                         @start_callback="countDownS_cb"
-                         @end_callback="countDownE_cb"
-                         :startTime="PromotionStartTime"
-                         :endTime="PromotionEndTime"
-                         :secondsTxt="''">
-            </v-countdown>
-            <div class="promotionStatusText" v-if="PromotionStatus === 5">
-              <span style="color: white">已结束</span>
-            </div>
-          </van-col>
-        </div>
-        <p class="price-title" v-else>
-          <span>￥</span>{{parseFloat(this.goods.price).toFixed(2)}}
-        </p>
-        <div class="goods-detail">
+              <div>
+                <p>
+                  <span class="origin-price-title">原价</span>
+                  <span class="origin-price">￥{{parseFloat(this.goods.price).toFixed(2)}}</span>
+                </p>
+              </div>
+            </van-col>
+            <van-col span="16" class="promotionBox">
+              <v-countdown v-if="PromotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
+                           @start_callback="countDownS_cb"
+                           @end_callback="countDownE_cb"
+                           :startTime="PromotionStartTime"
+                           :endTime="PromotionEndTime"
+                           :secondsTxt="''">
+              </v-countdown>
+              <div class="promotionStatusText" v-if="PromotionStatus === 5">
+                <span style="color: white">已结束</span>
+              </div>
+            </van-col>
+          </div>
+          <p class="price-title" v-else>
+            <span>￥</span>{{parseFloat(this.goods.price).toFixed(2)}}
+          </p>
+          <div class="goods-detail">
         <span class="goods-disciption">
           {{this.goods.name}}
         </span>
+          </div>
         </div>
-      </div>
-      <div class="couponBox" v-if="this.userCouponList.length > 0 || this.avaliableCouponList.length > 0">
-        <van-cell>
-          <div slot="title">
+        <div class="couponBox" v-if="this.userCouponList.length > 0 || this.avaliableCouponList.length > 0">
+          <van-cell>
+            <div slot="title">
              <span style="font-size: medium;font-weight: bold">
                领券
              </span>
-          </div>
-          <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
-                    @click="showCouponSelector()"/>
-        </van-cell>
-        <van-actionsheet v-model="showCoupon" title="优惠券" style="background-color: white">
-          <div class="couponLayout">
-            <div class="avaliableCoupon">
-              <div v-if="avaliableCouponList.length > 0">
-                <van-cell title="可领取的券" style="background-color: #f8f8f8; margin-top: -1px"></van-cell>
-                <div class="couponList">
-                  <div class="coupon coupon-white" v-for="(k,index) in avaliableCouponList" :key="index">
-                    <div class="coupon-main">
-                      <div class="coupon-img">
-                        <img :src="k.imageUrl.length?k.imageUrl: couponImg">
-                      </div>
-                      <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                        <div class="coupon-price">
-                          <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
-                          {{formateCouponPrice(k.rules.couponRules)}}
-                          <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+            </div>
+            <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
+                      @click="showCouponSelector()"/>
+          </van-cell>
+          <van-actionsheet v-model="showCoupon" title="优惠券" style="background-color: white">
+            <div class="couponLayout">
+              <div class="avaliableCoupon">
+                <div v-if="avaliableCouponList.length > 0">
+                  <van-cell title="可领取的券" style="background-color: #f8f8f8; margin-top: -1px"></van-cell>
+                  <div class="couponList">
+                    <div class="coupon coupon-white" v-for="(k,index) in avaliableCouponList" :key="index">
+                      <div class="coupon-main">
+                        <div class="coupon-img">
+                          <img :src="k.imageUrl.length?k.imageUrl: couponImg">
                         </div>
-                        <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
-                        <div class="coupon-expire-date">
-                          {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+                        <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                          <div class="coupon-price">
+                            <span v-if="k.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                            {{formateCouponPrice(k.rules.couponRules)}}
+                            <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+                          </div>
+                          <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
+                          <div class="coupon-expire-date">
+                            {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+                          </div>
+                        </div>
+                      </div>
+                      <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already">
+                      </div>
+                      <div v-else class="coupon-get" @click="onAvaliableCouponClick(k,index)">
+                        <div>
+                          <van-circle
+                            :value="formateReleasePercentage(k)"
+                            color="#FF4444"
+                            fill="#fff"
+                            size="55px"
+                            layer-color="#cccccc"
+                            :text="formateReleasePercentageText(k)"
+                            :rate="100"
+                            :speed="100"
+                            :stroke-width="50"/>
+                        </div>
+                        <div>
+                          <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
                         </div>
                       </div>
                     </div>
-                    <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already">
-                    </div>
-                    <div v-else class="coupon-get" @click="onAvaliableCouponClick(k,index)">
-                      <div>
-                        <van-circle
-                          :value="formateReleasePercentage(k)"
-                          color="#FF4444"
-                          fill="#fff"
-                          size="55px"
-                          layer-color="#cccccc"
-                          :text="formateReleasePercentageText(k)"
-                          :rate="100"
-                          :speed="100"
-                          :stroke-width="50"/>
+                  </div>
+                </div>
+              </div>
+              <div class="gottedCoupon">
+                <div v-if="userCouponList.length > 0">
+                  <van-cell title="已领取的券" style="background-color: #f8f8f8"></van-cell>
+                  <div class="couponList">
+                    <div class="coupon coupon-white" v-for="(coupon,index) in userCouponList" :key="index">
+                      <div class="coupon-main">
+                        <div class="coupon-img">
+                          <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg">
+                        </div>
+                        <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                          <!--                        <div class="coupon-suppler">
+                                                    <span>{{(coupon.couponInfo.supplierMerchantName!=undefined &&  coupon.couponInfo.supplierMerchantName.length) > 0? coupon.couponInfo.supplierMerchantName:'凤巢'}}</span>
+                                                    <i>{{coupon.couponInfo.name}}</i>
+                                                  </div>-->
+                          <div class="coupon-price">
+                            <span v-if="coupon.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                            {{formateCouponPrice(coupon.couponInfo.rules.couponRules)}}
+                            <span>{{formateCouponDetail(coupon.couponInfo.rules.couponRules)}}</span>
+                          </div>
+                          <div class="coupon-desc">{{formateCouponDescription(coupon.couponInfo)}}</div>
+                          <div class="coupon-expire-date">
+                            {{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}
+                          </div>
+                        </div>
                       </div>
-                      <div>
-                        <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
+                      <div class="coupon-get  coupon-get-already">
                       </div>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="gottedCoupon">
-              <div v-if="userCouponList.length > 0">
-                <van-cell title="已领取的券" style="background-color: #f8f8f8"></van-cell>
-                <div class="couponList">
-                  <div class="coupon coupon-white" v-for="(coupon,index) in userCouponList" :key="index">
-                    <div class="coupon-main">
-                      <div class="coupon-img">
-                        <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg">
-                      </div>
-                      <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                        <!--                        <div class="coupon-suppler">
-                                                  <span>{{(coupon.couponInfo.supplierMerchantName!=undefined &&  coupon.couponInfo.supplierMerchantName.length) > 0? coupon.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                                                  <i>{{coupon.couponInfo.name}}</i>
-                                                </div>-->
-                        <div class="coupon-price">
-                          <span v-if="coupon.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
-                          {{formateCouponPrice(coupon.couponInfo.rules.couponRules)}}
-                          <span>{{formateCouponDetail(coupon.couponInfo.rules.couponRules)}}</span>
-                        </div>
-                        <div class="coupon-desc">{{formateCouponDescription(coupon.couponInfo)}}</div>
-                        <div class="coupon-expire-date">
-                          {{formatEffectiveDateTime(coupon.couponInfo.effectiveStartDate,coupon.couponInfo.effectiveEndDate)}}
-                        </div>
-                      </div>
-                    </div>
-                    <div class="coupon-get  coupon-get-already">
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </van-actionsheet>
-      </div>
-      <div class="inventoryBox">
-        <div style="display: flex" v-if="(freeShippingTemplate != null || shippingTemplate != null)">
-          <div style="font-size: medium;font-weight: bold;padding: 3px;">
-            <p style="color: black;width: 2.5em">运费:</p>
-          </div>
-          <div style="font-size: medium;padding: 3px;font-weight: bold;color: #8c8c8c">
-            <div v-if="freeShippingTemplate != null">
-              <div v-if="freeShippingTemplate.mode == 0">
-                <span>满{{freeShippingTemplate.regions[0].fullAmount}}元享包邮</span>
-              </div>
-              <div v-else>
-                <span>满{{freeShippingTemplate.regions[0].fullAmount}}件享包邮</span>
-              </div>
-            </div>
-            <div v-if="shippingTemplate != null">
-              <div v-if="shippingTemplate.regions[0].basePrice != 0 && shippingTemplate.regions[0].cumulativePrice != 0">
-                <span>购买数量低于{{shippingTemplate.regions[0].baseAmount}}件，运费{{shippingTemplate.regions[0].basePrice}}元</span>
-                <span>超过最低购买数量后,每购买{{shippingTemplate.regions[0].cumulativeUnit}}件，运费增加:{{shippingTemplate.regions[0].cumulativePrice}}元</span>
-              </div>
-              <div v-if="shippingTemplate.regions[0].basePrice != 0 && shippingTemplate.regions[0].cumulativePrice == 0">
-                <span>运费{{shippingTemplate.regions[0].basePrice}}元</span>
-              </div>
-            </div>
-          </div>
+          </van-actionsheet>
         </div>
-        <div style="display: flex">
-          <div style="width: 90%; font-size: medium;font-weight: bold;padding: 3px;">
+        <div class="inventoryBox">
+          <div style="display: flex" v-if="(freeShippingTemplate != null || shippingTemplate != null)">
+            <div style="font-size: medium;font-weight: bold;padding: 3px;">
+              <p style="color: black;width: 2.5em">运费:</p>
+            </div>
+            <div style="font-size: medium;padding: 3px;font-weight: bold;color: #8c8c8c">
+              <div v-if="freeShippingTemplate != null">
+                <div v-if="freeShippingTemplate.mode == 0">
+                  <span>满{{freeShippingTemplate.regions[0].fullAmount}}元享包邮</span>
+                </div>
+                <div v-else>
+                  <span>满{{freeShippingTemplate.regions[0].fullAmount}}件享包邮</span>
+                </div>
+              </div>
+              <div v-if="shippingTemplate != null">
+                <div
+                  v-if="shippingTemplate.regions[0].basePrice != 0 && shippingTemplate.regions[0].cumulativePrice != 0">
+                  <span>购买数量低于{{shippingTemplate.regions[0].baseAmount}}件，运费{{shippingTemplate.regions[0].basePrice}}元</span>
+                  <span>超过最低购买数量后,每购买{{shippingTemplate.regions[0].cumulativeUnit}}件，运费增加:{{shippingTemplate.regions[0].cumulativePrice}}元</span>
+                </div>
+                <div
+                  v-if="shippingTemplate.regions[0].basePrice != 0 && shippingTemplate.regions[0].cumulativePrice == 0">
+                  <span>运费{{shippingTemplate.regions[0].basePrice}}元</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="display: flex">
+            <div style="width: 90%; font-size: medium;font-weight: bold;padding: 3px;">
 
-            <p style="color: black">
-              <span>送至:</span>
-              <van-icon name="location" size="14px" color="#FF4444"/>
-              <span style="color: #8c8c8c ">{{addressCode.provinceName}}</span>
-              <span style="color: #8c8c8c ">{{addressCode.cityName}}</span>
-              <span style="color: #8c8c8c ">{{addressCode.countyName}}</span>
-            </p>
+              <p style="color: black">
+                <span>送至:</span>
+                <van-icon name="location" size="14px" color="#FF4444"/>
+                <span style="color: #8c8c8c ">{{addressCode.provinceName}}</span>
+                <span style="color: #8c8c8c ">{{addressCode.cityName}}</span>
+                <span style="color: #8c8c8c ">{{addressCode.countyName}}</span>
+              </p>
+            </div>
+            <div style="width: 10%;">
+              <van-icon style="float: right;padding: 3px;margin-right: 7px;margin-top: 3px" name="weapp-nav"
+                        class="custom-icon" size="14px" color="#000000"
+                        @click="showAddressSelector()"></van-icon>
+            </div>
           </div>
-          <div style="width: 10%;">
-            <van-icon style="float: right;padding: 3px;margin-right: 7px;margin-top: 3px" name="weapp-nav"
-                      class="custom-icon" size="14px" color="#000000"
-                      @click="showAddressSelector()"></van-icon>
+          <div style="padding: 3px">
+            <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;font-weight: bold">获取库存...</span>
+            <span v-else style="color: #ff4444;font-size: medium;font-weight: bold">{{hasInventory?'有货':'无货'}}</span>
           </div>
         </div>
-        <div style="padding: 3px">
-          <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;font-weight: bold">获取库存...</span>
-          <span v-else style="color: #ff4444;font-size: medium;font-weight: bold">{{hasInventory?'有货':'无货'}}</span>
+        <div class="serviceBox" v-if="showServiceBox">
+          <div class="serviceTitle">
+            <span>店铺公告</span>
+            <img :src="seriviceIcon">
+          </div>
+          <div class="serviceDetail">
+            <span>1、本商品由苏宁易购发货并提供售后服务，苏宁易购服务电话4008516516</span>
+            <span>2、退货完成后，积分会在3个工作日内退回，如有延误，请联络关爱通客服进行处理。</span>
+            <span>3、关爱通苏宁易购的商品不享受价保服务，不享受苏宁官网活动或优惠。请谨慎下单。</span>
+            <span>4、若该商品主图或详情包含赠品信息,赠品赠完即止，不保证您的订单一定有赠品,请知悉。</span>
+          </div>
         </div>
-      </div>
-      <div class="serviceBox" v-if="showServiceBox">
-        <div class="serviceTitle">
-          <span>店铺公告</span>
-          <img :src="seriviceIcon">
+        <div v-if="bulletinInfo !=nulll && bulletinInfo.position == 'top'" class="bulletin">
+          <img v-lazy="bulletinInfo.imageUrl">
         </div>
-        <div class="serviceDetail">
-          <span>1、本商品由苏宁易购发货并提供售后服务，苏宁易购服务电话4008516516</span>
-          <span>2、退货完成后，积分会在3个工作日内退回，如有延误，请联络关爱通客服进行处理。</span>
-          <span>3、关爱通苏宁易购的商品不享受价保服务，不享受苏宁官网活动或优惠。请谨慎下单。</span>
-          <span>4、若该商品主图或详情包含赠品信息,赠品赠完即止，不保证您的订单一定有赠品,请知悉。</span>
+        <div class="contentBox">
+          <div class="contentTitle">
+            <span>商品详情</span>
+          </div>
+          <v-content :contentData=contentUrls></v-content>
         </div>
-      </div>
-      <div v-if="bulletinInfo !=nulll && bulletinInfo.position == 'top'" class="bulletin">
-        <img v-lazy="bulletinInfo.imageUrl">
-      </div>
-      <div class="contentBox">
-        <div class="contentTitle">
-          <span>商品详情</span>
+        <div v-if="bulletinInfo !=nulll && bulletinInfo.position == 'bottom'" class="bulletin">
+          <img v-lazy="bulletinInfo.imageUrl">
         </div>
-        <v-content :contentData=contentUrls></v-content>
+        <v-baseline/>
       </div>
-      <div v-if="bulletinInfo !=nulll && bulletinInfo.position == 'bottom'" class="bulletin">
-        <img v-lazy="bulletinInfo.imageUrl">
+      <div v-else>
+        <div class="noContext">
+          <img :src="icon_noContext">
+          <span class="noContext_line1">亲,没有查询到商品!</span>
+        </div>
+        <v-baseline/>
       </div>
-      <v-baseline/>
     </div>
     <v-action :datas="this.goods"/>
   </div>
@@ -249,44 +260,53 @@
       }
     },
 
-    mounted() {
+    async mounted() {
       this.pageloading = true;
       let that = this;
-      if (this.$store.state.appconf.currentGoods != undefined && this.$store.state.appconf.currentGoods.length > 0) {
-        this.goods = JSON.parse(this.$store.state.appconf.currentGoods);
-        if (!(JSON.stringify(this.goods) == "{}")) {
-          let imagesUrls = this.goods.imagesUrl;
-          if (imagesUrls != null && imagesUrls.length > 0) {
-            let ulsArray = imagesUrls.split(":");
-            if (ulsArray.length > 0) {
-              ulsArray.forEach(items => {
-                if (items != null && items.length > 0) {
-                  this.swiperUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
-                }
-              })
-            }
-          }
-          let comtentUrls = this.goods.introductionUrl;
-          if (comtentUrls != null && comtentUrls.length > 0) {
-            let ulsArray = comtentUrls.split(":");
-            if (ulsArray.length > 0) {
-              ulsArray.forEach(items => {
-                if (items != null && items.length > 0) {
-                  this.contentUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
-                }
-              })
-            }
-          }
-          if (this.goods.promotion != undefined && this.goods.promotion.length > 0) {
-            this.PromotionStartTime = new Date(this.$moment(this.goods.promotion[0].startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
-            this.PromotionEndTime = new Date(this.$moment(this.goods.promotion[0].endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
-            this.promotionType = this.goods.promotion[0].promotionType
-            this.discount = this.goods.promotion[0].discount
-            this.promotionId = this.goods.promotion[0].id
-            this.hasPromotion = true;
-            this.PromotionStatus = this.goods.promotion[0].status;
+      let mpu = this.$route.query.mpu;
+      this.goods = null
+      try {
+        let ret = await this.getProductInfo(mpu)
+        this.$log(ret)
+        if (ret.data.code == 200) {
+          this.goods = ret.data.data.result
+        }
+      } catch (e) {
+        that.goods = null
+      }
+      if(this.goods != null) {
+        let imagesUrls = this.goods.imagesUrl;
+        if (imagesUrls != null && imagesUrls.length > 0) {
+          let ulsArray = imagesUrls.split(":");
+          if (ulsArray.length > 0) {
+            ulsArray.forEach(items => {
+              if (items != null && items.length > 0) {
+                this.swiperUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+              }
+            })
           }
         }
+        let comtentUrls = this.goods.introductionUrl;
+        if (comtentUrls != null && comtentUrls.length > 0) {
+          let ulsArray = comtentUrls.split(":");
+          if (ulsArray.length > 0) {
+            ulsArray.forEach(items => {
+              if (items != null && items.length > 0) {
+                this.contentUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+              }
+            })
+          }
+        }
+        if (this.goods.promotion != undefined && this.goods.promotion.length > 0) {
+          this.PromotionStartTime = new Date(this.$moment(this.goods.promotion[0].startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+          this.PromotionEndTime = new Date(this.$moment(this.goods.promotion[0].endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+          this.promotionType = this.goods.promotion[0].promotionType
+          this.discount = this.goods.promotion[0].discount
+          this.promotionId = this.goods.promotion[0].id
+          this.hasPromotion = true;
+          this.PromotionStatus = this.goods.promotion[0].status;
+        }
+
         if (this.hasPromotion) {
           this.goods['dprice'] = this.goods.price - this.discount
         } else {
@@ -334,9 +354,11 @@
         } else {
           //no user
         }
+        this.updateServiceBoxInfo(this.goods);
+        this.updateInventor(this.goods)
+      } else {
+
       }
-      this.updateServiceBoxInfo(this.goods);
-      this.updateInventor(this.goods)
       this.pageloading = false;
     },
 
@@ -370,6 +392,7 @@
         avaliableCouponList: [],
         couponImg: require('@/assets/icons/ico_coupon.png'),
         seriviceIcon: require('@/assets/icons/ico_prod_service.jpg'),
+        icon_noContext: require('@/assets/icons/ico_empty_box.png'),
         showServiceBox: false,
         bulletinInfo: null,
         freeShippingTemplate: null,
@@ -377,22 +400,33 @@
       }
     },
     methods: {
+      getProductInfo(mpu) {
+        //获取goods信息，update current googds
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/prod',
+          params: {
+            mpu: mpu,
+          }
+        })
+      },
+
       updateServiceBoxInfo(goods) {
         let that = this
         this.$log("updateServiceBoxInfo Enter")
         this.$log(goods)
-        let merchantCode = ""
-        if(goods.merchantId == 2) {
-          merchantCode = goods.mpu.substr(0,2)
+        let params = {
+          merchantId: goods.merchantId
+        }
+        if (goods.merchantId == 2) {
+          params['merchantCode'] = goods.mpu.substr(0, 2)
         }
         that.$api.xapi({
           method: 'get',
           baseURL: this.$api.VENDOR_URL,
           url: '/bulletin/findByMerchantId',
-          params: {
-            merchantId: goods.merchantId,
-            merchantCode:merchantCode
-          },
+          params: params
         }).then((response) => {
           that.$log(response)
           if (response.data.data.result != null) {
@@ -468,7 +502,7 @@
             }
           }
           let id = this.$store.state.appconf.usedAddressId;
-          if(id == undefined) {
+          if (id == undefined) {
             id = -1
           }
           try {
@@ -481,7 +515,7 @@
                     break;
                   }
                 }
-                if ( id == -1) {
+                if (id == -1) {
                   id = addressList[0].id;
                   address = addressList[0]
                 }
@@ -509,7 +543,7 @@
           let inventorySkusOfZy = [];
           if (goods.merchantId === 2) {
             this.$log(goods)
-            inventorySkus.push({"skuId": goods.mpu, "remainNum": 1,"price":goods.price})
+            inventorySkus.push({"skuId": goods.mpu, "remainNum": 1, "price": goods.price})
           } else {
             inventorySkusOfZy.push({"mpu": goods.mpu, "remainNum": 1})
           }
@@ -715,6 +749,30 @@
       position: fixed;
       z-index: 5;
       top: 0;
+    }
+
+    .noContext {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: Center;
+      height: 500px;
+
+      img {
+        height: 130px;
+        width: 130px;
+      }
+
+      span {
+        margin: 2vw;
+      }
+
+      .noContext_line1 {
+        font-weight: lighter;
+        color: black;
+        .fz(font-size, 35);
+      }
     }
 
     .detail-body {
