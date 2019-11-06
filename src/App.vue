@@ -99,11 +99,6 @@
       });
     },
     created() {
-      /*      if(! this.$api.IS_GAT_APP) {
-              window.onload = () => {
-                this.getLoginAuthInfo();
-              }
-            }*/
     },
 
     methods: {
@@ -123,6 +118,14 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
+            let data= this.$md5(rt.token)
+            if(rt.newUser) {
+              data =  "1" + data
+            } else {
+              data =  "0" + data
+            }
+            this.$log(data)
+            that.$store.commit('SET_GUYS_INFO',data);
             that.configured = true
           }
         }).catch(function (error) {

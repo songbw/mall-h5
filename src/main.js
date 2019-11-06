@@ -11,6 +11,9 @@ import VueWechatTitle from 'vue-wechat-title'
 import VueScroller from 'vue-scroller'
 import VueQRCodeComponent from 'vue-qrcode-component'
 import VConsole from 'vconsole'
+import md5 from 'js-md5';
+
+Vue.prototype.$md5 = md5;
 
 if (process.env.NODE_ENV === 'production') {
   new VConsole()
@@ -25,6 +28,8 @@ Vue.use(ba, { siteId: "03a0d710c71e9da54f17e6e0544e5030" });
 
 Vue.use(LyTab)
 Vue.use(VueScroller)
+
+//Vue.prototype.$md5 = md5;
 
 import {
   Button,
