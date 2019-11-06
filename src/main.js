@@ -10,6 +10,8 @@ import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueScroller from 'vue-scroller'
 import VueQRCodeComponent from 'vue-qrcode-component'
+import md5 from 'js-md5';
+Vue.prototype.$md5 = md5;
 
 Vue.component('qr-code', VueQRCodeComponent)
 
@@ -20,6 +22,8 @@ Vue.use(ba, { siteId: "03a0d710c71e9da54f17e6e0544e5030" });
 
 Vue.use(LyTab)
 Vue.use(VueScroller)
+
+//Vue.prototype.$md5 = md5;
 
 import {
   Button,
@@ -140,7 +144,7 @@ Vue.use(vueLogger, {
     second = second < 10 ? ('0' + second) : second;
     return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
   },
-  dev: false,
+  dev: true,
   levels: ["log", "warn", "debug", "error", "dir"],
   forceLevels: []
 });

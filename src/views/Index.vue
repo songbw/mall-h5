@@ -52,8 +52,8 @@
       :closeOnClickOverlay="true"
       style="background-color: transparent"
     >
-      <div class="f" v-if="icon_git.length > 0">
-        <img :src=icon_git @click="onGiftDialogImgClick">
+      <div class="giftDialog" v-if="icon_gift.length > 0">
+        <img :src=icon_gift @click="onGiftDialogImgClick">
         <van-icon name="close" @click="onGiftDialogCloseBtnClicks"/>
       </div>
     </van-dialog>
@@ -122,8 +122,7 @@
         pageloading: true,
         showHeader: true,
         showDialog: false,
-        //icon_git: require('@/assets/icons/ico_gift.png'),
-        icon_git: "",
+        icon_gift: "",
         userTokenLoading: true,
       }
     },
@@ -153,7 +152,7 @@
           let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
           if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
-            this.icon_git = this.mHeader.novicePackUrl
+            this.icon_gift = this.mHeader.novicePackUrl
           }
         }
         this.$log(this.mHeader);
@@ -181,11 +180,11 @@
             this.userTokenLoading = false;
           }
         }, 10000);
-/*        setTimeout(() => {
+        setTimeout(() => {
           this.test();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
-        }, 1000);*/
+        }, 1000);
       }
     },
     computed: {
@@ -194,9 +193,24 @@
       },
       mlocation() {
         return this.$store.state.appconf.location;
-      }
+      },
+      guysinfo() {
+        return  this.$store.state.appconf.guysInfo;
+      },
+
     },
     watch:{
+      guysinfo(newValue, oldVal) {
+        if(newValue.length > 1) {
+          let flag = newValue.substr(0,1)
+          let data = flag +this.$md5(this.$store.state.appconf.token)
+          if(data == newValue) {
+            if(flag == '1' && !this.$api.IS_GAT_APP) {
+              this.showDialog = true
+            }
+          }
+        }
+      },
       userToken(newValue, oldVal) {
         if (newValue && newValue.length > 0) {
           let userInfo = this.$store.state.appconf.userInfo;
@@ -359,11 +373,15 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
+            let data= this.$md5(rt.token)
+            if(rt.newUser) {
+              data =  "1" + data
+            } else {
+              data =  "0" + data
+            }
+            this.$log(data)
+            that.$store.commit('SET_GUYS_INFO',data);
           }
-          //if (rt.newUser != undefined && rt.newUser) {
-            //if (!this.$api.IS_GAT_APP)
-            //  this.showDialog = true;
-          //}
         }).catch(function (error) {
           that.$log(error)
         })

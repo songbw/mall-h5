@@ -409,7 +409,7 @@
 
         .goodsComment {
           margin: 2px 5px;
-
+          min-height: 2.4em;
           > p {
             .fz(font-size, 25);
             min-height: 2rem;

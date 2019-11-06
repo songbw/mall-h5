@@ -21,7 +21,8 @@ const state = {
   cartList:[],
   merchantList:[],
   userDetail:'',
-  currentOptCard:''
+  currentOptCard:'',
+  guysInfo:''
 }
 
 const mutations = {
@@ -107,6 +108,10 @@ const mutations = {
 
   [types.SET_CURRENT_OPT_CARDS](state, res) {
     state.currentOptCard = res
+  },
+
+  [types.SET_GUYS_INFO](state, res) {
+    state.guysInfo = res
   },
 }
 
