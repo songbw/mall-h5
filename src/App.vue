@@ -91,6 +91,7 @@
             this.configured = true
           }, 1000);
         } else {
+          this.clearStorage();
           this.configured = true
         }
 
@@ -107,6 +108,19 @@
     },
 
     methods: {
+      clearStorage() {
+        let  payList = []
+        this.$store.commit('SET_PAY_LIST', this.payList);
+        let  cartList = []
+        this.$store.commit('SET_CART_LIST', cartList);
+        let  merchantList = []
+        this.$store.commit('SET_MERCHANT_LIST', merchantList);
+        let addressList = []
+        this.$store.commit('SET_ADDRESS_LIST', addressList);
+        let userDetail = ''
+        this.$store.commit('SET_USER_DETAIL', userDetail);
+
+      },
       thirdPartLogined(openId, accessToken) {
         let that = this;
         this.$api.xapi({

@@ -187,9 +187,11 @@
                 ret += " 收件人:" + jsonReturnAddress.receiverName
               if (jsonReturnAddress.receiverPhone != undefined && jsonReturnAddress.receiverPhone.length > 0)
                 ret += " 收件人电话:" + jsonReturnAddress.receiverPhone
-              ret += " 退货地址:" + jsonReturnAddress.provinceName +
-                jsonReturnAddress.cityName + jsonReturnAddress.countyName +
-                jsonReturnAddress.address
+                if(jsonReturnAddress.provinceName != undefined) {
+                    ret += " 退货地址:" + jsonReturnAddress.provinceName +
+                    jsonReturnAddress.cityName + jsonReturnAddress.countyName +
+                    jsonReturnAddress.address
+                }
             }
             let jsonRemark = comment.remark
             if (jsonRemark != undefined) {
