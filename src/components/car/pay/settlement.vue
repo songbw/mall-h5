@@ -29,7 +29,60 @@
           </div>
         </div>
         <div class="pay-list">
-          <div class="pay-product">
+          <div class="pay-product" v-if="this.$api.IS_GAT_APP">
+            <li v-for="item in arregationList" style="list-style: none">
+              <div v-if="item.goods.length > 0" class="supplyer">
+                <van-cell :title=item.merchantName icon="shop"/>
+                <ul>
+                  <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f8f8f8;">
+                    <div class="promotionBox"
+                         v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
+                      <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].tag}}</span>
+                      <v-countdown class="promotionCountDown"
+                                   @start_callback="countDownS_cb(index,k)"
+                                   @end_callback="countDownE_cb(index,k)"
+                                   :startTime="getDateTime(k.product.promotionInfo.promotion[0].startDate)"
+                                   :endTime="getDateTime(k.product.promotionInfo.promotion[0].endDate)"
+                                   :secondsTxt="''">
+                      </v-countdown>
+                    </div>
+                    <div v-if="k.product.promotionInfo.promotionState === 1">
+                      <div v-if="!k.valid">
+                        <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                      </div>
+                      <van-card
+                        :desc="locationCity"
+                        :num="k.product.baseInfo.count"
+                        :price="k.product.goodsInfo.dprice"
+                        :title="k.product.goodsInfo.name"
+                        :thumb="k.product.goodsInfo.image"
+                        :origin-price="k.checkedPrice">
+                      </van-card>
+                    </div>
+                    <div v-else>
+                      <div v-if="!k.valid">
+                        <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                      </div>
+                      <van-card
+                        :num="k.product.baseInfo.count"
+                        :price="k.product.goodsInfo.dprice"
+                        :title="k.product.goodsInfo.name"
+                        :thumb="k.product.goodsInfo.image">
+                        <div slot="desc">
+                          <span class="prodDesc">{{locationCity}}</span>
+                        </div>
+                      </van-card>
+                    </div>
+                  </li>
+                </ul>
+                <div class="supplyerSummery">
+                <span
+                  style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
+                </div>
+              </div>
+            </li>
+          </div>
+          <div class="pay-product" v-else>
             <div v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
                 <div v-for="(k,index) in item.goods" :key='index'>

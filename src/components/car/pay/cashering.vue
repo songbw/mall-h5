@@ -87,17 +87,19 @@
                 return;
               }
             }
-            let paymentStatusResp =  await  this.quertPaymentStatus()
-            this.$log(paymentStatusResp)
-            if(paymentStatusResp.data.code == 200) {
-              this.$log(paymentStatusResp.data.data)
-              let rt = paymentStatusResp.data.data
-              if(rt == 2) {
-                this.payInfoText = "支付失败!"
-                this.$toast("支付失败!")
-                this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                this.$router.replace({path: '/car/orderList'})
-                return;
+            if (!this.$api.IS_GAT_APP) {
+              let paymentStatusResp =  await  this.quertPaymentStatus()
+              this.$log(paymentStatusResp)
+              if(paymentStatusResp.data.code == 200) {
+                this.$log(paymentStatusResp.data.data)
+                let rt = paymentStatusResp.data.data
+                if(rt == 2) {
+                  this.payInfoText = "支付失败!"
+                  this.$toast("支付失败!")
+                  this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                  this.$router.replace({path: '/car/orderList'})
+                  return;
+                }
               }
             }
           } catch (e) {
