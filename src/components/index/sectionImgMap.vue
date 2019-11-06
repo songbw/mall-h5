@@ -46,7 +46,10 @@
         this.$router.push({path: '/category/goods/promotion/' + promotionId});
       },
       gotoGoodsPage(mpu) {
-        try {
+        this.$router.push({path:"/detail",query:{
+            mpu:mpu
+          }});
+/*        try {
           //获取goods信息，update current googds
           this.$api.xapi({
             method: 'get',
@@ -63,7 +66,7 @@
           })
         } catch (e) {
 
-        }
+        }*/
       },
       imgload(){
         this.$log(this.datas.settings.imageKey)

@@ -158,7 +158,10 @@
         if(mpu == null) {
           mpu = goods.skuid;
         }
-        try {
+        this.$router.push({path:"/detail",query:{
+             mpu:mpu
+        }});
+/*        try {
           //获取goods信息，update current googds
           this.$api.xapi({
             method: 'get',
@@ -175,7 +178,7 @@
           })
         } catch (e) {
 
-        }
+        }*/
       },
       onAdd2carBtnClick(goods) {
         let userInfo = this.$store.state.appconf.userInfo;

@@ -317,7 +317,10 @@
         if (mpu == null) {
           mpu = goods.skuid;
         }
-        try {
+        this.$router.push({path:"/detail",query:{
+            mpu:mpu
+          }});
+/*        try {
           //获取goods信息，update current googds
           this.$api.xapi({
             method: 'get',
@@ -334,7 +337,7 @@
           })
         } catch (e) {
 
-        }
+        }*/
       },
       countDownS_cb: function (x) {
         //console.log(x)
@@ -347,7 +350,10 @@
       },
       onBuyBtnClick(k) {
         this.$log("onBuyBtnClick Enter")
-        try {
+        this.$router.push({path:"/detail",query:{
+            mpu:mpu
+          }});
+/*        try {
           //获取goods信息，update current googds
           this.$api.xapi({
             method: 'get',
@@ -364,7 +370,7 @@
           })
         } catch (e) {
 
-        }
+        }*/
       }
     }
   }

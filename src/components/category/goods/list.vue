@@ -440,7 +440,10 @@
         if (mpu == null) {
           mpu = goods.skuid;
         }
-        try {
+        this.$router.push({path:"/detail",query:{
+            mpu:mpu
+          }});
+/*        try {
           this.$api.xapi({
             method: 'get',
             baseURL: this.$api.PRODUCT_BASE_URL,
@@ -456,7 +459,7 @@
           })
         } catch (e) {
 
-        }
+        }*/
       },
       onAdd2carBtnClick(goods) {
         //this.$log("onAdd2carBtnClick Enter",goods)
