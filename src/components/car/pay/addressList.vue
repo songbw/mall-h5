@@ -48,7 +48,7 @@
                   id: item.id,
                   name: item.receiverName,
                   tel: item.mobile,
-                  address: (item.proviceName != null ? item.proviceName : "") +
+                  address: (item.provinceName != null ? item.provinceName : "") +
                     (item.cityName != null ? item.cityName : "") +
                     (item.countyName != null ? item.countyName : "") +
                     (item.address != null ? item.address : "")
@@ -59,7 +59,7 @@
                   id: item.id,
                   name: item.receiverName,
                   tel: item.mobile,
-                  address: (item.proviceName != null ? item.proviceName : "") +
+                  address: (item.provinceName != null ? item.provinceName : "") +
                     (item.cityName != null ? item.cityName : "") +
                     (item.countyName != null ? item.countyName : "") +
                     (item.address != null ? item.address : "")
@@ -74,7 +74,7 @@
                   id: item.id,
                   name: item.receiverName,
                   tel: item.mobile,
-                  address: (item.proviceName != null ? item.proviceName : "") +
+                  address: (item.provinceName != null ? item.provinceName : "") +
                     (item.cityName != null ? item.cityName : "") +
                     (item.countyName != null ? item.countyName : "") +
                     (item.address != null ? item.address : "")
@@ -85,7 +85,7 @@
                   id: item.id,
                   name: item.receiverName,
                   tel: item.mobile,
-                  address: (item.proviceName != null ? item.proviceName : "") +
+                  address: (item.provinceName != null ? item.provinceName : "") +
                     (item.cityName != null ? item.cityName : "") +
                     (item.countyName != null ? item.countyName : "") +
                     (item.address != null ? item.address : "")
