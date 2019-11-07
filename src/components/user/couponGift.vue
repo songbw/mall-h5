@@ -5,7 +5,7 @@
     </v-header>
     <div class="giftcouponBody">
       <div v-if="loaded">
-        <div class="couponList" v-if="couponList.length == 0">
+        <div class="couponList" v-if="couponList.length > 0">
           <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i">
             <div class="coupon-main">
               <div class="coupon-img">
