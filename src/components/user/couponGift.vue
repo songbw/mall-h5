@@ -1,52 +1,61 @@
 <template lang="html">
-  <div class="giftcoupon"  v-if="showHeader">
-    <v-header>
+  <div class="giftcoupon">
+    <v-header v-if="showHeader">
       <h1 slot="title">新人礼包</h1>
     </v-header>
     <div class="giftcouponBody">
-      <div class="couponList">
-        <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i">
-          <div class="coupon-main">
-            <div class="coupon-img">
-              <img :src="k.imageUrl.length?k.imageUrl: couponImg">
-            </div>
-            <div class="coupon-info coupon-hole coupon-info-right-dashed">
-              <div class="coupon-price">
-                <span v-if="k.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
-                {{formateCouponPrice(k.rules.couponRules)}}
-                <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+      <div v-if="loaded">
+        <div class="couponList" v-if="couponList.length == 0">
+          <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i">
+            <div class="coupon-main">
+              <div class="coupon-img">
+                <img :src="k.imageUrl.length?k.imageUrl: couponImg">
               </div>
-              <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
-              <div class="coupon-expire-date">
-                {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+              <div class="coupon-info coupon-hole coupon-info-right-dashed">
+                <div class="coupon-price">
+                  <span v-if="k.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
+                  {{formateCouponPrice(k.rules.couponRules)}}
+                  <span>{{formateCouponDetail(k.rules.couponRules)}}</span>
+                </div>
+                <div class="coupon-desc">{{formateCouponDescription(k)}}</div>
+                <div class="coupon-expire-date">
+                  {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
+                </div>
               </div>
             </div>
-          </div>
-          <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
-               @click="onConponUseClick(k,i)">
-            <div>
-              <span class="coupon-action" style="margin-top:50px;" v-if="k.url != undefined && k.url.length > 0">立即使用</span>
+            <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
+                 @click="onConponUseClick(k,i)">
+              <div>
+                <span class="coupon-action" style="margin-top:50px;" v-if="k.url != undefined && k.url.length > 0">立即使用</span>
+              </div>
             </div>
-          </div>
-          <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
-            <div>
-              <van-circle
-                :value="formateReleasePercentage(k)"
-                color="#FF4444"
-                fill="#fff"
-                size="55px"
-                layer-color="#cccccc"
-                :text="formateReleasePercentageText(k)"
-                :rate="100"
-                :speed="100"
-                :stroke-width="50"/>
-            </div>
-            <div>
-              <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
+            <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
+              <div>
+                <van-circle
+                  :value="formateReleasePercentage(k)"
+                  color="#FF4444"
+                  fill="#fff"
+                  size="55px"
+                  layer-color="#cccccc"
+                  :text="formateReleasePercentageText(k)"
+                  :rate="100"
+                  :speed="100"
+                  :stroke-width="50"/>
+              </div>
+              <div>
+                <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
+              </div>
             </div>
           </div>
         </div>
+        <div v-else>
+          <div class="noContext">
+            <img :src="icon_noContext">
+            <span class="noContext_line1">亲，礼包还是空的!</span>
+          </div>
+        </div>
       </div>
+
     </div>
   </div>
 </template>
@@ -64,6 +73,8 @@
         showHeader: true,
         couponList: [],
         couponImg: require('@/assets/icons/ico_coupon.png'),
+        icon_noContext: require('@/assets/icons/ico_empty_box.png'),
+        loaded: false
       }
     },
 
@@ -88,8 +99,10 @@
           if(ret != undefined) {
             this.couponList = ret;
           }
+          that.loaded = true
         }).catch(function (error) {
           that.$log(error)
+          that.loaded = true
         })
       }
 
@@ -277,6 +290,29 @@
     top: 0px;
     background-color: #f8f8f8;
     .giftcouponBody{
+      .noContext {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
+        height: 400px;
+
+        img {
+          height: 130px;
+          width: 130px;
+        }
+
+        span {
+          margin: 2vw;
+        }
+
+        .noContext_line1 {
+          font-weight: lighter;
+          color: black;
+          .fz(font-size, 35);
+        }
+      }
       .couponList {
         display: flex;
         flex-direction: column;
@@ -531,7 +567,6 @@
         .coupon-wave-right::after {
           right: -7px;
         }
-
 
         /*.coupon-item {
           margin: 5px;
