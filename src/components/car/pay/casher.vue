@@ -409,7 +409,8 @@
         mCvv2: "",
         showSupportList: false,
         icon_support_bank_list: require('@/assets/icons/ico_bank_support.png'),
-        payBtnSubmitLoading:false
+        payBtnSubmitLoading:false,
+        mTelphoneNumber: ""
       }
     },
     computed: {
@@ -655,7 +656,7 @@
         }
       },
 
-      saveUserInfo() {
+/*      saveUserInfo() {
         return this.$api.xapi({
           method: 'put',
           baseURL: this.$api.SSO_BASE_URL,
@@ -663,7 +664,7 @@
           url: '/user',
           data: this.user
         })
-      },
+      },*/
       beforeCloseAddNewCardDlg(action, done) {
         this.$log("beforeCloseAddNewCardDlg Enter")
         if (action === 'confirm') {
@@ -821,9 +822,9 @@
               done(false) //不关闭弹框
               return
             } else {
-              this.userDetail.telephone = this.mTelphoneNumber
+/*              this.userDetail.telephone = this.mTelphoneNumber
               let ret = await this.saveUserInfo();
-              this.updateUserDetail(this.user);
+              this.updateUserDetail(this.user);*/
             }
           }
           if (this.newOptCardNumber.length == 0) {
