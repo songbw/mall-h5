@@ -73,7 +73,10 @@
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon"/>
         </van-cell>
-        <van-cell title="我的客服" :value="this.$api.SERVR_PHONE_NUM">
+        <van-cell title="在线客服" is-link href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
+          <img slot="icon" :src="customServiceIcon"/>
+        </van-cell>
+        <van-cell title="客服电话" :value="this.$api.SERVR_PHONE_NUM">
           <img slot="icon" :src="customServiceIcon"/>
         </van-cell>
         <van-cell title="关于我们" value="版本号 V1.0">
