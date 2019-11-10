@@ -73,7 +73,7 @@
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon"/>
         </van-cell>
-        <van-cell title="在线客服" is-link href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
+        <van-cell title="在线客服" is-link @click="showMeqiaPanel">
           <img slot="icon" :src="customServiceIcon"/>
         </van-cell>
         <van-cell title="客服电话" :value="this.$api.SERVR_PHONE_NUM">
@@ -94,6 +94,7 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Util from '@/util/common'
+
 
   export default {
     components: {
@@ -181,6 +182,9 @@
 
 
     },
+    beforeDestroy (){
+       this.hideMeqiaPanel()
+    },
     data() {
       return {
         showHeader: true,
@@ -229,6 +233,45 @@
       }
     },
     methods: {
+      getClientName() {
+        switch (this.$api.APP_ID) {
+          case "09":
+            return "关爱通品牌直供";
+          case "10":
+            return "关爱通苏宁易购";
+          case "11":
+            return "无锡市民卡";
+          default:
+            return "凤巢商城"
+        }
+      },
+      showMeqiaPanel () {
+        let userInfo = this.$store.state.appconf.userInfo;
+        let userDetail = this.$store.state.appconf.userDetail;
+        let userName = ""
+        let userId = ""
+        let telePhone = ""
+        if(!Util.isUserEmpty(userInfo)) {
+          let UserInfo = JSON.parse(userInfo)
+          userId = UserInfo.userId
+        }
+        if(userDetail.length > 0) {
+          let UserDetail  = JSON.parse(userDetail)
+          userName =  UserDetail.nickname
+          telePhone = UserDetail.telephone
+        }
+        _MEIQIA('showPanel')
+        _MEIQIA('metadata', {
+          name: userName, // 美洽默认字段
+          tel:telePhone,
+          '渠道': this.getClientName(), // 自定义字段
+          '用户ID': userId,
+          '当前URL': window.location.href,
+        });
+      },
+      hideMeqiaPanel(){
+        _MEIQIA('hidePanel');
+      },
       updateUserDatail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
       },
