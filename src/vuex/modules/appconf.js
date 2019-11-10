@@ -20,6 +20,7 @@ const state = {
   currentCouponPageInfo:'',
   cartList:[],
   merchantList:[],
+  userDetail:'',
 }
 
 const mutations = {
@@ -97,6 +98,10 @@ const mutations = {
 
   [types.SET_CURRENT_COUPON_PAGE_INFO](state, res) {
     state.currentCouponPageInfo = res
+  },
+
+  [types.SET_USER_DETAIL](state, res) {
+    state.userDetail = res
   },
 }
 

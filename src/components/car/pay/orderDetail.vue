@@ -124,15 +124,19 @@
           <p>{{formatTime(detail.paymentAt)}}</p>
         </span>
       </div>
-      <div class="oder-ServerInfo">
-        <!--<van-cell title="联系客服:" icon="phone" :value="getOrderServicePhone()"/>-->
-        <van-col span="12" class="chat" href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
+    </div>
+
+    <div class="order-ServerInfo">
+      <van-col span="12" class="chat">
+        <div @click="showMeqiaPanel">
           <van-icon name="service" size="1em"> 联系客服</van-icon>
-        </van-col>
-        <van-col span="12" class="phone">
+        </div>
+      </van-col>
+      <van-col span="12" class="phone">
+        <div>
           <span>电话: {{getOrderServicePhone()}}</span>
-        </van-col>
-      </div>
+        </div>
+      </van-col>
     </div>
   </section>
 </template>
@@ -172,6 +176,9 @@
             }*/
     },
 
+    beforeDestroy (){
+      this.hideMeqiaPanel()
+    },
 
     computed: {
       productPrice() {
@@ -205,6 +212,46 @@
     },
 
     methods: {
+      getClientName() {
+        switch (this.$api.APP_ID) {
+          case "09":
+            return "关爱通品牌直供";
+          case "10":
+            return "关爱通苏宁易购";
+          case "11":
+            return "无锡市民卡";
+          default:
+            return "凤巢商城"
+
+        }
+      },
+      showMeqiaPanel () {
+        let userInfo = this.$store.state.appconf.userInfo;
+        let userDetail = this.$store.state.appconf.userDetail;
+        let userName = ""
+        let userId = ""
+        let telePhone = ""
+        if(!Util.isUserEmpty(userInfo)) {
+          let UserInfo = JSON.parse(userInfo)
+          userId = UserInfo.userId
+        }
+        if(userDetail.length > 0) {
+          let UserDetail  = JSON.parse(userDetail)
+          userName =  UserDetail.nickname
+          telePhone = UserDetail.telephone
+        }
+        _MEIQIA('showPanel')
+        _MEIQIA('metadata', {
+          name: userName, // 美洽默认字段
+          tel:telePhone,
+          '渠道': this.getClientName(), // 自定义字段
+          '用户ID': userId,
+          '当前URL': window.location.href,
+        });
+      },
+      hideMeqiaPanel(){
+        _MEIQIA('hidePanel');
+      },
       See(e) {
         this.$log("jump to:" + e)
         window.location.href = e
@@ -485,7 +532,41 @@
       width: 100%;
     }
 
+    .order-ServerInfo {
+      background-color: white;
+      width: 100%;
+      height: 3em;
+      display: -webkit-flex;
+      display: -ms-flex;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background-color: #ffffff;
+      z-index: 5;
+
+      .chat {
+        height: 100%;
+        background-color: white;
+        text-align: center;
+        line-height: 3em;
+        color: #FF4444;
+        font-weight: bold;
+      }
+
+      .phone {
+        height: 100%;
+        background-color: #FF4444;
+        text-align: center;
+        line-height: 3em;
+        color: white;
+      }
+    }
+
     .order-body {
+      padding-bottom: 4em;
+      background-color: #f8f8f8;
       .order-status {
         background: url('../../../assets/images/redbg.png') no-repeat;
         background-size: 100% 100%;
@@ -563,30 +644,6 @@
           .fz(font-size, 30);
           margin: 1em;
           color: #000000;
-        }
-      }
-
-      .oder-ServerInfo {
-        background-color: white;
-        margin-top: 1em;
-        padding-bottom: 0.1em;
-        height: 3em;
-
-        .chat {
-          height: 100%;
-          background-color: white;
-          text-align: center;
-          line-height: 3em;
-          color: #ee892f;
-          font-weight: bold;
-        }
-
-        .phone {
-          height: 100%;
-          background-color: #ee892f;
-          text-align: center;
-          line-height: 3em;
-          color: white;
         }
       }
 

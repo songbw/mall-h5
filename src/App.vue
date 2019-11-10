@@ -74,10 +74,27 @@
           this.$api.TEST_USER = testUser
         if(title !=undefined && title.length > 0)
           this.title = title
-        if(this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
+        if(this.$api.APP_ID === "10" || this.$api.APP_ID === "09") {
           this.$api.IS_GAT_APP = true;
+          this.clearStorage();
+        }
         this.configured = true
       }).catch((error)=>{console.log(error)});
+    },
+    methods: {
+      clearStorage() {
+        let  payList = []
+        this.$store.commit('SET_PAY_LIST', this.payList);
+        let  cartList = []
+        this.$store.commit('SET_CART_LIST', cartList);
+        let  merchantList = []
+        this.$store.commit('SET_MERCHANT_LIST', merchantList);
+        let addressList = []
+        this.$store.commit('SET_ADDRESS_LIST', addressList);
+        let userDetail = ''
+        this.$store.commit('SET_USER_DETAIL', userDetail);
+
+      },
     }
   }
 </script>
