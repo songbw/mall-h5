@@ -77,7 +77,7 @@
           <img slot="icon" :src="customServiceIcon"/>
         </van-cell>
         <van-cell title="客服电话" :value="this.$api.SERVR_PHONE_NUM">
-          <img slot="icon" :src="customServiceIcon"/>
+          <img slot="icon" :src="servicePhoneIcon"/>
         </van-cell>
         <van-cell title="关于我们" value="版本号 V1.0">
           <img slot="icon" :src="aboutIcon"/>
@@ -211,6 +211,7 @@
         myCouponIcon: require('@/assets/icons/ico_mycoupon.png'),
         myCoinAccountIcon: require('@/assets/icons/ico_coin_account.png'),
         chCouponIcon: require('@/assets/icons/ico_changecoupon.png'),
+        servicePhoneIcon: require('@/assets/icons/ico_phone.png'),
 
         receriverAddressIcon: require('@/assets/icons/ico_receiveraddress.png'),
         aboutIcon: require('@/assets/icons/ico_info.png'),
