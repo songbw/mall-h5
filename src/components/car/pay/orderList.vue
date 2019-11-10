@@ -75,7 +75,7 @@
                     </van-button>
                     <van-button plain round size="small" type="primary"
                                 style="background-color: white;color: #1989fa ;border-color: #dedede"
-                                href="javascript:void(0)" onclick="_MEIQIA('showPanel')">
+                                @click="showMeqiaPanel">
                       联系客服
                     </van-button>
                     <van-button plain round size="small" type="primary"
@@ -186,7 +186,51 @@
       this.showHeader = this.$api.HAS_HEADER;
     },
 
+    beforeDestroy (){
+      this.hideMeqiaPanel()
+    },
+
     methods: {
+      getClientName() {
+        switch (this.$api.APP_ID) {
+          case "09":
+            return "关爱通品牌直供";
+          case "10":
+            return "关爱通苏宁易购";
+          case "11":
+            return "无锡市民卡";
+          default:
+            return "凤巢商城"
+
+        }
+      },
+      showMeqiaPanel () {
+        let userInfo = this.$store.state.appconf.userInfo;
+        let userDetail = this.$store.state.appconf.userDetail;
+        let userName = ""
+        let userId = ""
+        let telePhone = ""
+        if(!Util.isUserEmpty(userInfo)) {
+          let UserInfo = JSON.parse(userInfo)
+          userId = UserInfo.userId
+        }
+        if(userDetail.length > 0) {
+          let UserDetail  = JSON.parse(userDetail)
+          userName =  UserDetail.nickname
+          telePhone = UserDetail.telephone
+        }
+        _MEIQIA('showPanel')
+        _MEIQIA('metadata', {
+          name: userName, // 美洽默认字段
+          tel:telePhone,
+          '渠道': this.getClientName(), // 自定义字段
+          '用户ID': userId,
+          '当前URL': window.location.href,
+        });
+      },
+      hideMeqiaPanel(){
+        _MEIQIA('hidePanel');
+      },
       onQuerySalesServiceBtnClick(k,sku) {
         this.$router.push({name: '售后工单页'})
       },
