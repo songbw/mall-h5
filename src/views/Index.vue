@@ -174,18 +174,18 @@
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
-        this.testGAT();
+      //  this.testGAT();
       } else {
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
           }
         }, 10000);
-        setTimeout(() => {
+/*        setTimeout(() => {
           this.test();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
-        }, 1000);
+        }, 1000);*/
       }
     },
     computed: {
