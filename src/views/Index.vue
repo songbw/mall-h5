@@ -175,6 +175,11 @@
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
      //   this.testGAT();
+        setTimeout(() => {
+          if(this.userTokenLoading) {
+            this.userTokenLoading = false;
+          }
+        }, 20000);
       } else {
         setTimeout(() => {
           if(this.userTokenLoading) {
