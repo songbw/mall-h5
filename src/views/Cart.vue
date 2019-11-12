@@ -342,7 +342,8 @@
         this.$log(k)
         let options = {
           "id": k.baseInfo.cartId,
-          "count": k.baseInfo.count
+          "count": k.baseInfo.count,
+          "mpu": k.baseInfo.mpu
         }
         this.$api.xapi({
           method: 'put',
