@@ -237,6 +237,8 @@
           userName =  UserDetail.nickname
           telePhone = UserDetail.telephone
         }
+        this.$log("!!@@@@")
+        this.$log(this.detail.tradeNo)
         _MEIQIA('showPanel')
         _MEIQIA('metadata', {
           name: userName, // 美洽默认字段
@@ -244,6 +246,7 @@
           '渠道': this.getClientName(), // 自定义字段
           '用户ID': userId,
           '当前URL': window.location.href,
+          '订单号': this.detail.tradeNo
         });
       },
       hideMeqiaPanel(){

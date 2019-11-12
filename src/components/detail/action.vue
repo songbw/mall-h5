@@ -82,6 +82,7 @@
           '渠道': this.getClientName(), // 自定义字段
           '用户ID': userId,
           '当前URL': window.location.href,
+          '订单号': ''
         });
       },
       hideMeqiaPanel(){
