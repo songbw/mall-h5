@@ -305,7 +305,7 @@
 
         .goodsComment {
           margin: 2px 5px;
-
+          min-height: 2.4em;
           > p {
             .fz(font-size, 25);
             min-height: 2rem;
@@ -332,7 +332,8 @@
           display: flex;
           flex-direction: row;
           justify-items: center;
-          height: 2em;
+          min-height: 2em;
+
 
           .goodsPriceBox {
             width: 80%;
@@ -435,8 +436,8 @@
           display: flex;
           flex-direction: row;
           justify-items: center;
-          height: 2em;
-          padding-bottom: .5em;
+          min-height: 2em;
+          padding-bottom: .1em;
 
           .goodsPriceBox {
             width: 80%;
