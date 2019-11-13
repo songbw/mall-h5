@@ -158,24 +158,29 @@
                   <van-radio-group v-model="bankRadio">
                     <van-cell-group>
                       <div v-for="(item, index) in mBankcardList">
-                        <van-cell
-                          clickable
-                          :key="index"
-                          @click="BanckCardsClick(item)"
-                        >
-                          <div slot="default" class="bankCard">
-                            <span>{{getBankNameByAccountId(item.accountId)}}</span>
-                            <span>卡号: {{formatBankNumber(item.accountId)}}</span>
-                            <span>银行卡支付</span>
+                        <van-swipe-cell :right-width="60">
+                          <van-cell
+                            clickable
+                            :key="index"
+                            @click="BanckCardsClick(item)"
+                          >
+                            <div slot="default" class="bankCard">
+                              <span>{{getBankNameByAccountId(item.accountId)}}</span>
+                              <span>卡号: {{formatBankNumber(item.accountId)}}</span>
+                              <span>银行卡支付</span>
+                            </div>
+                            <div slot="right-icon" class="bankCardCheckBox">
+                              <van-radio
+                                :name="item.accountId"
+                                checked-color="#3dd5c8"
+                                ref="bankCardsCheckboxes"
+                              />
+                            </div>
+                          </van-cell>
+                          <div slot="right" @click="onDeleteCardBtnClick(item,index)" class="rightSlot">
+                            <span style="margin-left: 1em">删除</span>
                           </div>
-                          <div slot="right-icon" class="bankCardCheckBox">
-                            <van-radio
-                              :name="item.accountId"
-                              checked-color="#3dd5c8"
-                              ref="bankCardsCheckboxes"
-                            />
-                          </div>
-                        </van-cell>
+                        </van-swipe-cell>
                       </div>
                     </van-cell-group>
                   </van-radio-group>
@@ -566,6 +571,22 @@
       onAddNewBankCardClick() {
         this.$log("onAddNewBankCardClick Enter")
         this.addNewBankCardDlgShow = true;
+      },
+      onDeleteCardBtnClick(k,index) {
+        this.$log("onDeleteCardBtnClick Enter")
+        let that = this
+        that.$api.xapi({
+          method: 'delete',
+          baseURL: this.$api.QUICKLY_PAY_URL,
+          url: '/accounts/account/'+k.id,
+        }).then((response) => {
+          that.$log("onDelBtnClick coupon success, response is:" + JSON.stringify(response.data))
+          if (response.data.code == 200) {
+            this.mBankcardList.splice(index, 1);
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
       },
       BanckCardsClick(item) {
         this.$log("BanckCardsClick Enter")
@@ -1354,6 +1375,18 @@
           display: flex;
           flex-direction: column;
           justify-content: center;
+
+          .van-swipe-cell {
+            .rightSlot {
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              width: 60px;
+              height: 100%;
+              background-color: #ff4444;
+              color: #ffffff
+            }
+          }
 
           .van-cell {
             margin-top: -1px;
