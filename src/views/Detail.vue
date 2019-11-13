@@ -181,6 +181,7 @@
           <div style="padding: 3px">
             <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;font-weight: bold">获取库存...</span>
             <span v-else style="color: #ff4444;font-size: medium;font-weight: bold">{{hasInventory?'有货':'无货'}}</span>
+            <span style="color: #8c8c8c;font-size: medium;font-weight: bold" v-if="this.goods != null"> {{this.goods.state == 0?'已下架':''}}</span>
           </div>
         </div>
         <div class="serviceBox" v-if="showServiceBox">
