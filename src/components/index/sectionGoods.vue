@@ -299,7 +299,7 @@
 
         img {
           width: 100%;
-          height: 10em;
+          height: 11em;
           display: inline-block;
           border-top-left-radius: 10px;
           border-top-right-radius: 10px;
