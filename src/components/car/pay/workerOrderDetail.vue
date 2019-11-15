@@ -12,7 +12,9 @@
           <div class="expressNoBox" v-if="status == 3 || status == 5">
             <span style="margin: 10px;font-weight: bold">填写退货物流信息</span>
             <van-field
-              v-model="expressCom"
+              v-model="expressComSubmit"
+              rows="1"
+              maxlength="30"
               clearable
               label="物流公司"
               size="large"
@@ -20,7 +22,9 @@
               placeholder="请输入物流公司"
             />
             <van-field
-              v-model="expressNo"
+              v-model="expressNoSubmit"
+              rows="1"
+              maxlength="30"
               clearable
               label="退货单号"
               size="large"
@@ -63,6 +67,8 @@
         id: -1,
         expressNo:"",
         expressCom:"",
+        expressNoSubmit:"",
+        expressComSubmit:"",
         loading: false,
         list: [],
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
@@ -105,7 +111,15 @@
         })
       },
       onExpressNoSubmit() {
-        let logisticsInfo = {com: this.expressCom, order: this.expressNo}
+        if (this.expressComSubmit.length == 0) {
+          this.$toast("请输入正确的物流公司")
+          return
+        }
+        if (this.expressNoSubmit.length == 0) {
+          this.$toast("请输入正确的物流单号")
+          return
+        }
+        let logisticsInfo = {com: this.expressComSubmit, order: this.expressNoSubmit}
         const comments = { logisticsInfo:logisticsInfo}
         let str = JSON.stringify(comments)
         this.$log(str)
@@ -114,7 +128,7 @@
           status: 5,
           operator: "用户",
           workOrderId: this.id,
-          expressNo:this.expressNo,
+          expressNo:this.expressNoSubmit,
         }
         this.$api.xapi({
           method: 'post',
