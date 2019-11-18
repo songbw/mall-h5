@@ -58,6 +58,7 @@
         let testPaymentUrl = result.data.TESTSTUB_PAYMENT_URL
         let testUser = result.data.TEST_USER
         let title = result.data.MALL_TITLE
+        let isQpayCardSaved = result.data.IS_QUICKPAY_CARD_SAVED
         this.$api.GOODS_URL_PREFIX = result.data.GOODS_URL_PREFIX
         this.$api.APP_ID = result.data.iAppID
         this.$api.T_APP_ID = result.data.tAppID
@@ -83,6 +84,9 @@
           this.$api.TEST_USER = testUser
         if (title != undefined && title.length > 0)
           this.title = title
+        if(isQpayCardSaved != undefined && isQpayCardSaved == '0') {
+          this.$api.IS_QUICKPAY_CAN_SAVE = false;
+        }
         if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
           this.$api.IS_GAT_APP = true;
         if (this.$api.APP_ID == "11") {
