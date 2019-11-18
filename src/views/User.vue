@@ -513,7 +513,9 @@
     }
 
     .userBody {
-      margin-bottom: 5em;
+      margin-bottom: 3em;
+      padding-bottom: 2em;
+      background-color: #f8f8f8;
 
       .coupon-box {
         display: flex;
@@ -688,11 +690,12 @@
 
       .settingsBox {
         margin: 10px;
-        padding: 10px;
+        padding: 10px 0px;
         border-radius: 10px;
         background-color: white;
 
         .van-cell {
+          padding: 10pt 10pt;
           img {
             height: 16px;
             width: 16px;
