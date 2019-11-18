@@ -699,7 +699,7 @@
           img {
             height: 16px;
             width: 16px;
-            margin: 3px;
+            margin: 3px 10px 3px 3px
           }
 
         }
