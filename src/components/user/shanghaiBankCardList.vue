@@ -6,12 +6,15 @@
     <div class="bankCardBody">
       <div v-if="launchedLoaded">
         <div class="bankCardBind"  v-if="!hasBindedCard">
-          <span class="bindBankTitle">开通钱包</span>
+          <div class="bindBankTitle">
+            <img :src="icon_color_card">
+            <span class="bindBankText">请输入银行卡信息</span>
+          </div>
           <van-field
             v-model="realName"
             required
             clearable
-            label="姓名:"
+            label="持卡人:"
             maxlength="30"
             label-width="65px"
             placeholder="请输入真实姓名"
@@ -43,7 +46,16 @@
             label-width="65px"
             placeholder="请输入绑定的银行卡号"
           />
-          <van-button size="large" type="danger" style="margin-top: 20px" @click="onBCardBindBtnClick">绑定</van-button>
+          <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;">
+            <van-button size="large" type="danger" round @click="onBCardBindBtnClick">添加</van-button>
+            <div style="margin: 10px 5px;display: flex;justify-items: center;text-align: center;font-size: xx-small">
+              <van-checkbox v-model="checked" icon-size="10px" shape="square" style="margin-left: 5px">
+                我已经阅读并同意
+              </van-checkbox>
+              <span style="margin-top: 3px;">《上海银行电商资金管理业务电子协议》</span>
+            </div>
+          </div>
+
         </div>
         <div v-else class="bindedCardBox">
           <div class="bankCard">
@@ -93,7 +105,9 @@
         bankCardNo: "",
         reserveMobile: "",
         realName: "",
-        bindCardInfo:{}
+        bindCardInfo:{},
+        icon_color_card: require('@/assets/icons/ico_color_card.png'),
+        checked: false
       }
     },
 
@@ -239,19 +253,34 @@
     width: 100%;
     height: 100%;
     top: 0px;
+    background-color: #f8f8f8;
 
     .bankCardBody {
       .bankCardBind {
-        padding: 20px;
-        margin: 10px;
+
         display: flex;
         flex-direction: column;
         align-items: center;
         .bindBankTitle {
-          .fz(font-size, 40);
-          align-content: center;
-          color: black;
-          padding: 10px 0px;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
+
+          img {
+            height: 100px;
+            width: 100px;
+          }
+
+          span {
+            margin: 2vw;
+          }
+
+          .bindBankText {
+            font-weight: lighter;
+            .fz(font-size, 35);
+          }
         }
       }
       .bindedCardBox{
