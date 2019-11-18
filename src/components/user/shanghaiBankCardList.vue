@@ -12,36 +12,32 @@
           </div>
           <van-field
             v-model="realName"
-            required
             clearable
-            label="持卡人:"
+            label="持卡人"
             maxlength="30"
             label-width="65px"
-            placeholder="请输入真实姓名"
+            placeholder="请输入持卡人姓名"
           />
           <van-field
             v-model="idCardNo"
-            required
             clearable
-            label="身份证号:"
+            label="身份证号"
             maxlength="30"
             label-width="65px"
-            placeholder="请输入身份证号"
+            placeholder="请输入持卡人身份证号"
           />
           <van-field
             v-model="reserveMobile"
-            required
             clearable
-            label="电话号码:"
+            label="电话号码"
             maxlength="30"
             label-width="65px"
             placeholder="请输入银行预留电话号码"
           />
           <van-field
             v-model="bankCardNo"
-            required
             clearable
-            label="绑定卡号:"
+            label="绑定卡号"
             maxlength="30"
             label-width="65px"
             placeholder="请输入绑定的银行卡号"
@@ -49,10 +45,12 @@
           <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;align-items: center">
             <van-button size="large" type="danger" round @click="onBCardBindBtnClick">添加</van-button>
             <div style="margin: 10px 2px;display: flex;justify-items: center;text-align: center;">
-              <van-checkbox v-model="checked" icon-size="10px" shape="square" >
-                <span style="font-size: small">我已经阅读并同意</span>
-              </van-checkbox>
-              <span style="margin-top: 5px; color: #1989fa;font-size: xx-small" @click="onProtocolBtnClick">《上海银行电商资金管理业务电子协议》</span>
+              <p>
+                <van-checkbox v-model="checked" shape="round"  checked-color="#FF4444" >
+                  <span>我已经阅读并同意</span>
+                </van-checkbox>
+                <span style=" color: #1989fa;" @click="onProtocolBtnClick">《上海银行电商资金管理业务电子协议》</span>
+              </p>
             </div>
           </div>
 
@@ -290,6 +288,13 @@
           .bindBankText {
             font-weight: lighter;
             .fz(font-size, 35);
+          }
+        }
+        .van-button {
+          &--large {
+            width: 100%;
+            height: 35px;
+            line-height: 35px;
           }
         }
       }
