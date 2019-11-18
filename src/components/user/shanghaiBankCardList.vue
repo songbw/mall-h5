@@ -46,13 +46,13 @@
             label-width="65px"
             placeholder="请输入绑定的银行卡号"
           />
-          <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;">
+          <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;align-items: center">
             <van-button size="large" type="danger" round @click="onBCardBindBtnClick">添加</van-button>
-            <div style="margin: 10px 5px;display: flex;justify-items: center;text-align: center;font-size: xx-small">
-              <van-checkbox v-model="checked" icon-size="10px" shape="square" style="margin-left: 5px">
-                我已经阅读并同意
+            <div style="margin: 10px 2px;display: flex;justify-items: center;text-align: center;">
+              <van-checkbox v-model="checked" icon-size="10px" shape="square" >
+                <span style="font-size: small">我已经阅读并同意</span>
               </van-checkbox>
-              <span style="margin-top: 3px;">《上海银行电商资金管理业务电子协议》</span>
+              <span style="margin-top: 5px; color: #1989fa;font-size: xx-small" @click="onProtocolBtnClick">《上海银行电商资金管理业务电子协议》</span>
             </div>
           </div>
 
@@ -153,6 +153,12 @@
     },
 
     methods: {
+      onProtocolBtnClick() {
+         this.$log("onProtocolBtnClick Enter")
+        this.$router.push({
+          name:"上海银行电商资金管理业务电子协议页"}
+        )
+      },
       updateCardInfo(){
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
@@ -200,7 +206,11 @@
           this.$toast("请输入银行卡号")
           return
         }
-        let that =this
+        if(!this.checked) {
+          this.$toast("请先阅读并同意协议")
+          return
+        }
+         let that =this
         this.$log("姓名:" + this.realName)
         this.$log("身份证:" + this.idCardNo)
         this.$log("电话:" + this.reserveMobile)

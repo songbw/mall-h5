@@ -37,6 +37,8 @@ const LinkPayAccount = resolve => require(['@/components/user/linkPayAccount.vue
 
 const HistoryOrder = resolve => require(['@/components/user/historyOrderList.vue'], resolve)
 const HistoryOrderDetail = resolve => require(['@/components/user/historyOrderDetail.vue'], resolve)
+const ShangHaiProtocol = resolve => require(['@/components/user/shanghaiBankProtcol.vue'], resolve)
+
 
 export default new VueRouter({
   mode: 'history',
@@ -357,6 +359,14 @@ export default new VueRouter({
       component: HistoryOrderDetail,
       meta: {
         title: '历史订单详情',
+      }
+    },
+    {
+      path: '/user/shanghaiBankProtocol',
+      name: '上海银行电商资金管理业务电子协议页',
+      component: ShangHaiProtocol,
+      meta: {
+        title: '上海银行电商资金管理业务电子协议',
       }
     }
   ]
