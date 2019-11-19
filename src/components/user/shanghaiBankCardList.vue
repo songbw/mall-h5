@@ -45,7 +45,7 @@
           <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;align-items: center">
             <van-button size="large" type="danger" round @click="onBCardBindBtnClick">添加</van-button>
             <div style="margin: 10px 2px;display: flex;justify-items: center;text-align: center;">
-              <p>
+              <p style="font-size: 10pt">
                 <van-checkbox v-model="checked" shape="round"  checked-color="#FF4444" >
                   <span>我已经阅读并同意</span>
                 </van-checkbox>
@@ -296,6 +296,9 @@
             height: 35px;
             line-height: 35px;
           }
+        }
+        .van-field{
+          padding: 10pt 10pt;
         }
       }
       .bindedCardBox{
