@@ -293,8 +293,8 @@
         .van-button {
           &--large {
             width: 100%;
-            height: 35px;
-            line-height: 35px;
+            height: 40px;
+            line-height: 40px;
           }
         }
         .van-field{
