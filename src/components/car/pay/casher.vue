@@ -1260,7 +1260,8 @@
           if (this.remainPayAmount > 0) {
             if (this.radio == '1') {
               this.$log("link pay clicked")
-              if ( parseInt((this.remainPayAmount * 100).toFixed(0)) >= 10) {
+              if ( parseInt((this.remainPayAmount * 100).toFixed(0)) >= 10 &&
+                parseInt((this.remainPayAmount * 100).toFixed(0)) <= 500000 ) {
                 if (this.linkPayAccount.length == 0) {
                   this.$toast("请输入卡号")
                   return
@@ -1277,7 +1278,7 @@
                   "payType": "woa"
                 }
               } else {
-                this.$toast("抱歉，无法使用该支付方式，联机账户支付不能低于1角，")
+                this.$toast("抱歉，无法使用该支付方式，联机账户支付不能低于1角或大于5000元")
                 return
               }
             } else if (this.radio == '2') { //bank pay
