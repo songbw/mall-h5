@@ -173,7 +173,7 @@
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
-        this.testGAT();
+       // this.testGAT();
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
@@ -260,8 +260,8 @@
       testGAT() {
         //  let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
         //let openId = "52d7fd1f46e55ac6a2435818a00c06c0"
-        let openId = "46e794551c9144be82cc86c25703b936" //贺总
-        //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        //let openId = "46e794551c9144be82cc86c25703b936" //贺总
+        let openId = "b720d31ebd4c1d148da24ebf5660031f"
         this.$log("openId:" + openId);
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;

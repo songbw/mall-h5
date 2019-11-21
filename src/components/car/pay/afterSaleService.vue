@@ -19,13 +19,13 @@
           ￥{{goods.salePrice.toFixed(2)}}元
         </van-cell>
         <van-cell title="状态" title-class="CellTitle" :value="formatWOrderStatus(requestState)"></van-cell>
-        <div slot="footer">
-<!--          <van-cell title="申请数量" title-class="CellTitle">
+<!--        <div slot="footer">
+&lt;!&ndash;          <van-cell title="申请数量" title-class="CellTitle">
             <van-stepper
               v-model="count"
               :max="goods.num"
               @change="onCountChange"/>
-          </van-cell>-->
+          </van-cell>&ndash;&gt;
           <van-cell title="历史工单" :value=this.history_list.length title-class="CellTitle" isLink="true"
                     @click="onHistListClick">
           </van-cell>
@@ -52,7 +52,7 @@
               </div>
             </div>
           </van-actionsheet>
-        </div>
+        </div>-->
       </div>
       <div class="requireTypeBox">
         <van-cell title="申请类型" title-class="CellTitle"></van-cell>
@@ -216,6 +216,9 @@
     },
 
     methods: {
+      gotoWorkerOrderListPage() {
+        this.$router.push({name: '售后工单页'})
+      },
       formatWOrderCreateDateTime(createDate) {
         return this.$moment(createDate).format('YYYY.MM.DD')
       },
@@ -343,6 +346,7 @@
             this.requestState = 1;
             this.count = 0;
             this.cancelSubOrder();
+            this.gotoWorkerOrderListPage()
           } else {
             this.$toast("申请提交失败，请联系客服人员")
           }
@@ -381,6 +385,7 @@
 
     .serviceBody {
       margin-bottom: 3em;
+      padding-bottom: 1em;
 
       .van-cell {
         background-color: white;
@@ -433,7 +438,9 @@
     }
 
     .footer {
+      background-color: white;
       width: 100%;
+      height: 3em;
       display: -webkit-flex;
       display: -ms-flex;
       display: flex;
@@ -441,7 +448,8 @@
       position: fixed;
       bottom: 0;
       left: 0;
-
+      background-color: #ffffff;
+      z-index: 5;
     }
 
     .van-actionsheet {
