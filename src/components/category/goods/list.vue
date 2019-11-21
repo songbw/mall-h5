@@ -5,7 +5,7 @@
     </v-header>
     <div class="box" v-if="active === 0" :style="{'top':showHeader? '2.6em':'0px'}">
       <div class="orderBySelected actived" @click="onSelectedBtnClick">
-        <span>默认</span>
+        <span>精选</span>
       </div>
       <div class="orderByPrice" @click="onPriceBtnClick">
         <span>按价格排序</span>
