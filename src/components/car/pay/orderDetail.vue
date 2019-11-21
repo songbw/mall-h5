@@ -681,12 +681,11 @@
       z-index: 5;
 
       .chat {
-        width: 100%;
         height: 100%;
-        background-color: #FF4444;
+        background-color: white;
         text-align: center;
         line-height: 3em;
-        color: white;
+        color: #FF4444;
         font-weight: bold;
       }
 
