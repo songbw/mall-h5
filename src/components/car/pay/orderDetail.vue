@@ -27,7 +27,8 @@
               :price="sku.unitPrice"
               :title="sku.name"
               :num="sku.num"
-              :thumb="sku.image">
+              :thumb="sku.image"
+              @click="gotoDetailPage(sku)">
               <div slot="tags" v-if="sku.salePrice != sku.unitPrice" class="cardtags">
                 <img :src="tag_promotion" v-if="sku.promotionDiscount > 0"/>
                 <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0"/>
@@ -36,6 +37,7 @@
                 <div v-if="sku.status < 4">
                   <van-button plain round size="small" type="primary"
                               style="background-color: white;color: black;border-color: #dedede "
+                              @click.stop=""
                               @click="onAfterSalesServiceBtnClick(sku)" v-if="status==1||status==2">
                     申请售后
                   </van-button>
@@ -123,19 +125,16 @@
           成交时间:
           <p>{{formatTime(detail.paymentAt)}}</p>
         </span>
+        <span>
+          客服电话:
+          <p>{{getOrderServicePhone()}}</p>
+        </span>
       </div>
     </div>
     <div class="order-ServerInfo">
-      <van-col span="12" class="chat">
-        <div @click="showMeqiaPanel">
-          <van-icon name="service" size="1em"> 联系客服</van-icon>
-        </div>
-      </van-col>
-      <van-col span="12" class="phone">
-        <div>
-          <span>电话: {{getOrderServicePhone()}}</span>
-        </div>
-      </van-col>
+      <div @click="showMeqiaPanel" class="chat">
+        <van-icon name="service" size="1em"> 联系客服</van-icon>
+      </div>
     </div>
   </section>
 </template>
@@ -167,10 +166,6 @@
       this.detail = JSON.parse(this.$store.state.appconf.currentOrderInfo);
       this.$log(this.detail)
       this.status = this.detail.status;
-      /*      if(this.status == 0) {
-              let endTime = new Date(this.$moment(detail.createdAt).format('YYYY/MM/DD HH:mm:ss')).getTime() + 1000*60*30;
-              let current = new Date().getTime();
-            }*/
     },
 
     beforeDestroy (){
@@ -209,6 +204,15 @@
     },
 
     methods: {
+      See(e) {
+        this.$log("jump to:" + e)
+        window.location.href = e
+      },
+      gotoDetailPage(sku){
+        this.$router.push({path:"/detail",query:{
+            mpu:sku.mpu
+          }});
+      },
       getClientName() {
         switch (this.$api.APP_ID) {
           case "09":
@@ -415,6 +419,8 @@
           }).then((response) => {
             if (response.data.code == 200) {
               this.status = 2;
+              this.detail.status = this.status
+              this.$store.commit('SET_CURRENT_ORDER_INFO', JSON.stringify(this.detail));
             }
             //已取消
           }).catch(function (error) {
@@ -457,6 +463,8 @@
           }).then((response) => {
             if (response.data.code == 200) {
               this.status = 3;
+              this.detail.status = this.status
+              this.$store.commit('SET_CURRENT_ORDER_INFO', JSON.stringify(this.detail));
             }
             //已取消
           }).catch(function (error) {
@@ -509,8 +517,7 @@
 
 
       getMerchantName(merchantNo) {
-        return "惠民优选"
-/*        if (merchantNo == 20) {
+        if (merchantNo == 20) {
           return "苏宁易购"
         } else if (merchantNo == 30) {
           return "唯品会"
@@ -519,8 +526,8 @@
         } else if (merchantNo == 60) {
           return "京东"
         } else {
-          return "商城自营"
-        }*/
+          return "品牌自营"
+        }
       },
     }
   }
@@ -539,38 +546,6 @@
 
     .header {
       width: 100%;
-    }
-
-    .order-ServerInfo {
-      background-color: white;
-      width: 100%;
-      height: 3em;
-      display: -webkit-flex;
-      display: -ms-flex;
-      display: flex;
-      align-items: center;
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      background-color: #ffffff;
-      z-index: 5;
-
-      .chat {
-        height: 100%;
-        background-color: white;
-        text-align: center;
-        line-height: 3em;
-        color: #FF4444;
-        font-weight: bold;
-      }
-
-      .phone {
-        height: 100%;
-        background-color: #FF4444;
-        text-align: center;
-        line-height: 3em;
-        color: white;
-      }
     }
 
     .order-body {
@@ -702,11 +677,12 @@
       z-index: 5;
 
       .chat {
+        width: 100%;
         height: 100%;
-        background-color: white;
+        background-color: #FF4444;
         text-align: center;
         line-height: 3em;
-        color: #FF4444;
+        color: white;
         font-weight: bold;
       }
 

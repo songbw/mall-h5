@@ -173,7 +173,7 @@
           //获取关爱通openId
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
-     //   this.testGAT();
+        this.testGAT();
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;

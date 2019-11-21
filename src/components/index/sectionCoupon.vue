@@ -81,7 +81,7 @@
         couponList:[],
         couponImg: require('@/assets/icons/ico_coupon.png'),
         dataloaded:false,
-        icon_noCoupon: require('@/assets/icons/ico_nocoupon.png')
+        icon_noCoupon: require('@/assets/icons/ico_noCoupon.png')
       }
     },
     created() {
