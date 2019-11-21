@@ -12,10 +12,10 @@ import appconf from './modules/appconf'
     storage: window.sessionStorage
   })],*/
 export default new Vuex.Store({
-  plugins: [createPersistedState()],
-/*  plugins: [createPersistedState({
+/*  plugins: [createPersistedState()],*/
+  plugins: [createPersistedState({
     storage: window.sessionStorage
-  })],*/
+  })],
   modules: {
     appconf,
     detail,
