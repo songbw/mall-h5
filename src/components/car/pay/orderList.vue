@@ -356,7 +356,8 @@
         }
       },
       getMerchantName(merchantNo) {
-        if (merchantNo == 20) {
+        return "惠民优选"
+/*        if (merchantNo == 20) {
           return "苏宁易购"
         } else if (merchantNo == 30) {
           return "唯品会"
@@ -365,8 +366,8 @@
         } else if (merchantNo == 60) {
           return "京东"
         } else {
-          return "品牌自营"
-        }
+          return "商城自营"
+        }*/
       },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;

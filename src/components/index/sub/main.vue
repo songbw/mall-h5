@@ -1,6 +1,5 @@
 <template lang="html">
   <section class="submain"  :style="{'background-color': mBackgroundColor}">
-      <div v-wechat-title="$route.meta.title"></div>
       <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
         <h1 slot="title">{{title}}</h1>
       </v-header>
@@ -95,7 +94,6 @@
             },
           }).then((response) => {
             this.title = response.data.data.result.name;
-            this.$route.meta.title = this.title
             let jsonString = response.data.data.result.content
             this.datas = JSON.parse(jsonString);
             for (let i = 0 ; i < this.datas.length; i++) {
@@ -111,6 +109,7 @@
           }).catch(function (error) {
             alert(error)
           })
+
         }
       }
     },
@@ -142,7 +141,6 @@
         },
       }).then((response) => {
         this.title = response.data.data.result.name;
-        this.$route.meta.title = this.title
        // const pako = require('pako');
         //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         let jsonString = response.data.data.result.content

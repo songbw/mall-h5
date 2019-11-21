@@ -125,16 +125,19 @@
           成交时间:
           <p>{{formatTime(detail.paymentAt)}}</p>
         </span>
-        <span>
-          客服电话:
-          <p>{{getOrderServicePhone()}}</p>
-        </span>
       </div>
     </div>
     <div class="order-ServerInfo">
-      <div @click="showMeqiaPanel" class="chat">
-        <van-icon name="service" size="1em"> 联系客服</van-icon>
-      </div>
+      <van-col span="12" class="chat">
+        <div @click="showMeqiaPanel">
+          <van-icon name="service" size="1em"> 联系客服</van-icon>
+        </div>
+      </van-col>
+      <van-col span="12" class="phone">
+        <div>
+          <span>电话: {{getOrderServicePhone()}}</span>
+        </div>
+      </van-col>
     </div>
   </section>
 </template>
@@ -517,7 +520,8 @@
 
 
       getMerchantName(merchantNo) {
-        if (merchantNo == 20) {
+        return "惠民优选"
+/*        if (merchantNo == 20) {
           return "苏宁易购"
         } else if (merchantNo == 30) {
           return "唯品会"
@@ -526,8 +530,8 @@
         } else if (merchantNo == 60) {
           return "京东"
         } else {
-          return "品牌自营"
-        }
+          return "商城自营"
+        }*/
       },
     }
   }

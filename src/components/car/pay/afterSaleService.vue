@@ -19,13 +19,13 @@
           ￥{{goods.salePrice.toFixed(2)}}元
         </van-cell>
         <van-cell title="状态" title-class="CellTitle" :value="formatWOrderStatus(requestState)"></van-cell>
-<!--        <div slot="footer">
-&lt;!&ndash;          <van-cell title="申请数量" title-class="CellTitle">
+        <div slot="footer">
+<!--          <van-cell title="申请数量" title-class="CellTitle">
             <van-stepper
               v-model="count"
               :max="goods.num"
               @change="onCountChange"/>
-          </van-cell>&ndash;&gt;
+          </van-cell>
           <van-cell title="历史工单" :value=this.history_list.length title-class="CellTitle" isLink="true"
                     @click="onHistListClick">
           </van-cell>
@@ -438,7 +438,6 @@
     }
 
     .footer {
-      background-color: white;
       width: 100%;
       height: 3em;
       display: -webkit-flex;

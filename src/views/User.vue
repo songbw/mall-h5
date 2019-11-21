@@ -70,6 +70,18 @@
         </div>
       </div>
       <div class="settingsBox">
+        <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
+          <img slot="icon" :src="icon_optCard"/>
+        </van-cell>
+        <van-cell title="市民卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
+          <img slot="icon" :src="icon_linkPayCard"/>
+        </van-cell>
+<!--        <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
+          <img slot="icon" :src="icon_quickPayCard"/>
+        </van-cell>-->
+        <van-cell title="我的钱包" is-link @click="onShangHaiBankBtnClick">
+          <img slot="icon" :src="icon_bankCard"/>
+        </van-cell>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon"/>
         </van-cell>
@@ -94,7 +106,6 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Util from '@/util/common'
-
 
   export default {
     components: {
@@ -182,9 +193,11 @@
 
 
     },
+
     beforeDestroy (){
-       this.hideMeqiaPanel()
+      this.hideMeqiaPanel()
     },
+
     data() {
       return {
         showHeader: true,
@@ -208,6 +221,11 @@
             title: "售后/退货",
             key: 4,
             img: require('@/assets/icons/ico_order_cancel.png')
+          },
+          {
+            title: "历史订单",
+            key: 5,
+            img: require('@/assets/icons/ico_history_order.png')
           }
         ],
         couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),
@@ -215,7 +233,6 @@
         myCouponIcon: require('@/assets/icons/ico_mycoupon.png'),
         myCoinAccountIcon: require('@/assets/icons/ico_coin_account.png'),
         chCouponIcon: require('@/assets/icons/ico_changecoupon.png'),
-        servicePhoneIcon: require('@/assets/icons/ico_phone.png'),
 
         receriverAddressIcon: require('@/assets/icons/ico_receiveraddress.png'),
         aboutIcon: require('@/assets/icons/ico_info.png'),
@@ -244,6 +261,7 @@
             return "无锡市民卡";
           default:
             return "凤巢商城"
+
         }
       },
       showMeqiaPanel () {

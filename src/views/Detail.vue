@@ -376,12 +376,12 @@
         discount: 0,
         promotionId: -1,
         addressCode: {
-          "provinceName": "上海",
-          "provinceId": "20",
-          "cityName": "上海市",
-          "cityId": "021",
-          "countyName": "徐汇区",
-          "countyId": "03"
+          "provinceName": "江苏省",
+          "provinceId": "100",
+          "cityName": "无锡市",
+          "cityId": "510",
+          "countyName": "崇安区",
+          "countyId": "01"
         },
         hasInventory: false,
         pageloading: true,
