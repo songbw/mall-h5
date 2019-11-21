@@ -143,56 +143,45 @@
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
-          this.$log("xxxxxxxxxxxxxxxxxxx")
-          this.$log(this.result)
-          this.$toast("添加到购物车成功！")
-          let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
-          if (cartItem == null) {
-            let baseInfo = {
-              "userId": user.userId,
-              "skuId": goods.skuid,
-              "mpu": goods.mpu,
-              "merchantId": goods.merchantId,
-              "count": 1,
-              "choosed": true,
-              "cartId": this.result,
-            }
-            let goodsInfo = {
-              "id": goods.id,
-              "skuId": goods.skuid,
-              "mpu": goods.mpu,
-              "merchantId": goods.merchantId,
-              "image": goods.image,
-              "category": goods.category,
-              "name": goods.name,
-              "brand": goods.brand,
-              "model": goods.model,
-              "price": goods.price,
-              "checkedPrice": goods.price
-            }
-            let couponList = []
-            let promotionInfo = {}
-            cartItem = {
-              "baseInfo": baseInfo,
-              "goodsInfo": goodsInfo,
-              "couponList": couponList,
-              "promotionInfo": promotionInfo,
-            }
-          } else {
-            cartItem.baseInfo.count++;
-            let found = -1;
-            for (let i = 0; i < cartItem.couponList.length; i++) {
-              if (cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
-                found = i;
-                break;
+          if(response.data.code == 200) {
+            this.$toast("添加到购物车成功！")
+            let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
+            if (cartItem == null) {
+              let baseInfo = {
+                "userId": user.userId,
+                "skuId": goods.skuid,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "count": 1,
+                "choosed": true,
+                "cartId": this.result,
               }
+              let goodsInfo = {
+                "id": goods.id,
+                "skuId": goods.skuid,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "image": goods.image,
+                "category": goods.category,
+                "name": goods.name,
+                "brand": goods.brand,
+                "model": goods.model,
+                "price": goods.price,
+                "checkedPrice": goods.price
+              }
+              let couponList = []
+              let promotionInfo = {}
+              cartItem = {
+                "baseInfo": baseInfo,
+                "goodsInfo": goodsInfo,
+                "couponList": couponList,
+                "promotionInfo": promotionInfo,
+              }
+            } else {
+              cartItem.baseInfo.count++;
             }
-            if (found != -1) {
-              cartItem.couponList.splice(found, 1)
-            }
-            cartItem.couponList.push(this.coupon.couponInfo)
+            Util.updateCartItem(this, cartItem)
           }
-          Util.updateCartItem(this, cartItem)
         }).catch(function (error) {
           console.log(error)
         })

@@ -246,17 +246,6 @@
             }
           } else {
             cartItem.baseInfo.count++;
-            let found = -1;
-            for (let i = 0; i < cartItem.couponList.length; i++) {
-              if (cartItem.couponList[i].coupon.couponInfo.id == this.coupon.couponInfo.id) {
-                found = i;
-                break;
-              }
-            }
-            if (found != -1) {
-              cartItem.couponList.splice(found, 1)
-            }
-            cartItem.couponList.push(this.coupon.couponInfo)
           }
           Util.updateCartItem(this, cartItem)
         }).catch(function (error) {

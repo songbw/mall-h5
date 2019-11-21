@@ -339,7 +339,10 @@
                 })
                 if (item.rules.couponRules.type < 3 &&
                   item.rules.perLimited > result.couponUseInfo.length &&
-                  item.releaseNum < item.releaseTotal) {
+                  item.releaseNum < item.releaseTotal && (
+                    item.rules.collect.type == 1 ||
+                    item.rules.collect.type == 2
+                  )) {
                   //this.$log("还有券可领")
                   item.userCollectNum = result.couponUseInfo.length
                   this.avaliableCouponList.push(item);
@@ -680,12 +683,17 @@
             url: '/coupon/collect',
             data: options,
           }).then((response) => {
-            let result = response.data.data;
-            that.$log(result)
-            if (result != undefined) {
-              that.avaliableCouponList[index].userCollectNum = result.couponCollectNum;
-              that.avaliableCouponList[index].releaseNum++;
+            if(response.data.code == 200) {
+              let result = response.data.data;
+              that.$log(result)
+              if (result != undefined) {
+                that.avaliableCouponList[index].userCollectNum = result.couponCollectNum;
+                that.avaliableCouponList[index].releaseNum++;
+              }
+            } else {
+              that.$toast(response.data.msg)
             }
+
           }).catch(function (error) {
             that.$log(error)
           })

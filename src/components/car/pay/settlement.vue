@@ -417,6 +417,8 @@
       couponList() {
         let couponList = []
         let allPayList = this.$store.state.appconf.payList;
+        this.$log("conpon List Enter")
+        this.$log(this.couponTypes[0].list)
         this.couponTypes[0].list.forEach(item => {
           let found = -1;
           for (let i = 0; i < allPayList.length; i++) {
