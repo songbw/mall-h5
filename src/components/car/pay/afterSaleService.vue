@@ -183,7 +183,7 @@
 
     methods: {
       gotoWorkerOrderListPage() {
-        this.$router.push({name: '售后工单页'})
+        this.$router.replace({name: '售后工单页'})
       },
       formatWOrderCreateDateTime(createDate) {
         return this.$moment(createDate).format('YYYY.MM.DD')
