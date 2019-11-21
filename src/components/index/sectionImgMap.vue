@@ -72,8 +72,8 @@
         this.$log(this.datas.settings.imageKey)
         this.imageWidth = this.$refs[this.datas.settings.imageKey].offsetWidth;
         this.imageHeight =  this.$refs[this.datas.settings.imageKey].offsetHeight;
-        this.$log("imageWidth:"+this.imageWidth);
-        this.$log("imageHeight:"+this.imageHeight);
+/*        this.$log("imageWidth:"+this.imageWidth);
+        this.$log("imageHeight:"+this.imageHeight);*/
       },
       getCoords(k) {
         let x1 = k.area.leftPer * this.imageWidth;

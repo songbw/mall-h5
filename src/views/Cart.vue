@@ -60,9 +60,10 @@
                         :desc="addressCode.cityName != undefined ? addressCode.cityName: '南京'"
                         :price="k.goodsInfo.dprice"
                         :title="k.goodsInfo.name"
-                        :thumb="k.goodsInfo.image">
-                        <div slot="footer">
-                          <van-stepper v-model="k.baseInfo.count" @change="onCountChange(k)"/>
+                        :thumb="k.goodsInfo.image"
+                        @click="gotoDetailPage(k)">
+                        <div slot="footer" @click.stop="">
+                          <van-stepper v-model="k.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -71,9 +72,10 @@
                         desc="无货"
                         :price="k.goodsInfo.dprice"
                         :title="k.goodsInfo.name"
-                        :thumb="k.goodsInfo.image">
-                        <div slot="footer">
-                          <van-stepper v-model="k.baseInfo.count" disabled @change="onCountChange(k)"/>
+                        :thumb="k.goodsInfo.image"
+                        @click="gotoDetailPage(k)">
+                        <div slot="footer" @click.stop="">
+                          <van-stepper v-model="k.baseInfo.count" @click.stop="" disabled @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -179,6 +181,11 @@
     },
 
     methods: {
+      gotoDetailPage(sku){
+        this.$router.push({path:"/detail",query:{
+            mpu:sku.baseInfo.mpu
+          }});
+      },
       updateAoyiInventory(skus) {
         this.$log(this.addressCode)
         let options = {
@@ -343,7 +350,6 @@
 
       onCountChange(k) {
         Util.updateCartItem(this, k);
-        this.$log(k)
         let options = {
           "id": k.baseInfo.cartId,
           "count": k.baseInfo.count,
