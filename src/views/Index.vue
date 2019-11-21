@@ -52,8 +52,8 @@
       :closeOnClickOverlay="true"
       style="background-color: transparent"
     >
-      <div class="f" v-if="icon_git.length > 0">
-        <img :src=icon_git @click="onGiftDialogImgClick">
+      <div class="giftDialog" v-if="icon_gift.length > 0">
+        <img :src=icon_gift @click="onGiftDialogImgClick">
         <van-icon name="close" @click="onGiftDialogCloseBtnClicks"/>
       </div>
     </van-dialog>
@@ -122,8 +122,7 @@
         pageloading: true,
         showHeader: true,
         showDialog: false,
-        //icon_git: require('@/assets/icons/ico_gift.png'),
-        icon_git: "",
+        icon_gift: "",
         userTokenLoading: true,
       }
     },
@@ -153,7 +152,7 @@
           let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
           if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
-            this.icon_git = this.mHeader.novicePackUrl
+            this.icon_gift = this.mHeader.novicePackUrl
           }
         }
         this.$log(this.mHeader);
@@ -199,9 +198,24 @@
       },
       mlocation() {
         return this.$store.state.appconf.location;
-      }
+      },
+      guysinfo() {
+        return  this.$store.state.appconf.guysInfo;
+      },
+
     },
     watch:{
+      guysinfo(newValue, oldVal) {
+        if(newValue.length > 1) {
+          let flag = newValue.substr(0,1)
+          let data = flag +this.$md5(this.$store.state.appconf.token)
+          if(data == newValue) {
+            if(flag == '1' && !this.$api.IS_GAT_APP) {
+              this.showDialog = true
+            }
+          }
+        }
+      },
       userToken(newValue, oldVal) {
         if (newValue && newValue.length > 0) {
           let userInfo = this.$store.state.appconf.userInfo;
@@ -246,8 +260,8 @@
       testGAT() {
         //  let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
         //let openId = "52d7fd1f46e55ac6a2435818a00c06c0"
-        //let openId = "46e794551c9144be82cc86c25703b936" //贺总
-        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        let openId = "46e794551c9144be82cc86c25703b936" //贺总
+        //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         this.$log("openId:" + openId);
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
@@ -268,9 +282,9 @@
         let dsBridge = require("dsbridge");
         Vue.prototype.$jsbridge = dsBridge;
         this.initJsNativeCb();
-        //let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
-        // let openId = "44391000fd194ab888b1aa81c03c3739"
-        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
+         //let openId = "44391000fd194ab888b1aa81c03c3740"
+       // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
@@ -364,11 +378,15 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
+            let data= this.$md5(rt.token)
+            if(rt.newUser) {
+              data =  "1" + data
+            } else {
+              data =  "0" + data
+            }
+            this.$log(data)
+            that.$store.commit('SET_GUYS_INFO',data);
           }
-          //if (rt.newUser != undefined && rt.newUser) {
-            //if (!this.$api.IS_GAT_APP)
-            //  this.showDialog = true;
-          //}
         }).catch(function (error) {
           that.$log(error)
         })

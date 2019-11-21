@@ -149,15 +149,13 @@
                 </div>
               </div>
               <div v-if="shippingTemplate != null">
-                <div
-                  v-if="shippingTemplate.regions[0].basePrice != 0 && shippingTemplate.regions[0].cumulativePrice != 0">
+                <div v-if="shippingTemplate.regions[0].basePrice != 0 && shippingTemplate.regions[0].cumulativePrice != 0">
                   <span>购买数量低于{{shippingTemplate.regions[0].baseAmount}}件，运费{{shippingTemplate.regions[0].basePrice}}元</span>
                   <span>超过最低购买数量后,每购买{{shippingTemplate.regions[0].cumulativeUnit}}件，运费增加:{{shippingTemplate.regions[0].cumulativePrice}}元</span>
                 </div>
-                <div
-                  v-if="shippingTemplate.regions[0].basePrice != 0 && shippingTemplate.regions[0].cumulativePrice == 0">
+<!--                <div v-if="shippingTemplate.regions[0].basePrice != 0 && shippingTemplate.regions[0].cumulativePrice == 0">
                   <span>运费{{shippingTemplate.regions[0].basePrice}}元</span>
-                </div>
+                </div>-->
               </div>
             </div>
           </div>
@@ -181,6 +179,7 @@
           <div style="padding: 3px">
             <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;font-weight: bold">获取库存...</span>
             <span v-else style="color: #ff4444;font-size: medium;font-weight: bold">{{hasInventory?'有货':'无货'}}</span>
+            <span style="color: #8c8c8c;font-size: medium;font-weight: bold" v-if="this.goods != null"> {{this.goods.state == 0?'已下架':''}}</span>
           </div>
         </div>
         <div class="serviceBox" v-if="showServiceBox">

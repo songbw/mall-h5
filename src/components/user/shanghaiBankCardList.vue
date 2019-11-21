@@ -6,44 +6,54 @@
     <div class="bankCardBody">
       <div v-if="launchedLoaded">
         <div class="bankCardBind"  v-if="!hasBindedCard">
-          <span class="bindBankTitle">开通钱包</span>
+          <div class="bindBankTitle">
+            <img :src="icon_color_card">
+            <span class="bindBankText">请输入银行卡信息</span>
+          </div>
           <van-field
             v-model="realName"
-            required
             clearable
-            label="姓名:"
+            label="持卡人"
             maxlength="30"
             label-width="65px"
-            placeholder="请输入真实姓名"
+            placeholder="请输入持卡人姓名"
           />
           <van-field
             v-model="idCardNo"
-            required
             clearable
-            label="身份证号:"
+            label="身份证号"
             maxlength="30"
             label-width="65px"
-            placeholder="请输入身份证号"
+            placeholder="请输入持卡人身份证号"
           />
           <van-field
             v-model="reserveMobile"
-            required
             clearable
-            label="电话号码:"
+            label="电话号码"
             maxlength="30"
             label-width="65px"
             placeholder="请输入银行预留电话号码"
           />
           <van-field
             v-model="bankCardNo"
-            required
             clearable
-            label="绑定卡号:"
+            label="绑定卡号"
             maxlength="30"
             label-width="65px"
             placeholder="请输入绑定的银行卡号"
           />
-          <van-button size="large" type="danger" style="margin-top: 20px" @click="onBCardBindBtnClick">绑定</van-button>
+          <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;align-items: center">
+            <van-button size="large" type="danger" round @click="onBCardBindBtnClick">添加</van-button>
+            <div style="margin: 10px 2px;display: flex;justify-items: center;text-align: center;">
+              <p style="font-size: 10pt">
+                <van-checkbox v-model="checked" shape="round"  checked-color="#FF4444" >
+                  <span>我已经阅读并同意</span>
+                </van-checkbox>
+                <span style=" color: #1989fa;" @click="onProtocolBtnClick">《上海银行电商资金管理业务电子协议》</span>
+              </p>
+            </div>
+          </div>
+
         </div>
         <div v-else class="bindedCardBox">
           <div class="bankCard">
@@ -93,7 +103,9 @@
         bankCardNo: "",
         reserveMobile: "",
         realName: "",
-        bindCardInfo:{}
+        bindCardInfo:{},
+        icon_color_card: require('@/assets/icons/ico_color_card.png'),
+        checked: false
       }
     },
 
@@ -139,6 +151,12 @@
     },
 
     methods: {
+      onProtocolBtnClick() {
+         this.$log("onProtocolBtnClick Enter")
+        this.$router.push({
+          name:"上海银行电商资金管理业务电子协议页"}
+        )
+      },
       updateCardInfo(){
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
@@ -186,7 +204,11 @@
           this.$toast("请输入银行卡号")
           return
         }
-        let that =this
+        if(!this.checked) {
+          this.$toast("请先阅读并同意协议")
+          return
+        }
+         let that =this
         this.$log("姓名:" + this.realName)
         this.$log("身份证:" + this.idCardNo)
         this.$log("电话:" + this.reserveMobile)
@@ -239,19 +261,44 @@
     width: 100%;
     height: 100%;
     top: 0px;
+    background-color: #f8f8f8;
 
     .bankCardBody {
       .bankCardBind {
-        padding: 20px;
-        margin: 10px;
+
         display: flex;
         flex-direction: column;
         align-items: center;
         .bindBankTitle {
-          .fz(font-size, 40);
-          align-content: center;
-          color: black;
-          padding: 10px 0px;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
+
+          img {
+            height: 100px;
+            width: 100px;
+          }
+
+          span {
+            margin: 2vw;
+          }
+
+          .bindBankText {
+            font-weight: lighter;
+            .fz(font-size, 35);
+          }
+        }
+        .van-button {
+          &--large {
+            width: 100%;
+            height: 40px;
+            line-height: 40px;
+          }
+        }
+        .van-field{
+          padding: 10pt 10pt;
         }
       }
       .bindedCardBox{

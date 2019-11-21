@@ -124,14 +124,6 @@
           <p>{{formatTime(detail.paymentAt)}}</p>
         </span>
       </div>
-<!--      <div class="order-ServerInfo">
-        <div  class="chat" @click="showMeqiaPanel">
-          <van-icon name="service" size="1em"> 联系客服</van-icon>
-        </div>
-        <div span="12" class="phone">
-          <span>电话: {{getOrderServicePhone()}}</span>
-        </div>
-      </div>-->
     </div>
     <div class="order-ServerInfo">
       <van-col span="12" class="chat">
@@ -252,6 +244,7 @@
           '渠道': this.getClientName(), // 自定义字段
           '用户ID': userId,
           '当前URL': window.location.href,
+          '订单号': this.detail.tradeNo
         });
       },
       hideMeqiaPanel(){
@@ -546,6 +539,38 @@
 
     .header {
       width: 100%;
+    }
+
+    .order-ServerInfo {
+      background-color: white;
+      width: 100%;
+      height: 3em;
+      display: -webkit-flex;
+      display: -ms-flex;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background-color: #ffffff;
+      z-index: 5;
+
+      .chat {
+        height: 100%;
+        background-color: white;
+        text-align: center;
+        line-height: 3em;
+        color: #FF4444;
+        font-weight: bold;
+      }
+
+      .phone {
+        height: 100%;
+        background-color: #FF4444;
+        text-align: center;
+        line-height: 3em;
+        color: white;
+      }
     }
 
     .order-body {

@@ -150,7 +150,7 @@
 
         })
       },
-      saveUserInfo() {
+/*      saveUserInfo() {
         return this.$api.xapi({
           method: 'put',
           baseURL: this.$api.SSO_BASE_URL,
@@ -158,7 +158,7 @@
           url: '/user',
           data: this.user
         })
-      },
+      },*/
       formatTime(timeString) {
         if (timeString == null)
           return null
@@ -191,9 +191,9 @@
               done(false) //不关闭弹框
               return
             } else {
-              this.user.telephone = this.mTelphoneNumber
-              let ret = await this.saveUserInfo();
-              this.updateUserDetail(this.user);
+              //this.user.telephone = this.mTelphoneNumber
+              //let ret = await this.saveUserInfo();
+              //this.updateUserDetail(this.user);
             }
           }
           if(this.newOptCardNumber.length == 0) {

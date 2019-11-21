@@ -58,6 +58,7 @@
         let testPaymentUrl = result.data.TESTSTUB_PAYMENT_URL
         let testUser = result.data.TEST_USER
         let title = result.data.MALL_TITLE
+        let isQpayCardSaved = result.data.IS_QUICKPAY_CARD_SAVED
         this.$api.GOODS_URL_PREFIX = result.data.GOODS_URL_PREFIX
         this.$api.APP_ID = result.data.iAppID
         this.$api.T_APP_ID = result.data.tAppID
@@ -83,6 +84,9 @@
           this.$api.TEST_USER = testUser
         if (title != undefined && title.length > 0)
           this.title = title
+        if(isQpayCardSaved != undefined && isQpayCardSaved == '0') {
+          this.$api.IS_QUICKPAY_CAN_SAVE = false;
+        }
         if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
           this.$api.IS_GAT_APP = true;
         if (this.$api.APP_ID == "11") {
@@ -100,11 +104,6 @@
       });
     },
     created() {
-      /*      if(! this.$api.IS_GAT_APP) {
-              window.onload = () => {
-                this.getLoginAuthInfo();
-              }
-            }*/
     },
 
     methods: {
@@ -137,6 +136,14 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
+            let data= this.$md5(rt.token)
+            if(rt.newUser) {
+              data =  "1" + data
+            } else {
+              data =  "0" + data
+            }
+            this.$log(data)
+            that.$store.commit('SET_GUYS_INFO',data);
             that.configured = true
           }
         }).catch(function (error) {

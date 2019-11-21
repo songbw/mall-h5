@@ -220,6 +220,7 @@
         receriverAddressIcon: require('@/assets/icons/ico_receiveraddress.png'),
         aboutIcon: require('@/assets/icons/ico_info.png'),
         customServiceIcon: require('@/assets/icons/ico_customService.png'),
+        servicePhoneIcon: require('@/assets/icons/ico_phone.png'),
         icon_linkPayCard: require('@/assets/icons/ico_linkPayCard.png'),
         icon_optCard: require('@/assets/icons/ico_optCard.png'),
         icon_bankCard: require('@/assets/icons/ico_bankCard.png'),
@@ -267,6 +268,7 @@
           '渠道': this.getClientName(), // 自定义字段
           '用户ID': userId,
           '当前URL': window.location.href,
+          '订单号': ''
         });
       },
       hideMeqiaPanel(){
@@ -493,7 +495,9 @@
     }
 
     .userBody {
-      margin-bottom: 5em;
+      margin-bottom: 3em;
+      padding-bottom: 2em;
+      background-color: #f8f8f8;
 
       .coupon-box {
         display: flex;
@@ -632,7 +636,7 @@
 
               span {
                 margin: 5px;
-                .fz(font-size, 25);
+                .fz(font-size, 24);
               }
             }
 
@@ -668,15 +672,16 @@
 
       .settingsBox {
         margin: 10px;
-        padding: 10px;
+        padding: 10px 0px;
         border-radius: 10px;
         background-color: white;
 
         .van-cell {
+          padding: 10pt 10pt;
           img {
             height: 16px;
             width: 16px;
-            margin: 3px;
+            margin: 3px 10px 3px 3px
           }
 
         }

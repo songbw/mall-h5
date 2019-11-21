@@ -18,6 +18,7 @@
             <span>{{user.openId}}</span>
           </div>
         </van-cell>
+        <van-cell title="手机号" :value=user.telephone></van-cell>
         <van-cell title="昵称" :value=user.nickname isLink="true" @click="onNickNameClick()"></van-cell>
         <van-dialog
           v-model="nickNameDlgShow"
@@ -33,8 +34,8 @@
             clearable
           />
         </van-dialog>
-        <van-cell title="手机号" :value=user.telephone isLink="true" @click="onTelClick()"></van-cell>
-        <van-dialog
+
+        <!--<van-dialog
           v-model="telDlgShow"
           maxlength="30"
           title="修改手机号"
@@ -48,7 +49,7 @@
             placeholder="请输入您的电话号码"
             clearable>
           </van-field>
-        </van-dialog>
+        </van-dialog>-->
         <van-cell title="性别" :value=user.sex isLink="true" @click="onSexClick()"></van-cell>
         <van-dialog
           v-model="sexDlgShow"
@@ -95,7 +96,7 @@
       return {
         user: {},
         nickNameDlgShow: false,
-        telDlgShow: false,
+      //  telDlgShow: false,
         birthDlgShow: false,
         sexDlgShow: false,
         minDate: new Date(1940, 1, 1),
@@ -172,7 +173,7 @@
         }
       },
 
-      beforeCloseTelDialog(action, done) {
+/*      beforeCloseTelDialog(action, done) {
         this.$log("beforeCloseTelDialog Enter");
         if (action === 'confirm') {
           if (this.inputTel == null || this.inputTel.length == 0 || !this.inputTel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
@@ -186,7 +187,7 @@
         } else if (action === 'cancel') {
           done() //关闭
         }
-      },
+      },*/
 
       onSexConfirmClick() {
         this.$log("onSexConfirmClick Enter")
@@ -197,11 +198,11 @@
         this.inputNickName = this.user.nickname;
         this.nickNameDlgShow = true;
       },
-      onTelClick() {
+/*      onTelClick() {
         this.$log("onTelClick Enter")
         this.inputTel = this.user.telephone
         this.telDlgShow = true;
-      },
+      },*/
       onBirthClick() {
         this.$log("onBirthClick Enter")
         this.birthDlgShow = true;
@@ -220,7 +221,6 @@
 
   .userInfo {
     .userMain {
-
       .van-dialog {
         color: black;
       }

@@ -9,7 +9,8 @@
       <div >
         <div v-for="(category,index) in datas.list" :title=category.title :key="index">
           <ul :id="sectionGoodsListId"
-              :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' ">
+              :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' "
+              :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
             <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
               <img v-lazy="k.imagePath || k.image">
               <div class="goodsComment">
@@ -289,15 +290,16 @@
       background-color: #f0f0f0;
 
       li {
-        width: 50%;
+        width: 48%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        border: 4px solid #f0f0f0;
+        //border: 4px solid transparent;
         border-radius: 15px;
+        margin: 1vw;
 
         img {
           width: 100%;
-          height: 10em;
+          height: 11em;
           display: inline-block;
           border-top-left-radius: 10px;
           border-top-right-radius: 10px;
@@ -305,7 +307,7 @@
 
         .goodsComment {
           margin: 2px 5px;
-
+          min-height: 2.4em;
           > p {
             .fz(font-size, 25);
             min-height: 2rem;
@@ -332,7 +334,8 @@
           display: flex;
           flex-direction: row;
           justify-items: center;
-          height: 2em;
+          min-height: 2em;
+
 
           .goodsPriceBox {
             width: 80%;
@@ -393,11 +396,12 @@
       background-color: #f0f0f0;
 
       li {
-        width: 33%;
+        width: 32%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        border: 3px solid #f0f0f0;
+     //   border: 3px solid #f0f0f0;
         border-radius: 15px;
+        margin: .8vw;
 
         img {
           width: 100%;
@@ -409,7 +413,7 @@
 
         .goodsComment {
           margin: 2px 5px;
-
+          min-height: 2.4em;
           > p {
             .fz(font-size, 25);
             min-height: 2rem;
@@ -435,8 +439,8 @@
           display: flex;
           flex-direction: row;
           justify-items: center;
-          height: 2em;
-          padding-bottom: .5em;
+          min-height: 2em;
+          padding-bottom: .1em;
 
           .goodsPriceBox {
             width: 80%;

@@ -8,8 +8,8 @@
         <v-loading></v-loading>
       </div>
       <div class="logisticsInfo" v-else>
-        <ul>
-          <li v-for="(item,i)  in logisticsList" :key='i'>
+        <div>
+          <div v-for="(item,i)  in logisticsList" :key='i'>
             <div class="logisticsBox" v-if="getMatchedGoods(item.nu).length > 0">
               <div class="matched-goods">
                 <ul>
@@ -20,6 +20,16 @@
                       :num="sku.num"
                       :thumb="sku.image">
                     </van-card>
+                    <div>
+                      <div style="font-size: small">
+                        <span style="margin-left: 5px">物流公司:</span>
+                        <span style="float: right;margin-right: 5px">{{sku.logisticsContent}}</span>
+                      </div>
+                      <div style="font-size: small">
+                        <span style="margin-left: 5px">物流信息:</span>
+                        <span style="float: right;margin-right: 5px">{{sku.logisticsId}}</span>
+                      </div>
+                    </div>
                   </li>
                 </ul>
               </div>
@@ -30,8 +40,8 @@
                 </van-step>
               </van-steps>
             </div>
-          </li>
-        </ul>
+          </div>
+        </div>
         <div class="logisticsBox" v-if="getPreparingGoods().length > 0">
           <ul>
             <li v-for="(sku,skuIndex)  in getPreparingGoods()" :key='skuIndex'>
@@ -41,14 +51,25 @@
                 :num="sku.num"
                 :thumb="sku.image">
               </van-card>
+              <div  v-if="sku.logisticsContent != null && sku.logisticsId != null">
+                <div style="font-size: small">
+                  <span style="margin-left: 5px">物流公司:</span>
+                  <span style="float: right;margin-right: 5px">{{sku.logisticsContent}}</span>
+                </div>
+                <div style="font-size: small">
+                  <span style="margin-left: 5px">物流信息:</span>
+                  <span style="float: right;margin-right: 5px">{{sku.logisticsId}}</span>
+                </div>
+              </div>
+              <div v-else>
+                <van-steps direction="vertical" :active="0" active-color="#f44">
+                  <van-step>
+                    <h3>未查询到物流信息，敬请等待...</h3>
+                  </van-step>
+                </van-steps>
+              </div>
             </li>
           </ul>
-          <van-steps direction="vertical" :active="0" active-color="#f44">
-            <van-step>
-              <h3>未查询到物流信息，敬请等待...</h3>
-              <p>{{formatTime(this.detail.paymentAt)}}</p>
-            </van-step>
-          </van-steps>
         </div>
       </div>
     </div>
@@ -153,6 +174,10 @@
   @import "../../../assets/index/style.css";
 
   .logisticsDetail {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
     .header {
       width: 100%;
       position: fixed;
@@ -162,7 +187,8 @@
 
     .logistics-body {
       padding-top: 3em;
-
+      padding-bottom: 1em;
+      background-color: #f8f8f8;
       .noneInfo {
         display: flex;
         flex-direction: column;
@@ -179,9 +205,11 @@
       }
 
       .logisticsInfo {
+        height: 100%;
+        top: 0px;
+        background-color: #f8f8f8;
+        margin: 10px;
         .logisticsBox {
-          border: #f8f8f8 solid 10px;
-
           > li {
             list-style: none;
           }

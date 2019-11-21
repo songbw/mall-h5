@@ -555,6 +555,7 @@
       },
 
       arregationList() {
+        this.$log("####################")
         let merchantList = this.$store.state.appconf.merchantList;
         let arregationPayList = [];
         merchantList.forEach(item => {
@@ -1680,7 +1681,7 @@
       getUserCouponList() {
         this.onCouponLoad(0);
       },
-      getCarList() {
+      async getCarList() {
         this.$log("carList Enter !!!!!!!!!")
         let that = this;
         let inventorySkus = [];
@@ -1737,81 +1738,231 @@
         this.savePayList();
         this.getUserCouponList();
 
-        if (skus.length > 0) { //has aoyi product           //////////////////////查询库存//////////////////
-          let options = {
-            "cityId": locationCode.cityId,
-            "countyId": locationCode.countyId,
-            "skus": inventorySkus,
-          }
-          this.$log("options:" + JSON.stringify(options));
-          this.$api.xapi({
-            method: 'post',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod/inventory',
-            data: options,
-          }).then((response) => {
-            let result = response.data.data.result;
-            this.$log("库存 result is:" + JSON.stringify(result));
-            result.forEach(item => {
-              for (let i = 0; i < this.payCarList.length; i++) {
-                if (this.payCarList[i].product.baseInfo.skuId === item.skuId) {
-                  if ("1" === item.state) {
-                    this.payCarList[i].valid = true
-                  } else {
-                    this.payCarList[i].valid = false
+        if (this.$api.IS_GAT_APP) {
+          if (skus.length > 0) { //has aoyi product           //////////////////////查询库存//////////////////
+            let options = {
+              "cityId": locationCode.cityId,
+              "countyId": locationCode.countyId,
+              "skus": inventorySkus,
+            }
+            this.$log("options:" + JSON.stringify(options));
+            this.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.PRODUCT_BASE_URL,
+              url: '/prod/inventory',
+              data: options,
+            }).then((response) => {
+              let result = response.data.data.result;
+              this.$log("库存 result is:" + JSON.stringify(result));
+              result.forEach(item => {
+                for (let i = 0; i < this.payCarList.length; i++) {
+                  if (this.payCarList[i].product.baseInfo.skuId === item.skuId) {
+                    if ("1" === item.state) {
+                      this.payCarList[i].valid = true
+                    } else {
+                      this.payCarList[i].valid = false
+                    }
                   }
                 }
+              })
+              //获取运费
+              this.getAoyifreightPay();//获取奥弋商品库存
+            }).catch(function (error) {
+              that.$log(error)
+              that.isAoyiDataLoaded = true;
+              that.getAoyifreightPay();
+              that.$log("page loading end");
+              if (that.pageLoadTimerId != -1) {
+                clearTimeout(that.pageLoadTimerId)
               }
             })
-            //获取运费
-            this.getAoyifreightPay();//获取奥弋商品库存
-          }).catch(function (error) {
-            that.$log(error)
-            that.isAoyiDataLoaded = true;
-            that.getAoyifreightPay();
-            that.$log("page loading end");
+          } else {
+            this.isAoyiDataLoaded = true;
+          }
+          if (skusOfZy.length > 0) {//other merchant
+            let options = {
+              "inventories": inventorySkusOfZy
+            }
+            this.$api.xapi({
+              method: 'post',
+              baseURL: this.$api.PRODUCT_BASE_URL,
+              url: '/prod/inventory/self',
+              data: options,
+            }).then((response) => {
+              let result = response.data.data.result;
+              this.$log("自营库存 result is:" + JSON.stringify(result));
+              result.forEach(item => {
+                for (let i = 0; i < this.payCarList.length; i++) {
+                  if (this.payCarList[i].product.baseInfo.mpu === item.mpu) {
+                    if ("1" === item.state) {
+                      this.payCarList[i].valid = true
+                    } else {
+                      this.payCarList[i].valid = false
+                    }
+                  }
+                }
+              })
+              this.getPlatformFreightPay();
+            }).catch(function (error) {
+            })
+            this.getPlatformFreightPay();//获取平台商品库存
+            this.$log("page loading end");
+            if (this.pageLoadTimerId != -1) {
+              clearTimeout(this.pageLoadTimerId)
+            }
+          } else {
+            this.isOtherDataLoaded = true;
+          }
+        } else {
+          try {
+            if (skus.length > 0) {
+              let options = {
+                "cityId": locationCode.cityId,
+                "countyId": locationCode.countyId,
+                "skus": inventorySkus,
+              }
+              let ret = await this.getAoyiInventory(options);
+              this.$log("$$$$$$$$$$$$$$$$")
+              this.$log(ret)
+              if (ret.data.code == 200) {
+                let result = ret.data.data.result;
+                this.$log("奥弋库存 result is:" + JSON.stringify(result));
+                result.forEach(item => {
+                  for (let i = 0; i < this.payCarList.length; i++) {
+                    if (this.payCarList[i].product.baseInfo.mpu === item.mpu) {
+                      if ("1" === item.state) {
+                        this.payCarList[i].valid = true
+                      } else {
+                        this.payCarList[i].valid = false
+                      }
+                    }
+                  }
+                })
+              }
+            }
+            if (skusOfZy.length > 0) {
+              let options = {
+                "inventories": inventorySkusOfZy
+              }
+              let ret = await this.getPlatformInventory(options);
+              this.$log("^^^^^^^^^^^^^^")
+              this.$log(ret)
+              if (ret.data.code == 200) {
+                let result = ret.data.data.result;
+                this.$log("自营库存 result is:" + JSON.stringify(result));
+                result.forEach(item => {
+                  for (let i = 0; i < this.payCarList.length; i++) {
+                    if (this.payCarList[i].product.baseInfo.mpu === item.mpu) {
+                      if ("1" === item.state) {
+                        this.payCarList[i].valid = true
+                      } else {
+                        this.payCarList[i].valid = false
+                      }
+                    }
+                  }
+                })
+              }
+            }
+            let ret =  await this.getAllasPlatformFreight()
+            this.$log(ret)
+            if(ret.data.code == 200) {
+              let result = ret.data.data.result
+              if(result.totalPrice > 0) {
+                result.priceBeans.forEach(iFreight => {
+                  this.arregationList.forEach(item => {
+                    if (item.price > 0 && item.merchantId != 2) {
+                      if (iFreight.merchantId === item.merchantId) {
+                        item.freight = parseFloat(iFreight.shipPrice);
+                      }
+                    } else if(item.price > 0 && item.merchantId == 2) {
+                      if (iFreight.merchantCode === item.merchantCode) {
+                        item.freight = parseFloat(iFreight.shipPrice);
+                      }
+                    }
+                  })
+                });
+              }
+            }
+            this.upDatefreightPay()
+            that.isAoyiDataLoaded = true
+            that.isOtherDataLoaded = true
             if (that.pageLoadTimerId != -1) {
               clearTimeout(that.pageLoadTimerId)
             }
-          })
-        } else {
-          this.isAoyiDataLoaded = true;
-        }
-        if (skusOfZy.length > 0) {//other merchant
-          let options = {
-            "inventories": inventorySkusOfZy
+          } catch (error) {
+            that.$log(error)
+            that.isAoyiDataLoaded = true
+            that.isOtherDataLoaded = true
+            if (that.pageLoadTimerId != -1) {
+              clearTimeout(that.pageLoadTimerId)
+            }
           }
-          this.$api.xapi({
-            method: 'post',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod/inventory/self',
-            data: options,
-          }).then((response) => {
-            let result = response.data.data.result;
-            this.$log("自营库存 result is:" + JSON.stringify(result));
-            result.forEach(item => {
-              for (let i = 0; i < this.payCarList.length; i++) {
-                if (this.payCarList[i].product.baseInfo.mpu === item.mpu) {
-                  if ("1" === item.state) {
-                    this.payCarList[i].valid = true
-                  } else {
-                    this.payCarList[i].valid = false
-                  }
-                }
-              }
-            })
-            this.getPlatformFreightPay();
-          }).catch(function (error) {
-          })
-          this.getPlatformFreightPay();//获取平台商品库存
-          this.$log("page loading end");
-          if (this.pageLoadTimerId != -1) {
-            clearTimeout(this.pageLoadTimerId)
-          }
-        } else {
-          this.isOtherDataLoaded = true;
         }
       },
+
+      getAllasPlatformFreight() {
+        let that = this;
+        let all = 0;
+        let locationCode = this.getLocationCode()
+        let totalPrice = 0;
+        let merchantInfos = []
+        this.arregationList.forEach(item => {
+          let mpuParams = []
+          item.goods.forEach(goods => {
+            if (goods.valid) {
+              totalPrice += goods.product.goodsInfo.dprice * goods.product.baseInfo.count
+              mpuParams.push(
+                {
+                  mpu: goods.product.baseInfo.mpu,
+                  num: goods.product.baseInfo.count
+                }
+              )
+            }
+          })
+          if(mpuParams.length > 0) {
+            let merchantCode = ""
+            if(item.merchantId == 2) {
+              merchantCode = item.merchantCode
+            }
+            merchantInfos.push({
+              merchantId: item.merchantId,
+              merchantCode:merchantCode,
+              mpuParams: mpuParams
+            })
+          }
+        })
+        let options = {
+          provinceId: locationCode.provinceId,
+          totalPrice: parseFloat(totalPrice.toFixed(2)),
+          merchantInfos: merchantInfos
+        }
+        that.$log("options is:" + JSON.stringify(options))
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.FREIGHTS_URL,
+          url: '/ship/carriage',
+          data: options,
+        })
+      },
+
+      getAoyiInventory(options) {
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/prod/inventory',
+          data: options,
+        })
+      },
+
+      getPlatformInventory(options) {
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.PRODUCT_BASE_URL,
+          url: '/prod/inventory/self',
+          data: options,
+        })
+      },
+
       editAddressOrList() {
         this.$log("addressCount:" + this.addressCount)
         if (this.addressCount) { //go to Address List

@@ -157,7 +157,7 @@
           img {
             display: block;
             object-fit: cover;
-            height: 2.5rem;
+            height: 3rem;
           }
 
           h2 {
@@ -193,7 +193,7 @@
           img {
             display: block;
             object-fit: cover;
-            height: 2.5rem;
+            height: 3rem;
           }
 
           h2 {

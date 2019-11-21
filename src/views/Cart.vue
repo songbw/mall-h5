@@ -5,8 +5,12 @@
     </v-header>
 
     <div class="cartBody">
-      <div class="box" :style="{'padding-top':showHeader? '3em':'1em'}"></div>
-      <van-list v-model="loading" :finished="finished" @load="onLoad" style="list-style: none">
+      <div class="box" :style="{'padding-top':showHeader? '3em':'1em'}" v-if="finished"></div>
+      <van-list v-model="loading"
+                :finished="finished"
+                @load="onLoad"
+                loading-text="正在加载..."
+                style="list-style: none;background-color: #f8f8f8;">
       </van-list>
       <div v-if="finished">
         <div class="emptyCart" v-if="dataLoaded && cartList.length === 0">
@@ -342,7 +346,8 @@
         this.$log(k)
         let options = {
           "id": k.baseInfo.cartId,
-          "count": k.baseInfo.count
+          "count": k.baseInfo.count,
+          "mpu": k.baseInfo.mpu
         }
         this.$api.xapi({
           method: 'put',
