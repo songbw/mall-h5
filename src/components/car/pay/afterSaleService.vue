@@ -19,40 +19,6 @@
           ￥{{goods.salePrice.toFixed(2)}}元
         </van-cell>
         <van-cell title="状态" title-class="CellTitle" :value="formatWOrderStatus(requestState)"></van-cell>
-        <div slot="footer">
-<!--          <van-cell title="申请数量" title-class="CellTitle">
-            <van-stepper
-              v-model="count"
-              :max="goods.num"
-              @change="onCountChange"/>
-          </van-cell>
-          <van-cell title="历史工单" :value=this.history_list.length title-class="CellTitle" isLink="true"
-                    @click="onHistListClick">
-          </van-cell>
-          <van-actionsheet v-model="historyListShow" title="历史工单" class="invoice_layout">
-            <div>
-              <div class="workerOrderCard"
-                   v-for="(k,i) in this.history_list"
-                   :key="i">
-                <div class="title">
-                  <span>{{formateWOrderType(k.typeId)}}</span>
-                </div>
-                <div class="info">
-                  <div class="createTimeAndNumber">
-                    <span >{{formatWOrderCreateDateTime(k.createTime)}}</span>
-                    <span  style="margin-left: 15px">数量:{{k.returnedNum}}</span>
-                  </div>
-                  <div class="reasonBox">
-                    <span >￥{{k.refundAmount.toFixed(2)}}  {{k.title}}</span>
-                  </div>
-                  <div class="statusBox">
-                    <span >状态: {{formatWOrderStatus(k.status)}}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </van-actionsheet>
-        </div>-->
       </div>
       <div class="requireTypeBox">
         <van-cell title="申请类型" title-class="CellTitle"></van-cell>
