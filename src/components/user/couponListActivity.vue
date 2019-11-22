@@ -204,11 +204,11 @@
         return   new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },
       countDownS_cb(index, k) {
-        k['promotionState'] = Util.getPromotionState(k)
+        k['promotionState'] = Util.getPromotionState(this,k)
         k['dprice']=Util.getDisplayPrice(k.price,k)
       },
       countDownE_cb(index, k) {
-        k['promotionState'] = Util.getPromotionState(k)
+        k['promotionState'] = Util.getPromotionState(this,k)
         k['dprice']=Util.getDisplayPrice(k.price,k)
       },
 
@@ -334,7 +334,7 @@
                 that.finished = true;
               } else {
                 result.couponSkus.list.forEach(item => {
-                  item['promotionState'] = Util.getPromotionState(item)
+                  item['promotionState'] = Util.getPromotionState(this,item)
                   item['dprice']=Util.getDisplayPrice(item.price,item)
                   that.list.push(item);
                 })

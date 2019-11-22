@@ -282,9 +282,9 @@
         let dsBridge = require("dsbridge");
         Vue.prototype.$jsbridge = dsBridge;
         this.initJsNativeCb();
-        let openId = "499f36e745344e7e8de03f02cc392fe8"
+        //let openId = "499f36e745344e7e8de03f02cc392fe8"
          //let openId = "44391000fd194ab888b1aa81c03c3740"
-       // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
       //  let openId = "ace1c1722b834309a59fad302fe357b2"
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
