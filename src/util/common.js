@@ -98,10 +98,10 @@ export default {
     return window.localStorage.setItem(key, JSON.stringify(res))
   },
 
-  getDisplayPrice(checkedPrice,k) {
+  getDisplayPrice(env,checkedPrice,k) {
     if (k.promotion != undefined && k.promotion.length > 0) {
-      let startTime = new Date(k.promotion[0].startDate).getTime()
-      let endTime = new Date(k.promotion[0].endDate).getTime()
+      let startTime = new Date(env.$moment(k.promotion[0].startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+      let endTime = new Date(env.$moment(k.promotion[0].endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
       let current = new Date().getTime()
       if (current < startTime) {
         return checkedPrice //活动未开始
@@ -195,7 +195,7 @@ export default {
       }
       if(cartItem.promotionInfo != undefined) {
         cartItem.promotionInfo['promotionState'] = this.getPromotionState(env,cartItem.promotionInfo)
-        cartItem.goodsInfo['dprice'] = this.getDisplayPrice(cartItem.goodsInfo.price,cartItem.promotionInfo)
+        cartItem.goodsInfo['dprice'] = this.getDisplayPrice(env,cartItem.goodsInfo.price,cartItem.promotionInfo)
       }
       env.$log(cartItem)
       if (found == -1) {

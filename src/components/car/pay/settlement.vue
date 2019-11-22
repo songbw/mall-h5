@@ -578,7 +578,7 @@
           allPayList.forEach(item => {
             if (item.product.promotionInfo != undefined) {
               item.product.promotionInfo['promotionState'] = Util.getPromotionState(this,item.product.promotionInfo)
-              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(item.checkedPrice, item.product.promotionInfo)
+              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(this,item.checkedPrice, item.product.promotionInfo)
             }
             if (item.product.baseInfo.merchantId === 2) {//aoyi
               if (item.product.baseInfo.mpu != null) {
