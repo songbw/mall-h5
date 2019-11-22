@@ -152,16 +152,11 @@
         let userInfo = this.$store.state.appconf.userInfo
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
-          if(this.userDetail == null) {
-            this.loading = false;
-            this.finished = true;
-            this.launchedLoaded = true;
-            return
-          }
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
               "pageNo": this.pageNo++,
-              "mobile": this.userDetail.telephone
+              "mobile": this.userDetail.telephone,
+              "pageSize":10
             }
             this.$api.xapi({
               method: 'post',
@@ -177,7 +172,9 @@
                 this.loading = false;
                 this.finished = true;
               } else {
-                this.list = this.result.list
+                this.result.list.forEach(item => {
+                  this.list.push(item);
+                })
                 this.$log(this.list)
                 this.loading = false;
                 if (this.list.length >= this.total)
