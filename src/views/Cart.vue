@@ -320,11 +320,11 @@
         return (goods.brand == null ? '' : goods.brand) + ' ' + goods.name + ' ' + (goods.model == null ? '' : goods.model)
       },
       countDownS_cb(index, k) {
-        k.promotionInfo.promotionState = Util.getPromotionState(k)
+        k.promotionInfo.promotionState = Util.getPromotionState(this,k)
         Util.updateCartItem(this, k);
       },
       countDownE_cb(index, k) {
-        k.promotionInfo.promotionState = Util.getPromotionState(k)
+        k.promotionInfo.promotionState = Util.getPromotionState(this,k)
         let len = k.promotionInfo.promotion.length;
         k.promotionInfo.promotion.splice(0, len);
         Util.updateCartItem(this, k);
@@ -469,7 +469,7 @@
           let couponList = product.coupon
           let promotionInfo = {
             "promotion": product.promotion,
-            "promotionState": Util.getPromotionState(product)
+            "promotionState": Util.getPromotionState(this,product)
           }
           cartItem = {
             "baseInfo": baseInfo,
@@ -485,7 +485,7 @@
           cartItem.couponList = product.coupon
           cartItem.promotionInfo = {
             "promotion": product.promotion,
-            "promotionState": Util.getPromotionState(product)
+            "promotionState": Util.getPromotionState(this,product)
           }
         }
         Util.updateCartItem(this, cartItem)
@@ -532,7 +532,7 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState({promotion: promotion})
+            "promotionState": Util.getPromotionState(this,{promotion: promotion})
           }
           cartItem = {
             "baseInfo": baseInfo,
@@ -558,7 +558,7 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState({promotion: promotion})
+            "promotionState": Util.getPromotionState(this,{promotion: promotion})
           }
           cartItem.couponList = couponList
           cartItem.promotionInfo = promotionInfo

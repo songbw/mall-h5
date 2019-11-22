@@ -218,7 +218,7 @@
           let couponList = goods.coupon
           let promotionInfo = {
             "promotion": goods.promotion,
-            "promotionState": Util.getPromotionState(goods)
+            "promotionState": Util.getPromotionState(this,goods)
           }
           let product = {
             "baseInfo": baseInfo,
