@@ -221,11 +221,113 @@
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
              this.userTokenLoading= false;
+             this.loadCartList()
           }
         }
       },
     },
     methods: {
+      upDateSkuInfo(item, couponAndProms, user) {
+        let cartItem = Util.getCartItem(this, user.userId, item.mpu)
+        if (cartItem == null) {
+          let baseInfo = {
+            "userId": user.userId,
+            "skuId": item.skuid,
+            "mpu": item.mpu,
+            "merchantId": item.merchantId,
+            "count": item.count,
+            "choosed": false,
+            "cartId": item.id
+          }
+          let goodsInfo = {
+            "id": item.id,
+            "skuId": item.skuid,
+            "mpu": item.mpu,
+            "merchantId": item.merchantId,
+            "image": item.image,
+            "category": item.category,
+            "name": item.name,
+            "brand": item.brand,
+            "model": item.model,
+            "price": item.price,
+            "state": item.state,
+          }
+          let couponList = []
+          let promotion = []
+          if (couponAndProms != null) {
+            for (let i = 0; i < couponAndProms.length; i++) {
+              if (couponAndProms[i].mpu == item.mpu) {
+                couponList = couponAndProms[i].coupons
+                promotion = couponAndProms[i].promotions
+                break;
+              }
+            }
+          }
+          let promotionInfo = {
+            "promotion": promotion,
+            "promotionState": Util.getPromotionState({promotion: promotion})
+          }
+          cartItem = {
+            "baseInfo": baseInfo,
+            "goodsInfo": goodsInfo,
+            "couponList": couponList,
+            "promotionInfo": promotionInfo,
+          }
+        } else {
+          cartItem.baseInfo.count = item.count
+          cartItem.baseInfo.cartId = item.id
+          cartItem.baseInfo.merchantId = item.merchantId
+          cartItem.goodsInfo.merchantId = item.merchantId
+          let couponList = []
+          let promotion = []
+          if (couponAndProms != null) {
+            for (let i = 0; i < couponAndProms.length; i++) {
+              if (couponAndProms[i].mpu == item.mpu) {
+                couponList = couponAndProms[i].coupons
+                promotion = couponAndProms[i].promotions
+                break;
+              }
+            }
+          }
+          let promotionInfo = {
+            "promotion": promotion,
+            "promotionState": Util.getPromotionState({promotion: promotion})
+          }
+          cartItem.couponList = couponList
+          cartItem.promotionInfo = promotionInfo
+        }
+        Util.updateCartItem(this, cartItem)
+      },
+     loadCartList() {
+       let that = this
+       let userInfo = this.$store.state.appconf.userInfo;
+       if (!Util.isUserEmpty(userInfo)) {
+         let user = JSON.parse(userInfo);
+         let that = this
+         let options = {
+           "openId": user.userId,
+           "pageNo": 1,
+           "pageSize": 100
+         }
+         this.$api.xapi({
+           method: 'post',
+           baseURL: this.$api.ORDER_BASE_URL,
+           url: '/cart/all',
+           data: options,
+         }).then(async (response) => {
+           this.result = response.data.data.result;
+           this.$log(this.result.object)
+           if (this.result.object.cart != undefined && this.result.object.cart.length > 0) {
+             let couponsAndProms = this.result.object.couponProm
+             this.result.object.cart.forEach(item => {
+               this.upDateSkuInfo(item, couponsAndProms, userInfo)
+             })
+           }
+         }).catch(function (error) {
+           that.$log(error)
+         })
+       }
+      },
       isValidLeavedPath(to) {
         let path = to.path;
         // if("/category/all | /car | ^/index/ | /detail".match(path))
