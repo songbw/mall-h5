@@ -26,7 +26,7 @@
             :price="sku.price"
             :title="sku.title"
             :num="sku.total"
-            :thumb="sku.cover"
+            :thumb="getCover(sku.cover)"
             style="background-color: white">
           </van-card>
         </div>
@@ -90,6 +90,13 @@
     },
 
     methods: {
+      getCover(cover) {
+        if(cover.length > 4 && cover.substr(0,4)=="http") {
+          return cover
+        } else {
+          return "https://wap.wxhmmall.com/attachment/"+cover
+        }
+      },
       formateExpressType(dispatch_type) {
         if (dispatch_type == 1) {
           return "快递"

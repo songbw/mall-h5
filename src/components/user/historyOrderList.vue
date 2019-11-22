@@ -23,7 +23,7 @@
                   :price="sku.price"
                   :title="sku.title"
                   :num="sku.total"
-                  :thumb="sku.cover">
+                  :thumb="getCover(sku.cover)">
                 </van-card>
               </li>
             </ul>
@@ -87,6 +87,13 @@
     },
 
     methods: {
+      getCover(cover) {
+        if(cover.length > 4 && cover.substr(0,4)=="http") {
+          return cover
+        } else {
+          return "https://wap.wxhmmall.com/attachment/"+cover
+        }
+      },
       onHistoryOrderItemClick(k) {
         this.$log("onHistoryOrderItemClick Enter")
         this.$router.push({
