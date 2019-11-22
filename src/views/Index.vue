@@ -381,9 +381,9 @@
         }
       },
       test() {
-        let dsBridge = require("dsbridge");
-        Vue.prototype.$jsbridge = dsBridge;
-        this.initJsNativeCb();
+        //let dsBridge = require("dsbridge");
+        //Vue.prototype.$jsbridge = dsBridge;
+        //this.initJsNativeCb();
         let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
          //let openId = "44391000fd194ab888b1aa81c03c3740"
        // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
@@ -395,7 +395,7 @@
           let userId = this.$api.APP_ID + openId;
           //let auth_code = "12345678"
           //this.getThirdPartyAccessTokenInfo(auth_code)
-          let accessToken = "TTTTTTTTTTTT"
+          let accessToken = "############"
           let userInfo = {
             openId: openId,
             accessToken: accessToken,
@@ -405,6 +405,8 @@
           this.$store.commit('SET_USER', JSON.stringify(userInfo));
           this.thirdPartLogined(openId, accessToken);
         }
+/*        let requestCode = "12345678"
+        this.getPingAnThirdPartyAccessTokenInfo(requestCode)*/
       },
       closeWindow() {
         if (!this.$api.IS_GAT_APP) {
