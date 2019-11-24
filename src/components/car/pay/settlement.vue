@@ -577,8 +577,8 @@
         try {
           allPayList.forEach(item => {
             if (item.product.promotionInfo != undefined) {
-              item.product.promotionInfo['promotionState'] = Util.getPromotionState(item.product.promotionInfo)
-              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(item.checkedPrice, item.product.promotionInfo)
+              item.product.promotionInfo['promotionState'] = Util.getPromotionState(this,item.product.promotionInfo)
+              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(this,item.checkedPrice, item.product.promotionInfo)
             }
             if (item.product.baseInfo.merchantId === 2) {//aoyi
               if (item.product.baseInfo.mpu != null) {
@@ -1118,7 +1118,7 @@
           }
         }
         if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
+          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this,k)
           this.savePayList()
         }
       },
@@ -1130,7 +1130,7 @@
           }
         }
         if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(k)
+          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this,k)
           let len = this.payCarList[found].product.promotionInfo.promotion.length;
           this.payCarList[found].product.promotionInfo.promotion.splice(0, len);
           this.savePayList()
@@ -1727,7 +1727,7 @@
               skusOfZy.push({"mpu": item.baseInfo.mpu})
             }
             if (item.promotionInfo.promotion != null && item.promotionInfo.promotion.length > 0) {
-              item.promotionInfo.promotionState = Util.getPromotionState(item.promotionInfo);
+              item.promotionInfo.promotionState = Util.getPromotionState(this,item.promotionInfo);
             }
             //////////////////
             this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.price})

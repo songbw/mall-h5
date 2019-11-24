@@ -23,7 +23,7 @@
                   :price="sku.price"
                   :title="sku.title"
                   :num="sku.total"
-                  :thumb="sku.cover">
+                  :thumb="getCover(sku.cover)">
                 </van-card>
               </li>
             </ul>
@@ -87,6 +87,13 @@
     },
 
     methods: {
+      getCover(cover) {
+        if(cover.length > 4 && cover.substr(0,4)=="http") {
+          return cover
+        } else {
+          return "https://wap.wxhmmall.com/attachment/"+cover
+        }
+      },
       onHistoryOrderItemClick(k) {
         this.$log("onHistoryOrderItemClick Enter")
         this.$router.push({
@@ -145,16 +152,11 @@
         let userInfo = this.$store.state.appconf.userInfo
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
-          if(this.userDetail == null) {
-            this.loading = false;
-            this.finished = true;
-            this.launchedLoaded = true;
-            return
-          }
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
               "pageNo": this.pageNo++,
-              "mobile": this.userDetail.telephone
+              "mobile": this.userDetail.telephone,
+              "pageSize":10
             }
             this.$api.xapi({
               method: 'post',
@@ -170,7 +172,9 @@
                 this.loading = false;
                 this.finished = true;
               } else {
-                this.list = this.result.list
+                this.result.list.forEach(item => {
+                  this.list.push(item);
+                })
                 this.$log(this.list)
                 this.loading = false;
                 if (this.list.length >= this.total)
