@@ -185,11 +185,22 @@
             this.userTokenLoading = false;
           }
         }, 10000);
-        setTimeout(() => {
-          this.test();
-          this.startLocation();
-          this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
-        }, 1000);
+        if(this.$api.APP_ID == '08') {//公众服务号端
+            let authCode = this.$route.query.code ;
+            let state =  this.$route.query.state;
+            if(state == '08') {
+              this.$log("authCode:"+authCode)
+
+
+            }
+        } else {
+          setTimeout(() => {
+            this.test();
+            //this.startLocation();
+            //this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
+          }, 10000);
+        }
+
       }
     },
     computed: {

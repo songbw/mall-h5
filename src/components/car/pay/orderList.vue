@@ -438,7 +438,7 @@
               "orderNos": orderNos,
               "goodsName": "商品支付订单",
               "amount": pAnOrderInfo.orderAmount,
-              "returnUrl": returnUrl,
+              "returnUrl": returnUrl
             }
             that.$log("预下单:" + JSON.stringify(options))
             that.$api.xapi({
