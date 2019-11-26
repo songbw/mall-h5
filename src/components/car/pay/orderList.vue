@@ -52,7 +52,7 @@
                       </van-card>
                     </li>
                   </ul>
-                  <div style="margin: 10px;color: #333333">
+                  <div style="margin: 10px 12px;color: #333333">
                     <span style="margin-left: 5px"></span>
                     <span style="float: right;">订单日期: {{formatTime(k.createdAt)}}</span>
                   </div>
