@@ -121,7 +121,7 @@
           创建时间:
           <p>{{formatTime(detail.createdAt)}}</p>
         </span>
-        <span v-if="detail.paymentAt != null">
+        <span v-if="detail.payStatus == 5 && detail.paymentAt != null">
           成交时间:
           <p>{{formatTime(detail.paymentAt)}}</p>
         </span>
@@ -332,9 +332,9 @@
             "amount": pAnOrderInfo.orderAmount,
             "returnUrl": returnUrl,
           }
-          let savedOrderNo = this.getSavedPayOrderInfo(listItem);
-          this.$log("savedOrderNo:" + savedOrderNo)
-          savedOrderNo = null //force renew order no
+/*          let savedOrderNo = this.getSavedPayOrderInfo(listItem);
+          this.$log("savedOrderNo:" + savedOrderNo)*/
+          let savedOrderNo = null //force renew order no
           if (savedOrderNo != null) {
             pAnOrderInfo.orderNo = savedOrderNo
             that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
@@ -445,35 +445,63 @@
         let pAnOrderInfo = {
           "accessToken": user.accessToken,
           "orderNo": orderNo,
-          "orderAmount": listItem.amount * 100,//分
+          "orderAmount": listItem.saleAmount * 100,//分
           "openId": user.openId,
           "businessType": "11"
         }
         this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo, listItem)
       },
       onCancelBtnClick(detail) {
-        let id = detail.id
         this.$dialog.confirm({
           message: '确定取消订单?'
         }).then(() => {
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.ORDER_BASE_URL,
-            url: '/order/cancel',
-            params: {
-              id: id,
-            }
-          }).then((response) => {
-            if (response.data.code == 200) {
-              this.status = 3;
-              this.detail.status = this.status
-              this.$store.commit('SET_CURRENT_ORDER_INFO', JSON.stringify(this.detail));
-            }
-            //已取消
-          }).catch(function (error) {
-            console.log(error)
-          })
-
+          console.log("确定")
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (Util.isUserEmpty(userInfo)) {
+            this.$toast("没有用户信息，请先确认登录")
+            return
+          }
+          let user = JSON.parse(userInfo)
+          if(detail.status == 0) {//待支付
+            this.$api.xapi({
+              method: 'get',
+              baseURL: this.$api.ORDER_BASE_URL,
+              url: '/order/unpaid/cancel',
+              params: {
+                appId : this.$api.APP_ID,
+                openId: user.userId,
+                orderNos: detail.tradeNo
+              }
+            }).then((response) => {
+              if (response.data.code == 200) {
+                this.status = 3;
+                this.detail.status = this.status
+                this.$store.commit('SET_CURRENT_ORDER_INFO', JSON.stringify(this.detail));
+              }
+              //已取消
+            }).catch(function (error) {
+              console.log(error)
+            })
+          } else {
+            let id = detail.id
+            this.$api.xapi({
+              method: 'get',
+              baseURL: this.$api.ORDER_BASE_URL,
+              url: '/order/cancel',
+              params: {
+                id: id,
+              }
+            }).then((response) => {
+              if (response.data.code == 200) {
+                this.status = 3;
+                this.detail.status = this.status
+                this.$store.commit('SET_CURRENT_ORDER_INFO', JSON.stringify(this.detail));
+              }
+              //已取消
+            }).catch(function (error) {
+              console.log(error)
+            })
+          }
         }).catch(() => {
           console.log("不删")
         });
