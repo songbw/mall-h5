@@ -52,6 +52,10 @@
                       </van-card>
                     </li>
                   </ul>
+                  <div style="margin: 10px;color: #333333">
+                    <span style="margin-left: 5px"></span>
+                    <span style="float: right;">订单日期: {{formatTime(k.createdAt)}}</span>
+                  </div>
                   <div class="orderDetailSummery">
                     <span v-if="k.couponDiscount != null">合计: ￥{{parseFloat(k.saleAmount).toFixed(2)}}元 (含运费:￥{{k.servFee.toFixed(2)}}, 优惠券:￥{{k.couponDiscount.toFixed(2)}}) </span>
                     <span v-else>合计: ￥{{parseFloat(k.saleAmount).toFixed(2)}}元 (含运费:￥{{k.servFee.toFixed(2)}})</span>
@@ -190,6 +194,11 @@
     },
 
     methods: {
+      formatTime(timeString) {
+        if (timeString == null)
+          return ""
+        return this.$moment(timeString).format('YYYY/MM/DD HH:mm:ss')
+      },
       getClientName() {
         switch (this.$api.APP_ID) {
           case "09":
@@ -472,41 +481,6 @@
             }).catch(function (error) {
               that.$log(error)
             })
-            /*            that.$log("预下单:" + JSON.stringify(options))
-                        that.$api.xapi({
-                          baseURL: this.$api.SSO_BASE_URL,
-                          // url: '/zhcs/payment',
-                          url: '/payment/pingan',
-                          data: options,
-                        }).then((response) => {
-                          that.$log("预下单返回 :" + JSON.stringify(response.data))
-                          if (response.data.msg === "会员不存在") {
-                            //未开通钱包
-                            let walletInfo = {
-                              accessToken: user.accessToken,
-                              openId: user.openId,
-                            }
-                            that.$log("walletInfo:" + JSON.stringify(walletInfo))
-                            that.$jsbridge.call("dredgeWallet", walletInfo);
-                          } else {
-                            if (response.data.data.result != undefined) {
-                              let orderNo = response.data.data.result.orderNo
-                              let outTradeNo =  response.data.data.result.outTradeNo
-                              pAnOrderInfo['orderNo'] = orderNo
-                              pAnOrderInfo['outTradeNo'] = outTradeNo
-                              that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-                              that.$jsbridge.call("openCashPage", pAnOrderInfo);
-                              this.$router.replace({
-                                name: "收银台页",
-                                params: {
-                                  orderInfo: pAnOrderInfo
-                                }
-                              })
-                            }
-                          }
-                        }).catch(function (error) {
-                          that.$log(error)
-                        })*/
           }
         }
 
@@ -744,7 +718,6 @@
             data: options,
           }).then((response) => {
             if (that.orderTypes[index].status != 0) {
-              this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
               this.$log(that.orderTypes[index].pageNo)
               let unpaid = response.data.data.unpaid
               if (that.orderTypes[index].status == -1 && that.orderTypes[index].pageNo == 2) { //获取首页
@@ -759,6 +732,9 @@
                         tradeNo: listItem.orderNos,
                         skus: [],
                         status: 0,
+                        couponCode: listItem.coupon.code,
+                        couponDiscount: listItem.coupon.discount,
+                        couponId: listItem.coupon.id
                       }
                       if (listItem.ordersList.length > 0) {
                         item['address'] = listItem.ordersList[0].address
@@ -822,6 +798,9 @@
                     tradeNo: listItem.orderNos,
                     skus: [],
                     status: 0,
+                    couponCode: listItem.coupon.code,
+                    couponDiscount: listItem.coupon.discount,
+                    couponId: listItem.coupon.id
                   }
                   if (listItem.ordersList.length > 0) {
                     item['address'] = listItem.ordersList[0].address
@@ -932,7 +911,18 @@
             text-align: right;
             margin-right: 1em;
             .fz(font-size, 25);
+
             color: #000000;
+            >span{
+              display: inline-block;
+              align-content: center;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
+            }
           }
 
           .orderDetailAction {
