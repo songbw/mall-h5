@@ -428,7 +428,7 @@
           if (savedOrderNo != null) {
             pAnOrderInfo.orderNo = savedOrderNo
             that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-            this.$router.replace({
+            this.$router.push({
               name: "收银台页",
               params: {
                 orderInfo: pAnOrderInfo
@@ -470,7 +470,7 @@
                   pAnOrderInfo['outTradeNo'] = outTradeNo
                   that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
-                  this.$router.replace({
+                  this.$router.push({
                     name: "收银台页",
                     params: {
                       orderInfo: pAnOrderInfo
