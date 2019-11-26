@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="orderlist">
-    <v-header  v-if="showHeader">
+    <v-header v-if="showHeader">
       <h1 slot="title">我的订单</h1>
     </v-header>
     <div class="orderlist-layout">
@@ -15,7 +15,6 @@
                 <span>您还没有相关订单</span>
               </div>
               <li v-else v-for="(k,i) in item.list" :key="i" style="list-style: none">
-
                 <div class="orderDetail">
                   <div>
                     <van-cell :title=getMerchantName(k.merchantNo) icon="shop" :value="getOrderStatus(k.status)">
@@ -28,9 +27,9 @@
                         :title="sku.name"
                         :num="sku.num"
                         :thumb="sku.image">
-                        <div slot="tags"  v-if="sku.salePrice != sku.unitPrice" class="cardtags">
-                          <img :src="tag_promotion"  v-if="sku.promotionDiscount > 0"/>
-                          <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />
+                        <div slot="tags" v-if="sku.salePrice != sku.unitPrice" class="cardtags">
+                          <img :src="tag_promotion" v-if="sku.promotionDiscount > 0"/>
+                          <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0"/>
                         </div>
                         <div slot="footer" class="card_footer">
                           <div v-if="sku.status < 4">
@@ -53,6 +52,10 @@
                       </van-card>
                     </li>
                   </ul>
+                  <div style="margin: 10px 12px;color: #333333">
+                    <span style="margin-left: 5px"></span>
+                    <span style="float: right;">订单日期: {{formatTime(k.createdAt)}}</span>
+                  </div>
                   <div class="orderDetailSummery">
                     <span v-if="k.couponDiscount != null">合计: ￥{{parseFloat(k.saleAmount).toFixed(2)}}元 (含运费:￥{{k.servFee.toFixed(2)}}, 优惠券:￥{{k.couponDiscount.toFixed(2)}}) </span>
                     <span v-else>合计: ￥{{parseFloat(k.saleAmount).toFixed(2)}}元 (含运费:￥{{k.servFee.toFixed(2)}})</span>
@@ -109,7 +112,7 @@
   export default {
     components: {
       'v-header': Header,
-      'v-footer':Footer
+      'v-footer': Footer
     },
 
 
@@ -122,7 +125,7 @@
         tag_coupon: require('@/assets/icons/ico_lab_coupon.png'),
         tag_promotion: require('@/assets/icons/ico_lab_promotion.png'),
         launchedLoading: false,
-        reload:false,
+        reload: false,
         orderTypes: [
           {
             "title": "全部",
@@ -186,11 +189,16 @@
       this.showHeader = this.$api.HAS_HEADER;
     },
 
-    beforeDestroy (){
+    beforeDestroy() {
       this.hideMeqiaPanel()
     },
 
     methods: {
+      formatTime(timeString) {
+        if (timeString == null)
+          return ""
+        return this.$moment(timeString).format('YYYY/MM/DD HH:mm:ss')
+      },
       getClientName() {
         switch (this.$api.APP_ID) {
           case "09":
@@ -204,38 +212,38 @@
 
         }
       },
-      showMeqiaPanel () {
+      showMeqiaPanel() {
         let userInfo = this.$store.state.appconf.userInfo;
         let userDetail = this.$store.state.appconf.userDetail;
         let userName = ""
         let userId = ""
         let telePhone = ""
-        if(!Util.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           let UserInfo = JSON.parse(userInfo)
           userId = UserInfo.userId
         }
-        if(userDetail.length > 0) {
-          let UserDetail  = JSON.parse(userDetail)
-          userName =  UserDetail.nickname
+        if (userDetail.length > 0) {
+          let UserDetail = JSON.parse(userDetail)
+          userName = UserDetail.nickname
           telePhone = UserDetail.telephone
         }
         _MEIQIA('showPanel')
         _MEIQIA('metadata', {
           name: userName, // 美洽默认字段
-          tel:telePhone,
+          tel: telePhone,
           '渠道': this.getClientName(), // 自定义字段
           '用户ID': userId,
           '当前URL': window.location.href,
           '订单号': ''
         });
       },
-      hideMeqiaPanel(){
+      hideMeqiaPanel() {
         _MEIQIA('hidePanel');
       },
-      onQuerySalesServiceBtnClick(k,sku) {
+      onQuerySalesServiceBtnClick(k, sku) {
         this.$router.push({name: '售后工单页'})
       },
-      onAfterSalesServiceBtnClick(k,sku) {
+      onAfterSalesServiceBtnClick(k, sku) {
         this.$log("onAfterSalesServiceBtnClick Enter")
         this.$router.push({
           name: "售后服务页",
@@ -268,10 +276,10 @@
       },
 
       resetOrderTypeList() {
-        for(let i = 0 ; i< this.orderTypes.length ; i++) {
-          this.orderTypes[i].list.splice(0,1);
+        for (let i = 0; i < this.orderTypes.length; i++) {
+          this.orderTypes[i].list.splice(0, 1);
         }
-        this.orderTypes.splice(0,1);
+        this.orderTypes.splice(0, 1);
         this.orderTypes = [
           {
             "title": "全部",
@@ -322,7 +330,7 @@
       },
       /*statue: Number 子订单状态（0：已下单；1：待发货；2：已发货（15天后自动变为已完成）；3：已完成；4：已取消；5：失败）*/
       getSubOrderStatus(status) {
-        switch(status) {
+        switch (status) {
           case 0:
             return "已下单";
           case 1:
@@ -357,27 +365,26 @@
       },
       getMerchantName(merchantNo) {
         return "惠民优选"
-/*        if (merchantNo == 20) {
-          return "苏宁易购"
-        } else if (merchantNo == 30) {
-          return "唯品会"
-        } else if (merchantNo == 50) {
-          return "天猫精选"
-        } else if (merchantNo == 60) {
-          return "京东"
-        } else {
-          return "商城自营"
-        }*/
+        /*        if (merchantNo == 20) {
+                  return "苏宁易购"
+                } else if (merchantNo == 30) {
+                  return "唯品会"
+                } else if (merchantNo == 50) {
+                  return "天猫精选"
+                } else if (merchantNo == 60) {
+                  return "京东"
+                } else {
+                  return "商城自营"
+                }*/
       },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
         let returnUrl = ""
-        if(this.$api.IS_GAT_APP)
-        {
-          if(this.$api.APP_ID==='10') {
-            returnUrl  =   "https://gatsn.weesharing.com/pay/cashering";
-          } else if(this.$api.APP_ID==='09') {
-            returnUrl  =   "https://gatzy.weesharing.com/pay/cashering";
+        if (this.$api.IS_GAT_APP) {
+          if (this.$api.APP_ID === '10') {
+            returnUrl = "https://gatsn.weesharing.com/pay/cashering";
+          } else if (this.$api.APP_ID === '09') {
+            returnUrl = "https://gatzy.weesharing.com/pay/cashering";
           }
           let options = {
             "iAppId": this.$api.APP_ID,
@@ -415,14 +422,13 @@
             "amount": pAnOrderInfo.orderAmount,
             "returnUrl": returnUrl,
           }
-          let savedOrderNo = this.getSavedPayOrderInfo(listItem);
-          this.$log("savedOrderNo:" + savedOrderNo)
-          savedOrderNo = null //force ，renew order no
+/*          let savedOrderNo = this.getSavedPayOrderInfo(listItem);
+          this.$log("savedOrderNo:" + savedOrderNo)*/
+          let savedOrderNo = null //force ，renew order no
           if (savedOrderNo != null) {
             pAnOrderInfo.orderNo = savedOrderNo
             that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-           // that.$jsbridge.call("openCashPage", pAnOrderInfo);
-            this.$router.replace({
+            this.$router.push({
               name: "收银台页",
               params: {
                 orderInfo: pAnOrderInfo
@@ -464,7 +470,7 @@
                   pAnOrderInfo['outTradeNo'] = outTradeNo
                   that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
-                  this.$router.replace({
+                  this.$router.push({
                     name: "收银台页",
                     params: {
                       orderInfo: pAnOrderInfo
@@ -475,41 +481,6 @@
             }).catch(function (error) {
               that.$log(error)
             })
-/*            that.$log("预下单:" + JSON.stringify(options))
-            that.$api.xapi({
-              baseURL: this.$api.SSO_BASE_URL,
-              // url: '/zhcs/payment',
-              url: '/payment/pingan',
-              data: options,
-            }).then((response) => {
-              that.$log("预下单返回 :" + JSON.stringify(response.data))
-              if (response.data.msg === "会员不存在") {
-                //未开通钱包
-                let walletInfo = {
-                  accessToken: user.accessToken,
-                  openId: user.openId,
-                }
-                that.$log("walletInfo:" + JSON.stringify(walletInfo))
-                that.$jsbridge.call("dredgeWallet", walletInfo);
-              } else {
-                if (response.data.data.result != undefined) {
-                  let orderNo = response.data.data.result.orderNo
-                  let outTradeNo =  response.data.data.result.outTradeNo
-                  pAnOrderInfo['orderNo'] = orderNo
-                  pAnOrderInfo['outTradeNo'] = outTradeNo
-                  that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-                  that.$jsbridge.call("openCashPage", pAnOrderInfo);
-                  this.$router.replace({
-                    name: "收银台页",
-                    params: {
-                      orderInfo: pAnOrderInfo
-                    }
-                  })
-                }
-              }
-            }).catch(function (error) {
-              that.$log(error)
-            })*/
           }
         }
 
@@ -520,39 +491,69 @@
           message: '确定取消订单?'
         }).then(() => {
           console.log("确定")
-          let id = listItem.id
-          let index = this.active
-          this.reload = true;
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.ORDER_BASE_URL,
-            url: '/order/cancel',
-            params: {
-              id: id,
-            }
-          }).then((response) => {
-            if (response.data.code == 200) {
-              listItem.status = 3;
-              if(this.active != 0) {
-                let found = -1;
-                for (let i = 0; i < this.orderTypes[index].list.length; i++) {
-                  this.$log("listItem.id:"+listItem.id)
-                  this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
-                  if (listItem.id === this.orderTypes[index].list[i].id) {
-                    found = i;
-                    break;
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (Util.isUserEmpty(userInfo)) {
+            this.$toast("没有用户信息，请先确认登录")
+            return
+          }
+          this.$log(listItem)
+          if(listItem.status == 0) {//待支付
+            let index = this.active
+            this.reload = true;
+            let user = JSON.parse(userInfo)
+            this.$api.xapi({
+              method: 'get',
+              baseURL: this.$api.ORDER_BASE_URL,
+              url: '/order/unpaid/cancel',
+              params: {
+                appId : this.$api.APP_ID,
+                openId: user.userId,
+                orderNos: listItem.tradeNo
+              }
+            }).then((response) => {
+              this.$log(response)
+              if(response.data.code == 200) {
+                 this.onLoad(this.active)
+              }
+            }).catch(function (error) {
+              console.log(error)
+            })
+          } else {
+            let id = listItem.id
+            let index = this.active
+            this.reload = true;
+            this.$api.xapi({
+              method: 'get',
+              baseURL: this.$api.ORDER_BASE_URL,
+              url: '/order/cancel',
+              params: {
+                id: id,
+              }
+            }).then((response) => {
+              if (response.data.code == 200) {
+                listItem.status = 3;
+                if (this.active != 0) {
+                  let found = -1;
+                  for (let i = 0; i < this.orderTypes[index].list.length; i++) {
+                    this.$log("listItem.id:" + listItem.id)
+                    this.$log("this.orderTypes[index].list[i].id:" + this.orderTypes[index].list[i].id)
+                    if (listItem.id === this.orderTypes[index].list[i].id) {
+                      found = i;
+                      break;
+                    }
+                  }
+                  this.$log("found is:" + found)
+                  if (found != -1) {
+                    this.orderTypes[index].list.splice(found, 1)
+                    this.orderTypes[index].total--;
                   }
                 }
-                this.$log("found is:"+found)
-                if (found != -1) {
-                  this.orderTypes[index].list.splice(found, 1)
-                  this.orderTypes[index].total--;
-                }
               }
-            }
-          }).catch(function (error) {
-            console.log(error)
-          })
+            }).catch(function (error) {
+              console.log(error)
+            })
+          }
+
         }).catch(() => {
           console.log("不删")
         });
@@ -567,8 +568,8 @@
         }
         let user = JSON.parse(userInfo);
         let len = listItem.tradeNo.length;
-        let orderNos = JSON.stringify(listItem.tradeNo.substr(len - 8)).replace(/\"/g, "");
-        let orderNo = this.$api.APP_ID + listItem.merchantNo + user.openId + orderNos
+        let orderNos = listItem.tradeNo
+        let orderNo = this.$api.APP_ID + user.openId + orderNos
         let pAnOrderInfo = {
           "accessToken": user.accessToken,
           "orderNo": orderNo,
@@ -599,17 +600,17 @@
           }).then((response) => {
             if (response.data.code == 200) {
               listItem.status = 2;
-              if(this.active != 0) {
+              if (this.active != 0) {
                 let found = -1;
                 for (let i = 0; i < this.orderTypes[index].list.length; i++) {
-                  this.$log("listItem.id:"+listItem.id)
-                  this.$log("this.orderTypes[index].list[i].id:"+this.orderTypes[index].list[i].id)
+                  this.$log("listItem.id:" + listItem.id)
+                  this.$log("this.orderTypes[index].list[i].id:" + this.orderTypes[index].list[i].id)
                   if (listItem.id === this.orderTypes[index].list[i].id) {
                     found = i;
                     break;
                   }
                 }
-                this.$log("found is:"+found)
+                this.$log("found is:" + found)
                 if (found != -1) {
                   this.orderTypes[index].list.splice(found, 1)
                   this.orderTypes[index].total--;
@@ -691,7 +692,7 @@
         that.launchedLoading = true;
         let userInfo = this.$store.state.appconf.userInfo;
         this.$log("*************  userInfo is:" + userInfo);
-        if(this.reload) {
+        if (this.reload) {
           this.resetOrderTypeList();
           this.reload = false;
         }
@@ -713,25 +714,126 @@
           this.$api.xapi({
             method: 'post',
             baseURL: this.$api.ORDER_BASE_URL,
-            url: '/order/all',
+            url: '/order/all/v2',
             data: options,
           }).then((response) => {
-            let result = response.data.data.result
-            that.orderTypes[index].total = result.total;
-            if (result.list == undefined || result.list.length == 0) {
+            if (that.orderTypes[index].status != 0) {
+              this.$log(that.orderTypes[index].pageNo)
+              let unpaid = response.data.data.unpaid
+              if (that.orderTypes[index].status == -1 && that.orderTypes[index].pageNo == 2) { //获取首页
+                if(unpaid.length > 0) {
+                  that.orderTypes[index].list = []
+                  if (unpaid != null) {
+                    unpaid.forEach(listItem => {
+                      this.$log(listItem)
+                      let item = {
+                        servFee: listItem.servFee,
+                        saleAmount: listItem.saleAmount,
+                        tradeNo: listItem.orderNos,
+                        skus: [],
+                        status: 0,
+                        couponCode: listItem.coupon.code,
+                        couponDiscount: listItem.coupon.discount,
+                        couponId: listItem.coupon.id
+                      }
+                      if (listItem.ordersList.length > 0) {
+                        item['address'] = listItem.ordersList[0].address
+                        item['provinceId'] = listItem.ordersList[0].provinceId
+                        item['provinceName'] = listItem.ordersList[0].provinceName
+                        item['cityId'] = listItem.ordersList[0].cityId
+                        item['cityName'] = listItem.ordersList[0].cityName
+                        item['companyCustNo'] = listItem.ordersList[0].companyCustNo
+                        item['countyId'] = listItem.ordersList[0].countyId
+                        item['countyName'] = listItem.ordersList[0].countyName
+                        item['createdAt'] = listItem.ordersList[0].createdAt
+                        item['mobile'] = listItem.ordersList[0].mobile
+                        item['openId'] = listItem.ordersList[0].openId
+                        item['paymentAt'] = listItem.ordersList[0].paymentAt
+                        item['paymentNo'] = listItem.ordersList[0].paymentNo
+                        item['receiverName'] = listItem.ordersList[0].receiverName
+                        item['zip'] = listItem.ordersList[0].zip
+                        item['payStatus'] = listItem.ordersList[0].payStatus
+                      }
+                      listItem.ordersList.forEach(orderItem => {
+                        this.$log(orderItem)
+                        orderItem.skus.forEach(sku => {
+                          item.skus.push(sku)
+                        })
+                      })
+                      this.$log(item)
+                      that.orderTypes[index].list.push(item);
+                    })
+                  }
+                }
+              }
+              let result = response.data.data.result
+              that.orderTypes[index].total = result.total;
+              if(that.orderTypes[index].status == -1) {
+                that.orderTypes[index].total += unpaid.length
+              }
+              if (result.list == undefined || result.list.length == 0) {
+                that.orderTypes[index].loading = false;
+                that.orderTypes[index].finished = true;
+              } else {
+                result.list.forEach(item => {
+                  that.orderTypes[index].list.push(item);
+                })
+                that.orderTypes[index].loading = false;
+                if (that.orderTypes[index].list.length >= that.orderTypes[index].total) {
+                  that.orderTypes[index].finished = true;
+                  that.$log("index:" + index);
+                  that.$log(that.orderTypes[index]);
+                }
+              }
+            } else {
+              let unpaid = response.data.data.unpaid
+              //this.$log(unpaid)
+              that.orderTypes[index].list = []
+              if (unpaid != null) {
+                unpaid.forEach(listItem => {
+                  this.$log(listItem)
+                  let item = {
+                    servFee: listItem.servFee,
+                    saleAmount: listItem.saleAmount,
+                    tradeNo: listItem.orderNos,
+                    skus: [],
+                    status: 0,
+                    couponCode: listItem.coupon.code,
+                    couponDiscount: listItem.coupon.discount,
+                    couponId: listItem.coupon.id
+                  }
+                  if (listItem.ordersList.length > 0) {
+                    item['address'] = listItem.ordersList[0].address
+                    item['provinceId'] = listItem.ordersList[0].provinceId
+                    item['provinceName'] = listItem.ordersList[0].provinceName
+                    item['cityId'] = listItem.ordersList[0].cityId
+                    item['cityName'] = listItem.ordersList[0].cityName
+                    item['companyCustNo'] = listItem.ordersList[0].companyCustNo
+                    item['countyId'] = listItem.ordersList[0].countyId
+                    item['countyName'] = listItem.ordersList[0].countyName
+                    item['createdAt'] = listItem.ordersList[0].createdAt
+                    item['mobile'] = listItem.ordersList[0].mobile
+                    item['openId'] = listItem.ordersList[0].openId
+                    item['paymentAt'] = listItem.ordersList[0].paymentAt
+                    item['paymentNo'] = listItem.ordersList[0].paymentNo
+                    item['receiverName'] = listItem.ordersList[0].receiverName
+                    item['zip'] = listItem.ordersList[0].zip
+                    item['payStatus'] = listItem.ordersList[0].payStatus
+                  }
+                  listItem.ordersList.forEach(orderItem => {
+                    this.$log(orderItem)
+                    orderItem.skus.forEach(sku => {
+                      item.skus.push(sku)
+                    })
+                  })
+                  this.$log(item)
+                  that.orderTypes[index].list.push(item);
+                })
+              }
               that.orderTypes[index].loading = false;
               that.orderTypes[index].finished = true;
-            } else {
-              result.list.forEach(item => {
-                that.orderTypes[index].list.push(item);
-              })
-              that.orderTypes[index].loading = false;
-              if (that.orderTypes[index].list.length >= that.orderTypes[index].total) {
-                that.orderTypes[index].finished = true;
-                that.$log("index:" + index);
-                that.$log(that.orderTypes[index]);
-              }
             }
+
           }).catch(function (error) {
             that.$log(error)
             that.orderTypes[index].loading = false;
@@ -758,9 +860,10 @@
     top: 0px;
     text-align: left;
 
-    .orderlist-layout{
+    .orderlist-layout {
       margin-bottom: 3em;
       background-color: #f8f8f8;
+
       .section-title {
         background-color: #ffffff;
         text-align: left;
@@ -794,9 +897,10 @@
           background-color: white;
           margin-top: 1em;
 
-          .cardtags{
+          .cardtags {
             margin-top: 10px;
-            >img{
+
+            > img {
               width: 30px;
               height: 30px;
             }
@@ -807,7 +911,18 @@
             text-align: right;
             margin-right: 1em;
             .fz(font-size, 25);
+
             color: #000000;
+            >span{
+              display: inline-block;
+              align-content: center;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
+            }
           }
 
           .orderDetailAction {
@@ -828,7 +943,7 @@
               .fz(font-size, 40);
             }
 
-            .card_footer{
+            .card_footer {
               span {
                 .fz(font-size, 22);
               }
@@ -837,7 +952,6 @@
         }
       }
     }
-
 
 
   }
