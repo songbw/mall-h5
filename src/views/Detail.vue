@@ -49,7 +49,7 @@
         <div class="couponBox" v-if="this.userCouponList.length > 0 || this.avaliableCouponList.length > 0">
           <van-cell>
             <div slot="title">
-             <span style="font-size: medium;font-weight: bold">
+             <span style="font-size: medium;">
                领券
              </span>
             </div>
