@@ -159,7 +159,7 @@
             </div>
           </div>
           <div style="display: flex">
-            <div style="width: 90%; font-size: medium;font-weight: bold;padding: 3px;">
+            <div style="width: 90%; font-size: medium;padding: 3px;">
 
               <p style="color: black">
                 <span>送至:</span>
@@ -176,9 +176,9 @@
             </div>
           </div>
           <div style="padding: 3px">
-            <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;font-weight: bold">获取库存...</span>
-            <span v-else style="color: #ff4444;font-size: medium;font-weight: bold">{{hasInventory?'有货':'无货'}}</span>
-            <span style="color: #8c8c8c;font-size: medium;font-weight: bold" v-if="this.goods != null"> {{this.goods.state == 0?'已下架':''}}</span>
+            <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;">获取库存...</span>
+            <span v-else style="color: #ff4444;font-size: medium;">{{hasInventory?'有货':'无货'}}</span>
+            <span style="color: #8c8c8c;font-size: medium;" v-if="this.goods != null"> {{this.goods.state == 0?'已下架':''}}</span>
           </div>
         </div>
         <div class="serviceBox" v-if="showServiceBox">
@@ -1498,7 +1498,7 @@
       .promotion-price {
         background-color: white;
         padding-bottom: 0.1em;
-        height: 4em;
+        height: 3.5em;
 
         .priceBox {
           height: 100%;
@@ -1511,7 +1511,7 @@
           padding: 10px;
 
           .origin-price-title {
-            padding: 2px;
+            padding: 2px 0px;
             color: #ffffffcc;
             .fz(font-size, 22);
             font-weight: normal;
@@ -1519,6 +1519,8 @@
 
           .origin-price {
             color: #ffffffcc;
+            margin-left: -3px;
+            padding-top: 1px;
             .fz(font-size, 22);
             text-decoration: line-through;
             font-weight: normal;
@@ -1539,14 +1541,13 @@
           background-color: #FF4444;
           text-align: right;
           padding-right: 10px;
-          line-height: 4em;
+          line-height: 3.5em;
           color: white;
         }
       }
 
       .goods-detail {
-        padding-left: 10px;
-        padding-bottom: 10px;
+        padding: 10px 5px;
         background-color: white;
         .fz(font-size, 30);
 
