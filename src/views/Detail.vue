@@ -138,10 +138,10 @@
         </div>
         <div class="inventoryBox">
           <div style="display: flex" v-if="(freeShippingTemplate != null || shippingTemplate != null)">
-            <div style="font-size: medium;font-weight: bold;padding: 3px;">
+            <div style="font-size: medium;padding: 3px;">
               <p style="color: black;width: 2.5em">运费:</p>
             </div>
-            <div style="font-size: medium;padding: 3px;font-weight: bold;color: #8c8c8c">
+            <div style="font-size: medium;padding: 3px;color: #8c8c8c">
               <div v-if="freeShippingTemplate != null">
                 <div v-if="freeShippingTemplate.mode == 0">
                   <span>满{{freeShippingTemplate.regions[0].fullAmount}}元享包邮</span>
