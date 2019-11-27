@@ -1512,13 +1512,13 @@
 
           .origin-price-title {
             padding: 2px;
-            color: #ffffffaa;
+            color: #ffffffdd;
             .fz(font-size, 22);
             font-weight: normal;
           }
 
           .origin-price {
-            color: #ffffffaa;
+            color: #ffffffdd;
             .fz(font-size, 22);
             text-decoration: line-through;
             font-weight: normal;
