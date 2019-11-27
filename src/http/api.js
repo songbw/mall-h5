@@ -11,6 +11,7 @@ const GOODS_URL_PREFIX = ""
 const IS_GAT_APP = false
 const HAS_HEADER = false
 const IS_QUICKPAY_CAN_SAVE = true
+const APP_SOURCE = "00"
 
 /*let SERVICE_URL = "http://192.168.200.37:8000";
 let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"*/
@@ -108,5 +109,6 @@ export default {
   IS_GAT_APP,
   HAS_HEADER,
   IS_QUICKPAY_CAN_SAVE,
-  TEST_USER
+  TEST_USER,
+  APP_SOURCE
 }

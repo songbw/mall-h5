@@ -185,14 +185,11 @@
             this.userTokenLoading = false;
           }
         }, 10000);
-        if(this.$api.APP_ID == '08') {//公众服务号端
+        if(this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {//公众服务号端
             let authCode = this.$route.query.code ;
             let state =  this.$route.query.state;
-            if(state == '08') {
-              this.$log("authCode:"+authCode)
-
-
-            }
+            this.$log("authCode:"+authCode)
+            this.getWxOpenId(this.$api.APP_ID,authCode,state)
         } else {
           setTimeout(() => {
             this.test();
@@ -238,6 +235,48 @@
       },
     },
     methods: {
+      getWxOpenId(appId,code,state) {
+        let that = this
+        this.$log(appId)
+        this.$log(code)
+        if(appId == '11') {
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: '/sso/wx',
+            params: {
+              appId: appId,
+              code: code
+            }
+          }).then((response) => {
+            this.$log(response)
+            if(response.data.code == 200) {
+              let wxOpenId = response.data.data;
+              this.$log("wxOpenId is:"+wxOpenId);
+              this.isWxOpendBinded(appId,wxOpenId)
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
+      },
+      isWxOpendBinded(appId,wxOpenId) {
+        let that = this
+        that.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/wx/band/verify',
+          params: {
+            appId: appId,
+            openId: wxOpenId
+          }
+        }).then((response) => {
+          this.$log(response)
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+
       upDateSkuInfo(item, couponAndProms, user) {
         let cartItem = Util.getCartItem(this, user.userId, item.mpu)
         if (cartItem == null) {

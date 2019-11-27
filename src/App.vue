@@ -62,6 +62,10 @@
         this.$api.GOODS_URL_PREFIX = result.data.GOODS_URL_PREFIX
         this.$api.APP_ID = result.data.iAppID
         this.$api.T_APP_ID = result.data.tAppID
+        this.$api.APP_SOURCE = "00"
+        if( !result.data.APP_SOURCE != undefined) {
+          this.$api.APP_SOURCE = result.data.APP_SOURCE
+        }
         this.$api.SERVICE_URL = serverUrl;
         this.$api.SERVR_PHONE_NUM = result.data.SERVR_PHONE_NUM
         this.$api.PRODUCT_BASE_URL = serverUrl + "/v2/products/"
@@ -90,10 +94,14 @@
         if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
           this.$api.IS_GAT_APP = true;
         if (this.$api.APP_ID == "11") {
-          this.getLoginAuthInfo();
-          setTimeout(() => {
-            this.configured = true
-          }, 1000);
+          if(this.$api.APP_SOURCE == '00') {
+            this.getLoginAuthInfo();
+            setTimeout(() => {
+              this.configured = true
+            }, 1000);
+          } else {
+             this.configured = true
+          }
         } else {
           this.clearStorage();
           this.configured = true
@@ -102,8 +110,6 @@
       }).catch((error) => {
         console.log(error)
       });
-    },
-    created() {
     },
 
     methods: {
