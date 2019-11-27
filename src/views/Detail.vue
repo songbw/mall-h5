@@ -1498,7 +1498,7 @@
       .promotion-price {
         background-color: white;
         padding-bottom: 0.1em;
-        height: 3.5em;
+        height: 4em;
 
         .priceBox {
           height: 100%;
@@ -1541,7 +1541,7 @@
           background-color: #FF4444;
           text-align: right;
           padding-right: 10px;
-          line-height: 3.5em;
+          line-height: 4em;
           color: white;
         }
       }
