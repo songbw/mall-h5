@@ -28,6 +28,8 @@
                            @end_callback="countDownE_cb"
                            :startTime="PromotionStartTime"
                            :endTime="PromotionEndTime"
+                           backgroundColor="#FFFFFF"
+                           textColor="#FF4444"
                            :secondsTxt="''">
               </v-countdown>
               <div class="promotionStatusText" v-if="PromotionStatus === 5">
@@ -1500,7 +1502,7 @@
 
         .priceBox {
           height: 100%;
-          background-color: deeppink;
+          background-color: #FF4444;
           text-align: left;
           color: white;
           font-weight: bold;
@@ -1510,14 +1512,16 @@
 
           .origin-price-title {
             padding: 2px;
-            color: #c8c8cd;
+            color: #ffffffaa;
             .fz(font-size, 22);
+            font-weight: normal;
           }
 
           .origin-price {
-            color: #c8c8cd;
+            color: #ffffffaa;
             .fz(font-size, 22);
-            text-decoration: line-through
+            text-decoration: line-through;
+            font-weight: normal;
           }
 
           .sales-price {
@@ -1532,8 +1536,9 @@
 
         .promotionBox {
           height: 100%;
-          background-color: #ee892f;
-          text-align: center;
+          background-color: #FF4444;
+          text-align: right;
+          padding-right: 10px;
           line-height: 4em;
           color: white;
         }
