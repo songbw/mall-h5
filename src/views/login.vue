@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="login">
-    <v-header>
-      <h1 slot="title">请重新登录</h1>
+    <v-header class="header" v-if="showHeader">
+      <h1 slot="title">商品详情</h1>
     </v-header>
     <div>
     </div>
