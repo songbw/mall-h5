@@ -17,6 +17,17 @@
             label-width="65px"
             placeholder="请输入手机号"
           />
+        <div class="verifyCodeBox">
+          <van-field
+            v-model="quickPayVerifyCode"
+            maxlength="10"
+            clearable
+            placeholder="请输入短信验证码"
+          />
+          <van-button :disabled="isVerifyCodeBtnDisabled" type="danger"
+                      @click="onGetVerifyCodeBtnClick">{{verifyBtnText}}
+          </van-button>
+        </div>
           <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;align-items: center">
             <van-button size="large" type="danger" round @click="onBCardBindBtnClick">绑定</van-button>
             <div style="margin: 10px 2px;display: flex;justify-items: center;text-align: center;">
@@ -48,6 +59,12 @@
         showHeader: true,
         mobilePhone: "",
         icon_user_bind: require('@/assets/icons/ico_user_bind.png'),
+        verifyCode: "",
+        isVerifyCodeBtnDisabled: false,
+        verifyBtnText: '获取验证码',
+        verifyCodeCount: 0,
+        verifyCodeTimer: 0,
+        verifyBtnTextClicked: false,
       }
     },
     methods: {
@@ -112,6 +129,20 @@
 
         .van-field {
           padding: 10pt 10pt;
+        }
+
+        .verifyCodeBox {
+          display: flex;
+          padding: 10px;
+          width:  100%;
+          .van-field {
+            width: 60%;
+          }
+
+          .van-button {
+            width: 40%;
+            margin-left: 10px;
+          }
         }
       }
     }
