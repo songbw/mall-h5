@@ -49,7 +49,7 @@
         <div class="couponBox" v-if="this.userCouponList.length > 0 || this.avaliableCouponList.length > 0">
           <van-cell>
             <div slot="title">
-             <span style="font-size: medium;font-weight: bold">
+             <span style="font-size: medium;margin-left: -3px">
                领券
              </span>
             </div>
@@ -138,10 +138,10 @@
         </div>
         <div class="inventoryBox">
           <div style="display: flex" v-if="(freeShippingTemplate != null || shippingTemplate != null)">
-            <div style="font-size: medium;font-weight: bold;padding: 3px;">
+            <div style="font-size: medium;padding: 1px;">
               <p style="color: black;width: 2.5em">运费:</p>
             </div>
-            <div style="font-size: medium;padding: 3px;font-weight: bold;color: #8c8c8c">
+            <div style="font-size: medium;padding: 1px;color: #8c8c8c">
               <div v-if="freeShippingTemplate != null">
                 <div v-if="freeShippingTemplate.mode == 0">
                   <span>满{{freeShippingTemplate.regions[0].fullAmount}}元享包邮</span>
@@ -159,7 +159,7 @@
             </div>
           </div>
           <div style="display: flex">
-            <div style="width: 90%; font-size: medium;font-weight: bold;padding: 3px;">
+            <div style="width: 90%; font-size: medium;padding: 1px;">
 
               <p style="color: black">
                 <span>送至:</span>
@@ -175,10 +175,10 @@
                         @click="showAddressSelector()"></van-icon>
             </div>
           </div>
-          <div style="padding: 3px">
-            <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;font-weight: bold">获取库存...</span>
-            <span v-else style="color: #ff4444;font-size: medium;font-weight: bold">{{hasInventory?'有货':'无货'}}</span>
-            <span style="color: #8c8c8c;font-size: medium;font-weight: bold" v-if="this.goods != null"> {{this.goods.state == 0?'已下架':''}}</span>
+          <div style="padding: 1px">
+            <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;">获取库存...</span>
+            <span v-else style="color: #ff4444;font-size: medium;">{{hasInventory?'有货':'无货'}}</span>
+            <span style="color: #8c8c8c;font-size: medium;" v-if="this.goods != null"> {{this.goods.state == 0?'已下架':''}}</span>
           </div>
         </div>
         <div class="serviceBox" v-if="showServiceBox">
@@ -1499,7 +1499,7 @@
           padding: 10px;
 
           .origin-price-title {
-            padding: 2px;
+            padding: 2px 0px;
             color: #ffffffcc;
             .fz(font-size, 22);
             font-weight: normal;
@@ -1507,6 +1507,8 @@
 
           .origin-price {
             color: #ffffffcc;
+            margin-left: -3px;
+            padding-top: 1px;
             .fz(font-size, 22);
             text-decoration: line-through;
             font-weight: normal;
@@ -1533,8 +1535,7 @@
       }
 
       .goods-detail {
-        padding-left: 10px;
-        padding-bottom: 10px;
+        padding: 10px 10px;
         background-color: white;
         .fz(font-size, 30);
 

@@ -577,7 +577,11 @@
           "openId": user.openId,
           "businessType": "11"
         }
-        this.openCashPage(user, listItem.merchantNo, orderNos, pAnOrderInfo, listItem)
+        let merchantNo = ""
+        if(listItem.merchantNo != null) {
+          merchantNo = listItem.merchantNo
+        }
+        this.openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem)
       },
 
       onConfirmBtnClick(listItem, i) {
