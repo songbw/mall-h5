@@ -632,18 +632,6 @@
         }
       },
 
-      formateCouponDescription(couponInfo) {
-        switch (couponInfo.rules.scenario.type) {
-          case 1:
-            return "仅限某些指定的商品可用";
-          case 2:
-            return "全场商品可用";
-          case 3:
-            return "仅限定某些品牌类商品可用";
-          default:
-            return "限提供所描述特定的服务可用"
-        }
-      },
 
       formateCouponDetail(rules) {
         switch (rules.type) {
