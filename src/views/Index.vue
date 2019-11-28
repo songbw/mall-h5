@@ -206,7 +206,6 @@
       guysinfo() {
         return  this.$store.state.appconf.guysInfo;
       },
-
     },
     watch:{
       guysinfo(newValue, oldVal) {
@@ -231,19 +230,35 @@
       },
     },
     methods: {
+      updateUserDatail(userDetail) {
+        this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
+      },
       async wxLogin(appId,authCode,state){
         this.$log("wxLogin Enter")
+        let that = this
         try {
           let resp = await this.getWxOpenId(appId,authCode,state)
           this.$log(resp)
           if(resp.data.code == 200) {
-            let wxOpenId = resp.data.data;
+            let wxOpenId = resp.data.data.openid;
+            let accessToken = resp.data.data.access_token
+            this.$store.commit('SET_WX_OPENID', wxOpenId);
             resp = await this.isWxOpendBinded(appId,wxOpenId)
             this.$log(resp)
             if(resp.data.code == 200) {
-               let userInfo = resp.data.data
-               if(userInfo != null) {
-
+               let userDetail = resp.data.data
+               if(userDetail != null) {
+                 let openId = userDetail.openId
+                 let userId = this.$api.APP_ID + openId;
+                 let userInfo = {
+                   openId: openId,
+                   accessToken: accessToken,
+                   userId: userId
+                 }
+                 that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                 that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                 that.updateUserDatail(userDetail)
+                 that.thirdPartLogined(openId, accessToken)
                } else {
                  //未绑定用户
                  this.$router.push({name: '登录页'})
@@ -277,7 +292,7 @@
         return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.SSO_BASE_URL,
-          url: '/sso/wx/band/verify',
+          url: '/sso/wx/bind/verify',
           params: {
             appId: appId,
             openId: wxOpenId

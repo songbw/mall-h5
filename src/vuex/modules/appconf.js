@@ -22,7 +22,8 @@ const state = {
   merchantList: [],
   userDetail: '',
   currentOptCard: '',
-  guysInfo: ''
+  guysInfo: '',
+  wxOpenId: ''
 }
 
 const mutations = {
@@ -112,6 +113,10 @@ const mutations = {
 
   [types.SET_GUYS_INFO](state, res) {
     state.guysInfo = res
+  },
+
+  [types.SET_WX_OPENID](state, res) {
+    state.wxOpenId = res
   },
 }
 
