@@ -264,12 +264,12 @@
                  this.$router.push({name: '登录页'})
                }
             } else {
-              this.$toast("获取用户信息失败")
+            //  this.$toast("获取用户信息失败")
               this.userTokenLoading= false;
             }
 
           } else {
-            this.$toast("获取用户授权信息失败")
+           // this.$toast("获取用户授权信息失败")
             this.userTokenLoading= false;
           }
         } catch (e) {

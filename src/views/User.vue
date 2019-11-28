@@ -12,6 +12,7 @@
               <img :src="avatarDefaultImg">
             </div>
             <span v-if="user.nickname !=undefined && user.nickname.length > 0">{{user.nickname}}</span>
+            <span v-else-if="this.$api.IS_WX_GZH && pageloading == false">登录</span>
           </div>
           <div class="header-right">
             <van-icon name="arrow"/>
@@ -181,6 +182,7 @@
               this.$log(this.user)
               this.$log(this.user.nickname);
             }
+            that.pageloading = false;
           }).catch(function (error) {
             //alert(error)
             that.$log(error)
@@ -188,6 +190,7 @@
           })
         } else {
           //goto register UI
+          that.pageloading = false;
         }
       }
 
@@ -201,6 +204,7 @@
     data() {
       return {
         showHeader: true,
+        pageloading: true,
         orderbars: [
           {
             title: "待支付",
@@ -404,12 +408,36 @@
       },
       onUserInfoClick() {
         this.$log("onUserInfoClick Enter")
-        this.$router.push({
-          name: "我的信息",
-          params: {
-            user: this.user
+        if(this.$api.IS_WX_GZH) {
+          this.$log("wxOpenId:"+  this.$store.state.appconf.wxOpenId)
+          let wxOpenId =  this.$store.state.appconf.wxOpenId
+          if(wxOpenId != null && wxOpenId.length >0) {
+            if(this.user.nickname == undefined || this.user.nickname.length  == 0) {
+              this.$router.push({name: '登录页'})
+            } else {
+              this.$router.push({
+                name: "我的信息",
+                params: {
+                  user: this.user
+                }
+              })
+            }
+          } else {
+            this.$router.push({
+              name: "我的信息",
+              params: {
+                user: this.user
+              }
+            })
           }
-        })
+        } else {
+          this.$router.push({
+            name: "我的信息",
+            params: {
+              user: this.user
+            }
+          })
+        }
       }
 
     }

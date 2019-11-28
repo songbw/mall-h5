@@ -79,7 +79,7 @@
       toastNoAppUser(){
          switch (this.$api.APP_ID) {
            case '11': {
-             this.$toast("无法找到App用户，绑定失败! 请先登录无锡市民卡APP后再绑定。")
+             this.$toast("绑定失败! 请先登录无锡市民卡APP后再绑定。")
              break;
            }
            default:{
@@ -162,7 +162,7 @@
       getBindInfo() {
         switch (this.$api.APP_ID) {
           case '11': {
-            return "绑定无锡市民卡App用户"
+            return "注意:用户必须登录过无锡市民卡App才能绑定,"
           }
           default:
             return ""
