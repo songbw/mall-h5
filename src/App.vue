@@ -91,22 +91,32 @@
         if(isQpayCardSaved != undefined && isQpayCardSaved == '0') {
           this.$api.IS_QUICKPAY_CAN_SAVE = false;
         }
-        if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09")
+        if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09") {
           this.$api.IS_GAT_APP = true;
-        if (this.$api.APP_ID == "11") {
-          if(this.$api.APP_SOURCE == '00') {
-            this.getLoginAuthInfo();
-            setTimeout(() => {
-              this.configured = true
-            }, 1000);
-          } else {
-             this.configured = true
-          }
-        } else {
           this.clearStorage();
           this.configured = true
+        } else if (this.$api.APP_ID == "11") {
+          switch (this.$api.APP_SOURCE) {//APP
+            case '00': {
+              this.getLoginAuthInfo();
+              setTimeout(() => {
+                this.configured = true
+              }, 1000);
+              break;
+            }
+            case '01': {//微信公众号
+              this.$api.IS_WX_GZH = true;
+              this.clearStorage();
+              this.configured = true
+              break;
+            }
+            default://nothing to do
+              this.configured = true
+              break;
+          }
+        } else {
+          this.configured = true
         }
-
       }).catch((error) => {
         console.log(error)
       });

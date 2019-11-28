@@ -9,6 +9,7 @@ const TESTSTUB_PAYMENT_URL = ""
 const SERVR_PHONE_NUM= ""
 const GOODS_URL_PREFIX = ""
 const IS_GAT_APP = false
+const IS_WX_GZH =  false
 const HAS_HEADER = false
 const IS_QUICKPAY_CAN_SAVE = true
 const APP_SOURCE = "00"
@@ -107,6 +108,7 @@ export default {
   VENDOR_URL,
   QUICKLY_PAY_URL,
   IS_GAT_APP,
+  IS_WX_GZH,
   HAS_HEADER,
   IS_QUICKPAY_CAN_SAVE,
   TEST_USER,

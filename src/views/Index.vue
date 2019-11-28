@@ -167,37 +167,33 @@
     created() {
       this.showHeader = this.$api.HAS_HEADER;
       if (this.$api.IS_GAT_APP) {
-        let auth_code = this.$route.query.auth_code;
-        this.$log(`auto_code$(auth_code)`)
-        if (auth_code != undefined) {
-          //获取关爱通openId
-          this.getThirdPartyAccessTokenInfo(auth_code)
-        }
-       // this.testGAT();
+        // this.testGAT();
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
           }
         }, 20000);
-      } else {
+        let auth_code = this.$route.query.auth_code;
+        if (auth_code != undefined) {
+          this.getThirdPartyAccessTokenInfo(auth_code)
+        }
+      } else {//非关爱通App
+       // this.test();
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
           }
         }, 10000);
-        if(this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {//公众服务号端
+        if(this.$api.IS_WX_GZH) {//微信公众号端登录
             let authCode = this.$route.query.code ;
             let state =  this.$route.query.state;
             this.$log("authCode:"+authCode)
-            this.getWxOpenId(this.$api.APP_ID,authCode,state)
-        } else {
-          setTimeout(() => {
-            this.test();
-            //this.startLocation();
-            //this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
-          }, 10000);
+            if(authCode != undefined) {
+              this.wxLogin(this.$api.APP_ID,authCode,state)
+            } else {
+              this.userTokenLoading = false;
+            }
         }
-
       }
     },
     computed: {
@@ -235,34 +231,50 @@
       },
     },
     methods: {
-      getWxOpenId(appId,code,state) {
-        let that = this
-        this.$log(appId)
-        this.$log(code)
-        if(appId == '11') {
-          that.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.SSO_BASE_URL,
-            url: '/sso/wx',
-            params: {
-              appId: appId,
-              code: code
+      async wxLogin(appId,authCode,state){
+        this.$log("wxLogin Enter")
+        try {
+          let resp = await this.getWxOpenId(appId,authCode,state)
+          this.$log(resp)
+          if(resp.data.code == 200) {
+            let wxOpenId = resp.data.data;
+            resp = await this.isWxOpendBinded(appId,wxOpenId)
+            this.$log(resp)
+            if(resp.data.code == 200) {
+               let userInfo = resp.data.data
+               if(userInfo != null) {
+
+               } else {
+                 //未绑定用户
+                 this.$router.push({name: '搜索页'})
+               }
+            } else {
+              this.$toast("获取用户信息失败")
+              this.userTokenLoading= false;
             }
-          }).then((response) => {
-            this.$log(response)
-            if(response.data.code == 200) {
-              let wxOpenId = response.data.data;
-              this.$log("wxOpenId is:"+wxOpenId);
-              this.isWxOpendBinded(appId,wxOpenId)
-            }
-          }).catch(function (error) {
-            that.$log(error)
-          })
+
+          } else {
+            this.$toast("获取用户授权信息失败")
+            this.userTokenLoading= false;
+          }
+        } catch (e) {
+
         }
       },
+      getWxOpenId(appId,code,state) {
+        return  this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/wx',
+          params: {
+            appId: appId,
+            code: code
+          }
+        })
+      },
+
       isWxOpendBinded(appId,wxOpenId) {
-        let that = this
-        that.$api.xapi({
+        return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/wx/band/verify',
@@ -270,10 +282,6 @@
             appId: appId,
             openId: wxOpenId
           }
-        }).then((response) => {
-          this.$log(response)
-        }).catch(function (error) {
-          that.$log(error)
         })
       },
 
