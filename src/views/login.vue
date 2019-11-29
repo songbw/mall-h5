@@ -109,6 +109,9 @@
         }).then((response) => {
           if(response.data.code == 200) {
               this.$toast("绑定成功！")
+              this.$router.replace({
+                  name: "首页"
+              })
           } else {
             if(response.data.code == 900100) {
               this.toastNoAppUser()
