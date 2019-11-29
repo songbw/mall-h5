@@ -63,7 +63,7 @@
         this.$api.APP_ID = result.data.iAppID
         this.$api.T_APP_ID = result.data.tAppID
         this.$api.APP_SOURCE = "00"
-        if( !result.data.APP_SOURCE != undefined) {
+        if (!result.data.APP_SOURCE != undefined) {
           this.$api.APP_SOURCE = result.data.APP_SOURCE
         }
         this.$api.SERVICE_URL = serverUrl;
@@ -88,7 +88,7 @@
           this.$api.TEST_USER = testUser
         if (title != undefined && title.length > 0)
           this.title = title
-        if(isQpayCardSaved != undefined && isQpayCardSaved == '0') {
+        if (isQpayCardSaved != undefined && isQpayCardSaved == '0') {
           this.$api.IS_QUICKPAY_CAN_SAVE = false;
         }
         if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09") {
@@ -114,6 +114,18 @@
               this.configured = true
               break;
           }
+        } else if (this.$api.APP_ID == "01") {
+          switch (this.$api.APP_SOURCE) {//APP
+            case '01': {//微信公众号
+              this.$api.IS_WX_GZH = true;
+              this.clearStorage();
+              this.configured = true
+              break;
+            }
+            default://nothing to do
+              this.configured = true
+              break;
+          }
         } else {
           this.configured = true
         }
@@ -124,11 +136,11 @@
 
     methods: {
       clearStorage() {
-        let  payList = []
+        let payList = []
         this.$store.commit('SET_PAY_LIST', this.payList);
-        let  cartList = []
+        let cartList = []
         this.$store.commit('SET_CART_LIST', cartList);
-        let  merchantList = []
+        let merchantList = []
         this.$store.commit('SET_MERCHANT_LIST', merchantList);
         let addressList = []
         this.$store.commit('SET_ADDRESS_LIST', addressList);
@@ -152,14 +164,14 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
-            let data= this.$md5(rt.token)
-            if(rt.newUser) {
-              data =  "1" + data
+            let data = this.$md5(rt.token)
+            if (rt.newUser) {
+              data = "1" + data
             } else {
-              data =  "0" + data
+              data = "0" + data
             }
             this.$log(data)
-            that.$store.commit('SET_GUYS_INFO',data);
+            that.$store.commit('SET_GUYS_INFO', data);
             that.configured = true
           }
         }).catch(function (error) {

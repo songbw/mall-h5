@@ -1,6 +1,6 @@
 {
   "NODE_ENV": "development",
-  "iAppID": "08",
+  "iAppID": "01",
   "tAppID": "",
   "SERVICE_URL":"http://192.168.200.37:8000",
   "TESTSTUB_PAYMENT_URL": "http://192.168.200.122:8088",
