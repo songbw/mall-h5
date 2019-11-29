@@ -598,6 +598,7 @@
       this.updateOptCardInfo();
       this.udateBankcardList();
       this.updateBalanceAmount();
+      this.updateLinkPayAccount();
     },
 
     beforeDestroy() {
@@ -612,6 +613,12 @@
     },
 
     methods: {
+      updateLinkPayAccount(){
+         let linkPayAccount = Util.getLocal("linkPayAccount")
+         if(linkPayAccount != null) {
+           this.linkPayAccount = linkPayAccount;
+         }
+      },
       onQuerySupportBListClick() {
         this.$log("onQuerySupportBListClick Enter")
         this.showSupportList = true
@@ -1277,6 +1284,7 @@
                   "orderNo": this.orderInfo.orderNo,
                   "payType": "woa"
                 }
+                Util.setLocal(this.linkPayAccount, 'linkPayAccount', false);
               } else {
                 this.$toast("抱歉，无法使用该支付方式，联机账户支付不能低于1角或大于5000元")
                 return
