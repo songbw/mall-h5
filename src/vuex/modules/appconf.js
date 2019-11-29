@@ -121,17 +121,11 @@ const mutations = {
 }
 
 const actions = {
-  setAddress({commit}, res) {
-    // Util.setLocal(res, 'address', true);
-    // commit(types.SET_ADDRESS
-  },
-
   setInvoicdInfo({commit}, res) {
     console.log("setInvoicdInfo Enter");
     Util.setLocal(res, 'invoice', false);
     commit(types.SET_INVOICE_INFO);
   },
-
 
   getInvoiceInfo({commit}) {
     console.log("getInvoiceInfo Enter");

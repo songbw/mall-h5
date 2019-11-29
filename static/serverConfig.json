@@ -2,7 +2,6 @@
   "NODE_ENV": "development",
   "iAppID": "11",
   "tAppID": "",
-  "APP_SOURCE": "01",
   "SERVICE_URL":"http://192.168.200.37:8000",
   "TESTSTUB_PAYMENT_URL": "http://192.168.200.122:8088",
   "SERVR_PHONE_NUM": "010-58695954",

@@ -460,13 +460,10 @@
         let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
-        //let openId = "46e794551c9144be82cc86c25703b936" //贺总
         this.$log("openId:" + openId);
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
-          //let auth_code = "12345678"
-          //this.getThirdPartyAccessTokenInfo(auth_code)
-          let accessToken = "############"
+          let accessToken = "TTTTTTTTTTTT"
           let userInfo = {
             openId: openId,
             accessToken: accessToken,
