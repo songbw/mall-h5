@@ -6,7 +6,7 @@
               @change="onTabChanged"
               :style="{'background-color': datas.settings.floorTitleColor}">
       </ly-tab>
-      <div >
+      <div>
         <div v-for="(category,index) in datas.list" :title=category.title :key="index">
           <ul :id="sectionGoodsListId"
               :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' "
@@ -18,17 +18,19 @@
               </div>
               <div class="goodsFooter">
                 <div class="goodsPriceBox">
-                 <p   v-if="k.discount != undefined && datas.settings.countPerLine == 2"
-                   :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                   <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                   {{(k.price - k.discount).toFixed(2)}}
-                   <span style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                   <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
-                </p>
-                  <p   v-else
-                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                  <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
+                     :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                     <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{k.price}}
+                    {{(k.price - k.discount).toFixed(2)}}
+                    <span
+                      style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                    <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                  </p>
+
+                  <p v-else
+                     :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                    {{(k.discount != undefined?(k.price - k.discount ):k.price)}}
                   </p>
                 </div>
                 <div class="goodsBuyBox">
@@ -69,7 +71,7 @@
         tabsOffsetTop: 0,
         marginTop: 0,
         fixedBarId: 'fixedBar',
-        sectionGoodsListId:'sectionGoods-list'
+        sectionGoodsListId: 'sectionGoods-list'
 
       };
     },
@@ -79,8 +81,8 @@
     },
 
     created() {
-      this.fixedBarId = 'fixedBar'+this.datas.id
-      this.sectionGoodsListId = 'sectionGoods-list'+this.datas.id
+      this.fixedBarId = 'fixedBar' + this.datas.id
+      this.sectionGoodsListId = 'sectionGoods-list' + this.datas.id
       this.datas.list.forEach(item => {
         this.items.push({label: item.title})
       });
@@ -90,7 +92,7 @@
 
     mounted() {
       window.addEventListener('scroll', this.handleScroll);
-      this.goodsLists = document.querySelectorAll('#'+this.sectionGoodsListId)
+      this.goodsLists = document.querySelectorAll('#' + this.sectionGoodsListId)
     },
 
     destroyed() {
@@ -102,8 +104,8 @@
         if (this.isTabChanging) {
           this.isTabChanging = false;
         } else {
-          let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#'+this.fixedBarId).offsetHeight) + 1;
-         // this.$log("movePos is:" + movePos)
+          let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#' + this.fixedBarId).offsetHeight) + 1;
+          // this.$log("movePos is:" + movePos)
           this.isTabChanging = true;
           setTimeout(() => {
             this.isTabChanging = false;
@@ -113,15 +115,15 @@
         }
       },
       handleScroll() {
-        if (document.querySelector('#'+this.fixedBarId) == null)
+        if (document.querySelector('#' + this.fixedBarId) == null)
           return;
         let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop;
         if (!this.isFixed) {
-          this.tabsOffsetTop = document.querySelector('#'+this.fixedBarId).offsetTop;
+          this.tabsOffsetTop = document.querySelector('#' + this.fixedBarId).offsetTop;
         }
         if (scrollTop >= this.tabsOffsetTop) {
           this.isFixed = true;
-          this.marginTop = document.querySelector('#'+this.fixedBarId).offsetHeight + 'px';
+          this.marginTop = document.querySelector('#' + this.fixedBarId).offsetHeight + 'px';
           let found = -1;
           for (let i = 0; i < this.goodsLists.length; i++) {
             if (i == this.goodsLists.length - 1) {
@@ -156,30 +158,32 @@
         this.$log("onGoodsClick Enter")
         this.$log(goods)
         let mpu = goods.mpu
-        if(mpu == null) {
+        if (mpu == null) {
           mpu = goods.skuid;
         }
-        this.$router.push({path:"/detail",query:{
-             mpu:mpu
-        }});
-/*        try {
-          //获取goods信息，update current googds
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
+        this.$router.push({
+          path: "/detail", query: {
+            mpu: mpu
+          }
+        });
+        /*        try {
+                  //获取goods信息，update current googds
+                  this.$api.xapi({
+                    method: 'get',
+                    baseURL: this.$api.PRODUCT_BASE_URL,
+                    url: '/prod',
+                    params: {
+                      mpu: mpu,
+                    }
+                  }).then((res) => {
+                    this.updateCurrentGoods(res.data.data.result);
+                    this.$router.push("/detail");
+                  }).catch((error) => {
+                    console.log(error)
+                  })
+                } catch (e) {
 
-        }*/
+                }*/
       },
       onAdd2carBtnClick(goods) {
         let userInfo = this.$store.state.appconf.userInfo;
@@ -195,7 +199,7 @@
         this.$log(goods)
         let userId = user.userId;
         let mpu = goods.mpu;
-        if(mpu == null) {
+        if (mpu == null) {
           mpu = goods.skuid;
         }
         let addtoCar = {
@@ -297,6 +301,7 @@
         .goodsComment {
           margin: 2px 5px;
           min-height: 2.4em;
+
           > p {
             .fz(font-size, 25);
             min-height: 2rem;
@@ -388,7 +393,7 @@
         width: 32%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-     //   border: 3px solid #f0f0f0;
+        //   border: 3px solid #f0f0f0;
         border-radius: 15px;
         margin: .8vw;
 
@@ -403,6 +408,7 @@
         .goodsComment {
           margin: 2px 5px;
           min-height: 2.4em;
+
           > p {
             .fz(font-size, 25);
             min-height: 2rem;
