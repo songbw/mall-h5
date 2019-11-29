@@ -133,10 +133,7 @@
       this.$api.xapi({
         method: 'get',
         baseURL: this.$api.AGGREGATION_BASE_URL,
-        url: '/aggregation/findHomePage',
-        params: {
-          appId: this.$api.APP_ID
-        }
+        url: '/aggregation/findHomePage'
       }).then((response) => {
         // const pako = require('pako');
         //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
