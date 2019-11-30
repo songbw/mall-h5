@@ -89,7 +89,6 @@
         showHeader: true,
         detail: {},
         status: -1,
-        no_logistics_bg: require('@/assets/images/truck.png'),
         logisticsList: [],
         matchedGoods:[],
         loading: true

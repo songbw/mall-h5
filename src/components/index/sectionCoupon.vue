@@ -79,7 +79,7 @@
     data() {
       return {
         couponList:[],
-        couponImg: require('@/assets/icons/ico_coupon.png'),
+        couponImg: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_coupon.png',
         dataloaded:false,
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png')
       }

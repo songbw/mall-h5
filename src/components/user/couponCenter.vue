@@ -103,9 +103,9 @@
       return {
         active: 0,
         swipeThreshold: 5,
-        couponImg: require('@/assets/icons/ico_coupon.png'),
+        couponImg: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_coupon.png',
         couponTypes: [],
-        couponCenterHeaderImg: require('@/assets/icons/ico_couponCenterHeader.jpg'),
+        couponCenterHeaderImg: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_couponCenterHeader.jpg',
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
         headerColor: "#FFFFFF",
         reload: false,

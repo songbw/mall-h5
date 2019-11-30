@@ -90,7 +90,7 @@
         launchedLoaded: false,
         optCardList: [],
         icon_noCards: require('@/assets/icons/ico_empty_card.png'),
-        icon_optCardsReal: require('@/assets/icons/ico_optCards_real.png'),
+        icon_optCardsReal: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_optCards_real.png',
         addNewOptCardDlgShow: false,
         newOptCardNumber:"",
         newOptCardPwd:"",

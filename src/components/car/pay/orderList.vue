@@ -121,9 +121,9 @@
         showHeader: true,
         active: 0,
         swipeThreshold: 5,
-        no_orderList_bg: require('@/assets/images/emptyBox.png'),
-        tag_coupon: require('@/assets/icons/ico_lab_coupon.png'),
-        tag_promotion: require('@/assets/icons/ico_lab_promotion.png'),
+        no_orderList_bg: require('@/assets/icons/ico_empty_box.png'),
+        tag_coupon: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_lab_coupon.png',
+        tag_promotion: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_lab_promotion.png' ,
         launchedLoading: false,
         reload: false,
         orderTypes: [
@@ -794,6 +794,7 @@
               //this.$log(unpaid)
               that.orderTypes[index].list = []
               if (unpaid != null) {
+                that.orderTypes[index].total = unpaid.length
                 unpaid.forEach(listItem => {
                   this.$log(listItem)
                   let item = {
@@ -833,6 +834,8 @@
                   this.$log(item)
                   that.orderTypes[index].list.push(item);
                 })
+              } else {
+                that.orderTypes[index].total = 0;
               }
               that.orderTypes[index].loading = false;
               that.orderTypes[index].finished = true;
@@ -889,11 +892,12 @@
           flex-flow: column;
           text-align: center;
           justify-content: center;
+          padding-top: 100px;
 
           img {
             margin: 0 auto;
-            height: 150px;
-            width: 150px;
+            height: 100px;
+            width: 100px;
           }
         }
 
