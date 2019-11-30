@@ -5,6 +5,7 @@
         v-for="(item,index) in tabbars"
         :key="index"
         @click="tab(index,item.name)"
+        :info="(item.info != undefined && item.info > 0)?item.info:''"
       >
         <span :class="currIndex == index? 'title_active' : 'title_norm'">{{item.title}}</span>
         <template slot="icon">
@@ -38,7 +39,8 @@
             name: "/car",
             title: "购物车",
             normal: require('@/assets/icons/ico_shopping_cart.png'),
-            active: require('@/assets/icons/ico_shopping_cart_active.png')
+            active: require('@/assets/icons/ico_shopping_cart_active.png'),
+            info: 0
           },
           {
             name: "/user",
@@ -49,10 +51,32 @@
         ]
       };
     },
-
+    created(){
+      if(this.$store.state.appconf.cartList != undefined) {
+        this.tabbars[2].info = this.$store.state.appconf.cartList.length
+      }
+    },
+    activated() {
+      if(this.$store.state.appconf.cartList != undefined) {
+        this.tabbars[2].info = this.$store.state.appconf.cartList.length
+      }
+    },
     computed: {
       currIndex() {
         return this.$store.state.appconf.currentNaviIndex
+      },
+      cartListCount() {
+        let count = this.$store.state.appconf.cartList.length
+        return count
+      }
+    },
+
+    watch:{
+      cartListCount(newValue, oldVal) {
+        if(newValue > 99)
+          this.tabbars[2].info = 99
+        else
+          this.tabbars[2].info = newValue
       }
     },
 

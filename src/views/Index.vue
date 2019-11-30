@@ -219,15 +219,187 @@
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
              this.userTokenLoading= false;
+             this.loadCartList()
           }
         }
       },
     },
     methods: {
+      updateUserDatail(userDetail) {
+        this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
+      },
+      async wxLogin(appId,authCode,state){
+        this.$log("wxLogin Enter")
+        let that = this
+        try {
+          let resp = await this.getWxOpenId(appId,authCode,state)
+          this.$log(resp)
+          if(resp.data.code == 200) {
+            let wxOpenId = resp.data.data.openid;
+            let accessToken = resp.data.data.access_token
+            this.$store.commit('SET_WX_OPENID', wxOpenId);
+            resp = await this.isWxOpendBinded(appId,wxOpenId)
+            this.$log(resp)
+            if(resp.data.code == 200) {
+               let userDetail = resp.data.data
+               if(userDetail != null) {
+                 let openId = userDetail.openId
+                 let userId = this.$api.APP_ID + openId;
+                 let userInfo = {
+                   openId: openId,
+                   accessToken: accessToken,
+                   userId: userId
+                 }
+                 that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                 that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                 that.updateUserDatail(userDetail)
+                 that.thirdPartLogined(openId, accessToken)
+               } else {
+                 //未绑定用户
+                 this.$router.push({name: '登录页'})
+               }
+            } else {
+            //  this.$toast("获取用户信息失败")
+              this.userTokenLoading= false;
+            }
+
+          } else {
+           // this.$toast("获取用户授权信息失败")
+            this.userTokenLoading= false;
+          }
+        } catch (e) {
+
+        }
+      },
+      getWxOpenId(appId,code,state) {
+        return  this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/wx',
+          params: {
+            appId: appId,
+            code: code
+          }
+        })
+      },
+
+      isWxOpendBinded(appId,wxOpenId) {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/wx/bind/verify',
+          params: {
+            appId: appId,
+            openId: wxOpenId
+          }
+        })
+      },
+
+      upDateSkuInfo(item, couponAndProms, user) {
+        let cartItem = Util.getCartItem(this, user.userId, item.mpu)
+        if (cartItem == null) {
+          let baseInfo = {
+            "userId": user.userId,
+            "skuId": item.skuid,
+            "mpu": item.mpu,
+            "merchantId": item.merchantId,
+            "count": item.count,
+            "choosed": false,
+            "cartId": item.id
+          }
+          let goodsInfo = {
+            "id": item.id,
+            "skuId": item.skuid,
+            "mpu": item.mpu,
+            "merchantId": item.merchantId,
+            "image": item.image,
+            "category": item.category,
+            "name": item.name,
+            "brand": item.brand,
+            "model": item.model,
+            "price": item.price,
+            "state": item.state,
+          }
+          let couponList = []
+          let promotion = []
+          if (couponAndProms != null) {
+            for (let i = 0; i < couponAndProms.length; i++) {
+              if (couponAndProms[i].mpu == item.mpu) {
+                couponList = couponAndProms[i].coupons
+                promotion = couponAndProms[i].promotions
+                break;
+              }
+            }
+          }
+          let promotionInfo = {
+            "promotion": promotion,
+            "promotionState": Util.getPromotionState({promotion: promotion})
+          }
+          cartItem = {
+            "baseInfo": baseInfo,
+            "goodsInfo": goodsInfo,
+            "couponList": couponList,
+            "promotionInfo": promotionInfo,
+          }
+        } else {
+          cartItem.baseInfo.count = item.count
+          cartItem.baseInfo.cartId = item.id
+          cartItem.baseInfo.merchantId = item.merchantId
+          cartItem.goodsInfo.merchantId = item.merchantId
+          let couponList = []
+          let promotion = []
+          if (couponAndProms != null) {
+            for (let i = 0; i < couponAndProms.length; i++) {
+              if (couponAndProms[i].mpu == item.mpu) {
+                couponList = couponAndProms[i].coupons
+                promotion = couponAndProms[i].promotions
+                break;
+              }
+            }
+          }
+          let promotionInfo = {
+            "promotion": promotion,
+            "promotionState": Util.getPromotionState({promotion: promotion})
+          }
+          cartItem.couponList = couponList
+          cartItem.promotionInfo = promotionInfo
+        }
+        Util.updateCartItem(this, cartItem)
+      },
+     loadCartList() {
+       let that = this
+       let userInfo = this.$store.state.appconf.userInfo;
+       if (!Util.isUserEmpty(userInfo)) {
+         let user = JSON.parse(userInfo);
+         let that = this
+         let options = {
+           "openId": user.userId,
+           "pageNo": 1,
+           "pageSize": 100
+         }
+         this.$api.xapi({
+           method: 'post',
+           baseURL: this.$api.ORDER_BASE_URL,
+           url: '/cart/all',
+           data: options,
+         }).then(async (response) => {
+           this.result = response.data.data.result;
+           this.$log(this.result.object)
+           if (this.result.object.cart != undefined && this.result.object.cart.length > 0) {
+             let couponsAndProms = this.result.object.couponProm
+             this.result.object.cart.forEach(item => {
+               this.upDateSkuInfo(item, couponsAndProms, userInfo)
+             })
+           }
+         }).catch(function (error) {
+           that.$log(error)
+         })
+       }
+      },
       isValidLeavedPath(to) {
         let path = to.path;
         // if("/category/all | /car | ^/index/ | /detail".match(path))
-        if (path.match('(^/index/)|(/user)|(/category/all)|(/car)|(/detail)|(/search)|(^/category/goods/promotion/)'))
+        if (path.match('(^/index/)|(/user)|(/category/all)|(/car)|(/detail)|(/login)|(/search)|(^/category/goods/promotion/)'))
           return true;
         return false;
       },
@@ -277,14 +449,10 @@
         }
       },
       test() {
-       // let dsBridge = require("dsbridge");
-      //  Vue.prototype.$jsbridge = dsBridge;
-       // this.initJsNativeCb();
-        //let openId = "499f36e745344e7e8de03f02cc392fe8"
-         //let openId = "44391000fd194ab888b1aa81c03c3740"
-       // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
-      //  let openId = "ace1c1722b834309a59fad302fe357b2"
-        let openId = "ace1c1722b834309a59fad302fe357b2"
+        // let openId = "44391000fd194ab888b1aa81c03c3740"
+        // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        // let openId = "ace1c1722b834309a59fad302fe357b2"
+        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         this.$log("openId:" + openId);

@@ -219,7 +219,7 @@
         let address = this.addressCode;
         this.$log(this.$store.state.appconf.addressList)
         if (addressList == null || addressList == undefined || addressList.length == 0 ) {
-          let resp = await this.getAdressList()
+          let resp = await this.getAddressList()
           if (resp != null || resp != undefined) {
             addressList = resp.data.data.result.list
           }
@@ -287,7 +287,7 @@
         }
       },
 
-      getAdressList() {
+      getAddressList() {
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
@@ -373,7 +373,7 @@
           let options = {
             "openId": userInfo.userId,
             "pageNo": this.pageNo++,
-            "pageSize": 80
+            "pageSize": 100
           }
           this.$api.xapi({
             method: 'post',

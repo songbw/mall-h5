@@ -7,8 +7,8 @@ import LyTab from 'ly-tab'
 import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueQRCodeComponent from 'vue-qrcode-component'
+//import VConsole from 'vconsole'
 import md5 from 'js-md5';
-
 import {
   Button,
   Tab,
@@ -53,6 +53,10 @@ import {
   Collapse,
   CollapseItem
 } from 'vant';
+
+/*if (process.env.NODE_ENV === 'production') {
+  new VConsole()
+}*/
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)
@@ -134,10 +138,6 @@ Vue.prototype.$moment = moment;
 //let dsBridge = require("dsbridge");
 //Vue.prototype.$jsbridge = dsBridge;
 ////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 // 用钩子函数beforeEach()对路由进行判断
 
