@@ -232,7 +232,7 @@
             img: require('@/assets/icons/ico_history_order.png')
           }
         ],
-        couponCenterImg: require('@/assets/icons/ico_couponCenter.png'),
+
         avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
         myCouponIcon: require('@/assets/icons/ico_mycoupon.png'),
         myCoinAccountIcon: require('@/assets/icons/ico_coin_account.png'),

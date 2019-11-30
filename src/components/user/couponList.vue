@@ -131,7 +131,7 @@
         showHeader: true,
         active: 0,
         swipeThreshold: 5,
-        couponImg: require('@/assets/icons/ico_coupon.png'),
+        couponImg: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_coupon.png',
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
         couponTypes: [
           {

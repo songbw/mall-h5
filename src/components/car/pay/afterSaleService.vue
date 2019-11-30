@@ -122,8 +122,6 @@
         requestStateValue: "编辑中",
         commitDisabled: false,
         requestDescible: '',
-        tag_coupon: require('@/assets/icons/ico_lab_coupon.png'),
-        tag_promotion: require('@/assets/icons/ico_lab_promotion.png'),
         history_list: [],
         historyListShow: false
       }

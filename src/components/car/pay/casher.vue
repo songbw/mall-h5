@@ -540,7 +540,7 @@
         mExpiredDate: "",
         mCvv2: "",
         showSupportList: false,
-        icon_support_bank_list: require('@/assets/icons/ico_bank_support.png'),
+        icon_support_bank_list: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_bank_support.png',
         payBtnSubmitLoading:false,
         mTelphoneNumber: "",
 

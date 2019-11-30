@@ -155,9 +155,9 @@
         showHeader: true,
         detail: {},
         status: -1,
-        orderIcon: require('@/assets/images/order.png'),
-        tag_coupon: require('@/assets/icons/ico_lab_coupon.png'),
-        tag_promotion: require('@/assets/icons/ico_lab_promotion.png'),
+        orderIcon: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/order.png',
+        tag_coupon: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_lab_coupon.png',
+        tag_promotion: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_lab_promotion.png' ,
         coupon: {},
       }
     },
@@ -588,7 +588,7 @@
       padding-bottom: 4em;
       background-color: #f8f8f8;
       .order-status {
-        background: url('../../../assets/images/redbg.png') no-repeat;
+        background: url('https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/redbg.png') no-repeat;
         background-size: 100% 100%;
         -moz-background-size: 100% 100%;
         color: white;
