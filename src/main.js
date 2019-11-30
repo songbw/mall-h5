@@ -7,8 +7,8 @@ import LyTab from 'ly-tab'
 import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueQRCodeComponent from 'vue-qrcode-component'
+import VConsole from 'vconsole'
 import md5 from 'js-md5';
-
 import {
   Button,
   Tab,
@@ -54,6 +54,10 @@ import {
   CollapseItem
 } from 'vant';
 
+if (process.env.NODE_ENV === 'production') {
+  new VConsole()
+}
+
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)
 Vue.use(ba, "03a0d710c71e9da54f17e6e0544e5030")
@@ -75,7 +79,7 @@ Vue.use(vueLogger, {
     second = second < 10 ? ('0' + second) : second;
     return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
   },
-  dev: false,
+  dev: true,
   levels: ["log", "warn", "debug", "error", "dir"],
   forceLevels: []
 })

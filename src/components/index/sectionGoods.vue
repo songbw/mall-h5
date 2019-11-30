@@ -26,7 +26,6 @@
                       style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
                     <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
                   </p>
-
                   <p v-else
                      :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                     <span style="font-size: x-small;margin-right: -3px;">￥</span>
@@ -34,7 +33,7 @@
                   </p>
                 </div>
                 <div class="goodsBuyBox">
-                  <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                  <van-button size="mini" type="danger"  @click.stop=""  @click="onAdd2carBtnClick(k)">购买</van-button>
                 </div>
               </div>
             </li>
@@ -186,6 +185,8 @@
                 }*/
       },
       onAdd2carBtnClick(goods) {
+        this.$log("##########################################")
+        this.$log("onAdd2carBtnClick Enter")
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           this.add2Car(userInfo, goods);
@@ -353,21 +354,21 @@
           }
 
           .goodsBuyBox {
-            width: 20%;
             justify-content: center;
             line-height: 2em;
 
             .van-button {
-              margin: 1vw;
-              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-              background-size: 15px 15px;
+              margin-top: 5px;
+              margin-right: 1px;
+           //   background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+           //   background-size: 15px 15px;
               border: none;
               float: right;
             }
 
-            .van-button:active {
+/*            .van-button:active {
               opacity: 0;
-            }
+            }*/
           }
 
 
@@ -459,21 +460,21 @@
           }
 
           .goodsBuyBox {
-            width: 20%;
             justify-content: center;
             line-height: 2em;
 
             .van-button {
-              margin: 1vw;
-              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-              background-size: 15px 15px;
+              margin-top: 5px;
+              margin-right: 1px;
+              //background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+              //background-size: 15px 15px;
               border: none;
               float: right;
             }
 
-            .van-button:active {
+/*            .van-button:active {
               opacity: 0;
-            }
+            }*/
           }
 
 
