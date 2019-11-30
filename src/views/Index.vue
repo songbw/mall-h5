@@ -187,8 +187,6 @@
         }, 10000);
         setTimeout(() => {
           this.test();
-          this.startLocation();
-          this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
         }, 1000);
       }
     },
