@@ -314,7 +314,7 @@
         isOnSummitting: false,
         icon_noCoupon: require('@/assets/icons/ico_noCoupon.png'),
         icon_conatct_address: require('@/assets/icons/ico_contact_address.png'),
-        couponImg: require('@/assets/icons/ico_coupon.png'),
+        couponImg: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_coupon.png',
         addressCount: 0,
         freight: 0,
         payCarList: [],

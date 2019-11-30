@@ -185,11 +185,11 @@
             this.userTokenLoading = false;
           }
         }, 10000);
-/*        setTimeout(() => {
+        setTimeout(() => {
           this.test();
           this.startLocation();
           this.setStatusBarColor(0xFFFFFFFF)//通知App titile 背景
-        }, 1000);*/
+        }, 1000);
       }
     },
     computed: {
@@ -286,7 +286,7 @@
          //let openId = "44391000fd194ab888b1aa81c03c3740"
        // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
       //  let openId = "ace1c1722b834309a59fad302fe357b2"
-        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        let openId = "ace1c1722b834309a59fad302fe357b2"
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         this.$log("openId:" + openId);

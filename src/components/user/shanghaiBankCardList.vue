@@ -104,7 +104,7 @@
         reserveMobile: "",
         realName: "",
         bindCardInfo:{},
-        icon_color_card: require('@/assets/icons/ico_color_card.png'),
+        icon_color_card: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_color_card.png',
         checked: false
       }
     },
