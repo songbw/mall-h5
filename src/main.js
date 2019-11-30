@@ -1,29 +1,13 @@
-//import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from '@/vuex/store.js'   //vuex
 import services from '@/http/api.js'       //http请求
 import vueLogger from "vue-logger";
 import LyTab from 'ly-tab'
-import moment from 'moment'
 import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
-import VueScroller from 'vue-scroller'
 import VueQRCodeComponent from 'vue-qrcode-component'
 import md5 from 'js-md5';
-Vue.prototype.$md5 = md5;
-
-Vue.component('qr-code', VueQRCodeComponent)
-
-Vue.use(VueWechatTitle)
-
-Vue.use(ba, "03a0d710c71e9da54f17e6e0544e5030");
-Vue.use(ba, { siteId: "03a0d710c71e9da54f17e6e0544e5030" });
-
-Vue.use(LyTab)
-Vue.use(VueScroller)
-
-//Vue.prototype.$md5 = md5;
 
 import {
   Button,
@@ -70,6 +54,31 @@ import {
   CollapseItem
 } from 'vant';
 
+Vue.component('qr-code', VueQRCodeComponent)
+Vue.use(VueWechatTitle)
+Vue.use(ba, "03a0d710c71e9da54f17e6e0544e5030")
+Vue.use(ba, { siteId: "03a0d710c71e9da54f17e6e0544e5030" })
+Vue.use(LyTab)
+Vue.use(vueLogger, {
+  prefix: () => {
+    const date = new Date()
+    let y = date.getFullYear();
+    let m = date.getMonth() + 1;
+    m = m < 10 ? ('0' + m) : m;
+    let d = date.getDate();
+    d = d < 10 ? ('0' + d) : d;
+    let h = date.getHours();
+    h = h < 10 ? ('0' + h) : h;
+    let minute = date.getMinutes();
+    minute = minute < 10 ? ('0' + minute) : minute;
+    let second = date.getSeconds();
+    second = second < 10 ? ('0' + second) : second;
+    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+  },
+  dev: false,
+  levels: ["log", "warn", "debug", "error", "dir"],
+  forceLevels: []
+})
 Vue.use(Button)
   .use(Tab)
   .use(Tabs)
@@ -118,36 +127,13 @@ Vue.use(Button)
 Vue.config.productionTip = false
 //增加全局Service变量
 Vue.prototype.$api = services;
-
-
+Vue.prototype.$md5 = md5;
+Vue.prototype.$moment = moment;
 ////////////////////////////////////////////////////////////////////////
 //增加Android/ios bridge 全局变量
 //let dsBridge = require("dsbridge");
 //Vue.prototype.$jsbridge = dsBridge;
 ////////////////////////////////////////////////////////////////////////
-
-Vue.prototype.$moment = moment;
-
-Vue.use(vueLogger, {
-  prefix: () => {
-    const date = new Date()
-    let y = date.getFullYear();
-    let m = date.getMonth() + 1;
-    m = m < 10 ? ('0' + m) : m;
-    let d = date.getDate();
-    d = d < 10 ? ('0' + d) : d;
-    let h = date.getHours();
-    h = h < 10 ? ('0' + h) : h;
-    let minute = date.getMinutes();
-    minute = minute < 10 ? ('0' + minute) : minute;
-    let second = date.getSeconds();
-    second = second < 10 ? ('0' + second) : second;
-    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
-  },
-  dev: true,
-  levels: ["log", "warn", "debug", "error", "dir"],
-  forceLevels: []
-});
 
 // 用钩子函数beforeEach()对路由进行判断
 
