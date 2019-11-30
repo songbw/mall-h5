@@ -336,6 +336,9 @@
             width: 80%;
             line-height: 2em;
             margin-left: 5px;
+            >p{
+              .fz(font-size, 32);
+            }
 
             > span {
               display: inline-block;
@@ -356,7 +359,7 @@
           .goodsBuyBox {
             justify-content: center;
             line-height: 2em;
-
+            width: 20%;
             .van-button {
               margin-top: 5px;
               margin-right: 1px;
@@ -443,6 +446,10 @@
             line-height: 2em;
             margin-left: 5px;
 
+            >p{
+              .fz(font-size, 26);
+            }
+
             > span {
               display: inline-block;
               align-content: center;
@@ -455,13 +462,14 @@
               bottom: 0;
               left: 0;
               color: #ff4444;
-              .fz(font-size, 30);
+
             }
           }
 
           .goodsBuyBox {
             justify-content: center;
             line-height: 2em;
+            width: 20%;
 
             .van-button {
               margin-top: 5px;
