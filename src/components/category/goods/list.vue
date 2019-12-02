@@ -636,7 +636,10 @@
           background-color: #ffffff;
           text-align: right;
           color: #000000;
-          margin-top: -2em;
+          margin-top: -3.0em;
+          width: 5em;
+          float: right;
+          z-index: 1;
 
           .van-button {
            // background-color: #ff4444;
