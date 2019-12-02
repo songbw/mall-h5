@@ -185,9 +185,9 @@
             this.userTokenLoading = false;
           }
         }, 10000);
-/*        setTimeout(() => {
+        setTimeout(() => {
           this.test();
-        }, 1000);*/
+        }, 1000);
       }
     },
     computed: {

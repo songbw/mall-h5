@@ -447,7 +447,7 @@
 
           .goodsPriceBox {
             width: 80%;
-            line-height: 2em;
+            line-height: 1.8em;
             margin-left: 5px;
 
             >p{
