@@ -178,7 +178,7 @@
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
       } else {//非关爱通App
-        //this.test();
+        this.test();
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
@@ -338,7 +338,7 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState({promotion: promotion})
+            "promotionState": Util.getPromotionState(this,{promotion: promotion})
           }
           cartItem = {
             "baseInfo": baseInfo,
@@ -550,6 +550,7 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
+            this.$log("setToken:"+  rt.token)
             let data= this.$md5(rt.token)
             if(rt.newUser) {
               data =  "1" + data
