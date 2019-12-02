@@ -5,7 +5,7 @@
         v-for="(item,index) in tabbars"
         :key="index"
         @click="tab(index,item.name)"
-        :info="(item.info != undefined && item.info > 0)?item.info:''"
+        :info = "item.info != undefined && item.info > 0? item.info: ''"
       >
         <span :class="currIndex == index? 'title_active' : 'title_norm'">{{item.title}}</span>
         <template slot="icon">

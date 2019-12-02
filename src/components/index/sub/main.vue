@@ -1,53 +1,59 @@
 <template lang="html">
-  <section class="submain"  :style="{'background-color': mBackgroundColor}">
-      <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
-        <h1 slot="title">{{title}}</h1>
-      </v-header>
-      <div v-if="pageloading">
-        <v-loading></v-loading>
-      </div>
-      <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
-        <div v-if="this.mHeader.backgroundColor != null">
-          <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
-            <van-search placeholder="搜索您感兴趣的商品"
-                        shape="round"
-                        :background=this.mHeader.backgroundColor
-                        readonly
-                        @click="onSearchInputClick()"
-                        v-if="this.mHeader.showSearchBar"/>
-          </div>
-          <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
+  <section class="submain" :style="{'background-color': mBackgroundColor}">
+    <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
+      <h1 slot="title">{{title}}</h1>
+    </v-header>
+    <div v-if="pageloading">
+      <v-loading></v-loading>
+    </div>
+    <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
+      <div v-if="this.mHeader.backgroundColor != null">
+        <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
+          <van-search placeholder="搜索您感兴趣的商品"
+                      shape="round"
+                      :background=this.mHeader.backgroundColor
+                      readonly
+                      @click="onSearchInputClick()"
+                      v-if="this.mHeader.showSearchBar"/>
         </div>
-        <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px' ">
-          <div v-for="item in datas" >
-            <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
-              <v-swiper :datas="item.data"/>
-            </div>
-            <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
-              <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-            </div>
-            <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
-              <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-            </div>
-            <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
-              <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-            </div>
-            <div v-else-if="item.type==='7'" :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
-              <v-imgmap :datas="item.data"/>
-            </div>
-            <div v-else-if="item.type==='4'">
-              <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-            </div>
-            <div v-else-if="item.type==='6'">
-              <v-sectionCoupon :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-            </div>
-            <div v-else-if="item.type==='8'">
-              <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
+        <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
+      </div>
+      <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px' ">
+        <div v-for="item in datas">
+          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
+            <v-swiper :datas="item.data"/>
+          </div>
+          <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
+            <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
+          <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
+            <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
+          <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
+            <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
+          <div v-else-if="item.type==='7'"
+               :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
+            <v-imgmap :datas="item.data"/>
+          </div>
+          <div v-else-if="item.type==='4'">
+            <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            <div>
+              <img :src="icon_shopCart"
+                   @click="gotoShoppingCart()"
+                   style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;"/>
             </div>
           </div>
+          <div v-else-if="item.type==='6'">
+            <v-sectionCoupon :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
+          <div v-else-if="item.type==='8'">
+            <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
+          </div>
         </div>
-        <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
       </div>
+      <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
+    </div>
   </section>
 </template>
 
@@ -60,7 +66,7 @@
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import sectionImgMap from '@/components/index/sectionImgMap.vue'
   import sectionCoupon from '@/components/index/sectionCoupon.vue'
-  import sectionCompBox from  '@/components/index/sectionCompBox.vue'
+  import sectionCompBox from '@/components/index/sectionCompBox.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Loading from '@/common/_loading.vue'
@@ -81,10 +87,10 @@
       'v-sectionCompBox': sectionCompBox
     },
     watch: {
-      '$route' (to, from) {
+      '$route'(to, from) {
         if (to.name === '活动页') {
           let id = this.$route.params.id;
-          console.log("活动页:"+id)
+          console.log("活动页:" + id)
           this.$api.xapi({
             method: 'get',
             baseURL: this.$api.AGGREGATION_BASE_URL,
@@ -96,14 +102,13 @@
             this.title = response.data.data.result.name;
             let jsonString = response.data.data.result.content
             this.datas = JSON.parse(jsonString);
-            for (let i = 0 ; i < this.datas.length; i++) {
-              if(this.datas[i].type === '4')
+            for (let i = 0; i < this.datas.length; i++) {
+              if (this.datas[i].type === '4')
                 this.datas[i].data.id = id;
             }
             this.mBackgroundColor = response.data.data.result.backgroundColor
-            if(response.data.data.result.header != undefined)
-            {
-              let header =  JSON.parse(response.data.data.result.header)
+            if (response.data.data.result.header != undefined) {
+              let header = JSON.parse(response.data.data.result.header)
               this.mHeader = header
             }
           }).catch(function (error) {
@@ -113,18 +118,19 @@
         }
       }
     },
-      data() {
+    data() {
       return {
         datas: {},
         loading: true,
-        pageloading:true,
+        pageloading: true,
         title: '',
         mBackgroundColor: '#FFFFFF',
-        mHeader:{
+        mHeader: {
           backgroundColor: '#FFFFFF',
-          showSearchBar:false
+          showSearchBar: false
         },
         showHeader: true,
+        icon_shopCart: require('@/assets/icons/ico_cart-circle.png'),
       }
     },
 
@@ -141,20 +147,19 @@
         },
       }).then((response) => {
         this.title = response.data.data.result.name;
-       // const pako = require('pako');
+        // const pako = require('pako');
         //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
         // this.$log(response.data.data.result)
-        for (let i = 0 ; i < this.datas.length; i++) {
-          if(this.datas[i].type === '4')
+        for (let i = 0; i < this.datas.length; i++) {
+          if (this.datas[i].type === '4')
             this.datas[i].data.id = id;
         }
         this.$log(this.datas)
         this.mBackgroundColor = response.data.data.result.backgroundColor
-        if(response.data.data.result.header != undefined)
-        {
-          let header =  JSON.parse(response.data.data.result.header)
+        if (response.data.data.result.header != undefined) {
+          let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
         }
         this.pageloading = false;
@@ -179,7 +184,7 @@
       },
       onSearchInputClick() {
         this.$log("onSearchInputClick")
-        this.$router.push({name:'搜索页'})
+        this.$router.push({name: '搜索页'})
       }
     }
   }
@@ -187,42 +192,46 @@
 
 
 <style lang="less" scoped>
-    .submain {
+  .submain {
+    width: 100%;
+    height: 100%;
+    padding-bottom: 4vw;
+    background-color: #F8FCFF;
+
+    .home-body {
       width: 100%;
       height: 100%;
-      padding-bottom: 4vw;
-      background-color: #F8FCFF;
+      top: 0px;
+      background-color: #f8f8f8;
 
-      .home-body {
+      .box {
+        position: relative;
         width: 100%;
-        height: 100%;
-        top: 0px;
-        background-color: #f8f8f8;
+        line-height: 15vw;
+        background-color: #ff4444;
+      }
 
-        .box {
-          position: relative;
-          width: 100%;
-          line-height: 15vw;
-          background-color: #ff4444;
-        }
-        .box_after{
-          bottom: -60px;
-          height: 60px;
-          border-radius: 0 0 30% 30%;
-          background-color:  #ff4444;
-          overflow: hidden;
-          z-index: -1;
-        }
-        .index_main_50px{
-          margin-top: -50px;
-        }
-        .index_main_60px{
-          margin-top: -60px;
-        }
-        .ltRtMargin{
-          margin-left: 5px;
-          margin-right: 5px;
-        }
+      .box_after {
+        bottom: -60px;
+        height: 60px;
+        border-radius: 0 0 30% 30%;
+        background-color: #ff4444;
+        overflow: hidden;
+        z-index: -1;
+      }
+
+      .index_main_50px {
+        margin-top: -50px;
+      }
+
+      .index_main_60px {
+        margin-top: -60px;
+      }
+
+      .ltRtMargin {
+        margin-left: 5px;
+        margin-right: 5px;
       }
     }
+  }
 </style>

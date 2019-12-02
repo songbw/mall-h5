@@ -98,6 +98,11 @@
         </ul>
       </div>
     </div>
+    <div>
+      <img :src="icon_shopCart"
+           @click="gotoCart()"
+           style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;"/>
+    </div>
   </section>
 </template>
 
@@ -121,6 +126,7 @@
         seckillTypes: [],
         active: 0,
         timer: null,
+        icon_shopCart: require('@/assets/icons/ico_cart-circle.png'),
       }
     },
 
@@ -202,6 +208,9 @@
     computed: {},
 
     methods: {
+      gotoCart() {
+        this.$router.push({name: '购物车页'})
+      },
       getDateTime(time) {
         return   new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },

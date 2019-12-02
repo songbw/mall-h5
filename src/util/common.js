@@ -181,7 +181,6 @@ export default {
   },
 
   updateCartItem(env, cartItem) {
-    env.$log("updateCartItem Enter")
     let cartList = env.$store.state.appconf.cartList;
     try {
       let found = -1;
@@ -196,7 +195,6 @@ export default {
         cartItem.promotionInfo['promotionState'] = this.getPromotionState(env,cartItem.promotionInfo)
         cartItem.goodsInfo['dprice'] = this.getDisplayPrice(env,cartItem.goodsInfo.price,cartItem.promotionInfo)
       }
-      env.$log(cartItem)
       if (found == -1) {
         cartList.unshift(cartItem) //添加一个新的
       } else {

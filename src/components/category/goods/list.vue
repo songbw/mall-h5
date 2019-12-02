@@ -37,7 +37,7 @@
               </van-card>
             </div>
             <div class="goods-action">
-              <van-button size="mini" @click="onAdd2carBtnClick(k)"></van-button>
+              <van-button size="mini"  @click.stop=""  @click="onAdd2carBtnClick(k)"></van-button>
             </div>
           </li>
         </div>
@@ -635,13 +635,17 @@
         .goods-action {
           background-color: #ffffff;
           text-align: right;
-          margin-right: 1em;
           color: #000000;
-          margin-top: -2em;
+          margin-top: -3.0em;
+          width: 5em;
+          float: right;
+          z-index: 1;
 
           .van-button {
+           // background-color: #ff4444;
             background: url('../../../assets/icons/ico_add_cart.png') no-repeat center;
             background-size: 20px 20px;
+            padding: 20px 30px;
             border: none;
           }
 

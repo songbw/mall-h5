@@ -133,10 +133,7 @@
       this.$api.xapi({
         method: 'get',
         baseURL: this.$api.AGGREGATION_BASE_URL,
-        url: '/aggregation/findHomePage',
-        params: {
-          appId: this.$api.APP_ID
-        }
+        url: '/aggregation/findHomePage'
       }).then((response) => {
         // const pako = require('pako');
         //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
@@ -181,7 +178,7 @@
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
       } else {//非关爱通App
-       // this.test();
+        //this.test();
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
@@ -341,7 +338,7 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState({promotion: promotion})
+            "promotionState": Util.getPromotionState(this,{promotion: promotion})
           }
           cartItem = {
             "baseInfo": baseInfo,
@@ -367,7 +364,7 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState({promotion: promotion})
+            "promotionState": Util.getPromotionState(this,{promotion: promotion})
           }
           cartItem.couponList = couponList
           cartItem.promotionInfo = promotionInfo
@@ -396,7 +393,7 @@
            if (this.result.object.cart != undefined && this.result.object.cart.length > 0) {
              let couponsAndProms = this.result.object.couponProm
              this.result.object.cart.forEach(item => {
-               this.upDateSkuInfo(item, couponsAndProms, userInfo)
+               this.upDateSkuInfo(item, couponsAndProms, user)
              })
            }
          }).catch(function (error) {
@@ -553,6 +550,7 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
+            this.$log("setToken:"+  rt.token)
             let data= this.$md5(rt.token)
             if(rt.newUser) {
               data =  "1" + data
