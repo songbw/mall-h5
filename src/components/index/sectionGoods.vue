@@ -33,7 +33,7 @@
                   </p>
                 </div>
                 <div class="goodsBuyBox">
-                  <van-button size="mini" type="danger"  @click.stop=""  @click="onAdd2carBtnClick(k)">购买</van-button>
+                  <van-button size="mini" type="danger"  @click.stop=""  @click="onAdd2carBtnClick(k)"></van-button>
                 </div>
               </div>
             </li>
@@ -338,6 +338,12 @@
             margin-left: 5px;
             >p{
               .fz(font-size, 32);
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
             }
 
             > span {
@@ -363,15 +369,15 @@
             .van-button {
               margin-top: 5px;
               margin-right: 1px;
-           //   background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-           //   background-size: 15px 15px;
+              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+              background-size: 15px 15px;
               border: none;
               float: right;
             }
 
-/*            .van-button:active {
+            .van-button:active {
               opacity: 0;
-            }*/
+            }
           }
 
 
@@ -448,6 +454,12 @@
 
             >p{
               .fz(font-size, 26);
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
             }
 
             > span {
@@ -474,15 +486,15 @@
             .van-button {
               margin-top: 5px;
               margin-right: 1px;
-              //background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-              //background-size: 15px 15px;
+              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+              background-size: 15px 15px;
               border: none;
               float: right;
             }
 
-/*            .van-button:active {
+            .van-button:active {
               opacity: 0;
-            }*/
+            }
           }
 
 

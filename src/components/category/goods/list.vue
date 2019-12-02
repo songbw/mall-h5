@@ -37,7 +37,7 @@
               </van-card>
             </div>
             <div class="goods-action">
-              <van-button size="mini" type="danger"  @click.stop=""  @click="onAdd2carBtnClick(k)">购买</van-button>
+              <van-button size="mini"  @click.stop=""  @click="onAdd2carBtnClick(k)"></van-button>
             </div>
           </li>
         </div>
@@ -635,19 +635,20 @@
         .goods-action {
           background-color: #ffffff;
           text-align: right;
-          margin-right: 1em;
           color: #000000;
           margin-top: -2em;
 
           .van-button {
-            //background: url('../../../assets/icons/ico_add_cart.png') no-repeat center;
-            //background-size: 20px 20px;
+           // background-color: #ff4444;
+            background: url('../../../assets/icons/ico_add_cart.png') no-repeat center;
+            background-size: 20px 20px;
+            padding: 20px 30px;
             border: none;
           }
 
-/*          .van-button:active {
+          .van-button:active {
             opacity: 0;
-          }*/
+          }
 
           img {
             width: 30px;
