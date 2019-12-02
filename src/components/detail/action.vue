@@ -9,7 +9,8 @@
       <van-goods-action-mini-btn class="gotoCartBtn"
                                  icon="cart-o"
                                  text="购物车"
-                                 @click="gotoCar">
+                                 @click="gotoCar"
+                                 :info="cartNumber > 0? cartNumber : ''">
 
       </van-goods-action-mini-btn>
       <van-goods-action-big-btn class="add2CartBtn" text="加入购物车" @click="addGoodsCar"/>
@@ -36,10 +37,30 @@
         selStateInCarList: [],
         myCouponIcon: require('@/assets/icons/ico_mycoupon.png'),
         chCouponIcon: require('@/assets/icons/ico_changecoupon.png'),
+        cartNumber: 0,
       }
     },
-    created() {
 
+    computed: {
+      cartListCount() {
+        let count = this.$store.state.appconf.cartList.length
+        return count
+      }
+    },
+
+    watch:{
+      cartListCount(newValue, oldVal) {
+        if(newValue > 99)
+          this.cartNumber = 99
+        else
+          this.cartNumber = newValue
+      }
+    },
+
+    created() {
+      if(this.$store.state.appconf.cartList != undefined) {
+        this.cartNumber = this.$store.state.appconf.cartList.length
+      }
     },
 
     beforeDestroy (){
