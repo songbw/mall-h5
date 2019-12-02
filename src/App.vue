@@ -63,7 +63,7 @@
         this.$api.APP_ID = result.data.iAppID
         this.$api.T_APP_ID = result.data.tAppID
         this.$api.APP_SOURCE = "00"
-        if (!result.data.APP_SOURCE != undefined) {
+        if (result.data.APP_SOURCE != undefined) {
           this.$api.APP_SOURCE = result.data.APP_SOURCE
         }
         this.$api.SERVICE_URL = serverUrl;
@@ -97,20 +97,23 @@
           this.configured = true
         } else if (this.$api.APP_ID == "11") {
           switch (this.$api.APP_SOURCE) {//APP
-            case '00': {
+            case "00": {
+              this.$log("无锡市民卡App")
               this.getLoginAuthInfo();
               setTimeout(() => {
                 this.configured = true
               }, 1000);
               break;
             }
-            case '01': {//微信公众号
+            case "01": {//微信公众号
+              this.$log("无锡市民卡公众号")
               this.$api.IS_WX_GZH = true;
               this.clearStorage();
               this.configured = true
               break;
             }
             default://nothing to do
+              this.$log("无锡市民卡其它")
               this.configured = true
               break;
           }

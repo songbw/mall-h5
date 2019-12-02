@@ -178,7 +178,7 @@
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
       } else {//非关爱通App
-        this.test();
+       // this.test();
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
@@ -364,7 +364,7 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState({promotion: promotion})
+            "promotionState": Util.getPromotionState(this,{promotion: promotion})
           }
           cartItem.couponList = couponList
           cartItem.promotionInfo = promotionInfo
@@ -393,7 +393,7 @@
            if (this.result.object.cart != undefined && this.result.object.cart.length > 0) {
              let couponsAndProms = this.result.object.couponProm
              this.result.object.cart.forEach(item => {
-               this.upDateSkuInfo(item, couponsAndProms, userInfo)
+               this.upDateSkuInfo(item, couponsAndProms, user)
              })
            }
          }).catch(function (error) {
