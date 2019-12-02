@@ -33,7 +33,7 @@
                   </p>
                 </div>
                 <div class="goodsBuyBox">
-                  <van-button size="mini" type="danger"  @click.stop=""  @click="onAdd2carBtnClick(k)">购买</van-button>
+                  <van-button size="mini" type="danger"  @click.stop=""  @click="onAdd2carBtnClick(k)"></van-button>
                 </div>
               </div>
             </li>
@@ -334,9 +334,14 @@
             width: 80%;
             line-height: 2em;
             margin-left: 5px;
-
-            > p {
+            >p{
               .fz(font-size, 32);
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
             }
 
             > span {
@@ -351,6 +356,7 @@
               bottom: 0;
               left: 0;
               color: #ff4444;
+              .fz(font-size, 30);
             }
           }
 
@@ -361,15 +367,15 @@
             .van-button {
               margin-top: 5px;
               margin-right: 1px;
-           //   background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-           //   background-size: 15px 15px;
+              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+              background-size: 15px 15px;
               border: none;
               float: right;
             }
 
-/*            .van-button:active {
+            .van-button:active {
               opacity: 0;
-            }*/
+            }
           }
 
 
@@ -444,8 +450,14 @@
             line-height: 2em;
             margin-left: 5px;
 
-            > p {
+            >p{
               .fz(font-size, 26);
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 1;
+              word-break: break-all;
             }
 
             > span {
@@ -460,6 +472,7 @@
               bottom: 0;
               left: 0;
               color: #ff4444;
+
             }
           }
 
@@ -467,18 +480,19 @@
             justify-content: center;
             line-height: 2em;
             width: 20%;
+
             .van-button {
               margin-top: 5px;
               margin-right: 1px;
-              //background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-              //background-size: 15px 15px;
+              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+              background-size: 15px 15px;
               border: none;
               float: right;
             }
 
-/*            .van-button:active {
+            .van-button:active {
               opacity: 0;
-            }*/
+            }
           }
 
 
