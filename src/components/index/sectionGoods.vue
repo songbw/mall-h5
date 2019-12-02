@@ -185,8 +185,6 @@
                 }*/
       },
       onAdd2carBtnClick(goods) {
-        this.$log("##########################################")
-        this.$log("onAdd2carBtnClick Enter")
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           this.add2Car(userInfo, goods);
@@ -445,12 +443,13 @@
           flex-direction: row;
           justify-items: center;
           min-height: 2em;
-          padding-bottom: .1em;
+          padding-bottom: .2em;
 
           .goodsPriceBox {
             width: 80%;
             line-height: 2em;
             margin-left: 5px;
+            margin-top: 2px;
 
             >p{
               .fz(font-size, 26);
