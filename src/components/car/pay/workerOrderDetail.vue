@@ -208,7 +208,7 @@
             }
             let jsonRemark = comments.remark
             if (jsonRemark != undefined) {
-              ret += "备注:" + jsonRemark
+              ret += " 备注:" + jsonRemark
             }
           } catch (e) {
           }
