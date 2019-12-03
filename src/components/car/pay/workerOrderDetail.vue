@@ -175,7 +175,6 @@
       getComment(item) {
         let ret = this.formatWOrderStatus(item.status)
         if (item.comments != undefined) {
-
           try {
             let comments = JSON.parse(item.comments)
             let jsonlogisticsInfo = comments.logisticsInfo
@@ -207,9 +206,9 @@
                     jsonReturnAddress.address
                 }
             }
-            let jsonRemark = comment.remark
+            let jsonRemark = comments.remark
             if (jsonRemark != undefined) {
-              ret += "备注:" + jsonRemark
+              ret += " 备注:" + jsonRemark
             }
           } catch (e) {
           }
