@@ -79,6 +79,11 @@
                       @click="onConfirmBtnClick(detail)" v-show="status==1">
             确认收货
           </van-button>
+          <van-button plain round size="small" type="primary"
+                      style="background-color: white;color: #ff4444;border-color: #dedede "
+                      @click="onBuyBtnClick(detail)" v-show="status==2||status==3">
+            再次购买
+          </van-button>
         </div>
       </div>
       <div class="pay-settlement">
@@ -207,6 +212,82 @@
     },
 
     methods: {
+      gotoCart() {
+        this.$router.push({name: '购物车页'})
+      },
+      add2Car(user, goods) {
+        let userId = user.userId;
+        let mpu = goods.mpu;
+        let addtoCar = {
+          "openId": userId,
+          "mpu": mpu
+        }
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.ORDER_BASE_URL,
+          url: '/cart',
+          data: addtoCar,
+        })
+      },
+      async onBuyBtnClick(k) {
+        this.$log("onBuyBtnClick Enter")
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
+          for(let i = 0;  i < k.skus.length ;i++) {
+            let goods = k.skus[i]
+            try {
+              let resp = await this.add2Car(user, goods);
+              if(resp.data.code == 200) {
+                let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
+                if (cartItem == null) {
+                  let baseInfo = {
+                    "userId": user.userId,
+                    "skuId": goods.skuid,
+                    "mpu": goods.mpu,
+                    "merchantId": goods.merchantId,
+                    "count": 1,
+                    "choosed": true,
+                    "cartId": this.result,
+                  }
+                  let goodsInfo = {
+                    "id": goods.id,
+                    "skuId": goods.skuid,
+                    "mpu": goods.mpu,
+                    "merchantId": goods.merchantId,
+                    "image": goods.image,
+                    "category": goods.category,
+                    "name": goods.name,
+                    "brand": goods.brand,
+                    "model": goods.model,
+                    "price": goods.unitPrice,
+                    "checkedPrice": goods.price
+                  }
+                  let couponList = []
+                  let promotionInfo = {}
+                  cartItem = {
+                    "baseInfo": baseInfo,
+                    "goodsInfo": goodsInfo,
+                    "couponList": couponList,
+                    "promotionInfo": promotionInfo,
+                  }
+                } else {
+                  cartItem.baseInfo.count++;
+                }
+                Util.updateCartItem(this, cartItem)
+              }
+
+            } catch (e) {
+              that.$log(e)
+            }
+          }
+          this.gotoCart();
+        } else {
+          this.$toast("没有用户信息，请先登录,再添加购物车")
+        }
+      },
+
       See(e) {
         this.$log("jump to:" + e)
         window.location.href = e
