@@ -63,26 +63,50 @@ Vue.use(VueWechatTitle)
 Vue.use(ba, "03a0d710c71e9da54f17e6e0544e5030")
 Vue.use(ba, { siteId: "03a0d710c71e9da54f17e6e0544e5030" })
 Vue.use(LyTab)
-Vue.use(vueLogger, {
-  prefix: () => {
-    const date = new Date()
-    let y = date.getFullYear();
-    let m = date.getMonth() + 1;
-    m = m < 10 ? ('0' + m) : m;
-    let d = date.getDate();
-    d = d < 10 ? ('0' + d) : d;
-    let h = date.getHours();
-    h = h < 10 ? ('0' + h) : h;
-    let minute = date.getMinutes();
-    minute = minute < 10 ? ('0' + minute) : minute;
-    let second = date.getSeconds();
-    second = second < 10 ? ('0' + second) : second;
-    return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
-  },
-  dev: false,
-  levels: ["log", "warn", "debug", "error", "dir"],
-  forceLevels: []
-})
+if (process.env.NODE_ENV === 'production') {
+  Vue.use(vueLogger, {
+    prefix: () => {
+      const date = new Date()
+      let y = date.getFullYear();
+      let m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      let d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      let h = date.getHours();
+      h = h < 10 ? ('0' + h) : h;
+      let minute = date.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      let second = date.getSeconds();
+      second = second < 10 ? ('0' + second) : second;
+      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    },
+    dev: false,
+    levels: ["log", "warn", "debug", "error", "dir"],
+    forceLevels: []
+  })
+} else {
+  Vue.use(vueLogger, {
+    prefix: () => {
+      const date = new Date()
+      let y = date.getFullYear();
+      let m = date.getMonth() + 1;
+      m = m < 10 ? ('0' + m) : m;
+      let d = date.getDate();
+      d = d < 10 ? ('0' + d) : d;
+      let h = date.getHours();
+      h = h < 10 ? ('0' + h) : h;
+      let minute = date.getMinutes();
+      minute = minute < 10 ? ('0' + minute) : minute;
+      let second = date.getSeconds();
+      second = second < 10 ? ('0' + second) : second;
+      return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
+    },
+    dev: true,
+    levels: ["log", "warn", "debug", "error", "dir"],
+    forceLevels: []
+  })
+}
+
 Vue.use(Button)
   .use(Tab)
   .use(Tabs)

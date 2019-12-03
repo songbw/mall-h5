@@ -440,58 +440,6 @@
       },
 
 
-      updateCarList(item, product, user) {
-        let cartItem = Util.getCartItem(this, user.userId, item.mpu)
-        this.$log(cartItem)
-        if (cartItem == null) {
-          let baseInfo = {
-            "userId": user.userId,
-            "skuId": product.skuid,
-            "mpu": product.mpu,
-            "merchantId": product.merchantId,
-            "count": item.count,
-            "choosed": false,
-            "cartId": item.id
-          }
-          let goodsInfo = {
-            "id": product.id,
-            "skuId": product.skuid,
-            "mpu": product.mpu,
-            "merchantId": product.merchantId,
-            "image": product.image,
-            "category": product.category,
-            "name": product.name,
-            "brand": product.brand,
-            "model": product.model,
-            "price": product.price,
-            "state": product.state,
-          }
-          let couponList = product.coupon
-          let promotionInfo = {
-            "promotion": product.promotion,
-            "promotionState": Util.getPromotionState(this,product)
-          }
-          cartItem = {
-            "baseInfo": baseInfo,
-            "goodsInfo": goodsInfo,
-            "couponList": couponList,
-            "promotionInfo": promotionInfo,
-          }
-        } else {
-          cartItem.baseInfo.count = item.count
-          cartItem.baseInfo.cartId = item.id
-          cartItem.baseInfo.merchantId = product.merchantId
-          cartItem.goodsInfo.merchantId = product.merchantId
-          cartItem.couponList = product.coupon
-          cartItem.promotionInfo = {
-            "promotion": product.promotion,
-            "promotionState": Util.getPromotionState(this,product)
-          }
-        }
-        Util.updateCartItem(this, cartItem)
-        return cartItem;
-      },
-
       upDateSkuInfo(item, couponAndProms, user) {
         this.$log(item)
         let cartItem = Util.getCartItem(this, user.userId, item.mpu)
@@ -545,6 +493,7 @@
           cartItem.baseInfo.cartId = item.id
           cartItem.baseInfo.merchantId = item.merchantId
           cartItem.goodsInfo.merchantId = item.merchantId
+          cartItem.goodsInfo.price = item.price
           let couponList = []
           let promotion = []
           if (couponAndProms != null) {
@@ -566,30 +515,6 @@
         Util.updateCartItem(this, cartItem)
       },
 
-      getSkuInfoBy(item, user) {
-        this.$log(item)
-        this.$api.xapi({
-          method: 'get',
-          baseURL: this.$api.PRODUCT_BASE_URL,
-          url: '/prod',
-          params: {
-            mpu: item.mpu,
-          }
-        }).then((res) => {
-          if (res.data != null) {
-            let product = res.data.data.result;
-            if (product != null) {
-              this.updateCarList(item, product, user)
-              this.dataLoaded = true
-            } else {
-              this.$log("product:" + JSON.stringify(product) + ",mpu:" + item.mpu)
-            }
-          }
-        }).catch((error) => {
-          console.log(error)
-          this.dataLoaded = true
-        })
-      },
 
       singleChecked(index, k) {
         Util.updateCartItem(this, k)
