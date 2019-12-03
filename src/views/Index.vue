@@ -130,41 +130,68 @@
     beforeCreate() {
       let that = this;
       this.pageloading = true;
-      this.$api.xapi({
-        method: 'get',
-        baseURL: this.$api.AGGREGATION_BASE_URL,
-        url: '/aggregation/findHomePage',
-        params: {
-          appId: this.$api.APP_ID
-        }
-      }).then((response) => {
-        // const pako = require('pako');
-        //const jsonString = pako.inflate(response.data.data.result.content, {to: 'string'})
-        let jsonString = response.data.data.result.content
-        this.datas = JSON.parse(jsonString);
-        for (let i = 0; i < this.datas.length; i++) {
-          if (this.datas[i].type === '4')
-            this.datas[i].data.id = 0;
-        }
-        this.$log(this.datas);
-        this.$log(response.data.data.result)
-        this.mBackgroundColor = response.data.data.result.backgroundColor
-
-
-        if (response.data.data.result.header != undefined) {
-          let header = JSON.parse(response.data.data.result.header)
-          this.mHeader = header
-          if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
-            this.icon_gift = this.mHeader.novicePackUrl
+      if(this.$api.IS_SUPPORTED_MULTI_POINT) {
+        this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.AGGREGATION_BASE_URL,
+          url: '/aggregation/findHomePage',
+          params: {
+            appId: this.$api.APP_ID
           }
-        }
-        this.$log(this.mHeader);
-        this.pageloading = false;
-      }).catch(function (error) {
-        //alert(error)
-        that.$log(error)
-        that.pageloading = false;
-      })
+        }).then((response) => {
+          let jsonString = response.data.data.result.content
+          this.datas = JSON.parse(jsonString);
+          for (let i = 0; i < this.datas.length; i++) {
+            if (this.datas[i].type === '4')
+              this.datas[i].data.id = 0;
+          }
+          this.$log(this.datas);
+          this.$log(response.data.data.result)
+          this.mBackgroundColor = response.data.data.result.backgroundColor
+          if (response.data.data.result.header != undefined) {
+            let header = JSON.parse(response.data.data.result.header)
+            this.mHeader = header
+            if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
+              this.icon_gift = this.mHeader.novicePackUrl
+            }
+          }
+          this.$log(this.mHeader);
+          this.pageloading = false;
+        }).catch(function (error) {
+          //alert(error)
+          that.$log(error)
+          that.pageloading = false;
+        })
+      } else {
+        this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.AGGREGATION_BASE_URL,
+          url: '/aggregation/findHomePage',
+        }).then((response) => {
+          let jsonString = response.data.data.result.content
+          this.datas = JSON.parse(jsonString);
+          for (let i = 0; i < this.datas.length; i++) {
+            if (this.datas[i].type === '4')
+              this.datas[i].data.id = 0;
+          }
+          this.$log(this.datas);
+          this.$log(response.data.data.result)
+          this.mBackgroundColor = response.data.data.result.backgroundColor
+          if (response.data.data.result.header != undefined) {
+            let header = JSON.parse(response.data.data.result.header)
+            this.mHeader = header
+            if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
+              this.icon_gift = this.mHeader.novicePackUrl
+            }
+          }
+          this.$log(this.mHeader);
+          this.pageloading = false;
+        }).catch(function (error) {
+          //alert(error)
+          that.$log(error)
+          that.pageloading = false;
+        })
+      }
     },
 
     created() {
@@ -181,7 +208,7 @@
           this.getThirdPartyAccessTokenInfo(auth_code)
         }
       } else {//非关爱通App
-       // this.test();
+        this.test();
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;

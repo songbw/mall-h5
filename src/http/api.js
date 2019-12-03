@@ -13,6 +13,7 @@ const IS_WX_GZH =  false
 const HAS_HEADER = false
 const IS_QUICKPAY_CAN_SAVE = true
 const APP_SOURCE = "00"
+const IS_SUPPORTED_MULTI_POINT = true
 
 /*let SERVICE_URL = "http://192.168.200.37:8000";
 let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"*/
@@ -112,5 +113,6 @@ export default {
   HAS_HEADER,
   IS_QUICKPAY_CAN_SAVE,
   TEST_USER,
-  APP_SOURCE
+  APP_SOURCE,
+  IS_SUPPORTED_MULTI_POINT
 }
