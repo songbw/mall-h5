@@ -2,42 +2,91 @@
   <section class="sectionGoods"
            :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
     <div class="container" ref="container">
-      <ly-tab :id="fixedBarId" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
-              @change="onTabChanged"
-              :style="{'background-color': datas.settings.floorTitleColor}">
-      </ly-tab>
-      <div>
-        <div v-for="(category,index) in datas.list" :title=category.title :key="index">
-          <ul :id="sectionGoodsListId"
-              :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' "
-              :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
-            <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
-              <img v-lazy="k.imagePath || k.image">
-              <div class="goodsComment">
-                <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
-              </div>
-              <div class="goodsFooter">
-                <div class="goodsPriceBox">
-                  <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
-                     :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{(k.price - k.discount).toFixed(2)}}
-                    <span
-                      style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                    <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
-                  </p>
-                  <p v-else
-                     :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                    <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                    {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
-                  </p>
+      <div v-if="datas.settings.hasTabBar">
+        <div class="goodsLists">
+          <div class="goodsListTitle">
+
+          </div>
+          <div class="goodsList">
+
+          </div>
+        </div>
+
+<!--        <div>
+          <div v-for="(category,index) in datas.list" :title=category.title :key="index">
+            <ul :id="sectionGoodsListId"
+                :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' "
+                :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
+              <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
+                <img v-lazy="k.imagePath || k.image">
+                <div class="goodsComment">
+                  <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
                 </div>
-                <div class="goodsBuyBox">
-                  <van-button size="mini" type="danger"  @click.stop=""  @click="onAdd2carBtnClick(k)"></van-button>
+                <div class="goodsFooter">
+                  <div class="goodsPriceBox">
+                    <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
+                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{(k.price - k.discount).toFixed(2)}}
+                      <span
+                        style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                      <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                    </p>
+
+                    <p v-else
+                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                    </p>
+                  </div>
+                  <div class="goodsBuyBox">
+                    <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                  </div>
                 </div>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
+        </div>-->
+      </div>
+      <div v-else>
+        <ly-tab :id="fixedBarId" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
+                @change="onTabChanged"
+                :style="{'background-color': datas.settings.floorTitleColor}">
+        </ly-tab>
+        <div>
+          <div v-for="(category,index) in datas.list" :title=category.title :key="index">
+            <ul :id="sectionGoodsListId"
+                :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' "
+                :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
+              <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
+                <img v-lazy="k.imagePath || k.image">
+                <div class="goodsComment">
+                  <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
+                </div>
+                <div class="goodsFooter">
+                  <div class="goodsPriceBox">
+                    <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
+                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{(k.price - k.discount).toFixed(2)}}
+                      <span
+                        style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                      <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                    </p>
+
+                    <p v-else
+                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                      {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                    </p>
+                  </div>
+                  <div class="goodsBuyBox">
+                    <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -334,15 +383,6 @@
             width: 80%;
             line-height: 2em;
             margin-left: 5px;
-            >p{
-              .fz(font-size, 32);
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
-              word-break: break-all;
-            }
 
             > span {
               display: inline-block;
@@ -361,12 +401,12 @@
           }
 
           .goodsBuyBox {
+            width: 20%;
             justify-content: center;
             line-height: 2em;
-            width: 20%;
+
             .van-button {
-              margin-top: 5px;
-              margin-right: 1px;
+              margin: 1vw;
               background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
               background-size: 15px 15px;
               border: none;
@@ -443,23 +483,12 @@
           flex-direction: row;
           justify-items: center;
           min-height: 2em;
-          padding-bottom: .2em;
+          padding-bottom: .1em;
 
           .goodsPriceBox {
             width: 80%;
             line-height: 2em;
             margin-left: 5px;
-            margin-top: 2px;
-
-            >p{
-              .fz(font-size, 26);
-              overflow: hidden;
-              text-overflow: ellipsis;
-              display: -webkit-box;
-              -webkit-box-orient: vertical;
-              -webkit-line-clamp: 1;
-              word-break: break-all;
-            }
 
             > span {
               display: inline-block;
@@ -473,18 +502,17 @@
               bottom: 0;
               left: 0;
               color: #ff4444;
-
+              .fz(font-size, 30);
             }
           }
 
           .goodsBuyBox {
+            width: 20%;
             justify-content: center;
             line-height: 2em;
-            width: 20%;
 
             .van-button {
-              margin-top: 5px;
-              margin-right: 1px;
+              margin: 1vw;
               background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
               background-size: 15px 15px;
               border: none;
@@ -519,13 +547,6 @@
       background-color: #ffffff;
     }
 
-    .item {
-      display: inline-block;
-    }
-
-    .nav {
-      padding: 10px;
-    }
 
     .link {
       color: inherit;
