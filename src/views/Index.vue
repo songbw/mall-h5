@@ -198,15 +198,18 @@
       this.showHeader = this.$api.HAS_HEADER;
       if (this.$api.IS_GAT_APP) {
         // this.testGAT();
-        setTimeout(() => {
-          if(this.userTokenLoading) {
-            this.userTokenLoading = false;
-          }
-        }, 20000);
         let auth_code = this.$route.query.auth_code;
         if (auth_code != undefined) {
           this.getThirdPartyAccessTokenInfo(auth_code)
+          setTimeout(() => {
+            if(this.userTokenLoading) {
+              this.userTokenLoading = false;
+            }
+          }, 20000);
+        } else {
+          this.userTokenLoading = false;
         }
+
       } else {//非关爱通App
         this.test();
         setTimeout(() => {
