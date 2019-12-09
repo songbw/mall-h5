@@ -48,7 +48,7 @@
       width: 100%;
       height: 100vh;
       background:url('../assets/icons/ico_splash.png') no-repeat center;
-      background-size: 90vw 90vh;
+      background-size: 98% 98%;
       z-index: 1;
     }
   }
