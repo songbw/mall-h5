@@ -6,6 +6,7 @@
   "TESTSTUB_PAYMENT_URL": "http://192.168.200.122:8088",
   "SERVR_PHONE_NUM": "010-58695954",
   "GOODS_URL_PREFIX": "https://iwallet-1258175138.file.myqcloud.com",
+  "IS_SUPPORTED_MULTI_POINT": true,
   "MALL_TITLE" : "公共平台"
 }
 

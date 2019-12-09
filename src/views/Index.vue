@@ -211,7 +211,7 @@
         }
 
       } else {//非关爱通App
-        this.test();
+     //   this.test();
         setTimeout(() => {
           if(this.userTokenLoading) {
             this.userTokenLoading = false;
