@@ -7,7 +7,7 @@ import LyTab from 'ly-tab'
 import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueQRCodeComponent from 'vue-qrcode-component'
-//import VConsole from 'vconsole'
+import VConsole from 'vconsole'
 import md5 from 'js-md5';
 import {
   Button,
@@ -54,9 +54,9 @@ import {
   CollapseItem
 } from 'vant';
 
-/*if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   new VConsole()
-}*/
+}
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)

@@ -20,7 +20,7 @@
         const Snowflakes = require('magic-snowflakes');
         this.sf = new Snowflakes({
           color: '#ffffff', // Default: "#5ECDEF"
-          //container: document.querySelector('#snowflakes-container'), // Default: document.body
+          container: document.querySelector('#snowflakes-container'), // Default: document.body
           count: 100, // 100 snowflakes. Default: 50
           minOpacity: 0.1, // From 0 to 1. Default: 0.6
           maxOpacity: 0.95, // From 0 to 1. Default: 1
@@ -42,11 +42,13 @@
     width: 100%;
     height: 100vh;
     top: 0px;
-    background: linear-gradient(45deg,#fc4444,#c779d0,#4bc0c8);
+ //   background: linear-gradient(45deg,#ca273a,#ca273a,#ca273a);
+    background-color:#ca273a;
     .centerContext {
       width: 100%;
       height: 100vh;
       background:url('../assets/icons/ico_splash.png') no-repeat center;
+      background-size: 90vw 90vh;
       z-index: 1;
     }
   }
