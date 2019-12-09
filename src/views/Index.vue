@@ -7,57 +7,59 @@
     <div v-if="pageloading || userTokenLoading">
       <v-splash></v-splash>
     </div>
-    <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
-      <div v-if="this.mHeader.backgroundColor != null">
-        <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
-          <van-search placeholder="搜索您感兴趣的商品"
-                      shape="round"
-                      :background=this.mHeader.backgroundColor
-                      readonly
-                      @click="onSearchInputClick()"
-                      v-if="this.mHeader.showSearchBar"/>
+    <div v-else>
+      <div :style="{'background-color': mBackgroundColor}" class="home-body">
+        <div v-if="this.mHeader.backgroundColor != null">
+          <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
+            <van-search placeholder="搜索您感兴趣的商品"
+                        shape="round"
+                        :background=this.mHeader.backgroundColor
+                        readonly
+                        @click="onSearchInputClick()"
+                        v-if="this.mHeader.showSearchBar"/>
+          </div>
+          <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
         </div>
-        <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
-      </div>
-      <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px'">
-        <div v-for="item in datas">
-          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
-            <v-swiper :datas="item.data"/>
-          </div>
-          <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
-            <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
-            <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
-            <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='7'" :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
-            <v-imgmap :datas="item.data"/>
-          </div>
-          <div v-else-if="item.type==='4'">
-            <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='8'">
-            <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
+        <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px'">
+          <div v-for="item in datas">
+            <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
+              <v-swiper :datas="item.data"/>
+            </div>
+            <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
+              <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
+              <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
+              <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='7'" :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
+              <v-imgmap :datas="item.data"/>
+            </div>
+            <div v-else-if="item.type==='4'">
+              <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='8'">
+              <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
+            </div>
           </div>
         </div>
+        <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
       </div>
-      <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
+      <van-dialog
+        v-model="showDialog"
+        :showConfirmButton="false"
+        :closeOnClickOverlay="true"
+        style="background-color: transparent"
+      >
+        <div class="giftDialog" v-if="icon_gift.length > 0">
+          <img :src=icon_gift @click="onGiftDialogImgClick">
+          <van-icon name="close" @click="onGiftDialogCloseBtnClicks"/>
+        </div>
+      </van-dialog>
+      <v-footer></v-footer>
     </div>
-    <van-dialog
-      v-model="showDialog"
-      :showConfirmButton="false"
-      :closeOnClickOverlay="true"
-      style="background-color: transparent"
-    >
-      <div class="giftDialog" v-if="icon_gift.length > 0">
-        <img :src=icon_gift @click="onGiftDialogImgClick">
-        <van-icon name="close" @click="onGiftDialogCloseBtnClicks"/>
-      </div>
-    </van-dialog>
-    <v-footer></v-footer>
   </div>
 </template>
 
