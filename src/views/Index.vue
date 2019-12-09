@@ -5,7 +5,7 @@
       <h1 slot="title">凤巢商城</h1>
     </v-header>
     <div v-if="pageloading || userTokenLoading">
-      <v-loading></v-loading>
+      <v-splash></v-splash>
     </div>
     <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
       <div v-if="this.mHeader.backgroundColor != null">
@@ -71,7 +71,7 @@
   import sectionImgMap from '@/components/index/sectionImgMap.vue'
   import sectionCompBox from '@/components/index/sectionCompBox.vue'
   import Baseline from '@/common/_baseline.vue'
-  import Loading from '@/common/_loading.vue'
+  import Splash from '@/common/splash.vue'
   import Footer from '@/common/_footer.vue'
 
   import Util from '@/util/common'
@@ -87,7 +87,7 @@
       'v-imgmap': sectionImgMap,
       'v-sectionCompBox': sectionCompBox,
       'v-baseline': Baseline,
-      'v-loading': Loading,
+      'v-splash': Splash,
       'v-footer': Footer
     },
 
@@ -491,6 +491,7 @@
         // let openId = "d6c88055c3ab42a39d605ed2767a8b9d"
         // let openId = "ace1c1722b834309a59fad302fe357b2"
         let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        // let openId = "orqF45MIKg_GamvQNQXsxwpBl2GU"
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         this.$log("openId:" + openId);
