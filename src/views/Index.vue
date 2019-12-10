@@ -34,7 +34,8 @@
             <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
               <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
             </div>
-            <div v-else-if="item.type==='7'" :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
+            <div v-else-if="item.type==='7'"
+                 :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
               <v-imgmap :datas="item.data"/>
             </div>
             <div v-else-if="item.type==='4'">
@@ -132,68 +133,35 @@
     beforeCreate() {
       let that = this;
       this.pageloading = true;
-      if(this.$api.IS_SUPPORTED_MULTI_POINT) {
-        this.$api.xapi({
-          method: 'get',
-          baseURL: this.$api.AGGREGATION_BASE_URL,
-          url: '/aggregation/findHomePage',
-          params: {
-            appId: this.$api.APP_ID
+      this.$api.xapi({
+        method: 'get',
+        baseURL: this.$api.AGGREGATION_BASE_URL,
+        url: '/aggregation/findHomePage',
+      }).then((response) => {
+        let jsonString = response.data.data.result.content
+        this.datas = JSON.parse(jsonString);
+        for (let i = 0; i < this.datas.length; i++) {
+          if (this.datas[i].type === '4')
+            this.datas[i].data.id = 0;
+        }
+        this.$log(this.datas);
+        this.$log(response.data.data.result)
+        this.mBackgroundColor = response.data.data.result.backgroundColor
+        if (response.data.data.result.header != undefined) {
+          let header = JSON.parse(response.data.data.result.header)
+          this.mHeader = header
+          if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
+            this.icon_gift = this.mHeader.novicePackUrl
           }
-        }).then((response) => {
-          let jsonString = response.data.data.result.content
-          this.datas = JSON.parse(jsonString);
-          for (let i = 0; i < this.datas.length; i++) {
-            if (this.datas[i].type === '4')
-              this.datas[i].data.id = 0;
-          }
-          this.$log(this.datas);
-          this.$log(response.data.data.result)
-          this.mBackgroundColor = response.data.data.result.backgroundColor
-          if (response.data.data.result.header != undefined) {
-            let header = JSON.parse(response.data.data.result.header)
-            this.mHeader = header
-            if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
-              this.icon_gift = this.mHeader.novicePackUrl
-            }
-          }
-          this.$log(this.mHeader);
-          this.pageloading = false;
-        }).catch(function (error) {
-          //alert(error)
-          that.$log(error)
-          that.pageloading = false;
-        })
-      } else {
-        this.$api.xapi({
-          method: 'get',
-          baseURL: this.$api.AGGREGATION_BASE_URL,
-          url: '/aggregation/findHomePage',
-        }).then((response) => {
-          let jsonString = response.data.data.result.content
-          this.datas = JSON.parse(jsonString);
-          for (let i = 0; i < this.datas.length; i++) {
-            if (this.datas[i].type === '4')
-              this.datas[i].data.id = 0;
-          }
-          this.$log(this.datas);
-          this.$log(response.data.data.result)
-          this.mBackgroundColor = response.data.data.result.backgroundColor
-          if (response.data.data.result.header != undefined) {
-            let header = JSON.parse(response.data.data.result.header)
-            this.mHeader = header
-            if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
-              this.icon_gift = this.mHeader.novicePackUrl
-            }
-          }
-          this.$log(this.mHeader);
-          this.pageloading = false;
-        }).catch(function (error) {
-          //alert(error)
-          that.$log(error)
-          that.pageloading = false;
-        })
-      }
+        }
+        this.$log(this.mHeader);
+        this.pageloading = false;
+      }).catch(function (error) {
+        //alert(error)
+        that.$log(error)
+        that.pageloading = false;
+      })
+
     },
 
     created() {
@@ -204,7 +172,7 @@
         if (auth_code != undefined) {
           this.getThirdPartyAccessTokenInfo(auth_code)
           setTimeout(() => {
-            if(this.userTokenLoading) {
+            if (this.userTokenLoading) {
               this.userTokenLoading = false;
             }
           }, 20000);
@@ -215,40 +183,40 @@
       } else {//非关爱通App
         //this.test();
         setTimeout(() => {
-          if(this.userTokenLoading) {
+          if (this.userTokenLoading) {
             this.userTokenLoading = false;
           }
         }, 10000);
-        if(this.$api.IS_WX_GZH) {//微信公众号端登录
-            let authCode = this.$route.query.code ;
-            let state =  this.$route.query.state;
-            this.$log("authCode:"+authCode)
-            if(authCode != undefined) {
-              this.wxLogin(this.$api.APP_ID,authCode,state)
-            } else {
-              this.userTokenLoading = false;
-            }
+        if (this.$api.IS_WX_GZH) {//微信公众号端登录
+          let authCode = this.$route.query.code;
+          let state = this.$route.query.state;
+          this.$log("authCode:" + authCode)
+          if (authCode != undefined) {
+            this.wxLogin(this.$api.APP_ID, authCode, state)
+          } else {
+            this.userTokenLoading = false;
+          }
         }
       }
     },
     computed: {
       userToken() {
-        return  this.$store.state.appconf.token;
+        return this.$store.state.appconf.token;
       },
       mlocation() {
         return this.$store.state.appconf.location;
       },
       guysinfo() {
-        return  this.$store.state.appconf.guysInfo;
+        return this.$store.state.appconf.guysInfo;
       },
     },
-    watch:{
+    watch: {
       guysinfo(newValue, oldVal) {
-        if(newValue.length > 1) {
-          let flag = newValue.substr(0,1)
-          let data = flag +this.$md5(this.$store.state.appconf.token)
-          if(data == newValue) {
-            if(flag == '1' && !this.$api.IS_GAT_APP) {
+        if (newValue.length > 1) {
+          let flag = newValue.substr(0, 1)
+          let data = flag + this.$md5(this.$store.state.appconf.token)
+          if (data == newValue) {
+            if (flag == '1' && !this.$api.IS_GAT_APP) {
               this.showDialog = true
             }
           }
@@ -258,8 +226,8 @@
         if (newValue && newValue.length > 0) {
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
-             this.userTokenLoading= false;
-             this.loadCartList()
+            this.userTokenLoading = false;
+            this.loadCartList()
           }
         }
       },
@@ -268,51 +236,65 @@
       updateUserDatail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
       },
-      async wxLogin(appId,authCode,state){
+      async wxLogin(appId, authCode, state) {
         this.$log("wxLogin Enter")
         let that = this
         try {
-          let resp = await this.getWxOpenId(appId,authCode,state)
+          let resp = await this.getWxOpenId(appId, authCode, state)
           this.$log(resp)
-          if(resp.data.code == 200) {
+          if (resp.data.code == 200) {
             let wxOpenId = resp.data.data.openid;
             let accessToken = resp.data.data.access_token
             this.$store.commit('SET_WX_OPENID', wxOpenId);
-            resp = await this.isWxOpendBinded(appId,wxOpenId)
-            this.$log(resp)
-            if(resp.data.code == 200) {
-               let userDetail = resp.data.data
-               if(userDetail != null) {
-                 let openId = userDetail.openId
-                 let userId = this.$api.APP_ID + openId;
-                 let userInfo = {
-                   openId: openId,
-                   accessToken: accessToken,
-                   userId: userId
-                 }
-                 that.$log("userInfo  is:" + JSON.stringify(userInfo));
-                 that.$store.commit('SET_USER', JSON.stringify(userInfo));
-                 that.updateUserDatail(userDetail)
-                 that.thirdPartLogined(openId, accessToken)
-               } else {
-                 //未绑定用户
-                 this.$router.push({name: '登录页'})
-               }
+            if (this.$api.APP_ID == '01' || this.$api.APP_ID == '02') {
+              let openId = wxOpenId
+              let userId = this.$api.APP_ID + openId;
+              let userInfo = {
+                openId: openId,
+                accessToken: accessToken,
+                userId: userId
+              }
+              that.$log("userInfo  is:" + JSON.stringify(userInfo));
+              that.$store.commit('SET_USER', JSON.stringify(userInfo));
+              that.thirdPartLogined(openId, accessToken)
             } else {
-            //  this.$toast("获取用户信息失败")
-              this.userTokenLoading= false;
+              resp = await this.isWxOpendBinded(appId, wxOpenId)
+              this.$log(resp)
+              if (resp.data.code == 200) {
+                let userDetail = resp.data.data
+                if (userDetail != null) {
+                  let openId = userDetail.openId
+                  let userId = this.$api.APP_ID + openId;
+                  let userInfo = {
+                    openId: openId,
+                    accessToken: accessToken,
+                    userId: userId
+                  }
+                  that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                  that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                  that.updateUserDatail(userDetail)
+                  that.thirdPartLogined(openId, accessToken)
+                } else {
+                  //未绑定用户
+                  this.$router.push({name: '登录页'})
+                }
+              } else {
+                //  this.$toast("获取用户信息失败")
+                this.userTokenLoading = false;
+              }
             }
 
+
           } else {
-           // this.$toast("获取用户授权信息失败")
-            this.userTokenLoading= false;
+            // this.$toast("获取用户授权信息失败")
+            this.userTokenLoading = false;
           }
         } catch (e) {
 
         }
       },
-      getWxOpenId(appId,code,state) {
-        return  this.$api.xapi({
+      getWxOpenId(appId, code, state) {
+        return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/wx',
@@ -323,7 +305,7 @@
         })
       },
 
-      isWxOpendBinded(appId,wxOpenId) {
+      isWxOpendBinded(appId, wxOpenId) {
         return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.SSO_BASE_URL,
@@ -373,7 +355,7 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState(this,{promotion: promotion})
+            "promotionState": Util.getPromotionState(this, {promotion: promotion})
           }
           cartItem = {
             "baseInfo": baseInfo,
@@ -399,42 +381,42 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState(this,{promotion: promotion})
+            "promotionState": Util.getPromotionState(this, {promotion: promotion})
           }
           cartItem.couponList = couponList
           cartItem.promotionInfo = promotionInfo
         }
         Util.updateCartItem(this, cartItem)
       },
-     loadCartList() {
-       let that = this
-       let userInfo = this.$store.state.appconf.userInfo;
-       if (!Util.isUserEmpty(userInfo)) {
-         let user = JSON.parse(userInfo);
-         let that = this
-         let options = {
-           "openId": user.userId,
-           "pageNo": 1,
-           "pageSize": 100
-         }
-         this.$api.xapi({
-           method: 'post',
-           baseURL: this.$api.ORDER_BASE_URL,
-           url: '/cart/all',
-           data: options,
-         }).then(async (response) => {
-           this.result = response.data.data.result;
-           this.$log(this.result.object)
-           if (this.result.object.cart != undefined && this.result.object.cart.length > 0) {
-             let couponsAndProms = this.result.object.couponProm
-             this.result.object.cart.forEach(item => {
-               this.upDateSkuInfo(item, couponsAndProms, user)
-             })
-           }
-         }).catch(function (error) {
-           that.$log(error)
-         })
-       }
+      loadCartList() {
+        let that = this
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          let user = JSON.parse(userInfo);
+          let that = this
+          let options = {
+            "openId": user.userId,
+            "pageNo": 1,
+            "pageSize": 100
+          }
+          this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/cart/all',
+            data: options,
+          }).then(async (response) => {
+            this.result = response.data.data.result;
+            this.$log(this.result.object)
+            if (this.result.object.cart != undefined && this.result.object.cart.length > 0) {
+              let couponsAndProms = this.result.object.couponProm
+              this.result.object.cart.forEach(item => {
+                this.upDateSkuInfo(item, couponsAndProms, user)
+              })
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
       },
       isValidLeavedPath(to) {
         let path = to.path;
@@ -491,7 +473,7 @@
       test() {
         // let openId = "44391000fd194ab888b1aa81c03c3740"
         // let openId = "d6c88055c3ab42a39d605ed2767a8b9d"
-         let openId = "ace1c1722b834309a59fad302fe357b2"
+        let openId = "ace1c1722b834309a59fad302fe357b2"
         //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         // let openId = "orqF45MIKg_GamvQNQXsxwpBl2GU"
         if (this.$api.TEST_USER.length > 0)
@@ -509,8 +491,8 @@
           this.$store.commit('SET_USER', JSON.stringify(userInfo));
           this.thirdPartLogined(openId, accessToken);
         }
-/*        let requestCode = "12345678"
-        this.getPingAnThirdPartyAccessTokenInfo(requestCode)*/
+        /*        let requestCode = "12345678"
+                this.getPingAnThirdPartyAccessTokenInfo(requestCode)*/
       },
       closeWindow() {
         if (!this.$api.IS_GAT_APP) {
@@ -586,15 +568,15 @@
           this.$log("local information:" + JSON.stringify(rt));
           if (rt.token != null) {
             that.$store.commit('SET_TOKEN', rt.token);
-            this.$log("setToken:"+  rt.token)
-            let data= this.$md5(rt.token)
-            if(rt.newUser) {
-              data =  "1" + data
+            this.$log("setToken:" + rt.token)
+            let data = this.$md5(rt.token)
+            if (rt.newUser) {
+              data = "1" + data
             } else {
-              data =  "0" + data
+              data = "0" + data
             }
             this.$log(data)
-            that.$store.commit('SET_GUYS_INFO',data);
+            that.$store.commit('SET_GUYS_INFO', data);
           }
         }).catch(function (error) {
           that.$log(error)
@@ -853,7 +835,7 @@
       }
     }
 
-    .ltRtMargin{
+    .ltRtMargin {
       margin-left: 5px;
       margin-right: 5px;
     }

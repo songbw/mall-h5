@@ -61,6 +61,7 @@
         let isQpayCardSaved = result.data.IS_QUICKPAY_CARD_SAVED
         this.$api.GOODS_URL_PREFIX = result.data.GOODS_URL_PREFIX
         this.$api.APP_ID = result.data.iAppID
+        this.$store.commit('SET_APPID', this.$api.APP_ID);
         this.$api.T_APP_ID = result.data.tAppID
         this.$api.APP_SOURCE = "00"
         if (result.data.APP_SOURCE != undefined) {
@@ -121,15 +122,17 @@
               this.configured = true
               break;
           }
-        } else if (this.$api.APP_ID == "01") {
-          switch (this.$api.APP_SOURCE) {//APP
+        } else if (this.$api.APP_ID == "01"||this.$api.APP_ID == "02") {
+          switch (this.$api.APP_ID) {//APP
             case '01': {//微信公众号
+              this.$log("微信公众号")
               this.$api.IS_WX_GZH = true;
               this.clearStorage();
               this.configured = true
               break;
             }
             default://nothing to do
+              this.$log("微信小程序")
               this.configured = true
               break;
           }

@@ -92,3 +92,5 @@ export const SET_CURRENT_OPT_CARDS = 'SET_CURRENT_OPT_CARDS'
 export const SET_GUYS_INFO = 'SET_GUYS_INFO'
 
 export const SET_WX_OPENID = 'SET_WX_OPENID'
+
+export const SET_APPID = 'SET_APPID'
