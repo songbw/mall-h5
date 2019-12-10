@@ -10,14 +10,14 @@
             </span>
           </div>
           <div v-if="datas.settings.title.hasPromotionActivity && promotionStatus != -1">
-            <div v-if="isDailySchedule" style="font-size: x-small">
+            <div v-if="isDailySchedule"  class="promotionDetail">
               <span style="color:black">{{dailyScheduleText}}</span>
               <span style="color:black"> {{dailyScheduleDetail}}</span>
-              <span style="color:white;background-color: black;padding: 2px">{{msTime.hour}}</span>
+              <span style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.hour}}</span>
               <span style="color: black">:</span>
-              <span style="color:white;background-color: black;padding: 2px">{{msTime.minutes}}</span>
+              <span style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.minutes}}</span>
               <span style="color: black">:</span>
-              <span style="color:white;background-color: black;padding: 2px">{{msTime.seconds}}</span>
+              <span style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.seconds}}</span>
             </div>
             <div v-else>
               <v-countdown v-if="promotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
@@ -571,6 +571,16 @@
       color: black;
       font-weight: bold;
       width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 1;
+      word-break: break-all;
+    }
+
+    .promotionDetail{
+      font-size: x-small;
       overflow: hidden;
       text-overflow: ellipsis;
       display: -webkit-box;
