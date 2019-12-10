@@ -8,7 +8,7 @@
         <span>精选</span>
       </div>
       <div class="orderByPrice" @click="onPriceBtnClick">
-        <span>按价格排序</span>
+        <span>按价格排序</span>s
         <img :src="icon_select_none">
       </div>
     </div>
