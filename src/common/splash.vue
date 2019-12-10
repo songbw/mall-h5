@@ -1,6 +1,7 @@
 <template lang="html">
-  <div class="splash"  >
-    <div class="centerContext" id="snowflakes-container">
+  <div class="splash">
+    <div class="centerContext">
+        <img :src="splashImg">
     </div>
   </div>
 </template>
@@ -14,6 +15,13 @@
     },
     mounted() {
       this.snow()
+    },
+    beforeDestroy() {
+      setTimeout(() => {
+        if(this.sf != null) {
+          this.sf.destroy()
+        }
+      }, 5000);
     },
     methods: {
       snow() {
@@ -40,16 +48,21 @@
 <style lang="less" scoped>
   .splash {
     width: 100%;
-    height: 100vh;
+    height: 100%;
     top: 0px;
  //   background: linear-gradient(45deg,#ca273a,#ca273a,#ca273a);
     background-color:#ca273a;
     .centerContext {
       width: 100%;
-      height: 100vh;
-      background:url('../assets/icons/ico_splash.png') no-repeat center;
-      background-size: 98% 98%;
-      z-index: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: Center;
+
+      img{
+         height: 100vh;
+      }
     }
   }
 
