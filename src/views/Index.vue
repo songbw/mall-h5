@@ -246,7 +246,7 @@
             let wxOpenId = resp.data.data.openid;
             let accessToken = resp.data.data.access_token
             this.$store.commit('SET_WX_OPENID', wxOpenId);
-            if (this.$api.APP_ID == '01' || this.$api.APP_ID == '02') {
+            if (this.$api.APP_ID == '01') {
               let openId = wxOpenId
               let userId = this.$api.APP_ID + openId;
               let userInfo = {

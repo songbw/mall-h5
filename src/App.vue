@@ -122,7 +122,7 @@
               this.configured = true
               break;
           }
-        } else if (this.$api.APP_ID == "01"||this.$api.APP_ID == "02") {
+        } else if (this.$api.APP_ID == "01") {
           switch (this.$api.APP_ID) {//APP
             case '01': {//微信公众号
               this.$log("微信公众号")
