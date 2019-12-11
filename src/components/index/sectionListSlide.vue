@@ -144,6 +144,8 @@
 
     methods: {
       getAdaptedPromotion() {
+        this.$log(this.datas)
+
         return null;
       },
       updateTimer(startTime, endTime) {
@@ -274,7 +276,7 @@
             that.show = false;
           })
         } else {
-            let promotion = getAdaptedPromotion();
+            let promotion = this.getAdaptedPromotion();
             if(promotion != null) {
 
             }
