@@ -124,14 +124,9 @@
     },
 
     created() {
-      if (this.datas.settings.title.hasPromotionActivity) {
-        /*        this.PromotionStartTime = new Date(this.datas.settings.title.promotionActivityStartDate.replace(/-/g, '/')).getTime()
-                  this.PromotionEndTime = new Date(this.datas.settings.title.promotionActivityEndDate.replace(/-/g, '/')).getTime()*/
-        this.promotionActivityId = this.datas.settings.title.promotionActivityId
-        this.updatePromotionInfo();
-      } else {
-        this.show = true;
-      }
+      this.$log("sectionListSlide Created")
+      this.$log(this.datas)
+      this.updatePromotionInfo();
     },
 
     activated() {
@@ -148,6 +143,9 @@
     },
 
     methods: {
+      getAdaptedPromotion() {
+        return null;
+      },
       updateTimer(startTime, endTime) {
         let timeDistance = endTime - startTime;
         if (timeDistance > 0) {
@@ -276,7 +274,11 @@
             that.show = false;
           })
         } else {
-          if (this.promotionActivityId > 0) {
+            let promotion = getAdaptedPromotion();
+            if(promotion != null) {
+
+            }
+/*          if (this.promotionActivityId > 0) {
             let that = this
             this.$api.xapi({
               method: 'get',
@@ -305,7 +307,7 @@
               that.$log(error)
               that.show = false;
             })
-          }
+          }*/
         }
       },
       isDeepColor(hexColor) {

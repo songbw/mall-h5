@@ -44,6 +44,9 @@
             <div v-else-if="item.type==='8'">
               <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
             </div>
+            <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
+              <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
           </div>
         </div>
         <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
@@ -70,6 +73,7 @@
   import sectionService from '@/components/index/sectionService.vue'
   import sectionSquared from '@/components/index/sectionSquared.vue'
   import sectionSlide from '@/components/index/sectionSlide.vue'
+  import sectionListSilde from '@/components/index/sectionListSlide.vue'
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import sectionImgMap from '@/components/index/sectionImgMap.vue'
   import sectionCompBox from '@/components/index/sectionCompBox.vue'
@@ -86,6 +90,7 @@
       'v-service': sectionService,
       'v-sectionSquared': sectionSquared,
       'v-sectionSlide': sectionSlide,
+      'v-sectionListSlide': sectionListSilde,
       'v-sectionGoods': sectionGoods,
       'v-imgmap': sectionImgMap,
       'v-sectionCompBox': sectionCompBox,
