@@ -100,10 +100,10 @@
           this.$api.IS_GAT_APP = true;
           this.clearStorage();
           this.configured = true
-        } else if (this.$api.APP_ID == "11") {
+        } else if (this.$api.APP_ID == "11"||this.$api.APP_ID == "12") {
           switch (this.$api.APP_SOURCE) {//APP
             case "00": {
-              this.$log("无锡市民卡App")
+              this.$log("App")
               this.getLoginAuthInfo();
               setTimeout(() => {
                 this.configured = true
@@ -111,14 +111,14 @@
               break;
             }
             case "01": {//微信公众号
-              this.$log("无锡市民卡公众号")
+              this.$log("公众号")
               this.$api.IS_WX_GZH = true;
               this.clearStorage();
               this.configured = true
               break;
             }
             default://nothing to do
-              this.$log("无锡市民卡其它")
+              this.$log("其它")
               this.configured = true
               break;
           }
