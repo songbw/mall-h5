@@ -253,6 +253,10 @@
             return "关爱通苏宁易购";
           case "11":
             return "无锡市民卡";
+          case "12":
+            return "最珠海";
+          case "01":
+            return "凤巢公众号"
           default:
             return "凤巢商城"
 
