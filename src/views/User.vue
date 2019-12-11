@@ -19,21 +19,9 @@
           </div>
         </header>
       </div>
-      <div class="coupon-box" v-if="this.$api.IS_GAT_APP">
+      <div class="wealth-box">
         <div class="coupon-info">
-          <div class="my-coupon" @click="onMyCouponClick">
-            <img :src="myCouponIcon"/>
-            <span>我的优惠券</span>
-          </div>
-          <div class="coupon-change" @click="onChangeCouponClick">
-            <img :src="chCouponIcon"/>
-            <span>兑换优惠券</span>
-          </div>
-        </div>
-      </div>
-      <div class="wealth-box" v-else-if="this.$api.APP_ID == '11'">
-        <div class="coupon-info">
-          <div class="my-coupon" @click="onMyCoinAccountClick">
+          <div class="my-coupon" @click="onMyCoinAccountClick" v-if="this.$api.APP_ID == '11'">
             <img :src="myCoinAccountIcon"/>
             <span>我的余额</span>
           </div>
@@ -71,18 +59,20 @@
         </div>
       </div>
       <div class="settingsBox">
-        <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
-          <img slot="icon" :src="icon_optCard"/>
-        </van-cell>
-        <van-cell title="市民卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
-          <img slot="icon" :src="icon_linkPayCard"/>
-        </van-cell>
-<!--        <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
-          <img slot="icon" :src="icon_quickPayCard"/>
-        </van-cell>-->
-        <van-cell title="我的钱包" is-link @click="onShangHaiBankBtnClick">
-          <img slot="icon" :src="icon_bankCard"/>
-        </van-cell>
+        <div v-if="this.$api.APP_ID == '11'">
+          <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
+            <img slot="icon" :src="icon_optCard"/>
+          </van-cell>
+          <van-cell title="市民卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
+            <img slot="icon" :src="icon_linkPayCard"/>
+          </van-cell>
+          <!--        <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
+                    <img slot="icon" :src="icon_quickPayCard"/>
+                  </van-cell>-->
+          <van-cell title="我的钱包" is-link @click="onShangHaiBankBtnClick">
+            <img slot="icon" :src="icon_bankCard"/>
+          </van-cell>
+        </div>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon"/>
         </van-cell>
