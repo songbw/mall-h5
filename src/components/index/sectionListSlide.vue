@@ -144,7 +144,14 @@
 
     methods: {
       getAdaptedPromotion() {
-        this.$log(this.datas)
+        this.$log(this.datas.list)
+        if(this.datas.list != null && this.datas.list.length > 0) {
+          let currentTime = new Date().getTime();
+          
+        }
+        else {
+
+        }
 
         return null;
       },
