@@ -18,7 +18,7 @@
         <van-cell title="实际销售单价" title-class="CellTitle" v-if="goods.unitPrice != goods.salePrice">
           ￥{{goods.salePrice.toFixed(2)}}元
         </van-cell>
-        <van-cell title="状态" title-class="CellTitle" :value="formatWOrderStatus(requestState)"></van-cell>
+<!--        <van-cell title="状态" title-class="CellTitle" :value="formatWOrderStatus(requestState)"></van-cell>-->
       </div>
       <div class="requireTypeBox">
         <van-cell title="申请类型" title-class="CellTitle"></van-cell>
