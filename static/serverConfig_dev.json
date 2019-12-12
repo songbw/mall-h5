@@ -5,8 +5,7 @@
   "SERVICE_URL":"http://192.168.200.37:8000",
   "TESTSTUB_PAYMENT_URL": "http://192.168.200.122:8088",
   "SERVR_PHONE_NUM": "010-58695954",
-  "GOODS_URL_PREFIX": "https://iwallet-1258175138.file.myqcloud.com",
-  "IS_SUPPORTED_MULTI_POINT": true,
+  "GOODS_URL_PREFIX": "https://iwallet-1258175138.image.myqcloud.com",
   "MALL_TITLE" : "开发环境"
 }
 
