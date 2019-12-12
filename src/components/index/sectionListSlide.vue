@@ -2,14 +2,17 @@
   <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}" v-if="show">
     <div class="wrap">
       <div class='box' :style="{'background-color': decorateBgColor}">
-        <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()"
+        <van-cell v-if="datas.settings.title.textValue.length > 0" @click="gotoTargetUrl()"
                   :style="{'background-color':decorateBgColor}">
           <div slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
-            <span>
+            <span v-if="isDailySchedule">
                {{datas.settings.title.textValue}}
             </span>
+            <span v-else>
+               {{titleName}}
+            </span>
           </div>
-          <div v-if="datas.settings.title.hasPromotionActivity && promotionStatus != -1">
+          <div v-if="promotionStatus != -1">
             <div v-if="isDailySchedule" class="promotionDetail">
               <span style="color:black">{{dailyScheduleText}}</span>
               <span style="color:black"> {{dailyScheduleDetail}}</span>
@@ -45,31 +48,61 @@
         </div>
       </div>
       <div class="listBox">
-        <div class="sectionSlide-list">
-          <ul>
-            <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
-              <img v-lazy="k.imagePath">
-              <p class="sectionSlide-list-intro">
-                {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
-              </p>
-              <div v-if="k.discount != undefined">
-                <div style="display: flex">
+        <div v-if="isDailySchedule">
+          <div class="sectionSlide-list">
+            <ul>
+              <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
+                <img v-lazy="k.imagePath">
+                <p class="sectionSlide-list-intro">
+                  {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
+                </p>
+                <div v-if="k.discount != undefined">
+                  <div style="display: flex">
+                    <p class="sectionSlide-list-sales-price">
+                      <span>￥</span>{{(k.price-k.discount).toFixed(2)}}
+                    </p>
+                    <p class="sectionSlide-list-origin-price">
+                      <span>￥</span>{{k.price}}
+                    </p>
+                  </div>
+                </div>
+                <div v-else>
                   <p class="sectionSlide-list-sales-price">
-                    <span>￥</span>{{(k.price-k.discount).toFixed(2)}}
-                  </p>
-                  <p class="sectionSlide-list-origin-price">
                     <span>￥</span>{{k.price}}
                   </p>
                 </div>
-              </div>
-              <div v-else>
-                <p class="sectionSlide-list-sales-price">
-                  <span>￥</span>{{k.price}}
-                </p>
-              </div>
-            </li>
-          </ul>
+              </li>
+            </ul>
+          </div>
         </div>
+        <div v-else>
+          <div class="sectionSlide-list">
+            <ul>
+              <li v-for="(k,index) in skuList" @click="onGoodsClick(k)" :key="index">
+                <img v-lazy="k.imagePath">
+                <p class="sectionSlide-list-intro">
+                  {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
+                </p>
+                <div v-if="k.discount != undefined">
+                  <div style="display: flex">
+                    <p class="sectionSlide-list-sales-price">
+                      <span>￥</span>{{(k.price-k.discount).toFixed(2)}}
+                    </p>
+                    <p class="sectionSlide-list-origin-price">
+                      <span>￥</span>{{k.price}}
+                    </p>
+                  </div>
+                </div>
+                <div v-else>
+                  <p class="sectionSlide-list-sales-price">
+                    <span>￥</span>{{k.price}}
+                  </p>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
       </div>
     </div>
   </section>
@@ -106,7 +139,8 @@
           seconds: "",
         },
         show: false,
-
+        skuList: [],
+        titleName: ""
       }
     },
     watch: {
@@ -132,10 +166,8 @@
     },
 
     activated() {
-      if (this.datas.settings.title.hasPromotionActivity) {
         this.isDailySchedule = false;
         this.updatePromotionInfo()
-      }
     },
 
     deactivated() {
@@ -170,11 +202,11 @@
             let currentTime = new Date().getTime();
             let ret = resp.data.data;
             this.datas.list.forEach(item => {
-              for(let i = 0 ;i < ret.length ; i++) {
-                 if(ret[i].id == item.promotionId) {
-                   item['status'] = ret[i].status;
-                   break;
-                 }
+              for (let i = 0; i < ret.length; i++) {
+                if (ret[i].id == item.promotionId) {
+                  item['status'] = ret[i].status;
+                  break;
+                }
               }
               item['startTime'] = new Date(this.$moment(item.startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
               item['endTime'] = new Date(this.$moment(item.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
@@ -190,7 +222,7 @@
             })
             this.$log(this.datas.list)
             let onGoingList = this.datas.list.filter((item) => {
-              return item.actived == 1 &&  (item.status < 5 && item.status > 2)
+              return item.actived == 1 && (item.status < 5 && item.status > 2)
             })
             if (onGoingList != null && onGoingList.length > 0) {//显示进行中最早结束的活动
               onGoingList.sort(function (a, b) {
@@ -199,7 +231,7 @@
               return onGoingList[0]
             } else {//显示未开始最早的活动
               let unStartedList = this.datas.list.filter((item) => {
-                return item.actived == 0 && (item.status < 5 && item.status > 2 )
+                return item.actived == 0 && (item.status < 5 && item.status > 2)
               })
               if (unStartedList != null && unStartedList.length > 0) {
                 unStartedList.sort(function (a, b) {
@@ -344,6 +376,8 @@
           if (promotion != null) {
             this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
             this.$log(promotion)
+            this.promotionActivityId = promotion.promotionId
+            this.titleName = promotion.promotionName
             this.PromotionStartTime = promotion.startTime
             this.PromotionEndTime = promotion.endTime
             this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
@@ -351,6 +385,7 @@
             this.promotionStatus = promotion.status;
             this.$log(this.PromotionStartTime)
             this.$log(this.PromotionEndTime)
+            this.skuList = promotion.skus
             this.show = true;
           }
           /*          if (this.promotionActivityId > 0) {
@@ -426,58 +461,9 @@
             mpu: mpu
           }
         });
-        /*        try {
-                  //获取goods信息，update current googds
-                  this.$api.xapi({
-                    method: 'get',
-                    baseURL: this.$api.PRODUCT_BASE_URL,
-                    url: '/prod',
-                    params: {
-                      mpu: mpu,
-                    }
-                  }).then((res) => {
-                    this.updateCurrentGoods(res.data.data.result);
-                    this.$router.push("/detail");
-                  }).catch((error) => {
-                    console.log(error)
-                  })
-                } catch (e) {
-
-                }*/
       },
       gotoTargetUrl() {
-        let targetId = this.datas.settings.title.targetUrl
-        if (targetId.startsWith("aggregation://")) {
-          let id = targetId.substr(14);
-          this.$router.push({path: '/index/' + id});
-        } else if (targetId.startsWith("route://")) {
-          let target = targetId.substr(8);
-          let paths = target.split("/");
-          this.$log(paths);
-          if (paths[0] === 'category') {
-            this.$router.push({path: '/category'})
-          } else if (paths[0] === 'coupon_center') {
-            this.$router.push({path: '/user/couponCenter'})
-          } else if (paths[0] === 'commodity') {
-            try {
-              if (paths[1] != null)
-                this.gotoGoodsPage(paths[1]);
-            } catch (e) {
-            }
-          } else if (paths[0] === 'promotion') {
-            try {
-              if (paths[1] != null) {
-                //this.gotoGoodsPage(paths[1]);
-                //this.$log("promotion:"+paths[1])
-                //this.gotoPromotionPage(paths[1]);
-                this.gotoPromotionPage(this.promotionActivityId)
-              }
-            } catch (e) {
-            }
-          }
-        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
-          this.See(targetId);
-        }
+        this.gotoPromotionPage(this.promotionActivityId)
       },
       onGoodsClick(goods) {
         let mpu = goods.mpu
@@ -489,24 +475,6 @@
             mpu: mpu
           }
         });
-        /*        try {
-                  //获取goods信息，update current googds
-                  this.$api.xapi({
-                    method: 'get',
-                    baseURL: this.$api.PRODUCT_BASE_URL,
-                    url: '/prod',
-                    params: {
-                      mpu: mpu,
-                    }
-                  }).then((res) => {
-                    this.updateCurrentGoods(res.data.data.result);
-                    this.$router.push("/detail");
-                  }).catch((error) => {
-                    console.log(error)
-                  })
-                } catch (e) {
-
-                }*/
       },
     }
   }
