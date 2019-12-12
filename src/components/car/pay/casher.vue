@@ -149,6 +149,9 @@
                   @click-right-icon="togLinkPayPwdVisable()"
                 />
               </div>
+              <van-cell title="统一支付" :icon="icon_unionpay" clickable @click="radio = '3'">
+                <van-radio slot="right-icon" name="3" checked-color="#FF4444"/>
+              </van-cell>
             </div>
             <van-cell title="快捷支付" :icon="icon_quicklypay" clickable @click="radio = '2'">
               <van-radio slot="right-icon" name="2" checked-color="#FF4444"/>
@@ -447,6 +450,11 @@
                 </van-dialog>
               </div>
             </div>
+            <div v-if="this.$api.APP_ID == '01'">
+              <van-cell title="微信支付" :icon="icon_wechatpay" clickable @click="radio = '4'">
+                <van-radio slot="right-icon" name="4" checked-color="#FF4444"/>
+              </van-cell>
+            </div>
           </van-radio-group>
         </div>
         <van-dialog
@@ -495,6 +503,8 @@
         icon_quicklypay: require('@/assets/icons/ico_quicklypay.png'),
         icon_linkpay: require('@/assets/icons/ico_linkpay.png'),
         icon_coin_balance: require('@/assets/icons/ico_coin_balance.png'),
+        icon_unionpay: require('@/assets/icons/ico_unionpay.png'),
+        icon_wechatpay: require('@/assets/icons/ico_wechatpay.png'),
         radio: -1,
         linkPayAccount: "",
         linkPayPwd: "",
@@ -1234,7 +1244,10 @@
           let wocPays = []
           let woaPay = null
           let bankPay = null
+          let pingAnPay = null
+          let fcWxPay = null
           this.payOptions = {
+            appId: this.$api.APP_ID,
             orderNo: this.orderInfo.orderNo
           }
           this.mPaylist.forEach(item => {
@@ -1377,6 +1390,21 @@
                 return
               }
 
+            } else if (this.radio == '3') {
+              pingAnPay = {
+                "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
+                "memberNo": user.payId,
+                "orderNo": this.orderInfo.orderNo,
+                "payType": "pingan"
+              }
+            } else if (this.radio == '4') {
+              fcWxPay = {
+                "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
+                "body": "凤巢商品",
+                "openId": user.openId,//微信openId
+                "orderNo": this.orderInfo.orderNo,
+                "payType": "fcwx"
+              }
             } else {
               this.$toast("金额不够支付，请选择支付方式")
               return;
@@ -1390,8 +1418,10 @@
             this.payOptions['wocPays'] = wocPays
           if (woaPay != null)
             this.payOptions['woaPay'] = woaPay
-          this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxxxx")
-          this.$log(bankPay)
+          if (pingAnPay != null)
+            this.payOptions['pingAnPay'] = pingAnPay
+          if (fcWxPay != null)
+            this.payOptions['fcWxPay'] = fcWxPay
           if (bankPay != null) {
             this.payOptions['bankPay'] = bankPay
             this.quickPayDlgShow = true
@@ -1407,12 +1437,50 @@
             }).then((response) => {
               this.$log(response)
               if (response.data.code == 200) {
-                this.$router.replace({
-                  path: '/pay/cashering',
-                  query: {
-                    outer_trade_no: this.orderInfo.orderNo
+                if (pingAnPay != null) {
+                  let ret = JSON.parse(response.data.data);
+                  this.$log("统一支付")
+                  this.$log(ret)
+                  if (ret != null) {//统一支付
+                    sc.pay({
+                      mchOrderNo: ret.mchOrderNo,
+                      payId: ret.payId,
+                      merchantNo: ret.merchantNo
+                    }, function (res) {
+                      if (res.code == 0) {
+                        that.$log("统一支付成功")
+                      } else {
+                        that.$log("统一支付失败")
+                      }
+                      that.$log("################################")
+                      that.$router.replace({
+                        path: '/pay/cashering',
+                        query: {
+                          outer_trade_no: that.orderInfo.orderNo
+                        }
+                      })
+                      //this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                      //this.$router.replace({path: '/car/orderList'})
+                    })
+                  } else {
+                    this.$router.replace({
+                      path: '/pay/cashering',
+                      query: {
+                        outer_trade_no: this.orderInfo.orderNo
+                      }
+                    })
                   }
-                })
+                } else if (fcWxPay != null) {
+                  this.$log("fcWxPay response @@@@@@@@@@@@@@@@@@@@@")
+
+                } else {
+                  this.$router.replace({
+                    path: '/pay/cashering',
+                    query: {
+                      outer_trade_no: this.orderInfo.orderNo
+                    }
+                  })
+                }
                 this.payBtnSubmitLoading = false;
               } else {
                 this.$toast(response.data.message)
@@ -1532,9 +1600,9 @@
         }
 
 
-
-        .wuxipayBox{
+        .wuxipayBox {
           width: 96%;
+
           .coinBalanceBox {
             margin-top: 10px;
             padding: 10px 0px;
@@ -1548,6 +1616,7 @@
               margin-top: -1px;
             }
           }
+
           .composePayBox {
             margin-top: 10px;
             padding: 10px 0px;
@@ -1561,6 +1630,7 @@
               margin-top: -1px;
             }
           }
+
           .optCardBox {
             margin-top: 10px;
             padding: 10px 0px;
@@ -1607,6 +1677,7 @@
             }
           }
         }
+
         .pathBox {
           margin-top: 10px;
           padding: 10px 0px;

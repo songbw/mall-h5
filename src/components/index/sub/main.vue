@@ -50,6 +50,9 @@
           <div v-else-if="item.type==='8'">
             <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
           </div>
+          <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
+            <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+          </div>
         </div>
       </div>
       <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>

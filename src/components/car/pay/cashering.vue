@@ -1,7 +1,7 @@
 <template lang="html">
   <div class="cashering">
     <v-header v-if="showHeader">
-      <h1 slot="title">订单支付中</h1>
+      <h1 slot="title">订单确认中...</h1>
     </v-header>
     <div class="box"></div>
     <div class="casheringBox">
@@ -28,7 +28,7 @@
         ico_clock: require('@/assets/icons/ico_clock.png'),
         timer: '',
         value: 0,
-        payInfoText:'完成支付后，页面将自动跳转...'
+        payInfoText:'确认完成后，页面将自动跳转...'
       }
     },
 
@@ -94,8 +94,8 @@
                 this.$log(paymentStatusResp.data.data)
                 let rt = paymentStatusResp.data.data
                 if(rt == 2) {
-                  this.payInfoText = "支付失败!"
-                  this.$toast("支付失败!")
+                  this.payInfoText = "订单确认失败!"
+                  this.$toast("订单确认失败,已支付金额将原路返还!")
                   this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
                   this.$router.replace({path: '/car/orderList'})
                   return;

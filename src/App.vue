@@ -211,12 +211,14 @@
           that.$log("rt:" + JSON.stringify(rt));
           let openId = rt.openId;
           let accessToken = rt.accessToken;
+          let payId = rt.payId
           if (openId != undefined) {
             let userId = that.$api.APP_ID + openId;
             let userInfo = {
               openId: openId,
               accessToken: rt.accessToken,
-              userId: userId
+              userId: userId,
+              payId: payId
             }
             that.$log("userInfo  is:" + JSON.stringify(userInfo));
             that.$store.commit('SET_USER', JSON.stringify(userInfo));
