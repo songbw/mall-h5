@@ -1,5 +1,5 @@
 <template>
-  <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}"  v-if="show">
+  <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}" v-if="show">
     <div class="wrap">
       <div class='box' :style="{'background-color': decorateBgColor}">
         <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()"
@@ -10,14 +10,16 @@
             </span>
           </div>
           <div v-if="datas.settings.title.hasPromotionActivity && promotionStatus != -1">
-            <div v-if="isDailySchedule"  class="promotionDetail">
+            <div v-if="isDailySchedule" class="promotionDetail">
               <span style="color:black">{{dailyScheduleText}}</span>
               <span style="color:black"> {{dailyScheduleDetail}}</span>
               <span style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.hour}}</span>
               <span style="color: black">:</span>
-              <span style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.minutes}}</span>
+              <span
+                style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.minutes}}</span>
               <span style="color: black">:</span>
-              <span style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.seconds}}</span>
+              <span
+                style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.seconds}}</span>
             </div>
             <div v-else>
               <v-countdown v-if="promotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
@@ -143,16 +145,71 @@
     },
 
     methods: {
-      getAdaptedPromotion() {
-        this.$log(this.datas.list)
-        if(this.datas.list != null && this.datas.list.length > 0) {
-          let currentTime = new Date().getTime();
-          
-        }
-        else {
-
+      getPromotionsStatus() {
+        let ids = []
+        if (this.datas.list != null && this.datas.list.length > 0) {
+          this.datas.list.forEach(item => {
+            ids.push(item.promotionId)
+          })
         }
 
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.EQUITY_BASE_URL,
+          url: '/promotion/findByIdList',
+          params: {
+            idList: ids.join(','),
+          },
+        });
+      },
+      async getAdaptedPromotion() {
+        this.$log("getAdaptedPromotion Enter")
+        if (this.datas.list != null && this.datas.list.length > 0) {
+          let resp = await this.getPromotionsStatus();
+          if (resp.data.code == 200) {
+            let currentTime = new Date().getTime();
+            let ret = resp.data.data;
+            this.datas.list.forEach(item => {
+              for(let i = 0 ;i < ret.length ; i++) {
+                 if(ret[i].id == item.promotionId) {
+                   item['status'] = ret[i].status;
+                   break;
+                 }
+              }
+              item['startTime'] = new Date(this.$moment(item.startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+              item['endTime'] = new Date(this.$moment(item.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+              if (item['startTime'] >= currentTime) {
+                if (currentTime < item['endTime']) {
+                  item['actived'] = 1;//正在进行
+                } else {
+                  item['actived'] = 2;//已经结束
+                }
+              } else {
+                item['actived'] = 0;  //未开始
+              }
+            })
+            this.$log(this.datas.list)
+            let onGoingList = this.datas.list.filter((item) => {
+              return item.actived == 1 &&  (item.status < 5 && item.status > 2)
+            })
+            if (onGoingList != null && onGoingList.length > 0) {//显示进行中最早结束的活动
+              onGoingList.sort(function (a, b) {
+                return a.endTime - b.endTime
+              })
+              return onGoingList[0]
+            } else {//显示未开始最早的活动
+              let unStartedList = this.datas.list.filter((item) => {
+                return item.actived == 0 && (item.status < 5 && item.status > 2 )
+              })
+              if (unStartedList != null && unStartedList.length > 0) {
+                unStartedList.sort(function (a, b) {
+                  return a.startTime - b.startTime
+                })
+                return onGoingList[0]
+              }
+            }
+          }
+        }
         return null;
       },
       updateTimer(startTime, endTime) {
@@ -183,7 +240,7 @@
       },
 
       getClockString(schedule) {
-        let clock = schedule.substr(0,2);
+        let clock = schedule.substr(0, 2);
         return clock + "点场"
       },
       updateDailyScheduleText() {
@@ -191,7 +248,7 @@
         if (currentTime < this.dailyEndTime) {
           this.isExceedTodayMaxTime = false;
           if (currentTime < this.dailyScheduleInfo[0].starTime) {
-            this.updateTimer(currentTime, this.dailyScheduleInfo[0].starTime-1)
+            this.updateTimer(currentTime, this.dailyScheduleInfo[0].starTime - 1)
 
             this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[0].schedule)
             if (this.msTime.show) {
@@ -207,15 +264,15 @@
               }
             }
             if (found != -1) {
-              this.updateTimer(currentTime, this.dailyScheduleInfo[found + 1].starTime-1)
+              this.updateTimer(currentTime, this.dailyScheduleInfo[found + 1].starTime - 1)
               this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[found].schedule)
               if (this.msTime.show) {
                 this.dailyScheduleDetail = " 距下场 "
               }
             } else {
-              if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length-1].starTime) {
-                this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[this.dailyScheduleInfo.length-1].schedule)
-                this.updateTimer(currentTime, this.dailyEndTime-1)
+              if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length - 1].starTime) {
+                this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[this.dailyScheduleInfo.length - 1].schedule)
+                this.updateTimer(currentTime, this.dailyEndTime - 1)
                 if (this.msTime.show) {
                   this.dailyScheduleDetail = " 距结束 "
                 }
@@ -227,7 +284,7 @@
           this.isExceedTodayMaxTime = true;
         }
       },
-      updatePromotionInfo() {
+      async updatePromotionInfo() {
         if (this.datas.settings.title.promotionDailySchedule != undefined && this.datas.settings.title.promotionDailySchedule) {
           let that = this
           this.$api.xapi({
@@ -240,7 +297,7 @@
           }).then((response) => {
             this.$log(response.data.data.result)
             let detail = response.data.data.result
-            if(detail != null) {
+            if (detail != null) {
               this.promotionActivityId = detail.id
               this.promotionStatus = detail.status;
               if (detail.dailySchedule != undefined) {
@@ -248,7 +305,7 @@
                 this.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
               }
               if (this.isDailySchedule) {
-                this.datas.list= [];
+                this.datas.list = [];
                 detail.promotionSkus.forEach(item => {
                   let product = {
                     brand: item.brand,
@@ -283,40 +340,49 @@
             that.show = false;
           })
         } else {
-            let promotion = this.getAdaptedPromotion();
-            if(promotion != null) {
-
-            }
-/*          if (this.promotionActivityId > 0) {
-            let that = this
-            this.$api.xapi({
-              method: 'get',
-              baseURL: this.$api.EQUITY_BASE_URL,
-              url: '/promotion/findPromotion',
-              params: {
-                id: this.promotionActivityId,
-              },
-            }).then((response) => {
-              this.$log(response.data.data.result)
-              let detail = response.data.data.result
-              if(detail != null) {
-                this.$log(detail)
-                this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
-                this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
-                this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-                this.$log(detail.status)
-                this.promotionStatus = detail.status;
-                this.$log(this.PromotionStartTime)
-                this.$log(this.PromotionEndTime)
-                this.show = true;
-              } else {
-                this.show = false;
-              }
-            }).catch(function (error) {
-              that.$log(error)
-              that.show = false;
-            })
-          }*/
+          let promotion = await this.getAdaptedPromotion();
+          if (promotion != null) {
+            this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+            this.$log(promotion)
+            this.PromotionStartTime = promotion.startTime
+            this.PromotionEndTime = promotion.endTime
+            this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+            this.$log(promotion.status)
+            this.promotionStatus = promotion.status;
+            this.$log(this.PromotionStartTime)
+            this.$log(this.PromotionEndTime)
+            this.show = true;
+          }
+          /*          if (this.promotionActivityId > 0) {
+                      let that = this
+                      this.$api.xapi({
+                        method: 'get',
+                        baseURL: this.$api.EQUITY_BASE_URL,
+                        url: '/promotion/findPromotion',
+                        params: {
+                          id: this.promotionActivityId,
+                        },
+                      }).then((response) => {
+                        this.$log(response.data.data.result)
+                        let detail = response.data.data.result
+                        if(detail != null) {
+                          this.$log(detail)
+                          this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
+                          this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
+                          this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                          this.$log(detail.status)
+                          this.promotionStatus = detail.status;
+                          this.$log(this.PromotionStartTime)
+                          this.$log(this.PromotionEndTime)
+                          this.show = true;
+                        } else {
+                          this.show = false;
+                        }
+                      }).catch(function (error) {
+                        that.$log(error)
+                        that.show = false;
+                      })
+                    }*/
         }
       },
       isDeepColor(hexColor) {
@@ -355,27 +421,29 @@
         this.$router.push({path: '/category/goods/promotion/' + promotionId});
       },
       gotoGoodsPage(mpu) {
-        this.$router.push({path:"/detail",query:{
-            mpu:mpu
-          }});
-/*        try {
-          //获取goods信息，update current googds
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
+        this.$router.push({
+          path: "/detail", query: {
+            mpu: mpu
+          }
+        });
+        /*        try {
+                  //获取goods信息，update current googds
+                  this.$api.xapi({
+                    method: 'get',
+                    baseURL: this.$api.PRODUCT_BASE_URL,
+                    url: '/prod',
+                    params: {
+                      mpu: mpu,
+                    }
+                  }).then((res) => {
+                    this.updateCurrentGoods(res.data.data.result);
+                    this.$router.push("/detail");
+                  }).catch((error) => {
+                    console.log(error)
+                  })
+                } catch (e) {
 
-        }*/
+                }*/
       },
       gotoTargetUrl() {
         let targetId = this.datas.settings.title.targetUrl
@@ -402,7 +470,7 @@
                 //this.gotoGoodsPage(paths[1]);
                 //this.$log("promotion:"+paths[1])
                 //this.gotoPromotionPage(paths[1]);
-                 this.gotoPromotionPage(this.promotionActivityId)
+                this.gotoPromotionPage(this.promotionActivityId)
               }
             } catch (e) {
             }
@@ -416,27 +484,29 @@
         if (mpu == null) {
           mpu = goods.skuid;
         }
-        this.$router.push({path:"/detail",query:{
-            mpu:mpu
-          }});
-/*        try {
-          //获取goods信息，update current googds
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
+        this.$router.push({
+          path: "/detail", query: {
+            mpu: mpu
+          }
+        });
+        /*        try {
+                  //获取goods信息，update current googds
+                  this.$api.xapi({
+                    method: 'get',
+                    baseURL: this.$api.PRODUCT_BASE_URL,
+                    url: '/prod',
+                    params: {
+                      mpu: mpu,
+                    }
+                  }).then((res) => {
+                    this.updateCurrentGoods(res.data.data.result);
+                    this.$router.push("/detail");
+                  }).catch((error) => {
+                    console.log(error)
+                  })
+                } catch (e) {
 
-        }*/
+                }*/
       },
     }
   }
@@ -463,26 +533,27 @@
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
       }
-      .sectionSlide-title{
-        .fz(font-size,35);
+
+      .sectionSlide-title {
+        .fz(font-size, 35);
         font-weight: bold;
         color: #333333;
         //text-shadow:5px 2px 6px #000
       }
     }
 
-/*    .box:after {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -60px;
-      content: ' ';
-      height: 60px;
-      width: 100%;
-      border-radius: 0 0 30% 30%;
-      background: linear-gradient(#ffffff, #ffcccc);
-      overflow: hidden;
-    }*/
+    /*    .box:after {
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: -60px;
+          content: ' ';
+          height: 60px;
+          width: 100%;
+          border-radius: 0 0 30% 30%;
+          background: linear-gradient(#ffffff, #ffcccc);
+          overflow: hidden;
+        }*/
 
     .listBox {
       width: 100%;
@@ -590,7 +661,7 @@
       word-break: break-all;
     }
 
-    .promotionDetail{
+    .promotionDetail {
       font-size: x-small;
       overflow: hidden;
       text-overflow: ellipsis;
