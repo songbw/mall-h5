@@ -374,56 +374,17 @@
         } else {
           let promotion = await this.getAdaptedPromotion();
           if (promotion != null) {
-            this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-            this.$log(promotion)
             this.promotionActivityId = promotion.promotionId
             this.titleName = promotion.promotionName
             this.PromotionStartTime = promotion.startTime
             this.PromotionEndTime = promotion.endTime
-            this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-            this.$log(promotion.status)
             this.promotionStatus = promotion.status;
-            this.$log(this.PromotionStartTime)
-            this.$log(this.PromotionEndTime)
             this.skuList = promotion.skus
             this.show = true;
           }
-          /*          if (this.promotionActivityId > 0) {
-                      let that = this
-                      this.$api.xapi({
-                        method: 'get',
-                        baseURL: this.$api.EQUITY_BASE_URL,
-                        url: '/promotion/findPromotion',
-                        params: {
-                          id: this.promotionActivityId,
-                        },
-                      }).then((response) => {
-                        this.$log(response.data.data.result)
-                        let detail = response.data.data.result
-                        if(detail != null) {
-                          this.$log(detail)
-                          this.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
-                          this.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
-                          this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-                          this.$log(detail.status)
-                          this.promotionStatus = detail.status;
-                          this.$log(this.PromotionStartTime)
-                          this.$log(this.PromotionEndTime)
-                          this.show = true;
-                        } else {
-                          this.show = false;
-                        }
-                      }).catch(function (error) {
-                        that.$log(error)
-                        that.show = false;
-                      })
-                    }*/
         }
       },
       isDeepColor(hexColor) {
-        // this.$log("isDeepColor:" + hexColor)
-        /*        if(hexColor == undefined)
-                  return false;*/
         if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
         hexColor = hexColor.toLowerCase();
         let b = new Array();
@@ -441,10 +402,9 @@
           return true;
       },
       countDownS_cb(data) {
-        // this.$log("Start #################")
       },
       countDownE_cb(data) {
-        // this.$log("End   #################")
+        this.updatePromotionInfo()
       },
       updateCurrentGoods(goods) {
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
@@ -509,19 +469,6 @@
         //text-shadow:5px 2px 6px #000
       }
     }
-
-    /*    .box:after {
-          position: absolute;
-          left: 0;
-          right: 0;
-          bottom: -60px;
-          content: ' ';
-          height: 60px;
-          width: 100%;
-          border-radius: 0 0 30% 30%;
-          background: linear-gradient(#ffffff, #ffcccc);
-          overflow: hidden;
-        }*/
 
     .listBox {
       width: 100%;
@@ -639,6 +586,4 @@
       word-break: break-all;
     }
   }
-
-
 </style>

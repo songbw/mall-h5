@@ -25,128 +25,130 @@
             </div>
           </div>
         </div>
-
-        <div class="coinBalanceBox">
-          <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
-            <van-checkbox slot="right-icon" v-model="coinBalanceValue" checked-color="#FF4444"></van-checkbox>
-            <span slot="label" style="color:black">可用余额: ￥{{(mCoinBalance.amount/100).toFixed(2)}}</span>
-          </van-cell>
-        </div>
-
-        <div class="optCardBox">
-          <van-cell :title="mOptCards.title" :icon="mOptCards.icon"
-                    :value="this.mOptCards.show?'点击隐藏优选卡':'点击查看优选卡'"
+        <div v-if="this.$api.APP_ID == '11'" class="wuxipayBox">
+          <div class="coinBalanceBox">
+            <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
+              <van-checkbox slot="right-icon" v-model="coinBalanceValue" checked-color="#FF4444"></van-checkbox>
+              <span slot="label" style="color:black">可用余额: ￥{{(mCoinBalance.amount/100).toFixed(2)}}</span>
+            </van-cell>
+          </div>
+          <div class="optCardBox">
+            <van-cell :title="mOptCards.title" :icon="mOptCards.icon"
+                      :value="this.mOptCards.show?'点击隐藏优选卡':'点击查看优选卡'"
+                      clickable
+                      @click="onOptCardCellClick()">
+            </van-cell>
+            <div v-if="this.mOptCards.show == true">
+              <van-checkbox-group v-model="mOptCardsResult" @change="onOptCardsStatusChanged()">
+                <van-cell-group>
+                  <van-cell
+                    v-for="(item, index) in mOptCards.list"
                     clickable
-                    @click="onOptCardCellClick()">
-          </van-cell>
-          <div v-if="this.mOptCards.show == true">
-            <van-checkbox-group v-model="mOptCardsResult" @change="onOptCardsStatusChanged()">
-              <van-cell-group>
-                <van-cell
-                  v-for="(item, index) in mOptCards.list"
-                  clickable
-                  :key="index"
-                  @click="optCardsToggle(index)"
-                >
-                  <div slot="default" class="optCard">
-                    <span>{{item.balance/100}}元</span>
-                    <span>惠民优选卡支付</span>
-                  </div>
-                  <div slot="right-icon" class="optCardCheckBox">
-                    <van-checkbox
-                      :name="item.cardnum"
-                      checked-color="#3dd5c8"
-                      ref="optCardsCheckboxes"
-                    />
-                  </div>
-                </van-cell>
-              </van-cell-group>
-            </van-checkbox-group>
-            <div class="addNewOptCard" @click="onAddNewOptCardClick">
-              <van-icon name="plus" color="#FF4444"></van-icon>
-              <span>绑定惠民优选卡</span>
+                    :key="index"
+                    @click="optCardsToggle(index)"
+                  >
+                    <div slot="default" class="optCard">
+                      <span>{{item.balance/100}}元</span>
+                      <span>惠民优选卡支付</span>
+                    </div>
+                    <div slot="right-icon" class="optCardCheckBox">
+                      <van-checkbox
+                        :name="item.cardnum"
+                        checked-color="#3dd5c8"
+                        ref="optCardsCheckboxes"
+                      />
+                    </div>
+                  </van-cell>
+                </van-cell-group>
+              </van-checkbox-group>
+              <div class="addNewOptCard" @click="onAddNewOptCardClick">
+                <van-icon name="plus" color="#FF4444"></van-icon>
+                <span>绑定惠民优选卡</span>
+              </div>
+            </div>
+            <van-dialog
+              v-model="addNewOptCardDlgShow"
+              title="绑定惠民优选卡"
+              show-cancel-button="true"
+              confirm-button-text="绑定"
+              :beforeClose="beforeCloseAddNewOptCardDlg"
+            >
+              <van-field
+                v-model="mTelphoneNumber"
+                type="tel"
+                rows="1"
+                maxlength="20"
+                placeholder="绑定用户电话号码"
+                clearable
+                v-if="this.userDetail.telephone == null || this.userDetail.telephone.length == 0"
+              />
+              <van-field
+                v-model="newOptCardNumber"
+                type="number"
+                rows="1"
+                maxlength="20"
+                placeholder="请输入卡号"
+                clearable
+              />
+              <van-field
+                v-model="newOptCardPwd"
+                rows="1"
+                maxlength="20"
+                placeholder="请输入密码"
+                clearable
+              />
+            </van-dialog>
+          </div>
+          <div class="composePayBox">
+            <van-cell :title="mComposePay.title" :icon="mComposePay.icon">
+              <span slot="default" style="font-size: large;color: #ff4444">￥{{remainPayAmount}}</span>
+            </van-cell>
+            <div v-for="(item, index) in mPaylist" :key="index">
+              <van-cell v-if="item.payType == 'optCard'">
+                <span slot="title">优选卡支付:</span>
+                <span slot="default"
+                      style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
+              </van-cell>
+              <van-cell v-if="item.payType == 'coinBalance'">
+                <span slot="title">余额支付:</span>
+                <span slot="default"
+                      style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
+              </van-cell>
             </div>
           </div>
-          <van-dialog
-            v-model="addNewOptCardDlgShow"
-            title="绑定惠民优选卡"
-            show-cancel-button="true"
-            confirm-button-text="绑定"
-            :beforeClose="beforeCloseAddNewOptCardDlg"
-          >
-            <van-field
-              v-model="mTelphoneNumber"
-              type="tel"
-              rows="1"
-              maxlength="20"
-              placeholder="绑定用户电话号码"
-              clearable
-              v-if="this.userDetail.telephone == null || this.userDetail.telephone.length == 0"
-            />
-            <van-field
-              v-model="newOptCardNumber"
-              type="number"
-              rows="1"
-              maxlength="20"
-              placeholder="请输入卡号"
-              clearable
-            />
-            <van-field
-              v-model="newOptCardPwd"
-              rows="1"
-              maxlength="20"
-              placeholder="请输入密码"
-              clearable
-            />
-          </van-dialog>
         </div>
-
-        <div class="composePayBox">
-          <van-cell :title="mComposePay.title" :icon="mComposePay.icon">
-            <span slot="default" style="font-size: large;color: #ff4444">￥{{remainPayAmount}}</span>
-          </van-cell>
-          <div v-for="(item, index) in mPaylist" :key="index">
-            <van-cell v-if="item.payType == 'optCard'">
-              <span slot="title">优选卡支付:</span>
-              <span slot="default" style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
-            </van-cell>
-            <van-cell v-if="item.payType == 'coinBalance'">
-              <span slot="title">余额支付:</span>
-              <span slot="default" style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
-            </van-cell>
-          </div>
-        </div>
-
         <div class="pathBox">
           <van-radio-group v-model="radio">
-            <van-cell title="联机账户" :icon="icon_linkpay" clickable @click="radio = '1'">
-              <van-radio slot="right-icon" name="1" checked-color="#FF4444"/>
-            </van-cell>
-            <div class="linkPayDialog" v-if="radio == '1'">
-<!--              <span class="tip">温馨提示:联机账户支付不能低于1角</span>-->
-              <van-field
-                v-model="linkPayAccount"
-                type="number"
-                required
-                clearable
-                label="卡号"
-                maxlength="30"
-                label-width="40px"
-                placeholder="请输入卡号"
-              />
+            <div v-if="this.$api.APP_ID == '11'">
+              <van-cell title="联机账户" :icon="icon_linkpay" clickable @click="radio = '1'">
+                <van-radio slot="right-icon" name="1" checked-color="#FF4444"/>
+              </van-cell>
+              <div class="linkPayDialog" v-if="radio == '1'">
+                <!--              <span class="tip">温馨提示:联机账户支付不能低于1角</span>-->
+                <van-field
+                  v-model="linkPayAccount"
+                  type="number"
+                  required
+                  clearable
+                  label="卡号"
+                  maxlength="30"
+                  label-width="40px"
+                  placeholder="请输入卡号"
+                />
 
-              <van-field
-                v-model="linkPayPwd"
-                :type="isLinkPwdVisable?'number':'password'"
-                maxlength="30"
-                clearable
-                label="密码"
-                label-width="40px"
-                placeholder="请输入密码"
-                :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
-                required
-                @click-right-icon="togLinkPayPwdVisable()"
-              />
+                <van-field
+                  v-model="linkPayPwd"
+                  :type="isLinkPwdVisable?'number':'password'"
+                  maxlength="30"
+                  clearable
+                  label="密码"
+                  label-width="40px"
+                  placeholder="请输入密码"
+                  :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
+                  required
+                  @click-right-icon="togLinkPayPwdVisable()"
+                />
+              </div>
             </div>
             <van-cell title="快捷支付" :icon="icon_quicklypay" clickable @click="radio = '2'">
               <van-radio slot="right-icon" name="2" checked-color="#FF4444"/>
@@ -155,7 +157,6 @@
               <div v-if="this.$api.IS_QUICKPAY_CAN_SAVE">
                 <div class="bankListCheckBox">
                   <div v-if="mBankcardList.length > 0">
-                    <!--                  <span class="tip">温馨提示:快捷支付不能低于1元</span>-->
                     <van-radio-group v-model="bankRadio">
                       <van-cell-group>
                         <div v-for="(item, index) in mBankcardList">
@@ -469,7 +470,7 @@
         </van-dialog>
 
         <div class="footer_layout">
-          <van-button type="danger" round size="large" :loading="payBtnSubmitLoading"  @click="onPayBtnClick">
+          <van-button type="danger" round size="large" :loading="payBtnSubmitLoading" @click="onPayBtnClick">
             确认支付￥{{remainPayAmount}}
           </van-button>
         </div>
@@ -541,7 +542,7 @@
         mCvv2: "",
         showSupportList: false,
         icon_support_bank_list: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_bank_support.png',
-        payBtnSubmitLoading:false,
+        payBtnSubmitLoading: false,
         mTelphoneNumber: "",
 
         newCardRadioNotSaved: "1",
@@ -579,8 +580,8 @@
           return this.mOptCards.result
         },
         set(value) {
-          if(value.length > this.mOptCards.result.length) {//添加
-            if(this.remainPayAmount > 0) {
+          if (value.length > this.mOptCards.result.length) {//添加
+            if (this.remainPayAmount > 0) {
               this.mOptCards.result = value
             }
           } else {
@@ -613,11 +614,11 @@
     },
 
     methods: {
-      updateLinkPayAccount(){
-         let linkPayAccount = Util.getLocal("linkPayAccount")
-         if(linkPayAccount != null) {
-           this.linkPayAccount = linkPayAccount;
-         }
+      updateLinkPayAccount() {
+        let linkPayAccount = Util.getLocal("linkPayAccount")
+        if (linkPayAccount != null) {
+          this.linkPayAccount = linkPayAccount;
+        }
       },
       onQuerySupportBListClick() {
         this.$log("onQuerySupportBListClick Enter")
@@ -692,64 +693,64 @@
             }).catch(function (error) {
               that.$log(error)
             })
-/*            if(this.$api.IS_QUICKPAY_CAN_SAVE) {
-              this.$log(this.bankRadio)
-              let found = -1;
-              for (let i = 0; i < this.mBankcardList.length; i++) {
-                if (this.mBankcardList[i].accountId == this.bankRadio) {
-                  found = i;
-                  break;
-                }
-              }
-              if (found != -1) {
-                this.isVerifyCodeBtnDisabled = true;
-                this.quickPayVerifyCodeCount = 60
-                this.quickPayVerifyCodeTimer = setInterval(this.QPayBtnCountDown, 1000);
-                this.verifyBtnTextClicked = true;
-                this.$log(this.mBankcardList[found])
-                let payAmount = parseInt((this.remainPayAmount * 100).toFixed(0))
-                let options = {
-                  "accountId": this.mBankcardList[found].accountId,
-                  "accountName": this.mBankcardList[found].accountName,
-                  "accountType": this.mBankcardList[found].accountType,
-                  "certNo": this.mBankcardList[found].certNo,
-                  "cvv2": this.mBankcardList[found].cvv2,
-                  "doSaveIt": 0,
-                  "expiredDate": this.mBankcardList[found].expiredDate,
-                  "mobileNo": this.mBankcardList[found].mobileNo,
-                  "openId": user.userId,
-                  "orderNo": this.orderInfo.orderNo,
-                  "tranAmt": payAmount
-                }
-                this.$log(options)
-                this.$api.xapi({
-                  method: 'post',
-                  baseURL: this.$api.AGGREGATE_PAY_URL,
-                  url: '/wspay/fast/bank/auth',
-                  data: options,
-                }).then((response) => {
-                  this.$log(response)
-                  if (response.data.code == 200) {
+            /*            if(this.$api.IS_QUICKPAY_CAN_SAVE) {
+                          this.$log(this.bankRadio)
+                          let found = -1;
+                          for (let i = 0; i < this.mBankcardList.length; i++) {
+                            if (this.mBankcardList[i].accountId == this.bankRadio) {
+                              found = i;
+                              break;
+                            }
+                          }
+                          if (found != -1) {
+                            this.isVerifyCodeBtnDisabled = true;
+                            this.quickPayVerifyCodeCount = 60
+                            this.quickPayVerifyCodeTimer = setInterval(this.QPayBtnCountDown, 1000);
+                            this.verifyBtnTextClicked = true;
+                            this.$log(this.mBankcardList[found])
+                            let payAmount = parseInt((this.remainPayAmount * 100).toFixed(0))
+                            let options = {
+                              "accountId": this.mBankcardList[found].accountId,
+                              "accountName": this.mBankcardList[found].accountName,
+                              "accountType": this.mBankcardList[found].accountType,
+                              "certNo": this.mBankcardList[found].certNo,
+                              "cvv2": this.mBankcardList[found].cvv2,
+                              "doSaveIt": 0,
+                              "expiredDate": this.mBankcardList[found].expiredDate,
+                              "mobileNo": this.mBankcardList[found].mobileNo,
+                              "openId": user.userId,
+                              "orderNo": this.orderInfo.orderNo,
+                              "tranAmt": payAmount
+                            }
+                            this.$log(options)
+                            this.$api.xapi({
+                              method: 'post',
+                              baseURL: this.$api.AGGREGATE_PAY_URL,
+                              url: '/wspay/fast/bank/auth',
+                              data: options,
+                            }).then((response) => {
+                              this.$log(response)
+                              if (response.data.code == 200) {
 
-                  } else {
-                    this.$toast(response.data.message)
-                    if (this.quickPayVerifyCodeTimer) {
-                      clearInterval(this.quickPayVerifyCodeTimer)
-                      this.quickPayVerifyCodeTimer = 0
-                      this.verifyBtnTextClicked = false
-                      this.quickPayVerifyCode = ''
-                      this.isVerifyCodeBtnDisabled = false;
-                      this.verifyBtnText = "获取验证码"
-                    }
-                  }
-                }).catch(function (error) {
-                  that.$log(error)
-                })
-              } else {
-                this.$toast("没有找到银行卡信息")
-              }
-            } else {
-            }*/
+                              } else {
+                                this.$toast(response.data.message)
+                                if (this.quickPayVerifyCodeTimer) {
+                                  clearInterval(this.quickPayVerifyCodeTimer)
+                                  this.quickPayVerifyCodeTimer = 0
+                                  this.verifyBtnTextClicked = false
+                                  this.quickPayVerifyCode = ''
+                                  this.isVerifyCodeBtnDisabled = false;
+                                  this.verifyBtnText = "获取验证码"
+                                }
+                              }
+                            }).catch(function (error) {
+                              that.$log(error)
+                            })
+                          } else {
+                            this.$toast("没有找到银行卡信息")
+                          }
+                        } else {
+                        }*/
           }
         } else {
           this.$log("没有用户信息，请登录")
@@ -759,13 +760,13 @@
         this.$log("onAddNewBankCardClick Enter")
         this.addNewBankCardDlgShow = true;
       },
-      onDeleteCardBtnClick(k,index) {
+      onDeleteCardBtnClick(k, index) {
         this.$log("onDeleteCardBtnClick Enter")
         let that = this
         that.$api.xapi({
           method: 'delete',
           baseURL: this.$api.QUICKLY_PAY_URL,
-          url: '/accounts/account/'+k.id,
+          url: '/accounts/account/' + k.id,
         }).then((response) => {
           that.$log("onDelBtnClick coupon success, response is:" + JSON.stringify(response.data))
           if (response.data.code == 200) {
@@ -864,15 +865,15 @@
         }
       },
 
-/*      saveUserInfo() {
-        return this.$api.xapi({
-          method: 'put',
-          baseURL: this.$api.SSO_BASE_URL,
-          //url: '/user/updateProfile',
-          url: '/user',
-          data: this.user
-        })
-      },*/
+      /*      saveUserInfo() {
+              return this.$api.xapi({
+                method: 'put',
+                baseURL: this.$api.SSO_BASE_URL,
+                //url: '/user/updateProfile',
+                url: '/user',
+                data: this.user
+              })
+            },*/
       beforeCloseAddNewCardDlg(action, done) {
         this.$log("beforeCloseAddNewCardDlg Enter")
         if (action === 'confirm') {
@@ -1030,9 +1031,9 @@
               done(false) //不关闭弹框
               return
             } else {
-/*              this.userDetail.telephone = this.mTelphoneNumber
-              let ret = await this.saveUserInfo();
-              this.updateUserDetail(this.user);*/
+              /*              this.userDetail.telephone = this.mTelphoneNumber
+                            let ret = await this.saveUserInfo();
+                            this.updateUserDetail(this.user);*/
             }
           }
           if (this.newOptCardNumber.length == 0) {
@@ -1267,8 +1268,8 @@
           if (this.remainPayAmount > 0) {
             if (this.radio == '1') {
               this.$log("link pay clicked")
-              if ( parseInt((this.remainPayAmount * 100).toFixed(0)) >= 10 &&
-                parseInt((this.remainPayAmount * 100).toFixed(0)) <= 500000 ) {
+              if (parseInt((this.remainPayAmount * 100).toFixed(0)) >= 10 &&
+                parseInt((this.remainPayAmount * 100).toFixed(0)) <= 500000) {
                 if (this.linkPayAccount.length == 0) {
                   this.$toast("请输入卡号")
                   return
@@ -1292,7 +1293,7 @@
             } else if (this.radio == '2') { //bank pay
               this.$log(this.bankRadio)
               if (parseInt((this.remainPayAmount * 100).toFixed(0)) >= 100) {
-                if(this.$api.IS_QUICKPAY_CAN_SAVE) {
+                if (this.$api.IS_QUICKPAY_CAN_SAVE) {
                   let found = -1;
                   for (let i = 0; i < this.mBankcardList.length; i++) {
                     this.$log(this.mBankcardList[i].accountId)
@@ -1530,83 +1531,82 @@
           }
         }
 
-        .coinBalanceBox {
-          margin-top: 10px;
-          padding: 10px 0px;
+
+
+        .wuxipayBox{
           width: 96%;
-          background-color: white;
-          border-radius: 5px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-
-          .van-cell {
-            margin-top: -1px;
-          }
-        }
-
-        .composePayBox {
-          margin-top: 10px;
-          padding: 10px 0px;
-          width: 96%;
-          background-color: white;
-          border-radius: 5px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-
-          .van-cell {
-            margin-top: -1px;
-          }
-        }
-
-        .optCardBox {
-          margin-top: 10px;
-          padding: 10px 0px;
-          width: 96%;
-          background-color: white;
-          border-radius: 5px;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-
-          .van-cell {
-            margin-top: -1px;
-          }
-
-          .optCard {
-            border: 1px solid #3dd5c8;
+          .coinBalanceBox {
+            margin-top: 10px;
+            padding: 10px 0px;
+            background-color: white;
             border-radius: 5px;
-            height: 60px;
-            margin: 2px 25px;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            line-height: 30px;
-            color: #3dd5c8;
-            font-size: large;
-          }
-
-          .optCardCheckBox {
-            height: 64px;
-            align-items: center;
-            display: flex;
-          }
-
-          .addNewOptCard {
-            width: 100%;
-            display: flex;
             justify-content: center;
-            align-items: Center;
-            color: #ff4444;
-            padding-top: 10px;
-            span {
-              margin: 5px;
+
+            .van-cell {
+              margin-top: -1px;
+            }
+          }
+          .composePayBox {
+            margin-top: 10px;
+            padding: 10px 0px;
+            background-color: white;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .van-cell {
+              margin-top: -1px;
+            }
+          }
+          .optCardBox {
+            margin-top: 10px;
+            padding: 10px 0px;
+            background-color: white;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .van-cell {
+              margin-top: -1px;
+            }
+
+            .optCard {
+              border: 1px solid #3dd5c8;
+              border-radius: 5px;
+              height: 60px;
+              margin: 2px 25px;
+              display: flex;
+              flex-direction: column;
+              align-items: center;
+              line-height: 30px;
+              color: #3dd5c8;
+              font-size: large;
+            }
+
+            .optCardCheckBox {
+              height: 64px;
+              align-items: center;
+              display: flex;
+            }
+
+            .addNewOptCard {
+              width: 100%;
+              display: flex;
+              justify-content: center;
+              align-items: Center;
+              color: #ff4444;
+              padding-top: 10px;
+
+              span {
+                margin: 5px;
+              }
             }
           }
         }
-
-
         .pathBox {
           margin-top: 10px;
           padding: 10px 0px;
@@ -1652,16 +1652,19 @@
             align-items: center;
             display: flex;
           }
-          .queryBanckSupportList{
+
+          .queryBanckSupportList {
             width: 100%;
             text-align: center;
             color: #1989fa;
             padding-top: 10px;
-            span{
-              text-decoration:underline
+
+            span {
+              text-decoration: underline
             }
 
           }
+
           .addNewBankCard {
             width: 100%;
             display: flex;
@@ -1726,7 +1729,7 @@
         padding: 10px;
       }
 
-      .supportBankList{
+      .supportBankList {
         width: 100%;
         height: 400px;
         overflow: scroll;
