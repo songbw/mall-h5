@@ -1339,7 +1339,7 @@
               "payment": "01", //支付方式， 现金支付
               "servFee": item.freight, //运费
               "amount": amount,     //应给商户的实际总价
-              "saleAmount": saleAmount,//用户支付给商户的实际总价 = 单品salePrice*number + 运费
+              "saleAmount": 0.01,//saleAmount,//用户支付给商户的实际总价 = 单品salePrice*number + 运费
               "type": 1,//订单类型 0: 实时式订单  1: 预占型订单
               "skus": skus
             })
@@ -1527,7 +1527,7 @@
                           let pAnOrderInfo = {
                             "accessToken": user.accessToken,
                             "orderNo": '',// orderNo,
-                            "orderAmount": parseInt((amount * 100).toFixed(0)),//分
+                            "orderAmount": 1,//parseInt((amount * 100).toFixed(0)),//分
                             "openId": user.openId,
                             "businessType": "11"
                           }

@@ -10,7 +10,7 @@
             <span>头像</span>
           </div>
           <div slot="right-icon" class="header-icon">
-            <img :src="avatarDefaultImg">
+            <img :src="(user.headImg !=null && user.headImg.length > 0) ? user.headImg : avatarDefaultImg">
           </div>
         </van-cell>
         <van-cell title="用户ID" v-if="user.openId != null">
@@ -237,8 +237,10 @@
         align-items: center;
 
         img {
-          height: 35px;
-          width: 35px;
+          display: inline-block;
+          border-radius: 50%;
+          height: 50px;
+          width: 50px;
         }
       }
 

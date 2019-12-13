@@ -175,7 +175,7 @@
         // this.testGAT();
         let auth_code = this.$route.query.auth_code;
         if (auth_code != undefined) {
-          this.getThirdPartyAccessTokenInfo(auth_code)
+          this.thirdPartyLogin(auth_code)
           setTimeout(() => {
             if (this.userTokenLoading) {
               this.userTokenLoading = false;
@@ -192,14 +192,28 @@
             this.userTokenLoading = false;
           }
         }, 10000);
-        if (this.$api.IS_WX_GZH) {//微信公众号端登录
-          let authCode = this.$route.query.code;
-          let state = this.$route.query.state;
-          this.$log("authCode:" + authCode)
-          if (authCode != undefined) {
-            this.wxLogin(this.$api.APP_ID, authCode, state)
+        if (this.$api.APP_ID == '01') {
+          let code = this.$route.query.code;
+          if (code != undefined) {
+            this.thirdPartyLogin(code)
+            setTimeout(() => {
+              if (this.userTokenLoading) {
+                this.userTokenLoading = false;
+              }
+            }, 20000);
           } else {
             this.userTokenLoading = false;
+          }
+        } else {
+          if (this.$api.IS_WX_GZH) {//微信公众号端登录
+            let authCode = this.$route.query.code;
+            let state = this.$route.query.state;
+            this.$log("authCode:" + authCode)
+            if (authCode != undefined) {
+              this.wxLogin(this.$api.APP_ID, authCode, state)
+            } else {
+              this.userTokenLoading = false;
+            }
           }
         }
       }
@@ -463,7 +477,7 @@
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
           //let auth_code = "12345678"
-          //this.getThirdPartyAccessTokenInfo(auth_code)
+          //this.thirdPartyLogin(auth_code)
           let accessToken = "TTTTTTTTTTTT"
           let userInfo = {
             openId: openId,
@@ -485,7 +499,7 @@
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         this.$log("openId:" + openId);
-        let payId="0041900110127"
+        let payId = "0041900110127"
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
           let accessToken = "TTTTTTTTTTTT"
@@ -596,35 +610,51 @@
         this.$jsbridge.call("initStatusBarColor", color);
       },
 
-      getThirdPartyAccessTokenInfo(authCode) {
+      thirdPartyLogin(authCode) {
         let that = this;
-        that.$api.xapi({
-          method: 'get',
-          baseURL: this.$api.SSO_BASE_URL,
-          url: '/sso/thirdParty/token/gat',
-          params: {
+        let url = ""
+        let params = null
+        if(this.$api.APP_ID == '01') {
+          url = '/sso/thirdParty/token/wx';
+          params = {
+            iAppId: this.$api.APP_ID,
+            code: authCode,
+          }
+        } else if(this.$api.IS_GAT_APP){
+          url = '/sso/thirdParty/token/gat';
+          params = {
             iAppId: this.$api.APP_ID,
             initCode: authCode,
           }
-        }).then((response) => {
-          let rt = response.data.data.result
-          that.$log("rt:" + JSON.stringify(rt));
-          let openId = rt.openId;
-          let accessToken = rt.accessToken;
-          if (openId != undefined) {
-            let userId = that.$api.APP_ID + openId;
-            let userInfo = {
-              openId: openId,
-              accessToken: rt.accessToken,
-              userId: userId
+        }
+        this.$log("url:"+url)
+        this.$log(params)
+        if(url.length > 0 && params != null) {
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: url,
+            params: params
+          }).then((response) => {
+            let rt = response.data.data.result
+            that.$log("rt:" + JSON.stringify(rt));
+            let openId = rt.openId;
+            let accessToken = rt.accessToken;
+            if (openId != undefined) {
+              let userId = that.$api.APP_ID + openId;
+              let userInfo = {
+                openId: openId,
+                accessToken: rt.accessToken,
+                userId: userId
+              }
+              that.$log("userInfo  is:" + JSON.stringify(userInfo));
+              that.$store.commit('SET_USER', JSON.stringify(userInfo));
+              that.thirdPartLogined(openId, accessToken)
             }
-            that.$log("userInfo  is:" + JSON.stringify(userInfo));
-            that.$store.commit('SET_USER', JSON.stringify(userInfo));
-            that.thirdPartLogined(openId, accessToken)
-          }
-        }).catch(function (error) {
-          that.$log(error)
-        })
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
       },
 
       getInitCode() {

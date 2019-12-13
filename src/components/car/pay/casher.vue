@@ -1449,16 +1449,19 @@
                     }, function (res) {
                       if (res.code == 0) {
                         that.$log("统一支付成功")
+                        that.$log("################################")
+                        that.$router.replace({
+                          path: '/pay/cashering',
+                          query: {
+                            outer_trade_no: that.orderInfo.orderNo
+                          }
+                        })
                       } else {
                         that.$log("统一支付失败")
+                        that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                        that.$router.replace({path: '/car/orderList'})
                       }
-                      that.$log("################################")
-                      that.$router.replace({
-                        path: '/pay/cashering',
-                        query: {
-                          outer_trade_no: that.orderInfo.orderNo
-                        }
-                      })
+
                       //this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
                       //this.$router.replace({path: '/car/orderList'})
                     })

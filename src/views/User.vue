@@ -9,7 +9,7 @@
         <header class="userHeader" @click="onUserInfoClick()">
           <div class="headerTitle">
             <div class="header-icon">
-              <img :src="avatarDefaultImg">
+              <img :src="(user.headImg !=null && user.headImg.length > 0) ? user.headImg : avatarDefaultImg">
             </div>
             <span v-if="user.nickname !=undefined && user.nickname.length > 0">{{user.nickname}}</span>
             <span v-else-if="this.$api.IS_WX_GZH && pageloading == false">登录</span>

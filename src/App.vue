@@ -122,20 +122,6 @@
               this.configured = true
               break;
           }
-        } else if (this.$api.APP_ID == "01") {
-          switch (this.$api.APP_ID) {//APP
-            case '01': {//微信公众号
-              this.$log("微信公众号")
-              this.$api.IS_WX_GZH = true;
-              this.clearStorage();
-              this.configured = true
-              break;
-            }
-            default://nothing to do
-              this.$log("微信小程序")
-              this.configured = true
-              break;
-          }
         } else {
           this.configured = true
         }
