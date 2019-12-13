@@ -1,5 +1,6 @@
-const wx = require('weixin-js-sdk')
-export const callWechat = (env,action) => {
+import wx from 'weixin-js-sdk'
+
+function configWechat(env, callback) {
   let _url = ''
   if (window.__wxjs_is_wkwebview === true) {
     _url = window.location.href.split('#')[0] || window.location.href
@@ -11,11 +12,10 @@ export const callWechat = (env,action) => {
   }
   env.$api.xapi({
     method: 'post',
-    baseURL: "http://api.weesharing.com/v2/guanaitong-client/",
+    baseURL: env.$api.WECHAT_CONFIG_URL,
     url: '/jssdk/sign',
     data: options
-  })
-    .then(res => {
+  }).then(res => {
       console.log(res.data);
       wx.config({
         debug: false,
@@ -28,16 +28,13 @@ export const callWechat = (env,action) => {
           'scanQRCode'
         ]
       })
-
       wx.ready(() => {
-        if(action == 'chooseWXPay') {
-
-        } else if(action == 'scanQRCode') {
-
-        } else {
-          //do noting
-        }
+        if(callback) callback()
       })
     });
+}
+
+export {
+  configWechat
 }
 

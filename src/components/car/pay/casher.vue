@@ -491,6 +491,8 @@
   import Header from '@/common/_header.vue'
   import Util from '@/util/common'
   import BANKUtil from '@/util/bank'
+  import {configWechat} from '@/util/wechat'
+  import wx from 'weixin-js-sdk'
 
   export default {
     components: {
@@ -1429,15 +1431,15 @@
             this.$log("pay options:");
             this.payBtnSubmitLoading = true;
             this.$log(this.payOptions)
-            this.$api.xapi({
-              method: 'post',
-              baseURL: this.$api.AGGREGATE_PAY_URL,
-              url: '/wspay/pay',
-              data: this.payOptions,
-            }).then((response) => {
-              this.$log(response)
-              if (response.data.code == 200) {
-                if (pingAnPay != null) {
+            if (pingAnPay != null) {
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.AGGREGATE_PAY_URL,
+                url: '/wspay/pay',
+                data: this.payOptions,
+              }).then((response) => {
+                this.$log(response)
+                if (response.data.code == 200) {
                   let ret = JSON.parse(response.data.data);
                   this.$log("统一支付")
                   this.$log(ret)
@@ -1449,7 +1451,6 @@
                     }, function (res) {
                       if (res.code == 0) {
                         that.$log("统一支付成功")
-                        that.$log("################################")
                         that.$router.replace({
                           path: '/pay/cashering',
                           query: {
@@ -1461,38 +1462,55 @@
                         that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
                         that.$router.replace({path: '/car/orderList'})
                       }
-
-                      //this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                      //this.$router.replace({path: '/car/orderList'})
                     })
                   } else {
                     this.$router.replace({
                       path: '/pay/cashering',
                       query: {
-                        outer_trade_no: this.orderInfo.orderNo
+                        outer_trade_no: that.orderInfo.orderNo
                       }
                     })
                   }
-                } else if (fcWxPay != null) {
-                  this.$log("fcWxPay response @@@@@@@@@@@@@@@@@@@@@")
-
+                  this.payBtnSubmitLoading = false;
                 } else {
+                  this.$toast(response.data.message)
+                  this.payBtnSubmitLoading = false;
+                }
+              }).catch(function (error) {
+                that.$toast("请求支付失败")
+                this.payBtnSubmitLoading = false;
+              })
+            } else if (fcWxPay != null) {
+              this.$log("fcWxPay Enter")
+              configWechat(this,() =>{
+                  that.$log("##############@@@@@@@@@@@@@@@@@@@@@@")
+              })
+            } else {
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.AGGREGATE_PAY_URL,
+                url: '/wspay/pay',
+                data: this.payOptions,
+              }).then((response) => {
+                this.$log(response)
+                if (response.data.code == 200) {
                   this.$router.replace({
                     path: '/pay/cashering',
                     query: {
                       outer_trade_no: this.orderInfo.orderNo
                     }
                   })
+                  this.payBtnSubmitLoading = false;
+                } else {
+                  this.$toast(response.data.message)
+                  this.payBtnSubmitLoading = false;
                 }
+              }).catch(function (error) {
+                that.$toast("请求支付失败")
                 this.payBtnSubmitLoading = false;
-              } else {
-                this.$toast(response.data.message)
-                this.payBtnSubmitLoading = false;
-              }
-            }).catch(function (error) {
-              that.$toast("请求支付失败")
-              this.payBtnSubmitLoading = false;
-            })
+              })
+            }
+
           }
         } else {
           //no userInfo

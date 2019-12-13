@@ -85,6 +85,7 @@
         this.$api.OPTCARDS_URL = serverUrl + "/v2/wocs/"
         this.$api.VENDOR_URL = serverUrl + "/v2/vendors/"
         this.$api.QUICKLY_PAY_URL = serverUrl + "/v2/cardpayment/"
+        this.$api.WECHAT_CONFIG_URL = serverUrl + "/v2/guanaitong-client/"
         this.$api.IS_SUPPORTED_MULTI_POINT = false;
         if(result.data.IS_SUPPORTED_MULTI_POINT != undefined) {
           this.$api.IS_SUPPORTED_MULTI_POINT = result.data.IS_SUPPORTED_MULTI_POINT;

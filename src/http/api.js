@@ -13,7 +13,6 @@ const IS_WX_GZH =  false
 const HAS_HEADER = false
 const IS_QUICKPAY_CAN_SAVE = true
 const APP_SOURCE = "00"
-const IS_SUPPORTED_MULTI_POINT = false
 
 /*let SERVICE_URL = "http://192.168.200.37:8000";
 let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"*/
@@ -39,6 +38,8 @@ const SHANGHAI_BANK_URL = "http://180.76.244.14:8021"
 
 //const QUICKLY_PAY_URL = "http://192.168.200.37:8000/v2/cardpayment/"
 const QUICKLY_PAY_URL = SERVICE_URL + "/v2/cardpayment/"
+
+const WECHAT_CONFIG_URL = SERVICE_URL + "v2/guanaitong-client"
 
 
 const xapi = axios.create();
@@ -117,5 +118,5 @@ export default {
   IS_QUICKPAY_CAN_SAVE,
   TEST_USER,
   APP_SOURCE,
-  IS_SUPPORTED_MULTI_POINT
+  WECHAT_CONFIG_URL
 }
