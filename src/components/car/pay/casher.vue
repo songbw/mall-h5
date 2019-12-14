@@ -1484,6 +1484,68 @@
               this.$log("fcWxPay Enter")
               configWechat(this,() =>{
                   that.$log("##############@@@@@@@@@@@@@@@@@@@@@@")
+                this.$api.xapi({
+                  method: 'post',
+                  baseURL: this.$api.AGGREGATE_PAY_URL,
+                  url: '/wspay/pay',
+                  data: this.payOptions,
+                }).then((response) => {
+                  this.$log(response)
+                  if (response.data.code == 200) {
+                    let ret = JSON.parse(response.data.data);
+                    this.$log("公众号支付")
+                    this.$log(ret)
+                    this.$log(ret.timeStamp)
+                    this.$log(ret.nonceStr)
+                    this.$log(ret.packageStr)
+                    this.$log(ret.signType)
+                    this.$log(ret.paySign)
+                    if (ret != null) {//公众号支付
+                      wx.chooseWXPay({
+                        // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。
+                        // 但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
+                        timestamp: ret.timeStamp,
+                        // 支付签名随机串，不长于 32 位
+                        nonceStr: ret.nonceStr,
+                        package: ret.packageStr, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
+                        signType: ret.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
+                        paySign: ret.paySign, // 支付签名
+                        success: function(res) {
+                          // 支付成功后的回调函数
+                          console.log("公众号支付成功")
+                          that.$router.replace({
+                            path: '/pay/cashering',
+                            query: {
+                              outer_trade_no: that.orderInfo.orderNo
+                            }
+                          })
+                        },
+                        fail: function(res) {
+                          console.log('公众号支付失败')
+                          that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                          that.$router.replace({path: '/car/orderList'})
+                        },
+                        complete: function(res) {
+                          console.log(res, '公众号支付 complete')
+                        }
+                      })
+                    } else {
+                      this.$router.replace({
+                        path: '/pay/cashering',
+                        query: {
+                          outer_trade_no: that.orderInfo.orderNo
+                        }
+                      })
+                    }
+                    this.payBtnSubmitLoading = false;
+                  } else {
+                    this.$toast(response.data.message)
+                    this.payBtnSubmitLoading = false;
+                  }
+                }).catch(function (error) {
+                  that.$toast("请求支付失败")
+                  this.payBtnSubmitLoading = false;
+                })
               })
             } else {
               this.$api.xapi({
