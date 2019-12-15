@@ -334,6 +334,7 @@
 
         img {
           width: 100%;
+          height: 11em;
           display: inline-block;
           border-top-left-radius: 5px;
           border-top-right-radius: 5px;
@@ -440,6 +441,7 @@
 
         img {
           width: 100%;
+          height: 7em;
           display: inline-block;
           border-top-left-radius: 5px;
           border-top-right-radius: 5px;
