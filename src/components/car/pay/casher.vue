@@ -1527,6 +1527,10 @@
                         },
                         complete: function(res) {
                           console.log(res, '公众号支付 complete')
+                          if(res.errMsg == 'chooseWXPay:cancel') {
+                            that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                            that.$router.replace({path: '/car/orderList'})
+                          }
                         }
                       })
                     } else {
