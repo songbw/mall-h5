@@ -438,7 +438,6 @@
               .cardTitle {
                 padding: 0px 2px;
                 .fz(font-size, 30);
-                font-weight: bold;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 display: -webkit-box;
