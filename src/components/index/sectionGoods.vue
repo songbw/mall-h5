@@ -10,9 +10,45 @@
         <div>
           <div v-for="(category,index) in datas.list" :title=category.title :key="index">
             <ul :id="sectionGoodsListId"
-                :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' "
+                :class="getCountlineClass()"
                 :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
-              <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
+              <div v-if="datas.settings.countPerLine == 1">
+                <li v-for="(k,index) in category.skus" :key="index">
+                  <div class="goodsCard" @click="onGoodsClick(k)">
+                    <div class="card-layout">
+                      <van-col span="8" class="cardImg">
+                        <img v-lazy="k.imagePath || k.image">
+                      </van-col>
+                      <van-col span="16" class="cardInfo">
+                        <div class="cardTitle">
+                          <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
+                        </div>
+                        <div class="cardFooter">
+                          <div class="priceBox">
+                            <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
+                               :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                              <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                              {{(k.price - k.discount).toFixed(2)}}
+                              <span
+                                style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                              <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                            </p>
+                            <p v-else
+                               :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                              <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                              {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                            </p>
+                          </div>
+                          <div class="goodsBuyBox">
+                            <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                          </div>
+                        </div>
+                      </van-col>
+                    </div>
+                  </div>
+                </li>
+              </div>
+              <li v-else v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
                 <img v-lazy="k.imagePath || k.image">
                 <div class="goodsComment">
                   <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
@@ -50,9 +86,45 @@
               <span>{{category.title}}</span>
             </div>
             <ul
-                :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' "
-                :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
-              <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
+              :class="getCountlineClass()"
+              :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
+              <div v-if="datas.settings.countPerLine == 1">
+                <li v-for="(k,index) in category.skus" :key="index">
+                  <div class="goodsCard" @click="onGoodsClick(k)">
+                    <div class="card-layout">
+                      <van-col span="8" class="cardImg">
+                        <img v-lazy="k.imagePath || k.image">
+                      </van-col>
+                      <van-col span="16" class="cardInfo">
+                        <div class="cardTitle">
+                          <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
+                        </div>
+                        <div class="cardFooter">
+                          <div class="priceBox">
+                            <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
+                               :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                              <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                              {{(k.price - k.discount).toFixed(2)}}
+                              <span
+                                style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                              <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                            </p>
+                            <p v-else
+                               :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                              <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                              {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                            </p>
+                          </div>
+                          <div class="goodsBuyBox">
+                            <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                          </div>
+                        </div>
+                      </van-col>
+                    </div>
+                  </div>
+                </li>
+              </div>
+              <li v-else v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
                 <img v-lazy="k.imagePath || k.image">
                 <div class="goodsComment">
                   <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
@@ -142,6 +214,16 @@
     },
 
     methods: {
+      getCountlineClass() {
+        switch (this.datas.settings.countPerLine) {
+          case 1:
+            return "sectionGoods-list1"
+          case 2:
+            return "sectionGoods-list2"
+          default:
+            return "sectionGoods-list3"
+        }
+      },
       onTabChanged(item, index) {
         if (this.isTabChanging) {
           this.isTabChanging = false;
@@ -309,6 +391,111 @@
   .sectionGoods {
     width: 100%;
     overflow: hidden;
+
+    .sectionGoods-list1 {
+      width: 100%;
+      display: -ms-flex;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: flex-start;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      overflow: hidden;
+      background-color: #f0f0f0;
+
+      li {
+        list-style: none;
+        border-radius: 5px;
+        margin: 5px;
+
+        .goodsCard {
+          width: 100%;
+
+          .card-layout {
+            width: 100%;
+            height: 7rem;
+
+            .cardImg {
+              height: 100%;
+              text-align: center;
+
+              img {
+                width: 100%;
+                height: 100%;
+                border-top-left-radius: 5px;
+                border-bottom-left-radius: 5px;
+              }
+            }
+
+            .cardInfo {
+              height: 100%;
+              padding: 5px;
+              position: relative;
+
+              .cardTitle {
+                padding: 0px 2px;
+                .fz(font-size, 30);
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                word-break: break-all;
+              }
+
+
+              .cardFooter {
+                position:absolute;
+                bottom:0;
+                width: 100%;
+                display: flex;
+                padding: 5px 2px;
+
+                .priceBox {
+                  width: 80%;
+                  text-align: left;
+                  margin-top: 4px;
+
+                  .salePrice {
+                    color: #ff4444;
+                    .fz(font-size, 32);
+                    font-weight: bold;
+                  }
+
+                  .originPrice {
+                    color: #707070;
+                    .fz(font-size, 25);
+                    text-decoration: line-through
+                  }
+                }
+
+                .goodsBuyBox {
+                  justify-content: center;
+                  float: right;
+
+                  .van-button {
+                    margin: 1vw;
+                    background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+                    background-size: 15px 15px;
+                    border: none;
+                    float: right;
+                  }
+
+                  .van-button:active {
+                    opacity: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    }
 
     .sectionGoods-list2 {
       width: 100%;
