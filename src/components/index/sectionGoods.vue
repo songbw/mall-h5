@@ -3,16 +3,11 @@
            :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
     <div class="container" ref="container">
       <div v-if="datas.settings.hasTabBar">
-        <div class="goodsLists">
-          <div class="goodsListTitle">
-
-          </div>
-          <div class="goodsList">
-
-          </div>
-        </div>
-
-<!--        <div>
+        <ly-tab :id="fixedBarId" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
+                @change="onTabChanged"
+                :style="{'background-color': datas.settings.floorTitleColor}">
+        </ly-tab>
+        <div>
           <div v-for="(category,index) in datas.list" :title=category.title :key="index">
             <ul :id="sectionGoodsListId"
                 :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' "
@@ -46,16 +41,15 @@
               </li>
             </ul>
           </div>
-        </div>-->
+        </div>
       </div>
       <div v-else>
-        <ly-tab :id="fixedBarId" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
-                @change="onTabChanged"
-                :style="{'background-color': datas.settings.floorTitleColor}">
-        </ly-tab>
         <div>
           <div v-for="(category,index) in datas.list" :title=category.title :key="index">
-            <ul :id="sectionGoodsListId"
+            <div class="sectionGoods-title" :style="{'background-color':datas.settings.floorTitleColor}">
+              <span>{{category.title}}</span>
+            </div>
+            <ul
                 :class="datas.settings.countPerLine==3 ? 'sectionGoods-list3' : 'sectionGoods-list2' "
                 :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
               <li v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
@@ -335,15 +329,14 @@
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         //border: 4px solid transparent;
-        border-radius: 15px;
+        border-radius: 5px;
         margin: 1vw;
 
         img {
           width: 100%;
-          height: 11em;
           display: inline-block;
-          border-top-left-radius: 10px;
-          border-top-right-radius: 10px;
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
         }
 
         .goodsComment {
@@ -442,15 +435,14 @@
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         //   border: 3px solid #f0f0f0;
-        border-radius: 15px;
+        border-radius: 5px;
         margin: .8vw;
 
         img {
           width: 100%;
-          height: 6.66em;
           display: inline-block;
-          border-top-left-radius: 10px;
-          border-top-right-radius: 10px;
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
         }
 
         .goodsComment {
@@ -540,11 +532,9 @@
 
     .sectionGoods-title {
       text-align: center;
-      .fz(font-size, 25);
+      .fz(font-size, 30);
       font-weight: bold;
       padding: 2vw;
-      position: relative;
-      background-color: #ffffff;
     }
 
 
