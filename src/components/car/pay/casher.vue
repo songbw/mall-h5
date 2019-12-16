@@ -149,7 +149,7 @@
                   @click-right-icon="togLinkPayPwdVisable()"
                 />
               </div>
-              <van-cell title="统一支付" :icon="icon_unionpay" clickable @click="radio = '3'">
+              <van-cell title="统一支付" :icon="icon_unionpay" clickable @click="radio = '3'" v-if="isSupportUnionPay">
                 <van-radio slot="right-icon" name="3" checked-color="#FF4444"/>
               </van-cell>
             </div>
@@ -563,6 +563,7 @@
         mIdNoNotSaved: "",
         mExpiredDateNotSaved: "",
         mCvv2NotSaved: "",
+        isSupportUnionPay: false
       }
     },
     computed: {
@@ -612,6 +613,29 @@
       this.udateBankcardList();
       this.updateBalanceAmount();
       this.updateLinkPayAccount();
+      if(this.$api.APP_ID == '11') {
+        this.$log("######################")
+        let version = sc.getAppVersion()
+        this.$log("version:"+version)
+        let ret = this.versionStringCompare(version,'3.0.1')
+        if(ret < 0) {
+           this.$log("不支持统一支付")
+           this.isSupportUnionPay = false
+        } else {
+           this.$log("支持统一支付")
+           this.isSupportUnionPay = true
+        }
+        /*sc.isExistApi({
+          path:'pay'
+        },
+        function (res) {
+          if(res.code == 0) {
+            console.log("支持统一支付:"+res)
+          } else {
+            console.log("不支持统一支付:"+res)
+          }
+        })*/
+      }
     },
 
     beforeDestroy() {
@@ -626,6 +650,26 @@
     },
 
     methods: {
+      versionStringCompare (preVersion='', lastVersion='')  {
+        let sources = preVersion.split('.');
+        let dests = lastVersion.split('.');
+        let maxL = Math.max(sources.length, dests.length);
+        let result = 0;
+        for (let i = 0; i < maxL; i++) {
+          let preValue = sources.length > i ? sources[i] : 0;
+          let preNum = isNaN(Number(preValue)) ? preValue.charCodeAt() : Number(preValue);
+          let lastValue = dests.length > i ? dests[i] : 0;
+          let lastNum = isNaN(Number(lastValue)) ? lastValue.charCodeAt() : Number(lastValue);
+          if (preNum < lastNum) {
+            result = -1;
+            break;
+          } else if (preNum > lastNum) {
+            result = 1;
+            break;
+          }
+        }
+        return result;
+      },
       updateLinkPayAccount() {
         let linkPayAccount = Util.getLocal("linkPayAccount")
         if (linkPayAccount != null) {
