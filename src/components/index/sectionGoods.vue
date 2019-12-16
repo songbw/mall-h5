@@ -31,7 +31,8 @@
                               {{(k.price - k.discount).toFixed(2)}}
                               <span
                                 style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                              <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                              <span
+                                style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
                             </p>
                             <p v-else
                                :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
@@ -82,8 +83,14 @@
       <div v-else>
         <div>
           <div v-for="(category,index) in datas.list" :title=category.title :key="index">
-            <div class="sectionGoods-title" :style="{'background-color':datas.settings.floorTitleColor}">
-              <span>{{category.title}}</span>
+            <div class="sectionGoods-titleImg" v-if="category.titleImageUrl != undefined && category.titleImageUrl.length > 0">
+              <img v-lazy="category.titleImageUrl">
+            </div>
+            <div v-else class="sectionGoods-title" :style="{'background-color':datas.settings.floorTitleColor}">
+              <span
+                :style="(datas.settings.floorTitleTextColor == undefined ?{'color':'#000000'}:{'color':datas.settings.floorTitleTextColor})">
+                {{category.title}}
+              </span>
             </div>
             <ul
               :class="getCountlineClass()"
@@ -107,7 +114,8 @@
                               {{(k.price - k.discount).toFixed(2)}}
                               <span
                                 style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                              <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                              <span
+                                style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
                             </p>
                             <p v-else
                                :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
@@ -448,8 +456,8 @@
 
 
               .cardFooter {
-                position:absolute;
-                bottom:0;
+                position: absolute;
+                bottom: 0;
                 width: 100%;
                 display: flex;
                 padding: 5px 2px;
@@ -716,6 +724,12 @@
         margin-left: 1px;
       }
 
+    }
+
+    .sectionGoods-titleImg {
+      img{
+        width: 100%;
+      }
     }
 
     .sectionGoods-title {
