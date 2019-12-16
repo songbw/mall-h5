@@ -94,7 +94,7 @@
             </div>
             <ul
               :class="getCountlineClass()"
-              :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
+              :style=" (category.skuBackgroundColor == undefined || category.skuBackgroundColor=='#FFFFFF')?{}:{'background-color':category.skuBackgroundColor}">
               <div v-if="datas.settings.countPerLine == 1">
                 <li v-for="(k,index) in category.skus" :key="index">
                   <div class="goodsCard" @click="onGoodsClick(k)">
