@@ -13,7 +13,7 @@
           <div style="width: 100%;display: flex">
             <span class="orderNo_title">支付订单:</span>
             <span class="orderNo">{{this.orderInfo.orderNo}}</span>
-          </div>
+          </div>t
           <div style="  width: 100%;
           display: flex;
           flex-direction: row;">
@@ -623,7 +623,7 @@
            this.isSupportUnionPay = false
         } else {
            this.$log("支持统一支付")
-           this.isSupportUnionPay = true
+           this.isSupportUnionPay = false//true
         }
         /*sc.isExistApi({
           path:'pay'
