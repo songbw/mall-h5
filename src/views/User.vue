@@ -482,7 +482,7 @@
           }
 
           > span {
-            margin-top: 1vw;
+            margin-top: .28em;
             margin-left: 3.2vw;
             overflow: hidden;
             text-overflow: ellipsis;
