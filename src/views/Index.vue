@@ -191,7 +191,7 @@
           if (this.userTokenLoading) {
             this.userTokenLoading = false;
           }
-        }, 10000);
+        }, 3000);
         if (this.$api.APP_ID == '01') {
           let code = this.$route.query.code;
           if (code != undefined) {
