@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="sectionGoods"
-           :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
+           :style="{'margin-top':datas.settings.marginTop == undefined? 0:datas.settings.marginTop +'px','margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
     <div class="container" ref="container">
       <div v-if="datas.settings.hasTabBar">
         <ly-tab :id="fixedBarId" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
@@ -83,83 +83,87 @@
       <div v-else>
         <div>
           <div v-for="(category,index) in datas.list" :title=category.title :key="index">
-            <div class="sectionGoods-titleImg" v-if="category.titleImageUrl != undefined && category.titleImageUrl.length > 0">
-              <img v-lazy="category.titleImageUrl">
-            </div>
-            <div v-else class="sectionGoods-title" :style="{'background-color':datas.settings.floorTitleColor}">
+            <div v-if="datas.settings.showFloorTitle">
+              <div class="sectionGoods-titleImg" v-if="category.titleImageUrl != undefined && category.titleImageUrl.length > 0">
+                <img v-lazy="category.titleImageUrl">
+              </div>
+              <div v-else class="sectionGoods-title" :style="{'background-color':datas.settings.floorTitleColor}">
               <span
                 :style="(datas.settings.floorTitleTextColor == undefined ?{'color':'#000000'}:{'color':datas.settings.floorTitleTextColor})">
                 {{category.title}}
               </span>
+              </div>
             </div>
-            <ul
-              :class="getCountlineClass()"
-              :style=" (category.skuBackgroundColor == undefined || category.skuBackgroundColor=='#FFFFFF')?{}:{'background-color':category.skuBackgroundColor}">
-              <div v-if="datas.settings.countPerLine == 1">
-                <li v-for="(k,index) in category.skus" :key="index">
-                  <div class="goodsCard" @click="onGoodsClick(k)">
-                    <div class="card-layout">
-                      <van-col span="8" class="cardImg">
-                        <img v-lazy="k.imagePath || k.image">
-                      </van-col>
-                      <van-col span="16" class="cardInfo">
-                        <div class="cardTitle">
-                          <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
-                        </div>
-                        <div class="cardFooter">
-                          <div class="priceBox">
-                            <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
-                               :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                              <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                              {{(k.price - k.discount).toFixed(2)}}
-                              <span
-                                style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                              <span
-                                style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
-                            </p>
-                            <p v-else
-                               :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                              <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                              {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
-                            </p>
+            <div>
+              <ul
+                :class="getCountlineClass()"
+                :style=" (category.skuBackgroundColor == undefined || category.skuBackgroundColor=='#FFFFFF')?{}:{'background-color':category.skuBackgroundColor}">
+                <div v-if="datas.settings.countPerLine == 1">
+                  <li v-for="(k,index) in category.skus" :key="index">
+                    <div class="goodsCard" @click="onGoodsClick(k)">
+                      <div class="card-layout">
+                        <van-col span="8" class="cardImg">
+                          <img v-lazy="k.imagePath || k.image">
+                        </van-col>
+                        <van-col span="16" class="cardInfo">
+                          <div class="cardTitle">
+                            <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
                           </div>
-                          <div class="goodsBuyBox">
-                            <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                          <div class="cardFooter">
+                            <div class="priceBox">
+                              <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
+                                 :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                                <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                                {{(k.price - k.discount).toFixed(2)}}
+                                <span
+                                  style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                                <span
+                                  style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                              </p>
+                              <p v-else
+                                 :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                                <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                                {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                              </p>
+                            </div>
+                            <div class="goodsBuyBox">
+                              <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                            </div>
                           </div>
-                        </div>
-                      </van-col>
+                        </van-col>
+                      </div>
+                    </div>
+                  </li>
+                </div>
+                <li v-else v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
+                  <img v-lazy="k.imagePath || k.image">
+                  <div class="goodsComment">
+                    <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
+                  </div>
+                  <div class="goodsFooter">
+                    <div class="goodsPriceBox">
+                      <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
+                         :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                        <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                        {{(k.price - k.discount).toFixed(2)}}
+                        <span
+                          style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                        <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                      </p>
+
+                      <p v-else
+                         :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                        <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                        {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                      </p>
+                    </div>
+                    <div class="goodsBuyBox">
+                      <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
                     </div>
                   </div>
                 </li>
-              </div>
-              <li v-else v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
-                <img v-lazy="k.imagePath || k.image">
-                <div class="goodsComment">
-                  <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
-                </div>
-                <div class="goodsFooter">
-                  <div class="goodsPriceBox">
-                    <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
-                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                      {{(k.price - k.discount).toFixed(2)}}
-                      <span
-                        style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                      <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
-                    </p>
-
-                    <p v-else
-                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                      {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
-                    </p>
-                  </div>
-                  <div class="goodsBuyBox">
-                    <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
-                  </div>
-                </div>
-              </li>
-            </ul>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
