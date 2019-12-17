@@ -1,7 +1,10 @@
 <template lang="html">
   <div class="splash">
-    <div class="centerContext">
-        <img :src="splashImg">
+    <div class="centerContext" v-if="this.$api.APP_ID == '12'" :style="{'background-color': '#fbfcfd'}">
+        <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/12/splash.png">
+    </div>
+    <div class="centerContext" v-else>
+      <img :src="splashImg">
     </div>
   </div>
 </template>
@@ -14,7 +17,9 @@
       }
     },
     mounted() {
-      this.snow()
+      if(this.$api.APP_ID != '12') {
+        this.snow()
+      }
     },
     beforeDestroy() {
       setTimeout(() => {
@@ -51,7 +56,6 @@
     height: 100%;
     top: 0px;
  //   background: linear-gradient(45deg,#ca273a,#ca273a,#ca273a);
-    background-color:#ca273a;
     .centerContext {
       width: 100%;
       height: 100%;
@@ -59,7 +63,7 @@
       flex-direction: column;
       justify-content: center;
       align-items: Center;
-
+      background-color:#ca273a;
       img{
          height: 100vh;
       }
