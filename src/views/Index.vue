@@ -493,7 +493,8 @@
         // let openId = "44391000fd194ab888b1aa81c03c3740"
         // let openId = "d6c88055c3ab42a39d605ed2767a8b9d"
         // let openId = "ace1c1722b834309a59fad302fe357b2"
-        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        let openId = "5c8314363cea49de925bfaa39d4c4ebb"
         // let openId = "orqF45MIKg_GamvQNQXsxwpBl2GU"
         //let openId = "5c8314363cea49de925bfaa39d4c4ebb"//最珠海
         if (this.$api.TEST_USER.length > 0)

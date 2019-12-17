@@ -421,22 +421,21 @@
         this.$log(this.couponTypes[0].list)
         this.couponTypes[0].list.forEach(item => {
           let found = -1;
-          for (let i = 0; i < allPayList.length; i++) {
-            if (allPayList[i].valid && allPayList[i].product.couponList != undefined) {
-              for (let j = 0; j < allPayList[i].product.couponList.length; j++) {
-                if (allPayList[i].product.couponList[j].id === item.couponId) {
-                  //选出选购商品所有对应的优惠券
-                  found = j;
-                  break;
+          if (item.couponInfo.rules.scenario.type == 1) {
+            for (let i = 0; i < allPayList.length; i++) {
+              if (allPayList[i].valid && allPayList[i].product.couponList != undefined) {
+                for (let j = 0; j < item.couponInfo.rules.scenario.couponMpus.length; j++) {
+                  if(item.couponInfo.rules.scenario.couponMpus[j] == allPayList[i].product.baseInfo.mpu) {
+                    //选出选购商品所有对应的优惠券
+                    found = j;
+                    break;
+                  }
                 }
               }
             }
             if (found != -1) {
-              break;
+              couponList.push(item)
             }
-          }
-          if (found != -1 && item.couponInfo.rules.couponRules.type != 3) {
-            couponList.push(item)
           } else {
             if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 3) { //类别券单独处理
               for (let i = 0; i < allPayList.length; i++) {
@@ -449,7 +448,7 @@
                   }
                 }
               }
-            } else if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 2) {
+            } else if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 2) {//全场类
               couponList.push(item)
             }
           }
@@ -481,8 +480,8 @@
                     if (coupon.couponInfo.rules.scenario.type === 2) {
                       fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                     } else {
-                      for (let i = 0; i < payItem.product.couponList.length; i++) {
-                        if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
+                      for (let j = 0; j < coupon.couponInfo.rules.scenario.couponMpus.length; j++) {
+                        if(coupon.couponInfo.rules.scenario.couponMpus[j] == payItem.product.baseInfo.mpu) {
                           fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                           break;
                         }
