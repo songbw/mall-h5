@@ -219,7 +219,6 @@
         try {
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
-          //   this.$toast("initCode:"+initCode)
           if (!initCode)
             return
           sc.config({
