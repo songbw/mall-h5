@@ -489,9 +489,9 @@
                   float: right;
 
                   .van-button {
-                    margin: 1vw;
+                    margin: 1vw 0vw;
                     background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-                    background-size: 15px 15px;
+                    background-size: 20px 20px;
                     border: none;
                     float: right;
                   }
@@ -598,9 +598,9 @@
             line-height: 2em;
 
             .van-button {
-              margin: 1vw;
+              margin: 1vw 0vw;
               background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-              background-size: 15px 15px;
+              background-size: 20px 20px;
               border: none;
               float: right;
             }
