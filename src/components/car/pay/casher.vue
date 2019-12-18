@@ -13,7 +13,7 @@
           <div style="width: 100%;display: flex">
             <span class="orderNo_title">支付订单:</span>
             <span class="orderNo">{{this.orderInfo.orderNo}}</span>
-          </div>t
+          </div>
           <div style="  width: 100%;
           display: flex;
           flex-direction: row;">
