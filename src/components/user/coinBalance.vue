@@ -138,6 +138,7 @@
             })
           }
         } else {
+          this.$toast("无用户信息，请先登录后再查询。")
           this.loading = false;
           this.finished = true;
         }
