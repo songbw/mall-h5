@@ -240,7 +240,9 @@
                                code: - 10001    没有初始化 JSSDK
                                code: - 10002    用户点击拒绝授权
                                 code: - 10003    用户未登录 */
-                  console.warning(res.message)
+                  console.error(res.code)
+                  console.error(res.message)
+                  sc.close();
                 }
               });
             sc.setToolBar({
@@ -251,6 +253,7 @@
           })
           sc.error((res) => {
             console.error({res})
+            sc.close();
           })
         } catch (e) {
         }
