@@ -78,6 +78,7 @@
   @import '../../assets/index/style.css';
 
   .changeCoupon {
+    min-height: 100vh;
     .changeCouponBody {
       .changCouponTip {
         margin: 10px;

@@ -37,12 +37,12 @@
               </van-card>
             </div>
             <div class="goods-action">
-              <van-button size="mini"  @click.stop=""  @click="onAdd2carBtnClick(k)"></van-button>
+              <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
             </div>
           </li>
         </div>
         <div v-else>
-          <div v-if="finished && !loading"  class="noGoodsList">
+          <div v-if="finished && !loading" class="noGoodsList">
             <img :src="icon_empty_search">
             <span class="noGoodsList_text">暂无搜索结果...</span>
           </div>
@@ -102,6 +102,21 @@
     },
 
     methods: {
+      reOrderList() {
+        this.list.sort(function (a, b) {
+          try {
+            if (a.merchantId == 2 && b.merchantId != 2) {
+              return 1
+            } else if (a.merchantId != 2 && b.merchantId == 2) {
+              return -1
+            } else if ((a.merchantId != 2 && b.merchantId != 2) || (a.merchantId == 2 && b.merchantId == 2)) {
+              return 0
+            }
+          } catch (e) {
+            return 0
+          }
+        })
+      },
       resetList() {
         this.isLoadingByNewOrder = true
         this.list = [];
@@ -147,14 +162,14 @@
           this.$log(categoriesArray)
 
           if (this.total == -1 || this.total > this.list.length) {
-            if(categoriesArray.length > 1) {
+            if (categoriesArray.length > 1) {
               let options = {
                 "categories": categoriesArray,
                 "pageNo": this.pageNo++,
                 "pageSize": this.pageSize
               }
-              if(this.active === 1) {
-                if(this.tagPrice === 0) { //升序
+              if (this.active === 1) {
+                if (this.tagPrice === 0) { //升序
                   options['priceOrder'] = "ASC"
                 } else { //降序
                   options['priceOrder'] = "DESC"
@@ -179,6 +194,9 @@
                   this.result.list.forEach(item => {
                     this.list.push(item);
                   })
+                  if (this.active == 0) {
+                    this.reOrderList();
+                  }
                   this.loading = false;
                   this.isLoadingByNewOrder = false
                   if (this.list.length >= this.total)
@@ -198,8 +216,8 @@
                 "pageNo": this.pageNo++,
                 "pageSize": this.pageSize
               }
-              if(this.active === 1) {
-                if(this.tagPrice === 0) { //升序
+              if (this.active === 1) {
+                if (this.tagPrice === 0) { //升序
                   options['priceOrder'] = "ASC"
                 } else { //降序
                   options['priceOrder'] = "DESC"
@@ -224,6 +242,9 @@
                   this.result.list.forEach(item => {
                     this.list.push(item);
                   })
+                  if (this.active == 0) {
+                    this.reOrderList();
+                  }
                   this.loading = false;
                   this.isLoadingByNewOrder = false
                   if (this.list.length >= this.total)
@@ -249,8 +270,8 @@
             "pageNo": this.pageNo++,
             "pageSize": this.pageSize
           }
-          if(this.active === 1) {
-            if(this.tagPrice === 0) { //升序
+          if (this.active === 1) {
+            if (this.tagPrice === 0) { //升序
               options['priceOrder'] = "ASC"
             } else { //降序
               options['priceOrder'] = "DESC"
@@ -274,6 +295,9 @@
               this.result.list.forEach(item => {
                 this.list.push(item);
               })
+              if (this.active == 0) {
+                this.reOrderList();
+              }
               this.loading = false;
               this.isLoadingByNewOrder = false
               if (this.list.length >= this.total)
@@ -297,20 +321,20 @@
         let search = this.$route.query.search;
         let that = this
         this.launchedLoading = true
-        if(this.isLoadingByNewOrder)
+        if (this.isLoadingByNewOrder)
           return
         if (categories != null && categories.length > 0) {
           let categoriesArray = categories.split('_');
           this.$log(categoriesArray)
           if (this.total == -1 || this.total > this.list.length) {
-            if(categoriesArray.length > 1) {
+            if (categoriesArray.length > 1) {
               let options = {
                 "categories": categoriesArray,
                 "pageNo": this.pageNo++,
                 "pageSize": this.pageSize
               }
-              if(this.active === 1) {
-                if(this.tagPrice === 0) { //升序
+              if (this.active === 1) {
+                if (this.tagPrice === 0) { //升序
                   options['priceOrder'] = "ASC"
                 } else { //降序
                   options['priceOrder'] = "DESC"
@@ -332,6 +356,9 @@
                   this.result.list.forEach(item => {
                     this.list.push(item);
                   })
+                  if (this.active == 0) {
+                    this.reOrderList();
+                  }
                   this.loading = false;
                   if (this.list.length >= this.total)
                     this.finished = true;
@@ -341,15 +368,15 @@
                 that.loading = false;
                 that.finished = true;
               })
-            } else  if(categoriesArray.length == 1) {
+            } else if (categoriesArray.length == 1) {
               let category = categoriesArray[0]
               let options = {
                 "category": category,
                 "pageNo": this.pageNo++,
                 "pageSize": this.pageSize
               }
-              if(this.active === 1) {
-                if(this.tagPrice === 0) { //升序
+              if (this.active === 1) {
+                if (this.tagPrice === 0) { //升序
                   options['priceOrder'] = "ASC"
                 } else { //降序
                   options['priceOrder'] = "DESC"
@@ -371,6 +398,9 @@
                   this.result.list.forEach(item => {
                     this.list.push(item);
                   })
+                  if (this.active == 0) {
+                    this.reOrderList();
+                  }
                   this.loading = false;
                   if (this.list.length >= this.total)
                     this.finished = true;
@@ -391,8 +421,8 @@
             "pageNo": this.pageNo++,
             "pageSize": this.pageSize
           }
-          if(this.active === 1) {
-            if(this.tagPrice === 0) { //升序
+          if (this.active === 1) {
+            if (this.tagPrice === 0) { //升序
               options['priceOrder'] = "ASC"
             } else { //降序
               options['priceOrder'] = "DESC"
@@ -413,6 +443,9 @@
               this.result.list.forEach(item => {
                 this.list.push(item);
               })
+              if (this.active == 0) {
+                this.reOrderList();
+              }
               this.loading = false;
               if (this.list.length >= this.total)
                 this.finished = true;
@@ -440,26 +473,28 @@
         if (mpu == null) {
           mpu = goods.skuid;
         }
-        this.$router.push({path:"/detail",query:{
-            mpu:mpu
-          }});
-/*        try {
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
+        this.$router.push({
+          path: "/detail", query: {
+            mpu: mpu
+          }
+        });
+        /*        try {
+                  this.$api.xapi({
+                    method: 'get',
+                    baseURL: this.$api.PRODUCT_BASE_URL,
+                    url: '/prod',
+                    params: {
+                      mpu: mpu,
+                    }
+                  }).then((res) => {
+                    this.updateCurrentGoods(res.data.data.result);
+                    this.$router.push("/detail");
+                  }).catch((error) => {
+                    console.log(error)
+                  })
+                } catch (e) {
 
-        }*/
+                }*/
       },
       onAdd2carBtnClick(goods) {
         //this.$log("onAdd2carBtnClick Enter",goods)
@@ -488,7 +523,7 @@
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
-          if(response.data.code == 200) {
+          if (response.data.code == 200) {
             this.$toast("添加到购物车成功！")
             let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
             if (cartItem == null) {
@@ -541,6 +576,7 @@
   .detaillist {
     width: 100%;
     height: 100%;
+    min-height: 100vh;
     top: 0px;
     background-color: #f8f8f8;
 
@@ -617,6 +653,7 @@
           .fz(font-size, 35);
         }
       }
+
       .van-list {
         margin-top: 5px;
         background-color: #f8f8f8;
@@ -642,7 +679,7 @@
           z-index: 1;
 
           .van-button {
-           // background-color: #ff4444;
+            // background-color: #ff4444;
             background: url('../../../assets/icons/ico_add_cart.png') no-repeat center;
             background-size: 20px 20px;
             padding: 20px 30px;

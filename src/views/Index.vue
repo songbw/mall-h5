@@ -186,7 +186,9 @@
         }
 
       } else {//非关爱通App
-        //this.test();
+        if (process.env.NODE_ENV === 'development') {
+          this.test();
+        }
         setTimeout(() => {
           if (this.userTokenLoading) {
             this.userTokenLoading = false;
@@ -495,8 +497,12 @@
         // let openId = "ace1c1722b834309a59fad302fe357b2"
         //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
        // let openId = "5c8314363cea49de925bfaa39d4c4ebb"
-         let openId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc"
-        //let openId = "5c8314363cea49de925bfaa39d4c4ebb"//最珠海
+        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        if(this.$api.APP_ID == '01') {
+          openId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc"
+        } else if(this.$api.APP_ID == '12') {
+          openId = "5c8314363cea49de925bfaa39d4c4ebb"//最珠海
+        }
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         this.$log("openId:" + openId);

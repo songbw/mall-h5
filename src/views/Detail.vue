@@ -193,7 +193,7 @@
             <span>4、若该商品主图或详情包含赠品信息,赠品赠完即止，不保证您的订单一定有赠品,请知悉。</span>
           </div>
         </div>
-        <div v-if="bulletinInfo !=nulll && bulletinInfo.position == 'top'" class="bulletin">
+        <div v-if="bulletinInfo !=null && bulletinInfo.position == 'top'" class="bulletin">
           <img v-lazy="bulletinInfo.imageUrl">
         </div>
         <div class="contentBox">
@@ -202,7 +202,7 @@
           </div>
           <v-content :contentData=contentUrls></v-content>
         </div>
-        <div v-if="bulletinInfo !=nulll && bulletinInfo.position == 'bottom'" class="bulletin">
+        <div v-if="bulletinInfo !=null && bulletinInfo.position == 'bottom'" class="bulletin">
           <img v-lazy="bulletinInfo.imageUrl">
         </div>
         <v-baseline/>

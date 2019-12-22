@@ -1639,6 +1639,7 @@
   .casher {
     width: 100%;
     height: 100%;
+    min-height: 100vh;
     top: 0px;
     background-color: #f8f8f8;
 

@@ -94,6 +94,11 @@
         if (to.name === '活动页') {
           let id = this.$route.params.id;
           console.log("活动页:" + id)
+          if(from.name == '活动页' || from.name == '首页') {
+            setTimeout(() => {
+              window.scrollTo(0, 0);
+            }, 20);
+          }
           this.$api.xapi({
             method: 'get',
             baseURL: this.$api.AGGREGATION_BASE_URL,
@@ -135,6 +140,16 @@
         showHeader: true,
         icon_shopCart: require('@/assets/icons/ico_cart-circle.png'),
       }
+    },
+
+    beforeRouteEnter(to, from, next) {
+      next(vm => {
+        setTimeout(() => {
+          if(from.name == '活动页' || from.name == '首页') {
+            window.scrollTo(0, 0);
+          }
+        }, 20);
+      })
     },
 
     beforeCreate() {
