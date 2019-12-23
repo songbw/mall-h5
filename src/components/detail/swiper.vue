@@ -41,15 +41,15 @@
         this.$log(encodeURL)
         let options = {
           image: this.swiperData[0].imgPath,
-          title: "»İÃñÓÅÑ¡ÉÌÆ·",
+          title: "æƒ æ°‘ä¼˜é€‰å•†å“",
           content: this.goods.name,
           shareUrl: encodeURL
         }
         sc.share(options,function (res) {
           if (res.code == 0) {
-            this.$toast("·ÖÏí³É¹¦")
+            this.$log("åˆ†äº«æˆåŠŸ")
           } else {
-            this.$toast("·ÖÏíÊ§°Ü")
+            this.$log("åˆ†äº«å¤±è´¥")
           }
         })
       }
