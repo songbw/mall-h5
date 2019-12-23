@@ -91,6 +91,7 @@
     },
     watch: {
       '$route'(to, from) {
+        let that = this
         if (to.name === '活动页') {
           let id = this.$route.params.id;
           console.log("活动页:" + id)
@@ -99,6 +100,7 @@
               window.scrollTo(0, 0);
             }, 20);
           }
+          this.pageloading = true;
           this.$api.xapi({
             method: 'get',
             baseURL: this.$api.AGGREGATION_BASE_URL,
@@ -119,8 +121,10 @@
               let header = JSON.parse(response.data.data.result.header)
               this.mHeader = header
             }
+            this.pageloading = false;
           }).catch(function (error) {
             alert(error)
+            that.pageloading = false;
           })
 
         }
