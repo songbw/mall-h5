@@ -1,6 +1,8 @@
 <template lang="html">
   <div class="swiper">
-    <span></span>
+    <div class="shareBox" @click="onShareBtnClick" v-if="showShare">
+      <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_share.png">
+    </div>
     <van-swipe :autoplay="4000">
       <van-swipe-item v-for="(k,index) in swiperData" :key="index">
         <img v-lazy="k.imgPath">
@@ -10,15 +12,48 @@
 </template>
 
 <script>
+
   export default {
-    props: {
-      swiperData: {
-        type: Array,
-        default: function () {
-          return []
-        }
+    props: ['swiperData', 'goods'],
+    data()  {
+      return {
+        showShare: false
       }
     },
+    created() {
+      if(this.$api.APP_ID == '11' || this.$api.APP_ID == '12')
+        this.showShare = true
+    },
+    methods: {
+      onShareBtnClick() {
+        this.$log('onShareBtnClick Enter')
+        this.$log(this.goods)
+        let _url = ''
+        if (window.__wxjs_is_wkwebview === true) {
+          _url = window.location.href.split('#')[0] || window.location.href
+        } else {
+          _url = window.location.href
+        }
+        let url = "https://wechat.weesharing.com"+window.location.pathname
+        let encodeURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe5b7d5b7722a1577&redirect_uri="+
+           encodeURIComponent(url) + window.location.search +
+          "&response_type=code&scope=snsapi_userinfo&state=0102#wechat_redirect"
+        this.$log(encodeURL)
+        let options = {
+          image: this.swiperData[0].imgPath,
+          title: "惠民优选商品",
+          content: this.goods.name,
+          shareUrl: encodeURL
+        }
+        sc.share(options,function (res) {
+          if (res.code == 0) {
+            this.$toast("分享成功")
+          } else {
+            this.$toast("分享失败")
+          }
+        })
+      }
+    }
   }
 </script>
 
@@ -29,7 +64,18 @@
   .swiper {
     width: 100%;
     min-height: 20em;
+    position: relative;
 
+    .shareBox{
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 1;
+      img {
+        height: 20px;
+        width: 20px;
+      }
+    }
     .van-swipe {
       width: 100%;
 

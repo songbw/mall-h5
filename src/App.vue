@@ -217,6 +217,7 @@
       },
       async getLoginAuthInfo() {
         try {
+          let that = this
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
           if (!initCode)
@@ -240,6 +241,7 @@
                                code: - 10001    没有初始化 JSSDK
                                code: - 10002    用户点击拒绝授权
                                 code: - 10003    用户未登录 */
+                  //this.$toast("用户拒绝授权登录")
                   console.error(res.code)
                   console.error(res.message)
                   sc.close();

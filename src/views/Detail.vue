@@ -8,7 +8,7 @@
     </div>
     <div class="detail-body" :style="{'padding-top':showHeader? '2.6em':'0px'}" v-else>
       <div v-if="goods != null">
-        <v-swiper :swiperData=swiperUrls></v-swiper>
+        <v-swiper :swiperData=swiperUrls  :goods=this.goods></v-swiper>
         <div>
           <div class="promotion-price" v-if="hasPromotion">
             <van-col span="8" class="priceBox">
@@ -230,6 +230,9 @@
   import Loading from '@/common/_loading.vue'
   import Util from '@/util/common'
 
+  import {configWechat} from '@/util/wechat'
+  import wx from 'weixin-js-sdk'
+
   export default {
     components: {
       'v-swiper': Swiper,
@@ -254,6 +257,12 @@
       if (this.$api.IS_GAT_APP) {
         if (this.$api.APP_ID === '10') {
           this.showServiceBox = true;
+        }
+      }
+      if (this.$api.APP_ID == '01') {
+        let code = this.$route.query.code;
+        if (code != undefined) {
+          this.thirdPartyLogin(code)
         }
       }
     },
@@ -401,6 +410,82 @@
       }
     },
     methods: {
+      thirdPartLogined(openId, accessToken) {
+        let that = this;
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/thirdLogin',
+          data: {
+            iAppId: this.$api.APP_ID,
+            accessToken: accessToken,
+            openId: openId,
+          }
+        }).then((response) => {
+          let rt = response.data.data.result
+          this.$log("local information:" + JSON.stringify(rt));
+          if (rt.token != null) {
+            that.$store.commit('SET_TOKEN', rt.token);
+            this.$log("setToken:" + rt.token)
+            let data = this.$md5(rt.token)
+            if (rt.newUser) {
+              data = "1" + data
+            } else {
+              data = "0" + data
+            }
+            this.$log(data)
+            that.$store.commit('SET_GUYS_INFO', data);
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+      thirdPartyLogin(authCode) {
+        let that = this;
+        let url = ""
+        let params = null
+        if(this.$api.APP_ID == '01') {
+          url = '/sso/thirdParty/token/wx';
+          params = {
+            iAppId: this.$api.APP_ID,
+            code: authCode,
+          }
+        } else if(this.$api.IS_GAT_APP){
+          url = '/sso/thirdParty/token/gat';
+          params = {
+            iAppId: this.$api.APP_ID,
+            initCode: authCode,
+          }
+        }
+        this.$log("url:"+url)
+        this.$log(params)
+        if(url.length > 0 && params != null) {
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: url,
+            params: params
+          }).then((response) => {
+            let rt = response.data.data.result
+            that.$log("rt:" + JSON.stringify(rt));
+            let openId = rt.openId;
+            let accessToken = rt.accessToken;
+            if (openId != undefined) {
+              let userId = that.$api.APP_ID + openId;
+              let userInfo = {
+                openId: openId,
+                accessToken: rt.accessToken,
+                userId: userId
+              }
+              that.$log("userInfo  is:" + JSON.stringify(userInfo));
+              that.$store.commit('SET_USER', JSON.stringify(userInfo));
+              that.thirdPartLogined(openId, accessToken)
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
+      },
       getProductInfo(mpu) {
         //获取goods信息，update current googds
         return this.$api.xapi({
