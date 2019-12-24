@@ -1478,7 +1478,7 @@
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let event = "userId=" + user.userId + "&" + "dataTime:" + new Date().getTime()
-          window._hmt.push(['_trackEvent', '下订单', 'click', event]);
+         // window._hmt.push(['_trackEvent', '下订单', 'click', event]);
           let receiverId = this.$store.state.appconf.usedAddressId;
           that.$log("onSubmit receiverId is:" + receiverId)
           if (receiverId == undefined || receiverId == -1) {

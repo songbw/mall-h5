@@ -4,7 +4,7 @@ import store from '@/vuex/store.js'   //vuex
 import services from '@/http/api.js'       //http请求
 import vueLogger from "vue-logger";
 import LyTab from 'ly-tab'
-import ba from 'vue-ba'
+//import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueQRCodeComponent from 'vue-qrcode-component'
 //import VConsole from 'vconsole'
@@ -60,8 +60,8 @@ import {
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)
-Vue.use(ba, "03a0d710c71e9da54f17e6e0544e5030")
-Vue.use(ba, { siteId: "03a0d710c71e9da54f17e6e0544e5030" })
+//Vue.use(ba, "03a0d710c71e9da54f17e6e0544e5030")
+//Vue.use(ba, { siteId: "03a0d710c71e9da54f17e6e0544e5030" })
 Vue.use(LyTab)
 if (process.env.NODE_ENV === 'production') {
   Vue.use(vueLogger, {
@@ -170,9 +170,9 @@ router.beforeEach((to, from, next) => {
     console.log("redirect")
     next({path: '/user',replace: true})
   } else  {
-    if (to.path) {
+/*    if (to.path) {
       window._hmt.push(['_trackPageview', '/#' + to.fullPath]);
-    }
+    }*/
     next();
   }
 })
