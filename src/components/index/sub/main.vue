@@ -55,7 +55,8 @@
           </div>
         </div>
       </div>
-      <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
+      <v-baseline v-if="this.showFooter" :datas="this.footerText"  :style="{'background-color': mBackgroundColor}"></v-baseline>
+      <div v-else  :style="{'background-color': mBackgroundColor,'height':'5em'} "></div>
     </div>
   </section>
 </template>
@@ -120,6 +121,10 @@
             if (response.data.data.result.header != undefined) {
               let header = JSON.parse(response.data.data.result.header)
               this.mHeader = header
+              if(header.showFooter != undefined) {
+                this.showFooter =  header.showFooter
+                this.footerText = header.footerText
+              }
             }
             this.pageloading = false;
           }).catch(function (error) {
@@ -137,6 +142,8 @@
         pageloading: true,
         title: '',
         mBackgroundColor: '#FFFFFF',
+        showFooter: false,
+        footerText: '----我是有底线的-----',
         mHeader: {
           backgroundColor: '#FFFFFF',
           showSearchBar: false
@@ -183,6 +190,10 @@
         if (response.data.data.result.header != undefined) {
           let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
+          if(header.showFooter != undefined) {
+            this.showFooter =  header.showFooter
+            this.footerText = header.footerText
+          }
         }
         this.pageloading = false;
       }).catch(function (error) {
