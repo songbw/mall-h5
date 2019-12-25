@@ -155,7 +155,6 @@
         this.$log(this.datas);
         this.$log(response.data.data.result)
         this.mBackgroundColor = response.data.data.result.backgroundColor
-        this.$log("###########################################")
 
         if (response.data.data.result.header != undefined) {
           let header = JSON.parse(response.data.data.result.header)

@@ -83,7 +83,7 @@
       <div v-else>
         <div>
           <div v-for="(category,index) in datas.list" :title=category.title :key="index">
-            <div v-if="datas.settings.showFloorTitle">
+            <div v-if="datas.settings.showFloorTitle" @click="onGoodsTitleClick(category)">
               <div class="sectionGoods-titleImg" v-if="category.titleImageUrl != undefined && category.titleImageUrl.length > 0">
                 <img v-lazy="category.titleImageUrl">
               </div>
@@ -226,6 +226,55 @@
     },
 
     methods: {
+      See(e) {
+        window.location.href = e
+      },
+      gotoPromotionPage(promotionId) {
+        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+      },
+      gotoGoodsPage(mpu) {
+        this.$router.push({
+          path: "/detail", query: {
+            mpu: mpu
+          }
+        });
+      },
+      onGoodsTitleClick(k) {
+        try {
+          let targetId = k.titleTargetUrl;
+          if (targetId.startsWith("aggregation://")) {
+            let id = targetId.substr(14);
+            this.$router.push({path: '/index/' + id});
+          } else if (targetId.startsWith("route://")) {
+            let target = targetId.substr(8);
+            let paths = target.split("/");
+            this.$log(paths);
+            if (paths[0] === 'category') {
+              this.$router.push({path: '/category'})
+            } else  if (paths[0] === 'coupon_center') {
+              this.$router.push({path:'/user/couponCenter'})
+            } else if (paths[0] === 'commodity') {
+              try {
+                if (paths[1] != null)
+                  this.gotoGoodsPage(paths[1]);
+              } catch (e) {
+              }
+            } else if( paths[0] === 'promotion') {
+              try {
+                if (paths[1] != null) {
+                  //this.gotoGoodsPage(paths[1]);
+                  //this.$log("promotion:"+paths[1])
+                  this.gotoPromotionPage(paths[1]);
+                }
+              } catch (e) {
+              }
+            }
+          } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+            this.See(targetId);
+          }
+        } catch (e) {
+        }
+      },
       getCountlineClass() {
         switch (this.datas.settings.countPerLine) {
           case 1:
