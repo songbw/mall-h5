@@ -1,9 +1,11 @@
 <template lang="html">
-  <div>----我是有底线的-----</div>
+  <div>{{this.datas}}</div>
 </template>
 
 <script>
-  export default {}
+  export default {
+    props: ['datas']
+  }
 </script>
 
 <style lang="less" scoped>

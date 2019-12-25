@@ -49,7 +49,8 @@
             </div>
           </div>
         </div>
-        <v-baseline :style="{'background-color': mBackgroundColor}"></v-baseline>
+        <v-baseline v-if="this.showFooter" :datas="this.footerText"  :style="{'background-color': mBackgroundColor}"></v-baseline>
+        <div v-else  :style="{'background-color': mBackgroundColor,'height':'5em'} "></div>
       </div>
       <van-dialog
         v-model="showDialog"
@@ -123,6 +124,8 @@
         datas: {},
         loading: true,
         mBackgroundColor: '#FFFFFF',
+        showFooter: false,
+        footerText: '----我是有底线的-----',
         mHeader: {
           backgroundColor: '#FFFFFF',
           showSearchBar: false
@@ -152,11 +155,17 @@
         this.$log(this.datas);
         this.$log(response.data.data.result)
         this.mBackgroundColor = response.data.data.result.backgroundColor
+        this.$log("###########################################")
+
         if (response.data.data.result.header != undefined) {
           let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
           if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
             this.icon_gift = this.mHeader.novicePackUrl
+          }
+          if(header.showFooter != undefined) {
+            this.showFooter =  header.showFooter
+            this.footerText = header.footerText
           }
         }
         this.$log(this.mHeader);
