@@ -3,8 +3,11 @@
     <div class="centerContext" v-if="this.$api.APP_ID == '12'" :style="{'background-color': '#fbfcfd'}">
         <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/12/splash.png">
     </div>
+    <div class="centerContext" v-else-if="this.$api.APP_ID == '11'" :style="{'background-color': '#fbfcfd'}">
+      <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/11/splash.png">
+    </div>
     <div class="centerContext" v-else>
-      <img :src="splashImg">
+      <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/00/splash.png">
     </div>
   </div>
 </template>
@@ -13,23 +16,23 @@
   export default {
     data(){
       return {
-        splashImg: require('@/assets/icons/ico_splash.png'),
+       /* splashImg: require('@/assets/icons/ico_splash.png'),*/
       }
     },
     mounted() {
-      if(this.$api.APP_ID != '12') {
+/*      if(this.$api.APP_ID != '12') {
         this.snow()
-      }
+      }*/
     },
     beforeDestroy() {
-      setTimeout(() => {
+/*      setTimeout(() => {
         if(this.sf != null) {
           this.sf.destroy()
         }
-      }, 5000);
+      }, 5000);*/
     },
     methods: {
-      snow() {
+/*      snow() {
         const Snowflakes = require('magic-snowflakes');
         this.sf = new Snowflakes({
           color: '#ffffff', // Default: "#5ECDEF"
@@ -45,7 +48,7 @@
           zIndex: 100 // Default: 9999});
         })
         this.sf.start()
-      }
+      }*/
     }
   }
 </script>
