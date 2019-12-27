@@ -13,11 +13,11 @@
             <img :src="(user.headImg !=null && user.headImg.length > 0) ? user.headImg : avatarDefaultImg">
           </div>
         </van-cell>
-        <van-cell title="用户ID" v-if="user.openId != null">
+<!--        <van-cell title="用户ID" v-if="user.openId != null">
           <div slot="label">
             <span>{{user.openId}}</span>
           </div>
-        </van-cell>
+        </van-cell>-->
         <van-cell title="手机号" :value=user.telephone></van-cell>
         <van-cell title="昵称" :value=user.nickname isLink="true" @click="onNickNameClick()"></van-cell>
         <van-dialog
