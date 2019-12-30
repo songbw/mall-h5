@@ -15,6 +15,8 @@
 
 <script>
   import Loading from '@/common/_loading'
+  import Util from '@/util/common'
+
   import {
     Lazyload
   } from 'vant';
@@ -105,7 +107,9 @@
           switch (this.$api.APP_SOURCE) {//APP
             case "00": {
               this.$log("App")
-              this.getLoginAuthInfo();
+              if(this.shouldLogin()) {
+                this.getLoginAuthInfo();
+              }
               setTimeout(() => {
                 this.configured = true
               }, 1000);
@@ -132,6 +136,17 @@
     },
 
     methods: {
+      shouldLogin() {
+        if(this.$route.fullPath == '/pay/cashering') {
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (Util.isUserEmpty(userInfo)) {
+            return true
+          } else {
+            return false;
+          }
+        }
+        return true
+      },
       clearStorage() {
         let payList = []
         this.$store.commit('SET_PAY_LIST', this.payList);

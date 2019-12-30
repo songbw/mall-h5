@@ -3,7 +3,7 @@
     <v-header v-if="showHeader">
       <h1 slot="title">订单支付</h1>
     </v-header>
-    <div class="payBody">
+    <div class="payBody" v-if="this.orderInfo != undefined">
       <div class="box"></div>
       <div class="payBox">
         <div class="infoBox" style="z-index: 1">
@@ -455,6 +455,11 @@
                 <van-radio slot="right-icon" name="4" checked-color="#FF4444"/>
               </van-cell>
             </div>
+            <div v-if="(this.$api.APP_ID === '11' || this.$api.APP_ID === '12' ) && this.$api.APP_SOURCE == '00'">
+              <van-cell title="支付宝支付" :icon="icon_alipay" clickable @click="radio = '5'">
+                <van-radio slot="right-icon" name="5" checked-color="#FF4444"/>
+              </van-cell>
+            </div>
           </van-radio-group>
         </div>
         <van-dialog
@@ -507,6 +512,7 @@
         icon_coin_balance: require('@/assets/icons/ico_coin_balance.png'),
         icon_unionpay: require('@/assets/icons/ico_unionpay.png'),
         icon_wechatpay: require('@/assets/icons/ico_wechatpay.png'),
+        icon_alipay: require('@/assets/icons/ico_alipay.png'),
         radio: -1,
         linkPayAccount: "",
         linkPayPwd: "",
@@ -566,6 +572,7 @@
         isSupportUnionPay: false
       }
     },
+
     computed: {
       amount() {
         return (this.orderInfo.orderAmount / 100).toFixed(2)
@@ -609,33 +616,39 @@
       this.showHeader = this.$api.HAS_HEADER;
       this.orderInfo = this.$route.params.orderInfo;
       this.$log(this.orderInfo);
-      this.updateOptCardInfo();
-      this.udateBankcardList();
-      this.updateBalanceAmount();
-      this.updateLinkPayAccount();
-      if(this.$api.APP_ID == '11') {
-        this.$log("######################")
-        let version = sc.getAppVersion()
-        this.$log("version:"+version)
-        let ret = this.versionStringCompare(version,'3.0.1')
-        if(ret < 0) {
-           this.$log("不支持统一支付")
-           this.isSupportUnionPay = false
-        } else {
-           this.$log("支持统一支付")
-           this.isSupportUnionPay = false//true
-        }
-        /*sc.isExistApi({
-          path:'pay'
-        },
-        function (res) {
-          if(res.code == 0) {
-            console.log("支持统一支付:"+res)
+      if(this.orderInfo != undefined) {
+        this.updateOptCardInfo();
+        this.udateBankcardList();
+        this.updateBalanceAmount();
+        this.updateLinkPayAccount();
+        if (this.$api.APP_ID == '11') {
+          this.$log("######################")
+          let version = sc.getAppVersion()
+          this.$log("version:" + version)
+          let ret = this.versionStringCompare(version, '3.0.1')
+          if (ret < 0) {
+            this.$log("不支持统一支付")
+            this.isSupportUnionPay = false
           } else {
-            console.log("不支持统一支付:"+res)
+            this.$log("支持统一支付")
+            this.isSupportUnionPay = false//true
           }
-        })*/
+          /*sc.isExistApi({
+            path:'pay'
+          },
+          function (res) {
+            if(res.code == 0) {
+              console.log("支持统一支付:"+res)
+            } else {
+              console.log("不支持统一支付:"+res)
+            }
+          })*/
+        }
+      } else {
+        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+        this.$router.replace({path: '/car/orderList'})
       }
+
     },
 
     beforeDestroy() {
@@ -650,7 +663,7 @@
     },
 
     methods: {
-      versionStringCompare (preVersion='', lastVersion='')  {
+      versionStringCompare(preVersion = '', lastVersion = '') {
         let sources = preVersion.split('.');
         let dests = lastVersion.split('.');
         let maxL = Math.max(sources.length, dests.length);
@@ -1276,10 +1289,7 @@
       togLinkPayPwdVisable() {
         this.isLinkPwdVisable = !this.isLinkPwdVisable
       },
-      onPayResult() {
-        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-        this.$router.replace({path: '/car/orderList'})
-      },
+
       onPayBtnClick() {
         this.$log("onPayBtnClick Enter")
         let that = this
@@ -1292,6 +1302,7 @@
           let bankPay = null
           let pingAnPay = null
           let fcWxPay = null
+          let fcAlipayPay = null
           this.payOptions = {
             appId: this.$api.APP_ID,
             orderNo: this.orderInfo.orderNo
@@ -1451,6 +1462,16 @@
                 "orderNo": this.orderInfo.orderNo,
                 "payType": "fcwx"
               }
+            } else if (this.radio == '5') {
+              let url = window.location.protocol +"//" + window.location.host+"/pay/cashering"
+              this.$log(url)
+              fcAlipayPay = {
+                "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
+                "body": "凤巢商品",
+                "orderNo": this.orderInfo.orderNo,
+                "payType": "fcalipay",
+                "returnUrl": url,
+              }
             } else {
               this.$toast("金额不够支付，请选择支付方式")
               return;
@@ -1468,6 +1489,8 @@
             this.payOptions['pingAnPay'] = pingAnPay
           if (fcWxPay != null)
             this.payOptions['fcWxPay'] = fcWxPay
+          if (fcAlipayPay != null)
+            this.payOptions['fcAlipayPay'] = fcAlipayPay
           if (bankPay != null) {
             this.payOptions['bankPay'] = bankPay
             this.quickPayDlgShow = true
@@ -1522,12 +1545,12 @@
                 }
               }).catch(function (error) {
                 that.$toast("请求支付失败")
-                this.payBtnSubmitLoading = false;
+                that.payBtnSubmitLoading = false;
               })
             } else if (fcWxPay != null) {
               this.$log("fcWxPay Enter")
-              configWechat(this,() =>{
-                  that.$log("##############@@@@@@@@@@@@@@@@@@@@@@")
+              configWechat(this, () => {
+                that.$log("##############@@@@@@@@@@@@@@@@@@@@@@")
                 this.$api.xapi({
                   method: 'post',
                   baseURL: this.$api.AGGREGATE_PAY_URL,
@@ -1554,7 +1577,7 @@
                         package: ret.packageStr, // 统一支付接口返回的prepay_id参数值，提交格式如：prepay_id=\*\*\*）
                         signType: ret.signType, // 签名方式，默认为'SHA1'，使用新版支付需传入'MD5'
                         paySign: ret.paySign, // 支付签名
-                        success: function(res) {
+                        success: function (res) {
                           // 支付成功后的回调函数
                           console.log("公众号支付成功")
                           that.$router.replace({
@@ -1564,14 +1587,14 @@
                             }
                           })
                         },
-                        fail: function(res) {
+                        fail: function (res) {
                           console.log('公众号支付失败')
                           that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
                           that.$router.replace({path: '/car/orderList'})
                         },
-                        complete: function(res) {
+                        complete: function (res) {
                           console.log(res, '公众号支付 complete')
-                          if(res.errMsg == 'chooseWXPay:cancel') {
+                          if (res.errMsg == 'chooseWXPay:cancel') {
                             that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
                             that.$router.replace({path: '/car/orderList'})
                           }
@@ -1595,6 +1618,35 @@
                   this.payBtnSubmitLoading = false;
                 })
               })
+            } else if (fcAlipayPay != null) {
+              this.$log("fcAlipayPay Enter")
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.AGGREGATE_PAY_URL,
+                url: '/wspay/pay',
+                data: this.payOptions,
+              }).then((response) => {
+                this.$log(response)
+                if (response.data.code == 200) {
+                  let ret = response.data.data;
+                  this.$log("支付宝支付")
+                  const div = document.createElement('div')
+                  div.innerHTML = ret//此处form就是后台返回接收到的数据
+                  document.body.appendChild(div)
+                  document.forms[0].submit()
+                  this.payBtnSubmitLoading = false;
+                } else {
+                  this.$toast(response.data.message)
+                  this.payBtnSubmitLoading = false;
+                }
+              //  that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+              //  that.$router.replace({path: '/car/orderList'})
+              }).catch(function (error) {
+                that.$toast("请求支付失败")
+                that.payBtnSubmitLoading = false;
+                that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                that.$router.replace({path: '/car/orderList'})
+              })
             } else {
               this.$api.xapi({
                 method: 'post',
@@ -1617,7 +1669,7 @@
                 }
               }).catch(function (error) {
                 that.$toast("请求支付失败")
-                this.payBtnSubmitLoading = false;
+                that.payBtnSubmitLoading = false;
               })
             }
 

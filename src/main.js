@@ -167,9 +167,8 @@ Vue.prototype.$moment = moment;
 router.beforeEach((to, from, next) => {
   console.log("vue route:" + from.fullPath + "-->" + to.fullPath)
   if(to.fullPath == '/car/pay' && from.fullPath =='/') {
-    console.log("redirect")
     next({path: '/user',replace: true})
-  } else  {
+  } else {
 /*    if (to.path) {
       window._hmt.push(['_trackPageview', '/#' + to.fullPath]);
     }*/

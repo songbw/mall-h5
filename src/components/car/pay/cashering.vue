@@ -52,22 +52,33 @@
         this.$router.replace({path: '/car/orderList'})
       },
       quertPaymentStatus() {
+        let out_trade_no = this.payInfo.outer_trade_no
+        if(this.payInfo.method != undefined &&
+          this.payInfo.method == 'alipay.trade.wap.pay.return') {
+          out_trade_no = this.payInfo.out_trade_no
+        }
+        this.$log(out_trade_no)
         return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.AGGREGATE_PAY_URL,
           url: '/wspay/query/prepay',
           params: {
-            orderNo: this.payInfo.outer_trade_no
+            orderNo: out_trade_no
           }
         })
       },
       quertOrderStatus() {
+        let out_trade_no = this.payInfo.outer_trade_no
+        if(this.payInfo.method != undefined &&
+          this.payInfo.method == 'alipay.trade.wap.pay.return') {
+          out_trade_no = this.payInfo.out_trade_no
+        }
         return  this.$api.xapi({
           method: 'get',
           baseURL: this.$api.ORDER_BASE_URL,
           url: '/order/payment/status',
           params: {
-            outerTradeNo: this.payInfo.outer_trade_no
+            outerTradeNo: out_trade_no
           }
         })
       },
@@ -76,6 +87,7 @@
         let that = this;
         if(this.value < 50) {
           try{
+            let userInfo = this.$store.state.appconf.userInfo;
             let orderStatusResp =  await  this.quertOrderStatus ()
             this.$log(orderStatusResp.data)
             if(orderStatusResp.data.code == 200) {
@@ -105,8 +117,8 @@
           } catch (e) {
             that.$log(e)
             that.pageloading = false;
-            this.payInfoText = "网络错误!"
-            this.$toast(this.payInfoText)
+           // this.payInfoText = "网络错误!"
+           // this.$toast(this.payInfoText)
             this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0)
             this.$router.replace({path: '/car/orderList'})
           }
