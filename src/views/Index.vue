@@ -5,7 +5,8 @@
       <h1 slot="title">凤巢商城</h1>
     </v-header>
     <div v-if="pageloading || userTokenLoading">
-      <v-splash></v-splash>
+      <v-loading v-if="isSplashed"></v-loading>
+      <v-splash v-else></v-splash>
     </div>
     <div v-else>
       <div :style="{'background-color': mBackgroundColor}" class="home-body">
@@ -81,7 +82,7 @@
   import Baseline from '@/common/_baseline.vue'
   import Splash from '@/common/splash.vue'
   import Footer from '@/common/_footer.vue'
-
+  import Loading from '@/common/_loading.vue'
   import Util from '@/util/common'
 
   export default {
@@ -97,6 +98,7 @@
       'v-sectionCompBox': sectionCompBox,
       'v-baseline': Baseline,
       'v-splash': Splash,
+      'v-loading': Loading,
       'v-footer': Footer
     },
 
@@ -169,10 +171,12 @@
         }
         this.$log(this.mHeader);
         this.pageloading = false;
+        this.spalshed()
       }).catch(function (error) {
         //alert(error)
         that.$log(error)
         that.pageloading = false;
+        that.spalshed()
       })
 
     },
@@ -187,10 +191,12 @@
           setTimeout(() => {
             if (this.userTokenLoading) {
               this.userTokenLoading = false;
+              this.spalshed();
             }
           }, 20000);
         } else {
           this.userTokenLoading = false;
+          this.spalshed();
         }
 
       } else {//非关爱通App
@@ -200,6 +206,7 @@
         setTimeout(() => {
           if (this.userTokenLoading) {
             this.userTokenLoading = false;
+            this.spalshed();
           }
         }, 3000);
         if (this.$api.APP_ID == '01') {
@@ -209,10 +216,12 @@
             setTimeout(() => {
               if (this.userTokenLoading) {
                 this.userTokenLoading = false;
+                this.spalshed();
               }
             }, 20000);
           } else {
             this.userTokenLoading = false;
+            this.spalshed();
           }
         } else {
           if (this.$api.IS_WX_GZH) {//微信公众号端登录
@@ -223,6 +232,7 @@
               this.wxLogin(this.$api.APP_ID, authCode, state)
             } else {
               this.userTokenLoading = false;
+              this.spalshed();
             }
           }
         }
@@ -238,6 +248,9 @@
       guysinfo() {
         return this.$store.state.appconf.guysInfo;
       },
+      isSplashed() {
+        return this.$store.state.appconf.splashed;
+      }
     },
     watch: {
       guysinfo(newValue, oldVal) {
@@ -256,12 +269,18 @@
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
             this.userTokenLoading = false;
+            this.spalshed();
             this.loadCartList()
           }
         }
       },
     },
     methods: {
+      spalshed() {
+        if(!this.isSplashed) {
+          this.$store.commit('SET_SPLASHED', true);
+        }
+      },
       updateUserDatail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
       },
@@ -310,6 +329,7 @@
               } else {
                 //  this.$toast("获取用户信息失败")
                 this.userTokenLoading = false;
+                this.spalshed();
               }
             }
 
@@ -317,6 +337,7 @@
           } else {
             // this.$toast("获取用户授权信息失败")
             this.userTokenLoading = false;
+            this.spalshed();
           }
         } catch (e) {
 

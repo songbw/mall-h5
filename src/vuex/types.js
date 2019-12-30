@@ -94,3 +94,5 @@ export const SET_GUYS_INFO = 'SET_GUYS_INFO'
 export const SET_WX_OPENID = 'SET_WX_OPENID'
 
 export const SET_APPID = 'SET_APPID'
+
+export const SET_SPLASHED = 'SET_SPLASHED'

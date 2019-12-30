@@ -24,7 +24,8 @@ const state = {
   currentOptCard: '',
   guysInfo: '',
   wxOpenId: '',
-  appId: ''
+  appId: '',
+  splashed: false,
 }
 
 const mutations = {
@@ -122,6 +123,10 @@ const mutations = {
 
   [types.SET_APPID](state, res) {
     state.appId = res
+  },
+
+  [types.SET_SPLASHED](state, res) {
+    state.splashed = res
   },
 }
 
