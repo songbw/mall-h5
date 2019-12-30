@@ -6,6 +6,7 @@
     </v-header>
     <div v-if="pageloading || userTokenLoading">
       <v-splash v-if="showSplash"></v-splash>
+      <v-loading v-else></v-loading>
     </div>
     <div v-else>
       <div :style="{'background-color': mBackgroundColor}" class="home-body">
