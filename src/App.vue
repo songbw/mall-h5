@@ -137,7 +137,8 @@
 
     methods: {
       shouldLogin() {
-        if(this.$route.fullPath == '/pay/cashering') {
+        this.$log(this.$route)
+        if(this.$route.fullPath == '/pay/cashering'|| this.$route.fullPath == '/pay/casher') {
           let userInfo = this.$store.state.appconf.userInfo;
           if (Util.isUserEmpty(userInfo)) {
             return true
