@@ -110,9 +110,7 @@
               if(this.shouldLogin()) {
                 this.getLoginAuthInfo();
               }
-              setTimeout(() => {
-                this.configured = true
-              }, 1000);
+              this.configured = true
               break;
             }
             case "01": {//微信公众号

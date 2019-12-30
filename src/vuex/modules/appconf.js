@@ -25,7 +25,7 @@ const state = {
   guysInfo: '',
   wxOpenId: '',
   appId: '',
-  splashed: false,
+  backfromOuterlink: false,
 }
 
 const mutations = {
@@ -125,8 +125,8 @@ const mutations = {
     state.appId = res
   },
 
-  [types.SET_SPLASHED](state, res) {
-    state.splashed = res
+  [types.SET_BACK_FROME_OUTERLINK](state, res) {
+    state.backfromOuterlink = res
   },
 }
 

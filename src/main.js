@@ -168,10 +168,14 @@ router.beforeEach((to, from, next) => {
   console.log("vue route:" + from.fullPath + "-->" + to.fullPath)
   if(to.fullPath == '/car/pay' && from.fullPath =='/') {
     next({path: '/user',replace: true})
+  } if( (to.fullPath == '/pay/casher' && from.fullPath =='/')||
+        (to.fullPath == '/pay/cashering' && from.fullPath =='/')) {
+    store.commit("SET_BACK_FROME_OUTERLINK",true)
+    next()
+  } if( (to.fullPath == '/' && from.fullPath =='/')) {
+    store.commit("SET_BACK_FROME_OUTERLINK",false)
+    next()
   } else {
-/*    if (to.path) {
-      window._hmt.push(['_trackPageview', '/#' + to.fullPath]);
-    }*/
     next();
   }
 })

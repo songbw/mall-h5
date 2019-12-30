@@ -5,7 +5,7 @@
       <h1 slot="title">凤巢商城</h1>
     </v-header>
     <div v-if="pageloading || userTokenLoading">
-      <v-splash></v-splash>
+      <v-splash v-if="showSplash"></v-splash>
     </div>
     <div v-else>
       <div :style="{'background-color': mBackgroundColor}" class="home-body">
@@ -122,6 +122,7 @@
 
     data() {
       return {
+        showSplash: false,
         datas: {},
         loading: true,
         mBackgroundColor: '#FFFFFF',
@@ -181,6 +182,10 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
+      if(this.isBackFromOuterLink)
+        this.showSplash = false
+      else
+        this.showSplash = true
       if (this.$api.IS_GAT_APP) {
         // this.testGAT();
         let auth_code = this.$route.query.auth_code;
@@ -246,6 +251,9 @@
       guysinfo() {
         return this.$store.state.appconf.guysInfo;
       },
+      isBackFromOuterLink() {
+        return  this.$store.state.appconf.backfromOuterlink;
+      }
     },
     watch: {
       guysinfo(newValue, oldVal) {
