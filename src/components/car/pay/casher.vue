@@ -1467,7 +1467,7 @@
               this.$log(url)
               fcAlipayPay = {
                 "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
-                "body": "凤巢商品",
+                "body": this.$api.APP_ID + "_凤巢商品",
                 "orderNo": this.orderInfo.orderNo,
                 "payType": "fcalipay",
                 "returnUrl": url,
