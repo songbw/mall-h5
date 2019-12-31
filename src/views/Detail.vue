@@ -428,10 +428,10 @@
           } else {
             _url = window.location.href
           }
-          let url = "https://wechat.weesharing.com"+window.location.pathname
+          let url = "https://"+window.location.host +window.location.pathname
           let encodeURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe5b7d5b7722a1577&redirect_uri="+
             encodeURIComponent(url) + window.location.search +
-            "&response_type=code&scope=snsapi_userinfo&state=0102#wechat_redirect"
+            "&response_type=code&scope=snsapi_base&state=0102#wechat_redirect"
           this.$log(encodeURL)
           window.location.replace(encodeURL)
           setTimeout(() => {
