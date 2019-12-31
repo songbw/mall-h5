@@ -1465,9 +1465,15 @@
             } else if (this.radio == '5') {
               let url = window.location.protocol +"//" + window.location.host+"/pay/cashering"
               this.$log(url)
+              let appName = ""
+              if(this.$api.APP_ID == '12') {
+                appName = "最珠海惠民优选"
+              } else if (this.$api.APP_ID == '11'){
+                appName = "无锡惠民优选"
+              }
               fcAlipayPay = {
                 "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
-                "body": this.$api.APP_ID + "_凤巢商品",
+                "body": appName + "-商城商品",
                 "orderNo": this.orderInfo.orderNo,
                 "payType": "fcalipay",
                 "returnUrl": url,
