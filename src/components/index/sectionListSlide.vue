@@ -210,7 +210,7 @@
               }
               item['startTime'] = new Date(this.$moment(item.startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
               item['endTime'] = new Date(this.$moment(item.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
-              if (item['startTime'] >= currentTime) {
+              if (item['startTime'] <= currentTime) {
                 if (currentTime < item['endTime']) {
                   item['actived'] = 1;//正在进行
                 } else {

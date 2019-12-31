@@ -455,11 +455,11 @@
                 <van-radio slot="right-icon" name="4" checked-color="#FF4444"/>
               </van-cell>
             </div>
-            <div v-if="(this.$api.APP_ID === '11' || this.$api.APP_ID === '12' ) && this.$api.APP_SOURCE == '00'">
+<!--        <div v-if="(this.$api.APP_ID === '11' || this.$api.APP_ID === '12' ) && this.$api.APP_SOURCE == '00'">
               <van-cell title="支付宝支付" :icon="icon_alipay" clickable @click="radio = '5'">
                 <van-radio slot="right-icon" name="5" checked-color="#FF4444"/>
               </van-cell>
-            </div>
+            </div>-->
           </van-radio-group>
         </div>
         <van-dialog
