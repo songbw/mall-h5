@@ -25,7 +25,7 @@
                 style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.seconds}}</span>
             </div>
             <div v-else>
-              <v-countdown v-if="promotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
+              <v-countdown :key="activePromotion" v-if="promotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
                            class="countdownBox"
                            :style="'color:blank'"
                            @start_callback="countDownS_cb"
@@ -140,7 +140,8 @@
         },
         show: false,
         skuList: [],
-        titleName: ""
+        titleName: "",
+        activePromotion: null
       }
     },
     watch: {
@@ -372,15 +373,18 @@
             that.show = false;
           })
         } else {
-          let promotion = await this.getAdaptedPromotion();
-          if (promotion != null) {
-            this.promotionActivityId = promotion.promotionId
-            this.titleName = promotion.promotionName
-            this.PromotionStartTime = promotion.startTime
-            this.PromotionEndTime = promotion.endTime
-            this.promotionStatus = promotion.status;
-            this.skuList = promotion.skus
+          this.activePromotion = await this.getAdaptedPromotion();
+          if (this.activePromotion != null) {
+            this.$log("promotion change")
+            this.promotionActivityId = this.activePromotion.promotionId
+            this.titleName = this.activePromotion.promotionName
+            this.PromotionStartTime = this.activePromotion.startTime
+            this.PromotionEndTime = this.activePromotion.endTime
+            this.promotionStatus = this.activePromotion.status;
+            this.skuList = this.activePromotion.skus
             this.show = true;
+            this.$log("titleName:"+this.titleName)
+            this.$log("promotionStatus:"+this.promotionStatus)
           }
         }
       },
