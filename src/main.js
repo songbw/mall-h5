@@ -166,13 +166,13 @@ Vue.prototype.$moment = moment;
 
 router.beforeEach((to, from, next) => {
   console.log("vue route:" + from.fullPath + "-->" + to.fullPath)
-  if( from.fullPath =='/' && to.fullPath == '/car/pay') {
+  if( from.fullPath ==='/' && to.fullPath === '/car/pay') {
     store.commit("SET_BACK_FROME_OUTERLINK",true)
     next({path: '/user',replace: true})
-  } else if ( from.fullPath =='/' && to.fullPath != '/') {
+  } else if ( from.fullPath === '/' && to.fullPath != '/') {
     store.commit("SET_BACK_FROME_OUTERLINK",true)
     next()
-  } else if ( from.fullPath =='/' && to.fullPath == '/') {
+  } else if ( from.fullPath ==='/' && to.fullPath === '/') {
     store.commit("SET_BACK_FROME_OUTERLINK",false)
     next()
   } else {
