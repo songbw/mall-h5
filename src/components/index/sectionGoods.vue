@@ -572,7 +572,7 @@
       background-color: #f0f0f0;
 
       li {
-        width: 48%;
+        width: 47.9%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
         //border: 4px solid transparent;
