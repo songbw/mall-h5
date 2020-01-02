@@ -562,8 +562,8 @@
         // let openId = "ace1c1722b834309a59fad302fe357b2"
         //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         // let openId = "5c8314363cea49de925bfaa39d4c4ebb"
-        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
-       // let openId = "4a742681f23b4d45b13a78bd99c0bf77"
+       // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        let openId = "ace1c1722b834309a59fad302fe357b2"
         if (this.$api.APP_ID == '01') {
           openId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc"
         } else if (this.$api.APP_ID == '12') {
