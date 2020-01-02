@@ -28,7 +28,7 @@
                             <p v-if="k.discount != undefined && datas.settings.countPerLine != 3"
                                :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                               <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                              {{(k.price - k.discount).toFixed(2)}}
+                              {{parseFloat(k.discount).toFixed(2)}}
                               <span
                                 style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
                               <span
@@ -37,7 +37,7 @@
                             <p v-else
                                :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                               <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                              {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                              {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                             </p>
                           </div>
                           <div class="goodsBuyBox">
@@ -59,7 +59,7 @@
                     <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
                        :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                       <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                      {{(k.price - k.discount).toFixed(2)}}
+                      {{parseFloat(k.discount).toFixed(2)}}
                       <span
                         style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
                       <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
@@ -68,7 +68,7 @@
                     <p v-else
                        :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                       <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                      {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                      {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                     </p>
                   </div>
                   <div class="goodsBuyBox">
@@ -114,7 +114,7 @@
                               <p v-if="k.discount != undefined && datas.settings.countPerLine != 3"
                                  :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                                 <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                                {{(k.price - k.discount).toFixed(2)}}
+                                {{parseFloat(k.discount).toFixed(2)}}
                                 <span
                                   style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
                                 <span
@@ -123,7 +123,7 @@
                               <p v-else
                                  :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                                 <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                                {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                                {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                               </p>
                             </div>
                             <div class="goodsBuyBox">
@@ -145,7 +145,7 @@
                       <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
                          :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                         <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                        {{(k.price - k.discount).toFixed(2)}}
+                        {{parseFloat(k.discount).toFixed(2)}}
                         <span
                           style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
                         <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
@@ -154,7 +154,7 @@
                       <p v-else
                          :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                         <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                        {{(k.discount != undefined?(k.price - k.discount).toFixed(2):k.price)}}
+                        {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                       </p>
                     </div>
                     <div class="goodsBuyBox">

@@ -105,7 +105,7 @@ export default {
       if (current < startTime) {
         return checkedPrice //活动未开始
       } else if (current <= endTime) {
-        return parseFloat((checkedPrice-k.promotion[0].discount).toFixed(2)) //活动开始
+        return (parseFloat(k.promotion[0].discount).toFixed(2)) //活动开始
       } else {
         return checkedPrice// 活动已经结束
       }

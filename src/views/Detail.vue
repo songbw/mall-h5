@@ -323,7 +323,7 @@
         }
 
         if (this.hasPromotion) {
-          this.goods['dprice'] = this.goods.price - this.discount
+          this.goods['dprice'] = this.discount
         } else {
           this.goods['dprice'] = this.goods.price
         }

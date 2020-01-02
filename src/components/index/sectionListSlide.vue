@@ -59,7 +59,7 @@
                 <div v-if="k.discount != undefined">
                   <div style="display: flex">
                     <p class="sectionSlide-list-sales-price">
-                      <span>￥</span>{{(k.price-k.discount).toFixed(2)}}
+                      <span>￥</span>{{parseFloat(k.discount).toFixed(2)}}
                     </p>
                     <p class="sectionSlide-list-origin-price">
                       <span>￥</span>{{k.price}}
@@ -86,7 +86,7 @@
                 <div v-if="k.discount != undefined">
                   <div style="display: flex">
                     <p class="sectionSlide-list-sales-price">
-                      <span>￥</span>{{(k.price-k.discount).toFixed(2)}}
+                      <span>￥</span>{{parseFloat(k.discount).toFixed(2)}}
                     </p>
                     <p class="sectionSlide-list-origin-price">
                       <span>￥</span>{{k.price}}
