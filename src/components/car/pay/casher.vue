@@ -455,11 +455,11 @@
                 <van-radio slot="right-icon" name="4" checked-color="#FF4444"/>
               </van-cell>
             </div>
-<!--        <div v-if="(this.$api.APP_ID === '11' || this.$api.APP_ID === '12' ) && this.$api.APP_SOURCE == '00'">
+            <div v-if="(this.$api.APP_ID === '11' || this.$api.APP_ID === '12' ) && this.$api.APP_SOURCE == '00'">
               <van-cell title="支付宝支付" :icon="icon_alipay" clickable @click="radio = '5'">
                 <van-radio slot="right-icon" name="5" checked-color="#FF4444"/>
               </van-cell>
-            </div>-->
+            </div>
           </van-radio-group>
         </div>
         <van-dialog
@@ -616,7 +616,7 @@
       this.showHeader = this.$api.HAS_HEADER;
       this.orderInfo = this.$route.params.orderInfo;
       this.$log(this.orderInfo);
-      if(this.orderInfo != undefined) {
+      if (this.orderInfo != undefined) {
         this.updateOptCardInfo();
         this.udateBankcardList();
         this.updateBalanceAmount();
@@ -1463,12 +1463,12 @@
                 "payType": "fcwx"
               }
             } else if (this.radio == '5') {
-              let url = window.location.protocol +"//" + window.location.host+"/pay/cashering"
+              let url = window.location.protocol + "//" + window.location.host + "/pay/cashering"
               this.$log(url)
               let appName = ""
-              if(this.$api.APP_ID == '12') {
+              if (this.$api.APP_ID == '12') {
                 appName = "最珠海惠民优选"
-              } else if (this.$api.APP_ID == '11'){
+              } else if (this.$api.APP_ID == '11') {
                 appName = "无锡惠民优选"
               }
               fcAlipayPay = {
@@ -1645,8 +1645,8 @@
                   this.$toast(response.data.message)
                   this.payBtnSubmitLoading = false;
                 }
-              //  that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-              //  that.$router.replace({path: '/car/orderList'})
+                //  that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                //  that.$router.replace({path: '/car/orderList'})
               }).catch(function (error) {
                 that.$toast("请求支付失败")
                 that.payBtnSubmitLoading = false;
