@@ -50,8 +50,9 @@
             </div>
           </div>
         </div>
-        <v-baseline v-if="this.showFooter" :datas="this.footerText"  :style="{'background-color': mBackgroundColor}"></v-baseline>
-        <div v-else  :style="{'background-color': mBackgroundColor,'height':'5em'} "></div>
+        <v-baseline v-if="this.showFooter" :datas="this.footerText"
+                    :style="{'background-color': mBackgroundColor}"></v-baseline>
+        <div v-else :style="{'background-color': mBackgroundColor,'height':'5em'} "></div>
       </div>
       <van-dialog
         v-model="showDialog"
@@ -135,8 +136,11 @@
         },
         pageloading: true,
         showHeader: true,
+        showPackage: false,
         showDialog: false,
         icon_gift: "",
+        icon_gift_type: -1,
+        icon_gift_targeUrl: "",
         userTokenLoading: true,
       }
     },
@@ -162,11 +166,11 @@
         if (response.data.data.result.header != undefined) {
           let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
-          if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
-            this.icon_gift = this.mHeader.novicePackUrl
+          if (this.mHeader.showPackage != undefined) {
+            this.showPackage = this.mHeader.showPackage
           }
-          if(header.showFooter != undefined) {
-            this.showFooter =  header.showFooter
+          if (header.showFooter != undefined) {
+            this.showFooter = header.showFooter
             this.footerText = header.footerText
           }
         }
@@ -183,7 +187,7 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
-      if(this.isBackFromOuterLink)
+      if (this.isBackFromOuterLink)
         this.showSplash = false
       else
         this.showSplash = true
@@ -236,7 +240,6 @@
               this.wxLogin(this.$api.APP_ID, authCode, state)
             } else {
               this.userTokenLoading = false;
-
             }
           }
         }
@@ -253,7 +256,7 @@
         return this.$store.state.appconf.guysInfo;
       },
       isBackFromOuterLink() {
-        return  this.$store.state.appconf.backfromOuterlink;
+        return this.$store.state.appconf.backfromOuterlink;
       }
     },
     watch: {
@@ -263,6 +266,28 @@
           let data = flag + this.$md5(this.$store.state.appconf.token)
           if (data == newValue) {
             if (flag == '1' && !this.$api.IS_GAT_APP) {
+              if (this.showPackage) {
+                if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
+                  this.icon_gift = this.mHeader.novicePackUrl
+                  this.icon_gift_type = 0 // 新人礼券
+                } else {
+                  this.icon_gift = this.mHeader.commonPackUrl
+                  this.icon_gift_type = 1 // 普通促销
+                  this.icon_gift_targeUrl = this.mHeader.commonPackTargetUrl
+                }
+              }
+            } else if (flag == '0' && !this.$api.IS_GAT_APP) {
+              if (this.showPackage) {
+                if (this.mHeader.commonPackUrl != undefined && this.mHeader.commonPackUrl.length > 0) {
+                  this.icon_gift = this.mHeader.commonPackUrl
+                  this.icon_gift_type = 1 // 普通促销
+                  this.icon_gift_targeUrl = this.mHeader.commonPackTargetUrl
+                }
+              }
+            }
+            this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+            this.$log(this.mHeader)
+            if (this.icon_gift != null && this.icon_gift.length > 0) {
               this.showDialog = true
             }
           }
@@ -279,6 +304,20 @@
       },
     },
     methods: {
+      See(e) {
+        window.location.href = e
+      },
+      updateCurrentGoods(goods) {
+        this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
+      },
+      gotoPromotionPage(promotionId) {
+        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+      },
+      gotoGoodsPage(mpu) {
+        this.$router.push({path:"/detail",query:{
+            mpu:mpu
+          }});
+      },
       updateUserDatail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
       },
@@ -522,11 +561,12 @@
         // let openId = "d6c88055c3ab42a39d605ed2767a8b9d"
         // let openId = "ace1c1722b834309a59fad302fe357b2"
         //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
-       // let openId = "5c8314363cea49de925bfaa39d4c4ebb"
+        // let openId = "5c8314363cea49de925bfaa39d4c4ebb"
         let openId = "4a742681f23b4d45b13a78bd99c0bf46"
-        if(this.$api.APP_ID == '01') {
+       // let openId = "4a742681f23b4d45b13a78bd99c0bf77"
+        if (this.$api.APP_ID == '01') {
           openId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc"
-        } else if(this.$api.APP_ID == '12') {
+        } else if (this.$api.APP_ID == '12') {
           openId = "5c8314363cea49de925bfaa39d4c4ebb"//最珠海
         }
         if (this.$api.TEST_USER.length > 0)
@@ -647,22 +687,22 @@
         let that = this;
         let url = ""
         let params = null
-        if(this.$api.APP_ID == '01') {
+        if (this.$api.APP_ID == '01') {
           url = '/sso/thirdParty/token/wx';
           params = {
             iAppId: this.$api.APP_ID,
             code: authCode,
           }
-        } else if(this.$api.IS_GAT_APP){
+        } else if (this.$api.IS_GAT_APP) {
           url = '/sso/thirdParty/token/gat';
           params = {
             iAppId: this.$api.APP_ID,
             initCode: authCode,
           }
         }
-        this.$log("url:"+url)
+        this.$log("url:" + url)
         this.$log(params)
-        if(url.length > 0 && params != null) {
+        if (url.length > 0 && params != null) {
           that.$api.xapi({
             method: 'get',
             baseURL: this.$api.SSO_BASE_URL,
@@ -834,13 +874,47 @@
       onGiftDialogImgClick() {
         this.$log("onGiftDialogImgClick Enter")
         let userInfo = this.$store.state.appconf.userInfo;
-        if (!Util.isUserEmpty(userInfo)) {
-          let user = JSON.parse(userInfo)
-          this.$router.push({
-            name: "新人礼包页"
-          })
+        if (this.icon_gift_type == 0) {
+          if (!Util.isUserEmpty(userInfo)) {
+            let user = JSON.parse(userInfo)
+            this.$router.push({
+              name: "新人礼包页"
+            })
+          } else {
+            this.$log("无法获得用户信息，请重新登录授权")
+          }
         } else {
-          this.$log("无法获得用户信息，请重新登录授权")
+          let targetId = this.icon_gift_targeUrl
+          if(targetId != undefined && targetId.length > 0) {
+            if (targetId.startsWith("aggregation://")) {
+              let id = targetId.substr(14);
+              this.$router.push({path: '/index/' + id});
+            } else if (targetId.startsWith("route://")) {
+              let target = targetId.substr(8);
+              let paths = target.split("/");
+              this.$log(paths);
+              if (paths[0] === 'category') {
+                this.$router.push({path: '/category'})
+              } else if (paths[0] === 'coupon_center') {
+                this.$router.push({path: '/user/couponCenter'})
+              } else if (paths[0] === 'commodity') {
+                try {
+                  if (paths[1] != null)
+                    this.gotoGoodsPage(paths[1]);
+                } catch (e) {
+                }
+              } else if (paths[0] === 'promotion') {
+                try {
+                  if (paths[1] != null) {
+                    this.gotoPromotionPage(paths[1]);
+                  }
+                } catch (e) {
+                }
+              }
+            } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+              this.See(targetId);
+            }
+          }
         }
       },
 

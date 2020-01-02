@@ -238,7 +238,7 @@
                 unStartedList.sort(function (a, b) {
                   return a.startTime - b.startTime
                 })
-                return onGoingList[0]
+                return unStartedList[0]
               }
             }
           }
