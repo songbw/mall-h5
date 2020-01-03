@@ -374,6 +374,9 @@
         }
         this.updateServiceBoxInfo(this.goods);
         this.updateInventor(this.goods)
+        if(this.$api.APP_ID === '01') {
+          this.wechatShareConfig()
+        }
       } else {
 
       }
@@ -419,6 +422,54 @@
       }
     },
     methods: {
+      wechatShareConfig() {
+        this.$log('shareConfig Enter')
+        let that = this
+        this.$log(this.goods)
+        let _url = ''
+        if (window.__wxjs_is_wkwebview === true) {
+          _url = window.location.href.split('#')[0] || window.location.href
+        } else {
+          _url = window.location.href
+        }
+        let options = {
+          image: this.swiperUrls[0].imgPath,
+          title: "惠民优选",
+          content: this.goods.name,
+          shareUrl: _url
+        }
+        configWechat(this, () => {
+          wx.onMenuShareAppMessage({
+            title: options.title, // 分享标题
+            desc: options.content, // 分享描述
+            link:  options.shareUrl, // 分享链接
+            imgUrl: options.image, // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+              that.$toast("分享微信好友成功！");
+            },
+            cancel: function () {
+              that.$toast('分享微信好友失败');
+            }
+          });
+          wx.onMenuShareTimeline({
+            title:  options.title, // 分享标题
+            desc: options.content, // 分享描述
+            link: options.shareUrl, // 分享链接
+            imgUrl: options.image, // 分享图标
+            type: '', // 分享类型,music、video或link，不填默认为link
+            dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
+            success: function () {
+              that.$toast("分享微信好友成功！");
+            },
+            cancel: function () {
+              that.$toast('分享朋友圈失败');
+            }
+          });
+        })
+      },
+
       redirectOrNot() {
         let userInfo = this.$store.state.appconf.userInfo;
         if (Util.isUserEmpty(userInfo)) {

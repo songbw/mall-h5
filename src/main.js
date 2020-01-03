@@ -182,6 +182,19 @@ router.beforeEach((to, from, next) => {
 })
 
 
+router.afterEach((to, from) => {
+//  let allowShare = !!to.meta.allowShare;
+  if (!!window.__wxjs_is_wkwebview) {// IOS
+    if (window.entryUrl == "" || window.entryUrl == undefined) {
+      let authUrl = `${window.location.origin}${to.fullPath}`;
+      window.entryUrl = authUrl; // 将后面的参数去除
+    }
+  } else {
+    // 安卓
+  }
+});
+
+
 /* eslint-disable no-new */
 new Vue({
   el: '#app',

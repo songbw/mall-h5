@@ -3,7 +3,7 @@ import wx from 'weixin-js-sdk'
 function configWechat(env, callback) {
   let _url = ''
   if (window.__wxjs_is_wkwebview === true) {
-    _url = window.location.href.split('#')[0] || window.location.href
+    _url = window.entryUrl //window.location.href.split('#')[0] || window.location.href
   } else {
     _url = window.location.href
   }
@@ -24,6 +24,8 @@ function configWechat(env, callback) {
         nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
         signature: res.data.data.signature, // 必填，签名，见附录1
         jsApiList: [
+          'onMenuShareAppMessage',
+          'onMenuShareTimeline',
           'chooseWXPay',
           'scanQRCode'
         ]

@@ -41,7 +41,7 @@
         this.$log(encodeURL)
         let options = {
           image: this.swiperData[0].imgPath,
-          title: "惠民优选商品",
+          title: "惠民优选",
           content: this.goods.name,
           shareUrl: encodeURL
         }
