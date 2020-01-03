@@ -102,6 +102,8 @@
   import CountDown from '@/common/_vue2-countdown.vue'
   import Util from '@/util/common'
   import Footer from '@/common/_footer.vue'
+  import {configWechat} from '@/util/wechat'
+  import wx from 'weixin-js-sdk'
 
   export default {
     components: {
@@ -172,6 +174,7 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
+      this.wechatShareConfig()
       setTimeout(() => {
         this.$log("setTimeout launchedLoading:" + this.launchedLoading)
         if (!this.launchedLoading) {
@@ -181,6 +184,17 @@
     },
 
     methods: {
+      wechatShareConfig() {
+        this.$log('shareConfig Enter')
+        if(this.$api.APP_ID === '01') {
+          try{
+            configWechat(this, () => {
+              wx.hideOptionMenu()
+            })
+          } catch (e) {
+          }
+        }
+      },
       gotoDetailPage(sku){
         this.$router.push({path:"/detail",query:{
             mpu:sku.baseInfo.mpu

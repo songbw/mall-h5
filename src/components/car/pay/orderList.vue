@@ -112,7 +112,8 @@
   import Header from '@/common/_header.vue'
   import Footer from '@/common/_footer.vue'
   import Util from '@/util/common'
-
+  import {configWechat} from '@/util/wechat'
+  import wx from 'weixin-js-sdk'
 
   export default {
     components: {
@@ -192,6 +193,7 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
+      this.wechatShareConfig()
     },
 
     beforeDestroy() {
@@ -199,6 +201,17 @@
     },
 
     methods: {
+      wechatShareConfig() {
+        this.$log('shareConfig Enter')
+        if(this.$api.APP_ID === '01') {
+          try{
+            configWechat(this, () => {
+              wx.hideOptionMenu()
+            })
+          } catch (e) {
+          }
+        }
+      },
       gotoCart() {
         this.$router.push({name: '购物车页'})
       },

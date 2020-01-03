@@ -33,6 +33,9 @@
 </template>
 
 <script>
+  import {configWechat} from '@/util/wechat'
+  import wx from 'weixin-js-sdk'
+
   export default {
     data() {
       return {
@@ -59,9 +62,22 @@
       if(this.$api.IS_GAT_APP) {
         this.showBackArrow = false;
       }
+      this.wechatShareConfig()
     },
 
     methods: {
+      wechatShareConfig() {
+        this.$log('shareConfig Enter')
+        if(this.$api.APP_ID === '01') {
+          try{
+            configWechat(this, () => {
+              wx.hideOptionMenu()
+            })
+          } catch (e) {
+
+          }
+        }
+      },
       extractWord(words) {
         if (words != null && words.length > 0) {
           let wordArray = words.split(":");

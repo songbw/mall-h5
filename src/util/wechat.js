@@ -24,6 +24,8 @@ function configWechat(env, callback) {
         nonceStr: res.data.data.nonceStr, // 必填，生成签名的随机串
         signature: res.data.data.signature, // 必填，签名，见附录1
         jsApiList: [
+          'hideOptionMenu',
+          'showOptionMenu',
           'onMenuShareAppMessage',
           'onMenuShareTimeline',
           'chooseWXPay',

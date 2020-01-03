@@ -97,6 +97,8 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Util from '@/util/common'
+  import {configWechat} from '@/util/wechat'
+  import wx from 'weixin-js-sdk'
 
   export default {
     components: {
@@ -149,6 +151,7 @@
     created() {
       let userInfo = this.$store.state.appconf.userInfo;
       let that = this
+      this.wechatShareConfig()
       this.showHeader = this.$api.HAS_HEADER;
       if(this.$store.state.appconf.userDetail.length > 0) {
         this.user  =  JSON.parse(this.$store.state.appconf.userDetail)
@@ -245,6 +248,18 @@
       }
     },
     methods: {
+      wechatShareConfig() {
+        this.$log('shareConfig Enter')
+        if(this.$api.APP_ID === '01') {
+          try{
+            configWechat(this, () => {
+              wx.hideOptionMenu()
+            })
+          } catch (e) {
+
+          }
+        }
+      },
       getClientName() {
         switch (this.$api.APP_ID) {
           case "09":

@@ -18,6 +18,8 @@
   import Header from '@/common/_header.vue'
   import Aside from '@/components/category/aside.vue'
   import Footer from '@/common/_footer.vue'
+  import {configWechat} from '@/util/wechat'
+  import wx from 'weixin-js-sdk'
 
   export default {
     components: {
@@ -50,6 +52,20 @@
         this.class1Data = res.data.data;
       }).catch((error) => {
       })
+      this.wechatShareConfig()
+    },
+    methods: {
+      wechatShareConfig() {
+        this.$log('shareConfig Enter')
+        if(this.$api.APP_ID === '01') {
+          try{
+            configWechat(this, () => {
+              wx.hideOptionMenu()
+            })
+          } catch (e) {
+          }
+        }
+      },
     }
   }
 </script>

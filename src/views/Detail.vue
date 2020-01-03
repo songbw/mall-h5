@@ -439,6 +439,7 @@
           shareUrl: _url
         }
         configWechat(this, () => {
+          wx.showOptionMenu()
           wx.onMenuShareAppMessage({
             title: options.title, // 分享标题
             desc: options.content, // 分享描述
@@ -447,10 +448,10 @@
             type: '', // 分享类型,music、video或link，不填默认为link
             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {
-              that.$toast("分享微信好友成功！");
+             // that.$toast("分享微信好友成功！");
             },
             cancel: function () {
-              that.$toast('分享微信好友失败');
+             // that.$toast('分享微信好友失败');
             }
           });
           wx.onMenuShareTimeline({
@@ -461,10 +462,10 @@
             type: '', // 分享类型,music、video或link，不填默认为link
             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {
-              that.$toast("分享微信好友成功！");
+             // that.$toast("分享微信好友成功！");
             },
             cancel: function () {
-              that.$toast('分享朋友圈失败');
+             // that.$toast('分享朋友圈失败');
             }
           });
         })

@@ -74,6 +74,9 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Loading from '@/common/_loading.vue'
+
+  import {configWechat} from '@/util/wechat'
+  import wx from 'weixin-js-sdk'
   //import { Toast } from 'mint-ui'
   export default {
     components: {
@@ -204,9 +207,21 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
+      this.wechatShareConfig()
     },
 
     methods: {
+      wechatShareConfig() {
+        this.$log('shareConfig Enter')
+        if(this.$api.APP_ID === '01') {
+          try{
+            configWechat(this, () => {
+              wx.hideOptionMenu()
+            })
+          } catch (e) {
+          }
+        }
+      },
       gotoShoppingCart() {
         this.$log("gotoShoppingCart Enter")
         this.$router.push({name: '购物车页'})
