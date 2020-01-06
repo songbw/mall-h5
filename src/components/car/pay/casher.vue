@@ -505,6 +505,7 @@
     },
     data() {
       return {
+        hasVirtualGoods: false,
         showHeader: true,
         orderInfo: {},
         icon_quicklypay: require('@/assets/icons/ico_quicklypay.png'),
@@ -588,7 +589,11 @@
         },
         set(value) {
           if (this.mCoinBalance.amount == 0 && !this.mCoinBalance.checked ||
-            this.remainPayAmount == 0 && !this.mCoinBalance.checked) {
+            this.remainPayAmount == 0 && !this.mCoinBalance.checked  || this.hasVirtualGoods) {
+            if(this.hasVirtualGoods) {
+              this.mCoinBalance.checked = false
+           //   this.$toast("订单含有卡券类商品，不能使用余额!")
+            }
           } else {
             this.mCoinBalance.checked = value
           }
@@ -623,6 +628,8 @@
         this.updateLinkPayAccount();
         if (this.$api.APP_ID == '11') {
           this.$log("######################")
+          if(this.orderInfo.hasVirtualGoods != undefined)
+            this.hasVirtualGoods = this.orderInfo.hasVirtualGoods
           let version = sc.getAppVersion()
           this.$log("version:" + version)
           let ret = this.versionStringCompare(version, '3.0.1')
@@ -1201,7 +1208,10 @@
       onCoinBalanceSelector() {
         this.$log("onCoinBalanceSelector Enter")
         if (this.mCoinBalance.amount == 0 && !this.mCoinBalance.checked ||
-          this.remainPayAmount == 0 && !this.mCoinBalance.checked) {
+          this.remainPayAmount == 0 && !this.mCoinBalance.checked || this.hasVirtualGoods) {
+          if(this.hasVirtualGoods) {
+            this.$toast("订单含有卡券类商品，不能使用余额!")
+          }
         } else {
           this.mCoinBalance.checked = !this.mCoinBalance.checked
           for (let i = this.mPaylist.length - 1; i >= 0; i--) {

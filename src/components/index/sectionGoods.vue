@@ -423,7 +423,8 @@
               "brand": goods.brand,
               "model": goods.model,
               "price": goods.price,
-              "checkedPrice": goods.price
+              "checkedPrice": goods.price,
+              "type":  goods.type == undefined? 0:goods.type
             }
             let couponList = []
             let promotionInfo = {}
@@ -435,6 +436,7 @@
             }
           } else {
             cartItem.baseInfo.count++;
+            cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
           }
           Util.updateCartItem(this, cartItem)
         }).catch(function (error) {

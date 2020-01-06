@@ -308,6 +308,7 @@
     },
     data() {
       return {
+        hasVirtualGoods: false,
         freightPay: 0,
         payway: '现金支付',
         showHeader: true,
@@ -408,6 +409,9 @@
           cartList.forEach(item => {
             if (item.baseInfo.userId == user.userId && item.baseInfo.choosed) {
               selectCarList.push(item)
+              if(item.goodsInfo.type != undefined && item.goodsInfo.type != 0) {
+                this.hasVirtualGoods = true
+              }
             }
           })
         }
@@ -1308,7 +1312,8 @@
                   "salePrice": salePrice,
                   "promotionId": promotionId,
                   "promotionDiscount": promotionDiscount.toFixed(2),
-                  "skuCouponDiscount": skuCouponDiscount
+                  "skuCouponDiscount": skuCouponDiscount,
+                  "type": sku.product.goodsInfo.type == undefined ? 0:sku.product.goodsInfo.type
                 })
               }
             })
@@ -1528,7 +1533,8 @@
                             "orderNo": '',// orderNo,
                             "orderAmount": parseInt((amount * 100).toFixed(0)),//分
                             "openId": user.openId,
-                            "businessType": "11"
+                            "businessType": "11",
+                            "hasVirtualGoods": this.hasVirtualGoods
                           }
                           if (that.pageAction == "direct") {
                             this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')

@@ -261,7 +261,8 @@
                 "brand": goods.brand,
                 "model": goods.model,
                 "price": goods.price,
-                "checkedPrice": goods.price
+                "checkedPrice": goods.price,
+                "type":  goods.type == undefined? 0:goods.type
               }
               let couponList = []
               let promotionInfo = {}
@@ -274,6 +275,7 @@
               cartItem.couponList.push(this.coupon.couponInfo)
             } else {
               cartItem.baseInfo.count++;
+              cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
               let found = -1;
               for (let i = 0; i < cartItem.couponList.length; i++) {
                 if (cartItem.couponList[i].id == this.coupon.couponInfo.id) {

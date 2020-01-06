@@ -480,6 +480,7 @@
             "model": item.model,
             "price": item.price,
             "state": item.state,
+            "type":  item.type == undefined? 0:item.type
           }
           let couponList = []
           let promotion = []
@@ -508,6 +509,7 @@
           cartItem.baseInfo.merchantId = item.merchantId
           cartItem.goodsInfo.merchantId = item.merchantId
           cartItem.goodsInfo.price = item.price
+          cartItem.goodsInfo.type =  (item.type == undefined? 0:item.type)
           let couponList = []
           let promotion = []
           if (couponAndProms != null) {

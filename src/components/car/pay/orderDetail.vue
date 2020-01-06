@@ -262,7 +262,8 @@
                     "brand": goods.brand,
                     "model": goods.model,
                     "price": goods.unitPrice,
-                    "checkedPrice": goods.price
+                    "checkedPrice": goods.price,
+                    "type": goods.type == undefined? 0:goods.type
                   }
                   let couponList = []
                   let promotionInfo = {}
@@ -274,6 +275,7 @@
                   }
                 } else {
                   cartItem.baseInfo.count++;
+                  cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
                 }
                 Util.updateCartItem(this, cartItem)
               }
@@ -523,12 +525,20 @@
         let len = listItem.tradeNo.length;
         let orderNos = JSON.stringify(listItem.tradeNo.substr(len - 8)).replace(/\"/g, "");
         let orderNo = this.$api.APP_ID + listItem.merchantNo + user.openId + orderNos
+        let hasVirtualGoods = false
+        for(let i = 0 ;i < listItem.skus.length; i++) {
+          if(listItem.skus[i].productType != undefined && listItem.skus[i].productType != 0) {
+            hasVirtualGoods = true;
+            break;
+          }
+        }
         let pAnOrderInfo = {
           "accessToken": user.accessToken,
           "orderNo": orderNo,
           "orderAmount": listItem.saleAmount * 100,//分
           "openId": user.openId,
-          "businessType": "11"
+          "businessType": "11",
+          "hasVirtualGoods": hasVirtualGoods
         }
         let merchantNo = ""
         if(listItem.merchantNo != null) {
