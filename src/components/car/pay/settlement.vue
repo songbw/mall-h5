@@ -950,8 +950,6 @@
       },
 
       couponReducedPrice(coupon) {
-        this.$log("###############################################################################")
-        this.$log(coupon)
         let reducePrice = 0;
         let fullPrice = 0;
         if (coupon != null) {
@@ -998,7 +996,6 @@
             default:
               break;
           }
-          this.$log("reducePrice:" + reducePrice)
           if (reducePrice > fullPrice) {
             reducePrice = fullPrice;
           }
