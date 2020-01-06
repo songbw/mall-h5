@@ -426,7 +426,7 @@
             for (let i = 0; i < allPayList.length; i++) {
               if (allPayList[i].valid && allPayList[i].product.couponList != undefined) {
                 for (let j = 0; j < item.couponInfo.rules.scenario.couponMpus.length; j++) {
-                  if(item.couponInfo.rules.scenario.couponMpus[j] == allPayList[i].product.baseInfo.mpu) {
+                  if (item.couponInfo.rules.scenario.couponMpus[j] == allPayList[i].product.baseInfo.mpu) {
                     //选出选购商品所有对应的优惠券
                     found = j;
                     break;
@@ -482,7 +482,7 @@
                       fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                     } else {
                       for (let j = 0; j < coupon.couponInfo.rules.scenario.couponMpus.length; j++) {
-                        if(coupon.couponInfo.rules.scenario.couponMpus[j] == payItem.product.baseInfo.mpu) {
+                        if (coupon.couponInfo.rules.scenario.couponMpus[j] == payItem.product.baseInfo.mpu) {
                           fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                           break;
                         }
@@ -577,8 +577,8 @@
         try {
           allPayList.forEach(item => {
             if (item.product.promotionInfo != undefined) {
-              item.product.promotionInfo['promotionState'] = Util.getPromotionState(this,item.product.promotionInfo)
-              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(this,item.checkedPrice, item.product.promotionInfo)
+              item.product.promotionInfo['promotionState'] = Util.getPromotionState(this, item.product.promotionInfo)
+              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(this, item.checkedPrice, item.product.promotionInfo)
             }
             if (item.product.baseInfo.merchantId === 2) {//aoyi
               if (item.product.baseInfo.mpu != null) {
@@ -950,11 +950,13 @@
       },
 
       couponReducedPrice(coupon) {
+        this.$log("###############################################################################")
+        this.$log(coupon)
         let reducePrice = 0;
         let fullPrice = 0;
         if (coupon != null) {
           let allPayList = this.$store.state.appconf.payList;
-          if (coupon.couponInfo.rules.scenario.type === 3) {
+          if (coupon.couponInfo.rules.scenario.type === 3) {//类目品牌类
             allPayList.forEach(payItem => {
               if (payItem.valid) {
                 for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
@@ -965,24 +967,24 @@
                 }
               }
             })
-          } else if (coupon.couponInfo.rules.scenario.type === 2) {
-            allPayList.forEach(payItem => {
-              if (payItem.valid) {
-                fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-              }
-            })
           } else {
             allPayList.forEach(payItem => {
               if (payItem.valid) {
-                for (let i = 0; i < payItem.product.couponList.length; i++) {
-                  if (payItem.product.couponList[i].id === coupon.couponInfo.id) {
-                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                    break;
+                if (coupon.couponInfo.rules.scenario.type === 2) {//全场类
+                  fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                } else {
+                  for (let j = 0; j < coupon.couponInfo.rules.scenario.couponMpus.length; j++) {
+                    if (coupon.couponInfo.rules.scenario.couponMpus[j] == payItem.product.baseInfo.mpu) {
+                      fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                      break;
+                    }
                   }
                 }
               }
             })
           }
+          this.$log("fullPrice:" + fullPrice)
+
           switch (coupon.couponInfo.rules.couponRules.type) {
             case 0:
               reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
@@ -996,10 +998,12 @@
             default:
               break;
           }
+          this.$log("reducePrice:" + reducePrice)
+          if (reducePrice > fullPrice) {
+            reducePrice = fullPrice;
+          }
         }
-        if (reducePrice > fullPrice) {
-          reducePrice = fullPrice;
-        }
+        this.$log("reducePrice:" + reducePrice)
         this.reducedPriceOfCoupon = reducePrice.toFixed(2)
         this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
         return this.reducedPriceOfCoupon;
@@ -1118,7 +1122,7 @@
           }
         }
         if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this,k)
+          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this, k)
           this.savePayList()
         }
       },
@@ -1130,7 +1134,7 @@
           }
         }
         if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this,k)
+          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this, k)
           let len = this.payCarList[found].product.promotionInfo.promotion.length;
           this.payCarList[found].product.promotionInfo.promotion.splice(0, len);
           this.savePayList()
@@ -1274,7 +1278,7 @@
             let promotionDiscountOfMerchant = 0;
             item.goods.forEach(sku => {
               if (sku.valid) {
-                if(sku.product.goodsInfo.type != undefined && sku.product.goodsInfo.type != 0) {
+                if (sku.product.goodsInfo.type != undefined && sku.product.goodsInfo.type != 0) {
                   this.hasVirtualGoods = true
                 }
                 let promotionId = 0
@@ -1313,7 +1317,7 @@
                   "promotionId": promotionId,
                   "promotionDiscount": promotionDiscount.toFixed(2),
                   "skuCouponDiscount": skuCouponDiscount,
-                  "type": sku.product.goodsInfo.type == undefined ? 0:sku.product.goodsInfo.type
+                  "type": sku.product.goodsInfo.type == undefined ? 0 : sku.product.goodsInfo.type
                 })
               }
             })
@@ -1483,7 +1487,7 @@
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let event = "userId=" + user.userId + "&" + "dataTime:" + new Date().getTime()
-         // window._hmt.push(['_trackEvent', '下订单', 'click', event]);
+          // window._hmt.push(['_trackEvent', '下订单', 'click', event]);
           let receiverId = this.$store.state.appconf.usedAddressId;
           that.$log("onSubmit receiverId is:" + receiverId)
           if (receiverId == undefined || receiverId == -1) {
@@ -1732,7 +1736,7 @@
               skusOfZy.push({"mpu": item.baseInfo.mpu})
             }
             if (item.promotionInfo.promotion != null && item.promotionInfo.promotion.length > 0) {
-              item.promotionInfo.promotionState = Util.getPromotionState(this,item.promotionInfo);
+              item.promotionInfo.promotionState = Util.getPromotionState(this, item.promotionInfo);
             }
             //////////////////
             this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.price})
@@ -1870,18 +1874,18 @@
                 })
               }
             }
-            let ret =  await this.getAllasPlatformFreight()
+            let ret = await this.getAllasPlatformFreight()
             this.$log(ret)
-            if(ret.data.code == 200) {
+            if (ret.data.code == 200) {
               let result = ret.data.data.result
-              if(result.totalPrice > 0) {
+              if (result.totalPrice > 0) {
                 result.priceBeans.forEach(iFreight => {
                   this.arregationList.forEach(item => {
                     if (item.price > 0 && item.merchantId != 2) {
                       if (iFreight.merchantId === item.merchantId) {
                         item.freight = parseFloat(iFreight.shipPrice);
                       }
-                    } else if(item.price > 0 && item.merchantId == 2) {
+                    } else if (item.price > 0 && item.merchantId == 2) {
                       if (iFreight.merchantCode === item.merchantCode) {
                         item.freight = parseFloat(iFreight.shipPrice);
                       }
@@ -1926,14 +1930,14 @@
               )
             }
           })
-          if(mpuParams.length > 0) {
+          if (mpuParams.length > 0) {
             let merchantCode = ""
-            if(item.merchantId == 2) {
+            if (item.merchantId == 2) {
               merchantCode = item.merchantCode
             }
             merchantInfos.push({
               merchantId: item.merchantId,
-              merchantCode:merchantCode,
+              merchantCode: merchantCode,
               mpuParams: mpuParams
             })
           }
