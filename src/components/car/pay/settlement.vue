@@ -862,22 +862,21 @@
                 if (sku.valid) {
                   this.$log(sku)
                   let found = -1
-                  for (let i = 0; i < sku.product.couponList.length; i++) {
-                    if (sku.product.couponList[i].id === coupon.couponId) {
-                      found = i
-                      break;
-                    }
-                  }
-                  if (found === -1) {
-                    if (coupon.couponInfo.rules.scenario.type === 3) {
-                      for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
-                        if (coupon.couponInfo.rules.scenario.categories[i] === sku.product.goodsInfo.category) {
-                          found = 1;//找到
-                          break;
-                        }
+                  if (coupon.couponInfo.rules.scenario.type === 3) {
+                    for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
+                      if (coupon.couponInfo.rules.scenario.categories[i] === sku.product.goodsInfo.category) {
+                        found = 1;//找到
+                        break;
                       }
-                    } else if (coupon.couponInfo.rules.scenario.type === 2) {
-                      found = 1;//找到
+                    }
+                  } else if (coupon.couponInfo.rules.scenario.type === 2) {
+                    found = 1;//找到
+                  } else {
+                    for (let j = 0; j < coupon.couponInfo.rules.scenario.couponMpus.length; j++) {
+                      if (coupon.couponInfo.rules.scenario.couponMpus[j] == sku.product.baseInfo.mpu) {
+                        found = j
+                        break;
+                      }
                     }
                   }
                   if (found != -1) {
@@ -1000,9 +999,10 @@
             reducePrice = fullPrice;
           }
         }
-        this.$log("reducePrice:" + reducePrice)
+
         this.reducedPriceOfCoupon = reducePrice.toFixed(2)
         this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
+        this.$log("reducedPriceOfCoupon:" + this.reducedPriceOfCoupon)
         return this.reducedPriceOfCoupon;
       },
       onCouponListClick(coupon) {
@@ -1266,7 +1266,7 @@
           }
         }
         let couponInfo = this.getUsedCouponDetail4Order(this.usedCoupon)
-        this.$log(couponInfo)
+        this.$log("couponInfo:"+ couponInfo)
         this.arregationList.forEach(item => {
           if (item.goods.length > 0) {
             let skus = []
