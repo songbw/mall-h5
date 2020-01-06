@@ -409,9 +409,6 @@
           cartList.forEach(item => {
             if (item.baseInfo.userId == user.userId && item.baseInfo.choosed) {
               selectCarList.push(item)
-              if(item.goodsInfo.type != undefined && item.goodsInfo.type != 0) {
-                this.hasVirtualGoods = true
-              }
             }
           })
         }
@@ -1277,6 +1274,9 @@
             let promotionDiscountOfMerchant = 0;
             item.goods.forEach(sku => {
               if (sku.valid) {
+                if(sku.product.goodsInfo.type != undefined && sku.product.goodsInfo.type != 0) {
+                  this.hasVirtualGoods = true
+                }
                 let promotionId = 0
                 if (sku.product.promotionInfo.promotionState == 1) {
                   promotionId = sku.product.promotionInfo.promotion[0].id
