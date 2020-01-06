@@ -2023,6 +2023,7 @@
 
     .pay {
       width: 100%;
+      min-height: 100vh;
       top: 0px;
       background-color: #f8f8f8;
       padding-bottom: 50px;
