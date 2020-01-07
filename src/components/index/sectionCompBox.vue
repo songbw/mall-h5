@@ -370,6 +370,11 @@
           }
         } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
           this.See(targetId);
+        } else {
+          if(this.left.isDailySchedule && this.left.promotionActivityId != undefined)
+          {
+            this.gotoPromotionPage(this.left.promotionActivityId)
+          }
         }
       },
       gotoRightTargetUrl() {
@@ -402,6 +407,11 @@
           }
         } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
           this.See(targetId);
+        } else {
+          if(this.right.isDailySchedule && this.right.promotionActivityId != undefined)
+          {
+            this.gotoPromotionPage(this.right.promotionActivityId)
+          }
         }
       },
       updateLeftTimer(startTime, endTime) {

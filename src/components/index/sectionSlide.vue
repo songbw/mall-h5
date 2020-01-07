@@ -398,6 +398,10 @@
           }
         } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
           this.See(targetId);
+        } else {
+          if(this.promotionActivityId != undefined && this.isDailySchedule) {
+              this.gotoPromotionPage(this.promotionActivityId)
+          }
         }
       },
       onGoodsClick(goods) {
