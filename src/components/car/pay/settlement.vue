@@ -571,7 +571,6 @@
             }
           }
         });
-        this.$log("KKKKKKKKKKKKKKKKKKKKKK")
         if(this.usedCoupon != null) {
           let found = -1
           for(let i = 0 ; i < avaliableCouponList.length ; i++) {
