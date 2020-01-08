@@ -59,7 +59,7 @@
                         :title="k.product.goodsInfo.name"
                         :thumb="k.product.goodsInfo.image"
                         :origin-price="k.checkedPrice">
-                        <div slot="footer" @click.stop="">
+                        <div slot="footer" @click.stop="" class="cardStepper">
                           <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
                         </div>
                       </van-card>
@@ -77,7 +77,7 @@
                         <div slot="desc">
                           <span class="prodDesc">{{locationCity}}</span>
                         </div>
-                        <div slot="footer" @click.stop="">
+                        <div slot="footer" @click.stop="" class="cardStepper">
                           <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
                         </div>
                       </van-card>
@@ -121,7 +121,7 @@
                       <div slot="desc">
                         <span style="font-size: small">{{locationCity}}</span>
                       </div>
-                      <div slot="footer" @click.stop="">
+                      <div slot="footer" @click.stop="" class="cardStepper">
                         <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
                       </div>
                     </van-card>
@@ -139,7 +139,7 @@
                       <div slot="desc">
                         <span style="font-size: small">{{locationCity}}</span>
                       </div>
-                      <div slot="footer" @click.stop="">
+                      <div slot="footer" @click.stop="" class="cardStepper">
                         <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
                       </div>
                     </van-card>
@@ -2843,6 +2843,11 @@
               &__price {
                 margin-top: 0.5em;
                 .fz(font-size, 40);
+              }
+
+              .cardStepper{
+                margin-right: -5px;
+                margin-top: -20px;
               }
             }
           }
