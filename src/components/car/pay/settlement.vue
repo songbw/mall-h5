@@ -29,6 +29,7 @@
           </div>
         </div>
         <div class="pay-list">
+          <!--关爱通平台-->
           <div class="pay-product" v-if="this.$api.IS_GAT_APP">
             <li v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
@@ -46,6 +47,7 @@
                                    :secondsTxt="''">
                       </v-countdown>
                     </div>
+                    <!--商品有活动的布局-->
                     <div v-if="k.product.promotionInfo.promotionState === 1">
                       <div v-if="!k.valid">
                         <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
@@ -57,8 +59,12 @@
                         :title="k.product.goodsInfo.name"
                         :thumb="k.product.goodsInfo.image"
                         :origin-price="k.checkedPrice">
+                        <div slot="footer" @click.stop="">
+                          <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
+                        </div>
                       </van-card>
                     </div>
+                    <!--商品无活动的布局-->
                     <div v-else>
                       <div v-if="!k.valid">
                         <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
@@ -71,6 +77,9 @@
                         <div slot="desc">
                           <span class="prodDesc">{{locationCity}}</span>
                         </div>
+                        <div slot="footer" @click.stop="">
+                          <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
+                        </div>
                       </van-card>
                     </div>
                   </li>
@@ -82,6 +91,7 @@
               </div>
             </li>
           </div>
+          <!--其它平台-->
           <div class="pay-product" v-else>
             <div v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
@@ -97,6 +107,7 @@
                                  :secondsTxt="''">
                     </v-countdown>
                   </div>
+                  <!--商品有活动的布局-->
                   <div v-if="k.product.promotionInfo.promotionState === 1">
                     <div v-if="!k.valid">
                       <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
@@ -110,8 +121,12 @@
                       <div slot="desc">
                         <span style="font-size: small">{{locationCity}}</span>
                       </div>
+                      <div slot="footer" @click.stop="">
+                        <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
+                      </div>
                     </van-card>
                   </div>
+                  <!--商品无活动的布局-->
                   <div v-else>
                     <div v-if="!k.valid">
                       <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
@@ -123,6 +138,9 @@
                       :thumb="k.product.goodsInfo.image">
                       <div slot="desc">
                         <span style="font-size: small">{{locationCity}}</span>
+                      </div>
+                      <div slot="footer" @click.stop="">
+                        <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
                       </div>
                     </van-card>
                   </div>
@@ -737,6 +755,26 @@
     },
 
     methods: {
+      onCountChange(goods) {
+        this.$log("onCountChange Enter")
+        let k = goods.product
+        this.$log(k)
+        Util.updateCartItem(this, k);
+        let options = {
+          "id": k.baseInfo.cartId,
+          "count": k.baseInfo.count,
+          "mpu": k.baseInfo.mpu
+        }
+        this.$api.xapi({
+          method: 'put',
+          baseURL: this.$api.ORDER_BASE_URL,
+          url: '/cart/num',
+          data: options,
+        }).then((response) => {
+        }).catch(function (error) {
+          console.log(error)
+        })
+      },
       upDatefreightPay() {
         this.freightPay = 0;
         try {
