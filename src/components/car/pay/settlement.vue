@@ -571,6 +571,22 @@
             }
           }
         });
+        this.$log("KKKKKKKKKKKKKKKKKKKKKK")
+        if(this.usedCoupon != null) {
+          this.$log("SSSSSSSSSSSSSSSSSSSSS")
+          this.$log(this.usedCoupon)
+          this.$log(avaliableCouponList)
+          let found = -1
+          for(let i = 0 ; i < avaliableCouponList.length ; i++) {
+            if(this.usedCoupon.couponId  === this.arregationList[i].couponId) {
+              found = i;
+              break;
+            }
+          }
+          if( !found ) {
+            this.usedCoupon = null
+          }
+        }
         return avaliableCouponList;
       },
 
@@ -757,6 +773,9 @@
     methods: {
       onCountChange(goods) {
         this.$log("onCountChange Enter")
+        if(this.pageAction == 'direct' ) {
+          return
+        }
         let k = goods.product
         this.$log(k)
         Util.updateCartItem(this, k);
@@ -1150,26 +1169,29 @@
       },
 
       countDownS_cb(index, k) {
+        this.$log("countDownS_cb Enter ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         let found = -1;
         for (let i = 0; i < this.payCarList.length; i++) {
-          if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
+          if (this.payCarList[i].product.baseInfo.skuId == k.product.baseInfo.skuId) {
             found = i;
           }
         }
+        this.$log(k)
         if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this, k)
+          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this, k.product.promotionInfo)
           this.savePayList()
         }
       },
       countDownE_cb(index, k) {
+        this.$log("countDownE_cb Enter ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
         let found = -1;
         for (let i = 0; i < this.payCarList.length; i++) {
-          if (this.payCarList[i].product.baseInfo.skuId == k.skuId) {
+          if (this.payCarList[i].product.baseInfo.skuId == k.product.baseInfo.skuId) {
             found = i;
           }
         }
         if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this, k)
+          this.payCarList[found].product.promotionInfo.promotionState =  Util.getPromotionState(this, k.product.promotionInfo)
           let len = this.payCarList[found].product.promotionInfo.promotion.length;
           this.payCarList[found].product.promotionInfo.promotion.splice(0, len);
           this.savePayList()
