@@ -769,9 +769,35 @@
     },
 
     methods: {
-      onCountChange(goods) {
+      async onCountChange(goods) {
         this.$log("onCountChange Enter")
         if(this.pageAction == 'direct' ) {
+          if (this.$api.IS_GAT_APP) {
+            this.getAoyifreightPay();
+            this.getPlatformFreightPay();
+          } else {
+            let ret = await this.getAllasPlatformFreight()
+            this.$log(ret)
+            if (ret.data.code == 200) {
+              let result = ret.data.data.result
+              if (result.totalPrice > 0) {
+                result.priceBeans.forEach(iFreight => {
+                  this.arregationList.forEach(item => {
+                    if (item.price > 0 && item.merchantId != 2) {
+                      if (iFreight.merchantId === item.merchantId) {
+                        item.freight = parseFloat(iFreight.shipPrice);
+                      }
+                    } else if (item.price > 0 && item.merchantId == 2) {
+                      if (iFreight.merchantCode === item.merchantCode) {
+                        item.freight = parseFloat(iFreight.shipPrice);
+                      }
+                    }
+                  })
+                });
+              }
+            }
+            this.upDatefreightPay()
+          }
           return
         }
         let k = goods.product
