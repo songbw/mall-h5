@@ -60,7 +60,7 @@
                         :thumb="k.product.goodsInfo.image"
                         :origin-price="k.checkedPrice">
                         <div slot="footer" @click.stop="" class="cardStepper">
-                          <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
+                          <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -78,7 +78,7 @@
                           <span class="prodDesc">{{locationCity}}</span>
                         </div>
                         <div slot="footer" @click.stop="" class="cardStepper">
-                          <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
+                          <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -122,7 +122,7 @@
                         <span style="font-size: small">{{locationCity}}</span>
                       </div>
                       <div slot="footer" @click.stop="" class="cardStepper">
-                        <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
+                        <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
                       </div>
                     </van-card>
                   </div>
@@ -140,7 +140,7 @@
                         <span style="font-size: small">{{locationCity}}</span>
                       </div>
                       <div slot="footer" @click.stop="" class="cardStepper">
-                        <van-stepper v-model="k.product.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
+                        <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
                       </div>
                     </van-card>
                   </div>
