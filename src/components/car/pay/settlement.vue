@@ -2847,7 +2847,7 @@
 
               .cardStepper{
                 margin-right: -5px;
-                margin-top: -20px;
+                margin-top: -15px;
               }
             }
           }
