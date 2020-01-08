@@ -131,7 +131,7 @@
                   required
                   clearable
                   label="卡号"
-                  maxlength="30"
+                  maxlength="11"
                   label-width="40px"
                   placeholder="请输入卡号"
                 />
@@ -1259,8 +1259,8 @@
         this.$log("gotoLinkPay Enter")
         this.$log(this.linkPayAccount)
         this.$log(this.linkPayPwd)
-        if (this.linkPayAccount.length == 0) {
-          this.$toast("请输入卡号")
+        if (this.linkPayAccount.length != 11) {
+          this.$toast("请输入正确的卡号")
           return
         }
         if (this.linkPayPwd.length == 0 && !this.linkPayPwd.match("^[0-9]*$")) {
@@ -1350,8 +1350,8 @@
               this.$log("link pay clicked")
               if (parseInt((this.remainPayAmount * 100).toFixed(0)) >= 10 &&
                 parseInt((this.remainPayAmount * 100).toFixed(0)) <= 500000) {
-                if (this.linkPayAccount.length == 0) {
-                  this.$toast("请输入卡号")
+                if (this.linkPayAccount.length != 11) {
+                  this.$toast("请输入正确的卡号")
                   return
                 }
                 if (this.linkPayPwd.length == 0) {
