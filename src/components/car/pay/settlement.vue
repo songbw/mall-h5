@@ -573,17 +573,16 @@
         });
         this.$log("KKKKKKKKKKKKKKKKKKKKKK")
         if(this.usedCoupon != null) {
-          this.$log("SSSSSSSSSSSSSSSSSSSSS")
-          this.$log(this.usedCoupon)
-          this.$log(avaliableCouponList)
           let found = -1
           for(let i = 0 ; i < avaliableCouponList.length ; i++) {
-            if(this.usedCoupon.couponId  === this.arregationList[i].couponId) {
+            if(this.usedCoupon.couponId  === avaliableCouponList[i].couponId) {
               found = i;
               break;
             }
           }
-          if( !found ) {
+          if( found == -1 ) {
+            this.radio = ''
+            this.lastRadio = ''
             this.usedCoupon = null
           }
         }
@@ -1063,6 +1062,7 @@
         return this.reducedPriceOfCoupon;
       },
       onCouponListClick(coupon) {
+        this.$log("onCouponListClick Enter")
         if (this.radio === coupon.userCouponCode) {
           this.radio = ''
           this.usedCoupon = null;
@@ -1071,6 +1071,7 @@
           this.usedCoupon = coupon;
           this.showCoupon = false
         }
+        this.$log(this.usedCoupon)
         // this.lastRadio = this.radio
         // this.$log(this.radio)
       },
