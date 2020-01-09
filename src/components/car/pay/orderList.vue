@@ -247,7 +247,7 @@
                 if (cartItem == null) {
                   let baseInfo = {
                     "userId": user.userId,
-                    "skuId": goods.skuid,
+                    "skuId": goods.skuId,
                     "mpu": goods.mpu,
                     "merchantId": goods.merchantId,
                     "count": 1,
@@ -256,7 +256,7 @@
                   }
                   let goodsInfo = {
                     "id": goods.id,
-                    "skuId": goods.skuid,
+                    "skuId": goods.skuId,
                     "mpu": goods.mpu,
                     "merchantId": goods.merchantId,
                     "image": goods.image,
