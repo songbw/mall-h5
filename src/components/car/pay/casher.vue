@@ -1912,6 +1912,9 @@
     background-color: #f8f8f8;
 
     .payBody {
+      width: 100%;
+      height: 100%;
+      background-color: #f8f8f8;
       .quickPayDialog {
         width: 100%;
         align-items: center;
@@ -1949,6 +1952,7 @@
       }
 
       .payBox {
+        background-color: #f8f8f8;
         display: flex;
         flex-direction: column;
         width: 100%;
