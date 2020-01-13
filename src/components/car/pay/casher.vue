@@ -26,6 +26,50 @@
           </div>
         </div>
         <div v-if="this.$api.APP_ID == '11'" class="wuxipayBox">
+          <div class="linkPayBox">
+            <van-cell :title="mLinkPay.title" :icon="mLinkPay.icon" clickable @click="onLinkPaySelector()">
+              <van-checkbox slot="right-icon"  v-model="mLinkPay.checked" checked-color="#FF4444"></van-checkbox>
+            </van-cell>
+            <div v-if="mLinkPay.checked">
+              <div>
+                <van-field
+                  v-model="linkPayAccount"
+                  type="number"
+                  required
+                  clearable
+                  label="卡号"
+                  maxlength="30"
+                  label-width="40px"
+                  placeholder="请输入卡号"
+                />
+                <van-field
+                  v-model="linkPayPwd"
+                  :type="isLinkPwdVisable?'number':'password'"
+                  maxlength="30"
+                  clearable
+                  label="密码"
+                  label-width="40px"
+                  placeholder="请输入密码"
+                  :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
+                  required
+                  @click-right-icon="togLinkPayPwdVisable()"
+                />
+              </div>
+              <van-field
+                v-model="linkPayAmount"
+                center
+                clearable
+                label="支付金额(元)"
+                placeholder="输入支付额度"
+                @input="onLinkPayPayAmountChange"
+              >
+                <van-button slot="button" size="small" type="primary" @click="onLinkPayBalanceBtnClick">查询余额</van-button>
+              </van-field>
+              <div class="linkPayAmountBox" v-if="this.mLinkPay.amount != null">
+                <span style="color: #ff4444;">联机账户余额: ￥{{(this.mLinkPay.amount/100).toFixed(2)}}元</span>
+              </div>
+            </div>
+          </div>
           <div class="coinBalanceBox">
             <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
               <van-checkbox slot="right-icon" v-model="coinBalanceValue" checked-color="#FF4444"></van-checkbox>
@@ -99,6 +143,7 @@
               />
             </van-dialog>
           </div>
+
           <div class="composePayBox">
             <van-cell :title="mComposePay.title" :icon="mComposePay.icon">
               <span slot="default" style="font-size: large;color: #ff4444">￥{{remainPayAmount}}</span>
@@ -114,41 +159,46 @@
                 <span slot="default"
                       style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
               </van-cell>
+              <van-cell v-if="item.payType == 'linkPay'">
+                <span slot="title">联机账户支付:</span>
+                <span slot="default"
+                      style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
+              </van-cell>
             </div>
           </div>
         </div>
         <div class="pathBox">
           <van-radio-group v-model="radio">
             <div v-if="this.$api.APP_ID == '11'">
-              <van-cell title="联机账户" :icon="icon_linkpay" clickable @click="radio = '1'">
-                <van-radio slot="right-icon" name="1" checked-color="#FF4444"/>
-              </van-cell>
-              <div class="linkPayDialog" v-if="radio == '1'">
-                <!--              <span class="tip">温馨提示:联机账户支付不能低于1角</span>-->
-                <van-field
-                  v-model="linkPayAccount"
-                  type="number"
-                  required
-                  clearable
-                  label="卡号"
-                  maxlength="11"
-                  label-width="40px"
-                  placeholder="请输入卡号"
-                />
+              <!--              <van-cell title="联机账户" :icon="icon_linkpay" clickable @click="radio = '1'">
+                              <van-radio slot="right-icon" name="1" checked-color="#FF4444"/>
+                            </van-cell>-->
+              <!--              <div class="linkPayDialog" v-if="radio == '1'">
+                              &lt;!&ndash;              <span class="tip">温馨提示:联机账户支付不能低于1角</span>&ndash;&gt;
+                              <van-field
+                                v-model="linkPayAccount"
+                                type="number"
+                                required
+                                clearable
+                                label="卡号"
+                                maxlength="30"
+                                label-width="40px"
+                                placeholder="请输入卡号"
+                              />
 
-                <van-field
-                  v-model="linkPayPwd"
-                  :type="isLinkPwdVisable?'number':'password'"
-                  maxlength="30"
-                  clearable
-                  label="密码"
-                  label-width="40px"
-                  placeholder="请输入密码"
-                  :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
-                  required
-                  @click-right-icon="togLinkPayPwdVisable()"
-                />
-              </div>
+                              <van-field
+                                v-model="linkPayPwd"
+                                :type="isLinkPwdVisable?'number':'password'"
+                                maxlength="30"
+                                clearable
+                                label="密码"
+                                label-width="40px"
+                                placeholder="请输入密码"
+                                :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
+                                required
+                                @click-right-icon="togLinkPayPwdVisable()"
+                              />
+                            </div>-->
               <van-cell title="统一支付" :icon="icon_unionpay" clickable @click="radio = '3'" v-if="isSupportUnionPay">
                 <van-radio slot="right-icon" name="3" checked-color="#FF4444"/>
               </van-cell>
@@ -517,6 +567,7 @@
         radio: -1,
         linkPayAccount: "",
         linkPayPwd: "",
+        linkPayAmount: 0,
         isLinkPwdVisable: false,
         userDetail: {},
         mCoinBalance: {
@@ -534,6 +585,15 @@
           show: false,
           payAmount: 0,
         },
+
+        mLinkPay: {
+          title: "联机账户",
+          icon: require('@/assets/icons/ico_linkpay.png'),
+          amount: null,
+          checked: false,
+          payAmount: 0,
+        },
+
         mComposePay: {
           title: "还需支付",
           icon: require('@/assets/icons/ico_menu.png'),
@@ -580,7 +640,8 @@
       },
 
       remainPayAmount() {
-        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mOptCards.payAmount) / 100).toFixed(2)
+        this.$log("remainPayAmount Enter")
+        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mOptCards.payAmount - this.mLinkPay.payAmount) / 100).toFixed(2)
       },
 
       coinBalanceValue: {
@@ -628,7 +689,7 @@
         this.updateLinkPayAccount();
         if (this.$api.APP_ID == '11') {
           this.$log("######################")
-          if(this.orderInfo.hasVirtualGoods != undefined)
+          if (this.orderInfo.hasVirtualGoods != undefined)
             this.hasVirtualGoods = this.orderInfo.hasVirtualGoods
           let version = sc.getAppVersion()
           this.$log("version:" + version)
@@ -670,6 +731,98 @@
     },
 
     methods: {
+      queryLinkPayBalance() {
+        let options = {
+          "cardNo": this.linkPayAccount,
+          "password": this.linkPayPwd
+        }
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.LINKPAY_ACCOUNT_URL,
+          url: '/wxpos/balance',
+          data: options,
+        })
+      },
+      async onLinkPayBalanceBtnClick() {
+        this.$log("onLinkPayBalanceBtnClick Enter")
+        let that = this
+        if (this.linkPayAccount.length != 11) {
+          this.$toast("请输入正确的卡号")
+          return
+        }
+        if (this.linkPayPwd.length == 0 || !this.linkPayPwd.match("^[0-9]*$")) {
+          this.$toast("请输入正确的密码")
+          return
+        }
+        try {
+          let response = await this.queryLinkPayBalance()
+          if (response.data.code == 200) {
+            this.mLinkPay.amount = response.data.data
+            Util.setLocal(this.linkPayAccount, 'linkPayAccount', false);
+            if (this.mLinkPay.amount < this.mLinkPay.payAmount) {
+              this.linkPayAmount = parseFloat((this.mLinkPay.amount/100).toFixed(2))
+              this.mLinkPay.payAmount = parseInt((this.linkPayAmount * 100).toFixed(0))
+              for (let i = this.mPaylist.length - 1; i >= 0; i--) {
+                if (this.mPaylist[i].payType == 'linkPay')
+                  this.mPaylist.splice(i, 1);
+              }
+              this.mPaylist.push({
+                payType: 'linkPay',
+                payAmount: this.mLinkPay.payAmount,
+                cardNo: this.linkPayAccount,
+                cardPwd: this.linkPayPwd,
+              })
+            }
+          } else {
+            if (response.data.message != null && response.data.message.length > 0)
+             // this.$toast(response.data.message)
+              this.$toast("余额查询失败，请确认卡号密码信息。")
+          }
+        } catch (e) {
+          that.mLinkPay.amount = null
+          this.$toast("余额查询失败，请确认网络环境")
+        }
+      },
+      onLinkPayPayAmountChange() {
+        this.$log("onLinkPayPayAmountChange Enter")
+        this.linkPayAmount  =  this.linkPayAmount.replace(/[^\d.]/g, "")
+          .replace(/\.{2,}/g, ".").replace(".", "$#$")
+          .replace(/\./g, "").replace("$#$", ".")
+          .replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')
+          .replace(/^\./g,"");
+/*        /!*        this.linkPayAmount  = this.linkPayAmount .replace(/^\./g,""); //验证第一个字符是数字
+                this.linkPayAmount  = this.linkPayAmount .replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的*!/
+        this.linkPayAmount  = this.linkPayAmount.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数*/
+
+        for (let i = this.mPaylist.length - 1; i >= 0; i--) {
+          if (this.mPaylist[i].payType == 'linkPay')
+            this.mPaylist.splice(i, 1);
+        }
+        let remainPayAmount = this.remainPayAmount;
+        if (parseInt((this.linkPayAmount * 100).toFixed(0)) > (parseInt(this.mLinkPay.payAmount) + parseInt((remainPayAmount * 100).toFixed(0)))) {
+          this.linkPayAmount = parseFloat(((parseInt(this.mLinkPay.payAmount) + parseInt((remainPayAmount * 100).toFixed(0)))/100).toFixed(2));
+        }
+        if (this.mLinkPay.amount == null) {
+          if (this.linkPayAmount > 5000) {
+            this.linkPayAmount = 5000
+          }
+        } else {
+          if (this.linkPayAmount > 5000) {
+            this.linkPayAmount = 5000
+          }
+          if (this.linkPayAmount >  parseFloat((this.mLinkPay.amount/100).toFixed(2))) {
+            this.linkPayAmount = parseFloat((this.mLinkPay.amount/100).toFixed(2))
+          }
+        }
+        this.mLinkPay.payAmount = parseInt((this.linkPayAmount * 100).toFixed(0))
+        this.mPaylist.push({
+          payType: 'linkPay',
+          payAmount: this.mLinkPay.payAmount,
+          cardNo: this.linkPayAccount,
+          cardPwd: this.linkPayPwd,
+        })
+
+      },
       versionStringCompare(preVersion = '', lastVersion = '') {
         let sources = preVersion.split('.');
         let dests = lastVersion.split('.');
@@ -1160,7 +1313,6 @@
         } else {
           this.$refs.optCardsCheckboxes[index].toggle();
         }
-
       },
       onOptCardsStatusChanged(index) {
         this.$log("onOptCardsStatusChanged Enter")
@@ -1205,11 +1357,36 @@
         this.mOptCards.show = !this.mOptCards.show
 
       },
+      onLinkPaySelector() {
+        this.$log("onLinkPaySelector Enter")
+        this.mLinkPay.checked = !this.mLinkPay.checked
+        if (this.mLinkPay.checked) {
+          let remainPayAmount = this.remainPayAmount //parseInt((this.remainPayAmount * 100).toFixed(0))
+          if (remainPayAmount > 5000) {
+            this.linkPayAmount = 5000
+          } else {
+            this.linkPayAmount = remainPayAmount
+          }
+          this.mLinkPay.payAmount = parseInt((this.linkPayAmount * 100).toFixed(0))
+          this.mPaylist.push({
+            payType: 'linkPay',
+            payAmount: this.mLinkPay.payAmount,
+            cardNo: this.linkPayAccount,
+            cardPwd: this.linkPayPwd,
+          })
+        } else {
+          this.linkPayAmount = 0
+          this.mLinkPay.payAmount = 0
+          for (let i = this.mPaylist.length - 1; i >= 0; i--) {
+            if (this.mPaylist[i].payType == 'linkPay')
+              this.mPaylist.splice(i, 1);
+          }
+        }
+      },
       onCoinBalanceSelector() {
-        this.$log("onCoinBalanceSelector Enter")
         if (this.mCoinBalance.amount == 0 && !this.mCoinBalance.checked ||
           this.remainPayAmount == 0 && !this.mCoinBalance.checked || this.hasVirtualGoods) {
-          if(this.hasVirtualGoods) {
+          if (this.hasVirtualGoods) {
             this.$toast("订单含有卡券类商品，不能使用余额!")
           }
         } else {
@@ -1300,7 +1477,7 @@
         this.isLinkPwdVisable = !this.isLinkPwdVisable
       },
 
-      onPayBtnClick() {
+      async onPayBtnClick() {
         this.$log("onPayBtnClick Enter")
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
@@ -1336,41 +1513,30 @@
                   orderNo: this.orderInfo.orderNo,
                   payType: 'card'
                 })
+                break;
+              case 'linkPay': {
+                woaPay = {
+                  "actPayFee": "" + item.payAmount,
+                  "cardNo": this.linkPayAccount,
+                  "cardPwd": this.linkPayPwd,
+                  "orderNo": this.orderInfo.orderNo,
+                  "payType": "woa"
+                }
+                if (this.linkPayAccount.length > 0) {
+                  Util.setLocal(this.linkPayAccount, 'linkPayAccount', false);
+                }
+                break;
+              }
               case 'pos':
                 break;
               case 'bank':
-
                 break;
               default:
                 break;
             }
           })
           if (this.remainPayAmount > 0) {
-            if (this.radio == '1') {
-              this.$log("link pay clicked")
-              if (parseInt((this.remainPayAmount * 100).toFixed(0)) >= 10 &&
-                parseInt((this.remainPayAmount * 100).toFixed(0)) <= 500000) {
-                if (this.linkPayAccount.length != 11) {
-                  this.$toast("请输入正确的卡号")
-                  return
-                }
-                if (this.linkPayPwd.length == 0) {
-                  this.$toast("请输入卡密码")
-                  return
-                }
-                woaPay = {
-                  "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
-                  "cardNo": this.linkPayAccount,
-                  "cardPwd": this.linkPayPwd,
-                  "orderNo": this.orderInfo.orderNo,
-                  "payType": "woa"
-                }
-                Util.setLocal(this.linkPayAccount, 'linkPayAccount', false);
-              } else {
-                this.$toast("抱歉，无法使用该支付方式，联机账户支付不能低于1角或大于5000元")
-                return
-              }
-            } else if (this.radio == '2') { //bank pay
+            if (this.radio == '2') { //bank pay
               this.$log(this.bankRadio)
               if (parseInt((this.remainPayAmount * 100).toFixed(0)) >= 100) {
                 if (this.$api.IS_QUICKPAY_CAN_SAVE) {
@@ -1453,7 +1619,7 @@
                 }
 
               } else {
-                this.$toast("抱歉，无法使用该支付方式，快捷支付不能低于1元，")
+                this.$toast("抱歉，快捷支付不能低于1元，无法使用该支付方式")
                 return
               }
 
@@ -1489,7 +1655,8 @@
                 "returnUrl": url,
               }
             } else {
-              this.$toast("金额不够支付，请选择支付方式")
+              let warning = "还需支付"+this.remainPayAmount+"元，请选择其它支付方式补充"
+              this.$toast(warning)
               return;
             }
           } else {
@@ -1499,8 +1666,41 @@
             this.payOptions['balancePay'] = balancePay
           if (wocPays.length > 0)
             this.payOptions['wocPays'] = wocPays
-          if (woaPay != null)
-            this.payOptions['woaPay'] = woaPay
+          if (woaPay != null) {
+            //this.payOptions['woaPay'] = woaPay
+            this.$log(this.mLinkPay)
+            if (this.mLinkPay.payAmount > 500000 || this.mLinkPay.payAmount < 10) {
+              this.$toast("抱歉，联机账户支付不能低于1角或大于5000元，请调整支付金额")
+              return
+            } else {
+              if (this.linkPayAccount.length != 11) {
+                this.$toast("请输入正确的卡号")
+                return
+              }
+              if (this.linkPayPwd.length == 0) {
+                this.$toast("请输入卡密码")
+                return
+              }
+              try {
+                let response = await this.queryLinkPayBalance()
+                if (response.data.code == 200) {
+                  let linkPayAmount = response.data.data
+                  if (woaPay.actPayFee > linkPayAmount) {
+                    this.$toast("联机账户余额不足，请先调整支付金额")
+                    this.mLinkPay.amount = linkPayAmount
+                    return
+                  } else {
+                    this.payOptions['woaPay'] = woaPay
+                  }
+                } else {
+                  this.$toast("联机账户支付失败，请确认卡信息!")
+                }
+              } catch (e) {
+                that.$toast("网络错误，请确认网络环境!")
+                return;
+              }
+            }
+          }
           if (pingAnPay != null)
             this.payOptions['pingAnPay'] = pingAnPay
           if (fcWxPay != null)
@@ -1817,6 +2017,46 @@
             }
           }
 
+          .linkPayBox {
+            margin-top: 10px;
+            padding: 10px 0px;
+            background-color: white;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .van-cell {
+              margin-top: -1px;
+            }
+
+/*            .payAmountBox {
+              display: flex;
+              margin-top: -1px;
+              background-color: white;
+
+              .van-field {
+                width: 70%;
+
+              }
+
+              .van-button {
+                width: 30%;
+                margin-left: 10px;
+                color: #999999;
+                background-color: white;
+              }
+            }*/
+
+            .linkPayAmountBox {
+              display: flex;
+              padding: 10px 15px;
+              text-align: left;
+              color: #333333;
+              .fz(font-size, 25px);
+            }
+          }
+
           .composePayBox {
             margin-top: 10px;
             padding: 10px 0px;
@@ -1877,6 +2117,7 @@
             }
           }
         }
+
 
         .pathBox {
           margin-top: 10px;
