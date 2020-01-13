@@ -98,6 +98,8 @@
         }).then((response) => {
           that.list = response.data.data.result;
           that.loading = false;
+          this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+          this.$log(this.list)
           if(that.list.length > 0) {
             that.status = that.list[0].status
           }
@@ -156,6 +158,7 @@
         return status;
       },
       getComment(item) {
+        this.$log("getComment Enter")
         let ret = this.formatWOrderStatus(item.status)
         if (item.comments != undefined) {
 
@@ -184,13 +187,16 @@
                 ret += " 收件人:" + jsonReturnAddress.receiverName
               if (jsonReturnAddress.receiverPhone != undefined && jsonReturnAddress.receiverPhone.length > 0)
                 ret += " 收件人电话:" + jsonReturnAddress.receiverPhone
-              ret += " 退货地址:" + jsonReturnAddress.provinceName +
-                jsonReturnAddress.cityName + jsonReturnAddress.countyName +
-                jsonReturnAddress.address
+              if(jsonReturnAddress.provinceName != undefined && jsonReturnAddress.cityName != undefined &&
+                jsonReturnAddress.countyName  != undefined &&  jsonReturnAddress.address != undefined) {
+                ret += " 退货地址:" + jsonReturnAddress.provinceName +
+                  jsonReturnAddress.cityName + jsonReturnAddress.countyName +
+                  jsonReturnAddress.address
+              }
             }
-            let jsonRemark = comment.remark
+            let jsonRemark = comments.remark
             if (jsonRemark != undefined) {
-              ret += "备注:" + jsonRemark
+              ret += " 备注:" + jsonRemark
             }
           } catch (e) {
           }
