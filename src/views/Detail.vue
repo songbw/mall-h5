@@ -9,7 +9,7 @@
       </div>
       <div class="detail-body" :style="{'padding-top':showHeader? '2.6em':'0px'}" v-else>
         <div v-if="goods != null">
-          <v-swiper :swiperData=swiperUrls  :goods=this.goods></v-swiper>
+          <v-swiper :swiperData=swiperUrls :goods=this.goods></v-swiper>
           <div>
             <div class="promotion-price" v-if="hasPromotion">
               <van-col span="8" class="priceBox">
@@ -96,7 +96,8 @@
                               :stroke-width="50"/>
                           </div>
                           <div>
-                            <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
+                            <span class="coupon-action" v-if="formateReleasePercentage(k) < 100"
+                                  style="margin-top:5px;">立即领取</span>
                           </div>
                         </div>
                       </div>
@@ -118,7 +119,8 @@
                                                       <i>{{coupon.couponInfo.name}}</i>
                                                     </div>-->
                             <div class="coupon-price">
-                              <span v-if="coupon.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                              <span v-if="coupon.couponInfo.rules.couponRules.type <2"
+                                    style="margin-right: -7px">￥</span>
                               {{formateCouponPrice(coupon.couponInfo.rules.couponRules)}}
                               <span>{{formateCouponDetail(coupon.couponInfo.rules.couponRules)}}</span>
                             </div>
@@ -261,11 +263,20 @@
         if (this.$api.APP_ID === '10') {
           this.showServiceBox = true;
         }
-      }
-      if (this.$api.APP_ID == '01') {
+      } else if (this.$api.APP_ID == '01') {
         let code = this.$route.query.code;
         if (code != undefined) {
           this.thirdPartyLogin(code)
+          this.showDetail = true;
+        } else {
+          this.redirectOrNot();
+        }
+      } else if (this.$api.IS_WX_GZH) {//微信公众号端登录
+        let authCode = this.$route.query.code;
+        let state = this.$route.query.state;
+        this.$log("authCode:" + authCode)
+        if (authCode != undefined) {
+          this.wxLogin(this.$api.APP_ID, authCode, state)
           this.showDetail = true;
         } else {
           this.redirectOrNot();
@@ -289,7 +300,7 @@
       } catch (e) {
         that.goods = null
       }
-      if(this.goods != null) {
+      if (this.goods != null) {
         let imagesUrls = this.goods.imagesUrl;
         if (imagesUrls != null && imagesUrls.length > 0) {
           let ulsArray = imagesUrls.split(":");
@@ -374,7 +385,8 @@
         }
         this.updateServiceBoxInfo(this.goods);
         this.updateInventor(this.goods)
-        if(this.$api.APP_ID === '01') {
+        if (this.$api.APP_ID === '01' ||
+          (this.$api.APP_ID === '11' && this.$api.APP_SOURCE == '01')) {
           this.wechatShareConfig()
         }
       } else {
@@ -422,6 +434,69 @@
       }
     },
     methods: {
+      updateUserDatail(userDetail) {
+        this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
+      },
+      async wxLogin(appId, authCode, state) {
+        this.$log("wxLogin Enter")
+        let that = this
+        try {
+          let resp = await this.getWxOpenId(appId, authCode, state)
+          this.$log(resp)
+          if (resp.data.code == 200) {
+            let wxOpenId = resp.data.data.openid;
+            let accessToken = resp.data.data.access_token
+            this.$store.commit('SET_WX_OPENID', wxOpenId);
+            resp = await this.isWxOpendBinded(appId, wxOpenId)
+            this.$log(resp)
+            if (resp.data.code == 200) {
+              let userDetail = resp.data.data
+              if (userDetail != null) {
+                let openId = userDetail.openId
+                let userId = this.$api.APP_ID + openId;
+                let userInfo = {
+                  openId: openId,
+                  accessToken: accessToken,
+                  userId: userId
+                }
+                that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                that.updateUserDatail(userDetail)
+                that.thirdPartLogined(openId, accessToken)
+              } else {
+                //未绑定用户
+                this.$router.push({name: '登录页'})
+              }
+            }
+          }
+        } catch (e) {
+
+        }
+      },
+      getWxOpenId(appId, code, state) {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/wx',
+          params: {
+            appId: appId,
+            code: code
+          }
+        })
+      },
+
+      isWxOpendBinded(appId, wxOpenId) {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/wx/bind/verify',
+          params: {
+            appId: appId,
+            openId: wxOpenId
+          }
+        })
+      },
+
       wechatShareConfig() {
         this.$log('shareConfig Enter')
         let that = this
@@ -443,29 +518,29 @@
           wx.onMenuShareAppMessage({
             title: options.title, // 分享标题
             desc: options.content, // 分享描述
-            link:  options.shareUrl, // 分享链接
+            link: options.shareUrl, // 分享链接
             imgUrl: options.image, // 分享图标
             type: '', // 分享类型,music、video或link，不填默认为link
             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {
-             // that.$toast("分享微信好友成功！");
+              // that.$toast("分享微信好友成功！");
             },
             cancel: function () {
-             // that.$toast('分享微信好友失败');
+              // that.$toast('分享微信好友失败');
             }
           });
           wx.onMenuShareTimeline({
-            title:  options.title, // 分享标题
+            title: options.title, // 分享标题
             desc: options.content, // 分享描述
             link: options.shareUrl, // 分享链接
             imgUrl: options.image, // 分享图标
             type: '', // 分享类型,music、video或link，不填默认为link
             dataUrl: '', // 如果type是music或video，则要提供数据链接，默认为空
             success: function () {
-             // that.$toast("分享微信好友成功！");
+              // that.$toast("分享微信好友成功！");
             },
             cancel: function () {
-             // that.$toast('分享朋友圈失败');
+              // that.$toast('分享朋友圈失败');
             }
           });
         })
@@ -480,9 +555,12 @@
           } else {
             _url = window.location.href
           }
-          let url = "https://"+window.location.host +window.location.pathname
-          let encodeURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe5b7d5b7722a1577&redirect_uri="+
-            encodeURIComponent(url) + window.location.search +
+          let url = "https://" + window.location.host + window.location.pathname
+          let encodeURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+            this.$api.T_APP_ID +
+            "&redirect_uri=" +
+            encodeURIComponent(url) +
+            window.location.search +
             "&response_type=code&scope=snsapi_base&state=0102#wechat_redirect"
           this.$log(encodeURL)
           window.location.replace(encodeURL)
@@ -527,22 +605,22 @@
         let that = this;
         let url = ""
         let params = null
-        if(this.$api.APP_ID == '01') {
+        if (this.$api.APP_ID == '01') {
           url = '/sso/thirdParty/token/wx';
           params = {
             iAppId: this.$api.APP_ID,
             code: authCode,
           }
-        } else if(this.$api.IS_GAT_APP){
+        } else if (this.$api.IS_GAT_APP) {
           url = '/sso/thirdParty/token/gat';
           params = {
             iAppId: this.$api.APP_ID,
             initCode: authCode,
           }
         }
-        this.$log("url:"+url)
+        this.$log("url:" + url)
         this.$log(params)
-        if(url.length > 0 && params != null) {
+        if (url.length > 0 && params != null) {
           that.$api.xapi({
             method: 'get',
             baseURL: this.$api.SSO_BASE_URL,
@@ -838,7 +916,7 @@
             url: '/coupon/collect',
             data: options,
           }).then((response) => {
-            if(response.data.code == 200) {
+            if (response.data.code == 200) {
               let result = response.data.data;
               that.$log(result)
               if (result != undefined) {

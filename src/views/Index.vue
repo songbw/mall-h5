@@ -930,6 +930,7 @@
               this.See(targetId);
             }
           }
+          this.showDialog = false
         }
       },
 
