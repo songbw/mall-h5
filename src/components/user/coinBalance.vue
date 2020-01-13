@@ -10,7 +10,9 @@
           <img :src="icon_coin_amount">
           <span>我的余额</span>
           <div class="amountInfo">
-            <p><span>￥</span>{{(amount/100).toFixed(2)}}</p>
+            <p v-if="this.amountLoaded == -1" style="font-size: medium;margin: 10px">查询中...</p>
+            <p v-else-if="this.amountLoaded == 0" style="font-size: medium;margin: 10px">查询失败，请检查网络</p>
+            <p v-else-if="this.amountLoaded == 1"><span>￥</span>{{(amount/100).toFixed(2)}}</p>
           </div>
         </div>
         <div class="scrollerWrap">
@@ -71,6 +73,7 @@
         finished: false,
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
         launchedLoading: false,
+        amountLoaded: -1, // -1 未开始， 0 失败， 1 成功
       }
     },
 
@@ -169,8 +172,15 @@
               openId: user.openId
             }
           }).then((response) => {
-            this.amount = response.data.data.amount
+            if(response.data.code == 200) {
+              this.amount = response.data.data.amount
+              this.amountLoaded = 1;
+            } else {
+              this.amountLoaded = 0;
+            }
+
           }).catch(function (error) {
+            that.amountLoaded = 0;
             that.$log(error)
           })
         }
