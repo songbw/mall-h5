@@ -173,7 +173,11 @@
             }
           }).then((response) => {
             if(response.data.code == 200) {
-              this.amount = response.data.data.amount
+              if(response.data.data != null) {
+                this.amount = response.data.data.amount
+              } else {
+                this.amount = 0
+              }
               this.amountLoaded = 1;
             } else {
               this.amountLoaded = 0;
