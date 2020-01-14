@@ -474,9 +474,13 @@
               })
             }
           } else {
-            this.$router.replace({
-              path: '/login'
-            })
+            if(resp.data.code == 40163) {
+              //nothing to do
+            } else {
+              this.$router.replace({
+                path: '/login'
+              })
+            }
           }
         } catch (e) {
           that.$router.replace({
