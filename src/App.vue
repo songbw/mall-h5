@@ -69,6 +69,7 @@
         if (result.data.APP_SOURCE != undefined) {
           this.$api.APP_SOURCE = result.data.APP_SOURCE
         }
+        this.$store.commit('SET_APP_SOURCE', this.$api.APP_SOURCE);
         this.$api.SERVICE_URL = serverUrl;
         this.$api.SERVR_PHONE_NUM = result.data.SERVR_PHONE_NUM
         this.$api.PRODUCT_BASE_URL = serverUrl + "/v2/products/"

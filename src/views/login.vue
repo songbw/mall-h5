@@ -29,7 +29,8 @@
           </van-button>
         </div>
         <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;align-items: center">
-          <van-button size="large" type="danger" round @click="onBindBtnClick" :disabled="!isBindBtnEnable">绑定</van-button>
+          <van-button size="large" type="danger" round @click="onBindBtnClick" :disabled="!isBindBtnEnable">绑定
+          </van-button>
           <div style="margin: 10px 2px">
             <p style="font-size: 10pt">
               <span style=" color: #1989fa;">{{getBindInfo()}}</span>
@@ -79,10 +80,40 @@
     },
 
     methods: {
+      thirdPartLogined(openId, accessToken) {
+        let that = this;
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/thirdLogin',
+          data: {
+            iAppId: this.$api.APP_ID,
+            accessToken: accessToken,
+            openId: openId,
+          }
+        }).then((response) => {
+          let rt = response.data.data.result
+          this.$log("local information:" + JSON.stringify(rt));
+          if (rt.token != null) {
+            that.$store.commit('SET_TOKEN', rt.token);
+            this.$log("setToken:" + rt.token)
+            let data = this.$md5(rt.token)
+            if (rt.newUser) {
+              data = "1" + data
+            } else {
+              data = "0" + data
+            }
+            this.$log(data)
+            that.$store.commit('SET_GUYS_INFO', data);
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if(this.$api.APP_ID === '01') {
-          try{
+        if (this.$api.APP_ID === '01') {
+          try {
             configWechat(this, () => {
               wx.hideOptionMenu()
             })
@@ -91,22 +122,22 @@
           }
         }
       },
-      toastNoAppUser(){
-         switch (this.$api.APP_ID) {
-           case '11': {
-             this.$toast("绑定失败! 请先登录无锡市民卡APP后再绑定。")
-             break;
-           }
-           default:{
-             this.$toast("无法找到App用户，绑定失败!")
-             break;
-           }
-         }
+      toastNoAppUser() {
+        switch (this.$api.APP_ID) {
+          case '11': {
+            this.$toast("绑定失败! 请先登录无锡市民卡APP后再绑定。")
+            break;
+          }
+          default: {
+            this.$toast("无法找到App用户，绑定失败!")
+            break;
+          }
+        }
       },
       onBindBtnClick() {
         this.$log("onBindBtnClick Enter")
         let wxOpenId = this.$store.state.appconf.wxOpenId
-        if(wxOpenId == undefined ||wxOpenId.length == 0) {
+        if (wxOpenId == undefined || wxOpenId.length == 0) {
           this.$toast("没有获取的微信用户的授权信息,无法绑定")
           return;
         }
@@ -122,13 +153,25 @@
           url: '/sso/wx/bind',
           data: options,
         }).then((response) => {
-          if(response.data.code == 200) {
-              this.$toast("绑定成功！")
-              this.$router.replace({
-                  name: "首页"
-              })
+          if (response.data.code == 200) {
+            this.$toast("绑定成功！")
+            let userDetail = response.data.data
+            if (userDetail != null) {
+              let openId = userDetail.openId
+              let userId = this.$api.APP_ID + openId;
+              let userInfo = {
+                openId: openId,
+                accessToken: "",
+                userId: userId
+              }
+              this.$store.commit('SET_USER', JSON.stringify(userInfo));
+              this.thirdPartLogined(openId,"")
+            }
+            this.$router.replace({
+              name: "首页"
+            })
           } else {
-            if(response.data.code == 900100) {
+            if (response.data.code == 900100) {
               this.toastNoAppUser()
             } else {
               this.$toast(response.data.msg)
@@ -139,7 +182,7 @@
         })
       },
       getVerifyCode(telephone) {
-        return  this.$api.xapi({
+        return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/code',
@@ -246,10 +289,11 @@
           display: flex;
           flex-direction: row;
           margin-top: 2px;
+
           .van-field {
             margin-right: 10px;
             height: 100%;
-            padding: 11px  10px;
+            padding: 11px 10px;
           }
 
           .van-button {

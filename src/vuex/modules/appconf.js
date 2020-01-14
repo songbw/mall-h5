@@ -25,6 +25,7 @@ const state = {
   guysInfo: '',
   wxOpenId: '',
   appId: '',
+  appSource: '',
   backfromOuterlink: false,
 }
 
@@ -123,6 +124,10 @@ const mutations = {
 
   [types.SET_APPID](state, res) {
     state.appId = res
+  },
+
+  [types.SET_APP_SOURCE](state, res) {
+    state.appSource = res
   },
 
   [types.SET_BACK_FROME_OUTERLINK](state, res) {

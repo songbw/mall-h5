@@ -95,4 +95,6 @@ export const SET_WX_OPENID = 'SET_WX_OPENID'
 
 export const SET_APPID = 'SET_APPID'
 
+export const SET_APP_SOURCE = 'SET_APP_SOURCE'
+
 export const SET_BACK_FROME_OUTERLINK = 'SET_BACK_FROME_OUTERLINK'

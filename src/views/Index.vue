@@ -309,8 +309,8 @@
     methods: {
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if(this.$api.APP_ID === '01') {
-          try{
+        if (this.$api.APP_ID === '01') {
+          try {
             configWechat(this, () => {
               wx.hideOptionMenu()
             })
@@ -329,9 +329,11 @@
         this.$router.push({path: '/category/goods/promotion/' + promotionId});
       },
       gotoGoodsPage(mpu) {
-        this.$router.push({path:"/detail",query:{
-            mpu:mpu
-          }});
+        this.$router.push({
+          path: "/detail", query: {
+            mpu: mpu
+          }
+        });
       },
       updateUserDatail(userDetail) {
         this.$store.commit('SET_USER_DETAIL', JSON.stringify(userDetail));
@@ -346,52 +348,49 @@
             let wxOpenId = resp.data.data.openid;
             let accessToken = resp.data.data.access_token
             this.$store.commit('SET_WX_OPENID', wxOpenId);
-            if (this.$api.APP_ID == '01') {
-              let openId = wxOpenId
-              let userId = this.$api.APP_ID + openId;
-              let userInfo = {
-                openId: openId,
-                accessToken: accessToken,
-                userId: userId
-              }
-              that.$log("userInfo  is:" + JSON.stringify(userInfo));
-              that.$store.commit('SET_USER', JSON.stringify(userInfo));
-              that.thirdPartLogined(openId, accessToken)
-            } else {
-              resp = await this.isWxOpendBinded(appId, wxOpenId)
-              this.$log(resp)
-              if (resp.data.code == 200) {
-                let userDetail = resp.data.data
-                if (userDetail != null) {
-                  let openId = userDetail.openId
-                  let userId = this.$api.APP_ID + openId;
-                  let userInfo = {
-                    openId: openId,
-                    accessToken: accessToken,
-                    userId: userId
-                  }
-                  that.$log("userInfo  is:" + JSON.stringify(userInfo));
-                  that.$store.commit('SET_USER', JSON.stringify(userInfo));
-                  that.updateUserDatail(userDetail)
-                  that.thirdPartLogined(openId, accessToken)
-                } else {
-                  //未绑定用户
-                  this.$router.push({name: '登录页'})
+            resp = await this.isWxOpendBinded(appId, wxOpenId)
+            this.$log(resp)
+            if (resp.data.code == 200) {
+              let userDetail = resp.data.data
+              if (userDetail != null) {
+                let openId = userDetail.openId
+                let userId = this.$api.APP_ID + openId;
+                let userInfo = {
+                  openId: openId,
+                  accessToken: accessToken,
+                  userId: userId
                 }
+                that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                that.updateUserDatail(userDetail)
+                that.thirdPartLogined(openId, accessToken)
               } else {
-                //  this.$toast("获取用户信息失败")
+                //未绑定用户
+               // this.$toast("未绑定用户")
                 this.userTokenLoading = false;
+                this.$router.replace({
+                  path: '/login'
+                })
               }
+            } else {
+             //this.$toast("获取用户信息失败")
+              this.userTokenLoading = false;
+              this.$router.replace({
+                path: '/login'
+              })
             }
-
-
           } else {
-            // this.$toast("获取用户授权信息失败")
-            this.userTokenLoading = false;
-
+             //this.$toast("获取用户授权信息失败")
+             this.userTokenLoading = false;
+             this.$router.replace({
+               path: '/login'
+             })
           }
         } catch (e) {
-
+          that.userTokenLoading = false;
+          that.$router.replace({
+            path: '/login'
+          })
         }
       },
       getWxOpenId(appId, code, state) {
@@ -577,7 +576,7 @@
         // let openId = "ace1c1722b834309a59fad302fe357b2"
         //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         // let openId = "5c8314363cea49de925bfaa39d4c4ebb"
-       // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         let openId = "ace1c1722b834309a59fad302fe357b2"
         if (this.$api.APP_ID == '01') {
           openId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc"
@@ -900,7 +899,7 @@
           }
         } else {
           let targetId = this.icon_gift_targeUrl
-          if(targetId != undefined && targetId.length > 0) {
+          if (targetId != undefined && targetId.length > 0) {
             if (targetId.startsWith("aggregation://")) {
               let id = targetId.substr(14);
               this.$router.push({path: '/index/' + id});
