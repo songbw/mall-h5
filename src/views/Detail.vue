@@ -464,13 +464,24 @@
                 that.updateUserDatail(userDetail)
                 that.thirdPartLogined(openId, accessToken)
               } else {
-                //未绑定用户
-                this.$router.push({name: '登录页'})
+                this.$router.replace({
+                  path: '/login'
+                })
               }
+            } else {
+              this.$router.replace({
+                path: '/login'
+              })
             }
+          } else {
+            this.$router.replace({
+              path: '/login'
+            })
           }
         } catch (e) {
-
+          that.$router.replace({
+            path: '/login'
+          })
         }
       },
       getWxOpenId(appId, code, state) {
