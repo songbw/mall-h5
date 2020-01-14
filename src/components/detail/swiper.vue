@@ -21,7 +21,7 @@
       }
     },
     created() {
-      if(this.$api.APP_ID == '11' || this.$api.APP_ID == '12')
+      if((this.$api.APP_ID == '11' && this.$api.APP_SOURCE== '00')|| this.$api.APP_ID == '12')
         this.showShare = true
     },
     methods: {
