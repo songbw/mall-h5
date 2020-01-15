@@ -23,6 +23,9 @@
                         <div class="cardTitle">
                           <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
                         </div>
+                        <div class="alias" v-if="k.subTitle != undefined">
+                          <span>{{k.subTitle}}</span>
+                        </div>
                         <div class="cardFooter">
                           <div class="priceBox">
                             <p v-if="k.discount != undefined && datas.settings.countPerLine != 3"
@@ -50,29 +53,36 @@
                 </li>
               </div>
               <li v-else v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
-                <img v-lazy="k.imagePath || k.image">
-                <div class="goodsComment">
-                  <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
-                </div>
-                <div class="goodsFooter">
-                  <div class="goodsPriceBox">
-                    <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
-                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                      {{parseFloat(k.discount).toFixed(2)}}
-                      <span
-                        style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                      <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
-                    </p>
-
-                    <p v-else
-                       :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                      <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                      {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
-                    </p>
+                <div class="upperLayout">
+                  <img v-lazy="k.imagePath || k.image">
+                  <div class="goodsComment">
+                    <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
                   </div>
-                  <div class="goodsBuyBox">
-                    <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                  <div class="alias" v-if="k.subTitle != undefined">
+                    <span>{{k.subTitle}}</span>
+                  </div>
+                </div>
+                <div class="bottomLayout">
+                  <div class="goodsFooter">
+                    <div class="goodsPriceBox">
+                      <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
+                         :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                        <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                        {{parseFloat(k.discount).toFixed(2)}}
+                        <span
+                          style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                        <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                      </p>
+
+                      <p v-else
+                         :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                        <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                        {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
+                      </p>
+                    </div>
+                    <div class="goodsBuyBox">
+                      <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                    </div>
                   </div>
                 </div>
               </li>
@@ -109,6 +119,9 @@
                           <div class="cardTitle">
                             <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
                           </div>
+                          <div class="alias" v-if="k.subTitle != undefined">
+                            <span>{{k.subTitle}}</span>
+                          </div>
                           <div class="cardFooter">
                             <div class="priceBox">
                               <p v-if="k.discount != undefined && datas.settings.countPerLine != 3"
@@ -136,29 +149,36 @@
                   </li>
                 </div>
                 <li v-else v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
-                  <img v-lazy="k.imagePath || k.image">
-                  <div class="goodsComment">
-                    <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
-                  </div>
-                  <div class="goodsFooter">
-                    <div class="goodsPriceBox">
-                      <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
-                         :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                        <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                        {{parseFloat(k.discount).toFixed(2)}}
-                        <span
-                          style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                        <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
-                      </p>
-
-                      <p v-else
-                         :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
-                        <span style="font-size: x-small;margin-right: -3px;">￥</span>
-                        {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
-                      </p>
+                  <div class="upperLayout">
+                    <img v-lazy="k.imagePath || k.image">
+                    <div class="goodsComment">
+                      <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
                     </div>
-                    <div class="goodsBuyBox">
-                      <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                    <div class="alias" v-if="k.subTitle != undefined">
+                      <span>{{k.subTitle}}</span>
+                    </div>
+                  </div>
+                  <div class="bottomLayout">
+                    <div class="goodsFooter">
+                      <div class="goodsPriceBox">
+                        <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
+                           :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                          <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                          {{parseFloat(k.discount).toFixed(2)}}
+                          <span
+                            style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
+                          <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                        </p>
+
+                        <p v-else
+                           :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                          <span style="font-size: x-small;margin-right: -3px;">￥</span>
+                          {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
+                        </p>
+                      </div>
+                      <div class="goodsBuyBox">
+                        <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
+                      </div>
                     </div>
                   </div>
                 </li>
@@ -507,8 +527,25 @@
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 2;
                 word-break: break-all;
+                color: #000000;
+                text-shadow: 0px 0px #000;
               }
 
+              .alias {
+                color: #aaaaaa;
+                margin: 3px;
+                font-size: .12rem;
+                -webkit-transform-origin-x: 0; //缩小后文字居左
+                -webkit-transform: scale(0.80);   //关键
+                >span{
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                  display: -webkit-box;
+                  -webkit-box-orient: vertical;
+                  -webkit-line-clamp: 1;
+                  word-break: break-all;
+                }
+              }
 
               .cardFooter {
                 position: absolute;
@@ -581,87 +618,106 @@
         border-radius: 5px;
         margin: 1vw;
 
-        img {
-          width: 100%;
-          height: 11em;
-          display: inline-block;
-          border-top-left-radius: 5px;
-          border-top-right-radius: 5px;
-        }
-
-        .goodsComment {
-          margin: 2px 5px;
-          min-height: 2.4em;
-
-          > p {
-            .fz(font-size, 25);
-            min-height: 2rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            word-break: break-all;
-            bottom: 0;
-            left: 0;
+        .upperLayout {
+          height: 86%;
+          img {
             width: 100%;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            color: #323233;
+            height: 11em;
+            display: inline-block;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
           }
-        }
+          .goodsComment {
+            margin: 2px 5px;
+            min-height: 2.4em;
 
-        .goodsFooter {
-          border-bottom-left-radius: 10px;
-          border-bottom-right-radius: 10px;
-          padding-bottom: 3px;
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          justify-items: center;
-          min-height: 2em;
-
-
-          .goodsPriceBox {
-            width: 80%;
-            line-height: 2em;
+            > p {
+              .fz(font-size, 25);
+              min-height: 2rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              word-break: break-all;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+              color: #000000;
+              text-shadow: 0px 0px #000;
+            }
+          }
+          .alias {
+            color: #aaaaaa;
             margin-left: 5px;
-
-            > span {
-              display: inline-block;
-              align-content: center;
+            font-size: .12rem;
+            -webkit-transform-origin-x: 0; //缩小后文字居左
+            -webkit-transform: scale(0.80);   //关键
+            >span{
               overflow: hidden;
               text-overflow: ellipsis;
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
               word-break: break-all;
-              bottom: 0;
-              left: 0;
-              color: #ff4444;
-              .fz(font-size, 30);
             }
           }
+        }
 
-          .goodsBuyBox {
-            width: 20%;
-            justify-content: center;
-            line-height: 2em;
+        .bottomLayout {
+          .goodsFooter {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            padding-bottom: 3px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-items: center;
+            min-height: 2em;
 
-            .van-button {
-              margin: 1vw 0vw;
-              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-              background-size: 20px 20px;
-              border: none;
-              float: right;
+            .goodsPriceBox {
+              width: 80%;
+              line-height: 2em;
+              margin-left: 5px;
+
+              > span {
+                display: inline-block;
+                align-content: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+                bottom: 0;
+                left: 0;
+                color: #ff4444;
+                .fz(font-size, 30);
+              }
             }
 
-            .van-button:active {
-              opacity: 0;
+            .goodsBuyBox {
+              width: 20%;
+              justify-content: center;
+              line-height: 2em;
+
+              .van-button {
+                margin: 1vw 0vw;
+                background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+                background-size: 20px 20px;
+                border: none;
+                float: right;
+              }
+
+              .van-button:active {
+                opacity: 0;
+              }
             }
+
+
           }
-
-
         }
       }
     }
@@ -684,90 +740,107 @@
         width: 32%;
         -webkit-box-sizing: border-box;
         box-sizing: border-box;
-        //   border: 3px solid #f0f0f0;
         border-radius: 5px;
         margin: .8vw;
 
-        img {
-          width: 100%;
-          height: 7em;
-          display: inline-block;
-          border-top-left-radius: 5px;
-          border-top-right-radius: 5px;
-        }
-
-        .goodsComment {
-          margin: 2px 5px;
-          min-height: 2.4em;
-
-          > p {
-            .fz(font-size, 25);
-            min-height: 2rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-box-orient: vertical;
-            -webkit-line-clamp: 2;
-            word-break: break-all;
-            bottom: 0;
-            left: 0;
+        .upperLayout{
+          height: 80%;
+          img {
             width: 100%;
-            -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-            color: #323233;
+            height: 7em;
+            display: inline-block;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
           }
-        }
-
-        .goodsFooter {
-          border-bottom-left-radius: 10px;
-          border-bottom-right-radius: 10px;
-          width: 100%;
-          display: flex;
-          flex-direction: row;
-          justify-items: center;
-          min-height: 2em;
-          padding-bottom: .1em;
-
-          .goodsPriceBox {
-            width: 80%;
-            line-height: 2em;
+          .goodsComment {
+            margin: 2px 5px;
+            > p {
+              .fz(font-size, 25);
+              min-height: 2rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              display: -webkit-box;
+              -webkit-box-orient: vertical;
+              -webkit-line-clamp: 2;
+              word-break: break-all;
+              bottom: 0;
+              left: 0;
+              width: 100%;
+              -webkit-box-sizing: border-box;
+              box-sizing: border-box;
+              color: #000000;
+              text-shadow: 0px 0px #000;
+            }
+          }
+          .alias {
+            color: #aaaaaa;
             margin-left: 5px;
-
-            > span {
-              display: inline-block;
-              align-content: center;
+            font-size: .12rem;
+            -webkit-transform-origin-x: 0; //缩小后文字居左
+            -webkit-transform: scale(0.80);   //关键
+            >span{
               overflow: hidden;
               text-overflow: ellipsis;
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
               word-break: break-all;
-              bottom: 0;
-              left: 0;
-              color: #ff4444;
-              .fz(font-size, 30);
             }
           }
+        }
+        .bottomLayout{
+          margin-top: 2px;
+          .goodsFooter {
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            width: 100%;
+            display: flex;
+            flex-direction: row;
+            justify-items: center;
+            min-height: 2em;
+            padding-bottom: .1em;
 
-          .goodsBuyBox {
-            width: 20%;
-            justify-content: center;
-            line-height: 2em;
+            .goodsPriceBox {
+              width: 80%;
+              line-height: 2em;
+              margin-left: 5px;
 
-            .van-button {
-              margin: 1vw 0vw;
-              background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
-              background-size: 20px 20px;
-              border: none;
-              float: right;
+              > span {
+                display: inline-block;
+                align-content: center;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+                word-break: break-all;
+                bottom: 0;
+                left: 0;
+                color: #ff4444;
+                .fz(font-size, 30);
+              }
             }
 
-            .van-button:active {
-              opacity: 0;
+            .goodsBuyBox {
+              width: 20%;
+              justify-content: center;
+              line-height: 2em;
+
+              .van-button {
+                margin: 1vw 0vw;
+                background: url('../../assets/icons/ico_add_cart.png') no-repeat center;
+                background-size: 20px 20px;
+                border: none;
+                float: right;
+              }
+
+              .van-button:active {
+                opacity: 0;
+              }
             }
+
+
           }
-
-
         }
       }
 
