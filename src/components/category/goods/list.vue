@@ -704,13 +704,13 @@
             text-shadow: 0px 0px #000;
           }
           .description {
+            margin-left: -2px;
             color: #ff4444;
             background-color: #fff1f1;
             border: 1px solid #f2b6b8;
             border-radius: 3px;
             padding:2px 5px;
-            font-size: .12rem;
-            -webkit-transform: scale(0.80);   //关键
+            font-size: xx-small;
           }
         }
 
