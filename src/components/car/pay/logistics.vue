@@ -64,7 +64,7 @@
               <div v-else>
                 <van-steps direction="vertical" :active="0" active-color="#f44">
                   <van-step>
-                    <h3>未查询到物流信息，敬请等待...</h3>
+                    <h3>快马加鞭揽件中……</h3>
                   </van-step>
                 </van-steps>
               </div>
