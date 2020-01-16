@@ -31,9 +31,18 @@
             <div class="goods-detail" @click="onListClick(k)">
               <van-card
                 :price="k.price"
-                :title=composeGoodsTitle(k)
                 :thumb="k.image"
                 centered>
+                <div slot="title">
+                    <span class="cartTitle">
+                     {{composeGoodsTitle(k)}}
+                   </span>
+                </div>
+                <div slot="desc" v-if="k.promotion != undefined && k.promotion.length > 0">
+                   <span class="description">
+                     {{getPromtionPrice(k)}}
+                   </span>
+                </div>
               </van-card>
             </div>
             <div class="goods-action">
@@ -102,6 +111,13 @@
     },
 
     methods: {
+      getPromtionPrice(k) {
+        let promotionPrice = ""
+        if(k.promotion != undefined && k.promotion.length > 0) {
+          promotionPrice = "活动售价: ￥" + k.promotion[0].discount
+        }
+        return promotionPrice
+      },
       reOrderList() {
         this.list.sort(function (a, b) {
           try {
@@ -666,8 +682,34 @@
 
           &__price {
             margin-top: 0.5em;
-            margin-top: 18px;
             .fz(font-size, 35);
+          }
+
+          .cartTitle{
+            .fz(font-size, 25);
+            min-height: 2rem;
+            overflow: hidden;
+            margin-bottom: 2px;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            word-break: break-all;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            color: #000000;
+            text-shadow: 0px 0px #000;
+          }
+          .description {
+            color: white;
+            background-color: #323233;
+            border-radius: 8px;
+            padding:2px 5px;
+            font-size: .12rem;
+            -webkit-transform: scale(0.80);   //关键
           }
         }
 
