@@ -60,7 +60,7 @@
         :closeOnClickOverlay="true"
         style="background-color: transparent"
       >
-        <div class="giftDialog" v-if="icon_gift.length > 0">
+        <div class="giftDialog" v-if="icon_gift != null && icon_gift.length > 0">
           <img :src=icon_gift @click="onGiftDialogImgClick">
           <van-icon name="close" @click="onGiftDialogCloseBtnClicks"/>
         </div>
