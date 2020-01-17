@@ -30,7 +30,7 @@ const WorkerOrderList = resolve => require(['@/components/car/pay/workerOrderLis
 const WorkerOrderDetail = resolve => require(['@/components/car/pay/workerOrderDetail.vue'], resolve)
 const OptCardList = resolve => require(['@/components/user/optCardList.vue'], resolve)
 const OptCardDetail = resolve => require(['@/components/user/optCardDetail.vue'], resolve)
-const Qrcode = resolve => require(['@/views/Qrcode.vue'], resolve)
+const Qrcode = resolve => require(['@/views/qrcode.vue'], resolve)
 const ShangHaiCardList = resolve => require(['@/components/user/shanghaiBankCardList.vue'], resolve)
 const QuickPayCardList = resolve => require(['@/components/user/quickpayCardList.vue'], resolve)
 const LinkPayAccount = resolve => require(['@/components/user/linkPayAccount.vue'], resolve)
