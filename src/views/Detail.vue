@@ -159,6 +159,9 @@
           <span>店铺公告</span>
           <img :src="seriviceIcon">
         </div>
+        <div class="bulletin">
+          <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/bulletin_sn/ico_bulletin.jpg"  onerror="this.style.display='none'">
+        </div>
         <div class="serviceDetail">
           <span>1、本商品由苏宁易购发货并提供售后服务，苏宁易购服务电话4006278118</span>
           <span>2、退货完成后，积分会在3个工作日内退回，如有延误，请联络关爱通客服进行处理。</span>
@@ -1290,6 +1293,11 @@
           flex-direction: column;
           padding: 5px;
           color: black;
+        }
+        .bulletin{
+          img{
+            width: 100%;
+          }
         }
       }
 
