@@ -60,7 +60,7 @@
     },
     methods: {
 /*       testGetCode(province,city,county) {
-        this.$log("省:"+province+",市:"+city+",县:"+county)
+       // this.$log("省:"+province+",市:"+city+",县:"+county)
         let options = {
           "country": "中国",
           "province": province,
@@ -75,9 +75,9 @@
         })
       },
       async test() {
-        this.$log(areaList.city_list)
-        this.$log(areaList.county_list)
-        this.$log(areaList.province_list)
+       // this.$log(areaList.city_list)
+       // this.$log(areaList.county_list)
+       // this.$log(areaList.province_list)
         let province_name = "";
         let city_name = "";
         let county_name = "";
@@ -93,9 +93,11 @@
                   code = county_key
                   county_name = areaList.county_list[county_key];
                   try{
+                   // this.$log("省ID:"+province_key+",省:"+province_name+",市ID:"+city_key+",市:"+city_name+",县ID:"+county_key+",县:"+county_name)
+                    this.$log(county_key+" "+county_name+" "+city_key+" "+city_name+" "+province_key+" "+province_name)
                     let result =  await  this.testGetCode(province_name,city_name,county_name)
                     let code = result.data.data.code
-                    this.$log(code)
+                 //   this.$log(code)
                     if(code.countyId.length == 0) {
                       this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     }
