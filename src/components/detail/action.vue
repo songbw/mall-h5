@@ -23,7 +23,7 @@
         :goods="goods"
         :goods-id="datas.mpu"
         hide-stock= true
-        disable-stepper-input=true
+        disable-stepper-input
         @buy-clicked="onBuyClicked"
         @add-cart="onAddCartClicked"
       />
@@ -77,7 +77,7 @@
         if(newValue != null) {
           this.goods = {
             // 商品标题
-            title: '',
+            title: this.datas.name,
             // 默认商品 sku 缩略图
             picture: this.datas.image
           }
@@ -106,61 +106,51 @@
                     break;
                   }
                 }
+                let num = tree.length+1
                 if(foundKey == -1) {
                   tree.push({
+                  //  id: ""+num,
                     k: property.name,
                     v:[
                       {
                         name: property.val,
                         imgUrl:sku.goodsLogo
                       }
-                    ]
+                    ],
+                   // k_s: 's'+num
                   })
                 }
               })
-              list.push({
+
+            })
+            let total_stock_num = 0
+            this.datas.skuList.forEach(sku => {
+              let item = {
                 id:sku.skuId,
                 price: parseInt((this.datas.price * 100).toFixed(0)),
                 stock_num: 100
-              })
+              }
+              total_stock_num += item.stock_num
+/*              sku.propertyList.forEach(property => {
+                for(let i =0 ;i < tree.length; i++) {
+                  if(tree[i].k === property.name) {
+                    item[tree[i].k_s] = tree[i].id
+                  }
+                }
+              })*/
+              list.push(item)
             })
+
             this.$log("!!!!!!!!!!!!!!!!!!!!!!!")
             this.$log(tree)
             this.$log(list)
             this.sku =  {
               // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
               // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
-/*              tree: [
-                {
-                  k: '颜色', // skuKeyName：规格类目名称
-                  v: [
-                    {
-                      id: '30349', // skuValueId：规格值 id
-                      name: '红色', // skuValueName：规格值名称
-                      imgUrl: 'https://img.yzcdn.cn/1.jpg' // 规格类目图片，只有第一个规格类目可以定义图片
-                    },
-                    {
-                      id: '1215',
-                      name: '蓝色',
-                      imgUrl: 'https://img.yzcdn.cn/2.jpg'
-                    }
-                  ],
-                  k_s: 's1' // skuKeyStr：sku 组合列表（下方 list）中当前类目对应的 key 值，value 值会是从属于当前类目的一个规格值 id
-                }
-              ],*/
               tree: tree,
               list: list,
-              // 所有 sku 的组合列表，比如红色、M 码为一个 sku 组合，红色、S 码为另一个组合
-              // list: [
-              //   {
-              //     id: 2259, // skuId，下单时后端需要
-              //     price: 100, // 价格（单位分）
-              //     s1: '1215', // 规格类目 k_s 为 s1 的对应规格值 id
-              //     s2: '1193', // 规格类目 k_s 为 s2 的对应规格值 id
-              //     s3: '0', // 最多包含3个规格值，为0表示不存在该规格
-              //     stock_num: 110 // 当前 sku 组合对应的库存
-              //   }
-              // ],
+              stock_num: total_stock_num, // 商品总库存
+              none_sku: false, // 是否无规格商品
             }
           }
         }
