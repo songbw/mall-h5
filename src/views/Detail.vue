@@ -203,7 +203,8 @@
             <div class="contentTitle">
               <span>商品详情</span>
             </div>
-            <v-content :contentData=contentUrls></v-content>
+            <v-content :contentData=contentUrls v-if="contentUrls != undefined && contentUrls.length > 0"></v-content>
+            <div  v-else class="contentDetail" v-html="this.goods.introduction" />
           </div>
           <div v-if="bulletinInfo !=null && bulletinInfo.position == 'bottom'" class="bulletin">
             <img v-lazy="bulletinInfo.imageUrl">
@@ -307,9 +308,15 @@
           if (ulsArray.length > 0) {
             ulsArray.forEach(items => {
               if (items != null && items.length > 0) {
-                this.swiperUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+                this.$log(items)
+                if(items.startsWith("https")) {
+                  this.swiperUrls.push({"imgPath":  items})
+                } else {
+                  this.swiperUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+                }
               }
             })
+            this.$log(this.swiperUrls)
           }
         }
         let comtentUrls = this.goods.introductionUrl;
@@ -987,6 +994,13 @@
   }
 
 </script>
+
+<style>
+  .contentDetail img{
+     width: 100%;
+     display: block;
+  }
+</style>
 
 <style lang="less" scoped>
   @import "../assets/fz.less";
@@ -1727,6 +1741,7 @@
           .fz(font-size, 40);
           font-weight: bold;
         }
+
       }
 
       .price-title {
