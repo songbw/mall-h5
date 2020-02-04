@@ -304,7 +304,12 @@
       if (this.goods != null) {
         let imagesUrls = this.goods.imagesUrl;
         if (imagesUrls != null && imagesUrls.length > 0) {
-          let ulsArray = imagesUrls.split(";");
+          let ulsArray = null
+          if(imagesUrls.startsWith("https")) {
+            ulsArray = imagesUrls.split(";");
+          } else {
+            ulsArray = imagesUrls.split(":");
+          }
           if (ulsArray.length > 0) {
             ulsArray.forEach(items => {
               if (items != null && items.length > 0) {
