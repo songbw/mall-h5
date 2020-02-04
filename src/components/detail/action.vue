@@ -174,6 +174,15 @@
       onAddCartClicked(skuData) {
         this.$log("onAddCartClicked Enter")
         this.$log(skuData)
+        if(skuData != undefined) {
+          let selectSkuId = skuData.selectedSkuComb.id
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+            this.add2Car(userInfo, this.datas,selectSkuId);
+          } else {
+            this.$toast("没有用户信息，请先登录,再添加购物车")
+          }
+        }
       },
       getClientName() {
         switch (this.$api.APP_ID) {
@@ -261,13 +270,17 @@
         }
       },
 
-      add2Car(userInfo, goods) {
+      add2Car(userInfo, goods, selectSkuId) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
         let mpu = goods.mpu;
+        if(selectSkuId === undefined) {
+          selectSkuId = mpu
+        }
         let addtoCar = {
           "openId": userId,
-          "mpu": mpu
+          "mpu": mpu,
+          "skuId":selectSkuId
         }
         this.$api.xapi({
           method: 'post',
