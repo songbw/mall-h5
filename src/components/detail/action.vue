@@ -150,7 +150,7 @@
               tree: tree,
               list: list,
               stock_num: total_stock_num, // 商品总库存
-              none_sku: false, // 是否无规格商品
+              none_sku: false, // 是否无规格商品f
             }
           }
         }
@@ -256,8 +256,6 @@
           } else {
             this.add2Car(userInfo, this.datas);
           }
-
-
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
         }
