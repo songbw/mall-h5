@@ -35,8 +35,8 @@
         <van-button size="large" type="primary"  @click="">登录
         </van-button>
         <div class="footer">
-          <span style="float: left">新用户注册</span>
-          <span style="float: right">忘记密码</span>
+          <span style="float: left" @click="onRegisterBtnClick">新用户注册</span>
+          <span style="float: right" @click="onForgotPwdBtnClick">忘记密码</span>
         </div>
       </div>
 
@@ -56,7 +56,20 @@
     created() {
     },
 
-    methods: {}
+    methods: {
+      onRegisterBtnClick() {
+        this.$log("onRegisterBtnClick Enter")
+        this.$router.push({
+          path: 'fcRegister'
+        })
+      },
+      onForgotPwdBtnClick() {
+        this.$log("onForgotPwdBtnClick Enter")
+        this.$router.push({
+          path: 'fcResetPwd'
+        })
+      }
+    }
   }
 </script>
 
