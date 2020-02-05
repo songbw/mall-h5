@@ -75,7 +75,7 @@ xapi.interceptors.response.use(function (response) {
     if (error.response.status == 401) {
       // 如果返回401 即没有权限，跳到登录页重新登录
       console.log("401, 请重新登录")
-      if(store.state.appconf.appId === '12') {
+      if(store.state.appconf.appId === '13') {
         router.replace({
           path: 'fcLogin',
           query: {redirect: router.currentRoute.fullPath}
