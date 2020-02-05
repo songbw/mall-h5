@@ -458,10 +458,14 @@
         this.$log(item)
         let cartItem = Util.getCartItem(this, user.userId, item.mpu)
         this.$log(cartItem)
+        let skuId = item.skuId
+        if(skuId === undefined || skuId === null) {
+          skuId = item.skuid
+        }
         if (cartItem == null) {
           let baseInfo = {
             "userId": user.userId,
-            "skuId": item.skuid,
+            "skuId": skuId,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
             "count": item.count,
@@ -470,7 +474,7 @@
           }
           let goodsInfo = {
             "id": item.id,
-            "skuId": item.skuid,
+            "skuId": skuId,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
             "image": item.image,
@@ -504,6 +508,7 @@
             "promotionInfo": promotionInfo,
           }
         } else {
+          cartItem.baseInfo.skuId = skuId
           cartItem.baseInfo.count = item.count
           cartItem.baseInfo.cartId = item.id
           cartItem.baseInfo.merchantId = item.merchantId
