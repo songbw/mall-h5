@@ -391,7 +391,7 @@ export default new VueRouter({
     {
       path: '/fcResetPwd',
       name: '商城重置密码页',
-      component: FcRegister,
+      component: FcResetPwd,
       meta: {
         title: '重置密码',
       }

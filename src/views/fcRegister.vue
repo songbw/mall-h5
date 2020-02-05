@@ -11,12 +11,6 @@
           maxlength="30"
           placeholder="请输入手机号"
         />
-        <van-field
-          v-model="userPwd"
-          clearable
-          maxlength="30"
-          placeholder="请输入登录密码"
-        />
         <div class="verifyCodeBox">
           <van-field
             v-model="verifyCode"
@@ -28,12 +22,19 @@
                       @click="onGetVerifyCodeBtnClick">{{verifyBtnText}}
           </van-button>
         </div>
+        <van-field
+          v-model="userPwd"
+          clearable
+          maxlength="30"
+          placeholder="请输入登录密码"
+        />
+
       </div>
 
 
 
       <div class="registerConfirmBox">
-        <van-button size="large" type="primary" @click="">注册并登录
+        <van-button size="large" type="primary" @click="onRegisterBtnClick"  :disabled="!isBindBtnEnable">注册并登录
         </van-button>
       </div>
 
@@ -59,9 +60,100 @@
     created() {
     },
 
+    computed: {
+      isBindBtnEnable() {
+        return (this.userPhone.length > 0 && this.userPwd.length > 0 && this.verifyCode.length > 0)
+      },
+    },
     methods: {
+      async onRegisterBtnClick() {
+        this.$log("onRegisterBtnClick Enter")
+        try {
+          let response = await  this.registerUser()
+          this.$log(response)
+          if(response.data.code == 200) {
+             let ret  = response.data.data.result;
+             let openId = ret.openId;
+            let userId = this.$api.APP_ID + openId;
+             let token = ret.token;
+             let thirdToken = ret.thirdToken;
+             let userInfo = {
+              openId: openId,
+              accessToken: thirdToken,
+              userId: userId,
+              payId: ""
+            }
+            this.$log(userInfo)
+            this.$store.commit('SET_USER', JSON.stringify(userInfo));
+            this.$store.commit('SET_TOKEN', token);
+            let data = this.$md5(token)
+            if (ret.newUser) {
+              data = "1" + data
+            } else {
+              data = "0" + data
+            }
+            this.$store.commit('SET_GUYS_INFO', data);
+            this.$router.replace({
+              path: '/',
+            })
+          } else {
+            //注册失败
+            this.$toast(response.data.msg)
+          }
+        } catch (e)  {
+          //do nothing
+        }
+      },
+      getVerifyCode(telephone) {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/code',
+          params: {
+            telephone: telephone,
+            type: "zc"
+          }
+        })
+      },
+      registerUser() {
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/register',
+          data: {
+            username: this.userPhone,
+            password: this.userPwd,
+            code:this.verifyCode,
+            appId: this.$api.APP_ID
+          }
+        })
+      },
+      countDown() {
+        this.verifyCodeCount--;
+        if (this.verifyCodeCount <= 0) {
+          clearInterval(this.verifyCodeTimer)
+          this.verifyBtnTextClicked = false;
+          this.verifyCodeTimer = 0;
+          this.verifyCodeCount = 0
+          this.verifyBtnText = '获取验证码'
+          this.isVerifyCodeBtnDisabled = false;
+        } else {
+          this.verifyBtnText = this.verifyCodeCount + ' s'
+        }
+      },
       onGetVerifyCodeBtnClick() {
         this.$log("onGetVerifyCodeBtnClick Enter")
+        if (!this.isVerifyCodeBtnDisabled) {
+          if (this.userPhone.length == 0 || !this.userPhone.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+            this.$toast("请输入正确的电话号码")
+            return
+          }
+          this.isVerifyCodeBtnDisabled = true;
+          this.verifyCodeCount = 60
+          this.verifyCodeTimer = setInterval(this.countDown, 1000);
+          this.verifyBtnTextClicked = true;
+          this.getVerifyCode(this.userPhone);
+        }
       }
     }
   }
