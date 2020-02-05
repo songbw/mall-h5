@@ -183,6 +183,12 @@
           })
         } else {
           //goto register UI
+          if(this.$api.APP_ID === '13') {
+            this.$router.replace({
+              path: 'fcLogin',
+              query: {redirect: this.$router.currentRoute.fullPath}
+            })
+          }
           that.pageloading = false;
         }
       }
