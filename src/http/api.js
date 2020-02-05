@@ -75,11 +75,12 @@ xapi.interceptors.response.use(function (response) {
     if (error.response.status == 401) {
       // 如果返回401 即没有权限，跳到登录页重新登录
       console.log("401, 请重新登录")
-/*      if(store.state.appconf.appId === '11' && store.state.appconf.appSource === '01') {
+      if(store.state.appconf.appId === '12') {
         router.replace({
-          path: 'login'
+          path: 'fcLogin',
+          query: {redirect: router.currentRoute.fullPath}
         })
-      }*/
+      }
      // router.push({name: '登录页'})
       //alert('登录已失效，请重新登录');
 /*      store.commit('CHANGE_TOKEN', 0);

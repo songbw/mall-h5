@@ -38,6 +38,9 @@ const LinkPayAccount = resolve => require(['@/components/user/linkPayAccount.vue
 const HistoryOrder = resolve => require(['@/components/user/historyOrderList.vue'], resolve)
 const HistoryOrderDetail = resolve => require(['@/components/user/historyOrderDetail.vue'], resolve)
 const ShangHaiProtocol = resolve => require(['@/components/user/shanghaiBankProtcol.vue'], resolve)
+const FcLogin = resolve => require(['@/views/fcLogin.vue'], resolve)
+const FcRegister = resolve => require(['@/views/fcRegister.vue'], resolve)
+const FcResetPwd = resolve => require(['@/views/fcResetPwd.vue'], resolve)
 
 
 export default new VueRouter({
@@ -367,6 +370,30 @@ export default new VueRouter({
       component: ShangHaiProtocol,
       meta: {
         title: '上海银行电商资金管理业务电子协议',
+      }
+    },
+    {
+      path: '/fcLogin',
+      name: '商城登录页',
+      component: FcLogin,
+      meta: {
+        title: '登录',
+      }
+    },
+    {
+      path: '/fcRegister',
+      name: '商城注册页',
+      component: FcRegister,
+      meta: {
+        title: '注册',
+      }
+    },
+    {
+      path: '/fcResetPwd',
+      name: '商城重置密码页',
+      component: FcRegister,
+      meta: {
+        title: '重置密码',
       }
     }
   ]

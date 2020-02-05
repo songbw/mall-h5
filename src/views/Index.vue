@@ -212,7 +212,7 @@
 
       } else {//非关爱通App
         if (process.env.NODE_ENV === 'development') {
-          this.test();
+        //  this.test();
         }
         setTimeout(() => {
           if (this.userTokenLoading) {
@@ -227,7 +227,6 @@
             setTimeout(() => {
               if (this.userTokenLoading) {
                 this.userTokenLoading = false;
-
               }
             }, 20000);
           } else {
