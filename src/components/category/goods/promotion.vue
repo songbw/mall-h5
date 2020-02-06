@@ -237,6 +237,13 @@
         this.$log("tab:" + type)
         this.active = type
       },
+      gotoGoodsPage(mpu) {
+        this.$router.push({
+          path: "/detail", query: {
+            mpu: mpu
+          }
+        });
+      },
       add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         this.$log(goods)
@@ -245,62 +252,66 @@
         if (mpu == null) {
           mpu = goods.skuid;
         }
-        let addtoCar = {
-          "openId": userId,
-          "mpu": mpu
-        }
-        this.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.ORDER_BASE_URL,
-          url: '/cart',
-          data: addtoCar,
-        }).then((response) => {
-          this.result = response.data.data.result;
-          if(response.data.code == 200) {
-            this.$toast("添加到购物车成功！")
-            let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
-            this.$log(goods)
-            if (cartItem == null) {
-              let baseInfo = {
-                "userId": user.userId,
-                "skuId": goods.skuid,
-                "mpu": goods.mpu,
-                "merchantId": goods.merchantId,
-                "count": 1,
-                "choosed": true,
-                "cartId": this.result,
-              }
-              let goodsInfo = {
-                "id": goods.id,
-                "skuId": goods.skuid,
-                "mpu": goods.mpu,
-                "merchantId": goods.merchantId,
-                "image": goods.image,
-                "category": goods.category,
-                "name": goods.name,
-                "brand": goods.brand,
-                "model": goods.model,
-                "price": goods.price,
-                "checkedPrice": goods.price,
-                "type": goods.type == undefined? 0:goods.type
-              }
-              let couponList = []
-              let promotionInfo = {}
-              cartItem = {
-                "baseInfo": baseInfo,
-                "goodsInfo": goodsInfo,
-                "couponList": couponList,
-                "promotionInfo": promotionInfo,
-              }
-            } else {
-              cartItem.baseInfo.count++;
-              cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
-            }
-            Util.updateCartItem(this, cartItem)
+        if(mpu != goods.skuid) {
+          this.gotoGoodsPage(mpu)
+        } else {
+          let addtoCar = {
+            "openId": userId,
+            "mpu": mpu
           }
-        }).catch(function (error) {
-          console.log(error)
-        })
+          this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.ORDER_BASE_URL,
+            url: '/cart',
+            data: addtoCar,
+          }).then((response) => {
+            this.result = response.data.data.result;
+            if(response.data.code == 200) {
+              this.$toast("添加到购物车成功！")
+              let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
+              this.$log(goods)
+              if (cartItem == null) {
+                let baseInfo = {
+                  "userId": user.userId,
+                  "skuId": goods.skuid,
+                  "mpu": goods.mpu,
+                  "merchantId": goods.merchantId,
+                  "count": 1,
+                  "choosed": true,
+                  "cartId": this.result,
+                }
+                let goodsInfo = {
+                  "id": goods.id,
+                  "skuId": goods.skuid,
+                  "mpu": goods.mpu,
+                  "merchantId": goods.merchantId,
+                  "image": goods.image,
+                  "category": goods.category,
+                  "name": goods.name,
+                  "brand": goods.brand,
+                  "model": goods.model,
+                  "price": goods.price,
+                  "checkedPrice": goods.price,
+                  "type": goods.type == undefined? 0:goods.type
+                }
+                let couponList = []
+                let promotionInfo = {}
+                cartItem = {
+                  "baseInfo": baseInfo,
+                  "goodsInfo": goodsInfo,
+                  "couponList": couponList,
+                  "promotionInfo": promotionInfo,
+                }
+              } else {
+                cartItem.baseInfo.count++;
+                cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
+              }
+              Util.updateCartItem(this, cartItem)
+            }
+          }).catch(function (error) {
+            console.log(error)
+          })
+        }
       },
       onAdd2carBtnClick(goods) {
         this.$log("onAdd2carBtnClick")

@@ -337,56 +337,62 @@
 
       gotoPay() {
         this.$log("gotoPay Enter")
-        this.$log(this.datas);
-        let userInfo = this.$store.state.appconf.userInfo;
-        if (!Util.isUserEmpty(userInfo)) {
-          let user = JSON.parse(userInfo);
-          let goods = this.datas
-          let baseInfo = {
-            "userId": user.userId,
-            "skuId": goods.skuid,
-            "mpu": goods.mpu,
-            "merchantId": goods.merchantId,
-            "count": 1,
-            "choosed": true,
-            "cartId": -1,
-          }
-          let goodsInfo = {
-            "id": goods.id,
-            "skuId": goods.skuid,
-            "mpu": goods.mpu,
-            "merchantId": goods.merchantId,
-            "image": goods.image,
-            "category": goods.category,
-            "name": goods.name,
-            "brand": goods.brand,
-            "model": goods.model,
-            "price": goods.price,
-            "type": goods.type == undefined? 0:goods.type
-          }
-          let couponList = goods.coupon
-          let promotionInfo = {
-            "promotion": goods.promotion,
-            "promotionState": Util.getPromotionState(this,goods)
-          }
-          let product = {
-            "baseInfo": baseInfo,
-            "goodsInfo": goodsInfo,
-            "couponList": couponList,
-            "promotionInfo": promotionInfo,
-          }
-          this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
-          this.$router.push({path: '/car/pay/direct'})
-          /*          this.$router.push({
-                      name: "支付页",
-                      params: {
-                        tryPayed: tryPayed
-                      }
-                    })*/
-
+        if(this.datas.skuList != undefined && this.datas.skuList.length > 0)
+        {
+          this.showBase = true;
         } else {
-          this.$toast("没有用户信息，请先登录再购买")
+          this.$log(this.datas);
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+            let user = JSON.parse(userInfo);
+            let goods = this.datas
+            let baseInfo = {
+              "userId": user.userId,
+              "skuId": goods.skuid,
+              "mpu": goods.mpu,
+              "merchantId": goods.merchantId,
+              "count": 1,
+              "choosed": true,
+              "cartId": -1,
+            }
+            let goodsInfo = {
+              "id": goods.id,
+              "skuId": goods.skuid,
+              "mpu": goods.mpu,
+              "merchantId": goods.merchantId,
+              "image": goods.image,
+              "category": goods.category,
+              "name": goods.name,
+              "brand": goods.brand,
+              "model": goods.model,
+              "price": goods.price,
+              "type": goods.type == undefined? 0:goods.type
+            }
+            let couponList = goods.coupon
+            let promotionInfo = {
+              "promotion": goods.promotion,
+              "promotionState": Util.getPromotionState(this,goods)
+            }
+            let product = {
+              "baseInfo": baseInfo,
+              "goodsInfo": goodsInfo,
+              "couponList": couponList,
+              "promotionInfo": promotionInfo,
+            }
+            this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
+            this.$router.push({path: '/car/pay/direct'})
+            /*          this.$router.push({
+                        name: "支付页",
+                        params: {
+                          tryPayed: tryPayed
+                        }
+                      })*/
+
+          } else {
+            this.$toast("没有用户信息，请先登录再购买")
+          }
         }
+
       },
 
       gotoCar() {
