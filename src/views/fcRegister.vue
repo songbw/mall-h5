@@ -181,8 +181,10 @@
         justify-content: center;
 
         .TitleText {
+          font-weight: bold;
           margin-left: 12px;
           .fz(font-size, 45);
+          color:#333333;
         }
       }
 
@@ -214,6 +216,8 @@
       }
 
       .van-button {
+        background: linear-gradient(to right,#FFC000, #FF5D01);
+        border: none;
         &--large {
           width: 100%;
           height: 40px;
@@ -238,6 +242,8 @@
         }
 
         .van-button {
+          background: linear-gradient(to right,#FFC000, #FF5D01);
+          border: none;
           float: right;
           min-width: 8em;
           margin: 0px 2px;

@@ -153,8 +153,10 @@
         justify-content: center;
 
         .TitleText {
+          font-weight: bold;
           margin-left: 12px;
           .fz(font-size, 45);
+          color:#333333;
         }
       }
 
@@ -179,13 +181,16 @@
 
           > span {
             padding: 10px;
-            color: #1989fa;
+            font-weight: bold;
+            color: #333333;
           }
         }
 
       }
 
       .van-button {
+        background: linear-gradient(to right,#FFC000, #FF5D01);;
+        border: none;
         &--large {
           width: 100%;
           height: 40px;
