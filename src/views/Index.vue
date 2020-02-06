@@ -212,7 +212,8 @@
 
       } else {//非关爱通App
         if (process.env.NODE_ENV === 'development') {
-        //  this.test();
+          if(this.$api.APP_ID != '13')
+            this.test();
         }
         setTimeout(() => {
           if (this.userTokenLoading) {
