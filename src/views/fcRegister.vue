@@ -32,9 +32,8 @@
       </div>
 
 
-
       <div class="registerConfirmBox">
-        <van-button size="large" type="primary" @click="onRegisterBtnClick"  :disabled="!isBindBtnEnable">注册并登录
+        <van-button size="large" type="primary" @click="onRegisterBtnClick" :disabled="!isBindBtnEnable">注册并登录
         </van-button>
       </div>
 
@@ -69,15 +68,15 @@
       async onRegisterBtnClick() {
         this.$log("onRegisterBtnClick Enter")
         try {
-          let response = await  this.registerUser()
+          let response = await this.registerUser()
           this.$log(response)
-          if(response.data.code == 200) {
-             let ret  = response.data.data.result;
-             let openId = ret.openId;
+          if (response.data.code == 200) {
+            let ret = response.data.data.result;
+            let openId = ret.openId;
             let userId = this.$api.APP_ID + openId;
-             let token = ret.token;
-             let thirdToken = ret.thirdToken;
-             let userInfo = {
+            let token = ret.token;
+            let thirdToken = ret.thirdToken;
+            let userInfo = {
               openId: openId,
               accessToken: thirdToken,
               userId: userId,
@@ -100,7 +99,7 @@
             //注册失败
             this.$toast(response.data.msg)
           }
-        } catch (e)  {
+        } catch (e) {
           //do nothing
         }
       },
@@ -123,7 +122,7 @@
           data: {
             username: this.userPhone,
             password: this.userPwd,
-            code:this.verifyCode,
+            code: this.verifyCode,
             appId: this.$api.APP_ID
           }
         })

@@ -1,21 +1,15 @@
 <template lang="html">
-  <section class="resetPwd">
-    <div class="resetPwdBody">
-      <div class="resetPwdTitle">
+  <section class="register">
+    <div class="registerBody">
+      <div class="registerTitle">
         <span class="TitleText">重置密码</span>
       </div>
-      <div class="resetPwdForm">
+      <div class="registerForm">
         <van-field
           v-model="userPhone"
           clearable
           maxlength="30"
           placeholder="请输入手机号"
-        />
-        <van-field
-          v-model="userPwd"
-          clearable
-          maxlength="30"
-          placeholder="请输入新密码"
         />
         <div class="verifyCodeBox">
           <van-field
@@ -28,11 +22,21 @@
                       @click="onGetVerifyCodeBtnClick">{{verifyBtnText}}
           </van-button>
         </div>
+        <van-field
+          v-model="userPwd"
+          clearable
+          maxlength="30"
+          placeholder="请输入新密码"
+        />
+
       </div>
-      <div class="resetPwdConfirmBox">
-        <van-button size="large" type="primary" @click="">重置密码
+
+
+      <div class="registerConfirmBox">
+        <van-button size="large" type="primary" @click="onResetPwdBtnClick" :disabled="!isBindBtnEnable">重置密码
         </van-button>
       </div>
+
     </div>
   </section>
 </template>
@@ -55,9 +59,77 @@
     created() {
     },
 
+    computed: {
+      isBindBtnEnable() {
+        return (this.userPhone.length > 0 && this.userPwd.length > 0 && this.verifyCode.length > 0)
+      },
+    },
     methods: {
+      async onResetPwdBtnClick() {
+        this.$log("onResetPwdBtnClick Enter")
+        try {
+          let response = await this.resetUserPwd()
+          this.$log(response)
+          if (response.data.code == 200) {
+            this.$toast("密码已重置")
+          } else {
+            //注册失败
+            this.$toast(response.data.msg)
+          }
+        } catch (e) {
+          //do nothing
+        }
+      },
+      getVerifyCode(telephone) {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/code',
+          params: {
+            telephone: telephone,
+            type: "fp"
+          }
+        })
+      },
+      resetUserPwd() {
+        return this.$api.xapi({
+          method: 'put',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/password/forget',
+          data: {
+            username: this.userPhone,
+            password: this.userPwd,
+            code: this.verifyCode,
+            appId: this.$api.APP_ID
+          }
+        })
+      },
+      countDown() {
+        this.verifyCodeCount--;
+        if (this.verifyCodeCount <= 0) {
+          clearInterval(this.verifyCodeTimer)
+          this.verifyBtnTextClicked = false;
+          this.verifyCodeTimer = 0;
+          this.verifyCodeCount = 0
+          this.verifyBtnText = '获取验证码'
+          this.isVerifyCodeBtnDisabled = false;
+        } else {
+          this.verifyBtnText = this.verifyCodeCount + ' s'
+        }
+      },
       onGetVerifyCodeBtnClick() {
         this.$log("onGetVerifyCodeBtnClick Enter")
+        if (!this.isVerifyCodeBtnDisabled) {
+          if (this.userPhone.length == 0 || !this.userPhone.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+            this.$toast("请输入正确的电话号码")
+            return
+          }
+          this.isVerifyCodeBtnDisabled = true;
+          this.verifyCodeCount = 60
+          this.verifyCodeTimer = setInterval(this.countDown, 1000);
+          this.verifyBtnTextClicked = true;
+          this.getVerifyCode(this.userPhone);
+        }
       }
     }
   }
@@ -67,18 +139,18 @@
   @import '../assets/fz.less';
   @import '../assets/index/style.css';
 
-  .resetPwd {
+  .register {
     width: 100%;
     height: 100%;
     top: 0px;
 
-    .resetPwdBody {
+    .registerBody {
       display: flex;
       flex-direction: column;
       width: 100%;
       padding-top: 50px;
 
-      .resetPwdTitle {
+      .registerTitle {
         width: 100%;
         padding: 20px 0px;
         display: flex;
@@ -91,7 +163,7 @@
         }
       }
 
-      .resetPwdForm {
+      .registerForm {
         display: flex;
         flex-direction: column;
         width: 100%;
@@ -99,7 +171,7 @@
 
       }
 
-      .resetPwdConfirmBox {
+      .registerConfirmBox {
         width: 95%;
         margin: 10px;
         display: flex;

@@ -32,7 +32,7 @@
             </div>-->
       <!--      <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;align-items: center">-->
       <div class="loginConfirmBox">
-        <van-button size="large" type="primary"  @click="">登录
+        <van-button size="large" type="primary" @click="onLoginBtnClick">登录
         </van-button>
         <div class="footer">
           <span style="float: left" @click="onRegisterBtnClick">新用户注册</span>
@@ -54,9 +54,66 @@
     },
 
     created() {
+
     },
 
     methods: {
+      userLogin() {
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/login',
+          data: {
+            username: this.userPhone,
+            password: this.userPwd,
+            appId: this.$api.APP_ID
+          }
+        })
+      },
+     async onLoginBtnClick() {
+        this.$log("onLoginBtnClick Enter")
+        if (this.userPhone.length == 0 || !this.userPhone.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+          this.$toast("请输入正确的电话号码")
+          return
+        }
+        if (this.userPwd.length === 0) {
+          this.$toast("请输入用户密码")
+          return;
+        }
+        try {
+          let response = await  this.userLogin();
+          if(response.data.code === 200) {
+            let ret = response.data.data.result;
+            let openId = ret.openId;
+            let userId = this.$api.APP_ID + openId;
+            let token = ret.token;
+            let thirdToken = ret.thirdToken;
+            let userInfo = {
+              openId: openId,
+              accessToken: thirdToken,
+              userId: userId,
+              payId: ""
+            }
+            this.$store.commit('SET_USER', JSON.stringify(userInfo));
+            this.$store.commit('SET_TOKEN', token);
+            let data = this.$md5(token)
+            if (ret.newUser) {
+              data = "1" + data
+            } else {
+              data = "0" + data
+            }
+            this.$store.commit('SET_GUYS_INFO', data);
+            this.$router.replace({
+              path: '/',
+            })
+          } else {
+            this.$toast(response.data.msg)
+          }
+        } catch (e) {
+          //do nothing
+        }
+
+      },
       onRegisterBtnClick() {
         this.$log("onRegisterBtnClick Enter")
         this.$router.push({
@@ -109,17 +166,19 @@
 
       }
 
-      .loginConfirmBox{
-        width:95%;
+      .loginConfirmBox {
+        width: 95%;
         margin: 10px;
         display: flex;
-        flex-direction:column;
+        flex-direction: column;
         text-align: center;
         align-items: center;
-        .footer{
+
+        .footer {
           width: 100%;
-          >span{
-            padding: 10px ;
+
+          > span {
+            padding: 10px;
             color: #1989fa;
           }
         }

@@ -151,6 +151,7 @@
     created() {
       let userInfo = this.$store.state.appconf.userInfo;
       let that = this
+
       this.wechatShareConfig()
       this.showHeader = this.$api.HAS_HEADER;
       if(this.$store.state.appconf.userDetail.length > 0) {
