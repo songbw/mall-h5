@@ -500,11 +500,11 @@
                 </van-dialog>
               </div>
             </div>
-            <div v-if="this.$api.APP_ID == '01'">
+<!--            <div v-if="this.$api.APP_ID == '01'">
               <van-cell title="微信支付" :icon="icon_wechatpay" clickable @click="radio = '4'">
                 <van-radio slot="right-icon" name="4" checked-color="#FF4444"/>
               </van-cell>
-            </div>
+            </div>-->
             <div v-if="(this.$api.APP_ID != '01') && this.$api.APP_SOURCE == '00'">
               <van-cell title="支付宝支付" :icon="icon_alipay" clickable @click="radio = '5'">
                 <van-radio slot="right-icon" name="5" checked-color="#FF4444"/>
