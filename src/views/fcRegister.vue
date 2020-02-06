@@ -234,12 +234,11 @@
         display: flex;
         flex-direction: row;
         margin-top: 2px;
-
         .van-field {
           margin-right: 10px;
           height: 100%;
-          padding: 11px 10px;
-        }
+          padding: 11px 12px;
+      }
 
         .van-button {
           background: linear-gradient(to right,#FFC000, #FF5D01);

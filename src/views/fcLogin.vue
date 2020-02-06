@@ -19,18 +19,6 @@
         />
       </div>
 
-      <!--      <div class="verifyCodeBox">
-              <van-field
-                v-model="verifyCode"
-                maxlength="10"
-                clearable
-                placeholder="请输入短信验证码"
-              />
-              <van-button :disabled="isVerifyCodeBtnDisabled" type="danger"
-                          @click="onGetVerifyCodeBtnClick">{{verifyBtnText}}
-              </van-button>
-            </div>-->
-      <!--      <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;align-items: center">-->
       <div class="loginConfirmBox">
         <van-button size="large" type="primary" @click="onLoginBtnClick">登录
         </van-button>

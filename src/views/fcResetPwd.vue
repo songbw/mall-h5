@@ -215,7 +215,7 @@
         .van-field {
           margin-right: 10px;
           height: 100%;
-          padding: 11px 10px;
+          padding: 11px 12px;
         }
 
         .van-button {
