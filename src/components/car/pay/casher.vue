@@ -505,7 +505,7 @@
                 <van-radio slot="right-icon" name="4" checked-color="#FF4444"/>
               </van-cell>
             </div>
-            <div v-if="(this.$api.APP_ID === '11' || this.$api.APP_ID === '12' ) && this.$api.APP_SOURCE == '00'">
+            <div v-if="(this.$api.APP_ID != '01') && this.$api.APP_SOURCE == '00'">
               <van-cell title="支付宝支付" :icon="icon_alipay" clickable @click="radio = '5'">
                 <van-radio slot="right-icon" name="5" checked-color="#FF4444"/>
               </van-cell>
@@ -1646,6 +1646,8 @@
                 appName = "最珠海惠民优选"
               } else if (this.$api.APP_ID == '11') {
                 appName = "无锡惠民优选"
+              } else if (this.$api.APP_ID == '13') {
+                appName = "羊城通惠民优选"
               }
               fcAlipayPay = {
                 "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
