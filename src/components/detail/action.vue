@@ -143,7 +143,7 @@
             let total_stock_num = 0
             this.datas.skuList.forEach(sku => {
               let item = {
-                id: sku.skuId,
+                id: sku.code,
                 price: parseInt((this.datas.price * 100).toFixed(0)),
                 stock_num: sku.stock_num
               }
@@ -378,7 +378,7 @@
             if (cartItem == null) {
               let baseInfo = {
                 "userId": user.userId,
-                "skuId": goods.skuid,
+                "skuId": selectSkuId,
                 "mpu": goods.mpu,
                 "merchantId": goods.merchantId,
                 "count": count,
@@ -387,7 +387,7 @@
               }
               let goodsInfo = {
                 "id": goods.id,
-                "skuId": goods.skuid,
+                "skuId": selectSkuId,
                 "mpu": goods.mpu,
                 "merchantId": goods.merchantId,
                 "image": goods.image,
