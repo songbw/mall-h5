@@ -3,60 +3,62 @@
     <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
       <h1 slot="title">{{title}}</h1>
     </v-header>
-    <div v-if="pageloading">
-      <v-loading></v-loading>
-    </div>
-    <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
-      <div v-if="this.mHeader.backgroundColor != null">
-        <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
-          <van-search placeholder="搜索您感兴趣的商品"
-                      shape="round"
-                      :background=this.mHeader.backgroundColor
-                      readonly
-                      @click="onSearchInputClick()"
-                      v-if="this.mHeader.showSearchBar"/>
-        </div>
-        <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
+    <div v-if="showDetail">
+      <div v-if="pageloading">
+        <v-loading></v-loading>
       </div>
-      <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px' ">
-        <div v-for="item in datas">
-          <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
-            <v-swiper :datas="item.data"/>
+      <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
+        <div v-if="this.mHeader.backgroundColor != null">
+          <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
+            <van-search placeholder="搜索您感兴趣的商品"
+                        shape="round"
+                        :background=this.mHeader.backgroundColor
+                        readonly
+                        @click="onSearchInputClick()"
+                        v-if="this.mHeader.showSearchBar"/>
           </div>
-          <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
-            <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
-            <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
-            <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='7'"
-               :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
-            <v-imgmap :datas="item.data"/>
-          </div>
-          <div v-else-if="item.type==='4'">
-            <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-            <div>
-              <img :src="icon_shopCart"
-                   @click="gotoShoppingCart()"
-                   style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;"/>
+          <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
+        </div>
+        <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px' ">
+          <div v-for="item in datas">
+            <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
+              <v-swiper :datas="item.data"/>
+            </div>
+            <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
+              <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
+              <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
+              <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='7'"
+                 :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
+              <v-imgmap :datas="item.data"/>
+            </div>
+            <div v-else-if="item.type==='4'">
+              <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <div>
+                <img :src="icon_shopCart"
+                     @click="gotoShoppingCart()"
+                     style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;"/>
+              </div>
+            </div>
+            <div v-else-if="item.type==='6'">
+              <v-sectionCoupon :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+            </div>
+            <div v-else-if="item.type==='8'">
+              <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
+            </div>
+            <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
+              <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
             </div>
           </div>
-          <div v-else-if="item.type==='6'">
-            <v-sectionCoupon :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
-          <div v-else-if="item.type==='8'">
-            <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
-          </div>
-          <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
-            <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
-          </div>
         </div>
+        <v-baseline v-if="this.showFooter" :datas="this.footerText"  :style="{'background-color': mBackgroundColor}"></v-baseline>
+        <div v-else  :style="{'background-color': mBackgroundColor,'height':'5em'} "></div>
       </div>
-      <v-baseline v-if="this.showFooter" :datas="this.footerText"  :style="{'background-color': mBackgroundColor}"></v-baseline>
-      <div v-else  :style="{'background-color': mBackgroundColor,'height':'5em'} "></div>
     </div>
   </section>
 </template>
@@ -141,6 +143,7 @@
     },
     data() {
       return {
+        showDetail: false,
         datas: {},
         loading: true,
         pageloading: true,
@@ -217,6 +220,8 @@
         } else {
           this.redirectOrNot();
         }
+      } else {
+        this.showDetail = true;
       }
     },
 
@@ -315,6 +320,11 @@
             "&response_type=code&scope=snsapi_base&state=0102#wechat_redirect"
           this.$log(encodeURL)
           window.location.replace(encodeURL)
+          setTimeout(() => {
+            this.showDetail = true;
+          }, 2000);
+        } else {
+          this.showDetail = true;
         }
       },
       wechatShareConfig() {

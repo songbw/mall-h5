@@ -189,7 +189,7 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
-     // this.wechatShareConfig()
+      this.wechatShareConfig()
       if (this.isBackFromOuterLink)
         this.showSplash = false
       else
