@@ -207,7 +207,7 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
-      this.wechatShareConfig()
+      //this.wechatShareConfig()
     },
 
     methods: {
