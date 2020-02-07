@@ -166,6 +166,7 @@
               // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
               tree: tree,
               list: list,
+              price: parseFloat(this.datas.price).toFixed(2),
               stock_num: total_stock_num, // 商品总库存
               none_sku: false, // 是否无规格商品f
             }
@@ -215,7 +216,7 @@
               "skuId": selectSkuId,
               "mpu": goods.mpu,
               "merchantId": goods.merchantId,
-              "count": 1,
+              "count": skuData.selectedNum,
               "choosed": true,
               "cartId": -1,
             }
@@ -257,7 +258,7 @@
           let selectSkuId = skuData.selectedSkuComb.id
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
-            this.add2Car(userInfo, this.datas, selectSkuId);
+            this.add2Car(userInfo, this.datas, skuData);
           } else {
             this.$toast("没有用户信息，请先登录,再添加购物车")
           }
@@ -348,17 +349,21 @@
         }
       },
 
-      add2Car(userInfo, goods, selectSkuId) {
+      add2Car(userInfo, goods, skuData) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
         let mpu = goods.mpu;
-        if (selectSkuId === undefined) {
-          selectSkuId = mpu
+        let count = 1;
+        let selectSkuId = mpu
+        if (skuData != undefined) {
+          selectSkuId = skuData.selectedSkuComb.id
+          count = skuData.selectedNum
         }
         let addtoCar = {
           "openId": userId,
           "mpu": mpu,
-          "skuId": selectSkuId
+          "skuId": selectSkuId,
+          "count": count
         }
         this.$api.xapi({
           method: 'post',
@@ -376,7 +381,7 @@
                 "skuId": goods.skuid,
                 "mpu": goods.mpu,
                 "merchantId": goods.merchantId,
-                "count": 1,
+                "count": count,
                 "choosed": true,
                 "cartId": this.result,
               }
@@ -403,7 +408,7 @@
                 "promotionInfo": promotionInfo,
               }
             } else {
-              cartItem.baseInfo.count++;
+              cartItem.baseInfo.count = count + cartItem.baseInfo.count;
               cartItem.goodsInfo.type = (goods.type == undefined ? 0 : goods.type)
             }
             Util.updateCartItem(this, cartItem)
