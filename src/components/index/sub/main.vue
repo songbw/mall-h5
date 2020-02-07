@@ -77,6 +77,7 @@
 
   import {configWechat} from '@/util/wechat'
   import wx from 'weixin-js-sdk'
+  import Util from '@/util/common'
   //import { Toast } from 'mint-ui'
   export default {
     components: {
@@ -208,9 +209,114 @@
     created() {
       this.showHeader = this.$api.HAS_HEADER;
       //this.wechatShareConfig()
+      if (this.$api.APP_ID == '01') {
+        let code = this.$route.query.code;
+        if (code != undefined) {
+          this.thirdPartyLogin(code)
+          this.showDetail = true;
+        } else {
+          this.redirectOrNot();
+        }
+      }
     },
 
     methods: {
+      thirdPartLogined(openId, accessToken) {
+        let that = this;
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/thirdLogin',
+          data: {
+            iAppId: this.$api.APP_ID,
+            accessToken: accessToken,
+            openId: openId,
+          }
+        }).then((response) => {
+          let rt = response.data.data.result
+          this.$log("local information:" + JSON.stringify(rt));
+          if (rt.token != null) {
+            that.$store.commit('SET_TOKEN', rt.token);
+            this.$log("setToken:" + rt.token)
+            let data = this.$md5(rt.token)
+            if (rt.newUser) {
+              data = "1" + data
+            } else {
+              data = "0" + data
+            }
+            this.$log(data)
+            that.$store.commit('SET_GUYS_INFO', data);
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+      },
+      thirdPartyLogin(authCode) {
+        let that = this;
+        let url = ""
+        let params = null
+        if (this.$api.APP_ID == '01') {
+          url = '/sso/thirdParty/token/wx';
+          params = {
+            iAppId: this.$api.APP_ID,
+            code: authCode,
+          }
+        } else if (this.$api.IS_GAT_APP) {
+          url = '/sso/thirdParty/token/gat';
+          params = {
+            iAppId: this.$api.APP_ID,
+            initCode: authCode,
+          }
+        }
+        this.$log("url:" + url)
+        this.$log(params)
+        if (url.length > 0 && params != null) {
+          that.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.SSO_BASE_URL,
+            url: url,
+            params: params
+          }).then((response) => {
+            let rt = response.data.data.result
+            that.$log("rt:" + JSON.stringify(rt));
+            let openId = rt.openId;
+            let accessToken = rt.accessToken;
+            if (openId != undefined) {
+              let userId = that.$api.APP_ID + openId;
+              let userInfo = {
+                openId: openId,
+                accessToken: rt.accessToken,
+                userId: userId
+              }
+              that.$log("userInfo  is:" + JSON.stringify(userInfo));
+              that.$store.commit('SET_USER', JSON.stringify(userInfo));
+              that.thirdPartLogined(openId, accessToken)
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }
+      },
+      redirectOrNot() {
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (Util.isUserEmpty(userInfo)) {
+          let _url = ''
+          if (window.__wxjs_is_wkwebview === true) {
+            _url = window.location.href.split('#')[0] || window.location.href
+          } else {
+            _url = window.location.href
+          }
+          let url = "https://" + window.location.host + window.location.pathname
+          let encodeURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=" +
+            this.$api.T_APP_ID +
+            "&redirect_uri=" +
+            encodeURIComponent(url) +
+            window.location.search +
+            "&response_type=code&scope=snsapi_base&state=0102#wechat_redirect"
+          this.$log(encodeURL)
+          window.location.replace(encodeURL)
+        }
+      },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
         if(this.$api.APP_ID === '01') {
