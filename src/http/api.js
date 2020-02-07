@@ -41,6 +41,7 @@ const QUICKLY_PAY_URL = SERVICE_URL + "/v2/cardpayment/"
 
 const WECHAT_CONFIG_URL = SERVICE_URL + "v2/guanaitong-client"
 
+const AOYIS_CONFIG_URL = SERVICE_URL + "/v2/aoyis"
 
 const xapi = axios.create();
 //xapi.defaults.baseURL = SERVER_BASE_URL;
@@ -123,5 +124,6 @@ export default {
   IS_QUICKPAY_CAN_SAVE,
   TEST_USER,
   APP_SOURCE,
-  WECHAT_CONFIG_URL
+  WECHAT_CONFIG_URL,
+  AOYIS_CONFIG_URL
 }

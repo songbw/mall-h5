@@ -22,7 +22,6 @@
         :sku="sku"
         :goods="goods"
         :goods-id="datas.mpu"
-        hide-stock= true
         disable-stepper-input
         @buy-clicked="onBuyClicked"
         @add-cart="onAddCartClicked"
@@ -52,7 +51,7 @@
         chCouponIcon: require('@/assets/icons/ico_changecoupon.png'),
         cartNumber: 0,
         showBase: false,
-        sku:null,
+        sku: null,
         goods: null,
       }
     },
@@ -64,60 +63,78 @@
       }
     },
 
-    watch:{
+    watch: {
       cartListCount(newValue, oldVal) {
-        if(newValue > 99)
+        if (newValue > 99)
           this.cartNumber = 99
         else
           this.cartNumber = newValue
       },
-      datas(newValue, oldVal) {
+      async datas(newValue, oldVal) {
         this.$log("datas changed @@@@@@@@@@@@@@@@@@@")
         this.$log(newValue)
-        if(newValue != null) {
+        if (newValue != null) {
           this.goods = {
             // 商品标题
             title: this.datas.name,
             // 默认商品 sku 缩略图
             picture: this.datas.image
           }
-          if(this.datas.skuList != undefined && this.datas.skuList.length > 0) {
+          if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
             let tree = [];
             let list = [];
+            try {
+              let response = await this.getInventory()
+              this.$log(response)
+              if (response.data.code === 200) {
+                let ret = response.data.data.skuInvList;
+                this.datas.skuList.forEach(sku => {
+                  sku['stock_num'] = 0
+                  this.$log(ret)
+                  for (let i = 0; i < ret.length; i++) {
+                    if (ret[i].code === sku.code) {
+                      sku.stock_num = ret[i].inventoryCount
+                      break;
+                    }
+                  }
+                })
+              }
+            } catch (e) {
+            }
             this.datas.skuList.forEach(sku => {
               sku.propertyList.forEach(property => {
                 let foundKey = -1;
-                for(let i = 0; i < tree.length; i++) {
-                  if(tree[i].k == property.name) {
+                for (let i = 0; i < tree.length; i++) {
+                  if (tree[i].k == property.name) {
                     foundKey = 1;
                     let foundVal = -1;
-                    for(let j = 0; j <tree[i].v.length; j++) {
-                      if(tree[i].v[j].name == property.val) {
+                    for (let j = 0; j < tree[i].v.length; j++) {
+                      if (tree[i].v[j].name == property.val) {
                         foundVal = 1;
                         break;
                       }
                     }
-                    if(foundVal != -1) {
+                    if (foundVal != -1) {
                       tree[i].v.push({
                         name: property.val,
-                        imgUrl:sku.goodsLogo
+                        imgUrl: sku.goodsLogo
                       })
                     }
                     break;
                   }
                 }
-                let num = tree.length+1
-                if(foundKey == -1) {
+                let num = tree.length + 1
+                if (foundKey == -1) {
                   tree.push({
-                  //  id: ""+num,
+                    //  id: ""+num,
                     k: property.name,
-                    v:[
+                    v: [
                       {
                         name: property.val,
-                        imgUrl:sku.goodsLogo
+                        imgUrl: sku.goodsLogo
                       }
                     ],
-                   // k_s: 's'+num
+                    // k_s: 's'+num
                   })
                 }
               })
@@ -126,25 +143,25 @@
             let total_stock_num = 0
             this.datas.skuList.forEach(sku => {
               let item = {
-                id:sku.skuId,
+                id: sku.skuId,
                 price: parseInt((this.datas.price * 100).toFixed(0)),
-                stock_num: 100
+                stock_num: sku.stock_num
               }
               total_stock_num += item.stock_num
-/*              sku.propertyList.forEach(property => {
-                for(let i =0 ;i < tree.length; i++) {
-                  if(tree[i].k === property.name) {
-                    item[tree[i].k_s] = tree[i].id
-                  }
-                }
-              })*/
+              /*              sku.propertyList.forEach(property => {
+                              for(let i =0 ;i < tree.length; i++) {
+                                if(tree[i].k === property.name) {
+                                  item[tree[i].k_s] = tree[i].id
+                                }
+                              }
+                            })*/
               list.push(item)
             })
 
             this.$log("!!!!!!!!!!!!!!!!!!!!!!!")
             this.$log(tree)
             this.$log(list)
-            this.sku =  {
+            this.sku = {
               // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
               // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
               tree: tree,
@@ -158,20 +175,36 @@
     },
 
     created() {
-      if(this.$store.state.appconf.cartList != undefined) {
+      if (this.$store.state.appconf.cartList != undefined) {
         this.cartNumber = this.$store.state.appconf.cartList.length
       }
     },
 
-    beforeDestroy (){
+    beforeDestroy() {
       this.hideMeqiaPanel()
     },
 
     methods: {
+      getInventory() {
+        this.$log("getInventory Enter")
+        let codesArray = []
+        this.datas.skuList.forEach(sku => {
+          codesArray.push(sku.code)
+        })
+        let codes = codesArray.join(",");
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AOYIS_CONFIG_URL,
+          url: '/star/product/inventory',
+          data: {
+            codes: codes
+          },
+        })
+      },
       onBuyClicked(skuData) {
         this.$log("onBuyClicked Enter")
         this.$log(skuData)
-        if(skuData != undefined) {
+        if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
@@ -197,12 +230,12 @@
               "brand": goods.brand,
               "model": goods.model,
               "price": goods.price,
-              "type": goods.type == undefined? 0:goods.type
+              "type": goods.type == undefined ? 0 : goods.type
             }
             let couponList = goods.coupon
             let promotionInfo = {
               "promotion": goods.promotion,
-              "promotionState": Util.getPromotionState(this,goods)
+              "promotionState": Util.getPromotionState(this, goods)
             }
             let product = {
               "baseInfo": baseInfo,
@@ -220,11 +253,11 @@
       onAddCartClicked(skuData) {
         this.$log("onAddCartClicked Enter")
         this.$log(skuData)
-        if(skuData != undefined) {
+        if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
-            this.add2Car(userInfo, this.datas,selectSkuId);
+            this.add2Car(userInfo, this.datas, selectSkuId);
           } else {
             this.$toast("没有用户信息，请先登录,再添加购物车")
           }
@@ -243,32 +276,32 @@
 
         }
       },
-      showMeqiaPanel () {
+      showMeqiaPanel() {
         let userInfo = this.$store.state.appconf.userInfo;
         let userDetail = this.$store.state.appconf.userDetail;
         let userName = ""
         let userId = ""
         let telePhone = ""
-        if(!Util.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           let UserInfo = JSON.parse(userInfo)
           userId = UserInfo.userId
         }
-        if(userDetail.length > 0) {
-          let UserDetail  = JSON.parse(userDetail)
-          userName =  UserDetail.nickname
+        if (userDetail.length > 0) {
+          let UserDetail = JSON.parse(userDetail)
+          userName = UserDetail.nickname
           telePhone = UserDetail.telephone
         }
         _MEIQIA('showPanel')
         _MEIQIA('metadata', {
           name: userName, // 美洽默认字段
-          tel:telePhone,
+          tel: telePhone,
           '渠道': this.getClientName(), // 自定义字段
           '用户ID': userId,
           '当前URL': window.location.href,
           '订单号': ''
         });
       },
-      hideMeqiaPanel(){
+      hideMeqiaPanel() {
         _MEIQIA('hidePanel');
       },
 
@@ -305,8 +338,7 @@
       addGoodsCar() {
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
-          if(this.datas.skuList != undefined && this.datas.skuList.length > 0)
-          {
+          if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
             this.showBase = true;
           } else {
             this.add2Car(userInfo, this.datas);
@@ -320,13 +352,13 @@
         let user = JSON.parse(userInfo);
         let userId = user.userId;
         let mpu = goods.mpu;
-        if(selectSkuId === undefined) {
+        if (selectSkuId === undefined) {
           selectSkuId = mpu
         }
         let addtoCar = {
           "openId": userId,
           "mpu": mpu,
-          "skuId":selectSkuId
+          "skuId": selectSkuId
         }
         this.$api.xapi({
           method: 'post',
@@ -335,7 +367,7 @@
           data: addtoCar,
         }).then((response) => {
           this.result = response.data.data.result;
-          if(response.data.code == 200) {
+          if (response.data.code == 200) {
             this.$toast("添加到购物车成功！")
             let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
             if (cartItem == null) {
@@ -360,7 +392,7 @@
                 "model": goods.model,
                 "price": goods.price,
                 "checkedPrice": goods.price,
-                "type": goods.type == undefined? 0:goods.type
+                "type": goods.type == undefined ? 0 : goods.type
               }
               let couponList = []
               let promotionInfo = {}
@@ -372,7 +404,7 @@
               }
             } else {
               cartItem.baseInfo.count++;
-              cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
+              cartItem.goodsInfo.type = (goods.type == undefined ? 0 : goods.type)
             }
             Util.updateCartItem(this, cartItem)
           }
@@ -383,8 +415,7 @@
 
       gotoPay() {
         this.$log("gotoPay Enter")
-        if(this.datas.skuList != undefined && this.datas.skuList.length > 0)
-        {
+        if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
           this.showBase = true;
         } else {
           this.$log(this.datas);
@@ -412,12 +443,12 @@
               "brand": goods.brand,
               "model": goods.model,
               "price": goods.price,
-              "type": goods.type == undefined? 0:goods.type
+              "type": goods.type == undefined ? 0 : goods.type
             }
             let couponList = goods.coupon
             let promotionInfo = {
               "promotion": goods.promotion,
-              "promotionState": Util.getPromotionState(this,goods)
+              "promotionState": Util.getPromotionState(this, goods)
             }
             let product = {
               "baseInfo": baseInfo,
