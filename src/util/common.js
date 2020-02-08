@@ -1,4 +1,6 @@
 import CryptoJS from 'crypto-js'
+import areaList from '@/assets/area.js'
+
 const STORAGE_USER_KEY = 'STORAGE_USER_KEY'
 
 export default {
@@ -207,4 +209,45 @@ export default {
       env.$log("error updateCartItem")
     }
   },
+
+  getRegionId(env,provinceName,cityName,countyName) {
+    let reginonId = ""
+    let found = -1;
+    for (let province_key in areaList.province_list) {
+        env.$log("111111111")
+        let code = province_key
+        let province_name = areaList.province_list[province_key]
+        if (province_name === provinceName) {
+          found = 1;
+          reginonId = code
+          break;
+        }
+      }
+    if (found) {
+        let found = -1;
+        for (let city_key in areaList.city_list) {
+          let code = city_key
+          let city_name = areaList.city_list[city_key]
+          if (city_key.substr(0, 2) === reginonId.substr(0, 2) && city_name === cityName) {
+            found = 1;
+            reginonId = code
+            break;
+          }
+        }
+        if (found) {
+          let found = -1;
+          for (let county_key in areaList.county_list) {
+            let code = county_key
+            let county_name = areaList.county_list[county_key]
+            if (county_key.substr(0, 4) === reginonId.substr(0, 4) && county_name === countyName) {
+              found = 1;
+              reginonId = code
+              break;
+            }
+          }
+        }
+      }
+
+    return reginonId
+  }
 }

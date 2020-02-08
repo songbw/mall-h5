@@ -218,9 +218,13 @@
       add2Car(user, goods) {
         let userId = user.userId;
         let mpu = goods.mpu;
+        let count = 1;
+        let selectSkuId = goods.skuId
         let addtoCar = {
           "openId": userId,
-          "mpu": mpu
+          "mpu": mpu,
+          "skuId": selectSkuId,
+          "count": count
         }
         return this.$api.xapi({
           method: 'post',

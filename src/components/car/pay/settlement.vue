@@ -374,6 +374,7 @@
         merchantList: [],
         isAoyiDataLoaded: false,
         isOtherDataLoaded: false,
+        usedRegionId: ""
       }
     },
     watch: {
@@ -1338,6 +1339,9 @@
         }
         this.$store.commit('SET_USED_ADDRESS_ID', id);
         this.usedAddress = address
+        this.usedRegionId = Util.getRegionId(this,this.usedAddress.provinceName,this.usedAddress.cityName,this.usedAddress.countyName)
+        this.$log(this.usedAddress)
+        this.$log("usedRegionId:"+ this.usedRegionId)
       },
 
       prefixInteger(num, length) {
@@ -1476,6 +1480,7 @@
           "openId": user.userId,
           "companyCustNo": companyCustNo,
           "receiverId": receiverId,//接收地址ID
+          "regionId": this.usedRegionId,
           "remark": "",//用户自填字段，比如周末不配送
           "invoiceType": invoiceType,
           "invoiceTitleName": invoiceTitleName,
