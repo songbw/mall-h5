@@ -20,9 +20,15 @@
       <van-sku
         v-model="showBase"
         :sku="sku"
-        :goods="goods"
-        :goods-id="datas.mpu"
+        :goods="goods_info"
+        :goods-id="goods_id"
+        :hide-stock="sku.hide_stock"
+        :initial-sku="initialSku"
+        reset-stepper-on-hide
+        reset-selected-sku-on-hide
         disable-stepper-input
+        :close-on-click-overlay="closeOnClickOverlay"
+        :custom-sku-validator="customSkuValidator"
         @buy-clicked="onBuyClicked"
         @add-cart="onAddCartClicked"
       />
@@ -52,7 +58,115 @@
         cartNumber: 0,
         showBase: false,
         sku: null,
-        goods: null,
+        initialSku: null,
+        goods_info: null,
+        goods_id: "",
+        /*        sku: {
+                  // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
+                  // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
+                  tree: [
+                    {
+                      k: '颜色',
+                      k_id: '1',
+                      v: [
+                        {
+                          id: '30349',
+                          name: '天蓝色',
+                          imgUrl:
+                            'https://img.yzcdn.cn/upload_files/2017/02/21/FjKTOxjVgnUuPmHJRdunvYky9OHP.jpg!100x100.jpg'
+                        },
+                        {
+                          id: '1215',
+                          name: '白色'
+                        }
+                      ],
+                      k_s: 's1',
+                      count: 2
+                    },
+                    {
+                      k: '尺寸',
+                      k_id: '2',
+                      v: [
+                        {
+                          id: '1193',
+                          name: '1'
+                        },
+                        {
+                          id: '1194',
+                          name: '2'
+                        }
+                      ],
+                      k_s: 's2',
+                      count: 2
+                    }
+                  ],
+                  // 所有 sku 的组合列表，如下是：白色1、白色2、天蓝色1、天蓝色2
+                  list: [
+                    {
+                      id: 2259,
+                      price: 120, //价格
+                      discount: 122,
+                      s1: '1215',
+                      s2: '1193',
+                      s3: '0',
+                      s4: '0',
+                      s5: '0',
+                      stock_num: 20, //库存
+                      goods_id: 946755
+                    },
+                    {
+                      id: 2260,
+                      price: 110,
+                      discount: 112,
+                      s1: '1215',
+                      s2: '1194',
+                      s3: '0',
+                      s4: '0',
+                      s5: '0',
+                      stock_num: 2, //库存
+                      goods_id: 946755
+                    },
+                    {
+                      id: 2257,
+                      price: 130,
+                      discount: 132,
+                      s1: '30349',
+                      s2: '1193',
+                      s3: '0',
+                      s4: '0',
+                      s5: '0',
+                      stock_num: 40, //库存
+                      goods_id: 946755
+                    },
+                    {
+                      id: 2258,
+                      price: 100,
+                      discount: 100,
+                      s1: '30349',
+                      s2: '1194',
+                      s3: '0',
+                      s4: '0',
+                      s5: '0',
+                      stock_num: 50, //库存
+                      goods_id: 946755
+                    }
+                  ],
+                  price: '5.00',  //？？
+                  stock_num: 227, // 商品总库存？？
+                  none_sku: false,  // 是否无规格商品 false正常显示那些可供选择的标准，此处是颜色和尺寸
+                  hide_stock: false,  // 是否隐藏剩余库存 false正常显示剩余多少件的那个库存
+                },
+                initialSku: {
+                  s1: '30349',
+                  s2: '1193',
+                  selectedNum: 3  //下面的数字选择框的数字即买了多少件
+                },*/
+        /*        goods_id: '946755',*/
+
+        showCustom: false,
+        showStepper: false,
+        closeOnClickOverlay: true,  //点击空白处关闭购物框
+        customSkuValidator: () => '请正确选择商品规格'
       }
     },
 
@@ -74,12 +188,13 @@
         this.$log("datas changed @@@@@@@@@@@@@@@@@@@")
         this.$log(newValue)
         if (newValue != null) {
-          this.goods = {
+          this.goods_info = {
             // 商品标题
             title: this.datas.name,
             // 默认商品 sku 缩略图
             picture: this.datas.image
           }
+          this.goods_id = this.datas.mpu
           if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
             let tree = [];
             let list = [];
@@ -115,7 +230,9 @@
                       }
                     }
                     if (foundVal != -1) {
+                      let propertyCount = tree[i].v.tree[i].length + 1;
                       tree[i].v.push({
+                        id: tree[i].k_id + propertyCount,
                         name: property.val,
                         imgUrl: sku.goodsLogo
                       })
@@ -124,43 +241,57 @@
                   }
                 }
                 let num = tree.length + 1
-                if (foundKey == -1) {
+                if (foundKey == -1) {//新的属性
                   tree.push({
-                    //  id: ""+num,
                     k: property.name,
+                    k_id: "" + num,
                     v: [
                       {
+                        id: num + "1",
                         name: property.val,
                         imgUrl: sku.goodsLogo
                       }
                     ],
-                    // k_s: 's'+num
+                    k_s: 's' + num,
                   })
                 }
               })
-
             })
             let total_stock_num = 0
+            this.$log(this.datas.skuList)
             this.datas.skuList.forEach(sku => {
               let item = {
                 id: sku.code,
                 price: parseInt((this.datas.price * 100).toFixed(0)),
-                stock_num: sku.stock_num
+                s1: '0',
+                s2: '0',
+                s3: '0',
+                s4: '0',
+                s5: '0',
+                stock_num: sku.stock_num,
+                goods_id: this.datas.mpu
               }
+              sku.propertyList.forEach(property =>{
+                 for(let i =0;i < tree.length; i++) {
+                   if(tree[i].k === property.name) {
+                     this.$log(tree[i])
+                     for(let j=0; j < tree[i].v.length; j++) {
+                       if(tree[i].v[j].name === property.val){
+                         item[tree[i].k_s]  = tree[i].v[j].id
+                         break;
+                       }
+                     }
+                   }
+                 }
+              })
               total_stock_num += item.stock_num
-              /*              sku.propertyList.forEach(property => {
-                              for(let i =0 ;i < tree.length; i++) {
-                                if(tree[i].k === property.name) {
-                                  item[tree[i].k_s] = tree[i].id
-                                }
-                              }
-                            })*/
               list.push(item)
             })
-
             this.$log("!!!!!!!!!!!!!!!!!!!!!!!")
-            this.$log(tree)
-            this.$log(list)
+            tree.forEach(item => {
+              item['count'] = item.v.length
+            })
+
             this.sku = {
               // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
               // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
@@ -168,7 +299,20 @@
               list: list,
               price: parseFloat(this.datas.price).toFixed(2),
               stock_num: total_stock_num, // 商品总库存
-              none_sku: false, // 是否无规格商品f
+              none_sku: false,  // 是否无规格商品 false正常显示那些可供选择的标准，此处是颜色和尺寸
+              hide_stock: false,  // 是否隐藏剩余库存 false正常显示剩余多少件的那个库存
+            }
+            this.$log(this.sku)
+            if(list.length > 0) {
+              this.initialSku = {
+                s1: list[0].s1,
+                s2: list[0].s2,
+                s3: list[0].s3,
+                s4: list[0].s4,
+                s5: list[0].s5,
+                selectedNum: 1 //下面的数字选择框的数字即买了多少件
+              }
+              this.$log(this.initialSku)
             }
           }
         }
