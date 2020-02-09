@@ -131,7 +131,9 @@
                 break;
               }
             }
-          } else {
+          }  else if(item.baseInfo.merchantId === 127){
+            item['valid'] = true;
+          }  else {
             item['valid'] = true;
             for (let i = 0; i < this.inventoryListOfZy.length; i++) {
               if (this.inventoryListOfZy[i].state == 0 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
@@ -280,10 +282,13 @@
 
         let inventorySkus = [];
         let inventorySkusOfZy = [];
+        let inventorySkusOfYyt = [];
         list.forEach(item => {
           this.$log(item)
           if (item.merchantId == 2) {
             inventorySkus.push({"skuId": item.mpu, "remainNum": item.count,"price":item.price})
+          } else if(item.merchantId  ==  127) {
+            inventorySkus.push({"skuId": item.skuId, "remainNum": item.count,"price":item.price})
           } else {
             inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})
           }

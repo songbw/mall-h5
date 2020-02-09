@@ -50,7 +50,7 @@
                     <!--商品有活动的布局-->
                     <div v-if="k.product.promotionInfo.promotionState === 1">
                       <div v-if="!k.valid">
-                        <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                        <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444"/>
                       </div>
                       <van-card
                         :desc="locationCity"
@@ -67,7 +67,7 @@
                     <!--商品无活动的布局-->
                     <div v-else>
                       <div v-if="!k.valid">
-                        <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                        <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444"/>
                       </div>
                       <van-card
                         :num="k.product.baseInfo.count"
@@ -110,7 +110,7 @@
                   <!--商品有活动的布局-->
                   <div v-if="k.product.promotionInfo.promotionState === 1">
                     <div v-if="!k.valid">
-                      <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                      <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444"/>
                     </div>
                     <van-card
                       :num="k.product.baseInfo.count"
@@ -129,7 +129,7 @@
                   <!--商品无活动的布局-->
                   <div v-else>
                     <div v-if="!k.valid">
-                      <van-cell title="商品已售罄，不计入订单" icon="info" style="color: #ff4444"/>
+                      <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444"/>
                     </div>
                     <van-card
                       :num="k.product.baseInfo.count"
@@ -1817,6 +1817,9 @@
         let inventorySkusOfZy = [];
         let skusOfZy = [];
 
+        let inventorySkusOfYyt = [];
+        let skusOfYyt = [];
+
         this.payCarList = [];
         if (this.pageAction == "direct") {
           let payDirectProduct = this.$store.state.appconf.payDirectProduct;
@@ -1831,6 +1834,9 @@
                 "price": item.goodsInfo.price
               })
               skus.push({"skuId": item.baseInfo.skuId})
+            } else if(item.baseInfo.merchantId === 127)  {//yytong
+              inventorySkusOfYyt.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
+              skusOfYyt.push({"skuId": item.baseInfo.skuId})
             } else {
               inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
               skusOfZy.push({"mpu": item.baseInfo.mpu})
@@ -1847,6 +1853,9 @@
                 "price": item.goodsInfo.price
               })
               skus.push({"skuId": item.baseInfo.skuId})
+            } else if(item.baseInfo.merchantId === 127)  {//yytong
+              inventorySkusOfYyt.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
+              skusOfYyt.push({"skuId": item.baseInfo.skuId})
             } else {
               inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
               skusOfZy.push({"mpu": item.baseInfo.mpu})
@@ -1990,6 +1999,34 @@
                 })
               }
             }
+            if (skusOfYyt.length > 0) {
+              let codesArray = []
+              skusOfYyt.forEach(sku => {
+                codesArray.push(sku.skuId)
+              })
+              let codes = codesArray.join(",");
+              try {
+                let response = await this.getYytongInventory(codes);
+                this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                this.$log(response)
+                if (response.data.code === 200) {
+                  let ret = response.data.data.skuInvList;
+                  ret.forEach(item => {
+                    for (let i = 0; i < this.payCarList.length; i++) {
+                      if (this.payCarList[i].product.baseInfo.skuId === item.code) {
+                        this.$log(this.payCarList[i].product.baseInfo.count)
+                        if (item.inventoryCount < this.payCarList[i].product.baseInfo.count) {
+                          this.payCarList[i].valid =  false
+                        } else {
+                          this.payCarList[i].valid = true
+                        }
+                      }
+                    }
+                  })
+                }
+              } catch (e) {
+              }
+            }
             let ret = await this.getAllasPlatformFreight()
             this.$log(ret)
             if (ret.data.code == 200) {
@@ -2087,6 +2124,17 @@
           baseURL: this.$api.PRODUCT_BASE_URL,
           url: '/prod/inventory/self',
           data: options,
+        })
+      },
+
+      getYytongInventory(codes) {
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AOYIS_CONFIG_URL,
+          url: '/star/product/inventory',
+          data: {
+            codes:codes
+          }
         })
       },
 
