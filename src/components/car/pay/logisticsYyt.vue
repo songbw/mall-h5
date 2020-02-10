@@ -3,44 +3,40 @@
     <v-header class="header" v-if="showHeader">
       <h1 slot="title">物流信息</h1>
     </v-header>
-    <div class="logistics-body"  :style="{'padding-top':showHeader? '3em':'0px'}">
+    <div class="logistics-body" :style="{'padding-top':showHeader? '3em':'0px'}">
       <div class="noneInfo" v-if="loading">
         <v-loading></v-loading>
       </div>
       <div class="logisticsInfo" v-else>
-        <div>
-          <div v-for="(item,i)  in logisticsList" :key='i'>
-            <div class="logisticsBox" v-if="getMatchedGoods(item.nu).length > 0">
-              <div class="matched-goods">
-                <ul>
-                  <li v-for="(sku,skuIndex)  in getMatchedGoods(item.nu)" :key='skuIndex'>
-                    <van-card
-                      :price="sku.unitPrice"
-                      :title="sku.name"
-                      :num="sku.num"
-                      :thumb="sku.image">
-                    </van-card>
-                    <div>
-                      <div style="font-size: small">
-                        <span style="margin-left: 5px">物流公司:</span>
-                        <span style="float: right;margin-right: 5px">{{sku.logisticsContent}}</span>
-                      </div>
-                      <div style="font-size: small">
-                        <span style="margin-left: 5px">物流信息:</span>
-                        <span style="float: right;margin-right: 5px">{{sku.logisticsId}}</span>
-                      </div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <van-steps direction="vertical" :active="0" active-color="#f44">
-                <van-step v-for="(info,k)  in item.data" :key='k'>
-                  <h3>{{info.context}}</h3>
-                  <p>{{info.ftime}}</p>
-                </van-step>
-              </van-steps>
-            </div>
+        <div v-for="(item,i)  in logisticsList" :key='i'>
+          <div class="matched-goods">
+            <ul>
+              <li v-for="(sku,skuIndex)  in getMatchedGoods(item.skuList)" :key='skuIndex'>
+                <van-card
+                  :price="sku.unitPrice"
+                  :title="sku.name"
+                  :num="sku.num"
+                  :thumb="sku.image">
+                </van-card>
+                <div>
+                  <div style="font-size: small">
+                    <span style="margin-left: 5px">物流公司:</span>
+                    <span style="float: right;margin-right: 5px">{{item.deliveryName}}</span>
+                  </div>
+                  <div style="font-size: small">
+                    <span style="margin-left: 5px">物流信息:</span>
+                    <span style="float: right;margin-right: 5px">{{item.deliveryNo}}</span>
+                  </div>
+                </div>
+              </li>
+            </ul>
           </div>
+          <van-steps direction="vertical" :active="0" active-color="#f44">
+            <van-step v-for="(info,k)  in getOrdedDeliveryList(item.deliveryList)" :key='k'>
+              <h3>{{info.context}}</h3>
+              <p>{{info.time}}</p>
+            </van-step>
+          </van-steps>
         </div>
         <div class="logisticsBox" v-if="getPreparingGoods().length > 0">
           <ul>
@@ -51,23 +47,11 @@
                 :num="sku.num"
                 :thumb="sku.image">
               </van-card>
-              <div  v-if="sku.logisticsContent != null && sku.logisticsId != null">
-                <div style="font-size: small">
-                  <span style="margin-left: 5px">物流公司:</span>
-                  <span style="float: right;margin-right: 5px">{{sku.logisticsContent}}</span>
-                </div>
-                <div style="font-size: small">
-                  <span style="margin-left: 5px">物流信息:</span>
-                  <span style="float: right;margin-right: 5px">{{sku.logisticsId}}</span>
-                </div>
-              </div>
-              <div v-else>
-                <van-steps direction="vertical" :active="0" active-color="#f44">
-                  <van-step>
-                    <h3>快马加鞭揽件中……</h3>
-                  </van-step>
-                </van-steps>
-              </div>
+              <van-steps direction="vertical" :active="0" active-color="#f44">
+                <van-step>
+                  <h3>快马加鞭揽件中……</h3>
+                </van-step>
+              </van-steps>
             </li>
           </ul>
         </div>
@@ -79,6 +63,7 @@
 <script>
   import Header from '@/common/_header.vue'
   import Loading from '@/common/_loading.vue'
+
   export default {
     components: {
       'v-header': Header,
@@ -90,7 +75,7 @@
         detail: {},
         status: -1,
         logisticsList: [],
-        matchedGoods:[],
+        matchedGoods: [],
         loading: true
       }
     },
@@ -104,8 +89,13 @@
       that.loading = true;
       that.$log(that.detail)
       try {
-        let response = await  this.getLogisticsInfo()
+        let response = await this.getLogisticsInfo()
         this.$log(response)
+        if (response.data.code == 200) {
+          if(response.data.data != null) {
+            this.logisticsList = response.data.data
+          }
+        }
         that.loading = false;
       } catch (e) {
         that.loading = false;
@@ -115,6 +105,15 @@
     computed: {},
 
     methods: {
+      getOrdedDeliveryList(deliveryList) {
+        let list = []
+        if (deliveryList != null && deliveryList.length > 0) {
+          for (let i = (deliveryList.length - 1); i > -1; i--) {
+            list.push(deliveryList[i])
+          }
+        }
+        return list
+      },
       getLogisticsInfo() {
         this.$log("getLogisticsInfo Enter")
         return this.$api.xapi({
@@ -127,36 +126,41 @@
         })
       },
       getPreparingGoods() {
-        this.$log("getPreparingGoods Enter,this.detail.skus.length:"+this.detail.skus.length)
+        this.$log("getPreparingGoods Enter,this.detail.skus.length:" + this.detail.skus.length)
         let goods = []
         let matchedGoods = [];
-        for(let i =0 ; i < this.logisticsList.length; i++) {
-          let subMatched = this.getMatchedGoods(this.logisticsList[i].nu)
+        this.$log(this.logisticsList)
+        for (let i = 0; i < this.logisticsList.length; i++) {
+          this.$log(this.logisticsList)
+          let subMatched = this.getMatchedGoods(this.logisticsList[i].skuList)
           subMatched.forEach(sku => {
             matchedGoods.push(sku)
           })
         }
         this.detail.skus.forEach(sku => {
-           let found = -1;
-           for(let i=0; i < matchedGoods.length ; i++)
-           {
-              if(sku.mpu === matchedGoods[i].mpu) {
-                found = 1;
-                break;
-              }
-           }
-           if(found == -1)
-             goods.push(sku)
+          let found = -1;
+          for (let i = 0; i < matchedGoods.length; i++) {
+            if (sku.mpu === matchedGoods[i].mpu) {
+              found = 1;
+              break;
+            }
+          }
+          if (found == -1)
+            goods.push(sku)
         })
         return goods
       },
-      getMatchedGoods(nu) {
-        this.$log(nu)
+      getMatchedGoods(skuList) {
+        this.$log("getMatchedGoods Enter")
         let matchedGoods = []
         this.detail.skus.forEach(sku => {
-          if (sku.logisticsId == nu) {
-            matchedGoods.push(sku)
-          }
+          this.$log(sku)
+          skuList.forEach(yytSku => {
+            this.$log(yytSku)
+            if (sku.skuId === yytSku.code) {
+              matchedGoods.push(sku)
+            }
+          })
         })
         return matchedGoods
       },
@@ -179,6 +183,7 @@
     height: 100%;
     top: 0px;
     background-color: #f8f8f8;
+
     .header {
       width: 100%;
       position: fixed;
@@ -190,6 +195,7 @@
       padding-top: 3em;
       padding-bottom: 1em;
       background-color: #f8f8f8;
+
       .noneInfo {
         display: flex;
         flex-direction: column;
@@ -210,6 +216,7 @@
         top: 0px;
         background-color: #f8f8f8;
         margin: 10px;
+
         .logisticsBox {
           > li {
             list-style: none;
