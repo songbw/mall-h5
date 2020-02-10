@@ -131,7 +131,7 @@
                 break;
               }
             }
-          }  else if(item.baseInfo.merchantId === 127){
+          }  else if(item.baseInfo.merchantId === 4){
             item['valid'] = true;
           }  else {
             item['valid'] = true;
@@ -287,7 +287,7 @@
           this.$log(item)
           if (item.merchantId == 2) {
             inventorySkus.push({"skuId": item.mpu, "remainNum": item.count,"price":item.price})
-          } else if(item.merchantId  ==  127) {
+          } else if(item.merchantId  ==  4) {
             inventorySkus.push({"skuId": item.skuId, "remainNum": item.count,"price":item.price})
           } else {
             inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})

@@ -787,12 +787,22 @@
 
       onLogisticsBtnClick(listItem, i) {
         this.$log("onLogisticsBtnClick Enter")
-        this.$router.push({
-          name: "物流信息页",
-          params: {
-            detail: listItem
-          }
-        })
+        this.$log(listItem)
+        if(listItem.merchantId === 4) {
+          this.$router.push({
+            name: "怡亚通物流信息页",
+            params: {
+              detail: listItem
+            }
+          })
+        } else {
+          this.$router.push({
+            name: "物流信息页",
+            params: {
+              detail: listItem
+            }
+          })
+        }
       },
 
       onClick(index, title) {

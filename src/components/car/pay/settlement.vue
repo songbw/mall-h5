@@ -1834,7 +1834,7 @@
                 "price": item.goodsInfo.price
               })
               skus.push({"skuId": item.baseInfo.skuId})
-            } else if(item.baseInfo.merchantId === 127)  {//yytong
+            } else if(item.baseInfo.merchantId === 4)  {//yytong
               inventorySkusOfYyt.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
               skusOfYyt.push({"skuId": item.baseInfo.skuId})
             } else {
@@ -1853,7 +1853,7 @@
                 "price": item.goodsInfo.price
               })
               skus.push({"skuId": item.baseInfo.skuId})
-            } else if(item.baseInfo.merchantId === 127)  {//yytong
+            } else if(item.baseInfo.merchantId === 4)  {//yytong
               inventorySkusOfYyt.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
               skusOfYyt.push({"skuId": item.baseInfo.skuId})
             } else {

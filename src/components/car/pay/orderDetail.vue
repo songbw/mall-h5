@@ -485,12 +485,21 @@
 
       onLogisticsBtnClick(detail) {
         this.$log("onLogisticsBtnClick Enter")
-        this.$router.push({
-          name: "物流信息页",
-          params: {
-            detail: detail
-          }
-        })
+        if(detail.merchantId === 4) {
+          this.$router.push({
+            name: "怡亚通物流信息页",
+            params: {
+              detail: detail
+            }
+          })
+        } else {
+          this.$router.push({
+            name: "物流信息页",
+            params: {
+              detail: detail
+            }
+          })
+        }
       },
       onConfirmBtnClick(detail) {
         this.$dialog.confirm({
