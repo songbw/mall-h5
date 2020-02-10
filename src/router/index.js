@@ -11,6 +11,7 @@ const Settlement = resolve => require(['@/components/car/pay/settlement.vue'], r
 const OrderList = resolve => require(['@/components/car/pay/orderList.vue'], resolve)
 const OrderDetail = resolve => require(['@/components/car/pay/orderDetail.vue'], resolve)
 const Logistics = resolve => require(['@/components/car/pay/logistics.vue'], resolve)
+const LogisticsYyt = resolve => require(['@/components/car/pay/logisticsYyt.vue'], resolve)
 const Address = resolve => require(['@/components/car/pay/address.vue'], resolve)
 const AddressList = resolve => require(['@/components/car/pay/addressList.vue'], resolve)
 const Login = resolve => require(['@/views/login.vue'], resolve)
@@ -395,6 +396,14 @@ export default new VueRouter({
       meta: {
         title: '重置密码',
       }
-    }
+    },
+    {
+      path: '/car/LogisticsYyt',
+      name: '怡亚通物流信息页',
+      component: LogisticsYyt,
+      meta: {
+        title: '物流信息',
+      }
+    },
   ]
 })

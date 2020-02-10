@@ -131,7 +131,9 @@
                 break;
               }
             }
-          } else {
+          }  else if(item.baseInfo.merchantId === 4){
+            item['valid'] = true;
+          }  else {
             item['valid'] = true;
             for (let i = 0; i < this.inventoryListOfZy.length; i++) {
               if (this.inventoryListOfZy[i].state == 0 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
@@ -280,10 +282,13 @@
 
         let inventorySkus = [];
         let inventorySkusOfZy = [];
+        let inventorySkusOfYyt = [];
         list.forEach(item => {
           this.$log(item)
           if (item.merchantId == 2) {
             inventorySkus.push({"skuId": item.mpu, "remainNum": item.count,"price":item.price})
+          } else if(item.merchantId  ==  4) {
+            inventorySkus.push({"skuId": item.skuId, "remainNum": item.count,"price":item.price})
           } else {
             inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})
           }
@@ -458,10 +463,14 @@
         this.$log(item)
         let cartItem = Util.getCartItem(this, user.userId, item.mpu)
         this.$log(cartItem)
+        let skuId = item.skuId
+        if(skuId === undefined || skuId === null) {
+          skuId = item.skuid
+        }
         if (cartItem == null) {
           let baseInfo = {
             "userId": user.userId,
-            "skuId": item.skuid,
+            "skuId": skuId,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
             "count": item.count,
@@ -470,7 +479,7 @@
           }
           let goodsInfo = {
             "id": item.id,
-            "skuId": item.skuid,
+            "skuId": skuId,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
             "image": item.image,
@@ -504,6 +513,7 @@
             "promotionInfo": promotionInfo,
           }
         } else {
+          cartItem.baseInfo.skuId = skuId
           cartItem.baseInfo.count = item.count
           cartItem.baseInfo.cartId = item.id
           cartItem.baseInfo.merchantId = item.merchantId
