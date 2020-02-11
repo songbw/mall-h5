@@ -160,7 +160,7 @@
             this.datas.skuList.forEach(sku => {
               let item = {
                 id: sku.code,
-                price: parseInt((this.datas.price * 100).toFixed(0)),
+                price: sku.sprice,
                 s1: '0',
                 s2: '0',
                 s3: '0',
@@ -248,6 +248,7 @@
         this.$log(skuData)
         if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
+          let selectPrice = parseFloat((skuData.selectedSkuComb.price/100).toFixed(2))
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
             let user = JSON.parse(userInfo);
@@ -271,7 +272,7 @@
               "name": goods.name,
               "brand": goods.brand,
               "model": goods.model,
-              "price": goods.price,
+              "price": selectPrice,
               "type": goods.type == undefined ? 0 : goods.type
             }
             let couponList = goods.coupon
@@ -396,8 +397,10 @@
         let mpu = goods.mpu;
         let count = 1;
         let selectSkuId = mpu
+        let selectPrice = goods.price
         if (skuData != undefined) {
           selectSkuId = skuData.selectedSkuComb.id
+          selectPrice = parseFloat((skuData.selectedSkuComb.price/100).toFixed(2))
           count = skuData.selectedNum
         }
         let addtoCar = {
@@ -436,8 +439,8 @@
                 "name": goods.name,
                 "brand": goods.brand,
                 "model": goods.model,
-                "price": goods.price,
-                "checkedPrice": goods.price,
+                "price": selectPrice,
+                "checkedPrice": selectPrice,
                 "type": goods.type == undefined ? 0 : goods.type
               }
               let couponList = []
