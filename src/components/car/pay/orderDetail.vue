@@ -501,7 +501,8 @@
 
 
       getMerchantName(merchantNo) {
-        if (merchantNo == 20) {
+        return "苏宁易购"
+/*        if (merchantNo == 20) {
           return "苏宁易购"
         } else if (merchantNo == 30) {
           return "唯品会"
@@ -511,7 +512,7 @@
           return "京东"
         } else {
           return "商城自营"
-        }
+        }*/
       },
     }
   }

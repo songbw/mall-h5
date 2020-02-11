@@ -359,7 +359,8 @@
         }
       },
       getMerchantName(merchantNo) {
-        if (merchantNo == 20) {
+        return "苏宁易购"
+/*        if (merchantNo == 20) {
           return "苏宁易购"
         } else if (merchantNo == 30) {
           return "唯品会"
@@ -369,7 +370,7 @@
           return "京东"
         } else {
           return "商城自营"
-        }
+        }*/
       },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;

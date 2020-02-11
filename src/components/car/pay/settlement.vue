@@ -32,7 +32,7 @@
           <div class="pay-product">
             <li v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
-                <van-cell :title=item.merchantName icon="shop"/>
+                <van-cell title="苏宁易购" icon="shop"/>
                 <ul>
                   <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f8f8f8;">
                     <div class="promotionBox"
