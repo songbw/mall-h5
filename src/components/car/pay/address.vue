@@ -19,6 +19,7 @@
 <script>
   import Header from '@/common/_header.vue'
   import areaList from '@/assets/area.js'
+  import areaListWph from '@/assets/area_wph.js'
   import Util from '@/util/common'
 
   export default {
@@ -34,6 +35,7 @@
       }
     },
     created() {
+      this.test1();
      // this.test();
       this.showHeader = this.$api.HAS_HEADER;
       let id = this.$route.params.id
@@ -59,6 +61,47 @@
       }
     },
     methods: {
+      test1() {
+        for (var province_key_wph in areaListWph.province_list) {
+          let found = -1;
+          for (var province_key in areaList.province_list) {
+            if(areaList.province_list[province_key] == areaListWph.province_list[province_key_wph]) {
+              found = 1;
+              break;
+            }
+          }
+          if(found == -1) {
+            this.$log("省:"+ areaListWph.province_list[province_key_wph])
+          }
+        }
+
+        for (var city_key_wph in areaListWph.city_list) {
+          let found = -1;
+          for (var city_key in areaList.city_list) {
+            if(areaList.city_list[city_key] == areaListWph.city_list[city_key_wph]) {
+              found = 1;
+              break;
+            }
+          }
+          if(found == -1) {
+            this.$log("市:"+ areaListWph.city_list[city_key_wph])
+          }
+        }
+
+        for (var county_key_wph in areaListWph.county_list) {
+          let found = -1;
+          for (var county_key in areaList.city_list) {
+            if(areaList.county_list[county_key] == areaListWph.county_list[county_key_wph]) {
+              found = 1;
+              break;
+            }
+          }
+          if(found == -1) {
+            this.$log("县:"+ areaListWph.county_list[county_key_wph])
+          }
+        }
+
+      },
 /*       testGetCode(province,city,county) {
        // this.$log("省:"+province+",市:"+city+",县:"+county)
         let options = {
