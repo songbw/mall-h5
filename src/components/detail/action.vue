@@ -160,7 +160,7 @@
             this.datas.skuList.forEach(sku => {
               let item = {
                 id: sku.code,
-                price: sku.sprice,
+                price: sku.price,
                 s1: '0',
                 s2: '0',
                 s3: '0',
