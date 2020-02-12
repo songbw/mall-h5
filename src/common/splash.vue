@@ -1,13 +1,13 @@
 <template lang="html">
   <div class="splash">
     <div class="centerContext" v-if="this.$api.APP_ID == '12'" :style="{'background-color': '#fbfcfd'}">
-        <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/12/splash.png">
+        <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/12/splash.jpg">
     </div>
     <div class="centerContext" v-else-if="this.$api.APP_ID == '11'" :style="{'background-color': '#fbfcfd'}">
-      <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/11/splash.png">
+      <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/11/splash.jpg">
     </div>
     <div class="centerContext" v-else  :style="{'background-color': '#fbfcfd'}">
-      <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/00/splash.png">
+      <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/splash/00/splash.jpg">
     </div>
   </div>
 </template>
