@@ -104,10 +104,12 @@
                 this.datas.skuList.forEach(sku => {
                   sku['stock_num'] = 0
                   this.$log(ret)
-                  for (let i = 0; i < ret.length; i++) {
-                    if (ret[i].code === sku.code) {
-                      sku.stock_num = ret[i].inventoryCount
-                      break;
+                  if(sku.status == 1) {
+                    for (let i = 0; i < ret.length; i++) {
+                      if (ret[i].code === sku.code) {
+                        sku.stock_num = ret[i].inventoryCount
+                        break;
+                      }
                     }
                   }
                 })
@@ -160,7 +162,7 @@
             this.datas.skuList.forEach(sku => {
               let item = {
                 id: sku.code,
-                price: parseInt((this.datas.price * 100).toFixed(0)),
+                price: sku.price,
                 s1: '0',
                 s2: '0',
                 s3: '0',
@@ -248,48 +250,55 @@
         this.$log(skuData)
         if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
-          let userInfo = this.$store.state.appconf.userInfo;
-          if (!Util.isUserEmpty(userInfo)) {
-            let user = JSON.parse(userInfo);
-            let goods = this.datas
-            let baseInfo = {
-              "userId": user.userId,
-              "skuId": selectSkuId,
-              "mpu": goods.mpu,
-              "merchantId": goods.merchantId,
-              "count": skuData.selectedNum,
-              "choosed": true,
-              "cartId": -1,
+          let stock_num = skuData.selectedSkuComb.stock_num
+          if(stock_num > 0) {
+            let selectPrice = parseFloat((skuData.selectedSkuComb.price/100).toFixed(2))
+            let userInfo = this.$store.state.appconf.userInfo;
+            if (!Util.isUserEmpty(userInfo)) {
+              let user = JSON.parse(userInfo);
+              let goods = this.datas
+              let baseInfo = {
+                "userId": user.userId,
+                "skuId": selectSkuId,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "count": skuData.selectedNum,
+                "choosed": true,
+                "cartId": -1,
+              }
+              let goodsInfo = {
+                "id": goods.id,
+                "skuId": selectSkuId,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "image": goods.image,
+                "category": goods.category,
+                "name": goods.name,
+                "brand": goods.brand,
+                "model": goods.model,
+                "price": selectPrice,
+                "type": goods.type == undefined ? 0 : goods.type
+              }
+              let couponList = goods.coupon
+              let promotionInfo = {
+                "promotion": goods.promotion,
+                "promotionState": Util.getPromotionState(this, goods)
+              }
+              let product = {
+                "baseInfo": baseInfo,
+                "goodsInfo": goodsInfo,
+                "couponList": couponList,
+                "promotionInfo": promotionInfo,
+              }
+              this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
+              this.$router.push({path: '/car/pay/direct'})
+            } else {
+              this.$toast("没有用户信息，请先登录再购买")
             }
-            let goodsInfo = {
-              "id": goods.id,
-              "skuId": selectSkuId,
-              "mpu": goods.mpu,
-              "merchantId": goods.merchantId,
-              "image": goods.image,
-              "category": goods.category,
-              "name": goods.name,
-              "brand": goods.brand,
-              "model": goods.model,
-              "price": goods.price,
-              "type": goods.type == undefined ? 0 : goods.type
-            }
-            let couponList = goods.coupon
-            let promotionInfo = {
-              "promotion": goods.promotion,
-              "promotionState": Util.getPromotionState(this, goods)
-            }
-            let product = {
-              "baseInfo": baseInfo,
-              "goodsInfo": goodsInfo,
-              "couponList": couponList,
-              "promotionInfo": promotionInfo,
-            }
-            this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
-            this.$router.push({path: '/car/pay/direct'})
           } else {
-            this.$toast("没有用户信息，请先登录再购买")
+            this.$toast("库存不足，无法购买该商品")
           }
+
         }
       },
       onAddCartClicked(skuData) {
@@ -297,12 +306,18 @@
         this.$log(skuData)
         if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
-          let userInfo = this.$store.state.appconf.userInfo;
-          if (!Util.isUserEmpty(userInfo)) {
-            this.add2Car(userInfo, this.datas, skuData);
+          let stock_num = skuData.selectedSkuComb.stock_num
+          if(stock_num > 0) {
+            let userInfo = this.$store.state.appconf.userInfo;
+            if (!Util.isUserEmpty(userInfo)) {
+              this.add2Car(userInfo, this.datas, skuData);
+            } else {
+              this.$toast("没有用户信息，请先登录,再添加购物车")
+            }
           } else {
-            this.$toast("没有用户信息，请先登录,再添加购物车")
+            this.$toast("库存不足，无法购买该商品")
           }
+
         }
       },
       getClientName() {
@@ -379,11 +394,16 @@
 
       addGoodsCar() {
         let userInfo = this.$store.state.appconf.userInfo;
+        this.$log(this.datas)
         if (!Util.isUserEmpty(userInfo)) {
-          if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
-            this.showBase = true;
+          if(this.datas.state === '0') {
+            this.$toast("该商品已下架")
           } else {
-            this.add2Car(userInfo, this.datas);
+            if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
+              this.showBase = true;
+            } else {
+              this.add2Car(userInfo, this.datas);
+            }
           }
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
@@ -396,8 +416,10 @@
         let mpu = goods.mpu;
         let count = 1;
         let selectSkuId = mpu
+        let selectPrice = goods.price
         if (skuData != undefined) {
           selectSkuId = skuData.selectedSkuComb.id
+          selectPrice = parseFloat((skuData.selectedSkuComb.price/100).toFixed(2))
           count = skuData.selectedNum
         }
         let addtoCar = {
@@ -436,8 +458,8 @@
                 "name": goods.name,
                 "brand": goods.brand,
                 "model": goods.model,
-                "price": goods.price,
-                "checkedPrice": goods.price,
+                "price": selectPrice,
+                "checkedPrice": selectPrice,
                 "type": goods.type == undefined ? 0 : goods.type
               }
               let couponList = []
@@ -462,7 +484,17 @@
       gotoPay() {
         this.$log("gotoPay Enter")
         if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
-          this.showBase = true;
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+            if(this.datas.state === '0') {
+              this.$toast("该商品已下架")
+            } else {
+              this.showBase = true;
+            }
+          } else {
+            this.$toast("没有用户信息，请先登录再购买")
+          }
+
         } else {
           this.$log(this.datas);
           let userInfo = this.$store.state.appconf.userInfo;
