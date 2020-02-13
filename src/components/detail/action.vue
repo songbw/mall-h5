@@ -80,7 +80,8 @@
         showStepper: false,
         closeOnClickOverlay: true,  //点击空白处关闭购物框
         customSkuValidator: () => '请正确选择商品规格',
-        hasPromotion: false
+        hasPromotion: false,
+        PromotionStatus: -1
       }
     },
 
@@ -110,6 +111,7 @@
           }
           if(this.datas.promotion !=undefined && this.datas.promotion.length > 0 ) {
             this.hasPromotion = true;
+
           }
           this.goods_id = this.datas.mpu
           if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
@@ -206,10 +208,12 @@
               total_stock_num += item.stock_num
               list.push(item)
             })
-            if(this.hasPromotion == true) {
-              list[0].price =  parseInt((this.datas.dprice * 100).toFixed(0))
+            if(this.hasPromotion == true ) {
+              this.PromotionStatus = Util.getPromotionState(this, this.datas);
+              if(this.PromotionStatus == 1) {
+                list[0].price =  parseInt((this.datas.dprice * 100).toFixed(0))
+              }
             }
-            this.$log("!!!!!!!!!!!!!!!!!!!!!!!")
             tree.forEach(item => {
               item['count'] = item.v.length
             })
@@ -299,6 +303,7 @@
                 "brand": goods.brand,
                 "model": goods.model,
                 "price": selectPrice,
+                "checkedPrice": goods.price,
                 "type": goods.type == undefined ? 0 : goods.type
               }
               let couponList = goods.coupon
@@ -481,7 +486,6 @@
                 "brand": goods.brand,
                 "model": goods.model,
                 "price": selectPrice,
-                "checkedPrice": selectPrice,
                 "type": goods.type == undefined ? 0 : goods.type
               }
               let couponList = []

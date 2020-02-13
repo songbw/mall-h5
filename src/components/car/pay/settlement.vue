@@ -1841,7 +1841,7 @@
               inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
               skusOfZy.push({"mpu": item.baseInfo.mpu})
             }
-            this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.price})
+            this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.checkedPrice !=undefined ? item.goodsInfo.checkedPrice:item.goodsInfo.price})
           }
         } else {
           this.selectedCarList.forEach(item => {
