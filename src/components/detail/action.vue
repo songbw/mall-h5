@@ -79,7 +79,8 @@
         showCustom: false,
         showStepper: false,
         closeOnClickOverlay: true,  //点击空白处关闭购物框
-        customSkuValidator: () => '请正确选择商品规格'
+        customSkuValidator: () => '请正确选择商品规格',
+        hasPromotion: false
       }
     },
 
@@ -106,6 +107,9 @@
             title: this.datas.name,
             // 默认商品 sku 缩略图
             picture: this.datas.image
+          }
+          if(this.datas.promotion !=undefined && this.datas.promotion.length > 0 ) {
+            this.hasPromotion = true;
           }
           this.goods_id = this.datas.mpu
           if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
@@ -202,6 +206,9 @@
               total_stock_num += item.stock_num
               list.push(item)
             })
+            if(this.hasPromotion == true) {
+              list[0].price =  parseInt((this.datas.dprice * 100).toFixed(0))
+            }
             this.$log("!!!!!!!!!!!!!!!!!!!!!!!")
             tree.forEach(item => {
               item['count'] = item.v.length
