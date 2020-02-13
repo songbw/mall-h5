@@ -31,7 +31,22 @@
         :custom-sku-validator="customSkuValidator"
         @buy-clicked="onBuyClicked"
         @add-cart="onAddCartClicked"
-      />
+      >
+<!--        &lt;!&ndash; 自定义 sku-header-price &ndash;&gt;
+        <template slot="sku-header-price" slot-scope="props">
+          <div class="van-sku__goods-price">
+            <div v-if="datas.promotion.length == 0">
+              <span class="van-sku__price-symbol">￥</span><span class="van-sku__price-num">{{ props.price }}</span>
+            </div>
+            <div v-else>
+              <span class="van-sku__price-symbol">￥</span><span class="van-sku__price-num">{{ props.price }}</span>
+              <div>
+                <span style="margin-left:2px;font-size: smaller;color: #5a5a5a; text-decoration: line-through">￥{{ props.price }}</span>
+              </div>
+            </div>
+          </div>
+        </template>-->
+      </van-sku>
     </div>
 
   </section>
@@ -104,7 +119,7 @@
                 this.datas.skuList.forEach(sku => {
                   sku['stock_num'] = 0
                   this.$log(ret)
-                  if(sku.status == 1) {
+                  if (sku.status == 1) {
                     for (let i = 0; i < ret.length; i++) {
                       if (ret[i].code === sku.code) {
                         sku.stock_num = ret[i].inventoryCount
@@ -171,18 +186,18 @@
                 stock_num: sku.stock_num,
                 goods_id: this.datas.mpu
               }
-              sku.propertyList.forEach(property =>{
-                 for(let i =0;i < tree.length; i++) {
-                   if(tree[i].k === property.name) {
-                     this.$log(tree[i])
-                     for(let j=0; j < tree[i].v.length; j++) {
-                       if(tree[i].v[j].name === property.val){
-                         item[tree[i].k_s]  = tree[i].v[j].id
-                         break;
-                       }
-                     }
-                   }
-                 }
+              sku.propertyList.forEach(property => {
+                for (let i = 0; i < tree.length; i++) {
+                  if (tree[i].k === property.name) {
+                    this.$log(tree[i])
+                    for (let j = 0; j < tree[i].v.length; j++) {
+                      if (tree[i].v[j].name === property.val) {
+                        item[tree[i].k_s] = tree[i].v[j].id
+                        break;
+                      }
+                    }
+                  }
+                }
               })
               total_stock_num += item.stock_num
               list.push(item)
@@ -202,7 +217,7 @@
               hide_stock: false,  // 是否隐藏剩余库存 false正常显示剩余多少件的那个库存
             }
             this.$log(this.sku)
-            if(list.length > 0) {
+            if (list.length > 0) {
               this.initialSku = {
                 s1: list[0].s1,
                 s2: list[0].s2,
@@ -251,8 +266,8 @@
         if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
           let stock_num = skuData.selectedSkuComb.stock_num
-          if(stock_num > 0) {
-            let selectPrice = parseFloat((skuData.selectedSkuComb.price/100).toFixed(2))
+          if (stock_num > 0) {
+            let selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
             let userInfo = this.$store.state.appconf.userInfo;
             if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
@@ -307,7 +322,7 @@
         if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
           let stock_num = skuData.selectedSkuComb.stock_num
-          if(stock_num > 0) {
+          if (stock_num > 0) {
             let userInfo = this.$store.state.appconf.userInfo;
             if (!Util.isUserEmpty(userInfo)) {
               this.add2Car(userInfo, this.datas, skuData);
@@ -396,7 +411,7 @@
         let userInfo = this.$store.state.appconf.userInfo;
         this.$log(this.datas)
         if (!Util.isUserEmpty(userInfo)) {
-          if(this.datas.state === '0') {
+          if (this.datas.state === '0') {
             this.$toast("该商品已下架")
           } else {
             if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
@@ -419,7 +434,7 @@
         let selectPrice = goods.price
         if (skuData != undefined) {
           selectSkuId = skuData.selectedSkuComb.id
-          selectPrice = parseFloat((skuData.selectedSkuComb.price/100).toFixed(2))
+          selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
           count = skuData.selectedNum
         }
         let addtoCar = {
@@ -486,7 +501,7 @@
         if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
-            if(this.datas.state === '0') {
+            if (this.datas.state === '0') {
               this.$toast("该商品已下架")
             } else {
               this.showBase = true;
