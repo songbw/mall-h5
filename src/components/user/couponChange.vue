@@ -3,7 +3,11 @@
     <v-header class="header"  v-if="showHeader">
       <h1 slot="title">兑换优惠券</h1>
     </v-header>
-    <div class="changeCouponBody">
+    <div>
+      
+
+    </div>
+<!--    <div class="changeCouponBody">
       <div class="changCouponTip">
         <span>兑换码使用: 在当前页输入兑换码即可兑换为相应的优惠券。一个兑换码只能兑换一张优惠券，不可重复使用</span>
       </div>
@@ -11,7 +15,7 @@
         <van-field class="changeCouponInputBox" v-model="couponCode" placeholder="请输入兑换码" clearable/>
         <van-button class="ChangeCouponBtn" size="large" type="danger" @click="onChangeCouponBtnClick">立即兑换</van-button>
       </div>
-    </div>
+    </div> -->
   </section>
 </template>
 
