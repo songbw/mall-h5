@@ -1112,8 +1112,6 @@
           min-height: 500px;
           background-color: #f8f8f8;
 
-          .couponLayout {
-          }
         }
 
         .avaliableCoupon {
