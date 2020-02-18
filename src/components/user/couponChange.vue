@@ -12,7 +12,7 @@
             </div>
             <div class="cardForm">
               <van-field v-model="cardNumber" type="number" clearable maxlength="30" placeholder="请输入券码" />
-              <van-field v-model="cardPwd"  type="number"  clearable maxlength="30" placeholder="请输入密码" />
+              <van-field v-model="cardPwd" type="number" clearable maxlength="30" placeholder="请输入密码" />
             </div>
             <div class="cardConfirmBox">
               <van-button size="large" type="primary" @click="oncardBtnClick">兑 换
@@ -93,15 +93,20 @@
           return
         }
         let userInfo = this.$store.state.appconf.userInfo;
+
         if (!Util.isUserEmpty(userInfo)) {
           try {
             let user = JSON.parse(userInfo);
-            let response = await this.bindCard(user.userId) 
-            this.$log(response) 
-            if(response.data.code === 200) {
-               this.$toast("兑换成功")
-            } else {
-               this.$toast(this.data.msg)
+            let response = await this.bindCard(user.userId)
+            this.$log(response)
+            if (response.data.code == 200) {
+              //进入提货券页
+              this.$router.push({
+                path: "/user/billoflading",
+                query: {
+                  id: this.cardNumber
+                }
+              });
             }
           } catch (e) {
             that.$toast(e.response.data.message)
