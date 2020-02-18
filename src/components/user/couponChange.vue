@@ -11,8 +11,8 @@
               <span class="TitleText">兑换提货券</span>
             </div>
             <div class="cardForm">
-              <van-field v-model="cardNumber" clearable maxlength="30" placeholder="请输入券码" />
-              <van-field v-model="cardPwd" clearable maxlength="30" placeholder="请输入密码" />
+              <van-field v-model="cardNumber" type="number" clearable maxlength="30" placeholder="请输入券码" />
+              <van-field v-model="cardPwd"  type="number"  clearable maxlength="30" placeholder="请输入密码" />
             </div>
             <div class="cardConfirmBox">
               <van-button size="large" type="primary" @click="oncardBtnClick">兑 换
@@ -52,7 +52,7 @@
         showHeader: true,
         active: 0,
         cardNumber: "",
-        cardPwd:"",
+        cardPwd: "",
         couponTypes: [{
             title: "提货券"
           },
@@ -68,6 +68,50 @@
     },
 
     methods: {
+      bindCard(userId) {
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.EQUITY_BASE_URL,
+          url: '/card/binds',
+          data: {
+            openId: userId,
+            card: this.cardNumber,
+            password: this.cardPwd
+          }
+        })
+      },
+
+      async oncardBtnClick() {
+        this.$log("oncardBtnClick Enter");
+        let that = this
+        if (this.cardNumber.length === 0) {
+          this.$toast("请输入券码")
+          return
+        }
+        if (this.cardPwd.length === 0) {
+          this.$toast("请输入密码")
+          return
+        }
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          try {
+            let user = JSON.parse(userInfo);
+            let response = await this.bindCard(user.userId) 
+            this.$log(response) 
+            if(response.data.code === 200) {
+               this.$toast("兑换成功")
+            } else {
+               this.$toast(this.data.msg)
+            }
+          } catch (e) {
+            that.$toast(e.response.data.message)
+          }
+
+        } else {
+          this.$toast("没有用户信息，请先登录")
+        }
+
+      },
       onChangeCouponBtnClick() {
         this.$log("onChangeCouponBtnClick Enter");
         this.$log(this.couponCode);
@@ -164,6 +208,7 @@
         line-height: 40px;
       }
     }
+
     .van-field {
       padding: 10pt 10pt;
       font-weight: 500;
