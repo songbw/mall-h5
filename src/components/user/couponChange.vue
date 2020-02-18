@@ -4,43 +4,31 @@
       <h1 slot="title">兑换优惠券</h1>
     </v-header>
     <div>
-      <van-tabs
-        v-model="active"
-        sticky
-        @click="onClick"
-        :swipe-threshold="swipeThreshold"
-        swipeabl
-      >
-        <van-tab
-          v-for="(item, type) in couponTypes"
-          :title="item.title"
-          :key="type"
-        >
-          <div v-if="active == 0">
-            
+      <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold="swipeThreshold" swipeabl>
+        <van-tab v-for="(item, type) in couponTypes" :title="item.title" :key="type">
+          <div v-if="active == 0" class="cardBody">
+            <div class="cardTitle">
+              <span class="TitleText">兑换提货券</span>
+            </div>
+            <div class="cardForm">
+              <van-field v-model="cardNumber" clearable maxlength="30" placeholder="请输入券码" />
+              <van-field v-model="cardPwd" clearable maxlength="30" placeholder="请输入密码" />
+            </div>
+            <div class="cardConfirmBox">
+              <van-button size="large" type="primary" @click="oncardBtnClick">兑 换
+              </van-button>
+            </div>
           </div>
           <div v-else>
             <div class="changeCouponBody">
               <div class="changCouponTip">
-                <span
-                  >兑换码使用:
-                  在当前页输入兑换码即可兑换为相应的优惠券。一个兑换码只能兑换一张优惠券，不可重复使用</span
-                >
+                <span>兑换码使用:
+                  在当前页输入兑换码即可兑换为相应的优惠券。一个兑换码只能兑换一张优惠券，不可重复使用</span>
               </div>
               <div class="changeCouponBox">
-                <van-field
-                  class="changeCouponInputBox"
-                  v-model="couponCode"
-                  placeholder="请输入兑换码"
-                  clearable
-                />
-                <van-button
-                  class="ChangeCouponBtn"
-                  size="large"
-                  type="danger"
-                  @click="onChangeCouponBtnClick"
-                  >立即兑换</van-button
-                >
+                <van-field class="changeCouponInputBox" v-model="couponCode" placeholder="请输入兑换码" clearable />
+                <van-button class="ChangeCouponBtn" size="large" type="danger" @click="onChangeCouponBtnClick">立即兑换
+                </van-button>
               </div>
             </div>
           </div>
@@ -51,98 +39,158 @@
 </template>
 
 <script>
-import Header from "@/common/_header.vue";
-import Util from "@/util/common";
-export default {
-  components: {
-    "v-header": Header
-  },
+  import Header from "@/common/_header.vue";
+  import Util from "@/util/common";
+  export default {
+    components: {
+      "v-header": Header
+    },
 
-  data() {
-    return {
-      couponCode: "",
-      showHeader: true,
-      active: 0,
-      couponTypes: [
-        {
-          title: "提货券"
-        },
-        {
-          title: "优惠券"
+    data() {
+      return {
+        couponCode: "",
+        showHeader: true,
+        active: 0,
+        cardNumber: "",
+        cardPwd:"",
+        couponTypes: [{
+            title: "提货券"
+          },
+          {
+            title: "优惠券"
+          }
+        ]
+      };
+    },
+
+    created() {
+      this.showHeader = this.$api.HAS_HEADER;
+    },
+
+    methods: {
+      onChangeCouponBtnClick() {
+        this.$log("onChangeCouponBtnClick Enter");
+        this.$log(this.couponCode);
+        let that = this;
+        if (that.couponCode.length > 0) {
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+            let user = JSON.parse(userInfo);
+            let options = {
+              userOpenId: user.userId,
+              userCouponCode: this.couponCode
+            };
+            that.$api
+              .xapi({
+                method: "post",
+                baseURL: this.$api.EQUITY_BASE_URL,
+                url: "/coupon/redemption",
+                data: options
+              })
+              .then(response => {
+                // let result = response.data.data.result;
+                that.$log(response.data);
+                let rt = response.data;
+                if (rt.msg == "Success") {
+                  that.$toast("兑换成功");
+                } else {
+                  that.$toast(rt.msg);
+                }
+              })
+              .catch(function (error) {
+                that.$log(error);
+              });
+          }
+        } else {
+          this.$toast("请输入正确的兑换码");
         }
-      ]
-    };
-  },
-
-  created() {
-    this.showHeader = this.$api.HAS_HEADER;
-  },
-
-  methods: {
-    onChangeCouponBtnClick() {
-      this.$log("onChangeCouponBtnClick Enter");
-      this.$log(this.couponCode);
-      let that = this;
-      if (that.couponCode.length > 0) {
-        let userInfo = this.$store.state.appconf.userInfo;
-        if (!Util.isUserEmpty(userInfo)) {
-          let user = JSON.parse(userInfo);
-          let options = {
-            userOpenId: user.userId,
-            userCouponCode: this.couponCode
-          };
-          that.$api
-            .xapi({
-              method: "post",
-              baseURL: this.$api.EQUITY_BASE_URL,
-              url: "/coupon/redemption",
-              data: options
-            })
-            .then(response => {
-              // let result = response.data.data.result;
-              that.$log(response.data);
-              let rt = response.data;
-              if (rt.msg == "Success") {
-                that.$toast("兑换成功");
-              } else {
-                that.$toast(rt.msg);
-              }
-            })
-            .catch(function(error) {
-              that.$log(error);
-            });
-        }
-      } else {
-        this.$toast("请输入正确的兑换码");
       }
     }
-  }
-};
+  };
+
 </script>
 
 <style lang="less" scoped>
-@import "../../assets/fz.less";
-@import "../../assets/index/style.css";
+  @import "../../assets/fz.less";
+  @import "../../assets/index/style.css";
 
-.changeCoupon {
-  min-height: 100vh;
-  .changeCouponBody {
-    .changCouponTip {
-      margin: 10px;
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding-top: 20px;
+
+    .cardTitle {
+      width: 100%;
+      padding: 10px 0px;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      justify-content: center;
+
+      .TitleText {
+        font-weight: bold;
+        margin-left: 12px;
+        .fz(font-size, 45);
+        color: #333333;
+      }
     }
 
-    .changeCouponBox {
-      margin: 10px;
+    .cardForm {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+      margin: 10px 0px;
 
-      .changeCouponInputBox {
-        margin-top: 10px;
-        border: 1px solid #ff4444;
+    }
+
+    .cardConfirmBox {
+      width: 95%;
+      margin: 10px;
+      display: flex;
+      flex-direction: column;
+      text-align: center;
+      align-items: center;
+    }
+
+    .van-button {
+      background: linear-gradient(to right, #FFC000, #FF5D01);
+      ;
+      border: none;
+
+      &--large {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+      }
+    }
+    .van-field {
+      padding: 10pt 10pt;
+      font-weight: 500;
+    }
+  }
+
+  .changeCoupon {
+    min-height: 100vh;
+
+    .changeCouponBody {
+      .changCouponTip {
+        margin: 10px;
       }
 
-      .ChangeCouponBtn {
-        margin-top: 10px;
+      .changeCouponBox {
+        margin: 10px;
+
+        .changeCouponInputBox {
+          margin-top: 10px;
+          border: 1px solid #ff4444;
+        }
+
+        .ChangeCouponBtn {
+          margin-top: 10px;
+        }
       }
     }
   }
-}
+
 </style>
