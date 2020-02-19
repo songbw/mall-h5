@@ -28,31 +28,25 @@
                 <div v-for="(item, index) in cardDetail.coupons">
                   <van-cell clickable :key="index" @click="BanckCardsClick(item)">
                     <div slot="default" class="couponBox">
-                      <van-col span="8" class="cardImg">
+                      <van-col span="8" class="couponImage">
                         <img v-lazy="item.imageUrl.length?item.imageUrl: couponImg">
                       </van-col>
-                      <van-col span="16" class="cardInfo">
-                        <span>xxx</span>
-                        <!--                           <div class="cardTitle">
-                            <span>{{k.name}}</span>
-                          </div>
-                          <div class="cardTag">
-                            <span></span>
-                          </div>
-                          <div class="cardFooter">
-                            <van-col span="12" class="priceBox">
-                              <div class="salePrice">￥{{parseFloat(k.discount).toFixed(2)}}</div>
-                              <div class="originPrice">￥{{k.price}}</div>
-                            </van-col>
-                            <van-col span="12" class="actionBox">
-                              <van-button type="danger" @click.stop="" size="small" @click="onAdd2carBtnClick(k)">立即抢购
-                              </van-button>
-                            </van-col>
-                          </div> -->
+                      <van-col span="16" class="couponInfo">
+                        <div class="coupon-price">
+                          <span v-if="item.rules.couponRules.type !=2 && item.rules.couponRules.type != 4"
+                            style="margin-right: -7px">￥</span>
+                          {{formateCouponPrice(item.rules.couponRules)}}
+                          <span>{{formateCouponDetail(item.rules.couponRules)}}</span>
+                          <span style="float:right;color:#4CAF50" v-if="item.rules.couponRules.type == 4">查看详情 > </span>
+                        </div>
+                        <div class="coupon-desc">{{formateCouponDescription(item)}}</div>
+                        <div class="coupon-expire-date">
+                          {{formatEffectiveDateTime(item.effectiveStartDate,item.effectiveEndDate)}}
+                        </div>
                       </van-col>
                     </div>
                     <div slot="right-icon" class="couponBoxCheckBox">
-                      <van-radio :name="item.accountId" checked-color="#3dd5c8" ref="couponBoxsCheckboxes" />
+                      <van-radio :name="item.accountId" checked-color="#4CAF50" ref="couponBoxsCheckboxes" />
                     </div>
                   </van-cell>
                 </div>
@@ -105,6 +99,58 @@
     },
 
     methods: {
+      formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format(
+          'YYYY.MM.DD');
+      },
+      formateCouponPrice(rules) {
+        switch (rules.type) {
+          case 0: //满减券
+            return rules.fullReduceCoupon.reducePrice.toFixed(2);
+          case 1: //代金券
+            return rules.cashCoupon.amount.toFixed(2);
+          case 2: //折扣券
+            return (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折';
+          case 3: //服务券
+            this.$log(rules)
+            return rules.serviceCoupon.price.toFixed(2)
+          default:
+            return ""
+        }
+      },
+
+      formateCouponDescription(couponInfo) {
+        switch (couponInfo.rules.scenario.type) {
+          case 1:
+            return "仅限某些指定的商品可用";
+          case 2:
+            return "全场商品可用";
+          case 3:
+            return "仅限定某些品牌类商品可用";
+          default:
+            return "限提供所描述特定的服务可用"
+        }
+      },
+
+      formateCouponDetail(rules) {
+        switch (rules.type) {
+          case 0: //满减券
+            return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
+          case 1: //代金券
+            return '代金券';
+          case 2: //折扣券
+            if (rules.discountCoupon.fullPrice > 0) {
+              return '满' + rules.discountCoupon.fullPrice + '元可用';
+            } else {
+              return '折扣券 ';
+            }
+            case 4:
+              return '商品礼包'
+            default:
+              return ""
+        }
+      },
+
       formatTime(timeString) {
         if (timeString == null)
           return null
@@ -156,15 +202,12 @@
         margin: 10px;
         min-height: 200px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); //设置两层阴影
-        border-radius: 10px;
       }
 
       .header {
         background-color: #4CAF50;
         color: white;
         padding: 10px;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
 
         .title {
           text-align: center;
@@ -214,7 +257,7 @@
             color: #333333;
             font-size: large;
 
-            .cardImg {
+            .couponImage {
               height: 100%;
               text-align: center;
 
@@ -224,52 +267,36 @@
               }
             }
 
-            .cardInfo {
+            .couponInfo {
               height: 100%;
-              margin-left: 10px;
+              margin: 5px;
+              color: black;
 
-              .cardTitle {
+              .coupon-desc {
+                margin-left: 3px;
+                .fz(font-size, 22);
+              }
+
+              .coupon-price {
+                margin-left: 2px;
                 .fz(font-size, 30);
                 font-weight: bold;
+                color: black;
                 overflow: hidden;
                 text-overflow: ellipsis;
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
-                -webkit-line-clamp: 2;
+                -webkit-line-clamp: 1;
                 word-break: break-all;
               }
 
-              .cardTag {
-                height: 15%;
+              .coupon-price>span {
+                font-weight: normal;
               }
 
-              .cardFooter {
-                height: 50%;
-
-                .priceBox {
-                  height: 100%;
-                  text-align: left;
-                  line-height: 1.5em;
-                  padding: 10px;
-
-                  .salePrice {
-                    color: #ff4444;
-                    .fz(font-size, 32);
-                    font-weight: bold;
-                  }
-
-                  .originPrice {
-                    color: #707070;
-                    .fz(font-size, 25);
-                    text-decoration: line-through
-                  }
-                }
-
-                .actionBox {
-                  height: 100%;
-                  text-align: center;
-                  line-height: 3em;
-                }
+              .coupon-expire-date {
+                margin-left: 5px;
+                .fz(font-size, 22);
               }
 
             }
