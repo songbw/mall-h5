@@ -110,6 +110,14 @@
             }
           } catch (e) {
             that.$toast(e.response.data.message)
+            //test
+            //进入提货券页
+            this.$router.push({
+              path: "/user/billoflading",
+              query: {
+                id: this.cardNumber
+              }
+            });
           }
 
         } else {
