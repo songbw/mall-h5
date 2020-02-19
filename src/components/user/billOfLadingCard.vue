@@ -22,7 +22,22 @@
         </div>
 
         <div class="container">
-          <p>January 1, 2016</p>
+          <div class="couponListCheckBox">
+            <div v-if="cardDetail.coupons.length > 0">
+              <van-radio-group v-model="couponRadio">
+                  <div v-for="(item, index) in cardDetail.coupons">
+                    <van-cell clickable :key="index" @click="BanckCardsClick(item)">
+                      <div slot="default" class="couponBox">
+                        <span>银行卡支付</span>
+                      </div>
+                      <div slot="right-icon" class="couponBoxCheckBox">
+                        <van-radio :name="item.accountId" checked-color="#3dd5c8" ref="couponBoxsCheckboxes" />
+                      </div>
+                    </van-cell>
+                  </div>
+              </van-radio-group>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -44,6 +59,7 @@
         loading: true,
         cardNumber: "",
         cardDetail: null,
+        couponRadio: "-1",
       }
     },
 
@@ -159,6 +175,33 @@
 
       .container {
         padding: 10px;
+        background-color: #f8f8f8;
+
+        .couponListCheckBox {
+          .van-cell {
+            margin-top: -1px;
+            background: white;
+            border-radius: 5px;
+          }
+
+          .couponBox {
+            height: 100px;
+            margin: 2px 10px 2px 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 30px;
+            color: #333333;
+            font-size: large;
+          }
+
+          .couponBoxCheckBox {
+            height: 100px;
+            align-items: center;
+            display: flex;
+          }
+        }
+
       }
 
     }
