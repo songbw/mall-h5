@@ -17,7 +17,7 @@
           </div>
 
           <div class="validDate">
-            <span>截至日期: {{formatTime(cardDetail.createTime)}}</span>
+            <span>截至日期: {{formatTime(cardDetail.endTime)}}</span>
           </div>
         </div>
 
@@ -25,16 +25,37 @@
           <div class="couponListCheckBox">
             <div v-if="cardDetail.coupons.length > 0">
               <van-radio-group v-model="couponRadio">
-                  <div v-for="(item, index) in cardDetail.coupons">
-                    <van-cell clickable :key="index" @click="BanckCardsClick(item)">
-                      <div slot="default" class="couponBox">
-                        <span>银行卡支付</span>
-                      </div>
-                      <div slot="right-icon" class="couponBoxCheckBox">
-                        <van-radio :name="item.accountId" checked-color="#3dd5c8" ref="couponBoxsCheckboxes" />
-                      </div>
-                    </van-cell>
-                  </div>
+                <div v-for="(item, index) in cardDetail.coupons">
+                  <van-cell clickable :key="index" @click="BanckCardsClick(item)">
+                    <div slot="default" class="couponBox">
+                      <van-col span="8" class="cardImg">
+                        <img v-lazy="item.imageUrl.length?item.imageUrl: couponImg">
+                      </van-col>
+                      <van-col span="16" class="cardInfo">
+                        <span>xxx</span>
+                        <!--                           <div class="cardTitle">
+                            <span>{{k.name}}</span>
+                          </div>
+                          <div class="cardTag">
+                            <span></span>
+                          </div>
+                          <div class="cardFooter">
+                            <van-col span="12" class="priceBox">
+                              <div class="salePrice">￥{{parseFloat(k.discount).toFixed(2)}}</div>
+                              <div class="originPrice">￥{{k.price}}</div>
+                            </van-col>
+                            <van-col span="12" class="actionBox">
+                              <van-button type="danger" @click.stop="" size="small" @click="onAdd2carBtnClick(k)">立即抢购
+                              </van-button>
+                            </van-col>
+                          </div> -->
+                      </van-col>
+                    </div>
+                    <div slot="right-icon" class="couponBoxCheckBox">
+                      <van-radio :name="item.accountId" checked-color="#3dd5c8" ref="couponBoxsCheckboxes" />
+                    </div>
+                  </van-cell>
+                </div>
               </van-radio-group>
             </div>
           </div>
@@ -60,6 +81,7 @@
         cardNumber: "",
         cardDetail: null,
         couponRadio: "-1",
+        couponImg: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_coupon.png',
       }
     },
 
@@ -188,11 +210,69 @@
             height: 100px;
             margin: 2px 10px 2px 0px;
             display: flex;
-            flex-direction: column;
-            align-items: center;
             line-height: 30px;
             color: #333333;
             font-size: large;
+
+            .cardImg {
+              height: 100%;
+              text-align: center;
+
+              img {
+                width: 100%;
+                height: 100%;
+              }
+            }
+
+            .cardInfo {
+              height: 100%;
+              margin-left: 10px;
+
+              .cardTitle {
+                .fz(font-size, 30);
+                font-weight: bold;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                word-break: break-all;
+              }
+
+              .cardTag {
+                height: 15%;
+              }
+
+              .cardFooter {
+                height: 50%;
+
+                .priceBox {
+                  height: 100%;
+                  text-align: left;
+                  line-height: 1.5em;
+                  padding: 10px;
+
+                  .salePrice {
+                    color: #ff4444;
+                    .fz(font-size, 32);
+                    font-weight: bold;
+                  }
+
+                  .originPrice {
+                    color: #707070;
+                    .fz(font-size, 25);
+                    text-decoration: line-through
+                  }
+                }
+
+                .actionBox {
+                  height: 100%;
+                  text-align: center;
+                  line-height: 3em;
+                }
+              }
+
+            }
           }
 
           .couponBoxCheckBox {
