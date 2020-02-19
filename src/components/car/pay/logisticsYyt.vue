@@ -8,52 +8,33 @@
         <v-loading></v-loading>
       </div>
       <div class="logisticsInfo" v-else>
-        <div v-for="(item,i)  in logisticsList" :key='i'>
-          <div class="matched-goods">
-            <ul>
-              <li v-for="(sku,skuIndex)  in getMatchedGoods(item.skuList)" :key='skuIndex'>
-                <van-card
-                  :price="sku.unitPrice"
-                  :title="sku.name"
-                  :num="sku.num"
-                  :thumb="sku.image">
-                </van-card>
-                <div>
-                  <div style="font-size: small">
-                    <span style="margin-left: 5px">物流公司:</span>
-                    <span style="float: right;margin-right: 5px">{{item.deliveryName}}</span>
+        <div v-for="(logisticsItem,index)  in logisticsList" :key='index'>
+          <div v-for="(item,i)  in logisticsItem" :key='i' class="logisticsItemStyle">
+            <div class="matched-goods">
+              <ul>
+                <li v-for="(sku,skuIndex)  in getMatchedGoods(item.skuList)" :key='skuIndex'>
+                  <van-card :price="sku.unitPrice" :title="sku.name" :num="sku.num" :thumb="sku.image">
+                  </van-card>
+                  <div>
+                    <div style="font-size: small">
+                      <span style="margin-left: 5px">物流公司:</span>
+                      <span style="float: right;margin-right: 5px">{{item.deliveryName}}</span>
+                    </div>
+                    <div style="font-size: small">
+                      <span style="margin-left: 5px">物流信息:</span>
+                      <span style="float: right;margin-right: 5px">{{item.deliveryNo}}</span>
+                    </div>
                   </div>
-                  <div style="font-size: small">
-                    <span style="margin-left: 5px">物流信息:</span>
-                    <span style="float: right;margin-right: 5px">{{item.deliveryNo}}</span>
-                  </div>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
+            </div>
+            <van-steps direction="vertical" :active="0" active-color="#f44">
+              <van-step v-for="(info,k)  in getOrdedDeliveryList(item.deliveryList)" :key='k'>
+                <h3>{{info.context}}</h3>
+                <p>{{info.time}}</p>
+              </van-step>
+            </van-steps>
           </div>
-          <van-steps direction="vertical" :active="0" active-color="#f44">
-            <van-step v-for="(info,k)  in getOrdedDeliveryList(item.deliveryList)" :key='k'>
-              <h3>{{info.context}}</h3>
-              <p>{{info.time}}</p>
-            </van-step>
-          </van-steps>
-        </div>
-        <div class="logisticsBox" v-if="getPreparingGoods().length > 0">
-          <ul>
-            <li v-for="(sku,skuIndex)  in getPreparingGoods()" :key='skuIndex'>
-              <van-card
-                :price="sku.unitPrice"
-                :title="sku.name"
-                :num="sku.num"
-                :thumb="sku.image">
-              </van-card>
-              <van-steps direction="vertical" :active="0" active-color="#f44">
-                <van-step>
-                  <h3>快马加鞭揽件中……</h3>
-                </van-step>
-              </van-steps>
-            </li>
-          </ul>
         </div>
       </div>
     </div>
@@ -75,6 +56,7 @@
         detail: {},
         status: -1,
         logisticsList: [],
+        skusLogisticsList: [],
         matchedGoods: [],
         loading: true
       }
@@ -87,15 +69,22 @@
       that.$log("logisticsYyt created Enter")
       that.detail = this.$route.params.detail;
       that.loading = true;
+      //test
+      //this.detail.skus[0].thirdOrderSn = "324081376"
+      //this.detail.skus[1].thirdOrderSn = "324081377"
       that.$log(that.detail)
+
       try {
-        let response = await this.getLogisticsInfo()
-        this.$log(response)
-        if (response.data.code == 200) {
-          if(response.data.data != null) {
-            this.logisticsList = response.data.data
+        for (let i = 0; i < that.detail.skus.length; i++) {
+          let response = await this.getLogisticsInfo(that.detail.skus[i].thirdOrderSn)
+          this.$log(response)
+          if (response.data.code == 200) {
+            if (response.data.data != null) {
+              this.logisticsList.push(response.data.data)
+            }
           }
         }
+        this.$log(this.logisticsList)
         that.loading = false;
       } catch (e) {
         that.loading = false;
@@ -114,14 +103,14 @@
         }
         return list
       },
-      getLogisticsInfo() {
+      getLogisticsInfo(thirdOrderSn) {
         this.$log("getLogisticsInfo Enter")
         return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.AOYIS_CONFIG_URL,
           url: '/star/orders/express',
           params: {
-            orderSn: this.detail.aoyiId
+            orderSn: thirdOrderSn
           },
         })
       },
@@ -172,6 +161,7 @@
       },
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -217,8 +207,12 @@
         background-color: #f8f8f8;
         margin: 10px;
 
+        .logisticsItemStyle {
+          margin-top: 10px
+        }
+
         .logisticsBox {
-          > li {
+          >li {
             list-style: none;
           }
         }
@@ -234,4 +228,5 @@
       }
     }
   }
+
 </style>
