@@ -8,7 +8,32 @@
         <v-loading></v-loading>
       </div>
       <div class="logisticsInfo" v-else>
-        <div v-for="(logisticsItem,index)  in logisticsList" :key='index'>
+        <div v-if="logisticsList.length == 0" class="logisticsBox">
+          <ul>
+            <li v-for="(sku,skuIndex)  in getPreparingGoods()" :key='skuIndex'>
+              <van-card :price="sku.unitPrice" :title="sku.name" :num="sku.num" :thumb="sku.image">
+              </van-card>
+              <div v-if="sku.logisticsContent != null && sku.logisticsId != null">
+                <div style="font-size: small">
+                  <span style="margin-left: 5px">物流公司:</span>
+                  <span style="float: right;margin-right: 5px">{{sku.logisticsContent}}</span>
+                </div>
+                <div style="font-size: small">
+                  <span style="margin-left: 5px">物流信息:</span>
+                  <span style="float: right;margin-right: 5px">{{sku.logisticsId}}</span>
+                </div>
+              </div>
+              <div v-else>
+                <van-steps direction="vertical" :active="0" active-color="#f44">
+                  <van-step>
+                    <h3>快马加鞭揽件中……</h3>
+                  </van-step>
+                </van-steps>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div v-else v-for="(logisticsItem,index)  in logisticsList" :key='index'>
           <div v-for="(item,i)  in logisticsItem" :key='i' class="logisticsItemStyle">
             <div class="matched-goods">
               <ul>
@@ -36,6 +61,7 @@
             </van-steps>
           </div>
         </div>
+
       </div>
     </div>
   </section>
@@ -76,11 +102,13 @@
 
       try {
         for (let i = 0; i < that.detail.skus.length; i++) {
-          let response = await this.getLogisticsInfo(that.detail.skus[i].thirdOrderSn)
-          this.$log(response)
-          if (response.data.code == 200) {
-            if (response.data.data != null) {
-              this.logisticsList.push(response.data.data)
+          if (that.detail.skus[i].thirdOrderSn != undefined && that.detail.skus[i].thirdOrderSn.length > 0) {
+            let response = await this.getLogisticsInfo(that.detail.skus[i].thirdOrderSn)
+            this.$log(response)
+            if (response.data.code == 200) {
+              if (response.data.data != null) {
+                this.logisticsList.push(response.data.data)
+              }
             }
           }
         }
@@ -115,29 +143,7 @@
         })
       },
       getPreparingGoods() {
-        this.$log("getPreparingGoods Enter,this.detail.skus.length:" + this.detail.skus.length)
-        let goods = []
-        let matchedGoods = [];
-        this.$log(this.logisticsList)
-        for (let i = 0; i < this.logisticsList.length; i++) {
-          this.$log(this.logisticsList)
-          let subMatched = this.getMatchedGoods(this.logisticsList[i].skuList)
-          subMatched.forEach(sku => {
-            matchedGoods.push(sku)
-          })
-        }
-        this.detail.skus.forEach(sku => {
-          let found = -1;
-          for (let i = 0; i < matchedGoods.length; i++) {
-            if (sku.mpu === matchedGoods[i].mpu) {
-              found = 1;
-              break;
-            }
-          }
-          if (found == -1)
-            goods.push(sku)
-        })
-        return goods
+        return this.detail.skus
       },
       getMatchedGoods(skuList) {
         this.$log("getMatchedGoods Enter")
