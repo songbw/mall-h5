@@ -33,14 +33,15 @@
                       </van-col>
                       <van-col span="16" class="couponInfo">
                         <div class="coupon-price">
-                          <span v-if="item.rules.couponRules.type !=2 && item.rules.couponRules.type != 4"
-                            style="margin-right: -7px">￥</span>
+                          <span v-if="item.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
                           {{formateCouponPrice(item.rules.couponRules)}}
                           <span>{{formateCouponDetail(item.rules.couponRules)}}</span>
-                          <span style="float:right;color:#4CAF50" v-if="item.rules.couponRules.type == 4"
-                            @click="gotoCouponDetail(item)" @click.stop="">查看详情 > </span>
                         </div>
-                        <div class="coupon-desc">{{formateCouponDescription(item)}}</div>
+                        <div class="coupon-desc">
+                          <span>{{formateCouponDescription(item)}}</span>
+                          <span style="color:#4CAF50;float:right;margin-right: 1px"
+                            v-if="item.rules.couponRules.type == 4" @click="gotoCouponDetail(item)" @click.stop="">详情 ></span>
+                        </div>
                         <div class="coupon-expire-date">
                           {{formatEffectiveDateTime(item.effectiveStartDate,item.effectiveEndDate)}}
                         </div>
@@ -129,8 +130,8 @@
             this.selectedRadio = this.couponRadio;
           }
         } else {
-            this.couponRadio = coupon.rules.code
-            this.selectedRadio = this.couponRadio;
+          this.couponRadio = coupon.rules.code
+          this.selectedRadio = this.couponRadio;
         }
       },
 
@@ -160,6 +161,9 @@
           case 3: //服务券
             this.$log(rules)
             return rules.serviceCoupon.price.toFixed(2)
+          case 4:
+            this.$log("#################@########")
+            return rules.cashCoupon.amount.toFixed(2);
           default:
             return ""
         }
@@ -168,13 +172,13 @@
       formateCouponDescription(couponInfo) {
         switch (couponInfo.rules.scenario.type) {
           case 1:
-            return "仅限某些指定的商品可用";
+            return "限指定的商品可用";
           case 2:
             return "全场商品可用";
           case 3:
-            return "仅限定某些品牌类商品可用";
+            return "限指定品类商品可用";
           default:
-            return "限提供所描述特定的服务可用"
+            return "限特定的服务可用"
         }
       },
 
