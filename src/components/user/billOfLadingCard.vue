@@ -26,7 +26,7 @@
             <div v-if="cardDetail.coupons.length > 0">
               <van-radio-group v-model="couponRadio">
                 <div v-for="(item, index) in cardDetail.coupons">
-                  <van-cell clickable :key="index" @click="BanckCardsClick(item)">
+                  <van-cell clickable :key="index">
                     <div slot="default" class="couponBox">
                       <van-col span="8" class="couponImage">
                         <img v-lazy="item.imageUrl.length?item.imageUrl: couponImg">
@@ -46,12 +46,16 @@
                       </van-col>
                     </div>
                     <div slot="right-icon" class="couponBoxCheckBox">
-                      <van-radio :name="item.accountId" checked-color="#4CAF50" ref="couponBoxsCheckboxes" />
+                      <van-radio :name="item.rules.code" checked-color="#4CAF50" ref="couponBoxsCheckboxes" />
                     </div>
                   </van-cell>
                 </div>
               </van-radio-group>
             </div>
+          </div>
+          <div>
+            <van-button size="large" type="primary" @click="onBuyBtnClick(cardDetail.card)">去下单
+            </van-button>
           </div>
         </div>
       </div>
@@ -145,7 +149,7 @@
               return '折扣券 ';
             }
             case 4:
-              return '商品礼包'
+              return '礼包套餐'
             default:
               return ""
         }
@@ -311,6 +315,17 @@
 
       }
 
+    }
+
+    .van-button {
+      background: linear-gradient(to right, rgb(91, 230, 186), #4CAF50);
+      border: none;
+
+      &--large {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
+      }
     }
   }
 
