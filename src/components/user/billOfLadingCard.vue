@@ -33,14 +33,17 @@
                       </van-col>
                       <van-col span="16" class="couponInfo">
                         <div class="coupon-price">
-                          <span v-if="item.rules.couponRules.type !=2" style="margin-right: -7px">￥</span>
+                          <span
+                            v-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
+                            style="margin-right: -7px">￥</span>
                           {{formateCouponPrice(item.rules.couponRules)}}
                           <span>{{formateCouponDetail(item.rules.couponRules)}}</span>
                         </div>
                         <div class="coupon-desc">
                           <span>{{formateCouponDescription(item)}}</span>
                           <span style="color:#4CAF50;float:right;margin-right: 1px"
-                            v-if="item.rules.couponRules.type == 4" @click="gotoCouponDetail(item)" @click.stop="">详情 ></span>
+                            v-if="item.rules.couponRules.type == 4" @click="gotoCouponDetail(item)" @click.stop="">详情
+                            ></span>
                         </div>
                         <div class="coupon-expire-date">
                           {{formatEffectiveDateTime(item.effectiveStartDate,item.effectiveEndDate)}}
@@ -140,10 +143,23 @@
         this.$log(coupon)
       },
 
-      onBuyBtnClick() {
+      async onBuyBtnClick() {
         this.$log("onBuyBtnClick Enter")
         this.$log(this.cardDetail)
         this.$log(this.couponRadio)
+        if (this.cardDetail == null)
+          return
+        if(this.couponRadio.length == 0) {
+           this.$toast("请选择提货礼包")
+           return
+        }
+        try {
+          //兑换券
+          let response = this.changeToCoupon(this.cardDetail.card, this.couponRadio)
+
+        } catch (e) {
+
+        }
       },
 
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
@@ -162,8 +178,10 @@
             this.$log(rules)
             return rules.serviceCoupon.price.toFixed(2)
           case 4:
-            this.$log("#################@########")
-            return rules.cashCoupon.amount.toFixed(2);
+            if (rules.cashCoupon.amount > 0)
+              return rules.cashCoupon.amount.toFixed(2);
+            else
+              return ""
           default:
             return ""
         }
@@ -206,6 +224,7 @@
           return null
         return this.$moment(timeString).format('YYYY/MM/DD HH:mm:ss')
       },
+
       getCardInfo(userId) {
         this.$log("getCardInfo Enter:" + userId)
         return this.$api.xapi({
@@ -217,7 +236,22 @@
             card: this.cardNumber
           }
         })
-      }
+      },
+
+      changeToCoupon(card, couponId) {
+        this.$log("getCardInfo Enter:" + userId)
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.EQUITY_BASE_URL,
+          url: '/card/exchange',
+          data: {
+            card: card,
+            couponId: couponId
+          }
+        })
+      },
+
+
     }
   }
 
