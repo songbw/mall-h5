@@ -26,7 +26,7 @@
             <div v-if="cardDetail.coupons.length > 0">
               <van-radio-group v-model="couponRadio">
                 <div v-for="(item, index) in cardDetail.coupons">
-                  <van-cell clickable :key="index" @click="couponSelectToggle(index)">
+                  <van-cell clickable :key="index" @click="couponItemClick(item)">
                     <div slot="default" class="couponBox">
                       <van-col span="8" class="couponImage">
                         <img v-lazy="item.imageUrl.length?item.imageUrl: couponImg">
@@ -37,7 +37,8 @@
                             style="margin-right: -7px">￥</span>
                           {{formateCouponPrice(item.rules.couponRules)}}
                           <span>{{formateCouponDetail(item.rules.couponRules)}}</span>
-                          <span style="float:right;color:#4CAF50" v-if="item.rules.couponRules.type == 4" @click="gotoCouponDetail(item)">查看详情 > </span>
+                          <span style="float:right;color:#4CAF50" v-if="item.rules.couponRules.type == 4"
+                            @click="gotoCouponDetail(item)" @click.stop="">查看详情 > </span>
                         </div>
                         <div class="coupon-desc">{{formateCouponDescription(item)}}</div>
                         <div class="coupon-expire-date">
@@ -46,7 +47,8 @@
                       </van-col>
                     </div>
                     <div slot="right-icon" class="couponBoxCheckBox">
-                      <van-radio :name="item.rules.code" checked-color="#4CAF50" ref="couponBoxsCheckboxes" />
+                      <van-radio :name="item.rules.code" @click="onRadioBtnClick(item)" @click.stop=""
+                        checked-color="#4CAF50" ref="couponBoxsCheckboxes" />
                     </div>
                   </van-cell>
                 </div>
@@ -78,7 +80,8 @@
         loading: true,
         cardNumber: "",
         cardDetail: null,
-        couponRadio: "-1",
+        couponRadio: "",
+        selectedRadio: "",
         couponImg: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_coupon.png',
       }
     },
@@ -103,19 +106,43 @@
     },
 
     methods: {
-      couponSelectToggle(index) {
-        this.$log("couponSelectToggle Enter")
+      onRadioBtnClick(coupon) {
+        this.$log("onRadioBtnClick Enter")
+        this.$log(this.couponRadio)
+        if (this.selectedRadio != this.couponRadio) {
+          this.selectedRadio = this.couponRadio
+        } else {
+          this.couponRadio = ""
+          this.selectedRadio = ""
+        }
 
       },
+
+      couponItemClick(coupon) {
+        this.$log("couponItemClick Enter")
+        if (this.selectedRadio.length > 0) {
+          if (this.couponRadio === this.selectedRadio) {
+            this.couponRadio = ""
+            this.selectedRadio = "";
+          } else {
+            this.couponRadio = coupon.rules.code
+            this.selectedRadio = this.couponRadio;
+          }
+        } else {
+            this.couponRadio = coupon.rules.code
+            this.selectedRadio = this.couponRadio;
+        }
+      },
+
       gotoCouponDetail(coupon) {
         this.$log("gotoCouponDetail Enter")
         this.$log(coupon)
       },
+
       onBuyBtnClick() {
         this.$log("onBuyBtnClick Enter")
         this.$log(this.cardDetail)
         this.$log(this.couponRadio)
-
       },
 
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
