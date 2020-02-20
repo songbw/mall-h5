@@ -23,6 +23,7 @@ const CouponCenter = resolve => require(['@/components/user/couponCenter.vue'], 
 const CouponList = resolve => require(['@/components/user/couponList.vue'], resolve)
 const UserInfo = resolve => require(['@/components/user/userInfo.vue'], resolve)
 const BillOfLadingCard = resolve => require(['@/components/user/billOfLadingCard.vue'], resolve)
+const BillOfLadingList = resolve => require(['@/components/user/billOfLadingList.vue'], resolve)
 const CouponChange = resolve => require(['@/components/user/couponChange.vue'], resolve)
 const CouponListActivity = resolve => require(['@/components/user/couponListActivity.vue'], resolve)
 const CouponWouldCollect = resolve => require(['@/components/user/couponWouldCollect.vue'], resolve)
@@ -410,6 +411,14 @@ export default new VueRouter({
       component: BillOfLadingCard,
       meta: {
         title: '提货券',
+      }
+    },
+    {
+      path: '/user/billofladingList',
+      name: '提货券列表页',
+      component: BillOfLadingList,
+      meta: {
+        title: '我的提货券',
       }
     },
   ]
