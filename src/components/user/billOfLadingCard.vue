@@ -26,7 +26,7 @@
             <div v-if="cardDetail.coupons.length > 0">
               <van-radio-group v-model="couponRadio">
                 <div v-for="(item, index) in cardDetail.coupons">
-                  <van-cell clickable :key="index">
+                  <van-cell clickable :key="index" @click="couponSelectToggle(index)">
                     <div slot="default" class="couponBox">
                       <van-col span="8" class="couponImage">
                         <img v-lazy="item.imageUrl.length?item.imageUrl: couponImg">
@@ -37,7 +37,7 @@
                             style="margin-right: -7px">￥</span>
                           {{formateCouponPrice(item.rules.couponRules)}}
                           <span>{{formateCouponDetail(item.rules.couponRules)}}</span>
-                          <span style="float:right;color:#4CAF50" v-if="item.rules.couponRules.type == 4">查看详情 > </span>
+                          <span style="float:right;color:#4CAF50" v-if="item.rules.couponRules.type == 4" @click="gotoCouponDetail(item)">查看详情 > </span>
                         </div>
                         <div class="coupon-desc">{{formateCouponDescription(item)}}</div>
                         <div class="coupon-expire-date">
@@ -53,8 +53,8 @@
               </van-radio-group>
             </div>
           </div>
-          <div>
-            <van-button size="large" type="primary" @click="onBuyBtnClick(cardDetail.card)">去下单
+          <div style="margin-top:10px">
+            <van-button size="large" type="primary" @click="onBuyBtnClick">下单提货
             </van-button>
           </div>
         </div>
@@ -103,6 +103,21 @@
     },
 
     methods: {
+      couponSelectToggle(index) {
+        this.$log("couponSelectToggle Enter")
+
+      },
+      gotoCouponDetail(coupon) {
+        this.$log("gotoCouponDetail Enter")
+        this.$log(coupon)
+      },
+      onBuyBtnClick() {
+        this.$log("onBuyBtnClick Enter")
+        this.$log(this.cardDetail)
+        this.$log(this.couponRadio)
+
+      },
+
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
         return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format(
           'YYYY.MM.DD');
