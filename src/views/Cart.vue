@@ -333,8 +333,6 @@
           if (item.merchantId == 2) {
             inventorySkus.push({"skuId": item.mpu, "remainNum": item.count, "price": item.price})
           } else if (item.merchantId == 4) {
-            this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-            this.$log(item)
             let purchaseQty = 1;
             if(item.starSku != undefined) {
               purchaseQty = item.starSku.purchaseQty
