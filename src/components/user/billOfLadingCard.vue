@@ -50,9 +50,9 @@
                         </div>
                       </van-col>
                     </div>
-                    <div slot="right-icon" class="couponBoxCheckBox">
-                      <van-radio :name="item.rules.code" @click="onRadioBtnClick(item)" @click.stop=""
-                        checked-color="#4CAF50" ref="couponBoxsCheckboxes" />
+                    <div slot="right-icon" class="couponBoxCheckBox" v-if="item.status == 3">
+                      <van-radio :name="item.id" @click="onRadioBtnClick(item)" @click.stop="" checked-color="#4CAF50"
+                        ref="couponBoxsCheckboxes" />
                     </div>
                   </van-cell>
                 </div>
@@ -116,24 +116,24 @@
         if (this.selectedRadio != this.couponRadio) {
           this.selectedRadio = this.couponRadio
         } else {
-          this.couponRadio = ""
-          this.selectedRadio = ""
+          this.couponRadio = -1
+          this.selectedRadio = -1
         }
 
       },
 
       couponItemClick(coupon) {
         this.$log("couponItemClick Enter")
-        if (this.selectedRadio.length > 0) {
+        if (this.selectedRadio > 0) {
           if (this.couponRadio === this.selectedRadio) {
-            this.couponRadio = ""
-            this.selectedRadio = "";
+            this.couponRadio = -1
+            this.selectedRadio = -1;
           } else {
-            this.couponRadio = coupon.rules.code
+            this.couponRadio = coupon.id
             this.selectedRadio = this.couponRadio;
           }
         } else {
-          this.couponRadio = coupon.rules.code
+          this.couponRadio = coupon.id
           this.selectedRadio = this.couponRadio;
         }
       },
@@ -145,20 +145,44 @@
 
       async onBuyBtnClick() {
         this.$log("onBuyBtnClick Enter")
-        this.$log(this.cardDetail)
-        this.$log(this.couponRadio)
+        let that = this
         if (this.cardDetail == null)
           return
-        if(this.couponRadio.length == 0) {
-           this.$toast("请选择提货礼包")
-           return
+        if(this.cardDetail.status != 3 || this.cardDetail.status != 4)
+          return
+        if (this.cardDetail.status === 3) {
+          if (this.couponRadio.length == 0) {
+            this.$toast("请选择提货礼包")
+            return
+          }
         }
         try {
-          //兑换券
-          let response = this.changeToCoupon(this.cardDetail.card, this.couponRadio)
+          //兑换
+          this.$log(this.cardDetail)
+          this.$log(this.couponRadio)
+          let coupon = null
+          if (this.cardDetail.status == 3) {
+            let response = await this.changeToCoupon(this.cardDetail.card, this.couponRadio)
+            this.$log(response)
+            if (response.data.code == 200) {
+            
+            } else {
+              this.$toast(respone.data.msg)
+            }
+          } else {
+            coupon = {
+              id: this.cardDetail,
+              userCouponCode:this.cardDetail.userCouponCode,
+
+            }
+            coupon = thid.cardDetail.coupons[0]
+          }
+          
+
 
         } catch (e) {
-
+          that.$log(e.response.data.message)
+          that.$toast("下单提货失败, 原因:" + e.response.data.message)
         }
       },
 
@@ -239,7 +263,7 @@
       },
 
       changeToCoupon(card, couponId) {
-        this.$log("getCardInfo Enter:" + userId)
+        this.$log("getCardInfo Enter:")
         return this.$api.xapi({
           method: 'post',
           baseURL: this.$api.EQUITY_BASE_URL,
