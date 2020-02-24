@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="main">
-    <div class="noneInfo" v-if="Loading">
+    <div class="noneInfo" v-if="loading">
       <v-loading></v-loading>
     </div>
     <div v-else class="listBody">
@@ -45,7 +45,7 @@
 
         }
       }
-      this.Loading = false
+      this.loading = false
 
     },
 

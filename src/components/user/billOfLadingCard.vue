@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="main">
-    <div class="noneInfo" v-if="Loading">
+    <div class="noneInfo" v-if="loading">
       <v-loading></v-loading>
     </div>
     <div v-else class="cardBody">
@@ -106,7 +106,7 @@
           } catch (e) {}
         }
       }
-      this.Loading = false
+      this.loading = false
     },
 
     methods: {
@@ -141,6 +141,12 @@
       gotoCouponDetail(coupon) {
         this.$log("gotoCouponDetail Enter")
         this.$log(coupon)
+        this.$router.push({
+          path: "/user/billofladingGoods",
+          query: {
+            id: coupon.id
+          }
+        });
       },
 
       async onBuyBtnClick() {
@@ -148,7 +154,7 @@
         let that = this
         if (this.cardDetail == null)
           return
-        if(this.cardDetail.status != 3 || this.cardDetail.status != 4)
+        if (this.cardDetail.status != 3 || this.cardDetail.status != 4)
           return
         if (this.cardDetail.status === 3) {
           if (this.couponRadio.length == 0) {
@@ -165,19 +171,19 @@
             let response = await this.changeToCoupon(this.cardDetail.card, this.couponRadio)
             this.$log(response)
             if (response.data.code == 200) {
-            
+
             } else {
               this.$toast(respone.data.msg)
             }
           } else {
             coupon = {
               id: this.cardDetail,
-              userCouponCode:this.cardDetail.userCouponCode,
+              userCouponCode: this.cardDetail.userCouponCode,
 
             }
             coupon = thid.cardDetail.coupons[0]
           }
-          
+
 
 
         } catch (e) {
