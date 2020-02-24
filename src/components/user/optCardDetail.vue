@@ -177,10 +177,6 @@
           border-top-right-radius: .3rem;
           border-bottom-right-radius: .3rem;
           overflow: hidden;
-          .detailInfo {
-
-
-          }
           .detailDate{
              color: #8c8c8c;
              .fz(font-size,25)
