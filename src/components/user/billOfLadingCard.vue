@@ -110,6 +110,20 @@
     },
 
     methods: {
+      getGoodsList(couponId) {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.EQUITY_BASE_URL,
+          url: '/coupon/skuById',
+          params: {
+            id: couponId,
+            limit: 10,
+            offset: 1
+          }
+        })
+
+      },
+
       onRadioBtnClick(coupon) {
         this.$log("onRadioBtnClick Enter")
         this.$log(this.couponRadio)
@@ -152,10 +166,14 @@
       async onBuyBtnClick() {
         this.$log("onBuyBtnClick Enter")
         let that = this
-        if (this.cardDetail == null)
+        this.$log(this.cardDetail)
+        if (this.cardDetail == null) {
           return
-        if (this.cardDetail.status != 3 || this.cardDetail.status != 4)
+        }
+        if (this.cardDetail.status != 3 && this.cardDetail.status != 4) {
           return
+        }
+
         if (this.cardDetail.status === 3) {
           if (this.couponRadio.length == 0) {
             this.$toast("请选择提货礼包")
@@ -179,16 +197,29 @@
             coupon = {
               id: this.cardDetail,
               userCouponCode: this.cardDetail.userCouponCode,
-
+              couponInfo: this.cardDetail.coupons[0]
             }
-            coupon = thid.cardDetail.coupons[0]
+          }
+          this.$log(coupon)
+          let response = await this.getGoodsList(coupon.couponInfo.id) 
+          this.$log(response) 
+          if(response.data.code === 200) {
+            let goodsList = response.data.data.result.couponSkus.list
+            //开始下单
+            let pickupProdInfo = {
+              list: goodsList,
+              coupon: coupon
+            }
+            this.$store.commit('SET_PICKUP_PRODUCTS_INFO', pickupProdInfo);
+            this.$log(pickupProdInfo)
+            this.$router.push({path: '/car/pay/pickupGoods'})
           }
 
 
 
         } catch (e) {
-          that.$log(e.response.data.message)
-          that.$toast("下单提货失败, 原因:" + e.response.data.message)
+          that.$log(e)
+          that.$toast("下单提货失败")
         }
       },
 
