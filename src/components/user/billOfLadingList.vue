@@ -4,27 +4,31 @@
       <v-loading></v-loading>
     </div>
     <div v-else class="listBody">
-      <div v-for="(k,index) in unUsedList" :key="index" v-if="cardList.length > 0">
-        <div class="card">
-          <div class="header">
-            <div class="title">
-              <span>{{k.cardInfo.name}}</span>
-            </div>
-            <div class="price">
-              <p><span>￥</span>{{k.cardInfo.amount}}</p>
-            </div>
-            <div class="Number">
-              <span></span>{{k.card}}</span>
-            </div>
-            <div class="validDate">
-              <span>截至日期: {{formatTime(k.endTime)}}</span>
+      <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeabl>
+        <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
+          <div v-for="(k,index) in currentCardList" :key="index" v-if="currentCardList.length > 0">
+            <div class="card">
+              <div class="header">
+                <div class="title">
+                  <span>{{k.cardInfo.name}}</span>
+                </div>
+                <div class="price">
+                  <p><span>￥</span>{{k.cardInfo.amount}}</p>
+                </div>
+                <div class="Number">
+                  <span></span>{{k.card}}</span>
+                </div>
+                <div class="validDate">
+                  <span>截至日期: {{formatTime(k.endTime)}}</span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div v-else>
+          <div v-else>
+          </div>
+        </van-tab>
+      </van-tabs>
 
-      </div>
     </div>
   </section>
 </template>
@@ -39,21 +43,40 @@
       'v-loading': Loading
     },
 
-    
+
     computed: {
+      currentCardList() {
+        if (this.cardList.length > 0) {
+          switch (this.active) {
+            case 0:
+              return this.cardList.filter((item) => {
+                return item.status < 6
+              })
+            case 1:
+              return this.cardList.filter((item) => {
+                return item.status == 6
+              })
+            case 2:
+              return this.cardList.filter((item) => {
+                return item.status == 7
+              })
+          }
+        } else {
+          return []
+        }
+      },
+
       unUsedList() {
-        if(this.cardList.length > 0) {
-          return this.cardList.filter((item) =>{
-            return item.status < 6
-          })
+        if (this.cardList.length > 0) {
+
         } else {
           return []
         }
       },
 
       usedList() {
-        if(this.cardList.length > 0) {
-          return this.cardList.filter((item) =>{
+        if (this.cardList.length > 0) {
+          return this.cardList.filter((item) => {
             return item.status == 6
           })
         } else {
@@ -62,8 +85,8 @@
       },
 
       expiredList() {
-        if(this.cardList.length > 0) {
-          return this.cardList.filter((item) =>{
+        if (this.cardList.length > 0) {
+          return this.cardList.filter((item) => {
             return item.status == 7
           })
         } else {
@@ -77,7 +100,19 @@
     data() {
       return {
         loading: true,
-        cardList: []
+        cardList: [],
+        active: 0,
+        swipeThreshold: 5,
+        couponTypes: [{
+            "title": "未使用",
+          },
+          {
+            "title": "已使用",
+          },
+          {
+            "title": "已过期",
+          },
+        ],
       }
     },
 
