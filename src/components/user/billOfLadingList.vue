@@ -4,13 +4,15 @@
       <v-loading></v-loading>
     </div>
     <div v-else class="listBody">
-      <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeabl>
+      <van-tabs v-model="active" sticky :swipe-threshold=swipeThreshold swipeabl>
         <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
           <div v-for="(k,index) in currentCardList" :key="index" v-if="currentCardList.length > 0">
             <div class="card">
               <div class="header">
                 <div class="title">
                   <span>{{k.cardInfo.name}}</span>
+                  <van-icon style="float: right" name="delete" @click="onDeleteCardBtnClick(k,index)"></van-icon>
+                  </van-button>
                 </div>
                 <div class="price">
                   <p><span>￥</span>{{k.cardInfo.amount}}</p>
@@ -18,9 +20,14 @@
                 <div class="Number">
                   <span></span>{{k.card}}</span>
                 </div>
-                <div class="validDate">
-                  <span>截至日期: {{formatTime(k.endTime)}}</span>
+                <div class="footer">
+                  <span>{{getCardStatusDesc(k.status)}}</span>
+                  <span style="float: right">截至日期: {{formatTime(k.endTime)}}</span>
                 </div>
+              </div>
+              <div class="container" v-if="active == 0">
+                <van-button size="large" type="primary" @click="onUseBtnClick(k)">立即使用
+                </van-button>
               </div>
             </div>
           </div>
@@ -65,36 +72,6 @@
           return []
         }
       },
-
-      unUsedList() {
-        if (this.cardList.length > 0) {
-
-        } else {
-          return []
-        }
-      },
-
-      usedList() {
-        if (this.cardList.length > 0) {
-          return this.cardList.filter((item) => {
-            return item.status == 6
-          })
-        } else {
-          return []
-        }
-      },
-
-      expiredList() {
-        if (this.cardList.length > 0) {
-          return this.cardList.filter((item) => {
-            return item.status == 7
-          })
-        } else {
-          return []
-        }
-      },
-
-
     },
 
     data() {
@@ -134,6 +111,50 @@
     },
 
     methods: {
+      getCardStatusDesc(status) {
+        switch (status) {
+          case 1:
+            return "状态: 已创建";
+          case 2:
+            return "状态: 已激活";
+          case 3:
+            return "状态: 已绑定";
+          case 4:
+            return "状态: 已兑换";
+          case 5:
+            return "状态: 已占用 ";
+          case 6:
+            return "状态: 已使用";
+          case 7:
+            return "状态: 已过期";
+        }
+      },
+      onDeleteCardBtnClick(k, index) {
+        this.$log("onDeleteCardBtnClick Enter")
+        let that = this
+        that.$api.xapi({
+          method: 'delete',
+          baseURL: this.$api.QUICKLY_PAY_URL,
+          url: '/accounts/account/' + k.id,
+        }).then((response) => {
+          if (response.data.code == 200) {
+            this.cardList.splice(index, 1);
+          }
+        }).catch(function (error) {
+          that.$log(error)
+        })
+
+      },
+      onUseBtnClick(k) {
+        this.$log("onUseBtnClick Enter")
+        this.$log(k)
+        this.$router.push({
+          path: "/user/billoflading",
+          query: {
+            id: k.card
+          }
+        });
+      },
       formatTime(timeString) {
         if (timeString == null)
           return null
@@ -176,12 +197,12 @@
       }
 
       .header {
-        background-color: #4CAF50;
-        color: white;
+        background-color: white;
+        color: black;
         padding: 10px;
 
         .title {
-          text-align: center;
+          width: 100%;
           .fz(font-size, 40)
         }
 
@@ -203,83 +224,27 @@
 
         }
 
-        .validDate {
-          text-align: right;
+        .footer {
+          width: 100%;
           .fz(font-size, 24)
         }
+
+
       }
 
       .container {
-        padding: 10px;
-        background-color: #f8f8f8;
+        background-color: #4CAF50;
+      }
+    }
 
-        .couponListCheckBox {
-          .van-cell {
-            margin-top: -1px;
-            background: white;
-            border-radius: 5px;
-          }
+    .van-button {
+      background: rgb(36, 138, 49);
+      border: none;
 
-          .couponBox {
-            height: 100px;
-            margin: 2px 10px 2px 0px;
-            display: flex;
-            line-height: 30px;
-            color: #333333;
-            font-size: large;
-
-            .couponImage {
-              height: 100%;
-              text-align: center;
-
-              img {
-                width: 100%;
-                height: 100%;
-              }
-            }
-
-            .couponInfo {
-              height: 100%;
-              margin: 5px;
-              color: black;
-
-              .coupon-desc {
-                margin-left: 3px;
-                .fz(font-size, 22);
-              }
-
-              .coupon-price {
-                margin-left: 2px;
-                .fz(font-size, 30);
-                font-weight: bold;
-                color: black;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                display: -webkit-box;
-                -webkit-box-orient: vertical;
-                -webkit-line-clamp: 1;
-                word-break: break-all;
-              }
-
-              .coupon-price>span {
-                font-weight: normal;
-              }
-
-              .coupon-expire-date {
-                margin-left: 5px;
-                .fz(font-size, 22);
-              }
-
-            }
-          }
-
-          .couponBoxCheckBox {
-            height: 100px;
-            align-items: center;
-            display: flex;
-          }
-        }
-
+      &--large {
+        width: 100%;
+        height: 40px;
+        line-height: 40px;
       }
     }
 

@@ -173,7 +173,7 @@
           case 4:
             return "提货券状态:已兑换";
           case 5:
-            return "提货券状态: ";
+            return "提货券状态:已占用";
           case 6:
             return "提货券状态:已使用";
           case 7:
