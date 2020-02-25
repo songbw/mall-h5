@@ -65,7 +65,6 @@
           </div>
         </div>
       </div>
-
     </div>
   </section>
 </template>
@@ -174,7 +173,7 @@
           case 4:
             return "提货券状态:已兑换";
           case 5:
-            return "提货券状态:已占用";
+            return "提货券状态: ";
           case 6:
             return "提货券状态:已使用";
           case 7:
@@ -421,7 +420,6 @@
     .cardBody {
       .card {
         margin: 10px;
-        min-height: 200px;
         box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); //设置两层阴影
       }
 
