@@ -194,14 +194,12 @@
         if (this.cardDetail == null) {
           return
         }
-        if (this.cardDetail.status != 3 && this.cardDetail.status != 4 && this.cardDetail.status != 5 && this
-          .cardDetail.status != 6) {
-            if(this.cardDetail.status < 3){
-              this.$toast("提货券未兑换，请联系客服")
-            } else {
-              this.$toast(getCardStatusDesc(this.cardDetail.status))
-            }
-          
+        if (this.cardDetail.status != 3 && this.cardDetail.status != 4) {
+          if (this.cardDetail.status < 3) {
+            this.$toast("提货券未兑换，请联系客服")
+          } else {
+            this.$toast(this.getCardStatusDesc(this.cardDetail.status))
+          }
           return
         }
 
