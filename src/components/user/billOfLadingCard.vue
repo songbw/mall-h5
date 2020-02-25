@@ -163,16 +163,49 @@
         });
       },
 
+      getCardStatusDesc(status) {
+        switch (status) {
+          case 1:
+            return "提货券状态:已创建";
+          case 2:
+            return "提货券状态:已激活";
+          case 3:
+            return "提货券状态:已绑定";
+          case 4:
+            return "提货券状态:已兑换";
+          case 5:
+            return "提货券状态:已占用";
+          case 6:
+            return "提货券状态:已使用";
+          case 7:
+            return "提货券状态:已过期";
+        }
+      },
+
       async onBuyBtnClick() {
         this.$log("onBuyBtnClick Enter")
         let that = this
         this.$log(this.cardDetail)
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (Util.isUserEmpty(userInfo)) {
+          this.$toast("没有用户信息，请先登录再下单")
+          return
+        }
         if (this.cardDetail == null) {
           return
         }
-        if (this.cardDetail.status != 3 && this.cardDetail.status != 4) {
+        if (this.cardDetail.status != 3 && this.cardDetail.status != 4 && this.cardDetail.status != 5 && this
+          .cardDetail.status != 6) {
+            if(this.cardDetail.status < 3){
+              this.$toast("提货券未兑换，请联系客服")
+            } else {
+              this.$toast(getCardStatusDesc(this.cardDetail.status))
+            }
+          
           return
         }
+
+        let user = JSON.parse(userInfo)
 
         if (this.cardDetail.status === 3) {
           if (this.couponRadio.length == 0) {
@@ -195,24 +228,69 @@
             }
           } else {
             coupon = {
-              id: this.cardDetail,
-              userCouponCode: this.cardDetail.userCouponCode,
+              id: this.cardDetail.coupons[0].couponUseInfo[0].id,
+              userCouponCode: this.cardDetail.coupons[0].couponUseInfo[0].userCouponCode,
               couponInfo: this.cardDetail.coupons[0]
             }
           }
           this.$log(coupon)
-          let response = await this.getGoodsList(coupon.couponInfo.id) 
-          this.$log(response) 
-          if(response.data.code === 200) {
+          let response = await this.getGoodsList(coupon.couponInfo.id)
+          this.$log(response)
+          if (response.data.code === 200) {
             let goodsList = response.data.data.result.couponSkus.list
             //开始下单
+            let list = []
+            goodsList.forEach(goods => {
+              let skuId = goods.skuId
+              if (skuId === undefined || skuId === null) {
+                skuId = goods.skuid
+              }
+              let baseInfo = {
+                "userId": user.userId,
+                "skuId": skuId,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "count": 1,
+                "choosed": true,
+                "cartId": -1,
+              }
+              let goodsInfo = {
+                "id": goods.id,
+                "skuId": skuId,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "image": goods.image,
+                "category": goods.category,
+                "name": goods.name,
+                "brand": goods.brand,
+                "model": goods.model,
+                "price": goods.price,
+                "checkedPrice": goods.price,
+                "type": goods.type == undefined ? 0 : goods.type
+              }
+              let couponList = []
+              let promotionInfo = {
+                "promotion": [],
+                "promotionState": Util.getPromotionState(this, goods)
+              }
+              let product = {
+                "baseInfo": baseInfo,
+                "goodsInfo": goodsInfo,
+                "couponList": couponList,
+                "promotionInfo": promotionInfo,
+              }
+              list.push(product)
+            })
+            this.$log(list)
             let pickupProdInfo = {
-              list: goodsList,
+              list: list,
               coupon: coupon
             }
             this.$store.commit('SET_PICKUP_PRODUCTS_INFO', pickupProdInfo);
             this.$log(pickupProdInfo)
-            this.$router.push({path: '/car/pay/pickupGoods'})
+            this.$router.push({
+              path: '/car/pay/pickupGoods'
+            })
           }
 
 
