@@ -251,8 +251,6 @@
            font-weight: bold;
            margin: 10px 0px;
         }
-        .workerOrderDetailBox {
-        }
 
         .noContext {
           width: 100%;

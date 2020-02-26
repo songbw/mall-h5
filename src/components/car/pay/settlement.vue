@@ -728,6 +728,50 @@
     },
 
     methods: {
+      wkycPay() {
+        let that = this
+        let tradeOrderNo = 'tral' + Date.now() + Math.floor(Math.random() * 100000),
+          let payLoad = JSON.stringify({
+            merchantNo: 'MCH100001',
+            amount: 0.01,
+            tradeOrderNo: tradeOrderNo,
+            notifyUrl: 'https://testwkyc.weesharing.com/payment/cb',
+            expireTimeMinute: 20,
+            goodsDesc: '马拉松报名费用'
+          });
+        that.$log(payLoad); // 调试使用代码
+
+        if (/iphone|ipad/.test(navigator.userAgent.toLowerCase())) {
+          let temp;
+          window.payOrder = function () {}
+          window.webkit.messageHandlers.payOrder.postMessage(payLoad)
+        } else {
+          window.ycapp.payOrder(payLoad);
+        }
+
+        // 调用支付后的回调方法，只需要定义到window对象下，app会自动回调此方法
+        window.payResult = function (res) {
+          // 请注意此处返回的数据为json字符串，返回结果见下方内容
+          let response = JSON.parse(res)
+          that.$log(response);
+          if (response.code == '0') {
+            if (response.data.payStatus == 0) { //"具体的支付状态：0（成功）,-1（失败），-2（取消）",
+              /*               that.$router.replace({
+                              path: '/pay/cashering',
+                              query: {
+                                outer_trade_no: tradeOrderNo
+                              }
+                            }) */
+            } else {
+              /*               that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                            that.$router.replace({
+                              path: '/car/orderList'
+                            }) */
+            }
+          }
+
+        }
+      },
       async onCountChange(goods) {
         this.$log("onCountChange Enter")
         if (this.pageAction == 'direct') {
@@ -1536,6 +1580,7 @@
                 pAnOrderInfo['outTradeNo'] = outTradeNo
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                 if (this.$api.APP_ID == '14') {
+                  this.wkycPay()
                 } else {
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
                   this.$router.replace({
