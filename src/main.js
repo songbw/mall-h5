@@ -54,9 +54,9 @@ import {
   CollapseItem
 } from 'vant';
 
-/*if (process.env.NODE_ENV === 'production') {
+/* if (process.env.NODE_ENV === 'production') {
   new VConsole()
-}*/
+} */
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)

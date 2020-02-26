@@ -583,6 +583,8 @@
          // openId = "o_sjNjk5EQVlNuo3G2KoWfCKgR0A"
         } else if (this.$api.APP_ID == '12') {
           openId = "5c8314363cea49de925bfaa39d4c4ebb"//最珠海
+        } else if (this.$api.APP_ID == '14') {
+          openId = "979f478e2e4ef02b740e7f83e39f373d" //万科云城
         }
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
