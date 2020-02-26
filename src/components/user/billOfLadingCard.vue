@@ -32,12 +32,15 @@
                         <img v-lazy="item.imageUrl.length?item.imageUrl: couponImg">
                       </van-col>
                       <van-col span="16" class="couponInfo">
+<!--                         <span
+                          v-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
+                          style="margin-right: -7px">￥</span>
+                        {{formateCouponPrice(item.rules.couponRules)}}
+                        <span>{{formateCouponDetail(item.rules.couponRules)}}</span> -->
                         <div class="coupon-price">
                           <span
                             v-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
-                            style="margin-right: -7px">￥</span>
-                          {{formateCouponPrice(item.rules.couponRules)}}
-                          <span>{{formateCouponDetail(item.rules.couponRules)}}</span>
+                            style="margin-right: -7px">{{formateCouponDetail(item.rules.couponRules)}}</span>
                         </div>
                         <div class="coupon-desc">
                           <span>{{formateCouponDescription(item)}}</span>

@@ -23,9 +23,6 @@
                     <p><span>￥</span>{{k.dprice}}</p>
                   </div>
                 </div>
-                <div class="goodsBuyBox">
-                  <van-button size="mini" @click.stop="" @click="onBuyBtnClick(k)"></van-button>
-                </div>
               </div>
             </van-col>
           </div>
@@ -57,16 +54,20 @@
       let that = this
       this.$log("created Enter")
       try {
-        let repsonse = await this.getGoodsList(644)
-        this.$log(repsonse)
-        if (repsonse.data.code == 200) {
-          this.goodsList = repsonse.data.data.result.couponSkus.list
-          this.$log(this.goodsList)
-          this.goodsList.forEach(item => {
-            item['promotionState'] = Util.getPromotionState(this, item)
-            item['dprice'] = Util.getDisplayPrice(this, item.price, item)
-          })
+        let id = this.$route.query.id;
+        if (id != undefined) {
+          let repsonse = await this.getGoodsList(id)
+          this.$log(repsonse)
+          if (repsonse.data.code == 200) {
+            this.goodsList = repsonse.data.data.result.couponSkus.list
+            this.$log(this.goodsList)
+            this.goodsList.forEach(item => {
+              item['promotionState'] = Util.getPromotionState(this, item)
+              item['dprice'] = Util.getDisplayPrice(this, item.price, item)
+            })
+          }
         }
+
       } catch (e) {
         that.$log(e.repsonse)
       }

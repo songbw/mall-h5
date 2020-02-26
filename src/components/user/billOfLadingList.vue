@@ -132,21 +132,24 @@
       onDeleteCardBtnClick(k, index) {
         this.$log("onDeleteCardBtnClick Enter")
         let that = this
-        that.$api.xapi({
-          method: 'delete',
-          baseURL: this.$api.EQUITY_BASE_URL,
-          url: '/card/delete',
-          params:{
-            id: k.id
-          }
-        }).then((response) => {
-          if (response.data.code == 200) {
-            this.cardList.splice(index, 1);
-          }
-        }).catch(function (error) {
-          that.$log(error)
-        })
-
+        this.$dialog.confirm({
+          message: '确定删除该提货券?'
+        }).then(() => {
+          that.$api.xapi({
+            method: 'delete',
+            baseURL: this.$api.EQUITY_BASE_URL,
+            url: '/card/delete',
+            params: {
+              id: k.id
+            }
+          }).then((response) => {
+            if (response.data.code == 200) {
+              this.cardList.splice(index, 1);
+            }
+          }).catch(function (error) {
+            that.$log(error)
+          })
+        }).catch(() => {});
       },
       onUseBtnClick(k) {
         this.$log("onUseBtnClick Enter")
