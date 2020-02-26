@@ -50,7 +50,7 @@
                         </div>
                       </van-col>
                     </div>
-                    <div slot="right-icon" class="couponBoxCheckBox" v-if="item.status == 3">
+                    <div slot="right-icon" class="couponBoxCheckBox" v-if="cardDetail.status == 3">
                       <van-radio :name="item.id" @click="onRadioBtnClick(item)" @click.stop="" checked-color="#4CAF50"
                         ref="couponBoxsCheckboxes" />
                     </div>
@@ -219,6 +219,21 @@
             let response = await this.changeToCoupon(this.cardDetail.card, this.couponRadio)
             this.$log(response)
             if (response.data.code == 200) {
+              let couponInfo = null
+              let found = -1;
+              for (let i = 0; i < this.cardDetail.coupons.length; i++) {
+                if (this.cardDetail.coupons[i].id === response.data.data.result.couponId) {
+                  found = i;
+                  break;
+                }
+              }
+              if (found != -1) {
+                coupon = {
+                  id: response.data.data.result.id,
+                  userCouponCode: response.data.data.result.userCouponCode,
+                  couponInfo: this.cardDetail.coupons[found]
+                }
+              }
 
             } else {
               this.$toast(respone.data.msg)

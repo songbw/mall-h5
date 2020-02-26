@@ -26,7 +26,7 @@
                 </div>
               </div>
               <div class="container" v-if="active == 0">
-                <van-button size="large" type="primary" @click="onUseBtnClick(k)">立即使用
+                <van-button size="large" :disabled="k.status == 5" type="primary" @click="onUseBtnClick(k)">立即使用
                 </van-button>
               </div>
             </div>
@@ -134,8 +134,11 @@
         let that = this
         that.$api.xapi({
           method: 'delete',
-          baseURL: this.$api.QUICKLY_PAY_URL,
-          url: '/accounts/account/' + k.id,
+          baseURL: this.$api.EQUITY_BASE_URL,
+          url: '/card/delete',
+          params:{
+            id: k.id
+          }
         }).then((response) => {
           if (response.data.code == 200) {
             this.cardList.splice(index, 1);
