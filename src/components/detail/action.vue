@@ -31,6 +31,8 @@
         :custom-sku-validator="customSkuValidator"
         @buy-clicked="onBuyClicked"
         @add-cart="onAddCartClicked"
+        @stepper-change="onStepperChanged"
+        @sku-selected="onSkuSelectedChanged"
       >
 <!--        &lt;!&ndash; 自定义 sku-header-price &ndash;&gt;
         <template slot="sku-header-price" slot-scope="props">
@@ -190,7 +192,8 @@
                 s4: '0',
                 s5: '0',
                 stock_num: sku.stock_num,
-                goods_id: this.datas.mpu
+                goods_id: this.datas.mpu,
+                purchaseQty: sku.purchaseQty
               }
               sku.propertyList.forEach(property => {
                 for (let i = 0; i < tree.length; i++) {
@@ -235,7 +238,7 @@
                 s3: list[0].s3,
                 s4: list[0].s4,
                 s5: list[0].s5,
-                selectedNum: 1 //下面的数字选择框的数字即买了多少件
+                selectedNum: list[0].purchaseQty //下面的数字选择框的数字即买了多少件
               }
               this.$log(this.initialSku)
             }
@@ -271,12 +274,27 @@
           },
         })
       },
+      
+      onStepperChanged(value) {
+        this.$log("onStepperChanged Enter:"+value)
+      },
+      
+      onSkuSelectedChanged(data)
+      {
+        this.$log("onSkuSelectedChanged Enter")
+        this.$log(data)
+      },
+      
       onBuyClicked(skuData) {
         this.$log("onBuyClicked Enter")
         this.$log(skuData)
         if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
           let stock_num = skuData.selectedSkuComb.stock_num
+          if(skuData.selectedSkuComb.purchaseQty > skuData.selectedNum) {
+             this.$toast("一次购买数量不能少于"+skuData.selectedSkuComb.purchaseQty+"件")
+             return
+          }
           if (stock_num > 0) {
             let selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
             let userInfo = this.$store.state.appconf.userInfo;

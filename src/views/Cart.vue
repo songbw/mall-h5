@@ -69,7 +69,7 @@
                     </div>
                     <div class="goodsInvalid" v-else>
                       <van-card
-                        desc="无货"
+                        :desc="k.invalidReason"
                         :price="k.goodsInfo.dprice"
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image"
@@ -125,23 +125,33 @@
          // this.$log(item)
           if (item.baseInfo.merchantId === 2) {
             item['valid'] = true;
+            item['invalidReason'] = "";
             for (let i = 0; i < this.inventoryListOfAoyi.length; i++) {
               if (this.inventoryListOfAoyi[i].state == 0 && this.inventoryListOfAoyi[i].skuId === item.baseInfo.skuId) {
                 item['valid'] = false;
+                item['invalidReason'] = "无货";
                 item.baseInfo.choosed = false;
                 break;
               }
             }
           } else if (item.baseInfo.merchantId === 4) {
             item['valid'] = true;
+            item['invalidReason'] = "";
             for (let i = 0; i < this.inventoryListOfYyt.length; i++) {
                 if(this.inventoryListOfYyt[i].mpu === item.baseInfo.mpu && this.inventoryListOfYyt[i].skuId === item.baseInfo.skuId) {
                   if(this.inventoryListOfYyt[i].state == 0) {
                     item['valid'] = false;
+                    item['invalidReason'] = "无货";
                     item.baseInfo.choosed = false;
                     break;
-                  } else if (this.inventoryListOfYyt[i].inventoryCount < this.inventoryListOfYyt[i].remainNum) {
+                  } else if (this.inventoryListOfYyt[i].inventoryCount < this.inventoryListOfYyt[i].remainNum ||
+                         this.inventoryListOfYyt[i].remainNum <  this.inventoryListOfYyt[i].purchaseQty) {
                     item['valid'] = false;
+                    if(this.inventoryListOfYyt[i].inventoryCount < this.inventoryListOfYyt[i].remainNum ) {
+                       item['invalidReason'] = "无货";
+                    } else {
+                       item['invalidReason'] = "一次购买不少于"+this.inventoryListOfYyt[i].purchaseQty+"件";
+                    }
                     item.baseInfo.choosed = false;
                     break;
                   }
@@ -149,9 +159,11 @@
             }
           } else {
             item['valid'] = true;
+            item['invalidReason'] = "";
             for (let i = 0; i < this.inventoryListOfZy.length; i++) {
               if (this.inventoryListOfZy[i].state == 0 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
                 item['valid'] = false;
+                item['invalidReason'] = "无货";
                 item.baseInfo.choosed = false;
                 break;
               }
@@ -321,7 +333,11 @@
           if (item.merchantId == 2) {
             inventorySkus.push({"skuId": item.mpu, "remainNum": item.count, "price": item.price})
           } else if (item.merchantId == 4) {
-            inventorySkusOfYyt.push({"mpu": item.mpu, "state":item.state, "skuId": item.skuId, "remainNum": item.count, "inventoryCount":0,"price": item.price})
+            let purchaseQty = 1;
+            if(item.starSku != undefined) {
+              purchaseQty = item.starSku.purchaseQty
+            }
+            inventorySkusOfYyt.push({"mpu": item.mpu, "state":item.state, "skuId": item.skuId, "remainNum": item.count, "inventoryCount":0,"purchaseQty":purchaseQty,"price": item.price})
           } else {
             inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})
           }
@@ -529,8 +545,12 @@
         let cartItem = Util.getCartItem(this, user.userId, item.mpu)
         this.$log(cartItem)
         let skuId = item.skuId
+        let purchaseQty = 1
         if (skuId === undefined || skuId === null) {
           skuId = item.skuid
+        }
+        if(item.starSku != undefined) {
+          purchaseQty = item.starSku.purchaseQty
         }
         if (cartItem == null) {
           let baseInfo = {
@@ -540,7 +560,8 @@
             "merchantId": item.merchantId,
             "count": item.count,
             "choosed": false,
-            "cartId": item.id
+            "cartId": item.id,
+            "purchaseQty": purchaseQty
           }
           let goodsInfo = {
             "id": item.id,
@@ -582,6 +603,7 @@
           cartItem.baseInfo.count = item.count
           cartItem.baseInfo.cartId = item.id
           cartItem.baseInfo.merchantId = item.merchantId
+          cartItem.baseInfo.purchaseQty = purchaseQty
           cartItem.goodsInfo.merchantId = item.merchantId
           cartItem.goodsInfo.price = item.price
           cartItem.goodsInfo.type = (item.type == undefined ? 0 : item.type)
