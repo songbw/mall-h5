@@ -730,15 +730,15 @@
     methods: {
       wkycPay() {
         let that = this
-        let tradeOrderNo = 'tral' + Date.now() + Math.floor(Math.random() * 100000),
-          let payLoad = JSON.stringify({
-            merchantNo: 'MCH100001',
-            amount: 0.01,
-            tradeOrderNo: tradeOrderNo,
-            notifyUrl: 'https://testwkyc.weesharing.com/payment/cb',
-            expireTimeMinute: 20,
-            goodsDesc: '马拉松报名费用'
-          });
+        let tradeOrderNo = 'tral' + Date.now() + Math.floor(Math.random() * 100000)
+        let payLoad = JSON.stringify({
+          merchantNo: 'MCH100001',
+          amount: 0.01,
+          tradeOrderNo: tradeOrderNo,
+          notifyUrl: 'https://testwkyc.weesharing.com/payment/cb',
+          expireTimeMinute: 20,
+          goodsDesc: '马拉松报名费用'
+        });
         that.$log(payLoad); // 调试使用代码
 
         if (/iphone|ipad/.test(navigator.userAgent.toLowerCase())) {
