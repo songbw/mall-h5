@@ -733,18 +733,21 @@
     },
 
     methods: {
-      wkycCasher(orderInfo) {
+      wkycCasher(user, orderInfo) {
+        this.$log("wkycCasher Enter")
         let that = this
         let payOptions = {
           appId: this.$api.APP_ID,
           orderNo: orderInfo.orderNo
         }
-        balancePay = {
+        let yunChengPay = {
           actPayFee: "" + orderInfo.orderAmount,
           openId: user.openId,
           orderNo: orderInfo.orderNo,
-          payType: "balance"
+          payType: "yuncheng",
+          goodsDesc: "万科云城惠民优选商品"
         }
+        payOptions['yunChengPay'] = yunChengPay;
         this.$api.xapi({
           method: 'post',
           baseURL: this.$api.AGGREGATE_PAY_URL,
@@ -752,23 +755,20 @@
           data: payOptions,
         }).then((response) => {
           this.$log(response)
+          if (response.data.code == 200) {
+            let params = response.data.data;
+            this.wkycPay(params,orderInfo)
+          } else {
+            that.$toast("请求支付失败")
+          }
 
         }).catch(function (error) {
           that.$toast("请求支付失败")
           // that.payBtnSubmitLoading = false;
         })
       },
-      wkycPay() {
+      wkycPay(payLoad,orderInfo) {
         let that = this
-        let tradeOrderNo = 'tral' + Date.now() + Math.floor(Math.random() * 100000)
-        let payLoad = JSON.stringify({
-          merchantNo: 'MCH100001',
-          amount: 0.01,
-          tradeOrderNo: tradeOrderNo,
-          notifyUrl: 'https://testwkyc.weesharing.com/payment/cb',
-          expireTimeMinute: 20,
-          goodsDesc: '马拉松报名费用'
-        });
         that.$log(payLoad); // 调试使用代码
 
         if (/iphone|ipad/.test(navigator.userAgent.toLowerCase())) {
@@ -784,22 +784,28 @@
           // 请注意此处返回的数据为json字符串，返回结果见下方内容
           let response = JSON.parse(res)
           that.$log(response);
+          that.$log(response.code)
+                that.$log(response.code)
           if (response.code == '0') {
             if (response.data.payStatus == 0) { //"具体的支付状态：0（成功）,-1（失败），-2（取消）",
-              /*               that.$router.replace({
-                              path: '/pay/cashering',
-                              query: {
-                                outer_trade_no: tradeOrderNo
-                              }
-                            }) */
+              that.$router.replace({
+                path: '/pay/cashering',
+                query: {
+                  outer_trade_no: orderInfo.orderNo
+                }
+              })
             } else {
-              /*               that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                            that.$router.replace({
-                              path: '/car/orderList'
-                            }) */
+              that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+              that.$router.replace({
+                path: '/car/orderList'
+              })
             }
+          } else {//取消
+              that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+              that.$router.replace({
+                path: '/car/orderList'
+              })
           }
-
         }
       },
       async onCountChange(goods) {
@@ -1634,7 +1640,7 @@
                 pAnOrderInfo['outTradeNo'] = outTradeNo
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                 if (this.$api.APP_ID == '14') {
-                  this.wkycCasher(pAnOrderInfo);
+                  this.wkycCasher(user, pAnOrderInfo);
                 } else {
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
                   this.$router.replace({
