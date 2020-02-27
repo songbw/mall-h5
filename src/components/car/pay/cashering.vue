@@ -6,7 +6,7 @@
     <div class="box"></div>
     <div class="casheringBox">
       <div class="casheringBoxCard">
-        <img :src="ico_clock"/>
+        <img :src="ico_clock" />
         <span>{{payInfoText}}</span>
         <van-button @click="onJumpOutBtnClick">直接跳出</van-button>
       </div>
@@ -28,7 +28,7 @@
         ico_clock: require('@/assets/icons/ico_clock.png'),
         timer: '',
         value: 0,
-        payInfoText:'确认完成后，页面将自动跳转...'
+        payInfoText: '确认完成后，页面将自动跳转...'
       }
     },
 
@@ -49,11 +49,13 @@
     methods: {
       onJumpOutBtnClick() {
         this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-        this.$router.replace({path: '/car/orderList'})
+        this.$router.replace({
+          path: '/car/orderList'
+        })
       },
       quertPaymentStatus() {
         let out_trade_no = this.payInfo.outer_trade_no
-        if(this.payInfo.method != undefined &&
+        if (this.payInfo.method != undefined &&
           this.payInfo.method == 'alipay.trade.wap.pay.return') {
           out_trade_no = this.payInfo.out_trade_no
         }
@@ -69,11 +71,11 @@
       },
       quertOrderStatus() {
         let out_trade_no = this.payInfo.outer_trade_no
-        if(this.payInfo.method != undefined &&
+        if (this.payInfo.method != undefined &&
           this.payInfo.method == 'alipay.trade.wap.pay.return') {
           out_trade_no = this.payInfo.out_trade_no
         }
-        return  this.$api.xapi({
+        return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.ORDER_BASE_URL,
           url: '/order/payment/status',
@@ -85,31 +87,39 @@
       async checkPaymentStatus() {
         this.value++;
         let that = this;
-        if(this.value < 50) {
-          try{
+        if (this.value < 50) {
+          try {
             let userInfo = this.$store.state.appconf.userInfo;
-            let orderStatusResp =  await  this.quertOrderStatus ()
+            let orderStatusResp = await this.quertOrderStatus()
             this.$log(orderStatusResp.data)
-            if(orderStatusResp.data.code == 200) {
+            if (orderStatusResp.data.code == 200) {
               let rt = orderStatusResp.data.data.result
-              if(rt === 'success') {
+              if (rt === 'success') {
                 this.payInfoText = "支付成功!"
-                this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                this.$router.replace({path: '/car/orderList'})
+                setTimeout(() => {
+                  this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0)
+                  this.$router.replace({
+                    path: '/car/orderList'
+                  })
+                }, 2000);
                 return;
               }
             }
             if (!this.$api.IS_GAT_APP) {
-              let paymentStatusResp =  await  this.quertPaymentStatus()
+              let paymentStatusResp = await this.quertPaymentStatus()
               this.$log(paymentStatusResp)
-              if(paymentStatusResp.data.code == 200) {
+              if (paymentStatusResp.data.code == 200) {
                 this.$log(paymentStatusResp.data.data)
                 let rt = paymentStatusResp.data.data
-                if(rt == 2) {
+                if (rt == 2) {
                   this.payInfoText = "订单确认失败!"
                   this.$toast("订单确认失败,已支付金额将原路返还!")
-                  this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                  this.$router.replace({path: '/car/orderList'})
+                  setTimeout(() => {
+                    this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0)
+                    this.$router.replace({
+                      path: '/car/orderList'
+                    })
+                  }, 2000);
                   return;
                 }
               }
@@ -117,20 +127,28 @@
           } catch (e) {
             that.$log(e)
             that.pageloading = false;
-           // this.payInfoText = "网络错误!"
-           // this.$toast(this.payInfoText)
-            this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0)
-            this.$router.replace({path: '/car/orderList'})
+            // this.payInfoText = "网络错误!"
+            // this.$toast(this.payInfoText)
+            setTimeout(() => {
+              this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0)
+              this.$router.replace({
+                path: '/car/orderList'
+              })
+            }, 2000);
+
           }
         } else {
           this.payInfoText = "支付超时"
           this.$toast(this.payInfoText)
           this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-          this.$router.replace({path: '/car/orderList'})
+          this.$router.replace({
+            path: '/car/orderList'
+          })
         }
       }
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -197,4 +215,5 @@
       }
     }
   }
+
 </style>

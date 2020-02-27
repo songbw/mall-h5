@@ -141,7 +141,7 @@
                       <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                                 @click="showInvoiceSelector()"/>
                     </van-cell>-->
-          <van-cell title="优惠券:">
+          <van-cell title="优惠券:" v-if="pageAction != 'pickupGoods'">
             <div slot="default">
               <span>{{couponUsedTip}}</span>
             </div>
@@ -396,6 +396,9 @@
 
       couponList() {
         let couponList = []
+        if (this.pageAction === "pickupGoods") {
+          return [];
+        }
         let allPayList = this.$store.state.appconf.payList;
         this.$log("conpon List Enter")
         this.$log(this.couponTypes[0].list)
@@ -641,6 +644,8 @@
       let action = this.$route.params.action;
       if (action == "direct") {
         this.pageAction = "direct";
+      } else if (action == "pickupGoods") {
+        this.pageAction = "pickupGoods";
       }
       this.$store.dispatch('getInvoiceInfo');
       const invoiceInfo = this.$store.state.appconf.invoice;
@@ -804,24 +809,26 @@
             this.getAoyifreightPay();
             this.getPlatformFreightPay();
           } else {
-            let ret = await this.getAllasPlatformFreight()
-            this.$log(ret)
-            if (ret.data.code == 200) {
-              let result = ret.data.data.result
-              if (result.totalPrice > 0) {
-                result.priceBeans.forEach(iFreight => {
-                  this.arregationList.forEach(item => {
-                    if (item.price > 0 && item.merchantId != 2) {
-                      if (iFreight.merchantId === item.merchantId) {
-                        item.freight = parseFloat(iFreight.shipPrice);
+            if (this.pageAction != "pickupGoods") {
+              let ret = await this.getAllasPlatformFreight()
+              this.$log(ret)
+              if (ret.data.code == 200) {
+                let result = ret.data.data.result
+                if (result.totalPrice > 0) {
+                  result.priceBeans.forEach(iFreight => {
+                    this.arregationList.forEach(item => {
+                      if (item.price > 0 && item.merchantId != 2) {
+                        if (iFreight.merchantId === item.merchantId) {
+                          item.freight = parseFloat(iFreight.shipPrice);
+                        }
+                      } else if (item.price > 0 && item.merchantId == 2) {
+                        if (iFreight.merchantCode === item.merchantCode) {
+                          item.freight = parseFloat(iFreight.shipPrice);
+                        }
                       }
-                    } else if (item.price > 0 && item.merchantId == 2) {
-                      if (iFreight.merchantCode === item.merchantCode) {
-                        item.freight = parseFloat(iFreight.shipPrice);
-                      }
-                    }
-                  })
-                });
+                    })
+                  });
+                }
               }
             }
             this.upDatefreightPay()
@@ -1093,59 +1100,80 @@
       couponReducedPrice(coupon) {
         let reducePrice = 0;
         let fullPrice = 0;
-        if (coupon != null) {
-          let allPayList = this.$store.state.appconf.payList;
-          if (coupon.couponInfo.rules.scenario.type === 3) { //类目品牌类
+
+        if (this.pageAction === "pickupGoods") {
+          if (coupon != null) {
+            let allPayList = this.$store.state.appconf.payList;
             allPayList.forEach(payItem => {
               if (payItem.valid) {
-                for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
-                  if (coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
-                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                    break;
-                  }
-                }
+                fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
               }
             })
-          } else {
-            allPayList.forEach(payItem => {
-              if (payItem.valid) {
-                if (coupon.couponInfo.rules.scenario.type === 2) { //全场类
-                  fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                } else {
-                  for (let j = 0; j < coupon.couponInfo.rules.scenario.couponMpus.length; j++) {
-                    if (coupon.couponInfo.rules.scenario.couponMpus[j] == payItem.product.baseInfo.mpu) {
+            this.$log("fullPrice:" + fullPrice)
+            reducePrice = fullPrice
+          }
+
+          this.reducedPriceOfCoupon = reducePrice.toFixed(2)
+          this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
+          this.$log("reducedPriceOfCoupon:" + this.reducedPriceOfCoupon)
+          return this.reducedPriceOfCoupon;
+        } else {
+          if (coupon != null) {
+            let allPayList = this.$store.state.appconf.payList;
+            if (coupon.couponInfo.rules.scenario.type === 3) { //类目品牌类
+              allPayList.forEach(payItem => {
+                if (payItem.valid) {
+                  for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
+                    if (coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
                       fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                       break;
                     }
                   }
                 }
-              }
-            })
-          }
-          this.$log("fullPrice:" + fullPrice)
+              })
+            } else {
+              allPayList.forEach(payItem => {
+                if (payItem.valid) {
+                  if (coupon.couponInfo.rules.scenario.type === 2) { //全场类
+                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                  } else {
+                    for (let j = 0; j < coupon.couponInfo.rules.scenario.couponMpus.length; j++) {
+                      if (coupon.couponInfo.rules.scenario.couponMpus[j] == payItem.product.baseInfo.mpu) {
+                        fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                        break;
+                      }
+                    }
+                  }
+                }
+              })
+            }
+            this.$log("fullPrice:" + fullPrice)
 
-          switch (coupon.couponInfo.rules.couponRules.type) {
-            case 0:
-              reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
-              break;
-            case 1:
-              reducePrice = coupon.couponInfo.rules.couponRules.cashCoupon.amount;
-              break;
-            case 2:
-              reducePrice = fullPrice * (1 - coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio)
-              break;
-            default:
-              break;
+            switch (coupon.couponInfo.rules.couponRules.type) {
+              case 0:
+                reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
+                break;
+              case 1:
+                reducePrice = coupon.couponInfo.rules.couponRules.cashCoupon.amount;
+                break;
+              case 2:
+                reducePrice = fullPrice * (1 - coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio)
+                break;
+              default:
+                break;
+            }
+            if (reducePrice > fullPrice) {
+              reducePrice = fullPrice;
+            }
           }
-          if (reducePrice > fullPrice) {
-            reducePrice = fullPrice;
-          }
+
+          this.reducedPriceOfCoupon = reducePrice.toFixed(2)
+          this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
+          this.$log("reducedPriceOfCoupon:" + this.reducedPriceOfCoupon)
+          return this.reducedPriceOfCoupon;
         }
 
-        this.reducedPriceOfCoupon = reducePrice.toFixed(2)
-        this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
-        this.$log("reducedPriceOfCoupon:" + this.reducedPriceOfCoupon)
-        return this.reducedPriceOfCoupon;
+
       },
       onCouponListClick(coupon) {
         this.$log("onCouponListClick Enter")
@@ -1418,7 +1446,8 @@
           }
         }
         let couponInfo = this.getUsedCouponDetail4Order(this.usedCoupon)
-        this.$log("couponInfo:" + couponInfo)
+        this.$log("couponInfo:")
+        this.$log(couponInfo)
         this.arregationList.forEach(item => {
           if (item.goods.length > 0) {
             let skus = []
@@ -1695,6 +1724,8 @@
                           }
                           if (that.pageAction == "direct") {
                             this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
+                          } else if (that.pageAction == "pickupGoods") {
+                            this.$store.commit('SET_PICKUP_PRODUCTS_INFO', '')
                           } else {
                             that.deleteOrderedGoodsInCar();
                           }
@@ -1738,6 +1769,7 @@
 
       },
       getPlatformFreightPay() {
+        this.$log("getPlatformFreightPay Enter @@@@@@@@@@@@@@@@@@@@")
         /////////////查询平台运费////////////////////////
         let that = this;
         let all = 0;
@@ -1790,6 +1822,7 @@
         })
       },
       getAoyifreightPay() {
+        this.$log("getAoyifreightPay Enter @@@@@@@@@@@@@@@@@@@@")
         /////////////查询运费////////////////////////
         let that = this;
         let all = 0;
@@ -1893,6 +1926,51 @@
                 .goodsInfo.price
             })
           }
+        } else if (this.pageAction == "pickupGoods") {
+          let pickupProdInfo = this.$store.state.appconf.pickupProdInfo
+          if (pickupProdInfo != undefined) {
+            if (pickupProdInfo.list != undefined) {
+              pickupProdInfo.list.forEach(item => {
+                if (item.baseInfo.merchantId === 2) { //aoyi
+                  inventorySkus.push({
+                    "skuId": item.baseInfo.skuId,
+                    "remainNum": item.baseInfo.count,
+                    "price": item.goodsInfo.price
+                  })
+                  skus.push({
+                    "skuId": item.baseInfo.skuId
+                  })
+                } else if (item.baseInfo.merchantId === 4) { //yytong
+                  inventorySkusOfYyt.push({
+                    "skuId": item.baseInfo.skuId,
+                    "remainNum": item.baseInfo.count
+                  })
+                  skusOfYyt.push({
+                    "skuId": item.baseInfo.skuId
+                  })
+                } else {
+                  inventorySkusOfZy.push({
+                    "mpu": item.baseInfo.mpu,
+                    "remainNum": item.baseInfo.count
+                  })
+                  skusOfZy.push({
+                    "mpu": item.baseInfo.mpu
+                  })
+                }
+                this.payCarList.push({
+                  "product": item,
+                  "valid": true,
+                  "checkedPrice": item.goodsInfo.checkedPrice != undefined ? item.goodsInfo.checkedPrice :
+                    item
+                    .goodsInfo.price
+                })
+              })
+            }
+            this.usedCoupon = pickupProdInfo.coupon
+            this.$log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+            this.$log(this.usedCoupon)
+          }
+
         } else {
           this.selectedCarList.forEach(item => {
             // this.$log(item)
@@ -2091,26 +2169,29 @@
                 }
               } catch (e) {}
             }
-            let ret = await this.getAllasPlatformFreight()
-            this.$log(ret)
-            if (ret.data.code == 200) {
-              let result = ret.data.data.result
-              if (result.totalPrice > 0) {
-                result.priceBeans.forEach(iFreight => {
-                  this.arregationList.forEach(item => {
-                    if (item.price > 0 && item.merchantId != 2) {
-                      if (iFreight.merchantId === item.merchantId) {
-                        item.freight = parseFloat(iFreight.shipPrice);
+            if (this.pageAction != "pickupGoods") {
+              let ret = await this.getAllasPlatformFreight()
+              this.$log(ret)
+              if (ret.data.code == 200) {
+                let result = ret.data.data.result
+                if (result.totalPrice > 0) {
+                  result.priceBeans.forEach(iFreight => {
+                    this.arregationList.forEach(item => {
+                      if (item.price > 0 && item.merchantId != 2) {
+                        if (iFreight.merchantId === item.merchantId) {
+                          item.freight = parseFloat(iFreight.shipPrice);
+                        }
+                      } else if (item.price > 0 && item.merchantId == 2) {
+                        if (iFreight.merchantCode === item.merchantCode) {
+                          item.freight = parseFloat(iFreight.shipPrice);
+                        }
                       }
-                    } else if (item.price > 0 && item.merchantId == 2) {
-                      if (iFreight.merchantCode === item.merchantCode) {
-                        item.freight = parseFloat(iFreight.shipPrice);
-                      }
-                    }
-                  })
-                });
+                    })
+                  });
+                }
               }
             }
+
             this.upDatefreightPay()
             that.isAoyiDataLoaded = true
             that.isOtherDataLoaded = true
@@ -2129,6 +2210,7 @@
       },
 
       getAllasPlatformFreight() {
+        this.$log("getAllasPlatformFreight Enter @@@@@@@@@@@@@@@@@@@@@@")
         let that = this;
         let all = 0;
         let locationCode = this.getLocationCode()
@@ -2424,7 +2506,6 @@
         .pay-info {
           margin: 10px;
           background-color: white;
-          padding: 2px;
           border-radius: 10px;
 
           .van-actionsheet {

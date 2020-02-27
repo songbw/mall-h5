@@ -27,6 +27,7 @@ const state = {
   appId: '',
   appSource: '',
   backfromOuterlink: false,
+  pickupProdInfo:'',
 }
 
 const mutations = {
@@ -132,6 +133,10 @@ const mutations = {
 
   [types.SET_BACK_FROME_OUTERLINK](state, res) {
     state.backfromOuterlink = res
+  },
+
+  [types.SET_PICKUP_PRODUCTS_INFO](state, res) {
+    state.pickupProdInfo = res
   },
 }
 
