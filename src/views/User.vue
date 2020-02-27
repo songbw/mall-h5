@@ -31,7 +31,7 @@
           </div>
           <div class="coupon-change" @click="onChangeCouponClick">
             <img :src="chCouponIcon"/>
-            <span>兑换优惠券</span>
+            <span>兑换卡券</span>
           </div>
         </div>
       </div>

@@ -31,7 +31,9 @@
               </div>
             </div>
           </div>
-          <div v-else>
+          <div class="emptyBox" v-if="currentCardList.length == 0">
+            <img :src=empty_bg>
+            <span>您还没有相关记录</span>
           </div>
         </van-tab>
       </van-tabs>
@@ -67,6 +69,8 @@
               return this.cardList.filter((item) => {
                 return item.status == 7
               })
+            default:
+              return []
           }
         } else {
           return []
@@ -80,6 +84,7 @@
         cardList: [],
         active: 0,
         swipeThreshold: 5,
+        empty_bg: require('@/assets/icons/ico_empty_box.png'),
         couponTypes: [{
             "title": "未使用",
           },
@@ -129,7 +134,7 @@
             return "状态: 已过期";
         }
       },
-      
+
       onDeleteCardBtnClick(k, index) {
         this.$log("onDeleteCardBtnClick Enter")
         let that = this
@@ -264,6 +269,22 @@
         line-height: 40px;
       }
     }
+
+    .emptyBox{
+      width: 100%;
+      display: flex;
+      flex-flow: column;
+      text-align: center;
+      justify-content: center;
+      padding-top: 100px;
+
+      img {
+        margin: 0 auto;
+        height: 100px;
+        width: 100px;
+      }
+    }
+
 
   }
 
