@@ -6,9 +6,7 @@
     <div class="orderlist-layout">
       <van-tabs v-model="active" sticky @click="onClick" :swipe-threshold=swipeThreshold swipeable>
         <van-tab v-for="(item,type) in orderTypes" :title=item.title :key="type">
-          <van-list v-model="item.loading"
-                    :finished="item.finished"
-                    @load="onLoad(active)">
+          <van-list v-model="item.loading" :finished="item.finished" @load="onLoad(active)">
             <div class="orderlist-body">
               <div v-if="item.total === 0" class="no-orderlist">
                 <img :src=no_orderList_bg>
@@ -22,29 +20,23 @@
                   </div>
                   <ul @click="onListClick(k,i)">
                     <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
-                      <van-card
-                        :price="sku.unitPrice"
-                        :title="sku.name"
-                        :num="sku.num"
-                        :thumb="sku.image">
+                      <van-card :price="sku.unitPrice" :title="sku.name" :num="sku.num" :thumb="sku.image">
                         <div slot="tags" v-if="sku.salePrice != sku.unitPrice" class="cardtags">
-                          <img :src="tag_promotion" v-if="sku.promotionDiscount > 0"/>
-                          <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0"/>
+                          <img :src="tag_promotion" v-if="sku.promotionDiscount > 0" />
+                          <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />
                         </div>
                         <div slot="footer" class="card_footer">
                           <div v-if="sku.status < 4">
                             <van-button plain round size="small" type="primary"
-                                        style="background-color: white;color: #ff4444;border-color: #ffcccc "
-                                        @click.stop=""
-                                        @click="onAfterSalesServiceBtnClick(k,sku)" v-if="k.status==1||k.status==2">
+                              style="background-color: white;color: #ff4444;border-color: #ffcccc " @click.stop=""
+                              @click="onAfterSalesServiceBtnClick(k,sku)" v-if="k.status==1||k.status==2">
                               申请售后
                             </van-button>
                           </div>
                           <div v-else-if="sku.status == 5">
                             <van-button plain round size="small" type="primary"
-                                        style="background-color: white;color: #888888;border-color: #f0f0f0 "
-                                        @click.stop=""
-                                        @click="onQuerySalesServiceBtnClick(k,sku)">
+                              style="background-color: white;color: #888888;border-color: #f0f0f0 " @click.stop=""
+                              @click="onQuerySalesServiceBtnClick(k,sku)">
                               查看售后
                             </van-button>
                           </div>
@@ -57,44 +49,44 @@
                     <span style="float: right;">订单日期: {{formatTime(k.createdAt)}}</span>
                   </div>
                   <div class="orderDetailSummery">
-                    <span v-if="k.couponDiscount != null">合计: ￥{{parseFloat(k.saleAmount).toFixed(2)}}元 (含运费:￥{{k.servFee.toFixed(2)}}, 优惠券:￥{{k.couponDiscount.toFixed(2)}}) </span>
+                    <span v-if="k.couponDiscount != null">合计: ￥{{parseFloat(k.saleAmount).toFixed(2)}}元
+                      (含运费:￥{{k.servFee.toFixed(2)}}, 优惠券:￥{{getCouponDiscount(k)}}) </span>
                     <span v-else>合计: ￥{{parseFloat(k.saleAmount).toFixed(2)}}元 (含运费:￥{{k.servFee.toFixed(2)}})</span>
                   </div>
                   <div class="orderDetailAction">
                     <van-button plain round size="small" type="primary"
-                                style="background-color: white;color: black ;border-color: #dedede"
-                                @click="onConfirmBtnClick(k,i)" v-show="k.status==1">
+                      style="background-color: white;color: black ;border-color: #dedede"
+                      @click="onConfirmBtnClick(k,i)" v-show="k.status==1">
                       确认收货
                     </van-button>
                     <van-button plain round size="small" type="primary"
-                                style="background-color: #ff4444;color: white ;border-color: #ff4444"
-                                @click="onDelBtnClick(k,i)" v-show="k.status==2||k.status==3">
+                      style="background-color: #ff4444;color: white ;border-color: #ff4444" @click="onDelBtnClick(k,i)"
+                      v-show="k.status==2||k.status==3">
                       删除订单
                     </van-button>
                     <van-button plain round size="small" type="primary"
-                                style="background-color: white;color: black ;border-color: #dedede"
-                                @click="onCancelBtnClick(k,i)" v-show="k.status==0">
+                      style="background-color: white;color: black ;border-color: #dedede" @click="onCancelBtnClick(k,i)"
+                      v-show="k.status==0">
                       取消订单
                     </van-button>
                     <van-button plain round size="small" type="primary"
-                                style="background-color: white;color: #1989fa ;border-color: #dedede"
-                                @click="showMeqiaPanel">
+                      style="background-color: white;color: #1989fa ;border-color: #dedede" @click="showMeqiaPanel">
                       联系客服
                     </van-button>
                     <van-button plain round size="small" type="primary"
-                                style="background-color: white;color: #ff4444;border-color: #dedede "
-                                @click="onPayBtnClick(k,i)" v-show="k.status==0">
+                      style="background-color: white;color: #ff4444;border-color: #dedede " @click="onPayBtnClick(k,i)"
+                      v-show="k.status==0">
                       去支付
                     </van-button>
 
                     <van-button plain round size="small" type="primary"
-                                style="background-color: white;color: #ff4444;border-color: #dedede "
-                                @click="onLogisticsBtnClick(k,i)" v-show="k.status==1">
+                      style="background-color: white;color: #ff4444;border-color: #dedede "
+                      @click="onLogisticsBtnClick(k,i)" v-show="k.status==1">
                       查看物流
                     </van-button>
                     <van-button plain round size="small" type="primary"
-                                style="background-color: white;color: #ff4444;border-color: #dedede "
-                                @click="onBuyBtnClick(k,i)" v-show="k.status==2||k.status==3">
+                      style="background-color: white;color: #ff4444;border-color: #dedede " @click="onBuyBtnClick(k,i)"
+                      v-show="k.status==2||k.status==3">
                       再次购买
                     </van-button>
                   </div>
@@ -112,7 +104,9 @@
   import Header from '@/common/_header.vue'
   import Footer from '@/common/_footer.vue'
   import Util from '@/util/common'
-  import {configWechat} from '@/util/wechat'
+  import {
+    configWechat
+  } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
 
   export default {
@@ -129,11 +123,10 @@
         swipeThreshold: 5,
         no_orderList_bg: require('@/assets/icons/ico_empty_box.png'),
         tag_coupon: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_lab_coupon.png',
-        tag_promotion: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_lab_promotion.png' ,
+        tag_promotion: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_lab_promotion.png',
         launchedLoading: false,
         reload: false,
-        orderTypes: [
-          {
+        orderTypes: [{
             "title": "全部",
             "list": [],
             "total": -1,
@@ -201,19 +194,29 @@
     },
 
     methods: {
+      getCouponDiscount(k) {
+        let couponDiscount = 0;
+        k.skus.forEach(sku => {
+          couponDiscount += sku.skuCouponDiscount
+        })
+        return (couponDiscount / 100).toFixed(2)
+      },
+
       wechatShareConfig() {
+
         this.$log('shareConfig Enter')
-        if(this.$api.APP_ID === '01') {
-          try{
+        if (this.$api.APP_ID === '01') {
+          try {
             configWechat(this, () => {
               wx.hideOptionMenu()
             })
-          } catch (e) {
-          }
+          } catch (e) {}
         }
       },
       gotoCart() {
-        this.$router.push({name: '购物车页'})
+        this.$router.push({
+          name: '购物车页'
+        })
       },
       add2Car(user, goods) {
         let userId = user.userId;
@@ -233,20 +236,20 @@
           data: addtoCar,
         })
       },
-      async onBuyBtnClick(k,i) {
+      async onBuyBtnClick(k, i) {
         this.$log("onBuyBtnClick Enter")
         this.$log(k)
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
-          for(let i = 0;  i < k.skus.length ;i++) {
+          for (let i = 0; i < k.skus.length; i++) {
             let goods = k.skus[i]
             try {
               let resp = await this.add2Car(user, goods);
               this.$log("#######################################")
               this.$log(resp)
-              if(resp.data.code == 200) {
+              if (resp.data.code == 200) {
                 let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
                 if (cartItem == null) {
                   let baseInfo = {
@@ -270,7 +273,7 @@
                     "model": goods.model,
                     "price": goods.unitPrice,
                     "checkedPrice": goods.price,
-                    "type": goods.type == undefined? 0:goods.type
+                    "type": goods.type == undefined ? 0 : goods.type
 
                   }
                   let couponList = []
@@ -283,7 +286,7 @@
                   }
                 } else {
                   cartItem.baseInfo.count++;
-                  cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
+                  cartItem.goodsInfo.type = (goods.type == undefined ? 0 : goods.type)
                 }
                 Util.updateCartItem(this, cartItem)
               }
@@ -344,7 +347,9 @@
         _MEIQIA('hidePanel');
       },
       onQuerySalesServiceBtnClick(k, sku) {
-        this.$router.push({name: '售后工单页'})
+        this.$router.push({
+          name: '售后工单页'
+        })
       },
       onAfterSalesServiceBtnClick(k, sku) {
         this.$log("onAfterSalesServiceBtnClick Enter")
@@ -383,8 +388,7 @@
           this.orderTypes[i].list.splice(0, 1);
         }
         this.orderTypes.splice(0, 1);
-        this.orderTypes = [
-          {
+        this.orderTypes = [{
             "title": "全部",
             "list": [],
             "total": -1,
@@ -525,8 +529,8 @@
             "amount": pAnOrderInfo.orderAmount,
             "returnUrl": returnUrl,
           }
-/*          let savedOrderNo = this.getSavedPayOrderInfo(listItem);
-          this.$log("savedOrderNo:" + savedOrderNo)*/
+          /*          let savedOrderNo = this.getSavedPayOrderInfo(listItem);
+                    this.$log("savedOrderNo:" + savedOrderNo)*/
           let savedOrderNo = null //force ，renew order no
           if (savedOrderNo != null) {
             pAnOrderInfo.orderNo = savedOrderNo
@@ -600,7 +604,7 @@
             return
           }
           this.$log(listItem)
-          if(listItem.status == 0) {//待支付
+          if (listItem.status == 0) { //待支付
             let index = this.active
             this.reload = true;
             let user = JSON.parse(userInfo)
@@ -609,14 +613,14 @@
               baseURL: this.$api.ORDER_BASE_URL,
               url: '/order/unpaid/cancel',
               params: {
-                appId : this.$api.APP_ID,
+                appId: this.$api.APP_ID,
                 openId: user.userId,
                 orderNos: listItem.tradeNo
               }
             }).then((response) => {
               this.$log(response)
-              if(response.data.code == 200) {
-                 this.onLoad(this.active)
+              if (response.data.code == 200) {
+                this.onLoad(this.active)
               }
             }).catch(function (error) {
               console.log(error)
@@ -674,8 +678,8 @@
         let orderNos = listItem.tradeNo
         let orderNo = this.$api.APP_ID + user.openId + orderNos
         let hasVirtualGoods = false
-        for(let i = 0 ;i < listItem.skus.length; i++) {
-          if(listItem.skus[i].productType != undefined && listItem.skus[i].productType != 0) {
+        for (let i = 0; i < listItem.skus.length; i++) {
+          if (listItem.skus[i].productType != undefined && listItem.skus[i].productType != 0) {
             hasVirtualGoods = true;
             break;
           }
@@ -683,13 +687,13 @@
         let pAnOrderInfo = {
           "accessToken": user.accessToken,
           "orderNo": orderNo,
-          "orderAmount": listItem.saleAmount * 100,//分
+          "orderAmount": listItem.saleAmount * 100, //分
           "openId": user.openId,
           "businessType": "11",
           "hasVirtualGoods": hasVirtualGoods
         }
         let merchantNo = ""
-        if(listItem.merchantNo != null) {
+        if (listItem.merchantNo != null) {
           merchantNo = listItem.merchantNo
         }
         this.openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem)
@@ -735,8 +739,7 @@
           }).catch(function (error) {
             console.log(error)
           })
-        }).catch(() => {
-        });
+        }).catch(() => {});
       },
 
       onDelBtnClick(listItem, i) {
@@ -773,8 +776,7 @@
           }).catch(function (error) {
             that.$log(error)
           })
-        }).catch(() => {
-        });
+        }).catch(() => {});
       },
 
       onListClick(listItem, i) {
@@ -788,7 +790,7 @@
       onLogisticsBtnClick(listItem, i) {
         this.$log("onLogisticsBtnClick Enter")
         this.$log(listItem)
-        if(listItem.merchantId === 4) {
+        if (listItem.merchantId === 4) {
           this.$router.push({
             name: "怡亚通物流信息页",
             params: {
@@ -846,7 +848,7 @@
               this.$log(that.orderTypes[index].pageNo)
               let unpaid = response.data.data.unpaid
               if (that.orderTypes[index].status == -1 && that.orderTypes[index].pageNo == 2) { //获取首页
-                if(unpaid.length > 0) {
+                if (unpaid.length > 0) {
                   that.orderTypes[index].list = []
                   if (unpaid != null) {
                     unpaid.forEach(listItem => {
@@ -893,7 +895,7 @@
               }
               let result = response.data.data.result
               that.orderTypes[index].total = result.total;
-              if(that.orderTypes[index].status == -1) {
+              if (that.orderTypes[index].status == -1) {
                 that.orderTypes[index].total += unpaid.length
               }
               if (result.list == undefined || result.list.length == 0) {
@@ -976,6 +978,7 @@
       }
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -1029,7 +1032,7 @@
           .cardtags {
             margin-top: 10px;
 
-            > img {
+            >img {
               width: 30px;
               height: 30px;
             }
@@ -1042,7 +1045,8 @@
             .fz(font-size, 25);
 
             color: #000000;
-            >span{
+
+            >span {
               display: inline-block;
               align-content: center;
               overflow: hidden;
@@ -1084,4 +1088,5 @@
 
 
   }
+
 </style>

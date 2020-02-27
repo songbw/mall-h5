@@ -31,7 +31,7 @@
           </div>
           <div class="coupon-change" @click="onChangeCouponClick">
             <img :src="chCouponIcon"/>
-            <span>兑换优惠券</span>
+            <span>兑换卡券</span>
           </div>
         </div>
       </div>
@@ -60,6 +60,9 @@
       </div>
       <div class="settingsBox">
         <div v-if="this.$api.APP_ID == '11'">
+          <van-cell title="我的提货券" is-link @click="onLadingCardBtnClick">
+            <img slot="icon" :src="icon_ladingCard"/>
+          </van-cell>
           <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
             <img slot="icon" :src="icon_optCard"/>
           </van-cell>
@@ -243,6 +246,7 @@
         customServiceIcon: require('@/assets/icons/ico_customService.png'),
         servicePhoneIcon: require('@/assets/icons/ico_phone.png'),
         icon_linkPayCard: require('@/assets/icons/ico_linkPayCard.png'),
+        icon_ladingCard: require('@/assets/icons/ico_ladingCoupon.png'),
         icon_optCard: require('@/assets/icons/ico_optCard.png'),
         icon_bankCard: require('@/assets/icons/ico_bankCard.png'),
         icon_quickPayCard: require('@/assets/icons/ico_quickpay_cards.png'),
@@ -322,6 +326,13 @@
           params: {
             user: this.user
           }
+        })
+      },
+
+      onLadingCardBtnClick() {
+        this.$log("onLadingCardBtnClick Enter")
+        this.$router.push({
+          name: '提货券列表页'
         })
       },
 

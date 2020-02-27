@@ -25,7 +25,7 @@
             </div>
           </div>
           <div class="contact-card-right-icon">
-            <van-icon class="contact-edit" name="arrow" size="12px"/>
+            <van-icon class="contact-edit" name="arrow" size="12px" />
           </div>
         </div>
         <div class="pay-list">
@@ -33,33 +33,27 @@
           <div class="pay-product" v-if="this.$api.IS_GAT_APP">
             <li v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
-                <van-cell :title=item.merchantName icon="shop"/>
+                <van-cell :title=item.merchantName icon="shop" />
                 <ul>
                   <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f8f8f8;">
                     <div class="promotionBox"
-                         v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
+                      v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
                       <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].tag}}</span>
-                      <v-countdown class="promotionCountDown"
-                                   @start_callback="countDownS_cb(index,k)"
-                                   @end_callback="countDownE_cb(index,k)"
-                                   :startTime="getDateTime(k.product.promotionInfo.promotion[0].startDate)"
-                                   :endTime="getDateTime(k.product.promotionInfo.promotion[0].endDate)"
-                                   :secondsTxt="''">
+                      <v-countdown class="promotionCountDown" @start_callback="countDownS_cb(index,k)"
+                        @end_callback="countDownE_cb(index,k)"
+                        :startTime="getDateTime(k.product.promotionInfo.promotion[0].startDate)"
+                        :endTime="getDateTime(k.product.promotionInfo.promotion[0].endDate)" :secondsTxt="''">
                       </v-countdown>
                     </div>
                     <!--商品有活动的布局-->
                     <div v-if="k.product.promotionInfo.promotionState === 1">
                       <div v-if="!k.valid">
-                        <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444"/>
+                        <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444" />
                       </div>
-                      <van-card
-                        :desc="locationCity"
-                        :num="k.product.baseInfo.count"
-                        :price="k.product.goodsInfo.dprice"
-                        :title="k.product.goodsInfo.name"
-                        :thumb="k.product.goodsInfo.image"
+                      <van-card :desc="locationCity" :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
+                        :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
                         :origin-price="k.checkedPrice">
-<!--                        <div slot="footer" @click.stop="" class="cardStepper">
+                        <!--                        <div slot="footer" @click.stop="" class="cardStepper">
                           <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
                         </div>-->
                       </van-card>
@@ -67,17 +61,14 @@
                     <!--商品无活动的布局-->
                     <div v-else>
                       <div v-if="!k.valid">
-                        <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444"/>
+                        <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444" />
                       </div>
-                      <van-card
-                        :num="k.product.baseInfo.count"
-                        :price="k.product.goodsInfo.dprice"
-                        :title="k.product.goodsInfo.name"
-                        :thumb="k.product.goodsInfo.image">
+                      <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
+                        :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image">
                         <div slot="desc">
                           <span class="prodDesc">{{locationCity}}</span>
                         </div>
-<!--                        <div slot="footer" @click.stop="" class="cardStepper">
+                        <!--                        <div slot="footer" @click.stop="" class="cardStepper">
                           <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
                         </div>-->
                       </van-card>
@@ -85,8 +76,8 @@
                   </li>
                 </ul>
                 <div class="supplyerSummery">
-                <span
-                  style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元  ， 运费￥{{item.freight.toFixed(2)}}元 </span>
+                  <span style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元 ， 运费￥{{item.freight.toFixed(2)}}元
+                  </span>
                 </div>
               </div>
             </li>
@@ -97,31 +88,26 @@
               <div v-if="item.goods.length > 0" class="supplyer">
                 <div v-for="(k,index) in item.goods" :key='index'>
                   <div class="promotionBox"
-                       v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
+                    v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
                     <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].name}}</span>
-                    <v-countdown class="promotionCountDown"
-                                 @start_callback="countDownS_cb(index,k)"
-                                 @end_callback="countDownE_cb(index,k)"
-                                 :startTime="getDateTime(k.product.promotionInfo.promotion[0].startDate)"
-                                 :endTime="getDateTime(k.product.promotionInfo.promotion[0].endDate)"
-                                 :secondsTxt="''">
+                    <v-countdown class="promotionCountDown" @start_callback="countDownS_cb(index,k)"
+                      @end_callback="countDownE_cb(index,k)"
+                      :startTime="getDateTime(k.product.promotionInfo.promotion[0].startDate)"
+                      :endTime="getDateTime(k.product.promotionInfo.promotion[0].endDate)" :secondsTxt="''">
                     </v-countdown>
                   </div>
                   <!--商品有活动的布局-->
                   <div v-if="k.product.promotionInfo.promotionState === 1">
                     <div v-if="!k.valid">
-                      <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444"/>
+                      <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444" />
                     </div>
-                    <van-card
-                      :num="k.product.baseInfo.count"
-                      :price="k.product.goodsInfo.dprice"
-                      :title="k.product.goodsInfo.name"
-                      :thumb="k.product.goodsInfo.image"
+                    <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
+                      :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
                       :origin-price="k.checkedPrice">
                       <div slot="desc">
                         <span style="font-size: small">{{locationCity}}</span>
                       </div>
-<!--                      <div slot="footer" @click.stop="" class="cardStepper">
+                      <!--                      <div slot="footer" @click.stop="" class="cardStepper">
                         <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
                       </div>-->
                     </van-card>
@@ -129,17 +115,14 @@
                   <!--商品无活动的布局-->
                   <div v-else>
                     <div v-if="!k.valid">
-                      <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444"/>
+                      <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444" />
                     </div>
-                    <van-card
-                      :num="k.product.baseInfo.count"
-                      :price="k.product.goodsInfo.dprice"
-                      :title="k.product.goodsInfo.name"
-                      :thumb="k.product.goodsInfo.image">
+                    <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
+                      :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image">
                       <div slot="desc">
                         <span style="font-size: small">{{locationCity}}</span>
                       </div>
-<!--                      <div slot="footer" @click.stop="" class="cardStepper">
+                      <!--                      <div slot="footer" @click.stop="" class="cardStepper">
                         <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
                       </div>-->
                     </van-card>
@@ -149,13 +132,7 @@
             </div>
           </div>
           <div class="pay-footer"></div>
-          <van-submit-bar
-            :loading="isOnSummitting"
-            :price="allpay"
-            button-text="提交订单"
-            @submit="onSubmit"
-            :tip=tip
-          />
+          <van-submit-bar :loading="isOnSummitting" :price="allpay" button-text="提交订单" @submit="onSubmit" :tip=tip />
         </div>
         <div class="pay-info">
           <!--          <van-cell title="支付方式:" :value="payway">
@@ -164,12 +141,12 @@
                       <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
                                 @click="showInvoiceSelector()"/>
                     </van-cell>-->
-          <van-cell title="优惠券:">
+          <van-cell title="优惠券:" v-if="pageAction != 'pickupGoods'">
             <div slot="default">
               <span>{{couponUsedTip}}</span>
             </div>
             <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
-                      @click="showCouponSelector()"/>
+              @click="showCouponSelector()" />
           </van-cell>
           <van-actionsheet v-model="showInvoice" title="发票" class="invoice_layout">
             <div>
@@ -184,7 +161,8 @@
                   <input type="radio" id="eInvoice" value="eInvoice" v-model="invoiceType">
                   <label for="eInvoice">电子发票</label>
                 </div>
-                <span style="text-align: left;font-weight: lighter;font-size: x-small;margin: 15px;color: #8c8c8c">电子普通发票与纸质普通发票具备同等法律效力，可支持报销入账</span>
+                <span
+                  style="text-align: left;font-weight: lighter;font-size: x-small;margin: 15px;color: #8c8c8c">电子普通发票与纸质普通发票具备同等法律效力，可支持报销入账</span>
               </div>
               <div class="invoiceTitleBox">
                 <h1 class="section-title">
@@ -200,20 +178,13 @@
                     <label for="enterpriseInvoice">单位</label>
                   </div>
                 </div>
-                <span style="text-align: left;font-weight: lighter;font-size: x-small;margin: 15px;color: #8c8c8c">电子普通发票与纸质普通发票具备同等法律效力，可支持报销入账</span>
+                <span
+                  style="text-align: left;font-weight: lighter;font-size: x-small;margin: 15px;color: #8c8c8c">电子普通发票与纸质普通发票具备同等法律效力，可支持报销入账</span>
                 <div class="enterpriseInfo" v-if="invoiceTitleType==='enterprise'">
                   <van-cell-group>
-                    <van-field
-                      v-model="invoiceEnterpriseName"
-                      required
-                      placeholder="请填写单位名称"
-                    />
+                    <van-field v-model="invoiceEnterpriseName" required placeholder="请填写单位名称" />
 
-                    <van-field
-                      v-model="invoiceEnterpriseNumber"
-                      required
-                      placeholder="请填写纳税人识别号"
-                    />
+                    <van-field v-model="invoiceEnterpriseNumber" required placeholder="请填写纳税人识别号" />
                   </van-cell-group>
                 </div>
               </div>
@@ -223,17 +194,9 @@
                 </h1>
                 <div class="invoiceReceiverInfo">
                   <van-cell-group>
-                    <van-field
-                      v-model="invoiceReceiverMobile"
-                      required
-                      placeholder="收票人手机号"
-                    />
+                    <van-field v-model="invoiceReceiverMobile" required placeholder="收票人手机号" />
 
-                    <van-field
-                      v-model="invoiceReceiverEmail"
-                      required
-                      placeholder="收票人邮箱"
-                    />
+                    <van-field v-model="invoiceReceiverEmail" required placeholder="收票人邮箱" />
                   </van-cell-group>
                 </div>
                 <div class="footer_layout">
@@ -251,10 +214,7 @@
               <div class="hasCoupon">
                 <van-radio-group v-model="radio">
                   <div class="couponList">
-                    <div class="coupon coupon-white"
-                         v-for="(k,i) in couponList"
-                         :key="i"
-                         @click=onCouponListClick(k)>
+                    <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i" @click=onCouponListClick(k)>
                       <div class="coupon-main">
                         <div class="coupon-img">
                           <img :src="k.couponInfo.imageUrl.length?k.couponInfo.imageUrl: couponImg">
@@ -273,7 +233,7 @@
                       </div>
                       <div class="coupon-get">
                         <van-radio :name=k.userCouponCode @click.stop="" @click="onRadioBtnClick(k)"
-                                   checked-color="#FF4444"></van-radio>
+                          checked-color="#FF4444"></van-radio>
                       </div>
                     </div>
                   </div>
@@ -354,17 +314,15 @@
         usedCoupon: null,
         reducedPriceOfCoupon: 0,
         totalSkuPriceOfCoupon: 0,
-        couponTypes: [
-          {
-            "title": "未使用",
-            "list": [],
-            "total": -1,
-            "pageNo": 1,
-            "status": -1,
-            "loading": false,
-            "finished": false,
-          }
-        ],
+        couponTypes: [{
+          "title": "未使用",
+          "list": [],
+          "total": -1,
+          "pageNo": 1,
+          "status": -1,
+          "loading": false,
+          "finished": false,
+        }],
         invoiceType: 'eInvoice',
         invoiceTitleType: 'personal',
         invoiceEnterpriseName: '',
@@ -412,7 +370,9 @@
               title: '您还没有收货地址，请新增一个吧',
               confirmButtonText: '新增地址'
             }).then(() => {
-              this.$router.push({name: '地址页'})
+              this.$router.push({
+                name: '地址页'
+              })
             }).catch(() => {
               // on cancel
             });
@@ -436,6 +396,9 @@
 
       couponList() {
         let couponList = []
+        if (this.pageAction === "pickupGoods") {
+          return [];
+        }
         let allPayList = this.$store.state.appconf.payList;
         this.$log("conpon List Enter")
         this.$log(this.couponTypes[0].list)
@@ -468,7 +431,7 @@
                   }
                 }
               }
-            } else if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 2) {//全场类
+            } else if (item.couponInfo.rules != null && item.couponInfo.rules.scenario.type === 2) { //全场类
               couponList.push(item)
             }
           }
@@ -487,7 +450,8 @@
                 allPayList.forEach(payItem => {
                   if (payItem.valid) {
                     for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
-                      if (coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
+                      if (coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo
+                        .category) {
                         fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                         break;
                       }
@@ -572,15 +536,15 @@
             }
           }
         });
-        if(this.usedCoupon != null) {
+        if (this.usedCoupon != null) {
           let found = -1
-          for(let i = 0 ; i < avaliableCouponList.length ; i++) {
-            if(this.usedCoupon.couponId  === avaliableCouponList[i].couponId) {
+          for (let i = 0; i < avaliableCouponList.length; i++) {
+            if (this.usedCoupon.couponId === avaliableCouponList[i].couponId) {
               found = i;
               break;
             }
           }
-          if( found == -1 ) {
+          if (found == -1) {
             this.radio = ''
             this.lastRadio = ''
             this.usedCoupon = null
@@ -594,42 +558,40 @@
         let merchantList = this.$store.state.appconf.merchantList;
         let arregationPayList = [];
         merchantList.forEach(item => {
-          arregationPayList.push(
-            {
-              "merchantCode": item.merchantCode,
-              "merchantName": item.merchantName,
-              "merchantId": item.merchantId,
-              "goods": [],
-              price: 0,
-              freight: 0
-            }
-          )
+          arregationPayList.push({
+            "merchantCode": item.merchantCode,
+            "merchantName": item.merchantName,
+            "merchantId": item.merchantId,
+            "goods": [],
+            price: 0,
+            freight: 0
+          })
         });
 
         let allPayList = this.$store.state.appconf.payList;
         try {
           allPayList.forEach(item => {
             if (item.product.promotionInfo != undefined) {
-              item.product.promotionInfo['promotionState'] = Util.getPromotionState(this, item.product.promotionInfo)
-              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(this, item.checkedPrice, item.product.promotionInfo)
+              item.product.promotionInfo['promotionState'] = Util.getPromotionState(this, item.product
+                .promotionInfo)
+              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(this, item.checkedPrice, item.product
+                .promotionInfo)
             }
-            if (item.product.baseInfo.merchantId === 2) {//aoyi
+            if (item.product.baseInfo.merchantId === 2) { //aoyi
               if (item.product.baseInfo.mpu != null) {
                 let itemMerchantCode = item.product.baseInfo.mpu.substring(0, 2)
                 arregationPayList.forEach(merchant => {
-                    if (itemMerchantCode === merchant.merchantCode) {
-                      merchant.goods.push(item)
-                    }
+                  if (itemMerchantCode === merchant.merchantCode) {
+                    merchant.goods.push(item)
                   }
-                )
+                })
               }
             } else {
               arregationPayList.forEach(merchant => {
-                  if (item.product.baseInfo.merchantId === merchant.merchantId) {
-                    merchant.goods.push(item)
-                  }
+                if (item.product.baseInfo.merchantId === merchant.merchantId) {
+                  merchant.goods.push(item)
                 }
-              )
+              })
             }
           })
 
@@ -642,8 +604,7 @@
             })
             merchant.price = all;
           })
-        } catch (e) {
-        }
+        } catch (e) {}
         this.$log("~~~~~~~~~~~~~~~~~~")
         this.$log(arregationPayList);
         return arregationPayList;
@@ -660,14 +621,14 @@
           this.arregationList.forEach(item => {
             productPay += item.price
           })
-        } catch (e) {
-        }
+        } catch (e) {}
         return productPay.toFixed(2)
       },
 
       allpay() {
         let all = 0;
-        all = parseInt((this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100).toFixed(0))
+        all = parseInt((this.productPay * 100 + this.freightPay * 100 - this.couponReducedPrice(this.usedCoupon) * 100)
+          .toFixed(0))
         if (all < 0)
           all = 0
         return all;
@@ -683,6 +644,8 @@
       let action = this.$route.params.action;
       if (action == "direct") {
         this.pageAction = "direct";
+      } else if (action == "pickupGoods") {
+        this.pageAction = "pickupGoods";
       }
       this.$store.dispatch('getInvoiceInfo');
       const invoiceInfo = this.$store.state.appconf.invoice;
@@ -772,29 +735,31 @@
     methods: {
       async onCountChange(goods) {
         this.$log("onCountChange Enter")
-        if(this.pageAction == 'direct' ) {
+        if (this.pageAction == 'direct') {
           if (this.$api.IS_GAT_APP) {
             this.getAoyifreightPay();
             this.getPlatformFreightPay();
           } else {
-            let ret = await this.getAllasPlatformFreight()
-            this.$log(ret)
-            if (ret.data.code == 200) {
-              let result = ret.data.data.result
-              if (result.totalPrice > 0) {
-                result.priceBeans.forEach(iFreight => {
-                  this.arregationList.forEach(item => {
-                    if (item.price > 0 && item.merchantId != 2) {
-                      if (iFreight.merchantId === item.merchantId) {
-                        item.freight = parseFloat(iFreight.shipPrice);
+            if (this.pageAction != "pickupGoods") {
+              let ret = await this.getAllasPlatformFreight()
+              this.$log(ret)
+              if (ret.data.code == 200) {
+                let result = ret.data.data.result
+                if (result.totalPrice > 0) {
+                  result.priceBeans.forEach(iFreight => {
+                    this.arregationList.forEach(item => {
+                      if (item.price > 0 && item.merchantId != 2) {
+                        if (iFreight.merchantId === item.merchantId) {
+                          item.freight = parseFloat(iFreight.shipPrice);
+                        }
+                      } else if (item.price > 0 && item.merchantId == 2) {
+                        if (iFreight.merchantCode === item.merchantCode) {
+                          item.freight = parseFloat(iFreight.shipPrice);
+                        }
                       }
-                    } else if (item.price > 0 && item.merchantId == 2) {
-                      if (iFreight.merchantCode === item.merchantCode) {
-                        item.freight = parseFloat(iFreight.shipPrice);
-                      }
-                    }
-                  })
-                });
+                    })
+                  });
+                }
               }
             }
             this.upDatefreightPay()
@@ -855,8 +820,7 @@
               this.freightPay += item.freight;
             }
           })
-        } catch (e) {
-        }
+        } catch (e) {}
       },
       getDateTime(time) {
         return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
@@ -868,7 +832,7 @@
           let endTime = new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
           let current = new Date().getTime()
           if (current < startTime) {
-            ret = false//券活动未开始
+            ret = false //券活动未开始
           } else if (current <= endTime) {
             ret = true //活动开始
           } else {
@@ -879,11 +843,11 @@
       },
       formateCouponPrice(rules) {
         switch (rules.type) {
-          case 0://满减券
+          case 0: //满减券
             return rules.fullReduceCoupon.reducePrice;
-          case 1://代金券
+          case 1: //代金券
             return rules.cashCoupon.amount;
-          case 2://折扣券
+          case 2: //折扣券
             return (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折';
           default:
             return ""
@@ -892,11 +856,11 @@
 
       formateCouponDescription(couponInfo) {
         switch (couponInfo.rules.scenario.type) {
-          case 1://满减券
+          case 1: //满减券
             return "仅限某些指定的商品可用";
-          case 2://代金券
+          case 2: //代金券
             return "全场商品可用";
-          case 3://折扣券
+          case 3: //折扣券
             return "仅限定某些品牌类商品可用";
           default:
             return "限提供所描述特定的服务可用"
@@ -905,22 +869,23 @@
 
       formateCouponDetail(rules) {
         switch (rules.type) {
-          case 0://满减券
+          case 0: //满减券
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
-          case 1://代金券
+          case 1: //代金券
             return '代金券';
-          case 2://折扣券
+          case 2: //折扣券
             if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
             } else {
               return '折扣券 ';
             }
-          default:
-            return ""
+            default:
+              return ""
         }
       },
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
-        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format(
+          'YYYY.MM.DD');
       },
       obtainMerchantArray() {
         let that = this;
@@ -975,12 +940,12 @@
                   if (coupon.couponInfo.rules.scenario.type === 3) {
                     for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
                       if (coupon.couponInfo.rules.scenario.categories[i] === sku.product.goodsInfo.category) {
-                        found = 1;//找到
+                        found = 1; //找到
                         break;
                       }
                     }
                   } else if (coupon.couponInfo.rules.scenario.type === 2) {
-                    found = 1;//找到
+                    found = 1; //找到
                   } else {
                     for (let j = 0; j < coupon.couponInfo.rules.scenario.couponMpus.length; j++) {
                       if (coupon.couponInfo.rules.scenario.couponMpus[j] == sku.product.baseInfo.mpu) {
@@ -990,7 +955,8 @@
                     }
                   }
                   if (found != -1) {
-                    let unitCouponDiscount = Math.floor((this.reducedPriceOfCoupon * sku.product.goodsInfo.dprice / this.totalSkuPriceOfCoupon) * 100) / 100;
+                    let unitCouponDiscount = Math.floor((this.reducedPriceOfCoupon * sku.product.goodsInfo
+                      .dprice / this.totalSkuPriceOfCoupon) * 100) / 100;
                     let skuCouponDiscount = unitCouponDiscount * sku.product.baseInfo.count;
                     skus.push({
                       "skuId": sku.product.baseInfo.skuId,
@@ -1001,7 +967,8 @@
                       "skuCouponDiscount": skuCouponDiscount
                     })
                     // couponOccupiedPrice4OnPerMerchant += sku.product.goodsInfo.dprice * sku.product.baseInfo.count
-                    couponDiscountOfMerchant = parseFloat((couponDiscountOfMerchant + skuCouponDiscount).toFixed(2))
+                    couponDiscountOfMerchant = parseFloat((couponDiscountOfMerchant + skuCouponDiscount)
+                      .toFixed(2))
                   }
                 }
               })
@@ -1031,18 +998,21 @@
               }
               let diff = parseFloat((this.reducedPriceOfCoupon - totalCouponDiscount).toFixed(2))
               //把多余的优惠差价给最大的优惠价格拥有的商户
-              merchants[maxMerchants].couponDiscountOfMerchant = parseFloat((merchants[maxMerchants].couponDiscountOfMerchant + diff).toFixed(2))
+              merchants[maxMerchants].couponDiscountOfMerchant = parseFloat((merchants[maxMerchants]
+                .couponDiscountOfMerchant + diff).toFixed(2))
               //找到maxMerchants这个商户的有最大优惠券价值的SKU，把多余的券值赋给这个SKU
               let maxMpu = 0;
               if (merchants[maxMerchants].skus.length > 1) {
                 for (let i = 1; i < merchants[maxMerchants].skus.length; i++) {
-                  if (merchants[maxMerchants].skus[i].skuCouponDiscount > merchants[maxMerchants].skus[maxMpu].skuCouponDiscount) {
+                  if (merchants[maxMerchants].skus[i].skuCouponDiscount > merchants[maxMerchants].skus[maxMpu]
+                    .skuCouponDiscount) {
                     maxMpu = i;
                   }
                 }
               }
               //把多余的券值赋给这个SKU
-              merchants[maxMerchants].skus[maxMpu].skuCouponDiscount = parseFloat((merchants[maxMerchants].skus[maxMpu].skuCouponDiscount + diff).toFixed(2))
+              merchants[maxMerchants].skus[maxMpu].skuCouponDiscount = parseFloat((merchants[maxMerchants].skus[maxMpu]
+                .skuCouponDiscount + diff).toFixed(2))
             }
           }
           let couponDiscount = parseFloat(this.reducedPriceOfCoupon)
@@ -1061,59 +1031,80 @@
       couponReducedPrice(coupon) {
         let reducePrice = 0;
         let fullPrice = 0;
-        if (coupon != null) {
-          let allPayList = this.$store.state.appconf.payList;
-          if (coupon.couponInfo.rules.scenario.type === 3) {//类目品牌类
+
+        if (this.pageAction === "pickupGoods") {
+          if (coupon != null) {
+            let allPayList = this.$store.state.appconf.payList;
             allPayList.forEach(payItem => {
               if (payItem.valid) {
-                for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
-                  if (coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
-                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                    break;
-                  }
-                }
+                fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
               }
             })
-          } else {
-            allPayList.forEach(payItem => {
-              if (payItem.valid) {
-                if (coupon.couponInfo.rules.scenario.type === 2) {//全场类
-                  fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
-                } else {
-                  for (let j = 0; j < coupon.couponInfo.rules.scenario.couponMpus.length; j++) {
-                    if (coupon.couponInfo.rules.scenario.couponMpus[j] == payItem.product.baseInfo.mpu) {
+            this.$log("fullPrice:" + fullPrice)
+            reducePrice = fullPrice
+          }
+
+          this.reducedPriceOfCoupon = reducePrice.toFixed(2)
+          this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
+          this.$log("reducedPriceOfCoupon:" + this.reducedPriceOfCoupon)
+          return this.reducedPriceOfCoupon;
+        } else {
+          if (coupon != null) {
+            let allPayList = this.$store.state.appconf.payList;
+            if (coupon.couponInfo.rules.scenario.type === 3) { //类目品牌类
+              allPayList.forEach(payItem => {
+                if (payItem.valid) {
+                  for (let i = 0; i < coupon.couponInfo.rules.scenario.categories.length; i++) {
+                    if (coupon.couponInfo.rules.scenario.categories[i] === payItem.product.goodsInfo.category) {
                       fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
                       break;
                     }
                   }
                 }
-              }
-            })
-          }
-          this.$log("fullPrice:" + fullPrice)
+              })
+            } else {
+              allPayList.forEach(payItem => {
+                if (payItem.valid) {
+                  if (coupon.couponInfo.rules.scenario.type === 2) { //全场类
+                    fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                  } else {
+                    for (let j = 0; j < coupon.couponInfo.rules.scenario.couponMpus.length; j++) {
+                      if (coupon.couponInfo.rules.scenario.couponMpus[j] == payItem.product.baseInfo.mpu) {
+                        fullPrice += payItem.product.goodsInfo.dprice * payItem.product.baseInfo.count
+                        break;
+                      }
+                    }
+                  }
+                }
+              })
+            }
+            this.$log("fullPrice:" + fullPrice)
 
-          switch (coupon.couponInfo.rules.couponRules.type) {
-            case 0:
-              reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
-              break;
-            case 1:
-              reducePrice = coupon.couponInfo.rules.couponRules.cashCoupon.amount;
-              break;
-            case 2:
-              reducePrice = fullPrice * (1 - coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio)
-              break;
-            default:
-              break;
+            switch (coupon.couponInfo.rules.couponRules.type) {
+              case 0:
+                reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
+                break;
+              case 1:
+                reducePrice = coupon.couponInfo.rules.couponRules.cashCoupon.amount;
+                break;
+              case 2:
+                reducePrice = fullPrice * (1 - coupon.couponInfo.rules.couponRules.discountCoupon.discountRatio)
+                break;
+              default:
+                break;
+            }
+            if (reducePrice > fullPrice) {
+              reducePrice = fullPrice;
+            }
           }
-          if (reducePrice > fullPrice) {
-            reducePrice = fullPrice;
-          }
+
+          this.reducedPriceOfCoupon = reducePrice.toFixed(2)
+          this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
+          this.$log("reducedPriceOfCoupon:" + this.reducedPriceOfCoupon)
+          return this.reducedPriceOfCoupon;
         }
 
-        this.reducedPriceOfCoupon = reducePrice.toFixed(2)
-        this.totalSkuPriceOfCoupon = fullPrice.toFixed(2)
-        this.$log("reducedPriceOfCoupon:" + this.reducedPriceOfCoupon)
-        return this.reducedPriceOfCoupon;
+
       },
       onCouponListClick(coupon) {
         this.$log("onCouponListClick Enter")
@@ -1136,15 +1127,15 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
-          if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list.length) {
+          if (that.couponTypes[index].total == -1 || that.couponTypes[index].total > that.couponTypes[index].list
+            .length) {
             that.couponTypes[index].loading = true;
-            let options =
-              {
-                userOpenId: user.userId,
-                status: index + 1,
-                "offset": that.couponTypes[index].pageNo++,
-                "limit": 50
-              }
+            let options = {
+              userOpenId: user.userId,
+              status: index + 1,
+              "offset": that.couponTypes[index].pageNo++,
+              "limit": 50
+            }
             that.$api.xapi({
               method: 'post',
               baseURL: this.$api.EQUITY_BASE_URL,
@@ -1195,7 +1186,8 @@
 
       confirmedInvoiceSelector() {
         this.$log(this.invoiceRadio);
-        if (this.invoiceTitleType != "personal" && (this.invoiceEnterpriseName.length == 0 || this.invoiceEnterpriseNumber.length == 0)) {
+        if (this.invoiceTitleType != "personal" && (this.invoiceEnterpriseName.length == 0 || this
+            .invoiceEnterpriseNumber.length == 0)) {
           this.$toast("请正确填写企业名称与纳税人识别号!")
           return
         }
@@ -1233,7 +1225,8 @@
         }
         this.$log(k)
         if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this, k.product.promotionInfo)
+          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this, k.product
+            .promotionInfo)
           this.savePayList()
         }
       },
@@ -1246,7 +1239,8 @@
           }
         }
         if (found != -1) {
-          this.payCarList[found].product.promotionInfo.promotionState =  Util.getPromotionState(this, k.product.promotionInfo)
+          this.payCarList[found].product.promotionInfo.promotionState = Util.getPromotionState(this, k.product
+            .promotionInfo)
           let len = this.payCarList[found].product.promotionInfo.promotion.length;
           this.payCarList[found].product.promotionInfo.promotion.splice(0, len);
           this.savePayList()
@@ -1323,8 +1317,7 @@
               }
             }
           }
-        } catch (e) {
-        }
+        } catch (e) {}
         if (list.length > 0 && id == -1) {
           id = list[0].id
           address = list[0]
@@ -1339,9 +1332,10 @@
         }
         this.$store.commit('SET_USED_ADDRESS_ID', id);
         this.usedAddress = address
-        this.usedRegionId = Util.getRegionId(this,this.usedAddress.provinceName,this.usedAddress.cityName,this.usedAddress.countyName)
+        this.usedRegionId = Util.getRegionId(this, this.usedAddress.provinceName, this.usedAddress.cityName, this
+          .usedAddress.countyName)
         this.$log(this.usedAddress)
-        this.$log("usedRegionId:"+ this.usedRegionId)
+        this.$log("usedRegionId:" + this.usedRegionId)
       },
 
       prefixInteger(num, length) {
@@ -1355,8 +1349,7 @@
           allPayList.forEach(item => {
             Util.deletCartItem(this, item.product)
           })
-        } catch (e) {
-        }
+        } catch (e) {}
       },
 
       getComposedOrderOption(userInfo, receiverId) {
@@ -1384,7 +1377,8 @@
           }
         }
         let couponInfo = this.getUsedCouponDetail4Order(this.usedCoupon)
-        this.$log("couponInfo:"+ couponInfo)
+        this.$log("couponInfo:")
+        this.$log(couponInfo)
         this.arregationList.forEach(item => {
           if (item.goods.length > 0) {
             let skus = []
@@ -1456,14 +1450,14 @@
             this.$log("unitsAmount:" + unitsAmount)
             let saleAmount = parseFloat((unitsAmount - couponDiscountOfMerchant).toFixed(2));
             merchants.push({
-              "tradeNo": tradeNo,//主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
+              "tradeNo": tradeNo, //主订单号 = APP ID (2位)+ CITY ID (3位) + 商户ID (2位) + USER ID (8位)
               "merchantNo": item.merchantCode, //商户号
               "merchantId": item.merchantId,
               "payment": "01", //支付方式， 现金支付
               "servFee": item.freight, //运费
-              "amount": amount,     //应给商户的实际总价
-              "saleAmount": saleAmount,//用户支付给商户的实际总价 = 单品salePrice*number + 运费
-              "type": 1,//订单类型 0: 实时式订单  1: 预占型订单
+              "amount": amount, //应给商户的实际总价
+              "saleAmount": saleAmount, //用户支付给商户的实际总价 = 单品salePrice*number + 运费
+              "type": 1, //订单类型 0: 实时式订单  1: 预占型订单
               "skus": skus
             })
           }
@@ -1479,9 +1473,9 @@
         let options = {
           "openId": user.userId,
           "companyCustNo": companyCustNo,
-          "receiverId": receiverId,//接收地址ID
+          "receiverId": receiverId, //接收地址ID
           "regionId": this.usedRegionId,
-          "remark": "",//用户自填字段，比如周末不配送
+          "remark": "", //用户自填字段，比如周末不配送
           "invoiceType": invoiceType,
           "invoiceTitleName": invoiceTitleName,
           "invoiceEnterpriseNumber ": invoiceEnterpriseNumber,
@@ -1589,9 +1583,8 @@
         this.$log("isValidOrder:" + JSON.stringify(options))
         let count = 0;
         options.merchants.forEach(merchant => {
-            count += merchant.skus.length;
-          }
-        )
+          count += merchant.skus.length;
+        })
         if (count > 0)
           return true;
         return false;
@@ -1609,8 +1602,7 @@
           if (receiverId == undefined || receiverId == -1) {
             this.$dialog.alert({
               title: '请检查收件人信息是否已经填写',
-            }).then(() => {
-            })
+            }).then(() => {})
           } else {
             try {
               let options = this.getComposedOrderOption(userInfo, receiverId);
@@ -1638,7 +1630,7 @@
                         if (result != undefined && result.length > 0 && result[0].tradeNo.length > 8) {
                           let len = result[0].tradeNo.length;
                           orderNos = JSON.stringify(result[0].tradeNo.substr(len - 8)).replace(/\"/g, "");
-                          if (options.merchants.length == 1) {//单商户
+                          if (options.merchants.length == 1) { //单商户
                             merchantNo = options.merchants[0].merchantNo;
                           }
                           orderNo = this.$api.APP_ID + merchantNo + user.openId + orderNos
@@ -1650,14 +1642,16 @@
                           })
                           let pAnOrderInfo = {
                             "accessToken": user.accessToken,
-                            "orderNo": '',// orderNo,
-                            "orderAmount": parseInt((amount * 100).toFixed(0)),//分
+                            "orderNo": '', // orderNo,
+                            "orderAmount": parseInt((amount * 100).toFixed(0)), //分
                             "openId": user.openId,
                             "businessType": "11",
                             "hasVirtualGoods": this.hasVirtualGoods
                           }
                           if (that.pageAction == "direct") {
                             this.$store.commit('SET_PAY_DIRECT_PRODUCT', '')
+                          } else if (that.pageAction == "pickupGoods") {
+                            this.$store.commit('SET_PICKUP_PRODUCTS_INFO', '')
                           } else {
                             that.deleteOrderedGoodsInCar();
                           }
@@ -1691,18 +1685,17 @@
                 this.$log("无效的订单")
                 this.$toast("无效的订单")
               }
-            } catch (e) {
-            }
+            } catch (e) {}
           }
         } else {
           this.$dialog.alert({
             title: '未获取到用户信息，请检查用户是否已经登录',
-          }).then(() => {
-          })
+          }).then(() => {})
         }
 
       },
       getPlatformFreightPay() {
+        this.$log("getPlatformFreightPay Enter @@@@@@@@@@@@@@@@@@@@")
         /////////////查询平台运费////////////////////////
         let that = this;
         let all = 0;
@@ -1713,12 +1706,10 @@
             let mpuParams = []
             item.goods.forEach(goods => {
               if (goods.valid) {
-                mpuParams.push(
-                  {
-                    mpu: goods.product.baseInfo.mpu,
-                    num: goods.product.baseInfo.count
-                  }
-                )
+                mpuParams.push({
+                  mpu: goods.product.baseInfo.mpu,
+                  num: goods.product.baseInfo.count
+                })
               }
             })
             options.push({
@@ -1757,6 +1748,7 @@
         })
       },
       getAoyifreightPay() {
+        this.$log("getAoyifreightPay Enter @@@@@@@@@@@@@@@@@@@@")
         /////////////查询运费////////////////////////
         let that = this;
         let all = 0;
@@ -1833,16 +1825,78 @@
                 "remainNum": item.baseInfo.count,
                 "price": item.goodsInfo.price
               })
-              skus.push({"skuId": item.baseInfo.skuId})
-            } else if(item.baseInfo.merchantId === 4)  {//yytong
-              inventorySkusOfYyt.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
-              skusOfYyt.push({"skuId": item.baseInfo.skuId})
+              skus.push({
+                "skuId": item.baseInfo.skuId
+              })
+            } else if (item.baseInfo.merchantId === 4) { //yytong
+              inventorySkusOfYyt.push({
+                "skuId": item.baseInfo.skuId,
+                "remainNum": item.baseInfo.count
+              })
+              skusOfYyt.push({
+                "skuId": item.baseInfo.skuId
+              })
             } else {
-              inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
-              skusOfZy.push({"mpu": item.baseInfo.mpu})
+              inventorySkusOfZy.push({
+                "mpu": item.baseInfo.mpu,
+                "remainNum": item.baseInfo.count
+              })
+              skusOfZy.push({
+                "mpu": item.baseInfo.mpu
+              })
             }
-            this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.checkedPrice !=undefined ? item.goodsInfo.checkedPrice:item.goodsInfo.price})
+            this.payCarList.push({
+              "product": item,
+              "valid": true,
+              "checkedPrice": item.goodsInfo.checkedPrice != undefined ? item.goodsInfo.checkedPrice : item
+                .goodsInfo.price
+            })
           }
+        } else if (this.pageAction == "pickupGoods") {
+          let pickupProdInfo = this.$store.state.appconf.pickupProdInfo
+          if (pickupProdInfo != undefined) {
+            if (pickupProdInfo.list != undefined) {
+              pickupProdInfo.list.forEach(item => {
+                if (item.baseInfo.merchantId === 2) { //aoyi
+                  inventorySkus.push({
+                    "skuId": item.baseInfo.skuId,
+                    "remainNum": item.baseInfo.count,
+                    "price": item.goodsInfo.price
+                  })
+                  skus.push({
+                    "skuId": item.baseInfo.skuId
+                  })
+                } else if (item.baseInfo.merchantId === 4) { //yytong
+                  inventorySkusOfYyt.push({
+                    "skuId": item.baseInfo.skuId,
+                    "remainNum": item.baseInfo.count
+                  })
+                  skusOfYyt.push({
+                    "skuId": item.baseInfo.skuId
+                  })
+                } else {
+                  inventorySkusOfZy.push({
+                    "mpu": item.baseInfo.mpu,
+                    "remainNum": item.baseInfo.count
+                  })
+                  skusOfZy.push({
+                    "mpu": item.baseInfo.mpu
+                  })
+                }
+                this.payCarList.push({
+                  "product": item,
+                  "valid": true,
+                  "checkedPrice": item.goodsInfo.checkedPrice != undefined ? item.goodsInfo.checkedPrice :
+                    item
+                    .goodsInfo.price
+                })
+              })
+            }
+            this.usedCoupon = pickupProdInfo.coupon
+            this.$log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+            this.$log(this.usedCoupon)
+          }
+
         } else {
           this.selectedCarList.forEach(item => {
             // this.$log(item)
@@ -1852,19 +1906,35 @@
                 "remainNum": item.baseInfo.count,
                 "price": item.goodsInfo.price
               })
-              skus.push({"skuId": item.baseInfo.skuId})
-            } else if(item.baseInfo.merchantId === 4)  {//yytong
-              inventorySkusOfYyt.push({"skuId": item.baseInfo.skuId, "remainNum": item.baseInfo.count})
-              skusOfYyt.push({"skuId": item.baseInfo.skuId})
+              skus.push({
+                "skuId": item.baseInfo.skuId
+              })
+            } else if (item.baseInfo.merchantId === 4) { //yytong
+              inventorySkusOfYyt.push({
+                "skuId": item.baseInfo.skuId,
+                "remainNum": item.baseInfo.count
+              })
+              skusOfYyt.push({
+                "skuId": item.baseInfo.skuId
+              })
             } else {
-              inventorySkusOfZy.push({"mpu": item.baseInfo.mpu, "remainNum": item.baseInfo.count})
-              skusOfZy.push({"mpu": item.baseInfo.mpu})
+              inventorySkusOfZy.push({
+                "mpu": item.baseInfo.mpu,
+                "remainNum": item.baseInfo.count
+              })
+              skusOfZy.push({
+                "mpu": item.baseInfo.mpu
+              })
             }
             if (item.promotionInfo.promotion != null && item.promotionInfo.promotion.length > 0) {
               item.promotionInfo.promotionState = Util.getPromotionState(this, item.promotionInfo);
             }
             //////////////////
-            this.payCarList.push({"product": item, "valid": true, "checkedPrice": item.goodsInfo.price})
+            this.payCarList.push({
+              "product": item,
+              "valid": true,
+              "checkedPrice": item.goodsInfo.price
+            })
           })
         }
         this.$log("paylist:")
@@ -1902,7 +1972,7 @@
                 }
               })
               //获取运费
-              this.getAoyifreightPay();//获取奥弋商品库存
+              this.getAoyifreightPay(); //获取奥弋商品库存
             }).catch(function (error) {
               that.$log(error)
               that.isAoyiDataLoaded = true;
@@ -1915,7 +1985,7 @@
           } else {
             this.isAoyiDataLoaded = true;
           }
-          if (skusOfZy.length > 0) {//other merchant
+          if (skusOfZy.length > 0) { //other merchant
             let options = {
               "inventories": inventorySkusOfZy
             }
@@ -1939,9 +2009,8 @@
                 }
               })
               this.getPlatformFreightPay();
-            }).catch(function (error) {
-            })
-            this.getPlatformFreightPay();//获取平台商品库存
+            }).catch(function (error) {})
+            this.getPlatformFreightPay(); //获取平台商品库存
             this.$log("page loading end");
             if (this.pageLoadTimerId != -1) {
               clearTimeout(this.pageLoadTimerId)
@@ -2016,7 +2085,7 @@
                       if (this.payCarList[i].product.baseInfo.skuId === item.code) {
                         this.$log(this.payCarList[i].product.baseInfo.count)
                         if (item.inventoryCount < this.payCarList[i].product.baseInfo.count) {
-                          this.payCarList[i].valid =  false
+                          this.payCarList[i].valid = false
                         } else {
                           this.payCarList[i].valid = true
                         }
@@ -2024,29 +2093,31 @@
                     }
                   })
                 }
-              } catch (e) {
+              } catch (e) {}
+            }
+            if (this.pageAction != "pickupGoods") {
+              let ret = await this.getAllasPlatformFreight()
+              this.$log(ret)
+              if (ret.data.code == 200) {
+                let result = ret.data.data.result
+                if (result.totalPrice > 0) {
+                  result.priceBeans.forEach(iFreight => {
+                    this.arregationList.forEach(item => {
+                      if (item.price > 0 && item.merchantId != 2) {
+                        if (iFreight.merchantId === item.merchantId) {
+                          item.freight = parseFloat(iFreight.shipPrice);
+                        }
+                      } else if (item.price > 0 && item.merchantId == 2) {
+                        if (iFreight.merchantCode === item.merchantCode) {
+                          item.freight = parseFloat(iFreight.shipPrice);
+                        }
+                      }
+                    })
+                  });
+                }
               }
             }
-            let ret = await this.getAllasPlatformFreight()
-            this.$log(ret)
-            if (ret.data.code == 200) {
-              let result = ret.data.data.result
-              if (result.totalPrice > 0) {
-                result.priceBeans.forEach(iFreight => {
-                  this.arregationList.forEach(item => {
-                    if (item.price > 0 && item.merchantId != 2) {
-                      if (iFreight.merchantId === item.merchantId) {
-                        item.freight = parseFloat(iFreight.shipPrice);
-                      }
-                    } else if (item.price > 0 && item.merchantId == 2) {
-                      if (iFreight.merchantCode === item.merchantCode) {
-                        item.freight = parseFloat(iFreight.shipPrice);
-                      }
-                    }
-                  })
-                });
-              }
-            }
+
             this.upDatefreightPay()
             that.isAoyiDataLoaded = true
             that.isOtherDataLoaded = true
@@ -2065,6 +2136,7 @@
       },
 
       getAllasPlatformFreight() {
+        this.$log("getAllasPlatformFreight Enter @@@@@@@@@@@@@@@@@@@@@@")
         let that = this;
         let all = 0;
         let locationCode = this.getLocationCode()
@@ -2075,12 +2147,10 @@
           item.goods.forEach(goods => {
             if (goods.valid) {
               totalPrice += goods.product.goodsInfo.dprice * goods.product.baseInfo.count
-              mpuParams.push(
-                {
-                  mpu: goods.product.baseInfo.mpu,
-                  num: goods.product.baseInfo.count
-                }
-              )
+              mpuParams.push({
+                mpu: goods.product.baseInfo.mpu,
+                num: goods.product.baseInfo.count
+              })
             }
           })
           if (mpuParams.length > 0) {
@@ -2133,7 +2203,7 @@
           baseURL: this.$api.AOYIS_CONFIG_URL,
           url: '/star/product/inventory',
           data: {
-            codes:codes
+            codes: codes
           }
         })
       },
@@ -2141,9 +2211,13 @@
       editAddressOrList() {
         this.$log("addressCount:" + this.addressCount)
         if (this.addressCount) { //go to Address List
-          this.$router.push({name: '地址列表页'})
+          this.$router.push({
+            name: '地址列表页'
+          })
         } else { //没有Address //go to Address edit
-          this.$router.push({name: '地址页'})
+          this.$router.push({
+            name: '地址页'
+          })
         }
       },
 
@@ -2157,7 +2231,7 @@
           "countyName": "徐汇区",
           "countyId": "03"
         }
-        if (/*送货地址*/JSON.stringify(this.usedAddress) != "{}") {
+        if ( /*送货地址*/ JSON.stringify(this.usedAddress) != "{}") {
           code = this.usedAddress;
           this.locationCity = this.usedAddress.cityName;
         } else if (this.$store.state.appconf.locationCode != undefined &&
@@ -2171,6 +2245,7 @@
     }
 
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -2230,7 +2305,7 @@
               }
             }
 
-            > span {
+            >span {
               margin-top: 1vw;
               margin-left: 3.2vw;
               overflow: hidden;
@@ -2328,7 +2403,7 @@
                 word-break: break-all;
                 .fz(font-size, 35);
 
-                > span {
+                >span {
                   .fz(font-size, 25);
                   color: #8a8a8a;
                 }
@@ -2357,7 +2432,6 @@
         .pay-info {
           margin: 10px;
           background-color: white;
-          padding: 2px;
           border-radius: 10px;
 
           .van-actionsheet {
@@ -2445,7 +2519,7 @@
                 .fz(font-size, 25)
               }
 
-              input:checked + label {
+              input:checked+label {
                 color: #E06558;
                 border: 1px solid #E06558;
               }
@@ -2566,7 +2640,8 @@
 
                     /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
 
-                    .coupon-hole::before, .coupon-hole::after {
+                    .coupon-hole::before,
+                    .coupon-hole::after {
                       content: '';
                       width: 1rem;
                       height: 1rem;
@@ -2590,7 +2665,7 @@
                       bottom: -.5rem;
                     }
 
-                    .coupon-info > div {
+                    .coupon-info>div {
                       margin-bottom: .2rem;
                     }
 
@@ -2608,7 +2683,7 @@
                       color: #FF4444;
                     }
 
-                    .coupon-price > span {
+                    .coupon-price>span {
                       font-size: 60%;
                       font-weight: normal;
                     }
@@ -2671,7 +2746,8 @@
 
                 /* 左边框的波浪 */
 
-                .coupon-wave-left::before, .coupon-wave-right::after {
+                .coupon-wave-left::before,
+                .coupon-wave-right::after {
                   content: '';
                   position: absolute;
                   top: 0;
@@ -2888,14 +2964,14 @@
           bottom: 0;
           height: 2px;
           background: repeating-linear-gradient(-45deg,
-          #ff6c6c 0,
-          #ff6c6c 20%,
-          transparent 0,
-          transparent 25%,
-          blue 0,
-          blue 45%,
-          transparent 0,
-          transparent 50%);
+              #ff6c6c 0,
+              #ff6c6c 20%,
+              transparent 0,
+              transparent 25%,
+              blue 0,
+              blue 45%,
+              transparent 0,
+              transparent 50%);
           background-size: 80px;
         }
 
@@ -2952,7 +3028,7 @@
                 .fz(font-size, 40);
               }
 
-              .cardStepper{
+              .cardStepper {
                 margin-right: -5px;
                 margin-top: -15px;
               }

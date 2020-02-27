@@ -22,6 +22,9 @@ const AfterSaleService = resolve => require(['@/components/car/pay/afterSaleServ
 const CouponCenter = resolve => require(['@/components/user/couponCenter.vue'], resolve)
 const CouponList = resolve => require(['@/components/user/couponList.vue'], resolve)
 const UserInfo = resolve => require(['@/components/user/userInfo.vue'], resolve)
+const BillOfLadingCard = resolve => require(['@/components/user/billOfLadingCard.vue'], resolve)
+const BillOfLadingList = resolve => require(['@/components/user/billOfLadingList.vue'], resolve)
+const BillOfLadingGoods = resolve => require(['@/components/user/billOfLadingGoods.vue'], resolve)
 const CouponChange = resolve => require(['@/components/user/couponChange.vue'], resolve)
 const CouponListActivity = resolve => require(['@/components/user/couponListActivity.vue'], resolve)
 const CouponWouldCollect = resolve => require(['@/components/user/couponWouldCollect.vue'], resolve)
@@ -46,8 +49,7 @@ const FcResetPwd = resolve => require(['@/views/fcResetPwd.vue'], resolve)
 
 export default new VueRouter({
   mode: 'history',
-  routes: [
-    {
+  routes: [{
       path: '/',
       name: '首页',
       component: Index,
@@ -59,8 +61,7 @@ export default new VueRouter({
       path: '/index/:id',
       name: '活动页',
       component: IndexSub,
-      meta: {
-      }
+      meta: {}
     },
 
     {
@@ -78,7 +79,7 @@ export default new VueRouter({
           keepAlive: true, //此组件需要被缓存
           title: '商品分类',
         }
-      },]
+      }, ]
     },
     {
       path: '/category/goods/list',
@@ -125,7 +126,7 @@ export default new VueRouter({
         meta: {
           title: '确认订单',
         }
-      },]
+      }, ]
     },
     {
       path: '/car/orderList',
@@ -165,7 +166,7 @@ export default new VueRouter({
         meta: {
           title: '地址编辑',
         }
-      },]
+      }, ]
     },
     {
       path: '/car/addressList',
@@ -188,7 +189,7 @@ export default new VueRouter({
       name: '用户页',
       component: User,
       meta: {
-        requireAuth: true,  // 添加该字段，表示进入这个路由是需要登录才能进入的
+        requireAuth: true, // 添加该字段，表示进入这个路由是需要登录才能进入的
         title: '我的',
       },
     }, {
@@ -317,7 +318,7 @@ export default new VueRouter({
       meta: {
         title: '惠民优选卡详情',
       }
-    },    {
+    }, {
       path: '/qrcode',
       name: '二维码页',
       component: Qrcode,
@@ -403,6 +404,30 @@ export default new VueRouter({
       component: LogisticsYyt,
       meta: {
         title: '物流信息',
+      }
+    },
+    {
+      path: '/user/billoflading',
+      name: '提货券页',
+      component: BillOfLadingCard,
+      meta: {
+        title: '提货券',
+      }
+    },
+    {
+      path: '/user/billofladingList',
+      name: '提货券列表页',
+      component: BillOfLadingList,
+      meta: {
+        title: '我的提货券',
+      }
+    },
+    {
+      path: '/user/billofladingGoods',
+      name: '提货券商品页',
+      component: BillOfLadingGoods,
+      meta: {
+        title: '提货券商品',
       }
     },
   ]
