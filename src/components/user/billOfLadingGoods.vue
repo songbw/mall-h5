@@ -63,7 +63,13 @@
             this.$log(this.goodsList)
             this.goodsList.forEach(item => {
               item['promotionState'] = Util.getPromotionState(this, item)
-              item['dprice'] = Util.getDisplayPrice(this, item.price, item)
+              if (item.merchantId == 4) {
+                if(item.skuList.length > 0) {
+                  this.$log(item.skuList[0])
+                  item.price = parseFloat((item.skuList[0].price / 100 ).toFixed(2))          
+                }
+              }
+              item['dprice'] = item.price; //Util.getDisplayPrice(this, item.price, item)
             })
           }
         }

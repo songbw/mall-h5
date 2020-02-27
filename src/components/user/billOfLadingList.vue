@@ -129,6 +129,7 @@
             return "状态: 已过期";
         }
       },
+      
       onDeleteCardBtnClick(k, index) {
         this.$log("onDeleteCardBtnClick Enter")
         let that = this
@@ -144,7 +145,17 @@
             }
           }).then((response) => {
             if (response.data.code == 200) {
-              this.cardList.splice(index, 1);
+              let found = -1;
+              for (let i = 0; i < this.cardList.length; i++) {
+                if (this.cardList[i].id === k.id) {
+                  found = i;
+                  break;
+                }
+              }
+              if (found != -1) {
+                this.cardList.splice(found, 1);
+              }
+
             }
           }).catch(function (error) {
             that.$log(error)

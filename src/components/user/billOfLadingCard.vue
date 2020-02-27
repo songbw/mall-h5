@@ -256,9 +256,12 @@
             //开始下单
             let list = []
             goodsList.forEach(goods => {
-              let skuId = goods.skuId
-              if (skuId === undefined || skuId === null) {
-                skuId = goods.skuid
+              let skuId = goods.skuid
+              if (goods.merchantId == 4) {
+                if(goods.skuList.length > 0) {
+                  skuId = goods.skuList[0].code  
+                  goods.price  = parseFloat((goods.skuList[0].price / 100 ).toFixed(2))                 
+                }
               }
               let baseInfo = {
                 "userId": user.userId,
