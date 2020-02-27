@@ -728,6 +728,31 @@
     },
 
     methods: {
+      wkycCasher(orderInfo) {
+        let that = this
+        let payOptions = {
+          appId: this.$api.APP_ID,
+          orderNo: orderInfo.orderNo
+        }
+        balancePay = {
+          actPayFee: "" + orderInfo.orderAmount,
+          openId: user.openId,
+          orderNo: orderInfo.orderNo,
+          payType: "balance"
+        }
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AGGREGATE_PAY_URL,
+          url: '/wspay/pay',
+          data: payOptions,
+        }).then((response) => {
+          this.$log(response)
+
+        }).catch(function (error) {
+          that.$toast("请求支付失败")
+          // that.payBtnSubmitLoading = false;
+        })
+      },
       wkycPay() {
         let that = this
         let tradeOrderNo = 'tral' + Date.now() + Math.floor(Math.random() * 100000)
@@ -1580,7 +1605,7 @@
                 pAnOrderInfo['outTradeNo'] = outTradeNo
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                 if (this.$api.APP_ID == '14') {
-                  this.wkycPay()
+                  this.wkycCasher(pAnOrderInfo);
                 } else {
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
                   this.$router.replace({
