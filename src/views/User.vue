@@ -59,10 +59,10 @@
         </div>
       </div>
       <div class="settingsBox">
-        <div v-if="this.$api.APP_ID == '11'">
-          <van-cell title="我的提货券" is-link @click="onLadingCardBtnClick">
+        <van-cell title="我的提货券" is-link @click="onLadingCardBtnClick">
             <img slot="icon" :src="icon_ladingCard"/>
-          </van-cell>
+        </van-cell>
+        <div v-if="this.$api.APP_ID == '11'">
           <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
             <img slot="icon" :src="icon_optCard"/>
           </van-cell>
