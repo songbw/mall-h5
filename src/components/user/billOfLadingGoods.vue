@@ -21,6 +21,7 @@
                 <div class="priceBox">
                   <div class="salePrice">
                     <p><span>￥</span>{{k.dprice}}</p>
+                    <p v-if="k.price > k.dprice" style="margin:6px;color:#888888;font-size:small;text-decoration:line-through"><span>￥</span>{{k.price}}</p>
                   </div>
                 </div>
               </div>
@@ -47,6 +48,8 @@
         loading: true,
         goodsList: [],
         couponId: -1,
+        amount: 0,
+        totalPrice: 0
       }
     },
 
@@ -54,7 +57,8 @@
       let that = this
       this.$log("created Enter")
       try {
-        let id = this.$route.query.id;
+        let id = this.$route.params.id;
+        this.amount = this.$route.params.amount
         if (id != undefined) {
           let repsonse = await this.getGoodsList(id)
           this.$log(repsonse)
@@ -64,16 +68,41 @@
             this.goodsList.forEach(item => {
               item['promotionState'] = Util.getPromotionState(this, item)
               if (item.merchantId == 4) {
-                if(item.skuList.length > 0) {
+                if (item.skuList.length > 0) {
                   this.$log(item.skuList[0])
-                  item.price = parseFloat((item.skuList[0].price / 100 ).toFixed(2))          
+                  item.price = (item.skuList[0].price / 100).toFixed(2)
                 }
               }
-              item['dprice'] = item.price; //Util.getDisplayPrice(this, item.price, item)
+              item['dprice'] = 0;
+              this.totalPrice = this.totalPrice + parseFloat(item.price)
             })
+            if (this.totalPrice > this.amount) {
+              let tmpAmount = 0
+              for (let i = 0; i < this.goodsList.length; i++) {
+                this.goodsList[i].dprice = Math.floor((this.goodsList[i].price * this.amount / this.totalPrice) *
+                  100) / 100;
+                this.$log(this.goodsList[i].dprice)
+                tmpAmount = tmpAmount + this.goodsList[i].dprice
+              }
+              this.$log(tmpAmount)
+              let diff = parseFloat((this.amount - tmpAmount).toFixed(2))
+              this.$log("diff:"+diff)
+              if (diff > 0) {
+                for (let i = 0; i < this.goodsList.length; i++) {
+                  if (this.goodsList[i].price >= (diff + this.goodsList[i].dprice)) {
+                    this.goodsList[i].dprice = diff + this.goodsList[i].dprice
+                    this.$log(this.goodsList[i].dprice)
+                    break;
+                  }
+                }
+              }
+            } else {
+               for (let i = 0; i < this.goodsList.length; i++) {
+                this.goodsList[i].dprice = this.goodsList[i].price
+               }
+            }
           }
         }
-
       } catch (e) {
         that.$log(e.repsonse)
       }
@@ -203,6 +232,7 @@
                   margin-top: 4px;
 
                   .salePrice {
+                    display: flex;
                     color: #ff4444;
                     .fz(font-size, 42);
 

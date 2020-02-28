@@ -32,7 +32,7 @@
                         <img v-lazy="item.imageUrl.length?item.imageUrl: couponImg">
                       </van-col>
                       <van-col span="16" class="couponInfo">
-<!--                         <span
+                        <!--                         <span
                           v-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
                           style="margin-right: -7px">￥</span>
                         {{formateCouponPrice(item.rules.couponRules)}}
@@ -157,11 +157,14 @@
       gotoCouponDetail(coupon) {
         this.$log("gotoCouponDetail Enter")
         this.$log(coupon)
+
         this.$router.push({
-          path: "/user/billofladingGoods",
-          query: {
-            id: coupon.id
-          }
+          name: "提货券商品页",
+          params: {
+            id: coupon.id,
+            amount: this.cardDetail.cardInfo.amount
+          },
+
         });
       },
 
@@ -258,9 +261,9 @@
             goodsList.forEach(goods => {
               let skuId = goods.skuid
               if (goods.merchantId == 4) {
-                if(goods.skuList.length > 0) {
-                  skuId = goods.skuList[0].code  
-                  goods.price  = parseFloat((goods.skuList[0].price / 100 ).toFixed(2))                 
+                if (goods.skuList.length > 0) {
+                  skuId = goods.skuList[0].code
+                  goods.price = parseFloat((goods.skuList[0].price / 100).toFixed(2))
                 }
               }
               let baseInfo = {
