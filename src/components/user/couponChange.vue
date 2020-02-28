@@ -109,19 +109,19 @@
               });
             }
           } catch (e) {
-         
-            if(e.response.data.message == "该卡已被绑定") {
-               that.$toast(e.response.data.message)
-               this.$router.push({
+
+            if (e.response.data.message == "该卡已被绑定") {
+              that.$toast(e.response.data.message)
+              this.$router.push({
                 path: "/user/billofladingList",
               });
             } else {
-              if(e.response.data.status  == 404) {
+              if (e.response.data.status == 404) {
                 this.$log("没有找到券信息")
               } else {
                 that.$toast(e.response.data.message)
               }
-            } 
+            }
           }
 
         } else {
