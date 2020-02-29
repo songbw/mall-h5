@@ -89,6 +89,8 @@
         couponRadio: "",
         selectedRadio: "",
         couponImg: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_coupon.png',
+        amount: 0,
+        totalPrice: 0
       }
     },
 
@@ -255,15 +257,53 @@
           let response = await this.getGoodsList(coupon.couponInfo.id)
           this.$log(response)
           if (response.data.code === 200) {
+            this.amount = this.cardDetail.cardInfo.amount
             let goodsList = response.data.data.result.couponSkus.list
             //开始下单
             let list = []
+
+            //处理price
+            goodsList.forEach(goods => {
+              if (goods.merchantId == 4) {
+                if (goods.skuList.length > 0) {
+                  goods.price = parseFloat((goods.skuList[0].price / 100).toFixed(2))
+                }
+              }
+              goods['dprice'] = 0;
+              this.totalPrice = this.totalPrice + parseFloat(goods.price)
+            })
+            
+            if (this.totalPrice > this.amount) {
+              let tmpAmount = 0
+              for (let i = 0; i < goodsList.length; i++) {
+                goodsList[i].dprice = Math.floor((goodsList[i].price * this.amount / this.totalPrice) *
+                  100) / 100;
+                this.$log(goodsList[i].dprice)
+                tmpAmount = tmpAmount + goodsList[i].dprice
+              }
+              this.$log(tmpAmount)
+              let diff = parseFloat((this.amount - tmpAmount).toFixed(2))
+              this.$log("diff:"+diff)
+              if (diff > 0) {
+                for (let i = 0; i < goodsList.length; i++) {
+                  if (goodsList[i].price >= (diff + goodsList[i].dprice)) {
+                    goodsList[i].dprice = diff + goodsList[i].dprice
+                    this.$log(goodsList[i].dprice)
+                    break;
+                  }
+                }
+              }
+            } else {
+               for (let i = 0; i < goodsList.length; i++) {
+                goodsList[i].dprice = goodsList[i].price
+               }
+            }
+
             goodsList.forEach(goods => {
               let skuId = goods.skuid
               if (goods.merchantId == 4) {
                 if (goods.skuList.length > 0) {
                   skuId = goods.skuList[0].code
-                  goods.price = parseFloat((goods.skuList[0].price / 100).toFixed(2))
                 }
               }
               let baseInfo = {
@@ -285,14 +325,14 @@
                 "name": goods.name,
                 "brand": goods.brand,
                 "model": goods.model,
-                "price": goods.price,
+                "price": goods.dprice,
                 "checkedPrice": goods.price,
                 "type": goods.type == undefined ? 0 : goods.type
               }
               let couponList = []
               let promotionInfo = {
                 "promotion": [],
-                "promotionState": Util.getPromotionState(this, goods)
+                "promotionState": -1
               }
               let product = {
                 "baseInfo": baseInfo,
