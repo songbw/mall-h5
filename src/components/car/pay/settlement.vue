@@ -117,15 +117,27 @@
                     <div v-if="!k.valid">
                       <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444" />
                     </div>
-                    <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
-                      :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image">
-                      <div slot="desc">
-                        <span style="font-size: small">{{locationCity}}</span>
-                      </div>
-                      <!--                      <div slot="footer" @click.stop="" class="cardStepper">
+                    <div v-if="pageAction == 'pickupGoods'">
+                      <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
+                        :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
+                        :origin-price="k.checkedPrice > k.product.goodsInfo.dprice ? k.checkedPrice : ''">
+                        <div slot="desc">
+                          <span style="font-size: small">{{locationCity}}</span>
+                        </div>
+                      </van-card>
+                    </div>
+                    <div v-else>
+                      <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
+                        :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image">
+                        <div slot="desc">
+                          <span style="font-size: small">{{locationCity}}</span>
+                        </div>
+                        <!--                      <div slot="footer" @click.stop="" class="cardStepper">
                         <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
                       </div>-->
-                    </van-card>
+                      </van-card>
+                    </div>
+
                   </div>
                 </div>
               </div>
@@ -574,8 +586,10 @@
             if (item.product.promotionInfo != undefined) {
               item.product.promotionInfo['promotionState'] = Util.getPromotionState(this, item.product
                 .promotionInfo)
-              item.product.goodsInfo['dprice'] = Util.getDisplayPrice(this, item.checkedPrice, item.product
-                .promotionInfo)
+              if (this.pageAction != "pickupGoods") {
+                item.product.goodsInfo['dprice'] = Util.getDisplayPrice(this, item.checkedPrice, item.product
+                  .promotionInfo)
+              }
             }
             if (item.product.baseInfo.merchantId === 2) { //aoyi
               if (item.product.baseInfo.mpu != null) {

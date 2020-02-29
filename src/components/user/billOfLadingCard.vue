@@ -272,7 +272,7 @@
               goods['dprice'] = 0;
               this.totalPrice = this.totalPrice + parseFloat(goods.price)
             })
-            
+
             if (this.totalPrice > this.amount) {
               let tmpAmount = 0
               for (let i = 0; i < goodsList.length; i++) {
@@ -283,7 +283,7 @@
               }
               this.$log(tmpAmount)
               let diff = parseFloat((this.amount - tmpAmount).toFixed(2))
-              this.$log("diff:"+diff)
+              this.$log("diff:" + diff)
               if (diff > 0) {
                 for (let i = 0; i < goodsList.length; i++) {
                   if (goodsList[i].price >= (diff + goodsList[i].dprice)) {
@@ -294,9 +294,9 @@
                 }
               }
             } else {
-               for (let i = 0; i < goodsList.length; i++) {
+              for (let i = 0; i < goodsList.length; i++) {
                 goodsList[i].dprice = goodsList[i].price
-               }
+              }
             }
 
             goodsList.forEach(goods => {
@@ -315,6 +315,7 @@
                 "choosed": true,
                 "cartId": -1,
               }
+
               let goodsInfo = {
                 "id": goods.id,
                 "skuId": skuId,
@@ -325,7 +326,8 @@
                 "name": goods.name,
                 "brand": goods.brand,
                 "model": goods.model,
-                "price": goods.dprice,
+                "dprice": goods.dprice,
+                "price": goods.price,
                 "checkedPrice": goods.price,
                 "type": goods.type == undefined ? 0 : goods.type
               }
@@ -340,6 +342,7 @@
                 "couponList": couponList,
                 "promotionInfo": promotionInfo,
               }
+              this.$log(product)
               list.push(product)
             })
             this.$log(list)
@@ -353,9 +356,6 @@
               path: '/car/pay/pickupGoods'
             })
           }
-
-
-
         } catch (e) {
           that.$log(e)
           that.$toast("下单提货失败")
