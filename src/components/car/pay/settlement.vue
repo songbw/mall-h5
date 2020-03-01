@@ -118,13 +118,25 @@
                       <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444" />
                     </div>
                     <div v-if="pageAction == 'pickupGoods'">
-                      <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
-                        :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
-                        :origin-price="k.checkedPrice > k.product.goodsInfo.dprice ? k.checkedPrice : ''">
-                        <div slot="desc">
-                          <span style="font-size: small">{{locationCity}}</span>
-                        </div>
-                      </van-card>
+                      <div v-if="k.checkedPrice > k.product.goodsInfo.dprice">
+                        <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
+                          :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
+                          :origin-price="k.checkedPrice">
+                          <div slot="desc">
+                            <span style="font-size: small">{{locationCity}}</span>
+                          </div>
+                        </van-card>
+                      </div>
+                      <div v-else>
+                        <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
+                          :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image">
+                          <div slot="desc">
+                            <span style="font-size: small">{{locationCity}}</span>
+                          </div>
+                        </van-card>
+
+                      </div>
+
                     </div>
                     <div v-else>
                       <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
