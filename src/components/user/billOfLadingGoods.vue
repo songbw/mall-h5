@@ -82,15 +82,17 @@
                 this.goodsList[i].dprice = Math.floor((this.goodsList[i].price * this.amount / this.totalPrice) *
                   100) / 100;
                 this.$log(this.goodsList[i].dprice)
-                tmpAmount = tmpAmount + this.goodsList[i].dprice
+                tmpAmount = parseFloat((tmpAmount + this.goodsList[i].dprice).toFixed(2))
               }
               this.$log(tmpAmount)
               let diff = parseFloat((this.amount - tmpAmount).toFixed(2))
               this.$log("diff:"+diff)
               if (diff > 0) {
                 for (let i = 0; i < this.goodsList.length; i++) {
-                  if (this.goodsList[i].price >= (diff + this.goodsList[i].dprice)) {
-                    this.goodsList[i].dprice = diff + this.goodsList[i].dprice
+                  let temptPrice = parseFloat((diff + this.goodsList[i].dprice).toFixed(2))
+                  this.$log(temptPrice)
+                  if (this.goodsList[i].price >= temptPrice) {
+                    this.goodsList[i].dprice = temptPrice
                     this.$log(this.goodsList[i].dprice)
                     break;
                   }

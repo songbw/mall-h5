@@ -38,8 +38,11 @@
                         {{formateCouponPrice(item.rules.couponRules)}}
                         <span>{{formateCouponDetail(item.rules.couponRules)}}</span> -->
                         <div class="coupon-price">
+                          <span v-if="item.rules.couponRules.type == 4">
+                             {{item.name}}
+                          </span>
                           <span
-                            v-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
+                            v-else-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
                             style="margin-right: -7px">{{formateCouponDetail(item.rules.couponRules)}}</span>
                         </div>
                         <div class="coupon-desc">
@@ -279,15 +282,17 @@
                 goodsList[i].dprice = Math.floor((goodsList[i].price * this.amount / this.totalPrice) *
                   100) / 100;
                 this.$log(goodsList[i].dprice)
-                tmpAmount = tmpAmount + goodsList[i].dprice
+                tmpAmount = parseFloat((tmpAmount + goodsList[i].dprice).toFixed(2))
               }
               this.$log(tmpAmount)
               let diff = parseFloat((this.amount - tmpAmount).toFixed(2))
               this.$log("diff:" + diff)
               if (diff > 0) {
                 for (let i = 0; i < goodsList.length; i++) {
-                  if (goodsList[i].price >= (diff + goodsList[i].dprice)) {
-                    goodsList[i].dprice = diff + goodsList[i].dprice
+                  let temptPrice = parseFloat((diff + goodsList[i].dprice).toFixed(2))
+                  this.$log(temptPrice)
+                  if (goodsList[i].price >= temptPrice) {
+                    goodsList[i].dprice = temptPrice
                     this.$log(goodsList[i].dprice)
                     break;
                   }
