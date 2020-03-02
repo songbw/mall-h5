@@ -56,8 +56,6 @@ import {
 
 if (process.env.NODE_ENV === 'production') {
   new VConsole()
-} else {
-  new VConsole()
 }
 
 Vue.component('qr-code', VueQRCodeComponent)
