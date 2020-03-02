@@ -504,7 +504,7 @@
             baseURL: this.$api.ORDER_BASE_URL,
             url: '/cart/all',
             data: options,
-          }).then(async (response) => {
+          }).then((response) => {
             this.result = response.data.data.result;
             this.$log(this.result.object)
             if (this.result.object.cart != undefined && this.result.object.cart.length > 0) {
