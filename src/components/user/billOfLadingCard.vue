@@ -39,7 +39,7 @@
                         <span>{{formateCouponDetail(item.rules.couponRules)}}</span> -->
                         <div class="coupon-price">
                           <span v-if="item.rules.couponRules.type == 4">
-                             {{item.name}}
+                            {{item.name}}
                           </span>
                           <span
                             v-else-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
@@ -117,6 +117,30 @@
     },
 
     methods: {
+
+      isCardActivied() {
+        let ret = "";
+        this.$log("isCardActivied Enter")
+        this.$log(this.cardDetail)
+        if (this.cardDetail.status === 3 || this.cardDetail.status === 4) {
+           let startTime = new Date(this.$moment(this.cardDetail.activateTime).format('YYYY/MM/DD HH:mm:ss')).getTime()
+          let endTime = new Date(this.$moment(this.cardDetail.endTime).format('YYYY/MM/DD HH:mm:ss')).getTime()
+          let current = new Date().getTime()
+          this.$log(startTime)
+          this.$log(endTime)
+          this.$log(current)
+          if (current < startTime) {
+            ret = "提货券未激活" //券活动未开始
+          } else if (current <= endTime) {
+            ret = "success" //活动开始
+          } else {
+            ret = "提货券已过期" // 活动已经结束
+          } 
+        }
+        this.$log(ret)
+        return ret
+      },
+
       getGoodsList(couponId) {
         return this.$api.xapi({
           method: 'get',
@@ -211,6 +235,12 @@
             this.$toast(this.getCardStatusDesc(this.cardDetail.status))
           }
           return
+        }
+
+        let ret = this.isCardActivied()
+        if(ret != "success" && ret.length > 0) {
+          this.$toast(ret)
+          return 
         }
 
         let user = JSON.parse(userInfo)
