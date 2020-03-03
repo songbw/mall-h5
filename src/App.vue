@@ -143,7 +143,7 @@
         } else if (this.$api.APP_ID == "14") {
           try {
             this.wkycLogin()
-          } catch (e){
+          } catch (e) {
             this.$log(e)
           }
           this.configured = true
@@ -301,45 +301,104 @@
         } catch (e) {}
       },
       wkycLogin() {
-        let that =  this
+        let that = this
         const params = {
-          appkey: this.$api.T_APP_ID
+          appid: this.$api.T_APP_ID
         }
-        window.serviceTokenInfoResult = function (res) {
-         // console.log(res, '回调结果')
-          let response = JSON.parse(res)
-          if(response.code === '0') {
-            let rt = response.data
-            let openId = rt.openid;
-            let accessToken = rt.access_token;
-            let payId = -1
-            if (openId != undefined) {
-              let userId = that.$api.APP_ID + openId;
-              let userInfo = {
-                openId: openId,
-                accessToken: accessToken,
-                userId: userId,
-                payId: payId
+        window.shopUserInfoResult = function (res) {
+          that.$log("回调结果")
+          //that.$log(res)
+          //workaround for JSON 不规范
+          res = res.replace('["', '').replace(']"', '');
+          that.$log(res)
+          try {
+            let response = JSON.parse(res)
+            that.$log(response.ret)
+            if (response.ret === '0') {
+              let userinfo = response.data.userinfo;
+              let token = response.data.token
+              let openId = userinfo.openid;
+              let accessToken = token.access_token;
+              that.$log("openId:" + openId)
+              that.$log("accessToke:" + accessToken)
+              let payId = -1
+              if (openId != undefined) {
+                let userId = that.$api.APP_ID + openId;
+                let userInfo = {
+                  openId: openId,
+                  accessToken: accessToken,
+                  userId: userId,
+                  payId: payId
+                }
+                that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                that.thirdPartLogined(openId, accessToken)
               }
-              that.$log("userInfo  is:" + JSON.stringify(userInfo));
-              that.$store.commit('SET_USER', JSON.stringify(userInfo));
-              that.thirdPartLogined(openId, accessToken)
+            } else {
+              //获取用户信息失败
+              that.$log("获取用户授权失败!")
+              that.$toast("获取用户授权失败!")
             }
-          } else {
-            //获取用户信息失败
-            that.$log("获取用户授权失败!")
+          } catch (e) {
+            that.$log(e)
             that.$toast("获取用户授权失败!")
           }
+
         }
 
-        if (/iphone/.test(navigator.userAgent.toLowerCase())) {
-          window.getServiceTokenInfo = function (res) {
-
+        try {
+          window.ycapp.hideMainBottom();
+          if (/iphone/.test(navigator.userAgent.toLowerCase())) {
+            window.getServiceTokenInfo = function (res) {}
+            window.webkit.messageHandlers.getShopUserInfo.postMessage(JSON.stringify(params))
+          } else {
+            ycapp.getShopUserInfo(JSON.stringify(params))
           }
-          window.webkit.messageHandlers.getServiceTokenInfo.postMessage(JSON.stringify(params))
-        } else {
-          ycapp.getServiceTokenInfo(JSON.stringify(params))
+        } catch (e) {
+
         }
+
+
+
+
+
+
+
+
+        /*         window.serviceTokenInfoResult = function (res) {
+                  that.$log("回调结果")
+                  that.$log(res)
+                  let response = JSON.parse(res)
+                  if (response.code === '0') {
+                    let rt = response.data
+                    let openId = rt.openid;
+                    let accessToken = rt.access_token;
+                    let payId = -1
+                    if (openId != undefined) {
+                      let userId = that.$api.APP_ID + openId;
+                      let userInfo = {
+                        openId: openId,
+                        accessToken: accessToken,
+                        userId: userId,
+                        payId: payId
+                      }
+                      that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                      that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                      that.thirdPartLogined(openId, accessToken)
+                    }
+                  } else {
+                    //获取用户信息失败
+                    that.$log("获取用户授权失败!")
+                    that.$toast("获取用户授权失败!")
+                  }
+                }
+
+                if (/iphone/.test(navigator.userAgent.toLowerCase())) {
+                  window.getServiceTokenInfo = function (res) {}
+                  window.webkit.messageHandlers.getServiceTokenInfo.postMessage(JSON.stringify(params))
+                } else {
+                  ycapp.getServiceTokenInfo(JSON.stringify(params))
+                } */
       }
     }
   }
