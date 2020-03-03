@@ -348,10 +348,13 @@
 
         try {
           window.ycapp.hideMainBottom();
+          that.$log("getUserShopInfo")
           if (/iphone/.test(navigator.userAgent.toLowerCase())) {
+            that.$log("iphone call getUerShopInfo")
             window.getServiceTokenInfo = function (res) {}
             window.webkit.messageHandlers.getShopUserInfo.postMessage(JSON.stringify(params))
           } else {
+            that.$log("android call getUerShopInfo")
             ycapp.getShopUserInfo(JSON.stringify(params))
           }
         } catch (e) {

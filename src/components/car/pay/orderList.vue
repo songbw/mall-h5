@@ -50,7 +50,7 @@
                   </div>
                   <div class="orderDetailSummery">
                     <span v-if="k.couponDiscount != null">合计: ￥{{parseFloat(k.saleAmount).toFixed(2)}}元
-                      (含运费:￥{{k.servFee.toFixed(2)}}, 优惠券:￥{{getCouponDiscount(k)}}) </span>
+                      (含运费:￥{{k.servFee.toFixed(2)}}, 优惠券:￥{{k.couponDiscount.toFixed(2)}}) </span>
                     <span v-else>合计: ￥{{parseFloat(k.saleAmount).toFixed(2)}}元 (含运费:￥{{k.servFee.toFixed(2)}})</span>
                   </div>
                   <div class="orderDetailAction">
@@ -104,10 +104,7 @@
   import Header from '@/common/_header.vue'
   import Footer from '@/common/_footer.vue'
   import Util from '@/util/common'
-  import {
-    configWechat
-  } from '@/util/wechat'
-  import wx from 'weixin-js-sdk'
+
 
   export default {
     components: {
@@ -186,7 +183,6 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
-      this.wechatShareConfig()
     },
 
     beforeDestroy() {
@@ -194,23 +190,79 @@
     },
 
     methods: {
-      getCouponDiscount(k) {
-        let couponDiscount = 0;
-        k.skus.forEach(sku => {
-          couponDiscount += sku.skuCouponDiscount
+            wkycCasher(user, orderInfo) {
+        this.$log("wkycCasher Enter")
+        let that = this
+        let payOptions = {
+          appId: this.$api.APP_ID,
+          orderNo: orderInfo.orderNo
+        }
+        let yunChengPay = {
+          actPayFee: "" + orderInfo.orderAmount,
+          openId: user.openId,
+          orderNo: orderInfo.orderNo,
+          payType: "yuncheng",
+          goodsDesc: "万科云城惠民优选商品"
+        }
+        payOptions['yunChengPay'] = yunChengPay;
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AGGREGATE_PAY_URL,
+          url: '/wspay/pay',
+          data: payOptions,
+        }).then((response) => {
+          this.$log(response)
+          if (response.data.code == 200) {
+            let params = response.data.data;
+            this.wkycPay(params,orderInfo)
+          } else {
+            that.$toast("请求支付失败")
+          }
+
+        }).catch(function (error) {
+          that.$toast("请求支付失败")
+          // that.payBtnSubmitLoading = false;
         })
-        return (couponDiscount / 100).toFixed(2)
       },
+      wkycPay(payLoad,orderInfo) {
+        let that = this
+        that.$log(payLoad); // 调试使用代码
 
-      wechatShareConfig() {
+        if (/iphone|ipad/.test(navigator.userAgent.toLowerCase())) {
+          let temp;
+          window.payOrder = function () {}
+          window.webkit.messageHandlers.payOrder.postMessage(payLoad)
+        } else {
+          window.ycapp.payOrder(payLoad);
+        }
 
-        this.$log('shareConfig Enter')
-        if (this.$api.APP_ID === '01') {
-          try {
-            configWechat(this, () => {
-              wx.hideOptionMenu()
-            })
-          } catch (e) {}
+        // 调用支付后的回调方法，只需要定义到window对象下，app会自动回调此方法
+        window.payResult = function (res) {
+          // 请注意此处返回的数据为json字符串，返回结果见下方内容
+          let response = JSON.parse(res)
+          that.$log(response);
+          that.$log(response.code)
+                that.$log(response.code)
+          if (response.code == '0') {
+            if (response.data.payStatus == 0) { //"具体的支付状态：0（成功）,-1（失败），-2（取消）",
+              that.$router.replace({
+                path: '/pay/cashering',
+                query: {
+                  outer_trade_no: orderInfo.orderNo
+                }
+              })
+            } else {
+              that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+              that.$router.replace({
+                path: '/car/orderList'
+              })
+            }
+          } else {//取消
+              that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+              that.$router.replace({
+                path: '/car/orderList'
+              })
+          }
         }
       },
       gotoCart() {
@@ -221,13 +273,9 @@
       add2Car(user, goods) {
         let userId = user.userId;
         let mpu = goods.mpu;
-        let count = 1;
-        let selectSkuId = goods.skuId
         let addtoCar = {
           "openId": userId,
-          "mpu": mpu,
-          "skuId": selectSkuId,
-          "count": count
+          "mpu": mpu
         }
         return this.$api.xapi({
           method: 'post',
@@ -254,7 +302,7 @@
                 if (cartItem == null) {
                   let baseInfo = {
                     "userId": user.userId,
-                    "skuId": goods.skuId,
+                    "skuId": goods.skuid,
                     "mpu": goods.mpu,
                     "merchantId": goods.merchantId,
                     "count": 1,
@@ -263,7 +311,7 @@
                   }
                   let goodsInfo = {
                     "id": goods.id,
-                    "skuId": goods.skuId,
+                    "skuId": goods.skuid,
                     "mpu": goods.mpu,
                     "merchantId": goods.merchantId,
                     "image": goods.image,
@@ -272,9 +320,7 @@
                     "brand": goods.brand,
                     "model": goods.model,
                     "price": goods.unitPrice,
-                    "checkedPrice": goods.price,
-                    "type": goods.type == undefined ? 0 : goods.type
-
+                    "checkedPrice": goods.price
                   }
                   let couponList = []
                   let promotionInfo = {}
@@ -286,7 +332,6 @@
                   }
                 } else {
                   cartItem.baseInfo.count++;
-                  cartItem.goodsInfo.type = (goods.type == undefined ? 0 : goods.type)
                 }
                 Util.updateCartItem(this, cartItem)
               }
@@ -471,7 +516,7 @@
         }
       },
       getMerchantName(merchantNo) {
-        return "惠民优选"
+        return "慧聚品牌馆"
         /*        if (merchantNo == 20) {
                   return "苏宁易购"
                 } else if (merchantNo == 30) {
@@ -577,12 +622,16 @@
                   pAnOrderInfo['outTradeNo'] = outTradeNo
                   that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
-                  this.$router.push({
-                    name: "收银台页",
-                    params: {
-                      orderInfo: pAnOrderInfo
-                    }
-                  })
+                  if (this.$api.APP_ID == '14') {
+                    this.wkycCasher(user, pAnOrderInfo);
+                  } else {
+                    this.$router.push({
+                      name: "收银台页",
+                      params: {
+                        orderInfo: pAnOrderInfo
+                      }
+                    })
+                  }
                 }
               }
             }).catch(function (error) {
@@ -677,20 +726,12 @@
         let len = listItem.tradeNo.length;
         let orderNos = listItem.tradeNo
         let orderNo = this.$api.APP_ID + user.openId + orderNos
-        let hasVirtualGoods = false
-        for (let i = 0; i < listItem.skus.length; i++) {
-          if (listItem.skus[i].productType != undefined && listItem.skus[i].productType != 0) {
-            hasVirtualGoods = true;
-            break;
-          }
-        }
         let pAnOrderInfo = {
           "accessToken": user.accessToken,
           "orderNo": orderNo,
           "orderAmount": listItem.saleAmount * 100, //分
           "openId": user.openId,
-          "businessType": "11",
-          "hasVirtualGoods": hasVirtualGoods
+          "businessType": "11"
         }
         let merchantNo = ""
         if (listItem.merchantNo != null) {
@@ -789,22 +830,12 @@
 
       onLogisticsBtnClick(listItem, i) {
         this.$log("onLogisticsBtnClick Enter")
-        this.$log(listItem)
-        if (listItem.merchantId === 4) {
-          this.$router.push({
-            name: "怡亚通物流信息页",
-            params: {
-              detail: listItem
-            }
-          })
-        } else {
-          this.$router.push({
-            name: "物流信息页",
-            params: {
-              detail: listItem
-            }
-          })
-        }
+        this.$router.push({
+          name: "物流信息页",
+          params: {
+            detail: listItem
+          }
+        })
       },
 
       onClick(index, title) {
