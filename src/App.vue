@@ -142,6 +142,7 @@
           }
         } else if (this.$api.APP_ID == "14") {
           try {
+
             this.wkycLogin()
           } catch (e) {
             this.$log(e)
@@ -302,6 +303,8 @@
       },
       wkycLogin() {
         let that = this
+        that.$log("wkycLogin Enter")
+        that.$log("userAgent:" + navigator.userAgent.toLowerCase())
         const params = {
           appid: this.$api.T_APP_ID
         }
@@ -346,27 +349,28 @@
 
         }
 
+        window.backHomePageOfiOS = function () {
+          that.$log("backHomePageOfiOS Enter")
+          that.$router.push({
+            path: '/'
+          })
+        }
+
         try {
-          window.ycapp.hideMainBottom();
           that.$log("getUserShopInfo")
           if (/iphone/.test(navigator.userAgent.toLowerCase())) {
             that.$log("iphone call getUerShopInfo")
-            window.getServiceTokenInfo = function (res) {}
+            //window.getServiceTokenInfo = function (res) {}
             window.webkit.messageHandlers.getShopUserInfo.postMessage(JSON.stringify(params))
+            window.webkit.messageHandlers.hideMainBottom.postMessage(JSON.stringify(params))
           } else {
             that.$log("android call getUerShopInfo")
             ycapp.getShopUserInfo(JSON.stringify(params))
+            window.ycapp.hideMainBottom();
           }
         } catch (e) {
-
+          that.$log(e)
         }
-
-
-
-
-
-
-
 
         /*         window.serviceTokenInfoResult = function (res) {
                   that.$log("回调结果")
