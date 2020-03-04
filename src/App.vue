@@ -41,11 +41,10 @@
         el.setAttribute("class", "fadeIn")
       }
     },
-    throttleWait: 200,
-    observer: false,
+    observer: true,
     observerOptions: {
-      rootMargin: '0px',
-      threshold: 0.1
+      rootMargin: '1500px',
+      threshold: 0.05
     }
   })
   export default {
@@ -149,7 +148,7 @@
             that.$log(e)
             that.configured = true
           }
-          //this.configured = true
+          this.configured = true
         } else {
           this.configured = true
         }

@@ -140,19 +140,15 @@
         userTokenLoading: true,
       }
     },
-
-    async created() {
+    
+    beforeCreate() {
       let that = this;
       this.pageloading = true;
-      if (this.isBackFromOuterLink)
-        this.showSplash = false
-      else
-        this.showSplash = true
-
-      this.showHeader = this.$api.HAS_HEADER;
-      this.$log("page data loading ...............")
-      try {
-        let response = await this.getHomePage()
+      this.$api.xapi({
+        method: 'get',
+        baseURL: this.$api.AGGREGATION_BASE_URL,
+        url: '/aggregation/findHomePage',
+      }).then((response) => {
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
         for (let i = 0; i < this.datas.length; i++) {
@@ -176,11 +172,25 @@
         }
         this.$log(this.mHeader);
         this.pageloading = false;
-        this.$log("page data loaded ...............")
-      } catch (e) {
-        that.$log(e)
+
+      }).catch(function (error) {
+        //alert(error)
+        that.$log(error)
         that.pageloading = false;
-      }
+      })
+
+    },
+
+    async created() {
+      let that = this;
+      this.pageloading = true;
+      if (this.isBackFromOuterLink)
+        this.showSplash = false
+      else
+        this.showSplash = true
+
+      this.showHeader = this.$api.HAS_HEADER;
+     
       this.wechatShareConfig()
 
       if (this.$api.IS_GAT_APP) {
@@ -194,7 +204,6 @@
 
             }
           }, 20000);
-          time
         } else {
           this.userTokenLoading = false;
 
