@@ -504,7 +504,7 @@
             baseURL: this.$api.ORDER_BASE_URL,
             url: '/cart/all',
             data: options,
-          }).then(async (response) => {
+          }).then((response) => {
             this.result = response.data.data.result;
             this.$log(this.result.object)
             if (this.result.object.cart != undefined && this.result.object.cart.length > 0) {
@@ -583,6 +583,8 @@
          // openId = "o_sjNjk5EQVlNuo3G2KoWfCKgR0A"
         } else if (this.$api.APP_ID == '12') {
           openId = "5c8314363cea49de925bfaa39d4c4ebb"//最珠海
+        } else if (this.$api.APP_ID == '14') {
+          openId = "28bfc681351583c37ee3dd19f9a82112" //万科云城
         }
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
@@ -590,7 +592,7 @@
         let payId = "0041900110127"
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
-          let accessToken = "TTTTTTTTTTTT"
+          let accessToken = "3622c97b-a878-422f-879c-5b31709f1ea5"
           let userInfo = {
             openId: openId,
             accessToken: accessToken,

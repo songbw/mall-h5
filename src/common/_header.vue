@@ -1,10 +1,9 @@
 <template>
   <header :style="{'background-color':defaultBgColor}">
-    <van-row type="flex"
-             :style="{'color':backIsDeepColor? 'white':'blank'}">
+    <van-row type="flex" :style="{'color':backIsDeepColor? 'white':'blank'}">
       <van-col span="3">
         <div style="margin-top: 3px" v-if="this.$api.APP_ID != '10'">
-          <van-icon name="arrow-left"@click="closeWindow" v-if="$route.name==='首页'"></van-icon>
+          <van-icon name="arrow-left" @click="closeWindow" v-if="$route.name==='首页'"></van-icon>
           <van-icon name="arrow-left" @click="$router.go(-1)" v-else></van-icon>
         </div>
       </van-col>
@@ -32,7 +31,6 @@
     background-color: #FF4444;
   }
 
-
 </style>
 
 
@@ -47,21 +45,21 @@
     },
 
     watch: {
-      mBackgroundColor: function(newVal){
+      mBackgroundColor: function (newVal) {
         this.defaultBgColor = newVal;
         this.isDeepColor(this.defaultBgColor)
       }
     },
 
     mounted() {
-      if(this.mBackgroundColor != undefined) {
+      if (this.mBackgroundColor != undefined) {
         this.defaultBgColor = this.mBackgroundColor;
       }
       this.isDeepColor(this.defaultBgColor)
     },
     methods: {
       isDeepColor(hexColor) {
-        if(hexColor != null) {
+        if (hexColor != null) {
           if (hexColor.substr(0, 1) == "#") hexColor = hexColor.substring(1);
           hexColor = hexColor.toLowerCase();
           let b = new Array();
@@ -72,8 +70,8 @@
             b[2] = b[0].substr(1, 1)
             b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
           }
-          let grayLevel  =  b[20] * 0.299 +  b[21] * 0.587 +  b[22]* 0.114
-          if(grayLevel >= 192)
+          let grayLevel = b[20] * 0.299 + b[21] * 0.587 + b[22] * 0.114
+          if (grayLevel >= 192)
             this.backIsDeepColor = false
           else
             this.backIsDeepColor = true
@@ -83,10 +81,11 @@
         }
       },
       closeWindow() {
-        if(this.$api.IS_GAT_APP) {
+        if (this.$api.IS_GAT_APP) {
           this.$jsbridge.call("closeWindow");
         }
       },
     }
   }
+
 </script>
