@@ -413,7 +413,7 @@
         window.backHomePageOfiOS = function () {
           that.$log("backHomePageOfiOS Enter")
           that.$router.push({
-            path: '/'
+            name: "首页"
           })
         }
 
