@@ -63,6 +63,7 @@
       }
     },
     beforeCreate() {
+      let that = this
       this.$api.xapi({
         method: 'get',
         url: '/static/serverConfig.json'
@@ -142,10 +143,10 @@
           }
         } else if (this.$api.APP_ID == "14") {
           try {
-
             this.wkycLogin()
           } catch (e) {
-            this.$log(e)
+            that.$log(e)
+            that.configured = true
           }
           this.configured = true
         } else {
@@ -344,6 +345,7 @@
               //获取用户信息失败
               that.$log("获取用户授权失败!")
               that.$toast("获取用户授权失败!")
+              that.configured = true
             }
           } catch (e) {
             that.$log(e)
@@ -417,56 +419,17 @@
           })
         }
 
-        try {
-          that.$log("getUserShopInfo")
-          if (/iphone/.test(navigator.userAgent.toLowerCase())) {
-            that.$log("iphone call getUerShopInfo")
-            //window.getServiceTokenInfo = function (res) {}
-            window.webkit.messageHandlers.getShopUserInfo.postMessage(JSON.stringify(params))
-            window.webkit.messageHandlers.hideMainBottom.postMessage(JSON.stringify(params))
-          } else {
-            that.$log("android call getUerShopInfo")
-            ycapp.getShopUserInfo(JSON.stringify(params))
-            window.ycapp.hideMainBottom();
-          }
-        } catch (e) {
-          that.$log(e)
+        that.$log("getUserShopInfo")
+        if (/iphone/.test(navigator.userAgent.toLowerCase())) {
+          that.$log("iphone call getUerShopInfo")
+          //window.getServiceTokenInfo = function (res) {}
+          window.webkit.messageHandlers.getShopUserInfo.postMessage(JSON.stringify(params))
+          window.webkit.messageHandlers.hideMainBottom.postMessage(JSON.stringify(params))
+        } else {
+          that.$log("android call getUerShopInfo")
+          ycapp.getShopUserInfo(JSON.stringify(params))
+          window.ycapp.hideMainBottom();
         }
-
-        /*         window.serviceTokenInfoResult = function (res) {
-                  that.$log("回调结果")
-                  that.$log(res)
-                  let response = JSON.parse(res)
-                  if (response.code === '0') {
-                    let rt = response.data
-                    let openId = rt.openid;
-                    let accessToken = rt.access_token;
-                    let payId = -1
-                    if (openId != undefined) {
-                      let userId = that.$api.APP_ID + openId;
-                      let userInfo = {
-                        openId: openId,
-                        accessToken: accessToken,
-                        userId: userId,
-                        payId: payId
-                      }
-                      that.$log("userInfo  is:" + JSON.stringify(userInfo));
-                      that.$store.commit('SET_USER', JSON.stringify(userInfo));
-                      that.thirdPartLogined(openId, accessToken)
-                    }
-                  } else {
-                    //获取用户信息失败
-                    that.$log("获取用户授权失败!")
-                    that.$toast("获取用户授权失败!")
-                  }
-                }
-
-                if (/iphone/.test(navigator.userAgent.toLowerCase())) {
-                  window.getServiceTokenInfo = function (res) {}
-                  window.webkit.messageHandlers.getServiceTokenInfo.postMessage(JSON.stringify(params))
-                } else {
-                  ycapp.getServiceTokenInfo(JSON.stringify(params))
-                } */
       }
     }
   }

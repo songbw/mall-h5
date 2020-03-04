@@ -152,8 +152,8 @@
                         break;
                       }
                     }
-                    if (foundVal != -1) {
-                      let propertyCount = tree[i].v.tree[i].length + 1;
+                    if (foundVal == -1) {//新的值
+                      let propertyCount = tree[i].v.length + 1;
                       tree[i].v.push({
                         id: tree[i].k_id + propertyCount,
                         name: property.val,
@@ -180,6 +180,8 @@
                 }
               })
             })
+          
+            this.$log (tree)
             let total_stock_num = 0
             this.$log(this.datas.skuList)
             this.datas.skuList.forEach(sku => {

@@ -1,17 +1,15 @@
 <template lang="html">
   <section class="sectionGoods"
-           :style="{'margin-top':datas.settings.marginTop == undefined? 0:datas.settings.marginTop +'px','margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
+    :style="{'margin-top':datas.settings.marginTop == undefined? 0:datas.settings.marginTop +'px','margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
     <div class="container" ref="container">
       <div v-if="datas.settings.hasTabBar">
         <ly-tab :id="fixedBarId" :class="{fixedBar : isFixed}" v-model="selectedId" :items="items" :options="options"
-                @change="onTabChanged"
-                :style="{'background-color': datas.settings.floorTitleColor}">
+          @change="onTabChanged" :style="{'background-color': datas.settings.floorTitleColor}">
         </ly-tab>
         <div>
           <div v-for="(category,index) in datas.list" :title=category.title :key="index">
-            <ul :id="sectionGoodsListId"
-                :class="getCountlineClass()"
-                :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
+            <ul :id="sectionGoodsListId" :class="getCountlineClass()"
+              :style=" (mBackgroundColor == undefined || mBackgroundColor=='#FFFFFF')?{}:{'background-color':mBackgroundColor}">
               <div v-if="datas.settings.countPerLine == 1">
                 <li v-for="(k,index) in category.skus" :key="index">
                   <div class="goodsCard" @click="onGoodsClick(k)">
@@ -29,7 +27,7 @@
                         <div class="cardFooter">
                           <div class="priceBox">
                             <p v-if="k.discount != undefined && datas.settings.countPerLine != 3"
-                               :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                              :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                               <span style="font-size: x-small;margin-right: -3px;">￥</span>
                               {{parseFloat(k.discount).toFixed(2)}}
                               <span
@@ -38,7 +36,7 @@
                                 style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
                             </p>
                             <p v-else
-                               :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                              :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                               <span style="font-size: x-small;margin-right: -3px;">￥</span>
                               {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                             </p>
@@ -66,16 +64,17 @@
                   <div class="goodsFooter">
                     <div class="goodsPriceBox">
                       <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
-                         :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                        :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                         <span style="font-size: x-small;margin-right: -3px;">￥</span>
                         {{parseFloat(k.discount).toFixed(2)}}
                         <span
                           style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                        <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                        <span
+                          style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
                       </p>
 
                       <p v-else
-                         :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                        :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                         <span style="font-size: x-small;margin-right: -3px;">￥</span>
                         {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                       </p>
@@ -94,19 +93,19 @@
         <div>
           <div v-for="(category,index) in datas.list" :title=category.title :key="index">
             <div v-if="datas.settings.showFloorTitle" @click="onGoodsTitleClick(category)">
-              <div class="sectionGoods-titleImg" v-if="category.titleImageUrl != undefined && category.titleImageUrl.length > 0">
+              <div class="sectionGoods-titleImg"
+                v-if="category.titleImageUrl != undefined && category.titleImageUrl.length > 0">
                 <img v-lazy="category.titleImageUrl">
               </div>
               <div v-else class="sectionGoods-title" :style="{'background-color':datas.settings.floorTitleColor}">
-              <span
-                :style="(datas.settings.floorTitleTextColor == undefined ?{'color':'#000000'}:{'color':datas.settings.floorTitleTextColor})">
-                {{category.title}}
-              </span>
+                <span
+                  :style="(datas.settings.floorTitleTextColor == undefined ?{'color':'#000000'}:{'color':datas.settings.floorTitleTextColor})">
+                  {{category.title}}
+                </span>
               </div>
             </div>
             <div>
-              <ul
-                :class="getCountlineClass()"
+              <ul :class="getCountlineClass()"
                 :style=" (category.skuBackgroundColor == undefined || category.skuBackgroundColor=='#FFFFFF')?{}:{'background-color':category.skuBackgroundColor}">
                 <div v-if="datas.settings.countPerLine == 1">
                   <li v-for="(k,index) in category.skus" :key="index">
@@ -125,7 +124,7 @@
                           <div class="cardFooter">
                             <div class="priceBox">
                               <p v-if="k.discount != undefined && datas.settings.countPerLine != 3"
-                                 :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                                :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                                 <span style="font-size: x-small;margin-right: -3px;">￥</span>
                                 {{parseFloat(k.discount).toFixed(2)}}
                                 <span
@@ -134,7 +133,7 @@
                                   style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
                               </p>
                               <p v-else
-                                 :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                                :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                                 <span style="font-size: x-small;margin-right: -3px;">￥</span>
                                 {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                               </p>
@@ -162,16 +161,17 @@
                     <div class="goodsFooter">
                       <div class="goodsPriceBox">
                         <p v-if="k.discount != undefined && datas.settings.countPerLine == 2"
-                           :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                          :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                           <span style="font-size: x-small;margin-right: -3px;">￥</span>
                           {{parseFloat(k.discount).toFixed(2)}}
                           <span
                             style="font-size: x-small;margin-right: -3px;color: #8c8c8c;text-decoration: line-through;">￥</span>
-                          <span style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
+                          <span
+                            style="font-size: x-small;color: #8c8c8c;text-decoration: line-through;">{{k.price}}</span>
                         </p>
 
                         <p v-else
-                           :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
+                          :style="{'color': datas.settings.priceTextColor,'background-color': datas.settings.priceBackgroundColor}">
                           <span style="font-size: x-small;margin-right: -3px;">￥</span>
                           {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                         </p>
@@ -230,9 +230,10 @@
       this.fixedBarId = 'fixedBar' + this.datas.id
       this.sectionGoodsListId = 'sectionGoods-list' + this.datas.id
       this.datas.list.forEach(item => {
-        this.items.push({label: item.title})
+        this.items.push({
+          label: item.title
+        })
       });
-      this.$log("################################## ")
       this.$log(this.datas)
     },
 
@@ -250,11 +251,14 @@
         window.location.href = e
       },
       gotoPromotionPage(promotionId) {
-        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+        this.$router.push({
+          path: '/category/goods/promotion/' + promotionId
+        });
       },
       gotoGoodsPage(mpu) {
         this.$router.push({
-          path: "/detail", query: {
+          path: "/detail",
+          query: {
             mpu: mpu
           }
         });
@@ -264,36 +268,39 @@
           let targetId = k.titleTargetUrl;
           if (targetId.startsWith("aggregation://")) {
             let id = targetId.substr(14);
-            this.$router.push({path: '/index/' + id});
+            this.$router.push({
+              path: '/index/' + id
+            });
           } else if (targetId.startsWith("route://")) {
             let target = targetId.substr(8);
             let paths = target.split("/");
             this.$log(paths);
             if (paths[0] === 'category') {
-              this.$router.push({path: '/category'})
-            } else  if (paths[0] === 'coupon_center') {
-              this.$router.push({path:'/user/couponCenter'})
+              this.$router.push({
+                path: '/category'
+              })
+            } else if (paths[0] === 'coupon_center') {
+              this.$router.push({
+                path: '/user/couponCenter'
+              })
             } else if (paths[0] === 'commodity') {
               try {
                 if (paths[1] != null)
                   this.gotoGoodsPage(paths[1]);
-              } catch (e) {
-              }
-            } else if( paths[0] === 'promotion') {
+              } catch (e) {}
+            } else if (paths[0] === 'promotion') {
               try {
                 if (paths[1] != null) {
                   //this.gotoGoodsPage(paths[1]);
                   //this.$log("promotion:"+paths[1])
                   this.gotoPromotionPage(paths[1]);
                 }
-              } catch (e) {
-              }
+              } catch (e) {}
             }
           } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
             this.See(targetId);
           }
-        } catch (e) {
-        }
+        } catch (e) {}
       },
       getCountlineClass() {
         switch (this.datas.settings.countPerLine) {
@@ -309,14 +316,14 @@
         if (this.isTabChanging) {
           this.isTabChanging = false;
         } else {
-          let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#' + this.fixedBarId).offsetHeight) + 1;
+          let movePos = (this.goodsLists[index].offsetTop - document.querySelector('#' + this.fixedBarId)
+            .offsetHeight) + 1;
           // this.$log("movePos is:" + movePos)
           this.isTabChanging = true;
           setTimeout(() => {
             this.isTabChanging = false;
           }, 500);
           window.scroll(0, movePos)
-
         }
       },
       handleScroll() {
@@ -367,7 +374,8 @@
           mpu = goods.skuid;
         }
         this.$router.push({
-          path: "/detail", query: {
+          path: "/detail",
+          query: {
             mpu: mpu
           }
         });
@@ -407,8 +415,8 @@
         if (mpu == null) {
           mpu = goods.skuid;
         }
-        if(mpu != goods.skuid) {
-           this.gotoGoodsPage(mpu)
+        if (mpu != goods.skuid) {
+          this.gotoGoodsPage(mpu)
         } else {
           let addtoCar = {
             "openId": userId,
@@ -447,7 +455,7 @@
                 "model": goods.model,
                 "price": goods.price,
                 "checkedPrice": goods.price,
-                "type":  goods.type == undefined? 0:goods.type
+                "type": goods.type == undefined ? 0 : goods.type
               }
               let couponList = []
               let promotionInfo = {}
@@ -459,7 +467,7 @@
               }
             } else {
               cartItem.baseInfo.count++;
-              cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
+              cartItem.goodsInfo.type = (goods.type == undefined ? 0 : goods.type)
             }
             Util.updateCartItem(this, cartItem)
           }).catch(function (error) {
@@ -469,6 +477,7 @@
       }
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -530,7 +539,7 @@
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 2;
-                word-break: break-all;
+                
                 color: #000000;
                 text-shadow: 0px 0px #000;
               }
@@ -540,14 +549,15 @@
                 margin: 3px;
                 font-size: .12rem;
                 -webkit-transform-origin-x: 0; //缩小后文字居左
-                -webkit-transform: scale(0.80);   //关键
-                >span{
+                -webkit-transform: scale(0.80); //关键
+
+                >span {
                   overflow: hidden;
                   text-overflow: ellipsis;
                   display: -webkit-box;
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 1;
-                  word-break: break-all;
+                  
                 }
               }
 
@@ -624,6 +634,7 @@
 
         .upperLayout {
           height: 86%;
+
           img {
             width: 100%;
             height: 11em;
@@ -631,11 +642,12 @@
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
           }
+
           .goodsComment {
             margin: 2px 5px;
             min-height: 2.4em;
 
-            > p {
+            >p {
               .fz(font-size, 25);
               min-height: 2rem;
               overflow: hidden;
@@ -643,7 +655,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 2;
-              word-break: break-all;
+              
               bottom: 0;
               left: 0;
               width: 100%;
@@ -653,19 +665,21 @@
               text-shadow: 0px 0px #000;
             }
           }
+
           .alias {
             color: #aaaaaa;
             margin-left: 5px;
             font-size: .12rem;
             -webkit-transform-origin-x: 0; //缩小后文字居左
-            -webkit-transform: scale(0.80);   //关键
-            >span{
+            -webkit-transform: scale(0.80); //关键
+
+            >span {
               overflow: hidden;
               text-overflow: ellipsis;
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
-              word-break: break-all;
+              
             }
           }
         }
@@ -686,7 +700,7 @@
               line-height: 2em;
               margin-left: 5px;
 
-              > span {
+              >span {
                 display: inline-block;
                 align-content: center;
                 overflow: hidden;
@@ -694,7 +708,7 @@
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
-                word-break: break-all;
+                
                 bottom: 0;
                 left: 0;
                 color: #ff4444;
@@ -747,8 +761,9 @@
         border-radius: 5px;
         margin: .8vw;
 
-        .upperLayout{
+        .upperLayout {
           height: 80%;
+
           img {
             width: 100%;
             height: 7em;
@@ -756,9 +771,11 @@
             border-top-left-radius: 5px;
             border-top-right-radius: 5px;
           }
+
           .goodsComment {
             margin: 2px 5px;
-            > p {
+
+            >p {
               .fz(font-size, 25);
               min-height: 2rem;
               overflow: hidden;
@@ -766,7 +783,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 2;
-              word-break: break-all;
+              
               bottom: 0;
               left: 0;
               width: 100%;
@@ -776,24 +793,28 @@
               text-shadow: 0px 0px #000;
             }
           }
+
           .alias {
             color: #aaaaaa;
             margin-left: 5px;
             font-size: .12rem;
             -webkit-transform-origin-x: 0; //缩小后文字居左
-            -webkit-transform: scale(0.80);   //关键
-            >span{
+            -webkit-transform: scale(0.80); //关键
+
+            >span {
               overflow: hidden;
               text-overflow: ellipsis;
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
-              word-break: break-all;
+              
             }
           }
         }
-        .bottomLayout{
+
+        .bottomLayout {
           margin-top: 2px;
+
           .goodsFooter {
             border-bottom-left-radius: 10px;
             border-bottom-right-radius: 10px;
@@ -809,7 +830,7 @@
               line-height: 2em;
               margin-left: 5px;
 
-              > span {
+              >span {
                 display: inline-block;
                 align-content: center;
                 overflow: hidden;
@@ -817,7 +838,7 @@
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
-                word-break: break-all;
+                
                 bottom: 0;
                 left: 0;
                 color: #ff4444;
@@ -859,7 +880,7 @@
     }
 
     .sectionGoods-titleImg {
-      img{
+      img {
         width: 100%;
       }
     }
@@ -886,4 +907,5 @@
       background-color: white;
     }
   }
+
 </style>
