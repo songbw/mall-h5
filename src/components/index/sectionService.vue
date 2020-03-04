@@ -3,7 +3,7 @@
     <div class="wrap">
       <div class="section0-list">
         <ul>
-          <li v-for="k in datas.list.slice(0,this.lineNume)" @click="onClick(k.targetUrl)" :style="{'width': listWidth}">
+          <li v-for="(k,index) in datas.list.slice(0,this.lineNume)" :key="index" @click="onClick(k.targetUrl)" :style="{'width': listWidth}">
             <img v-lazy="k.imageUrl">
             <h2 :style="isDeepColor(cardBgClr)? 'color:white':'color:blank'">
               {{k.name}}
@@ -13,7 +13,7 @@
       </div>
       <div class="section1-list" v-if="datas.list.length > this.lineNume">
         <ul>
-          <li v-for="k in datas.list.slice(this.lineNume,datas.list.length)" @click="onClick(k.targetUrl)" :style="{'width':listWidth}">
+          <li v-for="(k,index) in datas.list.slice(this.lineNume,datas.list.length)" :key="index" @click="onClick(k.targetUrl)" :style="{'width':listWidth}">
             <img v-lazy="k.imageUrl">
             <h2 :style="isDeepColor(cardBgClr)? 'color:white':'color:blank'">
               {{k.name}}

@@ -4,6 +4,7 @@
     <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
       <h1 slot="title">凤巢商城</h1>
     </v-header>
+    <span>userTokenLoading:{{userTokenLoading}} pageloading:{{pageloading}}</span>
     <div v-if="pageloading || userTokenLoading">
       <v-splash v-if="showSplash"></v-splash>
       <v-loading v-else></v-loading>
@@ -12,57 +13,49 @@
       <div :style="{'background-color': mBackgroundColor}" class="home-body">
         <div v-if="this.mHeader.backgroundColor != null">
           <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
-            <van-search placeholder="搜索您感兴趣的商品"
-                        shape="round"
-                        :background=this.mHeader.backgroundColor
-                        readonly
-                        @click="onSearchInputClick()"
-                        v-if="this.mHeader.showSearchBar"/>
+            <van-search placeholder="搜索您感兴趣的商品" shape="round" :background=this.mHeader.backgroundColor readonly
+              @click="onSearchInputClick()" v-if="this.mHeader.showSearchBar" />
           </div>
           <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
         </div>
         <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px'">
           <div v-for="item in datas">
             <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
-              <v-swiper :datas="item.data"/>
+              <v-swiper :datas="item.data" />
             </div>
             <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
-              <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
-              <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
-              <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
-            <div v-else-if="item.type==='7'"
-                 :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
-              <v-imgmap :datas="item.data"/>
+             <div v-else-if="item.type==='7'"
+              :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
+              <v-imgmap :datas="item.data" />
             </div>
-            <div v-else-if="item.type==='4'">
-              <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+             <div v-else-if="item.type==='4'">
+              <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='8'">
               <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
             </div>
             <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
-              <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
-          </div>
+          </div> 
         </div>
-        <v-baseline v-if="this.showFooter" :datas="this.footerText"
-                    :style="{'background-color': mBackgroundColor}"></v-baseline>
+        <v-baseline v-if="this.showFooter" :datas="this.footerText" :style="{'background-color': mBackgroundColor}">
+        </v-baseline>
         <div v-else :style="{'background-color': mBackgroundColor,'height':'5em'} "></div>
       </div>
-      <van-dialog
-        v-model="showDialog"
-        :showConfirmButton="false"
-        :closeOnClickOverlay="true"
-        style="background-color: transparent"
-      >
+      <van-dialog v-model="showDialog" :showConfirmButton="false" :closeOnClickOverlay="true"
+        style="background-color: transparent">
         <div class="giftDialog" v-if="icon_gift != null && icon_gift.length > 0">
           <img :src=icon_gift @click="onGiftDialogImgClick">
-          <van-icon name="close" @click="onGiftDialogCloseBtnClicks"/>
+          <van-icon name="close" @click="onGiftDialogCloseBtnClicks" />
         </div>
       </van-dialog>
       <v-footer></v-footer>
@@ -85,7 +78,9 @@
   import Footer from '@/common/_footer.vue'
   import Loading from '@/common/_loading.vue'
   import Util from '@/util/common'
-  import {configWechat} from '@/util/wechat'
+  import {
+    configWechat
+  } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
 
   export default {
@@ -150,6 +145,7 @@
     beforeCreate() {
       let that = this;
       this.pageloading = true;
+      this.$log("page data loading ...............")
       this.$api.xapi({
         method: 'get',
         baseURL: this.$api.AGGREGATION_BASE_URL,
@@ -178,7 +174,7 @@
         }
         this.$log(this.mHeader);
         this.pageloading = false;
-
+        this.$log("page data loaded ...............")
       }).catch(function (error) {
         //alert(error)
         that.$log(error)
@@ -204,38 +200,38 @@
               this.userTokenLoading = false;
 
             }
-          }, 20000);time
+          }, 20000);
+          time
         } else {
           this.userTokenLoading = false;
 
         }
 
-      } else {//非关爱通App
+      } else { //非关爱通App
         if (process.env.NODE_ENV === 'development') {
-          if(this.$api.APP_ID != '13')
+          if (this.$api.APP_ID != '13')
             this.test();
         }
-        setTimeout(() => {
-          if (this.userTokenLoading) {
-            this.userTokenLoading = false;
+        if (this.userToken != undefined && this.userToken.length > 0) {
+          this.userTokenLoading = false;
+        } else {
+          setTimeout(() => {
+            if (this.userTokenLoading) {
+              this.userTokenLoading = false;
+              this.$log("userTokenLoading timeout 3s")
+            }
+          }, 3000);
+        }
 
-          }
-        }, 3000);
         if (this.$api.APP_ID == '01') {
           let code = this.$route.query.code;
           if (code != undefined) {
             this.thirdPartyLogin(code)
-            setTimeout(() => {
-              if (this.userTokenLoading) {
-                this.userTokenLoading = false;
-              }
-            }, 20000);
           } else {
             this.userTokenLoading = false;
-
           }
         } else {
-          if (this.$api.IS_WX_GZH) {//微信公众号端登录
+          if (this.$api.IS_WX_GZH) { //微信公众号端登录
             let authCode = this.$route.query.code;
             let state = this.$route.query.state;
             this.$log("authCode:" + authCode)
@@ -301,6 +297,7 @@
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
             this.userTokenLoading = false;
+            this.$log("userToken ok ....")
             this.loadCartList()
           }
         }
@@ -314,8 +311,7 @@
             configWechat(this, () => {
               wx.hideOptionMenu()
             })
-          } catch (e) {
-          }
+          } catch (e) {}
         }
       },
 
@@ -326,11 +322,14 @@
         this.$store.commit('SET_CURRENT_GOODS', JSON.stringify(goods));
       },
       gotoPromotionPage(promotionId) {
-        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+        this.$router.push({
+          path: '/category/goods/promotion/' + promotionId
+        });
       },
       gotoGoodsPage(mpu) {
         this.$router.push({
-          path: "/detail", query: {
+          path: "/detail",
+          query: {
             mpu: mpu
           }
         });
@@ -366,25 +365,25 @@
                 that.thirdPartLogined(openId, accessToken)
               } else {
                 //未绑定用户
-               // this.$toast("未绑定用户")
+                // this.$toast("未绑定用户")
                 this.userTokenLoading = false;
                 this.$router.replace({
                   path: '/login'
                 })
               }
             } else {
-             //this.$toast("获取用户信息失败")
+              //this.$toast("获取用户信息失败")
               this.userTokenLoading = false;
               this.$router.replace({
                 path: '/login'
               })
             }
           } else {
-             //this.$toast("获取用户授权信息失败")
-             this.userTokenLoading = false;
-             this.$router.replace({
-               path: '/login'
-             })
+            //this.$toast("获取用户授权信息失败")
+            this.userTokenLoading = false;
+            this.$router.replace({
+              path: '/login'
+            })
           }
         } catch (e) {
           that.userTokenLoading = false;
@@ -455,7 +454,9 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState(this, {promotion: promotion})
+            "promotionState": Util.getPromotionState(this, {
+              promotion: promotion
+            })
           }
           cartItem = {
             "baseInfo": baseInfo,
@@ -481,7 +482,9 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState(this, {promotion: promotion})
+            "promotionState": Util.getPromotionState(this, {
+              promotion: promotion
+            })
           }
           cartItem.couponList = couponList
           cartItem.promotionInfo = promotionInfo
@@ -491,6 +494,7 @@
       loadCartList() {
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
+        this.$log("start loading cartlist number ....")
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
           let that = this
@@ -513,6 +517,7 @@
                 this.upDateSkuInfo(item, couponsAndProms, user)
               })
             }
+            this.$log("end loading cartlist number ....")
           }).catch(function (error) {
             that.$log(error)
           })
@@ -521,34 +526,12 @@
       isValidLeavedPath(to) {
         let path = to.path;
         // if("/category/all | /car | ^/index/ | /detail".match(path))
-        if (path.match('(^/index/)|(/user)|(/category/all)|(/car)|(/detail)|(/login)|(/search)|(^/category/goods/promotion/)'))
+        if (path.match(
+            '(^/index/)|(/user)|(/category/all)|(/car)|(/detail)|(/login)|(/search)|(^/category/goods/promotion/)'))
           return true;
         return false;
       },
 
-      initJsNativeCb() {
-        this.$jsbridge.register('locationResult', (data) => {
-          this.$log("locationResult:" + data);
-          var responseData = JSON.parse(data);
-          if (data != null && data.length > 0) {
-            this.$store.commit('SET_LOCATION', data);
-            this.getLocationCode(data)
-          }
-          return "ok";
-        });
-
-        this.$jsbridge.register('payResult', (data) => {
-          /*
-          [2019-03-16 21:55:36 :: LOG]
-          payResult:{"code":1,"msg":"支付成功","orderNo":"5f786921c0944d389ab6514eb7406c491552744393140","orderAmount":1}
-          */
-          this.$log("payResult:" + data);
-          var responseData = JSON.parse(data);
-          this.onPayResult(responseData);
-          return "ok";
-        });
-
-      },
       testGAT() {
         //  let openId = "DFDBF1C25AB@EF6E2A7@AEM1L5D6GBD2"
         //let openId = "52d7fd1f46e55ac6a2435818a00c06c0"
@@ -580,9 +563,9 @@
         let openId = "ace1c1722b834309a59fad302fe357b2"
         if (this.$api.APP_ID == '01') {
           openId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc"
-         // openId = "o_sjNjk5EQVlNuo3G2KoWfCKgR0A"
+          // openId = "o_sjNjk5EQVlNuo3G2KoWfCKgR0A"
         } else if (this.$api.APP_ID == '12') {
-          openId = "5c8314363cea49de925bfaa39d4c4ebb"//最珠海
+          openId = "5c8314363cea49de925bfaa39d4c4ebb" //最珠海
         } else if (this.$api.APP_ID == '14') {
           openId = "28bfc681351583c37ee3dd19f9a82112" //万科云城
         }
@@ -606,63 +589,7 @@
         /*        let requestCode = "12345678"
                 this.getPingAnThirdPartyAccessTokenInfo(requestCode)*/
       },
-      closeWindow() {
-        if (!this.$api.IS_GAT_APP) {
-          this.$jsbridge.call("closeWindow");
-        }
-      },
-      onPayResult(payResult) {
-        this.$store.dispatch('getPrePayOrderList');
-        let list = this.$store.state.appconf.prePayOrderList
-        this.$log("##### before this.$store.state.appconf.prePayOrderList")
-        this.$log(this.$store.state.appconf.prePayOrderList)
-        let found = -1;
-        for (let i = 0; i < list.length; i++) {
-          // this.$log("list["+i+"]:" + JSON.stringify(list[i]) )
-          // this.$log("payResult:" + JSON.stringify(payResult))
-          if (list[i].orderNo === payResult.orderNo) {
-            found = i;
-            break;
-          }
-        }
-        //this.$log("found:" + found)
-        if (found != -1) {
-          list.splice(found, 1);
-          this.$store.dispatch('setPrePayOrderList', list);
-          //this.$log("##### after this.$store.state.appconf.prePayOrderList")
-          //this.$log(this.$store.state.appconf.prePayOrderList)
-        }
-        this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-        this.$router.replace({path: '/car/orderList'})
-      },
-      getUserInfo(accessToken) {
-        let that = this;
-        let paramets = {
-          appId: "fengcao",
-          accessToken: accessToken
-        }
-        that.$jsbridge.call("fetchUserInfoWithAccessToken", paramets, function (jsonString) {
-          that.$log("fetchUserInfoWithAccessToken  is:" + jsonString);
-          try {
-            let jsonObj = JSON.parse(jsonString);
-            let openId = jsonObj.openId;
-            let accessToken = jsonObj.userToken;
-            if (openId != undefined) {
-              let userId = that.$api.APP_ID + openId;
-              let userInfo = {
-                openId: openId,
-                accessToken: accessToken,
-                userId: userId
-              }
-              that.$log("userInfo  is:" + JSON.stringify(userInfo));
-              that.$store.commit('SET_USER', JSON.stringify(userInfo));
-              that.thirdPartLogined(openId, accessToken)
-            }
-          } catch (e) {
-            that.$log(e)
-          }
-        })
-      },
+
 
       thirdPartLogined(openId, accessToken) {
         let that = this;
@@ -695,10 +622,6 @@
         })
       },
 
-
-      setStatusBarColor(color) {
-        this.$jsbridge.call("initStatusBarColor", color);
-      },
 
       thirdPartyLogin(authCode) {
         let that = this;
@@ -794,98 +717,44 @@
           if (!initCode)
             return
           sc.config({
-            debug: false,   // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
-            appId: this.$api.T_APP_ID,  // 在统一 APP 开放平台服务器申请的 appId
+            debug: false, // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
+            appId: this.$api.T_APP_ID, // 在统一 APP 开放平台服务器申请的 appId
             initCode,
             nativeApis: ['userAuth']
           })
 
           sc.ready(() => {
-            sc.userAuth(
-              {appId: this.$api.T_APP_ID},
-              res => {  /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
+            sc.userAuth({
+                appId: this.$api.T_APP_ID
+              },
+              res => {
+                /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
                 if (res.code === 0) { //    用户同意授权
                   const requestCode = res.data.requestCode;
                   this.getPingAnThirdPartyAccessTokenInfo(requestCode);
-                } else {  /* 用户拒绝授权或其它失败情况
-                               code: - 1 默认失败
-                               code: - 10001    没有初始化 JSSDK
-                               code: - 10002    用户点击拒绝授权
-                                code: - 10003    用户未登录 */
+                } else {
+                  /* 用户拒绝授权或其它失败情况
+                                               code: - 1 默认失败
+                                               code: - 10001    没有初始化 JSSDK
+                                               code: - 10002    用户点击拒绝授权
+                                                code: - 10003    用户未登录 */
                   console.warning(res.message)
                 }
               })
           })
           sc.error((res) => {
-            console.error({res})
+            console.error({
+              res
+            })
           })
-        } catch (e) {
-        }
-      },
-
-      getAccessTokenInfo() {
-        let that = this;
-        that.$jsbridge.call("fetchInitCode", "fengcao", function (initCode) {
-          that.$log("initCode is:" + initCode);
-          that.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.SSO_BASE_URL,
-            url: '/sso/thirdParty/token',
-            params: {
-              iAppId: this.$api.APP_ID,
-              initCode: initCode,
-            }
-          }).then((response) => {
-            let rt = response.data.data.result
-            that.$log("rt:" + JSON.stringify(rt));
-            if (rt != undefined) {
-              let accessToken = rt.accessToken;
-              that.$log("accessToken:" + accessToken);
-              that.getUserInfo(accessToken);
-            } else {
-              that.$log(response.data.msg);
-            }
-          }).catch(function (error) {
-            that.$log(error)
-          })
-        })
-      },
-
-      startLocation() {
-        this.$jsbridge.call("startLoaction");
-      },
-
-      getLocationCode(locationInfo) {
-        let that = this;
-        let location = JSON.parse(locationInfo);
-        let options = {
-          "latitude": location.latitude,
-          "longitude": location.longitude,
-          "locTime": location.locTime,
-          "country": location.country,
-          "province": location.province,
-          "city": location.city,
-          "county": location.district
-        }
-        //this.$log("options:"+JSON.stringify(options))
-        this.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.ORDER_BASE_URL,
-          url: '/address/code',
-          data: options,
-        }).then((response) => {
-          let code = response.data.data.code;
-          this.$log("location code:" + JSON.stringify(code));
-          this.$store.commit('SET_LOCATION_CODE', code);
-        }).catch(function (error) {
-          that.$log(error)
-          that.finished = true;
-        })
+        } catch (e) {}
       },
 
       onSearchInputClick() {
         this.$log("onSearchInputClick")
-        this.$router.push({name: '搜索页'})
+        this.$router.push({
+          name: '搜索页'
+        })
       },
 
       onGiftDialogImgClick() {
@@ -905,28 +774,32 @@
           if (targetId != undefined && targetId.length > 0) {
             if (targetId.startsWith("aggregation://")) {
               let id = targetId.substr(14);
-              this.$router.push({path: '/index/' + id});
+              this.$router.push({
+                path: '/index/' + id
+              });
             } else if (targetId.startsWith("route://")) {
               let target = targetId.substr(8);
               let paths = target.split("/");
               this.$log(paths);
               if (paths[0] === 'category') {
-                this.$router.push({path: '/category'})
+                this.$router.push({
+                  path: '/category'
+                })
               } else if (paths[0] === 'coupon_center') {
-                this.$router.push({path: '/user/couponCenter'})
+                this.$router.push({
+                  path: '/user/couponCenter'
+                })
               } else if (paths[0] === 'commodity') {
                 try {
                   if (paths[1] != null)
                     this.gotoGoodsPage(paths[1]);
-                } catch (e) {
-                }
+                } catch (e) {}
               } else if (paths[0] === 'promotion') {
                 try {
                   if (paths[1] != null) {
                     this.gotoPromotionPage(paths[1]);
                   }
-                } catch (e) {
-                }
+                } catch (e) {}
               }
             } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
               this.See(targetId);
@@ -943,6 +816,7 @@
 
     }
   }
+
 </script>
 
 
@@ -1003,6 +877,5 @@
       margin-right: 5px;
     }
   }
-
 
 </style>
