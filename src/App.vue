@@ -312,7 +312,9 @@
           that.$log("回调结果")
           //that.$log(res)
           //workaround for JSON 不规范
-          res = res.replace('["', '').replace(']"', '');
+          //  
+          res = res.replace('["app"]', 'app');
+
           that.$log(res)
           try {
             let response = JSON.parse(res)
@@ -344,9 +346,67 @@
             }
           } catch (e) {
             that.$log(e)
-            that.$toast("获取用户授权失败!")
-          }
+            //workaround
+            let array = res.split(',')
+            let openId = ""
+            let accessToken = ""
+            let ret = "-1"
+            for (let i = 0; i < array.length; i++) {
+              let item = array[i].replace(/{/g, "").replace(/}/g, "").replace(/"/g,"")
+              try {
+                let itemArray = item.split(':')
+                //that.$log("++++++++++++++++++++++++")
+                for (let i = 0; i < itemArray.length; i++) {
+                  //that.$log(itemArray[i])
+                  if (itemArray[i] == "ret") {
+                    if (i < itemArray.length - 1) {
+                      ret = itemArray[i + 1]
+                    //  that.$log("ret:" + ret)
+                      break;
+                    }
+                  } else if (itemArray[i] == "openid") {
+                    if (i < itemArray.length - 1) {
+                      openId = itemArray[i + 1]
+                    //  that.$log("openId:" + openId)
+                      break;
+                    }
 
+                  } else if (itemArray[i] == "access_token") {
+                    if (i < itemArray.length - 1) {
+                      accessToken = itemArray[i + 1]
+                     // that.$log("accessToken:" + accessToken)
+                      break;
+                    }
+                  }
+                }
+                //that.$log("-------------------")
+              } catch (e) {
+
+              }
+            }
+            that.$log(ret)
+            that.$log(openId)
+            that.$log(accessToken)
+            if (ret == "0") {
+              that.$log("openId:" + openId)
+              that.$log("accessToke:" + accessToken)
+              let payId = -1
+              if (openId != undefined) {
+                let userId = that.$api.APP_ID + openId;
+                let userInfo = {
+                  openId: openId,
+                  accessToken: accessToken,
+                  userId: userId,
+                  payId: payId
+                }
+                that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                that.thirdPartLogined(openId, accessToken)
+              }
+            } else {
+              that.$toast("获取用户授权失败!")
+            }
+          }
         }
 
         window.backHomePageOfiOS = function () {
