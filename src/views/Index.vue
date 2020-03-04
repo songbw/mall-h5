@@ -4,7 +4,6 @@
     <v-header :mBackgroundColor="this.mHeader.backgroundColor" v-if="showHeader">
       <h1 slot="title">凤巢商城</h1>
     </v-header>
-    <span>userTokenLoading:{{userTokenLoading}} pageloading:{{pageloading}}</span>
     <div v-if="pageloading || userTokenLoading">
       <v-splash v-if="showSplash"></v-splash>
       <v-loading v-else></v-loading>
@@ -145,6 +144,10 @@
     async created() {
       let that = this;
       this.pageloading = true;
+      if (this.isBackFromOuterLink)
+        this.showSplash = false
+      else
+        this.showSplash = true
 
       this.showHeader = this.$api.HAS_HEADER;
       this.$log("page data loading ...............")
@@ -179,10 +182,7 @@
         that.pageloading = false;
       }
       this.wechatShareConfig()
-      if (this.isBackFromOuterLink)
-        this.showSplash = false
-      else
-        this.showSplash = true
+
       if (this.$api.IS_GAT_APP) {
         // this.testGAT();
         let auth_code = this.$route.query.auth_code;
