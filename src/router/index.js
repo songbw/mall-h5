@@ -54,7 +54,7 @@ export default new VueRouter({
       name: '首页',
       component: Index,
       meta: {
-        keepAlive: false, //此组件需要被缓存
+        keepAlive: true, //此组件需要被缓存
       }
     },
     {

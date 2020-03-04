@@ -539,7 +539,7 @@
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 2;
-                word-break: break-all;
+                
                 color: #000000;
                 text-shadow: 0px 0px #000;
               }
@@ -557,7 +557,7 @@
                   display: -webkit-box;
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 1;
-                  word-break: break-all;
+                  
                 }
               }
 
@@ -655,7 +655,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 2;
-              word-break: break-all;
+              
               bottom: 0;
               left: 0;
               width: 100%;
@@ -679,7 +679,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
-              word-break: break-all;
+              
             }
           }
         }
@@ -708,7 +708,7 @@
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
-                word-break: break-all;
+                
                 bottom: 0;
                 left: 0;
                 color: #ff4444;
@@ -783,7 +783,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 2;
-              word-break: break-all;
+              
               bottom: 0;
               left: 0;
               width: 100%;
@@ -807,7 +807,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
-              word-break: break-all;
+              
             }
           }
         }
@@ -838,7 +838,7 @@
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
-                word-break: break-all;
+                
                 bottom: 0;
                 left: 0;
                 color: #ff4444;
