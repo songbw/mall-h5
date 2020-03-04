@@ -310,12 +310,13 @@
         }
         window.shopUserInfoResult = function (res) {
           that.$log("回调结果")
-          //that.$log(res)
+          that.$log(res)
           //workaround for JSON 不规范
           //  
-          res = res.replace('["app"]', 'app');
-
-          that.$log(res)
+          //res = res.replace('["app"]', 'app');
+          res = res.replace(/\"scope\"\:\"\[\"app\"\]\",/g, "");
+          res = res.replace(/\"companyPark\"\:(\s)*(\"\[[\w\W]*\]\"|\"\"|null)\,/g, "");
+          // that.$log(res)
           try {
             let response = JSON.parse(res)
             that.$log(response.ret)
@@ -352,7 +353,7 @@
             let accessToken = ""
             let ret = "-1"
             for (let i = 0; i < array.length; i++) {
-              let item = array[i].replace(/{/g, "").replace(/}/g, "").replace(/"/g,"")
+              let item = array[i].replace(/{/g, "").replace(/}/g, "").replace(/"/g, "")
               try {
                 let itemArray = item.split(':')
                 //that.$log("++++++++++++++++++++++++")
@@ -361,20 +362,20 @@
                   if (itemArray[i] == "ret") {
                     if (i < itemArray.length - 1) {
                       ret = itemArray[i + 1]
-                    //  that.$log("ret:" + ret)
+                      //  that.$log("ret:" + ret)
                       break;
                     }
                   } else if (itemArray[i] == "openid") {
                     if (i < itemArray.length - 1) {
                       openId = itemArray[i + 1]
-                    //  that.$log("openId:" + openId)
+                      //  that.$log("openId:" + openId)
                       break;
                     }
 
                   } else if (itemArray[i] == "access_token") {
                     if (i < itemArray.length - 1) {
                       accessToken = itemArray[i + 1]
-                     // that.$log("accessToken:" + accessToken)
+                      // that.$log("accessToken:" + accessToken)
                       break;
                     }
                   }
