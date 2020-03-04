@@ -32,11 +32,11 @@
             <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
               <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
-             <div v-else-if="item.type==='7'"
+            <div v-else-if="item.type==='7'"
               :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
               <v-imgmap :datas="item.data" />
             </div>
-             <div v-else-if="item.type==='4'">
+            <div v-else-if="item.type==='4'">
               <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='8'">
@@ -45,7 +45,7 @@
             <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
               <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
-          </div> 
+          </div>
         </div>
         <v-baseline v-if="this.showFooter" :datas="this.footerText" :style="{'background-color': mBackgroundColor}">
         </v-baseline>
@@ -142,15 +142,14 @@
       }
     },
 
-    beforeCreate() {
+    async created() {
       let that = this;
       this.pageloading = true;
+
+      this.showHeader = this.$api.HAS_HEADER;
       this.$log("page data loading ...............")
-      this.$api.xapi({
-        method: 'get',
-        baseURL: this.$api.AGGREGATION_BASE_URL,
-        url: '/aggregation/findHomePage',
-      }).then((response) => {
+      try {
+        let response = await this.getHomePage()
         let jsonString = response.data.data.result.content
         this.datas = JSON.parse(jsonString);
         for (let i = 0; i < this.datas.length; i++) {
@@ -175,16 +174,10 @@
         this.$log(this.mHeader);
         this.pageloading = false;
         this.$log("page data loaded ...............")
-      }).catch(function (error) {
-        //alert(error)
-        that.$log(error)
+      } catch (e) {
+        that.$log(e)
         that.pageloading = false;
-      })
-
-    },
-
-    created() {
-      this.showHeader = this.$api.HAS_HEADER;
+      }
       this.wechatShareConfig()
       if (this.isBackFromOuterLink)
         this.showSplash = false
@@ -304,6 +297,13 @@
       },
     },
     methods: {
+      getHomePage() {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.AGGREGATION_BASE_URL,
+          url: '/aggregation/findHomePage',
+        })
+      },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
         if (this.$api.APP_ID === '01') {

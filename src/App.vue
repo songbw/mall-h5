@@ -41,10 +41,11 @@
         el.setAttribute("class", "fadeIn")
       }
     },
-    observer: true,
+    throttleWait: 200,
+    observer: false,
     observerOptions: {
-      rootMargin: '1500px',
-      threshold: 0.05
+      rootMargin: '0px',
+      threshold: 0.1
     }
   })
   export default {
