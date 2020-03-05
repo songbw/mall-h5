@@ -12,10 +12,16 @@
           <div class="expressNoBox" v-if="status == 3 || status == 5">
             <span style="margin: 10px;font-weight: bold">填写退货物流信息</span>
             <van-field v-model="expressComSubmit" rows="1" maxlength="30" clearable label="物流公司" size="large"
-              label-width="80px" placeholder="请输入物流公司" />
+              label-width="80px" placeholder="请输入物流公司" @click=onCompanyClick />
             <van-field v-model="expressNoSubmit" rows="1" maxlength="30" clearable label="退货单号" size="large"
               label-width="80px" placeholder="请输入退货物流单号" />
             <van-button size="large" round type="danger" @click="onExpressNoSubmit">提交</van-button>
+            <div>
+              <van-popup v-model="showLgCompanyPicker" position="bottom">
+                <van-picker title="请选择物流公司" show-toolbar :columns="companyName" @cancel="showLgCompanyPicker = false"
+                  @confirm="onSelectedCompany" />
+              </van-popup>
+            </div>
           </div>
           <span style="margin: 10px;font-weight: bold">工单详情</span>
           <van-steps direction="vertical" active-color="#000000">
@@ -45,12 +51,26 @@
       'v-header': Header,
       'v-loading': Loading
     },
+
+    computed: {
+       companyName() {
+          let list = []
+          this.logisticsCompanyList.forEach(company => {
+            list.push(company.name)
+          })
+          return list
+       }
+    },
+
+
+
     data() {
       return {
         showHeader: true,
         id: -1,
         expressNo: "",
         expressCom: "",
+        expressComSubmitCode: "",
         expressNoSubmit: "",
         expressComSubmit: "",
         loading: false,
@@ -58,10 +78,10 @@
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
         status: -1,
         merchantId: -1,
-        logisticsCompanyList:[],
+        logisticsCompanyList: [],
+        showLgCompanyPicker: false
       }
     },
-    computed: {},
 
     created() {
       let that = this;
@@ -75,20 +95,28 @@
       this.updateLogisticCompanyInfo()
     },
 
-    computed: {},
-
     methods: {
-       async updateLogisticCompanyInfo() {
-         try {
-            let response = await this.getLogisticsCompanyInfo() 
-            if(response.data.code == 200) {
-              this.logisticsCompanyList = response.data.data.result.list
-              this.$log(this.logisticsCompanyList)
-            }
-         } catch (e) {
+      onSelectedCompany(value, index) {
+        this.$log("onSelectedCompany Enter")
+        this.expressComSubmit = value
+        this.expressComSubmitCode = this.logisticsCompanyList[index].code
+        this.showLgCompanyPicker = false;
+      },
+      onCompanyClick() {
+        this.$log("onCompanyClick Enter")
+        this.showLgCompanyPicker = true
+      },
+      async updateLogisticCompanyInfo() {
+        try {
+          let response = await this.getLogisticsCompanyInfo()
+          if (response.data.code == 200) {
+            this.logisticsCompanyList = response.data.data.result.list
+            this.$log(this.logisticsCompanyList)
+          }
+        } catch (e) {
 
-         }
-      }, 
+        }
+      },
       getLogisticsCompanyInfo() {
         return this.$api.xapi({
           method: 'POST',
@@ -136,7 +164,8 @@
         }
         let logisticsInfo = {
           com: this.expressComSubmit,
-          order: this.expressNoSubmit
+          order: this.expressNoSubmit,
+          comCode:this.expressComSubmitCode
         }
         const comments = {
           logisticsInfo: logisticsInfo
