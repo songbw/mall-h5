@@ -100,6 +100,8 @@
         this.$log("onSelectedCompany Enter")
         this.expressComSubmit = value
         this.expressComSubmitCode = this.logisticsCompanyList[index].code
+        this.$log(this.expressComSubmit)
+        this.$log(this.expressComSubmitCode)
         this.showLgCompanyPicker = false;
       },
       onCompanyClick() {
