@@ -140,7 +140,7 @@
         userTokenLoading: true,
       }
     },
-    
+
     beforeCreate() {
       let that = this;
       this.pageloading = true;
@@ -190,7 +190,7 @@
         this.showSplash = true
 
       this.showHeader = this.$api.HAS_HEADER;
-     
+
       this.wechatShareConfig()
 
       if (this.$api.IS_GAT_APP) {
