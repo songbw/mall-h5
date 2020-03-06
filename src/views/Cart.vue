@@ -69,13 +69,14 @@
                     </div>
                     <div class="goodsInvalid" v-else>
                       <van-card
-                        desc="无货"
+                        :desc="k.invalidReason"
                         :price="k.goodsInfo.dprice"
                         :title="k.goodsInfo.name"
                         :thumb="k.goodsInfo.image"
                         @click="gotoDetailPage(k)">
                         <div slot="footer" @click.stop="">
-                          <van-stepper v-model="k.baseInfo.count" @click.stop="" disabled @change="onCountChange(k)"/>
+                          <van-stepper v-if="k.baseInfo.merchantId === 4" v-model="k.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
+                          <van-stepper v-else v-model="k.baseInfo.count" @click.stop="" disabled @change="onCountChange(k)"/>
                         </div>
                       </van-card>
                     </div>
@@ -121,30 +122,55 @@
     computed: {
       cartList() {
         this.$store.state.appconf.cartList.forEach(item => {
-          this.$log(item)
+         // this.$log(item)
           if (item.baseInfo.merchantId === 2) {
             item['valid'] = true;
+            item['invalidReason'] = "";
             for (let i = 0; i < this.inventoryListOfAoyi.length; i++) {
               if (this.inventoryListOfAoyi[i].state == 0 && this.inventoryListOfAoyi[i].skuId === item.baseInfo.skuId) {
                 item['valid'] = false;
+                item['invalidReason'] = "无货";
                 item.baseInfo.choosed = false;
                 break;
               }
             }
-          }  else if(item.baseInfo.merchantId === 4){
+          } else if (item.baseInfo.merchantId === 4) {
             item['valid'] = true;
-          }  else {
+            item['invalidReason'] = "";
+            for (let i = 0; i < this.inventoryListOfYyt.length; i++) {
+                if(this.inventoryListOfYyt[i].mpu === item.baseInfo.mpu && this.inventoryListOfYyt[i].skuId === item.baseInfo.skuId) {
+                  if(this.inventoryListOfYyt[i].state == 0) {
+                    item['valid'] = false;
+                    item['invalidReason'] = "无货";
+                    item.baseInfo.choosed = false;
+                    break;
+                  } else if (this.inventoryListOfYyt[i].inventoryCount < this.inventoryListOfYyt[i].remainNum ||
+                         this.inventoryListOfYyt[i].remainNum <  this.inventoryListOfYyt[i].purchaseQty) {
+                    item['valid'] = false;
+                    if(this.inventoryListOfYyt[i].inventoryCount < this.inventoryListOfYyt[i].remainNum ) {
+                       item['invalidReason'] = "无货";
+                    } else {
+                       item['invalidReason'] = "一次购买不少于"+this.inventoryListOfYyt[i].purchaseQty+"件";
+                    }
+                    item.baseInfo.choosed = false;
+                    break;
+                  }
+                }
+            }
+          } else {
             item['valid'] = true;
+            item['invalidReason'] = "";
             for (let i = 0; i < this.inventoryListOfZy.length; i++) {
               if (this.inventoryListOfZy[i].state == 0 && this.inventoryListOfZy[i].mpu === item.baseInfo.mpu) {
                 item['valid'] = false;
+                item['invalidReason'] = "无货";
                 item.baseInfo.choosed = false;
                 break;
               }
             }
           }
         })
-        this.$log(this.$store.state.appconf.cartList)
+       // this.$log(this.$store.state.appconf.cartList)
         return this.$store.state.appconf.cartList
       },
     },
@@ -157,6 +183,7 @@
         list: [],
         inventoryListOfAoyi: [],
         inventoryListOfZy: [],
+        inventoryListOfYyt: [],
         loading: false,
         finished: false,
         nothingInCar_bg: require('@/assets/icons/ico_empty_cart.png'),
@@ -188,8 +215,8 @@
     methods: {
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if(this.$api.APP_ID === '01') {
-          try{
+        if (this.$api.APP_ID === '01') {
+          try {
             configWechat(this, () => {
               wx.hideOptionMenu()
             })
@@ -197,10 +224,12 @@
           }
         }
       },
-      gotoDetailPage(sku){
-        this.$router.push({path:"/detail",query:{
-            mpu:sku.baseInfo.mpu
-          }});
+      gotoDetailPage(sku) {
+        this.$router.push({
+          path: "/detail", query: {
+            mpu: sku.baseInfo.mpu
+          }
+        });
       },
       updateAoyiInventory(skus) {
         this.$log(this.addressCode)
@@ -229,20 +258,37 @@
         })
       },
 
+      updateYytInventory(skus) {
+        this.$log("updateYytInventory Enter")
+        this.$log(skus)
+        let codesArray = []
+        skus.forEach(sku => {
+          codesArray.push(sku.skuId)
+        })
+        let codes = codesArray.join(",");
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AOYIS_CONFIG_URL,
+          url: '/star/product/inventory',
+          data: {
+            codes: codes
+          },
+        })
+      },
+
       async updateInventorList(list) {
         this.$log("updateInventorList Enter")
         let addressList = this.$store.state.appconf.addressList;
         let address = this.addressCode;
         this.$log(this.$store.state.appconf.addressList)
-        if (addressList == null || addressList == undefined || addressList.length == 0 ) {
+        if (addressList == null || addressList == undefined || addressList.length == 0) {
           let resp = await this.getAddressList()
           if (resp != null || resp != undefined) {
             addressList = resp.data.data.result.list
           }
         }
         let id = this.$store.state.appconf.usedAddressId;
-        if(id == undefined)
-        {
+        if (id == undefined) {
           id = -1
         }
         try {
@@ -255,7 +301,7 @@
                   break;
                 }
               }
-              if ( id == -1) {
+              if (id == -1) {
                 id = addressList[0].id;
                 address = addressList[0]
               }
@@ -284,16 +330,18 @@
         let inventorySkusOfZy = [];
         let inventorySkusOfYyt = [];
         list.forEach(item => {
-          this.$log(item)
           if (item.merchantId == 2) {
-            inventorySkus.push({"skuId": item.mpu, "remainNum": item.count,"price":item.price})
-          } else if(item.merchantId  ==  4) {
-            inventorySkus.push({"skuId": item.skuId, "remainNum": item.count,"price":item.price})
+            inventorySkus.push({"skuId": item.mpu, "remainNum": item.count, "price": item.price})
+          } else if (item.merchantId == 4) {
+            let purchaseQty = 1;
+            if(item.starSku != undefined) {
+              purchaseQty = item.starSku.purchaseQty
+            }
+            inventorySkusOfYyt.push({"mpu": item.mpu, "state":item.state, "skuId": item.skuId, "remainNum": item.count, "inventoryCount":0,"purchaseQty":purchaseQty,"price": item.price})
           } else {
             inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})
           }
         })
-
         if (inventorySkus.length > 0) {
           let resp = await this.updateAoyiInventory(inventorySkus)
           this.inventoryListOfAoyi = resp.data.data.result
@@ -303,6 +351,29 @@
           let resp = await this.updateOtherInventory(inventorySkusOfZy)
           this.inventoryListOfZy = resp.data.data.result
           this.$log(this.inventoryListOfZy)
+        }
+        if (inventorySkusOfYyt.length > 0) {
+          try {
+            let resp = await this.updateYytInventory(inventorySkusOfYyt)
+            if(resp.data.code === 200) {
+              let skuInvList = resp.data.data.skuInvList
+              skuInvList.forEach(skuInvt => {
+                 //inventoryListOfYyt.inventoryCount = skuInvt.inventoryCount
+                 for(let i = 0; i < inventorySkusOfYyt.length; i++) {
+                   this.$log("++++++++++++++++++++++++++++=")
+                   if(inventorySkusOfYyt[i].skuId === skuInvt.code) {
+                     inventorySkusOfYyt[i].inventoryCount = skuInvt.inventoryCount
+                     break;
+                   }
+                 }
+              })
+              this.inventoryListOfYyt = inventorySkusOfYyt
+              this.$log(this.inventoryListOfYyt)
+            }
+          } catch (e) {
+
+          }
+
         }
       },
 
@@ -339,11 +410,11 @@
         return (goods.brand == null ? '' : goods.brand) + ' ' + goods.name + ' ' + (goods.model == null ? '' : goods.model)
       },
       countDownS_cb(index, k) {
-        k.promotionInfo.promotionState = Util.getPromotionState(this,k)
+        k.promotionInfo.promotionState = Util.getPromotionState(this, k)
         Util.updateCartItem(this, k);
       },
       countDownE_cb(index, k) {
-        k.promotionInfo.promotionState = Util.getPromotionState(this,k)
+        k.promotionInfo.promotionState = Util.getPromotionState(this, k)
         let len = k.promotionInfo.promotion.length;
         k.promotionInfo.promotion.splice(0, len);
         Util.updateCartItem(this, k);
@@ -369,6 +440,15 @@
 
       onCountChange(k) {
         Util.updateCartItem(this, k);
+        if(k.baseInfo.merchantId === 4) {
+           for(let i = 0; i < this.inventoryListOfYyt.length; i++) {
+             if(this.inventoryListOfYyt[i].mpu == k.baseInfo.mpu &&
+                this.inventoryListOfYyt[i].skuId == k.baseInfo.skuId) {
+               this.inventoryListOfYyt[i].remainNum = k.baseInfo.count
+               break;
+             }
+           }
+        }
         let options = {
           "id": k.baseInfo.cartId,
           "count": k.baseInfo.count,
@@ -383,6 +463,7 @@
         }).catch(function (error) {
           console.log(error)
         })
+
       },
 
       async loadCartListBy(user) {
@@ -464,8 +545,12 @@
         let cartItem = Util.getCartItem(this, user.userId, item.mpu)
         this.$log(cartItem)
         let skuId = item.skuId
-        if(skuId === undefined || skuId === null) {
+        let purchaseQty = 1
+        if (skuId === undefined || skuId === null) {
           skuId = item.skuid
+        }
+        if(item.starSku != undefined) {
+          purchaseQty = item.starSku.purchaseQty
         }
         if (cartItem == null) {
           let baseInfo = {
@@ -475,7 +560,8 @@
             "merchantId": item.merchantId,
             "count": item.count,
             "choosed": false,
-            "cartId": item.id
+            "cartId": item.id,
+            "purchaseQty": purchaseQty
           }
           let goodsInfo = {
             "id": item.id,
@@ -489,7 +575,7 @@
             "model": item.model,
             "price": item.price,
             "state": item.state,
-            "type":  item.type == undefined? 0:item.type
+            "type": item.type == undefined ? 0 : item.type
           }
           let couponList = []
           let promotion = []
@@ -504,7 +590,7 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState(this,{promotion: promotion})
+            "promotionState": Util.getPromotionState(this, {promotion: promotion})
           }
           cartItem = {
             "baseInfo": baseInfo,
@@ -517,9 +603,10 @@
           cartItem.baseInfo.count = item.count
           cartItem.baseInfo.cartId = item.id
           cartItem.baseInfo.merchantId = item.merchantId
+          cartItem.baseInfo.purchaseQty = purchaseQty
           cartItem.goodsInfo.merchantId = item.merchantId
           cartItem.goodsInfo.price = item.price
-          cartItem.goodsInfo.type =  (item.type == undefined? 0:item.type)
+          cartItem.goodsInfo.type = (item.type == undefined ? 0 : item.type)
           let couponList = []
           let promotion = []
           if (couponAndProms != null) {
@@ -533,7 +620,7 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState(this,{promotion: promotion})
+            "promotionState": Util.getPromotionState(this, {promotion: promotion})
           }
           cartItem.couponList = couponList
           cartItem.promotionInfo = promotionInfo

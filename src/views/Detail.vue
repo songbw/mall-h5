@@ -815,9 +815,14 @@
 
           let inventorySkus = [];
           let inventorySkusOfZy = [];
+          let inventorySkusOfYyt = [];
+
+
           if (goods.merchantId === 2) {
             this.$log(goods)
             inventorySkus.push({"skuId": goods.mpu, "remainNum": 1, "price": goods.price})
+          } else if(goods.merchantId === 4) {
+            inventorySkusOfYyt.push({"skuId": goods.mpu, "remainNum": 1, "price": goods.price})
           } else {
             inventorySkusOfZy.push({"mpu": goods.mpu, "remainNum": 1})
           }
@@ -840,6 +845,30 @@
                 this.hasInventory = true;
               }
             })
+          }
+
+          if(inventorySkusOfYyt.length > 0) {
+            let total_stock_num = 0
+            try {
+              let response = await this.getYytInventory()
+              if (response.data.code === 200) {
+                let ret = response.data.data.skuInvList;
+                this.goods.skuList.forEach(sku => {
+                  if(sku.status == 1) {
+                    for (let i = 0; i < ret.length; i++) {
+                      if (ret[i].code === sku.code) {
+                        total_stock_num += ret[i].inventoryCount
+                        break;
+                      }
+                    }
+                  }
+                })
+              }
+              if(total_stock_num > 0) {
+                this.hasInventory = true;
+              }
+            } catch (e) {
+            }
           }
           this.updateFreightInfo(goods);
         }
@@ -871,6 +900,24 @@
           baseURL: this.$api.PRODUCT_BASE_URL,
           url: '/prod/inventory/self',
           data: options,
+        })
+      },
+
+
+      getYytInventory() {
+        this.$log("getYytInventory Enter")
+        let codesArray = []
+        this.goods.skuList.forEach(sku => {
+          codesArray.push(sku.code)
+        })
+        let codes = codesArray.join(",");
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AOYIS_CONFIG_URL,
+          url: '/star/product/inventory',
+          data: {
+            codes: codes
+          },
         })
       },
 
@@ -1065,8 +1112,6 @@
           min-height: 500px;
           background-color: #f8f8f8;
 
-          .couponLayout {
-          }
         }
 
         .avaliableCoupon {

@@ -75,7 +75,7 @@
             } catch (e) {
             }
           }
-        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+        } else if (targetId.startsWith("http://") || targetId.startsWith("https://")) {
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
             let user = JSON.parse(userInfo);

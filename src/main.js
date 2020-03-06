@@ -51,12 +51,13 @@ import {
   Popup,
   Circle,
   Collapse,
-  CollapseItem
+  CollapseItem,
+  Picker
 } from 'vant';
 
-/*if (process.env.NODE_ENV === 'production') {
+/* if (process.env.NODE_ENV === 'production') {
   new VConsole()
-}*/
+} */
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)
@@ -147,7 +148,8 @@ Vue.use(Button)
   .use(Popup)
   .use(Circle)
   .use(Collapse)
-  .use(CollapseItem);
+  .use(CollapseItem)
+  .use(Picker);
 
 
 ///////////////////////////////////////////////////////////////////////

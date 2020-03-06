@@ -1,17 +1,11 @@
 <template lang="html">
   <section class="search">
     <header v-if="showHeader">
-      <van-icon class="arrowback" name="arrow-left" size="1.2em" @click="$router.go(-1)" slot="left" v-if="showBackArrow"/>
+      <van-icon class="arrowback" name="arrow-left" size="1.2em" @click="$router.go(-1)" slot="left"
+        v-if="showBackArrow" />
       <form action="" style="width: 100%">
-        <van-search
-          background=#ffffff
-          v-model="value"
-          placeholder="请输入搜索关键词"
-          show-action
-          @search="onSearch"
-          slot="Title"
-          type="search"
-        >
+        <van-search background=#ffffff v-model="value" placeholder="请输入搜索关键词" show-action @search="onSearch"
+          slot="Title" type="search">
           <div slot="action" @click="onSearch">搜索</div>
         </van-search>
       </form>
@@ -33,7 +27,9 @@
 </template>
 
 <script>
-  import {configWechat} from '@/util/wechat'
+  import {
+    configWechat
+  } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
 
   export default {
@@ -51,15 +47,18 @@
         baseURL: this.$api.BASE_BASE_URL,
         url: '/tags'
       }).then((response) => {
-        let words = response.data.data.cdnUrl.work;
-        this.extractWord(words);
+        this.$log(response)
+        if (response.data.data.cdnUrl != null) {
+          let words = response.data.data.cdnUrl.work;
+          this.extractWord(words);
+        }
       }).catch(function (error) {
         alert(error)
       })
     },
 
     created() {
-      if(this.$api.IS_GAT_APP) {
+      if (this.$api.IS_GAT_APP) {
         this.showBackArrow = false;
       }
       this.wechatShareConfig()
@@ -68,8 +67,8 @@
     methods: {
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if(this.$api.APP_ID === '01') {
-          try{
+        if (this.$api.APP_ID === '01') {
+          try {
             configWechat(this, () => {
               wx.hideOptionMenu()
             })
@@ -98,7 +97,12 @@
 
       requestSearch(word) {
         if (word != null && word.length > 0)
-          this.$router.replace({path: "/category/goods/list", query: {'search': word}})
+          this.$router.replace({
+            path: "/category/goods/list",
+            query: {
+              'search': word
+            }
+          })
       },
 
       onClick(word) {
@@ -109,6 +113,7 @@
     }
 
   }
+
 </script>
 
 <style lang="less" scoped>

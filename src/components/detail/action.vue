@@ -31,7 +31,24 @@
         :custom-sku-validator="customSkuValidator"
         @buy-clicked="onBuyClicked"
         @add-cart="onAddCartClicked"
-      />
+        @stepper-change="onStepperChanged"
+        @sku-selected="onSkuSelectedChanged"
+      >
+<!--        &lt;!&ndash; 自定义 sku-header-price &ndash;&gt;
+        <template slot="sku-header-price" slot-scope="props">
+          <div class="van-sku__goods-price">
+            <div v-if="datas.promotion.length == 0">
+              <span class="van-sku__price-symbol">￥</span><span class="van-sku__price-num">{{ props.price }}</span>
+            </div>
+            <div v-else>
+              <span class="van-sku__price-symbol">￥</span><span class="van-sku__price-num">{{ props.price }}</span>
+              <div>
+                <span style="margin-left:2px;font-size: smaller;color: #5a5a5a; text-decoration: line-through">￥{{ props.price }}</span>
+              </div>
+            </div>
+          </div>
+        </template>-->
+      </van-sku>
     </div>
 
   </section>
@@ -64,7 +81,9 @@
         showCustom: false,
         showStepper: false,
         closeOnClickOverlay: true,  //点击空白处关闭购物框
-        customSkuValidator: () => '请正确选择商品规格'
+        customSkuValidator: () => '请正确选择商品规格',
+        hasPromotion: false,
+        PromotionStatus: -1
       }
     },
 
@@ -92,6 +111,10 @@
             // 默认商品 sku 缩略图
             picture: this.datas.image
           }
+          if(this.datas.promotion !=undefined && this.datas.promotion.length > 0 ) {
+            this.hasPromotion = true;
+
+          }
           this.goods_id = this.datas.mpu
           if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
             let tree = [];
@@ -104,10 +127,12 @@
                 this.datas.skuList.forEach(sku => {
                   sku['stock_num'] = 0
                   this.$log(ret)
-                  for (let i = 0; i < ret.length; i++) {
-                    if (ret[i].code === sku.code) {
-                      sku.stock_num = ret[i].inventoryCount
-                      break;
+                  if (sku.status == 1) {
+                    for (let i = 0; i < ret.length; i++) {
+                      if (ret[i].code === sku.code) {
+                        sku.stock_num = ret[i].inventoryCount
+                        break;
+                      }
                     }
                   }
                 })
@@ -127,8 +152,8 @@
                         break;
                       }
                     }
-                    if (foundVal != -1) {
-                      let propertyCount = tree[i].v.tree[i].length + 1;
+                    if (foundVal == -1) {//新的值
+                      let propertyCount = tree[i].v.length + 1;
                       tree[i].v.push({
                         id: tree[i].k_id + propertyCount,
                         name: property.val,
@@ -155,37 +180,45 @@
                 }
               })
             })
+          
+            this.$log (tree)
             let total_stock_num = 0
             this.$log(this.datas.skuList)
             this.datas.skuList.forEach(sku => {
               let item = {
                 id: sku.code,
-                price: parseInt((this.datas.price * 100).toFixed(0)),
+                price: sku.price,
                 s1: '0',
                 s2: '0',
                 s3: '0',
                 s4: '0',
                 s5: '0',
                 stock_num: sku.stock_num,
-                goods_id: this.datas.mpu
+                goods_id: this.datas.mpu,
+                purchaseQty: sku.purchaseQty
               }
-              sku.propertyList.forEach(property =>{
-                 for(let i =0;i < tree.length; i++) {
-                   if(tree[i].k === property.name) {
-                     this.$log(tree[i])
-                     for(let j=0; j < tree[i].v.length; j++) {
-                       if(tree[i].v[j].name === property.val){
-                         item[tree[i].k_s]  = tree[i].v[j].id
-                         break;
-                       }
-                     }
-                   }
-                 }
+              sku.propertyList.forEach(property => {
+                for (let i = 0; i < tree.length; i++) {
+                  if (tree[i].k === property.name) {
+                    this.$log(tree[i])
+                    for (let j = 0; j < tree[i].v.length; j++) {
+                      if (tree[i].v[j].name === property.val) {
+                        item[tree[i].k_s] = tree[i].v[j].id
+                        break;
+                      }
+                    }
+                  }
+                }
               })
               total_stock_num += item.stock_num
               list.push(item)
             })
-            this.$log("!!!!!!!!!!!!!!!!!!!!!!!")
+            if(this.hasPromotion == true ) {
+              this.PromotionStatus = Util.getPromotionState(this, this.datas);
+              if(this.PromotionStatus == 1) {
+                list[0].price =  parseInt((this.datas.dprice * 100).toFixed(0))
+              }
+            }
             tree.forEach(item => {
               item['count'] = item.v.length
             })
@@ -200,14 +233,14 @@
               hide_stock: false,  // 是否隐藏剩余库存 false正常显示剩余多少件的那个库存
             }
             this.$log(this.sku)
-            if(list.length > 0) {
+            if (list.length > 0) {
               this.initialSku = {
                 s1: list[0].s1,
                 s2: list[0].s2,
                 s3: list[0].s3,
                 s4: list[0].s4,
                 s5: list[0].s5,
-                selectedNum: 1 //下面的数字选择框的数字即买了多少件
+                selectedNum: list[0].purchaseQty //下面的数字选择框的数字即买了多少件
               }
               this.$log(this.initialSku)
             }
@@ -243,53 +276,76 @@
           },
         })
       },
+      
+      onStepperChanged(value) {
+        this.$log("onStepperChanged Enter:"+value)
+      },
+      
+      onSkuSelectedChanged(data)
+      {
+        this.$log("onSkuSelectedChanged Enter")
+        this.$log(data)
+      },
+      
       onBuyClicked(skuData) {
         this.$log("onBuyClicked Enter")
         this.$log(skuData)
         if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
-          let userInfo = this.$store.state.appconf.userInfo;
-          if (!Util.isUserEmpty(userInfo)) {
-            let user = JSON.parse(userInfo);
-            let goods = this.datas
-            let baseInfo = {
-              "userId": user.userId,
-              "skuId": selectSkuId,
-              "mpu": goods.mpu,
-              "merchantId": goods.merchantId,
-              "count": skuData.selectedNum,
-              "choosed": true,
-              "cartId": -1,
-            }
-            let goodsInfo = {
-              "id": goods.id,
-              "skuId": selectSkuId,
-              "mpu": goods.mpu,
-              "merchantId": goods.merchantId,
-              "image": goods.image,
-              "category": goods.category,
-              "name": goods.name,
-              "brand": goods.brand,
-              "model": goods.model,
-              "price": goods.price,
-              "type": goods.type == undefined ? 0 : goods.type
-            }
-            let couponList = goods.coupon
-            let promotionInfo = {
-              "promotion": goods.promotion,
-              "promotionState": Util.getPromotionState(this, goods)
-            }
-            let product = {
-              "baseInfo": baseInfo,
-              "goodsInfo": goodsInfo,
-              "couponList": couponList,
-              "promotionInfo": promotionInfo,
-            }
-            this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
-            this.$router.push({path: '/car/pay/direct'})
-          } else {
-            this.$toast("没有用户信息，请先登录再购买")
+          let stock_num = skuData.selectedSkuComb.stock_num
+          if(skuData.selectedSkuComb.purchaseQty > skuData.selectedNum) {
+             this.$toast("一次购买数量不能少于"+skuData.selectedSkuComb.purchaseQty+"件")
+             return
           }
+          if (stock_num > 0) {
+            let selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
+            let userInfo = this.$store.state.appconf.userInfo;
+            if (!Util.isUserEmpty(userInfo)) {
+              let user = JSON.parse(userInfo);
+              let goods = this.datas
+              let baseInfo = {
+                "userId": user.userId,
+                "skuId": selectSkuId,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "count": skuData.selectedNum,
+                "choosed": true,
+                "cartId": -1,
+              }
+              let goodsInfo = {
+                "id": goods.id,
+                "skuId": selectSkuId,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "image": goods.image,
+                "category": goods.category,
+                "name": goods.name,
+                "brand": goods.brand,
+                "model": goods.model,
+                "price": selectPrice,
+                "checkedPrice": goods.price,
+                "type": goods.type == undefined ? 0 : goods.type
+              }
+              let couponList = goods.coupon
+              let promotionInfo = {
+                "promotion": goods.promotion,
+                "promotionState": Util.getPromotionState(this, goods)
+              }
+              let product = {
+                "baseInfo": baseInfo,
+                "goodsInfo": goodsInfo,
+                "couponList": couponList,
+                "promotionInfo": promotionInfo,
+              }
+              this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
+              this.$router.push({path: '/car/pay/direct'})
+            } else {
+              this.$toast("没有用户信息，请先登录再购买")
+            }
+          } else {
+            this.$toast("库存不足，无法购买该商品")
+          }
+
         }
       },
       onAddCartClicked(skuData) {
@@ -297,12 +353,18 @@
         this.$log(skuData)
         if (skuData != undefined) {
           let selectSkuId = skuData.selectedSkuComb.id
-          let userInfo = this.$store.state.appconf.userInfo;
-          if (!Util.isUserEmpty(userInfo)) {
-            this.add2Car(userInfo, this.datas, skuData);
+          let stock_num = skuData.selectedSkuComb.stock_num
+          if (stock_num > 0) {
+            let userInfo = this.$store.state.appconf.userInfo;
+            if (!Util.isUserEmpty(userInfo)) {
+              this.add2Car(userInfo, this.datas, skuData);
+            } else {
+              this.$toast("没有用户信息，请先登录,再添加购物车")
+            }
           } else {
-            this.$toast("没有用户信息，请先登录,再添加购物车")
+            this.$toast("库存不足，无法购买该商品")
           }
+
         }
       },
       getClientName() {
@@ -379,11 +441,16 @@
 
       addGoodsCar() {
         let userInfo = this.$store.state.appconf.userInfo;
+        this.$log(this.datas)
         if (!Util.isUserEmpty(userInfo)) {
-          if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
-            this.showBase = true;
+          if (this.datas.state === '0') {
+            this.$toast("该商品已下架")
           } else {
-            this.add2Car(userInfo, this.datas);
+            if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
+              this.showBase = true;
+            } else {
+              this.add2Car(userInfo, this.datas);
+            }
           }
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
@@ -396,8 +463,10 @@
         let mpu = goods.mpu;
         let count = 1;
         let selectSkuId = mpu
+        let selectPrice = goods.price
         if (skuData != undefined) {
           selectSkuId = skuData.selectedSkuComb.id
+          selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
           count = skuData.selectedNum
         }
         let addtoCar = {
@@ -436,8 +505,7 @@
                 "name": goods.name,
                 "brand": goods.brand,
                 "model": goods.model,
-                "price": goods.price,
-                "checkedPrice": goods.price,
+                "price": selectPrice,
                 "type": goods.type == undefined ? 0 : goods.type
               }
               let couponList = []
@@ -462,55 +530,62 @@
       gotoPay() {
         this.$log("gotoPay Enter")
         if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
-          this.showBase = true;
+          let userInfo = this.$store.state.appconf.userInfo;
+          if (!Util.isUserEmpty(userInfo)) {
+            if (this.datas.state === '0') {
+              this.$toast("该商品已下架")
+            } else {
+              this.showBase = true;
+            }
+          } else {
+            this.$toast("没有用户信息，请先登录再购买")
+          }
+
         } else {
           this.$log(this.datas);
           let userInfo = this.$store.state.appconf.userInfo;
           if (!Util.isUserEmpty(userInfo)) {
-            let user = JSON.parse(userInfo);
-            let goods = this.datas
-            let baseInfo = {
-              "userId": user.userId,
-              "skuId": goods.skuid,
-              "mpu": goods.mpu,
-              "merchantId": goods.merchantId,
-              "count": 1,
-              "choosed": true,
-              "cartId": -1,
+            if (this.datas.state === '0') {
+              this.$toast("该商品已下架")
+            } else {
+              let user = JSON.parse(userInfo);
+              let goods = this.datas
+              let baseInfo = {
+                "userId": user.userId,
+                "skuId": goods.skuid,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "count": 1,
+                "choosed": true,
+                "cartId": -1,
+              }
+              let goodsInfo = {
+                "id": goods.id,
+                "skuId": goods.skuid,
+                "mpu": goods.mpu,
+                "merchantId": goods.merchantId,
+                "image": goods.image,
+                "category": goods.category,
+                "name": goods.name,
+                "brand": goods.brand,
+                "model": goods.model,
+                "price": goods.price,
+                "type": goods.type == undefined ? 0 : goods.type
+              }
+              let couponList = goods.coupon
+              let promotionInfo = {
+                "promotion": goods.promotion,
+                "promotionState": Util.getPromotionState(this, goods)
+              }
+              let product = {
+                "baseInfo": baseInfo,
+                "goodsInfo": goodsInfo,
+                "couponList": couponList,
+                "promotionInfo": promotionInfo,
+              }
+              this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
+              this.$router.push({path: '/car/pay/direct'})
             }
-            let goodsInfo = {
-              "id": goods.id,
-              "skuId": goods.skuid,
-              "mpu": goods.mpu,
-              "merchantId": goods.merchantId,
-              "image": goods.image,
-              "category": goods.category,
-              "name": goods.name,
-              "brand": goods.brand,
-              "model": goods.model,
-              "price": goods.price,
-              "type": goods.type == undefined ? 0 : goods.type
-            }
-            let couponList = goods.coupon
-            let promotionInfo = {
-              "promotion": goods.promotion,
-              "promotionState": Util.getPromotionState(this, goods)
-            }
-            let product = {
-              "baseInfo": baseInfo,
-              "goodsInfo": goodsInfo,
-              "couponList": couponList,
-              "promotionInfo": promotionInfo,
-            }
-            this.$store.commit('SET_PAY_DIRECT_PRODUCT', JSON.stringify(product));
-            this.$router.push({path: '/car/pay/direct'})
-            /*          this.$router.push({
-                        name: "支付页",
-                        params: {
-                          tryPayed: tryPayed
-                        }
-                      })*/
-
           } else {
             this.$toast("没有用户信息，请先登录再购买")
           }

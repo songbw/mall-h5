@@ -4,28 +4,21 @@
       <h1 slot="title">售后工单</h1>
     </v-header>
     <div class="workorderList">
-      <van-list v-model="loading"
-                :finished="finished"
-                @load="onLoad">
+      <van-list v-model="loading" :finished="finished" @load="onLoad">
         <div v-if="launchedLoaded && list.length > 0">
-          <div v-for="k in list" :key="k.id" style="background-color: white;margin: 10px" >
+          <div v-for="k in list" :key="k.id" style="background-color: white;margin: 10px">
             <div class="goods-detail">
-              <van-card
-                :price="k.unitPrice"
-                :desc=formatWOrderStatus(k)
-                :title= "k.name"
-                :thumb="k.image"
-                :num="k.returnedNum"
-                centered>
+              <van-card :price="k.unitPrice" :desc=formatWOrderStatus(k) :title="k.name" :thumb="k.image"
+                :num="k.returnedNum" centered>
               </van-card>
               <div>
-                <span style="float: left;padding: 10px;margin-top: 2px" >{{formatTime(k.createTime)}}</span>
-                <span style="float: right;padding: 10px"  @click="onListClick(k)">查看详情 ></span>
+                <span style="float: left;padding: 10px;margin-top: 2px">{{formatTime(k.createTime)}}</span>
+                <span style="float: right;padding: 10px" @click="onListClick(k)">查看详情 ></span>
               </div>
             </div>
           </div>
         </div>
-       <div v-else-if="launchedLoaded && list.length == 0">
+        <div v-else-if="launchedLoaded && list.length == 0">
           <div class="noContext">
             <img :src="icon_noContext">
             <span class="noContext_line1">亲，没有任何内容!</span>
@@ -78,7 +71,8 @@
         this.$router.push({
           name: "工单详情页",
           params: {
-             id:k.id,
+            id: k.id,
+            merchantId: k.merchantId,
             expressNo: k.expressNo
           }
         })
@@ -124,7 +118,7 @@
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
               "pageIndex": this.pageNo++,
-              "customer" : user.userId
+              "customer": user.userId
             }
             this.$api.xapi({
               method: 'get',
@@ -163,6 +157,7 @@
       },
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -177,10 +172,12 @@
 
     .workorderList {
       background-color: #f8f8f8;
-      .goods-detail{
+
+      .goods-detail {
         display: flex;
         flex-direction: column;
-        .van-card{
+
+        .van-card {
           background-color: white;
         }
       }
@@ -210,4 +207,5 @@
       }
     }
   }
+
 </style>

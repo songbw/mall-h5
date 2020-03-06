@@ -11,30 +11,20 @@
         <div class="workerOrderDetailBox" v-if="list.length >0">
           <div class="expressNoBox" v-if="status == 3 || status == 5">
             <span style="margin: 10px;font-weight: bold">填写退货物流信息</span>
-            <van-field
-              v-model="expressComSubmit"
-              rows="1"
-              maxlength="30"
-              clearable
-              label="物流公司"
-              size="large"
-              label-width="80px"
-              placeholder="请输入物流公司"
-            />
-            <van-field
-              v-model="expressNoSubmit"
-              rows="1"
-              maxlength="30"
-              clearable
-              label="退货单号"
-              size="large"
-              label-width="80px"
-              placeholder="请输入退货物流单号"
-            />
+            <van-field v-model="expressComSubmit" rows="1" maxlength="30" clearable label="物流公司" size="large"
+              label-width="80px" placeholder="请输入物流公司" @click=onCompanyClick />
+            <van-field v-model="expressNoSubmit" rows="1" maxlength="30" clearable label="退货单号" size="large"
+              label-width="80px" placeholder="请输入退货物流单号" />
             <van-button size="large" round type="danger" @click="onExpressNoSubmit">提交</van-button>
+            <div>
+              <van-popup v-model="showLgCompanyPicker" position="bottom">
+                <van-picker title="请选择物流公司" show-toolbar :columns="companyName" @cancel="showLgCompanyPicker = false"
+                  @confirm="onSelectedCompany" />
+              </van-popup>
+            </div>
           </div>
           <span style="margin: 10px;font-weight: bold">工单详情</span>
-          <van-steps direction="vertical" active-color="#000000" >
+          <van-steps direction="vertical" active-color="#000000">
             <van-step v-for="(item,k)  in list" :key='k'>
               <h3>{{getComment(item)}}</h3>
               <p>{{formatTime(item.createTime)}}</p>
@@ -61,37 +51,92 @@
       'v-header': Header,
       'v-loading': Loading
     },
+
+    computed: {
+       companyName() {
+          let list = []
+          this.logisticsCompanyList.forEach(company => {
+            list.push(company.name)
+          })
+          return list
+       }
+    },
+
+
+
     data() {
       return {
         showHeader: true,
         id: -1,
-        expressNo:"",
-        expressCom:"",
-        expressNoSubmit:"",
-        expressComSubmit:"",
+        expressNo: "",
+        expressCom: "",
+        expressComSubmitCode: "",
+        expressNoSubmit: "",
+        expressComSubmit: "",
         loading: false,
         list: [],
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
         status: -1,
+        merchantId: -1,
+        logisticsCompanyList: [],
+        showLgCompanyPicker: false
       }
     },
-    computed: {},
 
     created() {
       let that = this;
       this.showHeader = this.$api.HAS_HEADER;
       that.$log("workerOrder created Enter")
       that.id = this.$route.params.id;
-      this.expressNo = this.$route.params.expressNo == null? "":this.$route.params.expressNo
+      that.merchantId = this.$route.params.merchantId;
+      this.expressNo = this.$route.params.expressNo == null ? "" : this.$route.params.expressNo
       that.loading = true;
       this.updateWorkerFlow()
+      this.updateLogisticCompanyInfo()
     },
 
-    computed: {},
-
     methods: {
+      onSelectedCompany(value, index) {
+        this.$log("onSelectedCompany Enter")
+        this.expressComSubmit = value
+        this.expressComSubmitCode = this.logisticsCompanyList[index].code
+        this.$log(this.expressComSubmit)
+        this.$log(this.expressComSubmitCode)
+        this.showLgCompanyPicker = false;
+      },
+      onCompanyClick() {
+        this.$log("onCompanyClick Enter")
+        this.showLgCompanyPicker = true
+      },
+      async updateLogisticCompanyInfo() {
+        try {
+          let response = await this.getLogisticsCompanyInfo()
+          if (response.data.code == 200) {
+            this.logisticsCompanyList = response.data.data.result.list
+            this.$log(this.logisticsCompanyList)
+          }
+        } catch (e) {
+
+        }
+      },
+      getLogisticsCompanyInfo() {
+        return this.$api.xapi({
+          method: 'POST',
+          baseURL: this.$api.ORDER_BASE_URL,
+          url: '/kuaidi/all',
+          headers: {
+            'merchant': this.merchantId
+          },
+          data: {
+            pageNo: 1,
+            pageSize: 100,
+            name: ""
+          }
+        })
+      },
+
       updateWorkerFlow() {
-        let that =this
+        let that = this
         that.$api.xapi({
           method: 'get',
           baseURL: this.$api.WORKER_ORDER_BASE_URL,
@@ -102,7 +147,7 @@
         }).then((response) => {
           that.list = response.data.data.result;
           that.loading = false;
-          if(that.list.length > 0) {
+          if (that.list.length > 0) {
             that.status = that.list[0].status
           }
         }).catch(function (error) {
@@ -119,16 +164,22 @@
           this.$toast("请输入正确的物流单号")
           return
         }
-        let logisticsInfo = {com: this.expressComSubmit, order: this.expressNoSubmit}
-        const comments = { logisticsInfo:logisticsInfo}
+        let logisticsInfo = {
+          com: this.expressComSubmit,
+          order: this.expressNoSubmit,
+          comCode:this.expressComSubmitCode
+        }
+        const comments = {
+          logisticsInfo: logisticsInfo
+        }
         let str = JSON.stringify(comments)
         this.$log(str)
         let options = {
-          comments:str,
+          comments: str,
           status: 5,
           operator: "用户",
           workOrderId: this.id,
-          expressNo:this.expressNoSubmit,
+          expressNo: this.expressNoSubmit,
         }
         this.$api.xapi({
           method: 'post',
@@ -137,14 +188,13 @@
           data: options,
         }).then((response) => {
           this.$log(response.status)
-          if(response.status == 201) {
-             this.$toast("提交成功 !")
+          if (response.status == 201) {
+            this.$toast("提交成功 !")
           } else {
             this.$toast("提交失败! 您可以联系客服询问")
           }
           this.updateWorkerFlow()
-        }).catch(function (error) {
-        })
+        }).catch(function (error) {})
       },
       formatWOrderStatus(statusType) {
         let status = ""
@@ -178,13 +228,13 @@
           try {
             let comments = JSON.parse(item.comments)
             let jsonlogisticsInfo = comments.logisticsInfo
-            if(jsonlogisticsInfo != undefined) {
+            if (jsonlogisticsInfo != undefined) {
               if (jsonlogisticsInfo.com != undefined && jsonlogisticsInfo.com.length > 0)
                 ret += " 物流公司:" + jsonlogisticsInfo.com
-                this.expressCom = jsonlogisticsInfo.com
+              this.expressCom = jsonlogisticsInfo.com
               if (jsonlogisticsInfo.order != undefined && jsonlogisticsInfo.order.length > 0)
                 ret += " 物流单号:" + jsonlogisticsInfo.order
-                this.expressNo = jsonlogisticsInfo.order
+              this.expressNo = jsonlogisticsInfo.order
             }
             let jsonRefund = comments.refund
             if (jsonRefund != undefined) {
@@ -200,18 +250,17 @@
                 ret += " 收件人:" + jsonReturnAddress.receiverName
               if (jsonReturnAddress.receiverPhone != undefined && jsonReturnAddress.receiverPhone.length > 0)
                 ret += " 收件人电话:" + jsonReturnAddress.receiverPhone
-                if( jsonReturnAddress.provinceName != undefined) {
-                  ret += " 退货地址:" + jsonReturnAddress.provinceName +
-                    jsonReturnAddress.cityName + jsonReturnAddress.countyName +
-                    jsonReturnAddress.address
-                }
+              if (jsonReturnAddress.provinceName != undefined) {
+                ret += " 退货地址:" + jsonReturnAddress.provinceName +
+                  jsonReturnAddress.cityName + jsonReturnAddress.countyName +
+                  jsonReturnAddress.address
+              }
             }
             let jsonRemark = comments.remark
             if (jsonRemark != undefined) {
               ret += " 备注:" + jsonRemark
             }
-          } catch (e) {
-          }
+          } catch (e) {}
         }
         return ret
       },
@@ -222,6 +271,7 @@
       },
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -247,11 +297,9 @@
       }
 
       .workOrderInfo {
-        .expressNoBox{
-           font-weight: bold;
-           margin: 10px 0px;
-        }
-        .workerOrderDetailBox {
+        .expressNoBox {
+          font-weight: bold;
+          margin: 10px 0px;
         }
 
         .noContext {
@@ -289,4 +337,5 @@
       }
     }
   }
+
 </style>

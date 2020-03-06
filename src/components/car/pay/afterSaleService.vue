@@ -27,7 +27,7 @@
             <van-cell title="退货/退款" clickable @click="typeRadio = 'type1'">
               <van-radio name="type1"/>
             </van-cell>
-            <van-cell title="换货" clickable @click="typeRadio = 'type2'">
+            <van-cell title="换货" clickable @click="typeRadio = 'type2'"  v-if="goods.merchantId != 4">
               <van-radio name="type2"/>
             </van-cell>
           </van-cell-group>

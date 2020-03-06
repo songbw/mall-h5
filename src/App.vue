@@ -3,12 +3,12 @@
     <transition name="fadeIn">
       <keep-alive>
         <router-view v-if="$route.meta.keepAlive"
-                     v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
+          v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
       </keep-alive>
     </transition>
     <transition name="fadeIn">
       <router-view v-if="!$route.meta.keepAlive"
-                   v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
+        v-wechat-title='$route.meta.title != undefined ? $route.meta.title : title'></router-view>
     </transition>
   </div>
 </template>
@@ -27,12 +27,25 @@
     loading: require('../static/loading.png'),
     attempt: 3,
     adapter: {
-      loaded({bindType, el, naturalHeight, naturalWidth, $parent, src, loading, error, Init}) {
+      loaded({
+        bindType,
+        el,
+        naturalHeight,
+        naturalWidth,
+        $parent,
+        src,
+        loading,
+        error,
+        Init
+      }) {
         el.setAttribute("class", "fadeIn")
       }
     },
     observer: true,
-    observerOptions: {rootMargin: '1500px', threshold: 0.05}
+    observerOptions: {
+      rootMargin: '1500px',
+      threshold: 0.05
+    }
   })
   export default {
     components: {
@@ -50,6 +63,7 @@
       }
     },
     beforeCreate() {
+      let that = this
       this.$api.xapi({
         method: 'get',
         url: '/static/serverConfig.json'
@@ -91,7 +105,7 @@
         this.$api.WECHAT_CONFIG_URL = serverUrl + "/v2/guanaitong-client/"
         this.$api.AOYIS_CONFIG_URL = serverUrl + "/v2/aoyis"
         this.$api.IS_SUPPORTED_MULTI_POINT = false;
-        if(result.data.IS_SUPPORTED_MULTI_POINT != undefined) {
+        if (result.data.IS_SUPPORTED_MULTI_POINT != undefined) {
           this.$api.IS_SUPPORTED_MULTI_POINT = result.data.IS_SUPPORTED_MULTI_POINT;
         }
         if (testUser != undefined && testUser.length > 0)
@@ -105,28 +119,36 @@
           this.$api.IS_GAT_APP = true;
           this.clearStorage();
           this.configured = true
-        } else if (this.$api.APP_ID == "11"||this.$api.APP_ID == "12") {
-          switch (this.$api.APP_SOURCE) {//APP
+        } else if (this.$api.APP_ID == "11" || this.$api.APP_ID == "12") {
+          switch (this.$api.APP_SOURCE) { //APP
             case "00": {
               this.$log("App")
-              if(this.shouldLogin()) {
+              if (this.shouldLogin()) {
                 this.getLoginAuthInfo();
               }
               this.configured = true
               break;
             }
-            case "01": {//微信公众号
+            case "01": { //微信公众号
               this.$log("公众号")
               this.$api.IS_WX_GZH = true;
               this.clearStorage();
               this.configured = true
               break;
             }
-            default://nothing to do
+            default: //nothing to do
               this.$log("其它")
               this.configured = true
               break;
           }
+        } else if (this.$api.APP_ID == "14") {
+          try {
+            this.wkycLogin()
+          } catch (e) {
+            that.$log(e)
+            that.configured = true
+          }
+          this.configured = true
         } else {
           this.configured = true
         }
@@ -138,7 +160,7 @@
     methods: {
       shouldLogin() {
         this.$log(this.$route)
-        if(this.$route.fullPath == '/pay/cashering'|| this.$route.fullPath == '/pay/casher') {
+        if (this.$route.fullPath == '/pay/cashering' || this.$route.fullPath == '/pay/casher') {
           let userInfo = this.$store.state.appconf.userInfo;
           if (Util.isUserEmpty(userInfo)) {
             return true
@@ -239,24 +261,27 @@
           if (!initCode)
             return
           sc.config({
-            debug: false,   // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
-            appId: this.$api.T_APP_ID,  // 在统一 APP 开放平台服务器申请的 appId
+            debug: false, // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
+            appId: this.$api.T_APP_ID, // 在统一 APP 开放平台服务器申请的 appId
             initCode,
             nativeApis: ['userAuth']
           })
 
           sc.ready(() => {
-            sc.userAuth(
-              {appId: this.$api.T_APP_ID},
-              res => {  /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
+            sc.userAuth({
+                appId: this.$api.T_APP_ID
+              },
+              res => {
+                /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
                 if (res.code === 0) { //    用户同意授权
                   const requestCode = res.data.requestCode;
                   this.getPingAnThirdPartyAccessTokenInfo(requestCode);
-                } else {  /* 用户拒绝授权或其它失败情况
-                               code: - 1 默认失败
-                               code: - 10001    没有初始化 JSSDK
-                               code: - 10002    用户点击拒绝授权
-                                code: - 10003    用户未登录 */
+                } else {
+                  /* 用户拒绝授权或其它失败情况
+                                               code: - 1 默认失败
+                                               code: - 10001    没有初始化 JSSDK
+                                               code: - 10002    用户点击拒绝授权
+                                                code: - 10003    用户未登录 */
                   //this.$toast("用户拒绝授权登录")
                   console.error(res.code)
                   console.error(res.message)
@@ -264,24 +289,157 @@
                 }
               });
             sc.setToolBar({
-              leftBtns: [
-                {iconType: 0}
-              ]
+              leftBtns: [{
+                iconType: 0
+              }]
             });
           })
           sc.error((res) => {
-            console.error({res})
+            console.error({
+              res
+            })
             sc.close();
           })
-        } catch (e) {
-        }
+        } catch (e) {}
       },
+      wkycLogin() {
+        let that = this
+        that.$log("wkycLogin Enter")
+        that.$log("userAgent:" + navigator.userAgent.toLowerCase())
+        const params = {
+          appid: this.$api.T_APP_ID
+        }
+        window.shopUserInfoResult = function (res) {
+          that.$log("回调结果")
+          that.$log(res)
+          //workaround for JSON 不规范
+          //  
+          //res = res.replace('["app"]', 'app');
+          res = res.replace(/\"scope\"\:\"\[\"app\"\]\",/g, "");
+          res = res.replace(/\"companyPark\"\:(\s)*(\"\[[\w\W]*\]\"|\"\"|null)\,/g, "");
+          // that.$log(res)
+          try {
+            let response = JSON.parse(res)
+            that.$log(response.ret)
+            if (response.ret === '0') {
+              let userinfo = response.data.userinfo;
+              let token = response.data.token
+              let openId = userinfo.openid;
+              let accessToken = token.access_token;
+              that.$log("openId:" + openId)
+              that.$log("accessToke:" + accessToken)
+              let payId = -1
+              if (openId != undefined) {
+                let userId = that.$api.APP_ID + openId;
+                let userInfo = {
+                  openId: openId,
+                  accessToken: accessToken,
+                  userId: userId,
+                  payId: payId
+                }
+                that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                that.thirdPartLogined(openId, accessToken)
+              }
+            } else {
+              //获取用户信息失败
+              that.$log("获取用户授权失败!")
+              that.$toast("获取用户授权失败!")
+              that.configured = true
+            }
+          } catch (e) {
+            that.$log(e)
+            //workaround
+            let array = res.split(',')
+            let openId = ""
+            let accessToken = ""
+            let ret = "-1"
+            for (let i = 0; i < array.length; i++) {
+              let item = array[i].replace(/{/g, "").replace(/}/g, "").replace(/"/g, "")
+              try {
+                let itemArray = item.split(':')
+                //that.$log("++++++++++++++++++++++++")
+                for (let i = 0; i < itemArray.length; i++) {
+                  //that.$log(itemArray[i])
+                  if (itemArray[i] == "ret") {
+                    if (i < itemArray.length - 1) {
+                      ret = itemArray[i + 1]
+                      //  that.$log("ret:" + ret)
+                      break;
+                    }
+                  } else if (itemArray[i] == "openid") {
+                    if (i < itemArray.length - 1) {
+                      openId = itemArray[i + 1]
+                      //  that.$log("openId:" + openId)
+                      break;
+                    }
+
+                  } else if (itemArray[i] == "access_token") {
+                    if (i < itemArray.length - 1) {
+                      accessToken = itemArray[i + 1]
+                      // that.$log("accessToken:" + accessToken)
+                      break;
+                    }
+                  }
+                }
+                //that.$log("-------------------")
+              } catch (e) {
+
+              }
+            }
+            that.$log(ret)
+            that.$log(openId)
+            that.$log(accessToken)
+            if (ret == "0") {
+              that.$log("openId:" + openId)
+              that.$log("accessToke:" + accessToken)
+              let payId = -1
+              if (openId != undefined) {
+                let userId = that.$api.APP_ID + openId;
+                let userInfo = {
+                  openId: openId,
+                  accessToken: accessToken,
+                  userId: userId,
+                  payId: payId
+                }
+                that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                that.thirdPartLogined(openId, accessToken)
+              }
+            } else {
+              that.$toast("获取用户授权失败!")
+            }
+          }
+        }
+
+        window.backHomePageOfiOS = function () {
+          that.$log("backHomePageOfiOS Enter")
+          that.$router.push({
+            name: "首页"
+          })
+        }
+
+        that.$log("getUserShopInfo")
+        if (/iphone/.test(navigator.userAgent.toLowerCase())) {
+          that.$log("iphone call getUerShopInfo")
+          //window.getServiceTokenInfo = function (res) {}
+          window.webkit.messageHandlers.getShopUserInfo.postMessage(JSON.stringify(params))
+          window.webkit.messageHandlers.hideMainBottom.postMessage(JSON.stringify(params))
+        } else {
+          that.$log("android call getUerShopInfo")
+          ycapp.getShopUserInfo(JSON.stringify(params))
+          window.ycapp.hideMainBottom();
+        }
+      }
     }
   }
+
 </script>
 
 <style lang="less">
-  html, body, #app {
+  html,
+  body,
+  #app {
     width: 100%;
     height: 100%;
     -webkit-tap-highlight-color: rgba(0, 0, 0, 0)
@@ -323,7 +481,8 @@
     outline-style: none;
   }
 
-  ul, li {
+  ul,
+  li {
     background-color: #ffffff;
   }
 
@@ -401,6 +560,7 @@
     0% {
       opacity: 0
     }
+
     100% {
       opacity: 1
     }
@@ -410,6 +570,7 @@
     0% {
       opacity: 0
     }
+
     100% {
       opacity: 1
     }
@@ -420,11 +581,13 @@
     -webkit-animation: fadeIn 1s linear;
   }
 
-  .fade-enter-active, .fade-leave-active {
+  .fade-enter-active,
+  .fade-leave-active {
     transition: opacity .4s
   }
 
-  .fade-enter, .fade-leave-active {
+  .fade-enter,
+  .fade-leave-active {
     opacity: 0
   }
 
