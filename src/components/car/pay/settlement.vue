@@ -759,6 +759,34 @@
     },
 
     methods: {
+      pingAnCasher(user, orderInfo) {
+        this.$log("pingAnCasher Enter")
+        let that = this
+        let payOptions = {
+          appId: this.$api.APP_ID,
+          orderNo: orderInfo.orderNo
+        }
+        pingAnPay = {
+          "actPayFee":  "" + orderInfo.orderAmount,
+          "memberNo": user.payId,
+          "orderNo": this.orderInfo.orderNo,
+          "payType": "pingan"
+        }
+        payOptions['pingAnPay'] = pingAnPay;
+         this.$log(user.payId)
+         this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AGGREGATE_PAY_URL,
+          url: '/wspay/pay',
+          data: payOptions,
+        }).then((response) => {
+          this.$log(respose)
+        }).catch(function (error) {
+          that.$toast("请求支付失败")
+          // that.payBtnSubmitLoading = false;
+        })  
+      },
+
       wkycCasher(user, orderInfo) {
         this.$log("wkycCasher Enter")
         let that = this
@@ -783,7 +811,7 @@
           this.$log(response)
           if (response.data.code == 200) {
             let params = response.data.data;
-            this.wkycPay(params,orderInfo)
+            this.wkycPay(params, orderInfo)
           } else {
             that.$toast("请求支付失败")
           }
@@ -793,7 +821,7 @@
           // that.payBtnSubmitLoading = false;
         })
       },
-      wkycPay(payLoad,orderInfo) {
+      wkycPay(payLoad, orderInfo) {
         let that = this
         that.$log(payLoad); // 调试使用代码
 
@@ -811,7 +839,7 @@
           let response = JSON.parse(res)
           that.$log(response);
           that.$log(response.code)
-                that.$log(response.code)
+          that.$log(response.code)
           if (response.code == '0') {
             if (response.data.payStatus == 0) { //"具体的支付状态：0（成功）,-1（失败），-2（取消）",
               that.$router.replace({
@@ -826,11 +854,11 @@
                 path: '/car/orderList'
               })
             }
-          } else {//取消
-              that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-              that.$router.replace({
-                path: '/car/orderList'
-              })
+          } else { //取消
+            that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+            that.$router.replace({
+              path: '/car/orderList'
+            })
           }
         }
       },
@@ -1667,6 +1695,9 @@
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                 if (this.$api.APP_ID == '14') {
                   this.wkycCasher(user, pAnOrderInfo);
+                }
+                if (this.$api.APP_ID == '12') {
+                  this.pingAnCasher(user, pAnOrderInfo);
                 } else {
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
                   this.$router.replace({

@@ -261,7 +261,7 @@
           if (!initCode)
             return
           sc.config({
-            debug: false, // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
+            debug: true, // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
             appId: this.$api.T_APP_ID, // 在统一 APP 开放平台服务器申请的 appId
             initCode,
             nativeApis: ['userAuth']
