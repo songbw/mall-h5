@@ -766,12 +766,13 @@
           appId: this.$api.APP_ID,
           orderNo: orderInfo.orderNo
         }
-        pingAnPay = {
+        let pingAnPay = {
           "actPayFee":  "" + orderInfo.orderAmount,
           "memberNo": user.payId,
-          "orderNo": this.orderInfo.orderNo,
+          "orderNo":  orderInfo.orderNo,
           "payType": "pingan"
         }
+        
         payOptions['pingAnPay'] = pingAnPay;
          this.$log(user.payId)
          this.$api.xapi({
