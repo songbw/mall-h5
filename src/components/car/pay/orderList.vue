@@ -516,7 +516,7 @@
         }
       },
       getMerchantName(merchantNo) {
-        return "慧聚品牌馆"
+        return "惠民优选"
         /*        if (merchantNo == 20) {
                   return "苏宁易购"
                 } else if (merchantNo == 30) {
