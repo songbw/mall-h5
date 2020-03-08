@@ -781,7 +781,6 @@
           url: '/wspay/pay',
           data: payOptions,
         }).then((response) => {
-          this.$log(respose)
           this.$log(response)
           if (response.data.code == 200) {
             let ret = JSON.parse(response.data.data);
