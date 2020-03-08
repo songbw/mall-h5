@@ -190,7 +190,7 @@
     },
 
     methods: {
-            wkycCasher(user, orderInfo) {
+      wkycCasher(user, orderInfo) {
         this.$log("wkycCasher Enter")
         let that = this
         let payOptions = {
@@ -214,7 +214,7 @@
           this.$log(response)
           if (response.data.code == 200) {
             let params = response.data.data;
-            this.wkycPay(params,orderInfo)
+            this.wkycPay(params, orderInfo)
           } else {
             that.$toast("请求支付失败")
           }
@@ -224,7 +224,7 @@
           // that.payBtnSubmitLoading = false;
         })
       },
-      wkycPay(payLoad,orderInfo) {
+      wkycPay(payLoad, orderInfo) {
         let that = this
         that.$log(payLoad); // 调试使用代码
 
@@ -242,7 +242,7 @@
           let response = JSON.parse(res)
           that.$log(response);
           that.$log(response.code)
-                that.$log(response.code)
+          that.$log(response.code)
           if (response.code == '0') {
             if (response.data.payStatus == 0) { //"具体的支付状态：0（成功）,-1（失败），-2（取消）",
               that.$router.replace({
@@ -257,11 +257,11 @@
                 path: '/car/orderList'
               })
             }
-          } else {//取消
-              that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-              that.$router.replace({
-                path: '/car/orderList'
-              })
+          } else { //取消
+            that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+            that.$router.replace({
+              path: '/car/orderList'
+            })
           }
         }
       },
@@ -830,12 +830,21 @@
 
       onLogisticsBtnClick(listItem, i) {
         this.$log("onLogisticsBtnClick Enter")
-        this.$router.push({
-          name: "物流信息页",
-          params: {
-            detail: listItem
-          }
-        })
+        if (listItem.merchantId === 4) {
+          this.$router.push({
+            name: "怡亚通物流信息页",
+            params: {
+              detail: listItem
+            }
+          })
+        } else {
+          this.$router.push({
+            name: "物流信息页",
+            params: {
+              detail: listItem
+            }
+          })
+        }
       },
 
       onClick(index, title) {
