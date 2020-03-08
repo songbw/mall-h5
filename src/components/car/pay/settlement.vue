@@ -767,25 +767,69 @@
           orderNo: orderInfo.orderNo
         }
         let pingAnPay = {
-          "actPayFee":  "" + orderInfo.orderAmount,
+          "actPayFee": "" + orderInfo.orderAmount,
           "memberNo": user.payId,
-          "orderNo":  orderInfo.orderNo,
+          "orderNo": orderInfo.orderNo,
           "payType": "pingan"
         }
-        
+
         payOptions['pingAnPay'] = pingAnPay;
-         this.$log(user.payId)
-         this.$api.xapi({
+        this.$log(user.payId)
+        this.$api.xapi({
           method: 'post',
           baseURL: this.$api.AGGREGATE_PAY_URL,
           url: '/wspay/pay',
           data: payOptions,
         }).then((response) => {
           this.$log(respose)
+          this.$log(response)
+          if (response.data.code == 200) {
+            let ret = JSON.parse(response.data.data);
+            this.$log("平安统一支付")
+            this.$log(ret)
+            if (ret != null) { //统一支付
+              sc.pay({
+                mchOrderNo: ret.mchOrderNo,
+                merchantNo: ret.merchantNo
+              }, function (res) {
+                if (res.code == 0) {
+                  that.$log("统一支付成功")
+                  that.$router.replace({
+                    path: '/pay/cashering',
+                    query: {
+                      outer_trade_no: orderInfo.orderNo
+                    }
+                  })
+                } else {
+                  that.$log("统一支付失败")
+                  that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                  that.$router.replace({
+                    path: '/car/orderList'
+                  })
+                }
+              })
+            } else {
+              this.$router.replace({
+                path: '/pay/cashering',
+                query: {
+                  outer_trade_no: orderInfo.orderNo
+                }
+              })
+            }
+          } else {
+            this.$toast(response.data.message)
+            that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+            that.$router.replace({
+              path: '/car/orderList'
+            })
+          }
         }).catch(function (error) {
           that.$toast("请求支付失败")
-          // that.payBtnSubmitLoading = false;
-        })  
+          that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+          that.$router.replace({
+            path: '/car/orderList'
+          })
+        })
       },
 
       wkycCasher(user, orderInfo) {
