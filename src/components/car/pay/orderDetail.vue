@@ -245,33 +245,16 @@
                   })
                 } else {
                   that.$log("统一支付失败")
-                  that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                  that.$router.replace({
-                    path: '/car/orderList'
-                  })
                 }
               })
             } else {
-              this.$router.replace({
-                path: '/pay/cashering',
-                query: {
-                  outer_trade_no: orderInfo.orderNo
-                }
-              })
+              that.$toast("请求支付失败")
             }
           } else {
             this.$toast(response.data.message)
-            that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-            that.$router.replace({
-              path: '/car/orderList'
-            })
           }
         }).catch(function (error) {
           that.$toast("请求支付失败")
-          that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-          that.$router.replace({
-            path: '/car/orderList'
-          })
         })
       },
       wkycCasher(user, orderInfo) {
