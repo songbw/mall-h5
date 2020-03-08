@@ -1739,8 +1739,7 @@
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
                 if (this.$api.APP_ID == '14') {
                   this.wkycCasher(user, pAnOrderInfo);
-                }
-                if (this.$api.APP_ID == '12') {
+                } else if (this.$api.APP_ID == '12') {
                   this.pingAnCasher(user, pAnOrderInfo);
                 } else {
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
