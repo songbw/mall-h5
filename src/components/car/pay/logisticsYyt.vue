@@ -123,13 +123,13 @@
 
     methods: {
       getOrdedDeliveryList(deliveryList) {
-        let list = []
+/*         let list = []
         if (deliveryList != null && deliveryList.length > 0) {
           for (let i = (deliveryList.length - 1); i > -1; i--) {
             list.push(deliveryList[i])
           }
-        }
-        return list
+        } */
+        return deliveryList
       },
       getLogisticsInfo(thirdOrderSn) {
         this.$log("getLogisticsInfo Enter")
