@@ -223,7 +223,7 @@
     }
 
     .van-button {
-      background: linear-gradient(to right, #FFC000, #FF5D01);
+      background: linear-gradient(to right, #EF3949, #EF3949);
       ;
       border: none;
 
