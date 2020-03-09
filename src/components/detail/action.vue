@@ -225,10 +225,117 @@
                 this.$log(this.initialSku)
               }
             } else if (this.datas.merchantId == 2) {
-              this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+              if (/^(30)/.test(this.datas.mpu)) {
+                let tree = [];
+                let list = [];
+              
+                this.datas.skuList.forEach(sku => {
+                  this.$log("X@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                  this.$log(sku)
+/*                   sku.propertyList.forEach(property => {
+                    let foundKey = -1;
+                    for (let i = 0; i < tree.length; i++) {
+                      if (tree[i].k == property.name) {
+                        foundKey = 1;
+                        let foundVal = -1;
+                        for (let j = 0; j < tree[i].v.length; j++) {
+                          if (tree[i].v[j].name == property.val) {
+                            foundVal = 1;
+                            break;
+                          }
+                        }
+                        if (foundVal == -1) { //新的值
+                          let propertyCount = tree[i].v.length + 1;
+                          tree[i].v.push({
+                            id: tree[i].k_id + propertyCount,
+                            name: property.val,
+                            imgUrl: sku.goodsLogo
+                          })
+                        }
+                        break;
+                      }
+                    }
+                    let num = tree.length + 1
+                    if (foundKey == -1) { //新的属性
+                      tree.push({
+                        k: property.name,
+                        k_id: "" + num,
+                        v: [{
+                          id: num + "1",
+                          name: property.val,
+                          imgUrl: sku.goodsLogo
+                        }],
+                        k_s: 's' + num,
+                      })
+                    }
+                  }) */
+                })
 
+                this.$log(tree)
+                let total_stock_num = 0
+                this.$log(this.datas.skuList)
+                this.datas.skuList.forEach(sku => {
+                  let item = {
+                    id: sku.code,
+                    price: sku.price,
+                    s1: '0',
+                    s2: '0',
+                    s3: '0',
+                    s4: '0',
+                    s5: '0',
+                    stock_num: sku.stock_num,
+                    goods_id: this.datas.mpu,
+                    purchaseQty: sku.purchaseQty
+                  }
+                  sku.propertyList.forEach(property => {
+                    for (let i = 0; i < tree.length; i++) {
+                      if (tree[i].k === property.name) {
+                        this.$log(tree[i])
+                        for (let j = 0; j < tree[i].v.length; j++) {
+                          if (tree[i].v[j].name === property.val) {
+                            item[tree[i].k_s] = tree[i].v[j].id
+                            break;
+                          }
+                        }
+                      }
+                    }
+                  })
+                  total_stock_num += item.stock_num
+                  list.push(item)
+                })
+                if (this.hasPromotion == true) {
+                  this.PromotionStatus = Util.getPromotionState(this, this.datas);
+                  if (this.PromotionStatus == 1) {
+                    list[0].price = parseInt((this.datas.dprice * 100).toFixed(0))
+                  }
+                }
+                tree.forEach(item => {
+                  item['count'] = item.v.length
+                })
+                this.sku = {
+                  // 所有sku规格类目与其值的从属关系，比如商品有颜色和尺码两大类规格，颜色下面又有红色和蓝色两个规格值。
+                  // 可以理解为一个商品可以有多个规格类目，一个规格类目下可以有多个规格值。
+                  tree: tree,
+                  list: list,
+                  price: parseFloat(this.datas.price).toFixed(2),
+                  stock_num: total_stock_num, // 商品总库存
+                  none_sku: false, // 是否无规格商品 false正常显示那些可供选择的标准，此处是颜色和尺寸
+                  hide_stock: false, // 是否隐藏剩余库存 false正常显示剩余多少件的那个库存
+                }
+                this.$log(this.sku)
+                if (list.length > 0) {
+                  this.initialSku = {
+                    s1: list[0].s1,
+                    s2: list[0].s2,
+                    s3: list[0].s3,
+                    s4: list[0].s4,
+                    s5: list[0].s5,
+                    selectedNum: list[0].purchaseQty //下面的数字选择框的数字即买了多少件
+                  }
+                  this.$log(this.initialSku)
+                }
+              }
             }
-
           }
         }
       }
@@ -245,6 +352,22 @@
     },
 
     methods: {
+       getWphInventory() {
+        this.$log("getWphInventory Enter")
+        let codesArray = []
+/*         this.datas.skuList.forEach(sku => {
+          codesArray.push(sku.code)
+        })
+        let codes = codesArray.join(",");
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AOYIS_CONFIG_URL,
+          url: '/star/product/inventory',
+          data: {
+            codes: codes
+          },
+        }) */
+      },
       getInventory() {
         this.$log("getInventory Enter")
         let codesArray = []
