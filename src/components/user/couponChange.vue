@@ -8,7 +8,8 @@
         <van-tab v-for="(item, type) in couponTypes" :title="item.title" :key="type">
           <div v-if="active == 0" class="cardBody">
             <div class="cardTitle">
-              <span class="TitleText">兑换提货券</span>
+<!--               <span class="TitleText">兑换提货券</span> -->
+              <img :src=mall_logo>
             </div>
             <div class="cardForm">
               <van-field v-model="cardNumber" type="number" clearable maxlength="30" placeholder="请输入券码" />
@@ -53,6 +54,7 @@
         active: 0,
         cardNumber: "",
         cardPwd: "",
+        mall_logo: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_logo.png',
         couponTypes: [{
             title: "提货券"
           },
@@ -191,8 +193,15 @@
       .TitleText {
         font-weight: bold;
         margin-left: 12px;
+        margin-bottom: 10px;
         .fz(font-size, 45);
         color: #333333;
+      }
+
+      img {
+        margin: 0 auto;
+        height: 82px;
+        width: 100px;
       }
     }
 
