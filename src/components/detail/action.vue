@@ -411,6 +411,7 @@
           }
           if (stock_num > 0) {
             let selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
+            this.$log("selectPrice:"+selectPrice)
             let userInfo = this.$store.state.appconf.userInfo;
             if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
@@ -581,6 +582,7 @@
         if (skuData != undefined) {
           selectSkuId = skuData.selectedSkuComb.id
           selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
+          this.$log("selectPrice:"+selectPrice)
           count = skuData.selectedNum
         }
         let addtoCar = {
