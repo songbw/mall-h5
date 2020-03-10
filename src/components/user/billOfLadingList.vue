@@ -7,36 +7,14 @@
       <van-tabs v-model="active" sticky :swipe-threshold=swipeThreshold swipeabl>
         <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
           <div v-for="(k,index) in currentCardList" :key="index" v-if="currentCardList.length > 0">
-            <div class="card">
-              <div class="header">
-                <div class="title">
-                  <span>{{k.cardInfo.name}}</span>
-                  <van-icon style="float: right" name="delete" @click="onDeleteCardBtnClick(k,index)"></van-icon>
-                  </van-button>
-                </div>
-                <div class="price">
-                  <p><span>￥</span>{{k.cardInfo.amount}}</p>
-                </div>
-                <div class="Number">
-                  <span></span>{{k.card}}</span>
-                </div>
-                <div class="footer">
-                  <span>{{getCardStatusDesc(k.status)}}</span>
-                  <span style="float: right">截至日期: {{formatTime(k.endTime)}}</span>
-                </div>
-              </div>
-              <div class="container" v-if="active == 0">
-                <van-button size="large" :disabled="k.status == 5" type="primary" @click="onUseBtnClick(k)">立即使用
-                </van-button>
-              </div>
-            </div>
             <div style="margin:10px">
               <v-coupon :config="couponStyleConfig">
                 <div class="content">
                   <div class="upper">
                     <van-col span="7">
                       <div class="price">
-                        <p><span>￥</span>{{k.cardInfo.amount}}</p>
+                        <p v-if="k.status == 6||k.status == 7" class="grayColor"><span>￥</span>{{k.cardInfo.amount}}</p>
+                        <p v-else><span>￥</span>{{k.cardInfo.amount}}</p>
                       </div>
                     </van-col>
                     <van-col span="12">
@@ -45,25 +23,28 @@
                           <span>{{k.cardInfo.name}}</span>
                         </div>
                         <div class="Number">
-                          <span>券码:{{k.card}}</span>
+                          <span>券码: {{k.card}}</span>
                         </div>
                       </div>
                     </van-col>
                     <van-col span="5">
                       <div class="action">
-                        <van-button size="mini" type="danger" round @click="onBCardBindBtnClick"> 立即使用</van-button>
+                        <img v-if="k.status == 6" :src="cardUsed">
+                        <img v-else-if="k.status == 7" :src="cardOvertime">
+                        <van-button v-else size="mini" type="danger" round :disabled="k.status == 5"
+                          @click="onUseBtnClick(k)">
+                          立即使用</van-button>
                       </div>
                     </van-col>
                   </div>
                   <div class="footer">
+                    <span>截至日期: {{formatTime(k.endTime)}}</span>
+                    <van-icon v-if="k.status == 6||k.status == 7" style="float: right;margin: 2px 10px" name="delete"
+                      @click="onDeleteCardBtnClick(k,index)"></van-icon>
                   </div>
-
                 </div>
               </v-coupon>
             </div>
-
-
-
           </div>
           <div class="emptyBox" v-if="currentCardList.length == 0">
             <img :src=empty_bg>
@@ -119,6 +100,8 @@
         active: 0,
         swipeThreshold: 5,
         empty_bg: require('@/assets/icons/ico_empty_box.png'),
+        cardUsed: "https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_used.png",
+        cardOvertime: "https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_overtime.png",
         couponTypes: [{
             "title": "未使用",
           },
@@ -317,19 +300,24 @@
 
     .content {
       padding: 10px;
+      display: flex;
+      flex-direction: column;
 
       .upper {
         height: 80px;
         width: 100%;
 
         .price {
-          .fz(font-size, 60);
-          margin-left: 2px;
+          .fz(font-size, 56);
           line-height: 80px;
           color: #ff4444;
 
           span {
             .fz(font-size, 35);
+          }
+
+          .grayColor {
+            color: #888888
           }
         }
 
@@ -345,21 +333,26 @@
 
           .Number {
             margin-top: 5px;
-            .fz(font-size, 20);
+            .fz(font-size, 18);
             color: #888888
           }
         }
 
         .action {
           line-height: 80px;
-          margin-left: 5px;
+          margin-left: 6px;
           text-align: center;
           align-items: center;
           justify-items: center;
 
           .van-button {
             width: 100%;
-            margin-right: 5px;
+            margin-right: 2px;
+          }
+
+          img {
+            width: 100%;
+            display: inline-block;
           }
 
         }
@@ -367,8 +360,10 @@
       }
 
       .footer {
-        height: 100px;
+        height: 30px;
         width: 100%;
+        margin-top: 10px;
+        .fz(font-size, 24)
       }
     }
 
