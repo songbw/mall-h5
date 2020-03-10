@@ -4,6 +4,7 @@ import store from '@/vuex/store.js'   //vuex
 import services from '@/http/api.js'       //http请求
 import vueLogger from "vue-logger";
 import LyTab from 'ly-tab'
+import coupon from 'v-coupon'
 //import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueQRCodeComponent from 'vue-qrcode-component'
@@ -151,6 +152,8 @@ Vue.use(Button)
   .use(CollapseItem)
   .use(Picker);
 
+  
+Vue.use(coupon);
 
 ///////////////////////////////////////////////////////////////////////
 Vue.config.productionTip = false

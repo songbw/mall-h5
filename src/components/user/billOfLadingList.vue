@@ -30,6 +30,40 @@
                 </van-button>
               </div>
             </div>
+            <div style="margin:10px">
+              <v-coupon :config="couponStyleConfig">
+                <div class="content">
+                  <div class="upper">
+                    <van-col span="7">
+                      <div class="price">
+                        <p><span>￥</span>{{k.cardInfo.amount}}</p>
+                      </div>
+                    </van-col>
+                    <van-col span="12">
+                      <div class="info">
+                        <div class="title">
+                          <span>{{k.cardInfo.name}}</span>
+                        </div>
+                        <div class="Number">
+                          <span>券码:{{k.card}}</span>
+                        </div>
+                      </div>
+                    </van-col>
+                    <van-col span="5">
+                      <div class="action">
+                        <van-button size="mini" type="danger" round @click="onBCardBindBtnClick"> 立即使用</van-button>
+                      </div>
+                    </van-col>
+                  </div>
+                  <div class="footer">
+                  </div>
+
+                </div>
+              </v-coupon>
+            </div>
+
+
+
           </div>
           <div class="emptyBox" v-if="currentCardList.length == 0">
             <img :src=empty_bg>
@@ -95,6 +129,25 @@
             "title": "已过期",
           },
         ],
+        couponStyleConfig: {
+          width: 200,
+          height: 125,
+          cutPosition: 90, // 裁切口的位置
+          borderRadius: 15, // 卡券四个角的圆角半径
+          borderColor: '#ffffff', // 边框颜色
+          borderWidth: 0.5, // 边框粗细
+          borderOpcity: 1, // 边框透明度
+          borderDash: null, // 边框虚线数组, 直线是 null, 虚线的话给一个数组,如[2,2]
+          showLine: true, // 是否显示分割线
+          lineColor: '#888888', // 分割线颜色
+          lineWidth: 0.2, // 分割线粗细
+          lineOpcity: 1, // 分割线透明度
+          lineDash: [3, 5], // 分割线虚线数组, 同 边框虚线数组
+          lineOffset: 5, // 分割线跟卡券两侧的距离, 为 0 则相连
+          cutRadius: 10, // 裁切口的半径
+          cutSlope: 1.5, // 裁切口的弧度
+          background: '#ffffff' // 背景颜色, 优先级低于 slot 的背景
+        }
       }
     },
 
@@ -112,6 +165,9 @@
 
         }
       }
+      this.$log("xxxxxxxxxxxxxxxxxx")
+      this.$log(window.screen.width)
+      this.couponStyleConfig.width = window.screen.width - 20;
       this.loading = false
     },
 
@@ -259,18 +315,75 @@
       }
     }
 
-    .van-button {
+    .content {
+      padding: 10px;
+
+      .upper {
+        height: 80px;
+        width: 100%;
+
+        .price {
+          .fz(font-size, 60);
+          margin-left: 2px;
+          line-height: 80px;
+          color: #ff4444;
+
+          span {
+            .fz(font-size, 35);
+          }
+        }
+
+        .info {
+          padding: 15px 0px;
+          height: 80px;
+          align-items: center;
+
+          .title {
+            .fz(font-size, 35);
+            color: #000000
+          }
+
+          .Number {
+            margin-top: 5px;
+            .fz(font-size, 20);
+            color: #888888
+          }
+        }
+
+        .action {
+          line-height: 80px;
+          margin-left: 5px;
+          text-align: center;
+          align-items: center;
+          justify-items: center;
+
+          .van-button {
+            width: 100%;
+            margin-right: 5px;
+          }
+
+        }
+
+      }
+
+      .footer {
+        height: 100px;
+        width: 100%;
+      }
+    }
+
+    /*     .van-button {
       background: rgb(36, 138, 49);
       border: none;
 
       &--large {
         width: 100%;
-        height: 40px;
+        height: 30px;
         line-height: 40px;
       }
-    }
+    } */
 
-    .emptyBox{
+    .emptyBox {
       width: 100%;
       display: flex;
       flex-flow: column;
