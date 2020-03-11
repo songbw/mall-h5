@@ -6,7 +6,7 @@
     <div v-else class="listBody">
       <van-tabs v-model="active" sticky :swipe-threshold=swipeThreshold swipeabl>
         <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
-          <div v-for="(k,index) in currentCardList" :key="index" v-if="currentCardList.length > 0">
+          <div v-for="(k,index) in currentCardList" :key="index" v-if="currentCardList.length > 0" class="cardlistBody">
             <div style="margin:10px">
               <v-coupon :config="couponStyleConfig">
                 <div class="content">
@@ -52,10 +52,10 @@
           </div>
         </van-tab>
       </van-tabs>
-      <div class="cardListBottomFunc">
-        <div @click="onChangeCardBtnClick()" class="changeCardButton">
-          <span>兑换提货券</span>
-        </div>
+    </div>
+    <div class="cardListBottomFunc">
+      <div @click="onChangeCardBtnClick()" class="changeCardButton">
+        <span>兑换提货券</span>
       </div>
     </div>
   </section>
@@ -254,152 +254,105 @@
     width: 100%;
     height: 100%;
     top: 0px;
+    background-color: #ff4444;
 
     .listBody {
-      width: 100%;
-      height: 100%;
-      top: 0px;
+      padding-bottom: 5em;
       background-color: #f8f8f8;
-      padding-bottom: 3em;
 
-      .card {
-        margin: 10px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); //设置两层阴影
-      }
+      .cardlistBody {
+        background-color: #f8f8f8;
 
-      .header {
-        background-color: white;
-        color: black;
-        padding: 10px;
+        .content {
+          padding: 10px;
+          display: flex;
+          flex-direction: column;
 
-        .title {
-          width: 100%;
-          .fz(font-size, 40)
-        }
-
-        .Number {
-          text-align: center;
-          letter-spacing: 2px;
-          padding: 0px 0px 10px 0px;
-          .fz(font-size, 35);
-        }
-
-        .price {
-          text-align: center;
-          padding: 10px 0px 10px 0px;
-          .fz(font-size, 80);
-
-          span {
-            .fz(font-size, 30);
-          }
-
-        }
-
-        .footer {
-          width: 100%;
-          .fz(font-size, 24)
-        }
-
-
-      }
-
-      .container {
-        background-color: #4CAF50;
-      }
-    }
-
-    .content {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-
-      .upper {
-        height: 80px;
-        width: 100%;
-
-        .price {
-          .fz(font-size, 56);
-          line-height: 80px;
-          color: #ff4444;
-
-          span {
-            .fz(font-size, 35);
-          }
-
-          .grayColor {
-            color: #888888
-          }
-        }
-
-        .info {
-          padding: 15px 0px;
-          height: 80px;
-          align-items: center;
-
-          .title {
-            .fz(font-size, 35);
-            color: #000000
-          }
-
-          .Number {
-            margin-top: 5px;
-            .fz(font-size, 18);
-            color: #888888
-          }
-        }
-
-        .action {
-          line-height: 80px;
-          margin-left: 6px;
-          text-align: center;
-          align-items: center;
-          justify-items: center;
-
-          .van-button {
+          .upper {
+            height: 80px;
             width: 100%;
-            margin-right: 2px;
+
+            .price {
+              .fz(font-size, 56);
+              line-height: 80px;
+              color: #ff4444;
+
+              span {
+                .fz(font-size, 35);
+              }
+
+              .grayColor {
+                color: #888888
+              }
+            }
+
+            .info {
+              padding: 15px 0px;
+              height: 80px;
+              align-items: center;
+
+              .title {
+                .fz(font-size, 35);
+                color: #000000;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 1;
+              }
+
+              .Number {
+                margin-top: 5px;
+                .fz(font-size, 18);
+                color: #888888
+              }
+            }
+
+            .action {
+              line-height: 80px;
+              margin-left: 6px;
+              text-align: center;
+              align-items: center;
+              justify-items: center;
+
+              .van-button {
+                width: 100%;
+                margin-right: 2px;
+              }
+
+              img {
+                width: 100%;
+                display: inline-block;
+              }
+
+            }
+
           }
 
-          img {
+          .footer {
+            height: 30px;
             width: 100%;
-            display: inline-block;
+            margin-top: 10px;
+            .fz(font-size, 24)
           }
-
         }
 
       }
 
-      .footer {
-        height: 30px;
+
+      .emptyBox {
         width: 100%;
-        margin-top: 10px;
-        .fz(font-size, 24)
-      }
-    }
+        display: flex;
+        flex-flow: column;
+        text-align: center;
+        justify-content: center;
+        padding-top: 100px;
 
-    /*     .van-button {
-      background: rgb(36, 138, 49);
-      border: none;
-
-      &--large {
-        width: 100%;
-        height: 30px;
-        line-height: 40px;
-      }
-    } */
-
-    .emptyBox {
-      width: 100%;
-      display: flex;
-      flex-flow: column;
-      text-align: center;
-      justify-content: center;
-      padding-top: 100px;
-
-      img {
-        margin: 0 auto;
-        height: 100px;
-        width: 100px;
+        img {
+          margin: 0 auto;
+          height: 100px;
+          width: 100px;
+        }
       }
     }
 
@@ -424,10 +377,9 @@
         background-color: white;
         text-align: center;
         line-height: 3em;
-        color:black;
+        color: black;
       }
     }
-
   }
 
 </style>
