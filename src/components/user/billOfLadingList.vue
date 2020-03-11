@@ -254,7 +254,7 @@
     width: 100%;
     height: 100%;
     top: 0px;
-    background-color: #ff4444;
+    background-color: #f8f8f8;
 
     .listBody {
       padding-bottom: 5em;
