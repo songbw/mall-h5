@@ -38,7 +38,7 @@
                     </van-col>
                   </div>
                   <div class="footer">
-                    <span>截至日期: {{formatTime(k.endTime)}}</span>
+                    <span>有效期: {{formatTime(k.activateTime)}} - {{formatTime(k.endTime)}}</span>
                     <van-icon v-if="k.status == 6||k.status == 7" style="float: right;margin: 2px 10px" name="delete"
                       @click="onDeleteCardBtnClick(k,index)"></van-icon>
                   </div>
@@ -219,7 +219,7 @@
       formatTime(timeString) {
         if (timeString == null)
           return null
-        return this.$moment(timeString).format('YYYY/MM/DD HH:mm:ss')
+        return this.$moment(timeString).format('YYYY年MM月DD日')
       },
       getCardList(userId) {
         this.$log("getCardList Enter")
