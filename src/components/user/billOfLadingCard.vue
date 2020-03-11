@@ -56,7 +56,7 @@
                         </div>
                       </van-col>
                     </div>
-                    <div slot="right-icon" class="couponBoxCheckBox" v-if="cardDetail.status == 3">
+                    <div slot="icon" class="couponBoxCheckBox" v-if="cardDetail.status == 3">
                       <van-radio :name="item.id" @click="onRadioBtnClick(item)" @click.stop="" checked-color="#4CAF50"
                         ref="couponBoxsCheckboxes" />
                     </div>
@@ -500,6 +500,7 @@
     width: 100%;
     height: 100%;
     top: 0px;
+    background-color: #ff4444;
 
     .noneInfo {
       display: flex;
@@ -518,12 +519,12 @@
 
     .cardBody {
       .card {
-        margin: 10px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); //设置两层阴影
+        padding: 10px;
       }
 
       .header {
-        background-color: #4CAF50;
+        background: url('https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_pickupcard_bg.png') no-repeat;
+        background-size: 100% 100%;
         color: white;
         padding: 10px;
 
@@ -558,7 +559,9 @@
 
       .container {
         padding: 10px;
-        background-color: #f8f8f8;
+        background-color: white;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
 
         .couponListCheckBox {
           .van-cell {
