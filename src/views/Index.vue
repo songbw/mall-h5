@@ -426,20 +426,31 @@
       },
 
       upDateSkuInfo(item, couponAndProms, user) {
-        let cartItem = Util.getCartItem(this, user.userId, item.mpu)
+        let cartItem = Util.getCartItem(this, user.userId, item.mpu,item.skuId)
+        let skuId = item.skuId
+        let price = item.price
+        let purchaseQty = 1
+        if (skuId === undefined || skuId === null) {
+          skuId = item.skuid
+        }
+        if(item.starSku != undefined) {
+          purchaseQty = item.starSku.purchaseQty
+          price = (item.starSku.price/100).toFixed(2)
+        }
         if (cartItem == null) {
           let baseInfo = {
             "userId": user.userId,
-            "skuId": item.skuid,
+            "skuId": skuId,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
             "count": item.count,
             "choosed": false,
-            "cartId": item.id
+            "cartId": item.id,
+            "purchaseQty": purchaseQty
           }
           let goodsInfo = {
             "id": item.id,
-            "skuId": item.skuid,
+            "skuId": skuId,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
             "image": item.image,
@@ -474,10 +485,14 @@
             "promotionInfo": promotionInfo,
           }
         } else {
+          cartItem.baseInfo.skuId = skuId
           cartItem.baseInfo.count = item.count
           cartItem.baseInfo.cartId = item.id
           cartItem.baseInfo.merchantId = item.merchantId
+          cartItem.baseInfo.purchaseQty = purchaseQty
           cartItem.goodsInfo.merchantId = item.merchantId
+          cartItem.goodsInfo.price = price
+          cartItem.goodsInfo.type = (item.type == undefined ? 0 : item.type)
           let couponList = []
           let promotion = []
           if (couponAndProms != null) {

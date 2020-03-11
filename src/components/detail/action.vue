@@ -600,7 +600,7 @@
           this.result = response.data.data.result;
           if (response.data.code == 200) {
             this.$toast("添加到购物车成功！")
-            let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
+            let cartItem = Util.getCartItem(this, user.userId, goods.mpu,selectSkuId)
             if (cartItem == null) {
               let baseInfo = {
                 "userId": user.userId,

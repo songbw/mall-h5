@@ -541,16 +541,19 @@
 
 
       upDateSkuInfo(item, couponAndProms, user) {
+        this.$log("upDateSkuInfo Enter @@@@@@@@@@@@")
         this.$log(item)
-        let cartItem = Util.getCartItem(this, user.userId, item.mpu)
+        let cartItem = Util.getCartItem(this, user.userId, item.mpu,item.skuId)
         this.$log(cartItem)
         let skuId = item.skuId
+        let price = item.price
         let purchaseQty = 1
         if (skuId === undefined || skuId === null) {
           skuId = item.skuid
         }
         if(item.starSku != undefined) {
           purchaseQty = item.starSku.purchaseQty
+          price = (item.starSku.price/100).toFixed(2)
         }
         if (cartItem == null) {
           let baseInfo = {
@@ -573,7 +576,7 @@
             "name": item.name,
             "brand": item.brand,
             "model": item.model,
-            "price": item.price,
+            "price": price,
             "state": item.state,
             "type": item.type == undefined ? 0 : item.type
           }
@@ -605,7 +608,7 @@
           cartItem.baseInfo.merchantId = item.merchantId
           cartItem.baseInfo.purchaseQty = purchaseQty
           cartItem.goodsInfo.merchantId = item.merchantId
-          cartItem.goodsInfo.price = item.price
+          cartItem.goodsInfo.price = price
           cartItem.goodsInfo.type = (item.type == undefined ? 0 : item.type)
           let couponList = []
           let promotion = []

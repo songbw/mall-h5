@@ -442,6 +442,7 @@
                 "count": 1,
                 "choosed": true,
                 "cartId": this.result,
+                          "purchaseQty": purchaseQty
               }
               let goodsInfo = {
                 "id": goods.id,

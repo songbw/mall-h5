@@ -122,7 +122,6 @@
       display: -webkit-box;
       display: -ms-flexbox;
       display: flex;
-      -ms-flex-wrap: wrap;
       list-style: none;
      // margin-bottom: 1px;
       background-color: transparent;

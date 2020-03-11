@@ -137,17 +137,28 @@ export default {
     return (userInfo === undefined || userInfo === null|| userInfo.length === 0 )
   },
 
-  getCartItem(env, userId, mpu) {
+  getCartItem(env, userId, mpu,skuId) {
     let cartList = env.$store.state.appconf.cartList;
     try {
       let found = -1;
-      for (let i = 0; i < cartList.length; i++) {
-        if (cartList[i].baseInfo.userId === userId &&
-          cartList[i].baseInfo.mpu === mpu) {
-          found = i;
-          break;
+      if(skuId == undefined) {
+        for (let i = 0; i < cartList.length; i++) {
+          if (cartList[i].baseInfo.userId === userId &&
+            cartList[i].baseInfo.mpu === mpu) {
+            found = i;
+            break;
+          }
+        }
+      } else {
+        for (let i = 0; i < cartList.length; i++) {
+          if (cartList[i].baseInfo.userId === userId &&
+            cartList[i].baseInfo.mpu === mpu && cartList[i].baseInfo.skuId === skuId) {
+            found = i;
+            break;
+          }
         }
       }
+
       if (found == -1) {
         return null;
       } else {
@@ -167,7 +178,8 @@ export default {
       let found = -1;
       for (let i = 0; i < cartList.length; i++) {
         if (cartList[i].baseInfo.userId === cartItem.baseInfo.userId &&
-          cartList[i].baseInfo.mpu === cartItem.baseInfo.mpu) {
+          cartList[i].baseInfo.mpu === cartItem.baseInfo.mpu && 
+          cartList[i].baseInfo.skuId === cartItem.baseInfo.skuId) {
           found = i;
           break;
         }
@@ -183,12 +195,14 @@ export default {
   },
 
   updateCartItem(env, cartItem) {
+    env.$log("updateCartItem Enter")
     let cartList = env.$store.state.appconf.cartList;
     try {
       let found = -1;
       for (let i = 0; i < cartList.length; i++) {
         if (cartList[i].baseInfo.userId === cartItem.baseInfo.userId &&
-          cartList[i].baseInfo.mpu === cartItem.baseInfo.mpu) {
+          cartList[i].baseInfo.mpu === cartItem.baseInfo.mpu &&  
+          cartList[i].baseInfo.skuId === cartItem.baseInfo.skuId) {
           found = i;
           break;
         }
@@ -204,7 +218,7 @@ export default {
         cartList[found] = cartItem;
       }
       env.$store.commit('SET_CART_LIST', cartList);
-      //env.$log(env.$store.state.appconf.cartList)
+      env.$log(env.$store.state.appconf.cartList)
     } catch (e) {
       env.$log("error updateCartItem")
     }
