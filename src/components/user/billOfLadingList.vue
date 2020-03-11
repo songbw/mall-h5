@@ -178,7 +178,9 @@
         this.$log("onDeleteCardBtnClick Enter")
         let that = this
         this.$dialog.confirm({
-          message: '确定删除该提货券?'
+          title:'提示',
+          confirmButtonColor: '#FF4444',
+          message: '确定删除'+k.cardInfo.name+"?",
         }).then(() => {
           that.$api.xapi({
             method: 'delete',
