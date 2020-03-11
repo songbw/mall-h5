@@ -310,6 +310,7 @@
     },
     data() {
       return {
+        platformFreight: -1,
         hasVirtualGoods: false,
         freightPay: 0,
         payway: '现金支付',
@@ -783,7 +784,7 @@
           this.$log(response)
           if (response.data.code == 200) {
             let params = response.data.data;
-            this.wkycPay(params,orderInfo)
+            this.wkycPay(params, orderInfo)
           } else {
             that.$toast("请求支付失败")
           }
@@ -793,7 +794,7 @@
           // that.payBtnSubmitLoading = false;
         })
       },
-      wkycPay(payLoad,orderInfo) {
+      wkycPay(payLoad, orderInfo) {
         let that = this
         that.$log(payLoad); // 调试使用代码
 
@@ -811,7 +812,7 @@
           let response = JSON.parse(res)
           that.$log(response);
           that.$log(response.code)
-                that.$log(response.code)
+          that.$log(response.code)
           if (response.code == '0') {
             if (response.data.payStatus == 0) { //"具体的支付状态：0（成功）,-1（失败），-2（取消）",
               that.$router.replace({
@@ -826,11 +827,11 @@
                 path: '/car/orderList'
               })
             }
-          } else {//取消
-              that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-              that.$router.replace({
-                path: '/car/orderList'
-              })
+          } else { //取消
+            that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+            that.$router.replace({
+              path: '/car/orderList'
+            })
           }
         }
       },
@@ -913,16 +914,24 @@
 
 
       },
+
       upDatefreightPay() {
-        this.freightPay = 0;
-        try {
-          this.arregationList.forEach(item => {
-            if (item.freight > 0) {
-              this.freightPay += item.freight;
-            }
-          })
-        } catch (e) {}
+        if (this.platformFreight != -1) {
+          this.$log("xxxxxxxxxxxxxxxxxxx")
+          this.freightPay = this.platformFreight;
+        } else {
+          this.freightPay = 0;
+          try {
+            this.arregationList.forEach(item => {
+              if (item.freight > 0) {
+                this.freightPay += item.freight;
+              }
+            })
+          } catch (e) {}
+        }
+        this.$log("upDatefreightPay freightPay:"+ this.freightPay)
       },
+
       getDateTime(time) {
         return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },
@@ -2206,6 +2215,7 @@
               this.$log(ret)
               if (ret.data.code == 200) {
                 let result = ret.data.data.result
+                this.platformFreight = result.totalPrice
                 if (result.totalPrice > 0) {
                   result.priceBeans.forEach(iFreight => {
                     this.arregationList.forEach(item => {

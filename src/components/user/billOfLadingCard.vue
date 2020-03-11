@@ -4,20 +4,19 @@
       <v-loading></v-loading>
     </div>
     <div v-else class="cardBody">
+      <div class="title">
+        <span>-{{cardDetail.cardInfo.name}}-</span>
+      </div>
       <div class="card" v-if="cardDetail != null">
         <div class="header">
-          <div class="title">
-            <span>{{cardDetail.cardInfo.name}}</span>
+          <div class="Number">
+            <span>券码:{{cardDetail.card}}</span>
           </div>
           <div class="price">
-            <p><span>￥</span>{{cardDetail.cardInfo.amount}}</p>
+            <p><span>￥</span>{{parseFloat(cardDetail.cardInfo.amount).toFixed(2)}}</p>
           </div>
-          <div class="Number">
-            <span></span>{{cardDetail.card}}</span>
-          </div>
-
           <div class="validDate">
-            <span>截至日期: {{formatTime(cardDetail.endTime)}}</span>
+            <span>有效期:{{formatTime(cardDetail.activateTime)}} - {{formatTime(cardDetail.endTime)}}</span>
           </div>
         </div>
 
@@ -47,16 +46,16 @@
                         </div>
                         <div class="coupon-desc">
                           <span>{{formateCouponDescription(item)}}</span>
-                          <span style="color:#4CAF50;float:right;margin-right: 1px"
-                            v-if="item.rules.couponRules.type == 4" @click="gotoCouponDetail(item)" @click.stop="">详情
-                            ></span>
+
                         </div>
                         <div class="coupon-expire-date">
-                          {{formatEffectiveDateTime(item.effectiveStartDate,item.effectiveEndDate)}}
+                          <span style="color:#FF4444;" v-if="item.rules.couponRules.type == 4"
+                            @click="gotoCouponDetail(item)" @click.stop="">查看详情
+                            ></span>
                         </div>
                       </van-col>
                     </div>
-                    <div slot="right-icon" class="couponBoxCheckBox" v-if="cardDetail.status == 3">
+                    <div slot="icon" class="couponBoxCheckBox" v-if="cardDetail.status == 3">
                       <van-radio :name="item.id" @click="onRadioBtnClick(item)" @click.stop="" checked-color="#4CAF50"
                         ref="couponBoxsCheckboxes" />
                     </div>
@@ -65,10 +64,10 @@
               </van-radio-group>
             </div>
           </div>
-          <div style="margin-top:10px">
-            <van-button size="large" type="primary" @click="onBuyBtnClick">下单提货
-            </van-button>
-          </div>
+        </div>
+        <div style="padding-top:10px;background-color: #f8f8f8;width=100%">
+          <van-button size="large" type="primary" @click="onBuyBtnClick">下单提货
+          </van-button>
         </div>
       </div>
     </div>
@@ -123,7 +122,7 @@
         this.$log("isCardActivied Enter")
         this.$log(this.cardDetail)
         if (this.cardDetail.status === 3 || this.cardDetail.status === 4) {
-           let startTime = new Date(this.$moment(this.cardDetail.activateTime).format('YYYY/MM/DD HH:mm:ss')).getTime()
+          let startTime = new Date(this.$moment(this.cardDetail.activateTime).format('YYYY/MM/DD HH:mm:ss')).getTime()
           let endTime = new Date(this.$moment(this.cardDetail.endTime).format('YYYY/MM/DD HH:mm:ss')).getTime()
           let current = new Date().getTime()
           this.$log(startTime)
@@ -135,7 +134,7 @@
             ret = "success" //活动开始
           } else {
             ret = "提货券已过期" // 活动已经结束
-          } 
+          }
         }
         this.$log(ret)
         return ret
@@ -238,9 +237,9 @@
         }
 
         let ret = this.isCardActivied()
-        if(ret != "success" && ret.length > 0) {
+        if (ret != "success" && ret.length > 0) {
           this.$toast(ret)
-          return 
+          return
         }
 
         let user = JSON.parse(userInfo)
@@ -457,7 +456,7 @@
       formatTime(timeString) {
         if (timeString == null)
           return null
-        return this.$moment(timeString).format('YYYY/MM/DD HH:mm:ss')
+        return this.$moment(timeString).format('YYYY年MM月DD日')
       },
 
       getCardInfo(userId) {
@@ -500,6 +499,7 @@
     width: 100%;
     height: 100%;
     top: 0px;
+    background-color: #f8f8f8;
 
     .noneInfo {
       display: flex;
@@ -518,30 +518,32 @@
 
     .cardBody {
       .card {
-        margin: 10px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); //设置两层阴影
+        padding: 10px;
+      }
+
+      .title {
+        padding: 10px;
+        text-align: center;
+        .fz(font-size, 30)
       }
 
       .header {
-        background-color: #4CAF50;
+        background: url('https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_pickupcard_bg.png') no-repeat;
+        background-size: 100% 100%;
         color: white;
-        padding: 10px;
-
-        .title {
-          text-align: center;
-          .fz(font-size, 40)
-        }
+        padding: 10px 10px 0px 10px;
 
         .Number {
-          text-align: center;
-          letter-spacing: 2px;
+          text-align: left;
+          letter-spacing: .5px;
           padding: 0px 0px 10px 0px;
-          .fz(font-size, 35);
+          font-weight: 300;
+          .fz(font-size, 25);
         }
 
         .price {
-          text-align: center;
-          padding: 10px 0px 10px 0px;
+          text-align: left;
+          padding: 0px 0px 10px 0px;
           .fz(font-size, 80);
 
           span {
@@ -551,25 +553,29 @@
         }
 
         .validDate {
-          text-align: right;
-          .fz(font-size, 24)
+          text-align: left;
+          .fz(font-size, 24);
+          padding: 0px 0px 3px 0px;
+          >span {
+            padding-top: 10px;
+          }
         }
       }
 
       .container {
-        padding: 10px;
-        background-color: #f8f8f8;
+        padding-bottom: 5px;
+        background-color: white;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
 
         .couponListCheckBox {
           .van-cell {
-            margin-top: -1px;
             background: white;
-            border-radius: 5px;
           }
 
           .couponBox {
             height: 100px;
-            margin: 2px 10px 2px 0px;
+            margin-left: 10px;
             display: flex;
             line-height: 30px;
             color: #333333;
@@ -592,7 +598,7 @@
 
               .coupon-desc {
                 margin-left: 3px;
-                .fz(font-size, 22);
+                .fz(font-size, 28);
               }
 
               .coupon-price {
@@ -614,7 +620,7 @@
 
               .coupon-expire-date {
                 margin-left: 5px;
-                .fz(font-size, 22);
+                .fz(font-size, 28);
               }
 
             }
@@ -632,7 +638,7 @@
     }
 
     .van-button {
-      background: linear-gradient(to right, rgb(91, 230, 186), #4CAF50);
+      background: #FF4444;
       border: none;
 
       &--large {
