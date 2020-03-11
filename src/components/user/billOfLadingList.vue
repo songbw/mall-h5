@@ -52,7 +52,11 @@
           </div>
         </van-tab>
       </van-tabs>
-
+      <div class="cardListBottomFunc">
+        <div @click="onChangeCardBtnClick()" class="changeCardButton">
+          <span>兑换提货券</span>
+        </div>
+      </div>
     </div>
   </section>
 </template>
@@ -155,6 +159,9 @@
     },
 
     methods: {
+      onChangeCardBtnClick() {
+        this.$router.push("/user/couponChange")
+      },
       getCardStatusDesc(status) {
         switch (status) {
           case 1:
@@ -178,9 +185,9 @@
         this.$log("onDeleteCardBtnClick Enter")
         let that = this
         this.$dialog.confirm({
-          title:'提示',
+          title: '提示',
           confirmButtonColor: '#FF4444',
-          message: '确定删除'+k.cardInfo.name+"?",
+          message: '确定删除' + k.cardInfo.name + "?",
         }).then(() => {
           that.$api.xapi({
             method: 'delete',
@@ -253,6 +260,7 @@
       height: 100%;
       top: 0px;
       background-color: #f8f8f8;
+      padding-bottom: 3em;
 
       .card {
         margin: 10px;
@@ -395,6 +403,30 @@
       }
     }
 
+    .cardListBottomFunc {
+      background-color: white;
+      width: 100%;
+      height: 3em;
+      display: -webkit-flex;
+      display: -ms-flex;
+      display: flex;
+      align-items: center;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      background-color: #ffffff;
+      z-index: 5;
+
+
+      .changeCardButton {
+        width: 100%;
+        height: 100%;
+        background-color: white;
+        text-align: center;
+        line-height: 3em;
+        color:black;
+      }
+    }
 
   }
 
