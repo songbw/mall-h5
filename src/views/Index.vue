@@ -44,6 +44,9 @@
             <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
               <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
+            <div v-else-if="item.type==='10'" style="margin-left: 5px;margin-right: 5px;">
+              <v-horizontalGoods :datas="item.data" :mBackgroundColor="mBackgroundColor" />
+            </div>
           </div>
         </div>
         <v-baseline v-if="this.showFooter" :datas="this.footerText" :style="{'background-color': mBackgroundColor}">
@@ -72,6 +75,7 @@
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import sectionImgMap from '@/components/index/sectionImgMap.vue'
   import sectionCompBox from '@/components/index/sectionCompBox.vue'
+  import horizontalGoods from '@/components/index/horizontalGoods.vue'
   import Baseline from '@/common/_baseline.vue'
   import Splash from '@/common/splash.vue'
   import Footer from '@/common/_footer.vue'
@@ -82,6 +86,7 @@
   } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
 
+
   export default {
     components: {
       'v-header': Header,
@@ -91,6 +96,7 @@
       'v-sectionSlide': sectionSlide,
       'v-sectionListSlide': sectionListSilde,
       'v-sectionGoods': sectionGoods,
+      'v-horizontalGoods': horizontalGoods,
       'v-imgmap': sectionImgMap,
       'v-sectionCompBox': sectionCompBox,
       'v-baseline': Baseline,

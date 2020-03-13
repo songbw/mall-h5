@@ -10,54 +10,53 @@
       <div :style="{'background-color': mBackgroundColor}" v-else class="home-body">
         <div v-if="this.mHeader.backgroundColor != null">
           <div class='box' :style="{'background-color': this.mHeader.backgroundColor}">
-            <van-search placeholder="搜索您感兴趣的商品"
-                        shape="round"
-                        :background=this.mHeader.backgroundColor
-                        readonly
-                        @click="onSearchInputClick()"
-                        v-if="this.mHeader.showSearchBar"/>
+            <van-search placeholder="搜索您感兴趣的商品" shape="round" :background=this.mHeader.backgroundColor readonly
+              @click="onSearchInputClick()" v-if="this.mHeader.showSearchBar" />
           </div>
           <div class="box_after" :style="{'background-color': this.mHeader.backgroundColor}"></div>
         </div>
         <div :class="this.mHeader.backgroundColor == null?'': 'index_main_50px' ">
           <div v-for="item in datas">
             <div v-if="item.type==='0'" style="margin-left: 5px;margin-right: 5px; border-radius: 10px">
-              <v-swiper :datas="item.data"/>
+              <v-swiper :datas="item.data" />
             </div>
             <div v-else-if="item.type==='1'" style="margin-left: 5px;margin-right: 5px;">
-              <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-service :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
-              <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
-              <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='7'"
-                 :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
-              <v-imgmap :datas="item.data"/>
+              :class="item.data.settings.hasMargin == undefined || item.data.settings.hasMargin?'ltRtMargin':''">
+              <v-imgmap :datas="item.data" />
             </div>
             <div v-else-if="item.type==='4'">
-              <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-sectionGoods :datas="item.data" :mBackgroundColor="mBackgroundColor" />
               <div>
-                <img :src="icon_shopCart"
-                     @click="gotoShoppingCart()"
-                     style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;"/>
+                <img :src="icon_shopCart" @click="gotoShoppingCart()"
+                  style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;" />
               </div>
             </div>
             <div v-else-if="item.type==='6'">
-              <v-sectionCoupon :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-sectionCoupon :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='8'">
               <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
             </div>
             <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
-              <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor"/>
+              <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
+            </div>
+            <div v-else-if="item.type==='10'" style="margin-left: 5px;margin-right: 5px;">
+              <v-horizontalGoods :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
           </div>
         </div>
-        <v-baseline v-if="this.showFooter" :datas="this.footerText"  :style="{'background-color': mBackgroundColor}"></v-baseline>
-        <div v-else  :style="{'background-color': mBackgroundColor,'height':'5em'} "></div>
+        <v-baseline v-if="this.showFooter" :datas="this.footerText" :style="{'background-color': mBackgroundColor}">
+        </v-baseline>
+        <div v-else :style="{'background-color': mBackgroundColor,'height':'5em'} "></div>
       </div>
     </div>
   </section>
@@ -73,11 +72,15 @@
   import sectionImgMap from '@/components/index/sectionImgMap.vue'
   import sectionCoupon from '@/components/index/sectionCoupon.vue'
   import sectionCompBox from '@/components/index/sectionCompBox.vue'
+  import sectionListSilde from '@/components/index/sectionListSlide.vue'
+  import horizontalGoods from '@/components/index/horizontalGoods.vue'
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Loading from '@/common/_loading.vue'
 
-  import {configWechat} from '@/util/wechat'
+  import {
+    configWechat
+  } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
   import Util from '@/util/common'
   //import { Toast } from 'mint-ui'
@@ -94,7 +97,9 @@
       'v-loading': Loading,
       'v-imgmap': sectionImgMap,
       'v-sectionCoupon': sectionCoupon,
-      'v-sectionCompBox': sectionCompBox
+      'v-sectionCompBox': sectionCompBox,
+      'v-sectionListSlide': sectionListSilde,
+      'v-horizontalGoos': horizontalGoods,
     },
     watch: {
       '$route'(to, from) {
@@ -102,7 +107,7 @@
         if (to.name === '活动页') {
           let id = this.$route.params.id;
           console.log("活动页:" + id)
-          if(from.name == '活动页' || from.name == '首页') {
+          if (from.name == '活动页' || from.name == '首页') {
             setTimeout(() => {
               window.scrollTo(0, 0);
             }, 20);
@@ -127,8 +132,8 @@
             if (response.data.data.result.header != undefined) {
               let header = JSON.parse(response.data.data.result.header)
               this.mHeader = header
-              if(header.showFooter != undefined) {
-                this.showFooter =  header.showFooter
+              if (header.showFooter != undefined) {
+                this.showFooter = header.showFooter
                 this.footerText = header.footerText
               }
             }
@@ -163,7 +168,7 @@
     beforeRouteEnter(to, from, next) {
       next(vm => {
         setTimeout(() => {
-          if(from.name == '活动页' || from.name == '首页') {
+          if (from.name == '活动页' || from.name == '首页') {
             window.scrollTo(0, 0);
           }
         }, 20);
@@ -197,8 +202,8 @@
         if (response.data.data.result.header != undefined) {
           let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
-          if(header.showFooter != undefined) {
-            this.showFooter =  header.showFooter
+          if (header.showFooter != undefined) {
+            this.showFooter = header.showFooter
             this.footerText = header.footerText
           }
         }
@@ -329,29 +334,35 @@
       },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if(this.$api.APP_ID === '01') {
-          try{
+        if (this.$api.APP_ID === '01') {
+          try {
             configWechat(this, () => {
               wx.hideOptionMenu()
             })
-          } catch (e) {
-          }
+          } catch (e) {}
         }
       },
       gotoShoppingCart() {
         this.$log("gotoShoppingCart Enter")
-        this.$router.push({name: '购物车页'})
+        this.$router.push({
+          name: '购物车页'
+        })
       },
       gotoOrderList() {
         this.$log("gotoOrderList Enter")
-        this.$router.push({name: '订单列表页'})
+        this.$router.push({
+          name: '订单列表页'
+        })
       },
       onSearchInputClick() {
         this.$log("onSearchInputClick")
-        this.$router.push({name: '搜索页'})
+        this.$router.push({
+          name: '搜索页'
+        })
       }
     }
   }
+
 </script>
 
 
@@ -398,4 +409,5 @@
       }
     }
   }
+
 </style>
