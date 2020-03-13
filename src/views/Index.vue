@@ -45,7 +45,7 @@
               <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='10'" style="margin-left: 5px;margin-right: 5px;">
-              <v-horizontalGoos :datas="item.data" :mBackgroundColor="mBackgroundColor" />
+              <v-horizontalGoods :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
           </div>
         </div>
@@ -96,7 +96,7 @@
       'v-sectionSlide': sectionSlide,
       'v-sectionListSlide': sectionListSilde,
       'v-sectionGoods': sectionGoods,
-      'v-horizontalGoos': horizontalGoods,
+      'v-horizontalGoods': horizontalGoods,
       'v-imgmap': sectionImgMap,
       'v-sectionCompBox': sectionCompBox,
       'v-baseline': Baseline,
