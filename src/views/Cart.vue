@@ -6,16 +6,13 @@
 
     <div class="cartBody">
       <div class="box" :style="{'padding-top':showHeader? '3em':'1em'}" v-if="finished"></div>
-      <van-list v-model="loading"
-                :finished="finished"
-                @load="onLoad"
-                loading-text="正在加载..."
-                style="list-style: none;background-color: #f8f8f8;">
+      <van-list v-model="loading" :finished="finished" @load="onLoad" loading-text="正在加载..."
+        style="list-style: none;background-color: #f8f8f8;">
       </van-list>
       <div v-if="finished">
         <div class="emptyCart" v-if="dataLoaded && cartList.length === 0">
           <div class="nothingInCar">
-            <img :src="nothingInCar_bg"/>
+            <img :src="nothingInCar_bg" />
             <span>您的购物车还没有商品，快去挑选吧</span>
             <van-button round type="danger" style="width:35%;font-size: medium" @click="gotoCategoryPage()">去逛逛
             </van-button>
@@ -27,56 +24,43 @@
               <van-swipe-cell :right-width="60">
                 <div style="display: flex;justify-content: left;background-color: #ffffff">
                   <div v-if="k.valid"
-                       style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
-                    <van-checkbox
-                      v-model="k.baseInfo.choosed"
-                      checked-color="#FF4444"
-                      @change="singleChecked(index,k)">
+                    style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                    <van-checkbox v-model="k.baseInfo.choosed" checked-color="#FF4444" @change="singleChecked(index,k)">
                     </van-checkbox>
                   </div>
                   <div v-else
-                       style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
-                    <van-checkbox
-                      disabled
-                      v-model="k.baseInfo.choosed"
-                      checked-color="#FF4444"
+                    style="width: 8%;display: flex;flex-direction: column;justify-content: center; margin-left: 1em;">
+                    <van-checkbox disabled v-model="k.baseInfo.choosed" checked-color="#FF4444"
                       @change="singleChecked(index,k)">
                     </van-checkbox>
                   </div>
                   <div style="width: 92%; display: flex;flex-direction: column;justify-content: center;">
                     <div class="promotionBox"
-                         v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
+                      v-if="k.promotionInfo.promotion!= undefined && k.promotionInfo.promotionState != -1">
                       <span class="promotionTitle">{{k.promotionInfo.promotion[0].tag}}</span>
-                      <v-countdown :key="k" class="promotionCountDown"
-                                   @start_callback="countDownS_cb(index,k)"
-                                   @end_callback="countDownE_cb(index,k)"
-                                   :startTime="getDateTime(k.promotionInfo.promotion[0].startDate)"
-                                   :endTime="getDateTime(k.promotionInfo.promotion[0].endDate)"
-                                   :secondsTxt="''">
+                      <v-countdown :key="k" class="promotionCountDown" @start_callback="countDownS_cb(index,k)"
+                        @end_callback="countDownE_cb(index,k)"
+                        :startTime="getDateTime(k.promotionInfo.promotion[0].startDate)"
+                        :endTime="getDateTime(k.promotionInfo.promotion[0].endDate)" :secondsTxt="''">
                       </v-countdown>
                     </div>
                     <div class="goodsValid" v-if="k.valid">
-                      <van-card
-                        :desc="addressCode.cityName != undefined ? addressCode.cityName: '南京'"
-                        :price="k.goodsInfo.dprice"
-                        :title="k.goodsInfo.name"
-                        :thumb="k.goodsInfo.image"
+                      <van-card :desc="addressCode.cityName != undefined ? addressCode.cityName: '南京'"
+                        :price="k.goodsInfo.dprice" :title="k.goodsInfo.name" :thumb="k.goodsInfo.image"
                         @click="gotoDetailPage(k)">
                         <div slot="footer" @click.stop="">
-                          <van-stepper v-model="k.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
+                          <van-stepper v-model="k.baseInfo.count" @click.stop="" @change="onCountChange(k)" />
                         </div>
                       </van-card>
                     </div>
                     <div class="goodsInvalid" v-else>
-                      <van-card
-                        :desc="k.invalidReason"
-                        :price="k.goodsInfo.dprice"
-                        :title="k.goodsInfo.name"
-                        :thumb="k.goodsInfo.image"
-                        @click="gotoDetailPage(k)">
+                      <van-card :desc="k.invalidReason" :price="k.goodsInfo.dprice" :title="k.goodsInfo.name"
+                        :thumb="k.goodsInfo.image" @click="gotoDetailPage(k)">
                         <div slot="footer" @click.stop="">
-                          <van-stepper v-if="k.baseInfo.merchantId === 4" v-model="k.baseInfo.count" @click.stop="" @change="onCountChange(k)"/>
-                          <van-stepper v-else v-model="k.baseInfo.count" @click.stop="" disabled @change="onCountChange(k)"/>
+                          <van-stepper v-if="k.baseInfo.merchantId === 4" v-model="k.baseInfo.count" @click.stop=""
+                            @change="onCountChange(k)" />
+                          <van-stepper v-else v-model="k.baseInfo.count" @click.stop="" disabled
+                            @change="onCountChange(k)" />
                         </div>
                       </van-card>
                     </div>
@@ -87,7 +71,7 @@
                 </div>
               </van-swipe-cell>
             </div>
-            <v-cartfooter class="cartfooter"/>
+            <v-cartfooter class="cartfooter" />
           </div>
         </div>
       </div>
@@ -103,7 +87,9 @@
   import CountDown from '@/common/_vue2-countdown.vue'
   import Util from '@/util/common'
   import Footer from '@/common/_footer.vue'
-  import {configWechat} from '@/util/wechat'
+  import {
+    configWechat
+  } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
 
   export default {
@@ -122,12 +108,13 @@
     computed: {
       cartList() {
         this.$store.state.appconf.cartList.forEach(item => {
-         // this.$log(item)
+          // this.$log(item)
           if (item.baseInfo.merchantId === 2) {
             item['valid'] = true;
             item['invalidReason'] = "";
             for (let i = 0; i < this.inventoryListOfAoyi.length; i++) {
-              if (this.inventoryListOfAoyi[i].state == 0 && this.inventoryListOfAoyi[i].skuId === item.baseInfo.skuId) {
+              if (this.inventoryListOfAoyi[i].state == 0 && this.inventoryListOfAoyi[i].skuId === item.baseInfo
+                .skuId) {
                 item['valid'] = false;
                 item['invalidReason'] = "无货";
                 item.baseInfo.choosed = false;
@@ -138,24 +125,25 @@
             item['valid'] = true;
             item['invalidReason'] = "";
             for (let i = 0; i < this.inventoryListOfYyt.length; i++) {
-                if(this.inventoryListOfYyt[i].mpu === item.baseInfo.mpu && this.inventoryListOfYyt[i].skuId === item.baseInfo.skuId) {
-                  if(this.inventoryListOfYyt[i].state == 0) {
-                    item['valid'] = false;
+              if (this.inventoryListOfYyt[i].mpu === item.baseInfo.mpu && this.inventoryListOfYyt[i].skuId === item
+                .baseInfo.skuId) {
+                if (this.inventoryListOfYyt[i].state == 0) {
+                  item['valid'] = false;
+                  item['invalidReason'] = "无货";
+                  item.baseInfo.choosed = false;
+                  break;
+                } else if (this.inventoryListOfYyt[i].inventoryCount < this.inventoryListOfYyt[i].remainNum ||
+                  this.inventoryListOfYyt[i].remainNum < this.inventoryListOfYyt[i].purchaseQty) {
+                  item['valid'] = false;
+                  if (this.inventoryListOfYyt[i].inventoryCount < this.inventoryListOfYyt[i].remainNum) {
                     item['invalidReason'] = "无货";
-                    item.baseInfo.choosed = false;
-                    break;
-                  } else if (this.inventoryListOfYyt[i].inventoryCount < this.inventoryListOfYyt[i].remainNum ||
-                         this.inventoryListOfYyt[i].remainNum <  this.inventoryListOfYyt[i].purchaseQty) {
-                    item['valid'] = false;
-                    if(this.inventoryListOfYyt[i].inventoryCount < this.inventoryListOfYyt[i].remainNum ) {
-                       item['invalidReason'] = "无货";
-                    } else {
-                       item['invalidReason'] = "一次购买不少于"+this.inventoryListOfYyt[i].purchaseQty+"件";
-                    }
-                    item.baseInfo.choosed = false;
-                    break;
+                  } else {
+                    item['invalidReason'] = "一次购买不少于" + this.inventoryListOfYyt[i].purchaseQty + "件";
                   }
+                  item.baseInfo.choosed = false;
+                  break;
                 }
+              }
             }
           } else {
             item['valid'] = true;
@@ -170,7 +158,7 @@
             }
           }
         })
-       // this.$log(this.$store.state.appconf.cartList)
+        // this.$log(this.$store.state.appconf.cartList)
         return this.$store.state.appconf.cartList
       },
     },
@@ -220,13 +208,13 @@
             configWechat(this, () => {
               wx.hideOptionMenu()
             })
-          } catch (e) {
-          }
+          } catch (e) {}
         }
       },
       gotoDetailPage(sku) {
         this.$router.push({
-          path: "/detail", query: {
+          path: "/detail",
+          query: {
             mpu: sku.baseInfo.mpu
           }
         });
@@ -321,8 +309,7 @@
               address = addressList[0]
             }
           }
-        } catch (e) {
-        }
+        } catch (e) {}
         this.addressCode = address
         this.$log(this.addressCode)
 
@@ -331,15 +318,30 @@
         let inventorySkusOfYyt = [];
         list.forEach(item => {
           if (item.merchantId == 2) {
-            inventorySkus.push({"skuId": item.mpu, "remainNum": item.count, "price": item.price})
+            inventorySkus.push({
+              "skuId": item.mpu,
+              "remainNum": item.count,
+              "price": item.price
+            })
           } else if (item.merchantId == 4) {
             let purchaseQty = 1;
-            if(item.starSku != undefined) {
+            if (item.starSku != undefined) {
               purchaseQty = item.starSku.purchaseQty
             }
-            inventorySkusOfYyt.push({"mpu": item.mpu, "state":item.state, "skuId": item.skuId, "remainNum": item.count, "inventoryCount":0,"purchaseQty":purchaseQty,"price": item.price})
+            inventorySkusOfYyt.push({
+              "mpu": item.mpu,
+              "state": item.state,
+              "skuId": item.skuId,
+              "remainNum": item.count,
+              "inventoryCount": 0,
+              "purchaseQty": purchaseQty,
+              "price": item.price
+            })
           } else {
-            inventorySkusOfZy.push({"mpu": item.mpu, "remainNum": item.count})
+            inventorySkusOfZy.push({
+              "mpu": item.mpu,
+              "remainNum": item.count
+            })
           }
         })
         if (inventorySkus.length > 0) {
@@ -355,17 +357,17 @@
         if (inventorySkusOfYyt.length > 0) {
           try {
             let resp = await this.updateYytInventory(inventorySkusOfYyt)
-            if(resp.data.code === 200) {
+            if (resp.data.code === 200) {
               let skuInvList = resp.data.data.skuInvList
               skuInvList.forEach(skuInvt => {
-                 //inventoryListOfYyt.inventoryCount = skuInvt.inventoryCount
-                 for(let i = 0; i < inventorySkusOfYyt.length; i++) {
-                   this.$log("++++++++++++++++++++++++++++=")
-                   if(inventorySkusOfYyt[i].skuId === skuInvt.code) {
-                     inventorySkusOfYyt[i].inventoryCount = skuInvt.inventoryCount
-                     break;
-                   }
-                 }
+                //inventoryListOfYyt.inventoryCount = skuInvt.inventoryCount
+                for (let i = 0; i < inventorySkusOfYyt.length; i++) {
+                  this.$log("++++++++++++++++++++++++++++=")
+                  if (inventorySkusOfYyt[i].skuId === skuInvt.code) {
+                    inventorySkusOfYyt[i].inventoryCount = skuInvt.inventoryCount
+                    break;
+                  }
+                }
               })
               this.inventoryListOfYyt = inventorySkusOfYyt
               this.$log(this.inventoryListOfYyt)
@@ -404,10 +406,13 @@
         return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },
       gotoCategoryPage() {
-        this.$router.replace({'name': '分类页'})
+        this.$router.replace({
+          'name': '分类页'
+        })
       },
       composeGoodsTitle(goods) {
-        return (goods.brand == null ? '' : goods.brand) + ' ' + goods.name + ' ' + (goods.model == null ? '' : goods.model)
+        return (goods.brand == null ? '' : goods.brand) + ' ' + goods.name + ' ' + (goods.model == null ? '' : goods
+          .model)
       },
       countDownS_cb(index, k) {
         k.promotionInfo.promotionState = Util.getPromotionState(this, k)
@@ -440,14 +445,14 @@
 
       onCountChange(k) {
         Util.updateCartItem(this, k);
-        if(k.baseInfo.merchantId === 4) {
-           for(let i = 0; i < this.inventoryListOfYyt.length; i++) {
-             if(this.inventoryListOfYyt[i].mpu == k.baseInfo.mpu &&
-                this.inventoryListOfYyt[i].skuId == k.baseInfo.skuId) {
-               this.inventoryListOfYyt[i].remainNum = k.baseInfo.count
-               break;
-             }
-           }
+        if (k.baseInfo.merchantId === 4) {
+          for (let i = 0; i < this.inventoryListOfYyt.length; i++) {
+            if (this.inventoryListOfYyt[i].mpu == k.baseInfo.mpu &&
+              this.inventoryListOfYyt[i].skuId == k.baseInfo.skuId) {
+              this.inventoryListOfYyt[i].remainNum = k.baseInfo.count
+              break;
+            }
+          }
         }
         let options = {
           "id": k.baseInfo.cartId,
@@ -459,8 +464,7 @@
           baseURL: this.$api.ORDER_BASE_URL,
           url: '/cart/num',
           data: options,
-        }).then((response) => {
-        }).catch(function (error) {
+        }).then((response) => {}).catch(function (error) {
           console.log(error)
         })
 
@@ -549,7 +553,7 @@
         if (skuId === undefined || skuId === null) {
           skuId = item.skuid
         }
-        if(item.starSku != undefined) {
+        if (item.starSku != undefined) {
           purchaseQty = item.starSku.purchaseQty
         }
         if (cartItem == null) {
@@ -590,7 +594,9 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState(this, {promotion: promotion})
+            "promotionState": Util.getPromotionState(this, {
+              promotion: promotion
+            })
           }
           cartItem = {
             "baseInfo": baseInfo,
@@ -620,7 +626,9 @@
           }
           let promotionInfo = {
             "promotion": promotion,
-            "promotionState": Util.getPromotionState(this, {promotion: promotion})
+            "promotionState": Util.getPromotionState(this, {
+              promotion: promotion
+            })
           }
           cartItem.couponList = couponList
           cartItem.promotionInfo = promotionInfo
@@ -723,8 +731,11 @@
               margin-top: 10px;
 
               &__price {
-                margin-top: 0.5em;
-                .fz(font-size, 35);
+                position:fixed; 
+                bottom:15px;
+                display: inline-block;
+                font-weight: 500;
+                .fz(font-size, 28);
               }
             }
           }
@@ -735,8 +746,11 @@
               margin-top: 10px;
 
               &__price {
-                margin-top: 0.5em;
-                .fz(font-size, 35);
+                position:fixed; 
+                bottom:15px;
+                display: inline-block;
+                font-weight: 500;
+                .fz(font-size, 28);
                 color: #515151;
               }
 
@@ -747,7 +761,7 @@
           }
 
 
-          .van-card__footer > div {
+          .van-card__footer>div {
             display: flex !important;
             align-items: center;
             float: right;
@@ -791,4 +805,5 @@
       margin-bottom: 3em;
     }
   }
+
 </style>
