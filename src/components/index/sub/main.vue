@@ -99,7 +99,7 @@
       'v-sectionCoupon': sectionCoupon,
       'v-sectionCompBox': sectionCompBox,
       'v-sectionListSlide': sectionListSilde,
-      'v-horizontalGoos': horizontalGoods,
+      'v-horizontalGoods': horizontalGoods,
     },
     watch: {
       '$route'(to, from) {
