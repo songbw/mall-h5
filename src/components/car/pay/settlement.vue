@@ -3138,9 +3138,10 @@
 
             .van-card {
               background-color: #ffffff;
+              
 
               &__price {
-                margin-top: 0.5em;
+                margin-top: 0.6em;
                 .fz(font-size, 40);
               }
 
