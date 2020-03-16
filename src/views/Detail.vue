@@ -818,12 +818,8 @@
 
 
           if (goods.merchantId === 2) {
-            this.$log("@######################################################")
-            this.$log(goods)
             let skuId = goods.mpu
-            this.$log(skuId)
             if (skuId.startsWith("30")) {
-              this.$log("######################################################")
               this.goods.skuList.forEach(sku => {
                 inventorySkus.push({
                   "skuId": sku.skuId,
