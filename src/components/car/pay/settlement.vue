@@ -2149,7 +2149,7 @@
                 this.$log("奥弋库存 result is:" + JSON.stringify(result));
                 result.forEach(item => {
                   for (let i = 0; i < this.payCarList.length; i++) {
-                    if (this.payCarList[i].product.baseInfo.mpu === item.mpu) {
+                    if (this.payCarList[i].product.baseInfo.skuId === item.skuId) {
                       if ("1" === item.state) {
                         this.payCarList[i].valid = true
                       } else {

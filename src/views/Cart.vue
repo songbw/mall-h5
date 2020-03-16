@@ -330,8 +330,14 @@
         let inventorySkusOfZy = [];
         let inventorySkusOfYyt = [];
         list.forEach(item => {
+          this.$log("#########$$$$$$$$$$$$$$$$$$$$$$$@@")
+          this.$log(item)
           if (item.merchantId == 2) {
-            inventorySkus.push({"skuId": item.mpu, "remainNum": item.count, "price": item.price})
+            let skuId = item.mpu
+            if(item.skuId != null) {
+              skuId = item.skuId
+            }
+            inventorySkus.push({"skuId": skuId, "remainNum": item.count, "price": item.price})
           } else if (item.merchantId == 4) {
             let purchaseQty = 1;
             if(item.starSku != undefined) {
