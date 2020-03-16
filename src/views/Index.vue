@@ -435,6 +435,7 @@
         let cartItem = Util.getCartItem(this, user.userId, item.mpu,item.skuId)
         let skuId = item.skuId
         let price = item.price
+        let image = item.image
         let purchaseQty = 1
         if (skuId === undefined || skuId === null) {
           skuId = item.skuid
@@ -442,6 +443,8 @@
         if(item.starSku != undefined) {
           purchaseQty = item.starSku.purchaseQty
           price = (item.starSku.price/100).toFixed(2)
+          if(item.starSku.goodsLogo != undefined && item.starSku.goodsLogo.length > 0)
+              image = item.starSku.goodsLogo
         }
         if (cartItem == null) {
           let baseInfo = {
@@ -459,7 +462,7 @@
             "skuId": skuId,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
-            "image": item.image,
+            "image": image,
             "category": item.category,
             "name": item.name,
             "brand": item.brand,
@@ -499,6 +502,7 @@
           cartItem.goodsInfo.merchantId = item.merchantId
           cartItem.goodsInfo.price = price
           cartItem.goodsInfo.type = (item.type == undefined ? 0 : item.type)
+          cartItem.goodsInfo.image = image
           let couponList = []
           let promotion = []
           if (couponAndProms != null) {
