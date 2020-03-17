@@ -29,14 +29,16 @@
         <div class="sectionSlide-list">
           <ul>
             <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
-              <img v-lazy="k.imagePath">
-              <p class="sectionSlide-list-intro">
-                {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
-              </p>
-              <div>
-                <p class="sectionSlide-list-sales-price">
-                  <span>￥</span>{{k.price}}
+              <div style="width:27vw">
+                <img v-lazy="k.imagePath">
+                <p class="sectionSlide-list-intro">
+                  {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
                 </p>
+                <div>
+                  <p class="sectionSlide-list-sales-price">
+                    <span>￥</span>{{k.price}}
+                  </p>
+                </div>
               </div>
             </li>
           </ul>
@@ -243,7 +245,6 @@
         padding-top: 2px;
         padding-bottom: 2px;
 
-
         /*原生滑动*/
         -webkit-overflow-scrolling: touch;
 
@@ -257,10 +258,10 @@
           background-color: #3dd5c8;
 
           li {
-            margin-right: 1vw;
-            margin-left: 1vw;
+            margin-right: .5vw;
+            margin-left: .5vw;
             width: 27vw;
-            border-radius: 10px;
+            border-radius: 5px;
             z-index: 1;
 
             a,
@@ -268,29 +269,21 @@
               display: block;
               width: 100%;
               height: 6.1em;
-              border-top-right-radius: 10px;
-              border-top-left-radius: 10px;
+              border-top-right-radius: 5px;
+              border-top-left-radius: 5px;
             }
 
-            h2,
             p {
               overflow: hidden;
               white-space: nowrap;
               text-overflow: ellipsis;
+              padding: 2px;
             }
-
-            h2 {
-              .fz(font-size, 30);
-              padding-top: 2vw;
-              color: #333;
-            }
-
             p.sectionSlide-list-intro {
               padding-top: 1vw;
               .fz(font-size, 23);
               color: #323233;
             }
-
             p.sectionSlide-list-origin-price {
               margin: 2px;
               color: #707070;
@@ -301,7 +294,6 @@
                 .fz(font-size, 10);
               }
             }
-
             p.sectionSlide-list-sales-price {
               margin: 2px;
               color: #ff4444;
