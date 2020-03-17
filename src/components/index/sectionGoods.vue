@@ -413,6 +413,7 @@
         let userId = user.userId;
         let mpu = goods.mpu;
         let skuId = goods.skuId
+        let purchaseQty = 1
         if(goods.skuid != undefined)
            skuId = goods.skuid
         if (mpu != skuId) {
