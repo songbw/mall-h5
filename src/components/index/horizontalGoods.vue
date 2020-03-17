@@ -198,7 +198,6 @@
   .wrap {
     border-radius: 10px;
     background-color: white;
-    padding-bottom: 5px;
 
     .box {
       position: relative;
