@@ -29,7 +29,7 @@
         <div class="sectionSlide-list">
           <ul>
             <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
-              <div style="width:31.2vw">
+              <div style="width:7.2rem">
                 <img v-lazy="k.imagePath">
                 <p class="sectionSlide-list-intro">
                   {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
@@ -262,12 +262,13 @@
             margin-left: .5vw;
             border-radius: 5px;
             z-index: 1;
+            width: 7.2rem;
 
             a,
             img {
               display: block;
               width: 100%;
-              height: 7.2em;
+              height: 7.2rem;
               border-top-right-radius: 5px;
               border-top-left-radius: 5px;
             }
