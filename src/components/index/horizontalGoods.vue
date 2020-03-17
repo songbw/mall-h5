@@ -84,10 +84,10 @@
 
       getListStyle() {
         let skuBackgroundColor = '#FFFFFF'
-        if(this.datas.settings.skuBackgroundColor != undefined)
-            skuBackgroundColor = this.datas.settings.skuBackgroundColor
+        if (this.datas.settings.skuBackgroundColor != undefined)
+          skuBackgroundColor = this.datas.settings.skuBackgroundColor
         let style = {
-          'background-color':skuBackgroundColor
+          'background-color': skuBackgroundColor
         }
         return style
       },
