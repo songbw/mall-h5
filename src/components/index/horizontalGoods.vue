@@ -1,25 +1,31 @@
 <template>
-  <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
+  <!--   <section
+    :style="{'margin-left':datas.settings.marginX+'px',
+    'margin-right':datas.settings.marginX+'px',
+    'margin-bottom': datas.settings.marginBottom+'px',
+    'background-color':mBackgroundColor}"> -->
+  <section :style="getBoxStyle()">
     <div class="wrap">
       <div class='box' :style="{'background-color': decorateBgColor}">
         <van-cell v-if="datas.settings.title.textValue.length" @click="gotoTargetUrl()"
-                  :style="{'background-color':decorateBgColor}">
+          :style="{'background-color':decorateBgColor}">
           <div slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
             <span>
-               {{datas.settings.title.textValue}}
+              {{datas.settings.title.textValue}}
             </span>
           </div>
           <div slot="default" v-if="datas.settings.title.textAlign =='left'">
-             <span v-if="datas.settings.title.textLinkValue != undefined && datas.settings.title.textLinkValue.length > 0">
-               {{datas.settings.title.textLinkValue}}
-             </span>
+            <span
+              v-if="datas.settings.title.textLinkValue != undefined && datas.settings.title.textLinkValue.length > 0">
+              {{datas.settings.title.textLinkValue}}
+            </span>
           </div>
         </van-cell>
         <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
           <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
         </div>
       </div>
-      <div class="listBox">
+      <div class="listBox" :style="getListStyle()">
         <div class="sectionSlide-list">
           <ul>
             <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
@@ -54,7 +60,8 @@
         decorateBgColor: '#FFFFFF',
       }
     },
-  
+
+
 
     created() {
       this.$log("horizontal goods enter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
@@ -62,6 +69,29 @@
     },
 
     methods: {
+      getBoxStyle() {
+        let marginX = 0;
+        if (this.datas.settings.marginX != undefined)
+          marginX = this.datas.settings.marginX
+        let style = {
+          'margin-left': marginX + 'px',
+          'margin-right': marginX + 'px',
+          'margin-bottom': this.datas.settings.marginBottom + 'px',
+          'background-color': this.mBackgroundColor
+        }
+        return style;
+      },
+
+      getListStyle() {
+        let skuBackgroundColor = '#FFFFFF'
+        if(this.datas.settings.skuBackgroundColor != undefined)
+            skuBackgroundColor = this.datas.settings.skuBackgroundColor
+        let style = {
+          'background-color':skuBackgroundColor
+        }
+        return style
+      },
+
       isDeepColor(hexColor) {
         // this.$log("isDeepColor:" + hexColor)
         /*        if(hexColor == undefined)
@@ -90,48 +120,57 @@
         window.location.href = e
       },
       gotoPromotionPage(promotionId) {
-        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+        this.$router.push({
+          path: '/category/goods/promotion/' + promotionId
+        });
       },
       gotoGoodsPage(mpu) {
-        this.$router.push({path:"/detail",query:{
-            mpu:mpu
-          }});
+        this.$router.push({
+          path: "/detail",
+          query: {
+            mpu: mpu
+          }
+        });
       },
       gotoTargetUrl() {
         let targetId = this.datas.settings.title.targetUrl
         if (targetId.startsWith("aggregation://")) {
           let id = targetId.substr(14);
-          this.$router.push({path: '/index/' + id});
+          this.$router.push({
+            path: '/index/' + id
+          });
         } else if (targetId.startsWith("route://")) {
           let target = targetId.substr(8);
           let paths = target.split("/");
           this.$log(paths);
           if (paths[0] === 'category') {
-            this.$router.push({path: '/category'})
+            this.$router.push({
+              path: '/category'
+            })
           } else if (paths[0] === 'coupon_center') {
-            this.$router.push({path: '/user/couponCenter'})
+            this.$router.push({
+              path: '/user/couponCenter'
+            })
           } else if (paths[0] === 'commodity') {
             try {
               if (paths[1] != null)
                 this.gotoGoodsPage(paths[1]);
-            } catch (e) {
-            }
+            } catch (e) {}
           } else if (paths[0] === 'promotion') {
             try {
               if (paths[1] != null) {
                 //this.gotoGoodsPage(paths[1]);
                 //this.$log("promotion:"+paths[1])
                 //this.gotoPromotionPage(paths[1]);
-                 this.gotoPromotionPage(this.promotionActivityId)
+                this.gotoPromotionPage(this.promotionActivityId)
               }
-            } catch (e) {
-            }
+            } catch (e) {}
           }
         } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
           this.See(targetId);
         } else {
-          if(this.promotionActivityId != undefined && this.isDailySchedule) {
-              this.gotoPromotionPage(this.promotionActivityId)
+          if (this.promotionActivityId != undefined && this.isDailySchedule) {
+            this.gotoPromotionPage(this.promotionActivityId)
           }
         }
       },
@@ -140,12 +179,16 @@
         if (mpu == null) {
           mpu = goods.skuid;
         }
-        this.$router.push({path:"/detail",query:{
-            mpu:mpu
-          }});
+        this.$router.push({
+          path: "/detail",
+          query: {
+            mpu: mpu
+          }
+        });
       },
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -169,15 +212,16 @@
         border-top-left-radius: 10px;
         border-top-right-radius: 10px;
       }
-      .sectionSlide-title{
-        .fz(font-size,35);
+
+      .sectionSlide-title {
+        .fz(font-size, 35);
         font-weight: bold;
         color: #333333;
         //text-shadow:5px 2px 6px #000
       }
     }
 
-/*    .box:after {
+    /*    .box:after {
       position: absolute;
       left: 0;
       right: 0;
@@ -204,7 +248,7 @@
         /*原生滑动*/
         -webkit-overflow-scrolling: touch;
 
-        > ul {
+        >ul {
           display: -ms-flex;
           display: -webkit-box;
           display: -ms-flexbox;
@@ -296,7 +340,7 @@
       word-break: break-all;
     }
 
-    .promotionDetail{
+    .promotionDetail {
       font-size: x-small;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -306,6 +350,5 @@
       word-break: break-all;
     }
   }
-
 
 </style>

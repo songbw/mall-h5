@@ -49,7 +49,7 @@
             <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
               <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
-            <div v-else-if="item.type==='10'" style="margin-left: 5px;margin-right: 5px;">
+            <div v-else-if="item.type==='10'">
               <v-horizontalGoods :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
           </div>
