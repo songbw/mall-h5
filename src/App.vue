@@ -309,8 +309,48 @@
         const params = {
           appid: this.$api.T_APP_ID
         }
+        const paramsSubSrv = {
+          appkey: this.$api.T_APP_ID
+        }
+
+        window.serviceTokenInfoResult = function (res) {
+          that.$log("子服务回调结果")
+          that.$log(res)
+          try {
+            let response = JSON.parse(res)
+            that.$log(response)
+            if (response.code == "0") {
+              let openId = response.data.openid;
+              let accessToken = response.data.access_token;
+              that.$log("openId:" + openId)
+              that.$log("accessToke:" + accessToken)
+              let payId = -1
+              if (openId != undefined) {
+                let userId = that.$api.APP_ID + openId;
+                let userInfo = {
+                  openId: openId,
+                  accessToken: accessToken,
+                  userId: userId,
+                  payId: payId
+                }
+                that.$log("userInfo  is:" + JSON.stringify(userInfo));
+                that.$store.commit('SET_USER', JSON.stringify(userInfo));
+                that.thirdPartLogined(openId, accessToken)
+              }
+            } else {
+              that.$log("获取用户授权失败!")
+              that.$toast("获取用户授权失败!")
+              that.configured = true
+            }
+          } catch (e) {
+            that.$log(e)
+            that.$toast("获取用户授权失败!")
+            that.configured = true
+          }
+        }
+
         window.shopUserInfoResult = function (res) {
-          that.$log("回调结果")
+          that.$log("商圈回调结果")
           that.$log(res)
           //workaround for JSON 不规范
           //  
@@ -419,16 +459,18 @@
           })
         }
 
-        that.$log("getUserShopInfo")
+        that.$log("getUserInfo")
         if (/iphone/.test(navigator.userAgent.toLowerCase())) {
-          that.$log("iphone call getUerShopInfo")
+          that.$log("iphone call getUerInfo")
           //window.getServiceTokenInfo = function (res) {}
+          window.webkit.messageHandlers.getServiceTokenInfo.postMessage(JSON.stringify(paramsSubSrv))
           window.webkit.messageHandlers.getShopUserInfo.postMessage(JSON.stringify(params))
           window.webkit.messageHandlers.hideMainBottom.postMessage(JSON.stringify(params))
         } else {
-          that.$log("android call getUerShopInfo")
+          that.$log("android call getUerInfo")
+          ycapp.getServiceTokenInfo(JSON.stringify(paramsSubSrv))
           ycapp.getShopUserInfo(JSON.stringify(params))
-          window.ycapp.hideMainBottom();
+          ycapp.hideMainBottom();
         }
       }
     }
