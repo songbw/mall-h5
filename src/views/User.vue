@@ -15,22 +15,22 @@
             <span v-else-if="this.$api.IS_WX_GZH && pageloading == false">登录</span>
           </div>
           <div class="header-right">
-            <van-icon name="arrow"/>
+            <van-icon name="arrow" />
           </div>
         </header>
       </div>
       <div class="wealth-box">
         <div class="coupon-info">
           <div class="my-coupon" @click="onMyCoinAccountClick" v-if="this.$api.APP_ID == '11'">
-            <img :src="myCoinAccountIcon"/>
+            <img :src="myCoinAccountIcon" />
             <span>我的余额</span>
           </div>
           <div class="my-coupon" @click="onMyCouponClick">
-            <img :src="myCouponIcon"/>
+            <img :src="myCouponIcon" />
             <span>我的优惠券</span>
           </div>
           <div class="coupon-change" @click="onChangeCouponClick">
-            <img :src="chCouponIcon"/>
+            <img :src="chCouponIcon" />
             <span>兑换卡券</span>
           </div>
         </div>
@@ -46,10 +46,7 @@
         </div>
         <div class="orderCategory">
           <van-row type="flex" justify="space-between">
-            <van-col
-              v-for="(item,index) in orderbars"
-              :key="index"
-            >
+            <van-col v-for="(item,index) in orderbars" :key="index">
               <div class="orderCategoryBar" @click=onOrderListBarClick(item.key)>
                 <img :src=" item.img">
                 <span>{{item.title}}</span>
@@ -60,33 +57,33 @@
       </div>
       <div class="settingsBox">
         <van-cell title="我的提货券" is-link @click="onLadingCardBtnClick">
-            <img slot="icon" :src="icon_ladingCard"/>
+          <img slot="icon" :src="icon_ladingCard" />
         </van-cell>
         <div v-if="this.$api.APP_ID == '11'">
           <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
-            <img slot="icon" :src="icon_optCard"/>
+            <img slot="icon" :src="icon_optCard" />
           </van-cell>
           <van-cell title="市民卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
-            <img slot="icon" :src="icon_linkPayCard"/>
+            <img slot="icon" :src="icon_linkPayCard" />
           </van-cell>
           <!--        <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
                     <img slot="icon" :src="icon_quickPayCard"/>
                   </van-cell>-->
           <van-cell title="我的钱包" is-link @click="onShangHaiBankBtnClick">
-            <img slot="icon" :src="icon_bankCard"/>
+            <img slot="icon" :src="icon_bankCard" />
           </van-cell>
         </div>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
-          <img slot="icon" :src="receriverAddressIcon"/>
+          <img slot="icon" :src="receriverAddressIcon" />
         </van-cell>
         <van-cell title="在线客服" is-link @click="showMeqiaPanel">
-          <img slot="icon" :src="customServiceIcon"/>
+          <img slot="icon" :src="customServiceIcon" />
         </van-cell>
         <van-cell title="客服电话" :value="this.$api.SERVR_PHONE_NUM">
-          <img slot="icon" :src="servicePhoneIcon"/>
+          <img slot="icon" :src="servicePhoneIcon" />
         </van-cell>
         <van-cell title="关于我们" value="版本号 V3.0">
-          <img slot="icon" :src="aboutIcon"/>
+          <img slot="icon" :src="aboutIcon" />
         </van-cell>
       </div>
     </div>
@@ -100,7 +97,9 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
   import Util from '@/util/common'
-  import {configWechat} from '@/util/wechat'
+  import {
+    configWechat
+  } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
 
   export default {
@@ -142,6 +141,10 @@
               if (user != null) {
                 this.user = user;
                 this.updateUserDatail(this.user);
+              } else {
+                if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
+                  this.$log("xxxxxxxxxxxxxx$$$$$$$$$$$$$$$$$$$$$$$$x")
+                }
               }
             }).catch(function (error) {
               that.$log(error)
@@ -157,8 +160,8 @@
 
       this.wechatShareConfig()
       this.showHeader = this.$api.HAS_HEADER;
-      if(this.$store.state.appconf.userDetail.length > 0) {
-        this.user  =  JSON.parse(this.$store.state.appconf.userDetail)
+      if (this.$store.state.appconf.userDetail.length > 0) {
+        this.user = JSON.parse(this.$store.state.appconf.userDetail)
         this.pageloading = false;
       } else {
         if (!Util.isUserEmpty(userInfo)) {
@@ -178,6 +181,13 @@
               this.updateUserDatail(this.user);
               this.$log(this.user)
               this.$log(this.user.nickname);
+            } else {
+              if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
+                this.$log("1xxxxxxxxxxxxxx$$$$$$$$$$$$$$$$$$$$$$$$x")
+                this.$router.replace({
+                  path: '/login'
+                })
+              }
             }
             that.pageloading = false;
           }).catch(function (error) {
@@ -187,10 +197,12 @@
           })
         } else {
           //goto register UI
-          if(this.$api.APP_ID === '13') {
+          if (this.$api.APP_ID === '13') {
             this.$router.replace({
               path: 'fcLogin',
-              query: {redirect: this.$router.currentRoute.fullPath}
+              query: {
+                redirect: this.$router.currentRoute.fullPath
+              }
             })
           }
           that.pageloading = false;
@@ -200,7 +212,7 @@
 
     },
 
-    beforeDestroy (){
+    beforeDestroy() {
       this.hideMeqiaPanel()
     },
 
@@ -208,8 +220,7 @@
       return {
         showHeader: true,
         pageloading: true,
-        orderbars: [
-          {
+        orderbars: [{
             title: "待支付",
             key: 1,
             img: require('@/assets/icons/ico_to_be_paid.png'),
@@ -261,8 +272,8 @@
     methods: {
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if(this.$api.APP_ID === '01') {
-          try{
+        if (this.$api.APP_ID === '01') {
+          try {
             configWechat(this, () => {
               wx.hideOptionMenu()
             })
@@ -288,32 +299,32 @@
 
         }
       },
-      showMeqiaPanel () {
+      showMeqiaPanel() {
         let userInfo = this.$store.state.appconf.userInfo;
         let userDetail = this.$store.state.appconf.userDetail;
         let userName = ""
         let userId = ""
         let telePhone = ""
-        if(!Util.isUserEmpty(userInfo)) {
+        if (!Util.isUserEmpty(userInfo)) {
           let UserInfo = JSON.parse(userInfo)
           userId = UserInfo.userId
         }
-        if(userDetail.length > 0) {
-          let UserDetail  = JSON.parse(userDetail)
-          userName =  UserDetail.nickname
+        if (userDetail.length > 0) {
+          let UserDetail = JSON.parse(userDetail)
+          userName = UserDetail.nickname
           telePhone = UserDetail.telephone
         }
         _MEIQIA('showPanel')
         _MEIQIA('metadata', {
           name: userName, // 美洽默认字段
-          tel:telePhone,
+          tel: telePhone,
           '渠道': this.getClientName(), // 自定义字段
           '用户ID': userId,
           '当前URL': window.location.href,
           '订单号': ''
         });
       },
-      hideMeqiaPanel(){
+      hideMeqiaPanel() {
         _MEIQIA('hidePanel');
       },
       updateUserDatail(userDetail) {
@@ -358,7 +369,9 @@
       onQueryLinkPayBtnClick() {
         this.$log("link pay account btn clicked")
         //  this.showLinkPayDialog = true;
-        this.$router.push({name: '联机账户页'})
+        this.$router.push({
+          name: '联机账户页'
+        })
       },
 
       togLinkPayPwdVisable() {
@@ -400,12 +413,16 @@
                 })*/
       },
       onMyCouponClick() {
-        this.$router.push({path: '/user/couponList'})
+        this.$router.push({
+          path: '/user/couponList'
+        })
       },
 
       onMyCoinAccountClick() {
         this.$log("onMyCoinAccountClick Enter")
-        this.$router.push({name: "余额账户"})
+        this.$router.push({
+          name: "余额账户"
+        })
       },
 
       onOrderListBarClick(type) {
@@ -413,10 +430,14 @@
         this.$log("onOrderListBarClick:" + type);
         if (type < 4) {
           this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', type);
-          this.$router.push({name: '订单列表页'})
+          this.$router.push({
+            name: '订单列表页'
+          })
         } else {
           if (type == 4) {
-            this.$router.push({name: '售后工单页'})
+            this.$router.push({
+              name: '售后工单页'
+            })
           } else {
 
             this.$router.push({
@@ -435,12 +456,14 @@
       },
       onUserInfoClick() {
         this.$log("onUserInfoClick Enter")
-        if(this.$api.IS_WX_GZH) {
-          this.$log("wxOpenId:"+  this.$store.state.appconf.wxOpenId)
-          let wxOpenId =  this.$store.state.appconf.wxOpenId
-          if(wxOpenId != null && wxOpenId.length >0) {
-            if(this.user.nickname == undefined || this.user.nickname.length  == 0) {
-              this.$router.push({name: '登录页'})
+        if (this.$api.IS_WX_GZH) {
+          this.$log("wxOpenId:" + this.$store.state.appconf.wxOpenId)
+          let wxOpenId = this.$store.state.appconf.wxOpenId
+          if (wxOpenId != null && wxOpenId.length > 0) {
+            if (this.user.nickname == undefined || this.user.nickname.length == 0) {
+              this.$router.push({
+                name: '登录页'
+              })
             } else {
               this.$router.push({
                 name: "我的信息",
@@ -469,6 +492,7 @@
 
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -514,7 +538,7 @@
             }
           }
 
-          > span {
+          >span {
             margin-top: .28em;
             margin-left: 3.2vw;
             overflow: hidden;
@@ -751,6 +775,7 @@
 
         .van-cell {
           padding: 10pt 10pt;
+
           img {
             height: 16px;
             width: 16px;
@@ -780,4 +805,5 @@
           }
         }*/
   }
+
 </style>

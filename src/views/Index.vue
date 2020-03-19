@@ -603,7 +603,8 @@
         } else if (this.$api.APP_ID == '14') {
           // openId = "2a984f9270aafb236cc7c0c74b21ff38" //万科云城
         } else if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
-          let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc"
+        //  let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc" //13810864380
+          let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6cc" //18612794815
           let accessToken = "TTTTTTTTTTTTTTTTTTTTTTTT"
           this.$store.commit('SET_WX_OPENID', wxOpenId);
           let resp = await this.isWxOpendBinded(this.$api.APP_ID, wxOpenId)
