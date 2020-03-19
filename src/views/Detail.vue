@@ -516,7 +516,7 @@
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/wx/bind/verify',
           params: {
-            appId: appId,
+            appSrc: this.$api.APP_SOURCE,
             openId: wxOpenId
           }
         })

@@ -145,7 +145,7 @@
           telephone: this.mobilePhone,
           openId: wxOpenId,
           code: this.verifyCode,
-          appId: this.$api.APP_ID
+          appSrc: this.$api.APP_SOURCE
         }
         this.$api.xapi({
           method: 'put',
@@ -187,6 +187,7 @@
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/code',
           params: {
+            appSrc: this.$api.APP_SOURCE,
             telephone: telephone,
             type: "wx"
           }

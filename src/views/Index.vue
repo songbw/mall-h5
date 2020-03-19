@@ -425,14 +425,14 @@
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/wx/bind/verify',
           params: {
-            appId: appId,
+            appSrc: this.$api.APP_SOURCE,
             openId: wxOpenId
           }
         })
       },
 
       upDateSkuInfo(item, couponAndProms, user) {
-        let cartItem = Util.getCartItem(this, user.userId, item.mpu,item.skuId)
+        let cartItem = Util.getCartItem(this, user.userId, item.mpu, item.skuId)
         let skuId = item.skuId
         let price = item.price
         let image = item.image
@@ -440,11 +440,11 @@
         if (skuId === undefined || skuId === null) {
           skuId = item.skuid
         }
-        if(item.starSku != undefined) {
+        if (item.starSku != undefined) {
           purchaseQty = item.starSku.purchaseQty
-          price = (item.starSku.price/100).toFixed(2)
-          if(item.starSku.goodsLogo != undefined && item.starSku.goodsLogo.length > 0)
-              image = item.starSku.goodsLogo
+          price = (item.starSku.price / 100).toFixed(2)
+          if (item.starSku.goodsLogo != undefined && item.starSku.goodsLogo.length > 0)
+            image = item.starSku.goodsLogo
         }
         if (cartItem == null) {
           let baseInfo = {
@@ -587,11 +587,11 @@
           this.thirdPartLogined(openId, accessToken);
         }
       },
-      test() {
-         let openId = "44391000fd194ab888b1aa81c03c3740"
+      async test() {
+        // let openId = "44391000fd194ab888b1aa81c03c3740"
         // let openId = "d6c88055c3ab42a39d605ed2767a8b9d"
         // let openId = "ace1c1722b834309a59fad302fe357b2"
-        //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         // let openId = "5c8314363cea49de925bfaa39d4c4ebb"
         // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         //let openId = "ace1c1722b834309a59fad302fe357b2"
@@ -601,7 +601,27 @@
         } else if (this.$api.APP_ID == '12') {
           openId = "5c8314363cea49de925bfaa39d4c4ebb" //最珠海
         } else if (this.$api.APP_ID == '14') {
-         // openId = "2a984f9270aafb236cc7c0c74b21ff38" //万科云城
+          // openId = "2a984f9270aafb236cc7c0c74b21ff38" //万科云城
+        } else if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
+          let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc"
+          let accessToken = "TTTTTTTTTTTTTTTTTTTTTTTT"
+          this.$store.commit('SET_WX_OPENID', wxOpenId);
+          let resp = await this.isWxOpendBinded(this.$api.APP_ID, wxOpenId)
+          this.$log(resp)
+          if (resp.data.code == 200) {
+            let userDetail = resp.data.data
+            if (userDetail != null) {
+              openId = userDetail.openId
+            } else {
+              //未绑定用户
+              // this.$toast("未绑定用户")
+              this.userTokenLoading = false;
+              this.$router.replace({
+                path: '/login'
+              })
+              return;
+            }
+          }
         }
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
