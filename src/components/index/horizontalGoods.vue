@@ -36,7 +36,7 @@
                 </p>
                 <div>
                   <p class="sectionSlide-list-sales-price">
-                    <span>￥</span>{{k.price}}
+                    <span>￥</span>{{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                   </p>
                 </div>
               </div>
