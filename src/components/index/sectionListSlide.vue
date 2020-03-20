@@ -3,13 +3,13 @@
     <div class="wrap">
       <div class='box' :style="{'background-color': decorateBgColor}">
         <van-cell v-if="datas.settings.title.textValue.length > 0" @click="gotoTargetUrl()"
-                  :style="{'background-color':decorateBgColor}">
+          :style="{'background-color':decorateBgColor}">
           <div slot="title" class="sectionSlide-title" :style="{'text-align': datas.settings.title.textAlign}">
             <span v-if="isDailySchedule">
-               {{datas.settings.title.textValue}}
+              {{datas.settings.title.textValue}}
             </span>
             <span v-else>
-               {{titleName}}
+              {{titleName}}
             </span>
           </div>
           <div v-if="promotionStatus != -1">
@@ -25,17 +25,11 @@
                 style="color:white;background-color: black;padding: 2px;border-radius: 3px">{{msTime.seconds}}</span>
             </div>
             <div v-else>
-              <v-countdown :key="activePromotion" v-if="promotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
-                           class="countdownBox"
-                           :style="'color:blank'"
-                           @start_callback="countDownS_cb"
-                           @end_callback="countDownE_cb"
-                           :startTime="PromotionStartTime"
-                           :endTime="PromotionEndTime"
-                           :secondsTxt="''"
-                           backgroundColor="#000000"
-                           textColor="#FFFFFF"
-                           style="font-size: x-small;font-weight: lighter">
+              <v-countdown :key="activePromotion"
+                v-if="promotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0" class="countdownBox"
+                :style="'color:blank'" @start_callback="countDownS_cb" @end_callback="countDownE_cb"
+                :startTime="PromotionStartTime" :endTime="PromotionEndTime" :secondsTxt="''" backgroundColor="#000000"
+                textColor="#FFFFFF" style="font-size: x-small;font-weight: lighter">
               </v-countdown>
               <div class="promotionStatusText" v-if="promotionStatus === 5">
                 <span>已结束</span>
@@ -48,56 +42,61 @@
         </div>
       </div>
       <div class="listBox">
-        <div v-if="isDailySchedule">
+        <div v-if="isDailySchedule" class="slidelistBox">
           <div class="sectionSlide-list">
             <ul>
               <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
-                <img v-lazy="k.imagePath">
-                <p class="sectionSlide-list-intro">
-                  {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
-                </p>
-                <div v-if="k.discount != undefined">
-                  <div style="display: flex">
+                <div style="width:7.2rem;">
+                  <img v-lazy="k.imagePath">
+                  <p class="sectionSlide-list-intro">
+                    {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
+                  </p>
+                  <div v-if="k.discount != undefined">
+                    <div style="display: flex">
+                      <p class="sectionSlide-list-sales-price">
+                        <span>￥</span>{{parseFloat(k.discount).toFixed(2)}}
+                      </p>
+                      <p class="sectionSlide-list-origin-price">
+                        <span>￥</span>{{k.price}}
+                      </p>
+                    </div>
+                  </div>
+                  <div v-else>
                     <p class="sectionSlide-list-sales-price">
-                      <span>￥</span>{{parseFloat(k.discount).toFixed(2)}}
-                    </p>
-                    <p class="sectionSlide-list-origin-price">
                       <span>￥</span>{{k.price}}
                     </p>
                   </div>
-                </div>
-                <div v-else>
-                  <p class="sectionSlide-list-sales-price">
-                    <span>￥</span>{{k.price}}
-                  </p>
                 </div>
               </li>
             </ul>
           </div>
         </div>
-        <div v-else>
+        <div v-else class="slidelistBox">
           <div class="sectionSlide-list">
             <ul>
               <li v-for="(k,index) in skuList" @click="onGoodsClick(k)" :key="index">
-                <img v-lazy="k.imagePath">
-                <p class="sectionSlide-list-intro">
-                  {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
-                </p>
-                <div v-if="k.discount != undefined">
-                  <div style="display: flex">
+                <div style="width:7.2rem;">
+                  <img v-lazy="k.imagePath">
+                  <p class="sectionSlide-list-intro">
+                    {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
+                  </p>
+                  <div v-if="k.discount != undefined">
+                    <div style="display: flex">
+                      <p class="sectionSlide-list-sales-price">
+                        <span>￥</span>{{parseFloat(k.discount).toFixed(2)}}
+                      </p>
+                      <p class="sectionSlide-list-origin-price">
+                        <span>￥</span>{{k.price}}
+                      </p>
+                    </div>
+                  </div>
+                  <div v-else>
                     <p class="sectionSlide-list-sales-price">
-                      <span>￥</span>{{parseFloat(k.discount).toFixed(2)}}
-                    </p>
-                    <p class="sectionSlide-list-origin-price">
                       <span>￥</span>{{k.price}}
                     </p>
                   </div>
                 </div>
-                <div v-else>
-                  <p class="sectionSlide-list-sales-price">
-                    <span>￥</span>{{k.price}}
-                  </p>
-                </div>
+
               </li>
             </ul>
           </div>
@@ -167,8 +166,8 @@
     },
 
     activated() {
-        this.isDailySchedule = false;
-        this.updatePromotionInfo()
+      this.isDailySchedule = false;
+      this.updatePromotionInfo()
     },
 
     deactivated() {
@@ -213,24 +212,24 @@
               item['endTime'] = new Date(this.$moment(item.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
               if (item['startTime'] <= currentTime) {
                 if (currentTime < item['endTime']) {
-                  item['actived'] = 1;//正在进行
+                  item['actived'] = 1; //正在进行
                 } else {
-                  item['actived'] = 2;//已经结束
+                  item['actived'] = 2; //已经结束
                 }
               } else {
-                item['actived'] = 0;  //未开始
+                item['actived'] = 0; //未开始
               }
             })
             this.$log(this.datas.list)
             let onGoingList = this.datas.list.filter((item) => {
               return item.actived == 1 && (item.status < 5 && item.status > 2)
             })
-            if (onGoingList != null && onGoingList.length > 0) {//显示进行中最早结束的活动
+            if (onGoingList != null && onGoingList.length > 0) { //显示进行中最早结束的活动
               onGoingList.sort(function (a, b) {
                 return a.endTime - b.endTime
               })
               return onGoingList[0]
-            } else {//显示未开始最早的活动
+            } else { //显示未开始最早的活动
               let unStartedList = this.datas.list.filter((item) => {
                 return item.actived == 0 && (item.status < 5 && item.status > 2)
               })
@@ -256,7 +255,7 @@
           this.msTime.minutes = Math.floor(timeDistance / 60000);
           timeDistance -= this.msTime.minutes * 60000;
           //是否开启秒表倒计,未完成
-//                    this.secondsFixed ? msTime.seconds = new Number(timeDistance / 1000).toFixed(2) : msTime.seconds = Math.floor( timeDistance / 1000 ).toFixed(0);
+          //                    this.secondsFixed ? msTime.seconds = new Number(timeDistance / 1000).toFixed(2) : msTime.seconds = Math.floor( timeDistance / 1000 ).toFixed(0);
           this.msTime.seconds = Math.floor(timeDistance / 1000).toFixed(0);
           timeDistance -= this.msTime.seconds * 1000;
 
@@ -304,13 +303,13 @@
               }
             } else {
               if (currentTime > this.dailyScheduleInfo[this.dailyScheduleInfo.length - 1].starTime) {
-                this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[this.dailyScheduleInfo.length - 1].schedule)
+                this.dailyScheduleText = this.getClockString(this.dailyScheduleInfo[this.dailyScheduleInfo.length - 1]
+                  .schedule)
                 this.updateTimer(currentTime, this.dailyEndTime - 1)
                 if (this.msTime.show) {
                   this.dailyScheduleDetail = " 距结束 "
                 }
-              } else {
-              }
+              } else {}
             }
           }
         } else {
@@ -318,7 +317,8 @@
         }
       },
       async updatePromotionInfo() {
-        if (this.datas.settings.title.promotionDailySchedule != undefined && this.datas.settings.title.promotionDailySchedule) {
+        if (this.datas.settings.title.promotionDailySchedule != undefined && this.datas.settings.title
+          .promotionDailySchedule) {
           let that = this
           this.$api.xapi({
             method: 'get',
@@ -357,7 +357,8 @@
                   this.$log(item)
                   let info = {
                     schedule: item.schedule,
-                    starTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss')).getTime(),
+                    starTime: new Date(this.$moment(item.startTime).format('YYYY/MM/DD HH:mm:ss'))
+                      .getTime(),
                   }
                   this.dailyScheduleInfo.push(info)
                 })
@@ -383,8 +384,8 @@
             this.promotionStatus = this.activePromotion.status;
             this.skuList = this.activePromotion.skus
             this.show = true;
-            this.$log("titleName:"+this.titleName)
-            this.$log("promotionStatus:"+this.promotionStatus)
+            this.$log("titleName:" + this.titleName)
+            this.$log("promotionStatus:" + this.promotionStatus)
           }
         }
       },
@@ -405,8 +406,7 @@
         else
           return true;
       },
-      countDownS_cb(data) {
-      },
+      countDownS_cb(data) {},
       countDownE_cb(data) {
         this.updatePromotionInfo()
       },
@@ -417,11 +417,14 @@
         window.location.href = e
       },
       gotoPromotionPage(promotionId) {
-        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+        this.$router.push({
+          path: '/category/goods/promotion/' + promotionId
+        });
       },
       gotoGoodsPage(mpu) {
         this.$router.push({
-          path: "/detail", query: {
+          path: "/detail",
+          query: {
             mpu: mpu
           }
         });
@@ -435,13 +438,15 @@
           mpu = goods.skuid;
         }
         this.$router.push({
-          path: "/detail", query: {
+          path: "/detail",
+          query: {
             mpu: mpu
           }
         });
       },
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -450,8 +455,9 @@
 
   .wrap {
     border-radius: 10px;
-    background-color: white;
+    background-color: transparent;
     padding-bottom: 5px;
+  
 
     .box {
       position: relative;
@@ -477,84 +483,93 @@
     .listBox {
       width: 100%;
       justify-content: center;
+      
 
-      .sectionSlide-list {
-        width: 100%;
-        overflow-x: auto;
-        padding-top: 2px;
-        padding-bottom: 2px;
+      .slidelistBox {
 
+        .sectionSlide-list {
+          width: 100%;
+          overflow-x: auto;
+          padding-top: 2px;
+          padding-bottom: 2px;
 
-        /*原生滑动*/
-        -webkit-overflow-scrolling: touch;
+          /*原生滑动*/
+          -webkit-overflow-scrolling: touch;
 
-        > ul {
-          display: -ms-flex;
-          display: -webkit-box;
-          display: -ms-flexbox;
-          display: flex;
-          padding-left: 0vw;
-          width: 0px;
-          background-color: #3dd5c8;
+          >ul {
+            display: -ms-flex;
+            display: -webkit-box;
+            display: -ms-flexbox;
+            display: flex;
+            padding-left: 0vw;
+            width: 0px;
 
-          li {
-            margin-right: 1vw;
-            margin-left: 1vw;
-            width: 27vw;
-            border-radius: 10px;
-            z-index: 1;
+            li {
+              margin-right: .5vw;
+              margin-left: .5vw;
+              border-radius: 5px;
+              z-index: 1;
+              width: 7.2rem;
 
-            a,
-            img {
-              display: block;
-              width: 100%;
-              height: 6.1em;
-              border-top-right-radius: 10px;
-              border-top-left-radius: 10px;
-            }
-
-            h2,
-            p {
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-            }
-
-            h2 {
-              .fz(font-size, 30);
-              padding-top: 2vw;
-              color: #333;
-            }
-
-            p.sectionSlide-list-intro {
-              padding-top: 1vw;
-              .fz(font-size, 23);
-              color: #323233;
-            }
-
-            p.sectionSlide-list-origin-price {
-              margin: 2px;
-              color: #707070;
-              .fz(font-size, 15);
-              text-decoration: line-through;
-
-              span {
-                .fz(font-size, 10);
+              a,
+              img {
+                display: block;
+                width: 100%;
+                height: 7.2rem;
+                border-top-right-radius: 5px;
+                border-top-left-radius: 5px;
               }
-            }
 
-            p.sectionSlide-list-sales-price {
-              margin: 2px;
-              color: #ff4444;
-              .fz(font-size, 20);
+              p {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                padding: 2px;
+              }
 
-              span {
-                .fz(font-size, 12);
+              p.sectionSlide-list-intro {
+                padding-top: 1vw;
+                .fz(font-size, 23);
+                color: #323233;
+              }
+
+              p.sectionSlide-list-origin-price {
+                margin: 2px;
+                color: #707070;
+                .fz(font-size, 15);
+                text-decoration: line-through;
+
+                span {
+                  .fz(font-size, 10);
+                }
+              }
+
+              p.sectionSlide-list-sales-price {
+                margin: 2px;
+                color: #ff4444;
+                .fz(font-size, 20);
+
+                span {
+                  .fz(font-size, 12);
+                }
+              }
+
+              p.sectionSlide-list-origin-price {
+                margin: 2px;
+                color: #707070;
+                .fz(font-size, 15);
+                text-decoration: line-through;
+
+                span {
+                  .fz(font-size, 10);
+                }
               }
             }
           }
         }
       }
+
+
     }
 
     .sectionSlide-banner {
@@ -590,4 +605,5 @@
       word-break: break-all;
     }
   }
+
 </style>

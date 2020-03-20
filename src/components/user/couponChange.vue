@@ -8,7 +8,7 @@
         <van-tab v-for="(item, type) in couponTypes" :title="item.title" :key="type">
           <div v-if="active == 0" class="cardBody">
             <div class="cardTitle">
-<!--               <span class="TitleText">兑换提货券</span> -->
+              <!--               <span class="TitleText">兑换提货券</span> -->
               <img :src=mall_logo>
             </div>
             <div class="cardForm">
@@ -177,7 +177,10 @@
   @import "../../assets/index/style.css";
 
   .cardBody {
-    display: flex;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
     flex-direction: column;
     width: 100%;
     padding-top: 20px;
@@ -208,9 +211,12 @@
     .cardForm {
       display: flex;
       flex-direction: column;
-      width: 100%;
-      margin: 10px 0px;
+      margin: 10px;
 
+      .van-field {
+        margin-top: 10px;
+        font-weight: 500;
+      }
     }
 
     .cardConfirmBox {
@@ -220,23 +226,6 @@
       flex-direction: column;
       text-align: center;
       align-items: center;
-    }
-
-    .van-button {
-      background: linear-gradient(to right, #EF3949, #EF3949);
-      ;
-      border: none;
-
-      &--large {
-        width: 100%;
-        height: 40px;
-        line-height: 40px;
-      }
-    }
-
-    .van-field {
-      padding: 10pt 10pt;
-      font-weight: 500;
     }
   }
 
@@ -260,6 +249,19 @@
           margin-top: 10px;
         }
       }
+    }
+  }
+
+  .van-button {
+    background: linear-gradient(to right, #EF3949, #EF3949);
+    border: none;
+    font-weight: 600;
+    margin-top: 10px;
+
+    &--large {
+      width: 100%;
+      height: 50px;
+      line-height: 40px;
     }
   }
 
