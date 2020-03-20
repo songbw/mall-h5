@@ -49,7 +49,7 @@
 
                         </div>
                         <div class="coupon-expire-date">
-                          <span style="color:#FF4444;" v-if="item.rules.couponRules.type == 4"
+                          <span style="color:#ef3949;" v-if="item.rules.couponRules.type == 4"
                             @click="gotoCouponDetail(item)" @click.stop="">查看详情
                             ></span>
                         </div>
@@ -65,7 +65,7 @@
             </div>
           </div>
         </div>
-        <div style="padding-top:10px;background-color: #f8f8f8;width=100%">
+        <div style="padding-top:10px;background-color: #f6f6f6;width=100%;font-weight:600">
           <van-button size="large" type="primary" @click="onBuyBtnClick">下单提货
           </van-button>
         </div>
@@ -499,7 +499,7 @@
     width: 100%;
     height: 100%;
     top: 0px;
-    background-color: #f8f8f8;
+    background-color: #f6f6f6;
 
     .noneInfo {
       display: flex;
@@ -522,7 +522,7 @@
       }
 
       .title {
-        padding: 10px;
+        padding: 20px 20px 10px 20px;
         text-align: center;
         .fz(font-size, 30)
       }
@@ -545,6 +545,7 @@
           text-align: left;
           padding: 0px 0px 10px 0px;
           .fz(font-size, 80);
+          font-weight: 600;
 
           span {
             .fz(font-size, 30);
@@ -599,6 +600,7 @@
               .coupon-desc {
                 margin-left: 3px;
                 .fz(font-size, 28);
+                color: #999999;
               }
 
               .coupon-price {
@@ -612,10 +614,6 @@
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
                 word-break: break-all;
-              }
-
-              .coupon-price>span {
-                font-weight: normal;
               }
 
               .coupon-expire-date {
@@ -638,7 +636,7 @@
     }
 
     .van-button {
-      background: #FF4444;
+      background: #ef3949;
       border: none;
 
       &--large {

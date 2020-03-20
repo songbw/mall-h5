@@ -103,7 +103,7 @@
         cardList: [],
         active: 0,
         swipeThreshold: 5,
-        empty_bg: require('@/assets/icons/ico_empty_box.png'),
+        empty_bg: require('@/assets/icons/ico_noCoupon.png'),
         cardUsed: "https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_used.png",
         cardOvertime: "https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_overtime.png",
         couponTypes: [{
@@ -120,7 +120,7 @@
           width: 200,
           height: 125,
           cutPosition: 90, // 裁切口的位置
-          borderRadius: 15, // 卡券四个角的圆角半径
+          borderRadius: 6, // 卡券四个角的圆角半径
           borderColor: '#ffffff', // 边框颜色
           borderWidth: 0.5, // 边框粗细
           borderOpcity: 1, // 边框透明度
@@ -131,8 +131,8 @@
           lineOpcity: 1, // 分割线透明度
           lineDash: [3, 5], // 分割线虚线数组, 同 边框虚线数组
           lineOffset: 5, // 分割线跟卡券两侧的距离, 为 0 则相连
-          cutRadius: 10, // 裁切口的半径
-          cutSlope: 1.5, // 裁切口的弧度
+          cutRadius: 6, // 裁切口的半径
+          cutSlope: 1, // 裁切口的弧度
           background: '#ffffff' // 背景颜色, 优先级低于 slot 的背景
         }
       }
@@ -186,7 +186,7 @@
         let that = this
         this.$dialog.confirm({
           title: '提示',
-          confirmButtonColor: '#FF4444',
+          confirmButtonColor: '#EF3949',
           message: '确定删除' + k.cardInfo.name + "?",
         }).then(() => {
           that.$api.xapi({
@@ -254,14 +254,14 @@
     width: 100%;
     height: 100%;
     top: 0px;
-    background-color: #f8f8f8;
+    background-color: #f6f6f6;
 
     .listBody {
       padding-bottom: 5em;
-      background-color: #f8f8f8;
+      background-color: #f6f6f6;
 
       .cardlistBody {
-        background-color: #f8f8f8;
+        background-color: #f6f6f6;
 
         .content {
           padding: 10px;
@@ -275,7 +275,7 @@
             .price {
               .fz(font-size, 56);
               line-height: 80px;
-              color: #ff4444;
+              color: #EF3949;
 
               span {
                 .fz(font-size, 35);
@@ -333,7 +333,8 @@
             height: 30px;
             width: 100%;
             margin-top: 10px;
-            .fz(font-size, 24)
+            .fz(font-size, 24);
+            color:#999999
           }
         }
 
