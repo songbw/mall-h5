@@ -38,6 +38,7 @@ const Qrcode = resolve => require(['@/views/qrcode.vue'], resolve)
 const ShangHaiCardList = resolve => require(['@/components/user/shanghaiBankCardList.vue'], resolve)
 const QuickPayCardList = resolve => require(['@/components/user/quickpayCardList.vue'], resolve)
 const LinkPayAccount = resolve => require(['@/components/user/linkPayAccount.vue'], resolve)
+const MallBulletin = resolve => require(['@/components/user/mallBulletin.vue'], resolve)
 
 const HistoryOrder = resolve => require(['@/components/user/historyOrderList.vue'], resolve)
 const HistoryOrderDetail = resolve => require(['@/components/user/historyOrderDetail.vue'], resolve)
@@ -428,6 +429,14 @@ export default new VueRouter({
       component: BillOfLadingGoods,
       meta: {
         title: '提货券商品',
+      }
+    },
+    {
+      path: '/user/mallBulletin',
+      name: '商城公告页',
+      component: MallBulletin,
+      meta: {
+        title: '商城公告',
       }
     },
   ]
