@@ -254,6 +254,7 @@
         if (this.$api.APP_ID === '10') {
           this.showServiceBox = true;
         }
+        this.showDetail = true;
       } else if (this.$api.APP_ID == '01') {
         let code = this.$route.query.code;
         if (code != undefined) {
