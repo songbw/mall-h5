@@ -200,6 +200,10 @@
       this.wechatShareConfig()
 
       if (this.$api.IS_GAT_APP) {
+       if (process.env.NODE_ENV === 'development') {
+            this.testGAT();
+            return 
+        }
         // this.testGAT();
         let auth_code = this.$route.query.auth_code;
         if (auth_code != undefined) {
@@ -571,6 +575,9 @@
         //let openId = "52d7fd1f46e55ac6a2435818a00c06c0"
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
         let openId = "b720d31ebd4c1d148da24ebf5660031f"
+        if(this.$api.APP_ID == '08') {
+            openId = "b720d31ebd4c1d148da24ebf5660031f"
+        }
         this.$log("openId:" + openId);
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
