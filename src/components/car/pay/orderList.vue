@@ -543,11 +543,16 @@
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
         let returnUrl = ""
+        this.$log("openCashPage Enter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+        this.$log(this.$api)
         if (this.$api.IS_GAT_APP) {
+          this.$log("IS_GAT_APP Enter")
           if (this.$api.APP_ID === '10') {
             returnUrl = "https://gatsn.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '09') {
             returnUrl = "https://gatzy.weesharing.com/pay/cashering";
+          } else if (this.$api.APP_ID === '08') {
+            returnUrl = "https://testgatwph.weesharing.com/pay/cashering";
           }
           let options = {
             "iAppId": this.$api.APP_ID,

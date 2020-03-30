@@ -30,7 +30,7 @@
         </div>
         <div class="pay-list">
           <!--关爱通平台-->
-          <div class="pay-product" v-if="this.$api.IS_GAT_APP">
+          <div class="pay-product" v-if="false">
             <li v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
                 <van-cell :title=item.merchantName icon="shop" />
@@ -724,7 +724,7 @@
             "pageNo": 1,
             "pageSize": "20",
           }
-          // this.$log("options:" + JSON.stringify(options));
+          this.$log("options:" + JSON.stringify(options));
           this.$api.xapi({
             method: 'post',
             baseURL: this.$api.ORDER_BASE_URL,
@@ -734,6 +734,7 @@
             let result = response.data.data.result;
             this.addressCount = result.total;
             if (this.addressCount == 0) {
+              this.$log("this.addressCoun ========================== 0")
               this.addressEmptyInfo = "您的收获地址为空，点此添加收货地址";
               this.$store.commit('SET_USED_ADDRESS_ID', -1);
               this.updateUsedAddress();
@@ -1610,6 +1611,8 @@
             returnUrl = "https://gatsn.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '09') {
             returnUrl = "https://gatzy.weesharing.com/pay/cashering";
+          } else if (this.$api.APP_ID === '08') {
+            returnUrl = "https://testgatwph.weesharing.com/pay/cashering";
           }
 
 
