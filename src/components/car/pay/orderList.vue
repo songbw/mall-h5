@@ -543,8 +543,6 @@
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
         let returnUrl = ""
-        this.$log("openCashPage Enter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-        this.$log(this.$api)
         if (this.$api.IS_GAT_APP) {
           this.$log("IS_GAT_APP Enter")
           if (this.$api.APP_ID === '10') {
