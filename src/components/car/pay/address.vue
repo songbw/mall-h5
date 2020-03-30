@@ -35,7 +35,7 @@
       }
     },
     created() {
-      this.test1();
+     // this.test1();
      // this.test();
       this.showHeader = this.$api.HAS_HEADER;
       let id = this.$route.params.id
