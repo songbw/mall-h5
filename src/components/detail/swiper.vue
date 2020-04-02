@@ -34,10 +34,11 @@
         } else {
           _url = window.location.href
         }
-        let url = "https://wechat.weesharing.com"+window.location.pathname
-        let encodeURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe5b7d5b7722a1577&redirect_uri="+
-           encodeURIComponent(url) + window.location.search +
-          "&response_type=code&scope=snsapi_userinfo&state=0102#wechat_redirect"
+        let url = "https://xmall.weesharing.com"+window.location.pathname+ window.location.search
+       // let encodeURL = "https://open.weixin.qq.com/connect/oauth2/authorize?appid=wxe5b7d5b7722a1577&redirect_uri="+
+       //    encodeURIComponent(url) + window.location.search +
+       //   "&response_type=code&scope=snsapi_userinfo&state=0102#wechat_redirect"
+        let encodeURL = url
         this.$log(encodeURL)
         let options = {
           image: this.swiperData[0].imgPath,
