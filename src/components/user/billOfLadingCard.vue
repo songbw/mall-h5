@@ -40,18 +40,26 @@
                           <span v-if="item.rules.couponRules.type == 4">
                             {{item.name}}
                           </span>
-                          <span
-                            v-else-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
-                            style="margin-right: -7px">{{formateCouponDetail(item.rules.couponRules)}}</span>
+                          <span v-if="item.rules.couponRules.type == 5">
+                            {{formateCouponDetail(item.rules.couponRules)}}
+                          </span>
                         </div>
                         <div class="coupon-desc">
                           <span>{{formateCouponDescription(item)}}</span>
-
                         </div>
                         <div class="coupon-expire-date">
                           <span style="color:#ef3949;" v-if="item.rules.couponRules.type == 4"
                             @click="gotoCouponDetail(item)" @click.stop="">查看详情
                             ></span>
+                          <div v-if="item.rules.couponRules.type == 5">
+                            <span v-if="item.rules.scenario.type == 1 || item.rules.scenario.type == 3" style="color:#ef3949;" @click="gotoCouponDetail(item)" @click.stop="">
+                              查看详情
+                            </span>
+                            <span v-else>
+                              
+                            </span>
+                          </div>
+
                         </div>
                       </van-col>
                     </div>
@@ -435,6 +443,7 @@
       },
 
       formateCouponDetail(rules) {
+        this.$log(rules)
         switch (rules.type) {
           case 0: //满减券
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
@@ -448,6 +457,8 @@
             }
             case 4:
               return '礼包套餐'
+            case 5:
+              return "代金券"
             default:
               return ""
         }
@@ -557,6 +568,7 @@
           text-align: left;
           .fz(font-size, 24);
           padding: 0px 0px 3px 0px;
+
           >span {
             padding-top: 10px;
           }
