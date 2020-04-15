@@ -52,11 +52,12 @@
                             @click="gotoCouponDetail(item)" @click.stop="">查看详情
                             ></span>
                           <div v-if="item.rules.couponRules.type == 5">
-                            <span v-if="item.rules.scenario.type == 1 || item.rules.scenario.type == 3" style="color:#ef3949;" @click="gotoCouponDetail(item)" @click.stop="">
+                            <span v-if="item.rules.scenario.type == 1 || item.rules.scenario.type == 3"
+                              style="color:#ef3949;" @click="gotoCouponDetail(item)" @click.stop="">
                               查看详情
                             </span>
-                            <span v-else>
-                              
+                            <span v-else style="color:#888888;">
+                              {{formatEffectiveDateTime(item.effectiveStartDate,item.effectiveEndDate)}}
                             </span>
                           </div>
 
@@ -254,7 +255,7 @@
 
         if (this.cardDetail.status === 3) {
           if (this.couponRadio.length == 0) {
-            this.$toast("请选择提货礼包")
+            this.$toast("请选择你要兑换的券")
             return
           }
         }
@@ -293,111 +294,129 @@
               couponInfo: this.cardDetail.coupons[0]
             }
           }
+          this.$log("xxxxxxxxxxxxxxx")
           this.$log(coupon)
-          let response = await this.getGoodsList(coupon.couponInfo.id)
-          this.$log(response)
-          if (response.data.code === 200) {
-            this.amount = this.cardDetail.cardInfo.amount
-            let goodsList = response.data.data.result.couponSkus.list
-            //开始下单
-            let list = []
+          if (coupon.couponInfo.rules.couponRules.type === 4) {
+            //提货礼包券
+            let response = await this.getGoodsList(coupon.couponInfo.id)
+            this.$log(response)
+            if (response.data.code === 200) {
+              this.amount = this.cardDetail.cardInfo.amount
+              let goodsList = response.data.data.result.couponSkus.list
+              //开始下单
+              let list = []
 
-            //处理price
-            goodsList.forEach(goods => {
-              if (goods.merchantId == 4) {
-                if (goods.skuList.length > 0) {
-                  goods.price = parseFloat((goods.skuList[0].price / 100).toFixed(2))
-                }
-              }
-              goods['dprice'] = 0;
-              this.totalPrice = this.totalPrice + parseFloat(goods.price)
-            })
-
-            if (this.totalPrice > this.amount) {
-              let tmpAmount = 0
-              for (let i = 0; i < goodsList.length; i++) {
-                goodsList[i].dprice = Math.floor((goodsList[i].price * this.amount / this.totalPrice) *
-                  100) / 100;
-                this.$log(goodsList[i].dprice)
-                tmpAmount = parseFloat((tmpAmount + goodsList[i].dprice).toFixed(2))
-              }
-              this.$log(tmpAmount)
-              let diff = parseFloat((this.amount - tmpAmount).toFixed(2))
-              this.$log("diff:" + diff)
-              if (diff > 0) {
-                for (let i = 0; i < goodsList.length; i++) {
-                  let temptPrice = parseFloat((diff + goodsList[i].dprice).toFixed(2))
-                  this.$log(temptPrice)
-                  if (goodsList[i].price >= temptPrice) {
-                    goodsList[i].dprice = temptPrice
-                    this.$log(goodsList[i].dprice)
-                    break;
+              //处理price
+              goodsList.forEach(goods => {
+                if (goods.merchantId == 4) {
+                  if (goods.skuList.length > 0) {
+                    goods.price = parseFloat((goods.skuList[0].price / 100).toFixed(2))
                   }
                 }
-              }
-            } else {
-              for (let i = 0; i < goodsList.length; i++) {
-                goodsList[i].dprice = goodsList[i].price
-              }
-            }
+                goods['dprice'] = 0;
+                this.totalPrice = this.totalPrice + parseFloat(goods.price)
+              })
 
-            goodsList.forEach(goods => {
-              let skuId = goods.skuid
-              if (goods.merchantId == 4) {
-                if (goods.skuList.length > 0) {
-                  skuId = goods.skuList[0].code
+              if (this.totalPrice > this.amount) {
+                let tmpAmount = 0
+                for (let i = 0; i < goodsList.length; i++) {
+                  goodsList[i].dprice = Math.floor((goodsList[i].price * this.amount / this.totalPrice) *
+                    100) / 100;
+                  this.$log(goodsList[i].dprice)
+                  tmpAmount = parseFloat((tmpAmount + goodsList[i].dprice).toFixed(2))
+                }
+                this.$log(tmpAmount)
+                let diff = parseFloat((this.amount - tmpAmount).toFixed(2))
+                this.$log("diff:" + diff)
+                if (diff > 0) {
+                  for (let i = 0; i < goodsList.length; i++) {
+                    let temptPrice = parseFloat((diff + goodsList[i].dprice).toFixed(2))
+                    this.$log(temptPrice)
+                    if (goodsList[i].price >= temptPrice) {
+                      goodsList[i].dprice = temptPrice
+                      this.$log(goodsList[i].dprice)
+                      break;
+                    }
+                  }
+                }
+              } else {
+                for (let i = 0; i < goodsList.length; i++) {
+                  goodsList[i].dprice = goodsList[i].price
                 }
               }
-              let baseInfo = {
-                "userId": user.userId,
-                "skuId": skuId,
-                "mpu": goods.mpu,
-                "merchantId": goods.merchantId,
-                "count": 1,
-                "choosed": true,
-                "cartId": -1,
-              }
 
-              let goodsInfo = {
-                "id": goods.id,
-                "skuId": skuId,
-                "mpu": goods.mpu,
-                "merchantId": goods.merchantId,
-                "image": goods.image,
-                "category": goods.category,
-                "name": goods.name,
-                "brand": goods.brand,
-                "model": goods.model,
-                "dprice": goods.dprice,
-                "price": goods.price,
-                "checkedPrice": goods.price,
-                "type": goods.type == undefined ? 0 : goods.type
+              goodsList.forEach(goods => {
+                let skuId = goods.skuid
+                if (goods.merchantId == 4) {
+                  if (goods.skuList.length > 0) {
+                    skuId = goods.skuList[0].code
+                  }
+                }
+                let baseInfo = {
+                  "userId": user.userId,
+                  "skuId": skuId,
+                  "mpu": goods.mpu,
+                  "merchantId": goods.merchantId,
+                  "count": 1,
+                  "choosed": true,
+                  "cartId": -1,
+                }
+
+                let goodsInfo = {
+                  "id": goods.id,
+                  "skuId": skuId,
+                  "mpu": goods.mpu,
+                  "merchantId": goods.merchantId,
+                  "image": goods.image,
+                  "category": goods.category,
+                  "name": goods.name,
+                  "brand": goods.brand,
+                  "model": goods.model,
+                  "dprice": goods.dprice,
+                  "price": goods.price,
+                  "checkedPrice": goods.price,
+                  "type": goods.type == undefined ? 0 : goods.type
+                }
+                let couponList = []
+                let promotionInfo = {
+                  "promotion": [],
+                  "promotionState": -1
+                }
+                let product = {
+                  "baseInfo": baseInfo,
+                  "goodsInfo": goodsInfo,
+                  "couponList": couponList,
+                  "promotionInfo": promotionInfo,
+                }
+                this.$log(product)
+                list.push(product)
+              })
+              this.$log(list)
+              let pickupProdInfo = {
+                list: list,
+                coupon: coupon
               }
-              let couponList = []
-              let promotionInfo = {
-                "promotion": [],
-                "promotionState": -1
-              }
-              let product = {
-                "baseInfo": baseInfo,
-                "goodsInfo": goodsInfo,
-                "couponList": couponList,
-                "promotionInfo": promotionInfo,
-              }
-              this.$log(product)
-              list.push(product)
-            })
-            this.$log(list)
-            let pickupProdInfo = {
-              list: list,
-              coupon: coupon
+              this.$store.commit('SET_PICKUP_PRODUCTS_INFO', pickupProdInfo);
+              this.$log(pickupProdInfo)
+              this.$router.push({
+                path: '/car/pay/pickupGoods'
+              })
             }
-            this.$store.commit('SET_PICKUP_PRODUCTS_INFO', pickupProdInfo);
-            this.$log(pickupProdInfo)
-            this.$router.push({
-              path: '/car/pay/pickupGoods'
-            })
+          } else if(coupon.couponInfo.rules.couponRules.type === 5) {
+            //提货代金券
+            this.$log("提货代金券")
+            if(coupon.couponInfo.rules.scenario.type == 1) { //仅限部分商品可用
+
+            } else if (coupon.couponInfo.rules.scenario.type == 2) {//全场商品可用
+
+            } else if (coupon.couponInfo.rules.scenario.type == 3) {//限指定品类商品可用
+
+            }
+
+          } else {
+            this.$toast("未识别的提货券类型")
           }
+
         } catch (e) {
           that.$log(e)
           that.$toast("下单提货失败")
