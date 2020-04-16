@@ -1384,6 +1384,7 @@
         }
       },
       onCoinBalanceSelector() {
+        this.$log("onCoinBalanceSelector Enter")
         if (this.mCoinBalance.amount == 0 && !this.mCoinBalance.checked ||
           this.remainPayAmount == 0 && !this.mCoinBalance.checked || this.hasVirtualGoods) {
           if (this.hasVirtualGoods) {

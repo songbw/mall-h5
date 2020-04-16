@@ -205,6 +205,60 @@
         });
       },
 
+      isCouponActivied(coupon) {
+        this.$log(coupon)
+        let ret = "";
+        let startTime = new Date(this.$moment(coupon.couponInfo.effectiveStartDate).format('YYYY/MM/DD HH:mm:ss'))
+          .getTime() //new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
+        let endTime = new Date(this.$moment(coupon.couponInfo.effectiveEndDate).format('YYYY/MM/DD HH:mm:ss'))
+          .getTime() //new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
+        let current = new Date().getTime()
+        if (current < startTime) {
+          ret = "优惠券活动未开始" //券活动未开始
+        } else if (current <= endTime) {
+          ret = "success" //活动开始
+        } else {
+          ret = "优惠券已无效" // 活动已经结束
+        }
+        return ret
+      },
+
+      useConpon(coupon) {
+        this.$log("useConpon Enter")
+        let ret = this.isCouponActivied(coupon);
+        if (ret == "success") { //未使用
+          let couponInfo = coupon.couponInfo;
+          switch (couponInfo.rules.scenario.type) {
+            case 1: {
+              this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
+              this.$router.push("/user/couponListActivity");
+              return;
+            }
+            case 2: {
+              this.$router.push({
+                path: "/category"
+              });
+              return
+            }
+            case 3: {
+              //this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
+              if (couponInfo.rules.scenario.categories.length > 0) {
+                let categeries = couponInfo.rules.scenario.categories[0]
+                for (let i = 1; i < couponInfo.rules.scenario.categories.length; i++) {
+                  categeries += "_" + couponInfo.rules.scenario.categories[i]
+                }
+                this.$router.push({
+                  path: "/category/goods/list?category=" + categeries
+                });
+              }
+
+              return
+            }
+          }
+
+        }
+      },
+
       getCardStatusDesc(status) {
         switch (status) {
           case 1:
@@ -294,8 +348,6 @@
               couponInfo: this.cardDetail.coupons[0]
             }
           }
-          this.$log("xxxxxxxxxxxxxxx")
-          this.$log(coupon)
           if (coupon.couponInfo.rules.couponRules.type === 4) {
             //提货礼包券
             let response = await this.getGoodsList(coupon.couponInfo.id)
@@ -402,17 +454,10 @@
                 path: '/car/pay/pickupGoods'
               })
             }
-          } else if(coupon.couponInfo.rules.couponRules.type === 5) {
+          } else if (coupon.couponInfo.rules.couponRules.type === 5) {
             //提货代金券
             this.$log("提货代金券")
-            if(coupon.couponInfo.rules.scenario.type == 1) { //仅限部分商品可用
-
-            } else if (coupon.couponInfo.rules.scenario.type == 2) {//全场商品可用
-
-            } else if (coupon.couponInfo.rules.scenario.type == 3) {//限指定品类商品可用
-
-            }
-
+            this.useConpon(coupon)
           } else {
             this.$toast("未识别的提货券类型")
           }
@@ -424,8 +469,9 @@
       },
 
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
-        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format(
-          'YYYY.MM.DD');
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate)
+          .format(
+            'YYYY.MM.DD');
       },
       formateCouponPrice(rules) {
         switch (rules.type) {

@@ -168,6 +168,7 @@
                 return "已满足优惠条件，下单使用该券可立减￥" + rules.fullReduceCoupon.reducePrice
               }
               case 1: //代金券
+              case 5:
                 return "已满足优惠条件，下单使用该券可立减￥" + rules.cashCoupon.amount
               case 2: //折扣券
                 //return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折'+"优惠"
@@ -232,8 +233,8 @@
         let that = this
         let mpu = goods.mpu;
         let skuId = goods.skuId
-        if(goods.skuid != undefined)
-           skuId = goods.skuid
+        if (goods.skuid != undefined)
+          skuId = goods.skuid
         if (mpu != skuId || goods.merchantId == 2 && goods.mpu.startsWith("30")) {
           this.gotoGoodsPage(mpu)
         } else {
@@ -377,6 +378,7 @@
           case 0: //满减券
             return '￥' + rules.fullReduceCoupon.reducePrice;
           case 1: //代金券
+          case 5:
             return '￥' + rules.cashCoupon.amount;
           case 2: //折扣券
             return (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折';
@@ -396,6 +398,8 @@
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
           case 1: //代金券
             return '代金券';
+          case 5:
+            return '提货代金券';
           case 2: //折扣券
             if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
@@ -408,8 +412,8 @@
 
       },
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
-        return this.$moment(effectiveStartDate).format('YYYY.MM.DD HH:MM:ss') + ' - ' + this.$moment(effectiveEndDate)
-          .format('YYYY.MM.DD HH:MM:ss' +
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate)
+          .format('YYYY.MM.DD' +
             '');
       },
     }
@@ -544,6 +548,9 @@
             font-size: 150%;
             font-weight: bold;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
           }
 
           .coupon-expire-date {
