@@ -32,6 +32,38 @@
     },
 
     methods: {
+      getAccountBalace(mobile) {
+        this.$log("getAccountBalace Enter")
+        let that = this
+        this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.VENDOR_URL,
+          url: '/welfare/employees/accounts/byPhone',
+          params: {
+            phone: mobile,
+          /*
+UNKNOWN(0, "UNKNOWN", "未知"),
+NORMAL(1, "NORMAL", "普通虚户"),
+OFFLINE(2, "OFFLINE", "线下充值账户"),
+GUAZHANG(3, "GUAZHANG", "挂帐账户"),
+HUIYU(4, "HUIYU", "惠余"),
+HUIMI(5, "HUIMI", "惠米");
+          */
+            type: 4
+          }
+        }).then((response) => {
+          that.$log(response.data)
+          if(response.data.code == 200) {
+            this.accountBalance = parseFloat(response.data.data.amount).toFixed(2)
+            this.accountLoaded = true
+          } else {
+            this.$log("1xxxxxxxxxxxxxxxx")
+          }
+        }).catch(function (error) {
+          that.$log(error.response)
+          that.$toast(error.response.data.message)
+        })
+      },
       async loadData() {
         this.$log("loadData Enter")
         let that = this
@@ -43,10 +75,12 @@
             this.$log(response.data)
             if (response.data.code == 200) {
               let userDetail = response.data.data.user
-              this.$log(userDetail.telephone)
+              this.$log(userDetail.telephone.length)
               if (userDetail.telephone != undefined && userDetail.telephone.length > 0) {
-                this.getAccountBalace(userDetail.telephone)
-              } else {}
+                that.getAccountBalace(userDetail.telephone)
+              } else {
+                
+              }
             }
           } catch (error) {
             //ignore
@@ -67,22 +101,6 @@
       },
       onAccountRecordBtnClick() {
         this.$log("onAccountRecordBtnClick Enter")
-      },
-      getAccountBalace(mobile) {
-        let that = this
-        this.$api.xapi({
-          method: 'get',
-          baseURL: this.$api.VENDOR_URL,
-          url: '/welfare/employees/accounts/byPhone',
-          params: {
-            phone: mobile
-          }
-        }).then((response) => {
-          that.$log(response.data)
-        }).catch(function (error) {
-          that.$log(error.response)
-          that.$toast(error.response.data.message)
-        })
       }
     },
   }
