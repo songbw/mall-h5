@@ -44,6 +44,7 @@ const PolicySecurity = resolve => require(['@/components/user/policySecurity.vue
 const HistoryOrder = resolve => require(['@/components/user/historyOrderList.vue'], resolve)
 const HistoryOrderDetail = resolve => require(['@/components/user/historyOrderDetail.vue'], resolve)
 const ShangHaiProtocol = resolve => require(['@/components/user/shanghaiBankProtcol.vue'], resolve)
+const Huiyu = resolve => require(['@/components/user/huiyu.vue'], resolve)
 const FcLogin = resolve => require(['@/views/fcLogin.vue'], resolve)
 const FcRegister = resolve => require(['@/views/fcRegister.vue'], resolve)
 const FcResetPwd = resolve => require(['@/views/fcResetPwd.vue'], resolve)
@@ -456,5 +457,13 @@ export default new VueRouter({
         title: '商城隐私保护协议',
       }
     },
+    {
+      path: '/user/huiyu',
+      name: '惠余页',
+      component: Huiyu,
+      meta: {
+        title: '我的惠余',
+      }
+    }
   ]
 })

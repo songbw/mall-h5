@@ -59,6 +59,9 @@
         <van-cell title="我的提货券" is-link @click="onLadingCardBtnClick">
           <img slot="icon" :src="icon_ladingCard" />
         </van-cell>
+        <van-cell title="我的惠余" is-link @click="onHuiyuBtnClick">
+          <img slot="icon" :src="icon_huiyu" />
+        </van-cell>
         <div v-if="this.$api.APP_ID == '11'">
           <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
             <img slot="icon" :src="icon_optCard" />
@@ -265,6 +268,7 @@
         icon_optCard: require('@/assets/icons/ico_optCard.png'),
         icon_bankCard: require('@/assets/icons/ico_bankCard.png'),
         icon_quickPayCard: require('@/assets/icons/ico_quickpay_cards.png'),
+        icon_huiyu:require('@/assets/icons/ico_huiyu.png'),
         user: {},
         /*        showLinkPayDialog: false,
                 linkPayAccount:"",
@@ -346,6 +350,13 @@
           params: {
             user: this.user
           }
+        })
+      },
+
+      onHuiyuBtnClick() {
+        this.$log("onHuiyuBtnClick Enter")
+        this.$router.push({
+          name: '惠余页'
         })
       },
 
