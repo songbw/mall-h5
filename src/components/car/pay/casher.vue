@@ -110,6 +110,11 @@
                 <span slot="default"
                   style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
               </van-cell>
+              <van-cell v-if="item.payType == 'huiyuBalance'">
+                <span slot="title">惠余支付:</span>
+                <span slot="default"
+                  style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
+              </van-cell>
               <van-cell v-if="item.payType == 'linkPay'">
                 <span slot="title">联机账户支付:</span>
                 <span slot="default"
@@ -357,6 +362,7 @@
           title: "惠余支付",
           icon: require('@/assets/icons/ico_huiyu.png'),
           amount: 0,
+          accountNo: "",
           checked: false,
           payAmount: 0,
         },
@@ -424,7 +430,7 @@
 
       remainPayAmount() {
         this.$log("remainPayAmount Enter")
-        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mOptCards.payAmount - this.mLinkPay
+        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount  -  this.mHuiyuBalance.payAmount - this.mOptCards.payAmount - this.mLinkPay
           .payAmount) / 100).toFixed(2)
       },
 
@@ -1199,6 +1205,31 @@
       },
       onHuiyuBalanceSelector() {
         this.$log("onHuiyuBalanceSelector Enter")
+        if (this.mHuiyuBalance.amount == 0 && !this.mHuiyuBalance.checked ||
+          this.remainPayAmount == 0 && !this.mHuiyuBalance.checked || this.hasVirtualGoods) {
+          if (this.hasVirtualGoods) {
+            this.$toast("订单含有卡券类商品，不能使用余额!")
+          }
+        } else {
+          this.mHuiyuBalance.checked = !this.mHuiyuBalance.checked
+          for (let i = this.mPaylist.length - 1; i >= 0; i--) {
+            if (this.mPaylist[i].payType == 'huiyuBalance')
+              this.mPaylist.splice(i, 1);
+          }
+          this.mHuiyuBalance.payAmount = 0;
+          if (this.mHuiyuBalance.checked) {
+            let remainPayAmount = this.remainPayAmount;
+            if (this.mHuiyuBalance.amount >= parseInt((remainPayAmount * 100).toFixed(0))) {
+              this.mHuiyuBalance.payAmount = parseInt((remainPayAmount * 100).toFixed(0));
+            } else {
+              this.mHuiyuBalance.payAmount = this.mHuiyuBalance.amount
+            }
+            this.mPaylist.push({
+              payType: 'huiyuBalance',
+              payAmount: this.mHuiyuBalance.payAmount,
+            })
+          }
+        }
       },
 
       onCoinBalanceSelector() {
@@ -1246,6 +1277,7 @@
           that.$log(response.data)
           if (response.data.code == 200) {
             this.mHuiyuBalance.amount = parseInt((response.data.data.amount*100).toFixed(0))
+            this.mHuiyuBalance.accountNo = response.data.data.accountNo
           } else {
           }
         }).catch(function (error) {
