@@ -28,42 +28,20 @@
         <div v-if="this.$api.APP_ID == '11'" class="wuxipayBox">
           <div class="linkPayBox">
             <van-cell :title="mLinkPay.title" :icon="mLinkPay.icon" clickable @click="onLinkPaySelector()">
-              <van-checkbox slot="right-icon"  v-model="mLinkPay.checked" checked-color="#FF4444"></van-checkbox>
+              <van-checkbox slot="right-icon" v-model="mLinkPay.checked" checked-color="#FF4444"></van-checkbox>
             </van-cell>
             <div v-if="mLinkPay.checked">
               <div>
-                <van-field
-                  v-model="linkPayAccount"
-                  type="number"
-                  required
-                  clearable
-                  label="卡号"
-                  maxlength="30"
-                  label-width="40px"
-                  placeholder="请输入卡号"
-                />
-                <van-field
-                  v-model="linkPayPwd"
-                  :type="isLinkPwdVisable?'number':'password'"
-                  maxlength="30"
-                  clearable
-                  label="密码"
-                  label-width="40px"
-                  placeholder="请输入密码"
-                  :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
-                  required
-                  @click-right-icon="togLinkPayPwdVisable()"
-                />
+                <van-field v-model="linkPayAccount" type="number" required clearable label="卡号" maxlength="30"
+                  label-width="40px" placeholder="请输入卡号" />
+                <van-field v-model="linkPayPwd" :type="isLinkPwdVisable?'number':'password'" maxlength="30" clearable
+                  label="密码" label-width="40px" placeholder="请输入密码" :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
+                  required @click-right-icon="togLinkPayPwdVisable()" />
               </div>
-              <van-field
-                v-model="linkPayAmount"
-                center
-                clearable
-                label="支付金额(元)"
-                placeholder="输入支付额度"
-                @input="onLinkPayPayAmountChange"
-              >
-                <van-button slot="button" size="small" type="primary" @click="onLinkPayBalanceBtnClick">查询余额</van-button>
+              <van-field v-model="linkPayAmount" center clearable label="支付金额(元)" placeholder="输入支付额度"
+                @input="onLinkPayPayAmountChange">
+                <van-button slot="button" size="small" type="primary" @click="onLinkPayBalanceBtnClick">查询余额
+                </van-button>
               </van-field>
               <div class="linkPayAmountBox" v-if="this.mLinkPay.amount != null">
                 <span style="color: #ff4444;">联机账户余额: ￥{{(this.mLinkPay.amount/100).toFixed(2)}}元</span>
@@ -76,31 +54,28 @@
               <span slot="label" style="color:black">可用余额: ￥{{(mCoinBalance.amount/100).toFixed(2)}}</span>
             </van-cell>
           </div>
+          <div class="huiyuBalanceBox">
+            <van-cell :title="mHuiyuBalance.title" :icon="mHuiyuBalance.icon" clickable
+              @click="onHuiyuBalanceSelector()">
+              <van-checkbox slot="right-icon" v-model="huiyuBalanceValue" checked-color="#FF4444"></van-checkbox>
+              <span slot="label" style="color:black">可用惠余: ￥{{(mHuiyuBalance.amount/100).toFixed(2)}}</span>
+            </van-cell>
+          </div>
           <div class="optCardBox">
-            <van-cell :title="mOptCards.title" :icon="mOptCards.icon"
-                      :value="this.mOptCards.show?'点击隐藏优选卡':'点击查看优选卡'"
-                      clickable
-                      @click="onOptCardCellClick()">
+            <van-cell :title="mOptCards.title" :icon="mOptCards.icon" :value="this.mOptCards.show?'点击隐藏优选卡':'点击查看优选卡'"
+              clickable @click="onOptCardCellClick()">
             </van-cell>
             <div v-if="this.mOptCards.show == true">
               <van-checkbox-group v-model="mOptCardsResult" @change="onOptCardsStatusChanged()">
                 <van-cell-group>
-                  <van-cell
-                    v-for="(item, index) in mOptCards.list"
-                    clickable
-                    :key="index"
-                    @click="optCardsToggle(index)"
-                  >
+                  <van-cell v-for="(item, index) in mOptCards.list" clickable :key="index"
+                    @click="optCardsToggle(index)">
                     <div slot="default" class="optCard">
                       <span>{{item.balance/100}}元</span>
                       <span>惠民优选卡支付</span>
                     </div>
                     <div slot="right-icon" class="optCardCheckBox">
-                      <van-checkbox
-                        :name="item.cardnum"
-                        checked-color="#3dd5c8"
-                        ref="optCardsCheckboxes"
-                      />
+                      <van-checkbox :name="item.cardnum" checked-color="#3dd5c8" ref="optCardsCheckboxes" />
                     </div>
                   </van-cell>
                 </van-cell-group>
@@ -110,37 +85,13 @@
                 <span>绑定惠民优选卡</span>
               </div>
             </div>
-            <van-dialog
-              v-model="addNewOptCardDlgShow"
-              title="绑定惠民优选卡"
-              show-cancel-button="true"
-              confirm-button-text="绑定"
-              :beforeClose="beforeCloseAddNewOptCardDlg"
-            >
-              <van-field
-                v-model="mTelphoneNumber"
-                type="tel"
-                rows="1"
-                maxlength="20"
-                placeholder="绑定用户电话号码"
-                clearable
-                v-if="this.userDetail.telephone == null || this.userDetail.telephone.length == 0"
-              />
-              <van-field
-                v-model="newOptCardNumber"
-                type="number"
-                rows="1"
-                maxlength="20"
-                placeholder="请输入卡号"
-                clearable
-              />
-              <van-field
-                v-model="newOptCardPwd"
-                rows="1"
-                maxlength="20"
-                placeholder="请输入密码"
-                clearable
-              />
+            <van-dialog v-model="addNewOptCardDlgShow" title="绑定惠民优选卡" show-cancel-button="true"
+              confirm-button-text="绑定" :beforeClose="beforeCloseAddNewOptCardDlg">
+              <van-field v-model="mTelphoneNumber" type="tel" rows="1" maxlength="20" placeholder="绑定用户电话号码" clearable
+                v-if="this.userDetail != null && (this.userDetail.telephone == null || this.userDetail.telephone.length == 0)" />
+              <van-field v-model="newOptCardNumber" type="number" rows="1" maxlength="20" placeholder="请输入卡号"
+                clearable />
+              <van-field v-model="newOptCardPwd" rows="1" maxlength="20" placeholder="请输入密码" clearable />
             </van-dialog>
           </div>
 
@@ -152,17 +103,17 @@
               <van-cell v-if="item.payType == 'optCard'">
                 <span slot="title">优选卡支付:</span>
                 <span slot="default"
-                      style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
+                  style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
               </van-cell>
               <van-cell v-if="item.payType == 'coinBalance'">
                 <span slot="title">余额支付:</span>
                 <span slot="default"
-                      style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
+                  style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
               </van-cell>
               <van-cell v-if="item.payType == 'linkPay'">
                 <span slot="title">联机账户支付:</span>
                 <span slot="default"
-                      style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
+                  style="font-size: medium;color: #ff4444">-￥{{(item.payAmount/100).toFixed(2)}}</span>
               </van-cell>
             </div>
           </div>
@@ -200,11 +151,11 @@
                               />
                             </div>-->
               <van-cell title="统一支付" :icon="icon_unionpay" clickable @click="radio = '3'" v-if="isSupportUnionPay">
-                <van-radio slot="right-icon" name="3" checked-color="#FF4444"/>
+                <van-radio slot="right-icon" name="3" checked-color="#FF4444" />
               </van-cell>
             </div>
             <van-cell title="快捷支付" :icon="icon_quicklypay" clickable @click="radio = '2'">
-              <van-radio slot="right-icon" name="2" checked-color="#FF4444"/>
+              <van-radio slot="right-icon" name="2" checked-color="#FF4444" />
             </van-cell>
             <div class="quickPayDialog" v-if="radio == '2'">
               <div v-if="this.$api.IS_QUICKPAY_CAN_SAVE">
@@ -214,22 +165,14 @@
                       <van-cell-group>
                         <div v-for="(item, index) in mBankcardList">
                           <van-swipe-cell :right-width="60">
-                            <van-cell
-                              clickable
-                              :key="index"
-                              @click="BanckCardsClick(item)"
-                            >
+                            <van-cell clickable :key="index" @click="BanckCardsClick(item)">
                               <div slot="default" class="bankCard">
                                 <span>{{getBankNameByAccountId(item.accountId)}}</span>
                                 <span>卡号: {{formatBankNumber(item.accountId)}}</span>
                                 <span>银行卡支付</span>
                               </div>
                               <div slot="right-icon" class="bankCardCheckBox">
-                                <van-radio
-                                  :name="item.accountId"
-                                  checked-color="#3dd5c8"
-                                  ref="bankCardsCheckboxes"
-                                />
+                                <van-radio :name="item.accountId" checked-color="#3dd5c8" ref="bankCardsCheckboxes" />
                               </div>
                             </van-cell>
                             <div slot="right" @click="onDeleteCardBtnClick(item,index)" class="rightSlot">
@@ -248,128 +191,46 @@
                     <span>添加银行卡</span>
                   </div>
                 </div>
-                <van-dialog
-                  v-model="showSupportList"
-                  title="快捷支付银行卡列表"
-                >
+                <van-dialog v-model="showSupportList" title="快捷支付银行卡列表">
                   <div class="supportBankList">
                     <img :src="icon_support_bank_list">
                   </div>
                 </van-dialog>
-                <van-dialog
-                  v-model="addNewBankCardDlgShow"
-                  title="添加银行卡"
-                  show-cancel-button="true"
-                  confirm-button-text="添加"
-                  :beforeClose="beforeCloseAddNewCardDlg"
-                >
+                <van-dialog v-model="addNewBankCardDlgShow" title="添加银行卡" show-cancel-button="true"
+                  confirm-button-text="添加" :beforeClose="beforeCloseAddNewCardDlg">
                   <div class="cardTypeBox">
                     <van-radio-group v-model="newCardRadio" style="display: flex">
                       <van-cell title="储蓄卡" clickable @click="newCardRadio = '1'">
-                        <van-radio slot="right-icon" name="1"/>
+                        <van-radio slot="right-icon" name="1" />
                       </van-cell>
                       <van-cell title="信用卡" @click="newCardRadio = '2'">
-                        <van-radio slot="right-icon" name="2"/>
+                        <van-radio slot="right-icon" name="2" />
                       </van-cell>
                     </van-radio-group>
                   </div>
                   <div v-if="newCardRadio == '1'">
-                    <van-field
-                      v-model="newCardNumber"
-                      label="银行卡号:"
-                      maxlength="32"
-                      label-width="65px"
-                      type="number"
-                      rows="1"
-                      placeholder="请输入银行卡号"
-                      clearable
-                    />
-                    <van-field
-                      v-model="newCustomName"
-                      label="真实姓名:"
-                      maxlength="30"
-                      label-width="65px"
-                      rows="1"
-                      placeholder="请输入银行卡用户姓名"
-                      clearable
-                    />
-                    <van-field
-                      v-model="mTelphoneNumber"
-                      label="电话号码:"
-                      maxlength="30"
-                      label-width="65px"
-                      type="tel"
-                      rows="1"
-                      placeholder="请输入银行预留电话号码"
-                      clearable
-                    />
-                    <van-field
-                      v-model="mIdNo"
-                      label="身份证号:"
-                      maxlength="30"
-                      label-width="65px"
-                      rows="1"
-                      placeholder="请输入用户身份证号码"
-                      clearable
-                    />
+                    <van-field v-model="newCardNumber" label="银行卡号:" maxlength="32" label-width="65px" type="number"
+                      rows="1" placeholder="请输入银行卡号" clearable />
+                    <van-field v-model="newCustomName" label="真实姓名:" maxlength="30" label-width="65px" rows="1"
+                      placeholder="请输入银行卡用户姓名" clearable />
+                    <van-field v-model="mTelphoneNumber" label="电话号码:" maxlength="30" label-width="65px" type="tel"
+                      rows="1" placeholder="请输入银行预留电话号码" clearable />
+                    <van-field v-model="mIdNo" label="身份证号:" maxlength="30" label-width="65px" rows="1"
+                      placeholder="请输入用户身份证号码" clearable />
                   </div>
                   <div v-if="newCardRadio == '2'">
-                    <van-field
-                      v-model="newCardNumber"
-                      label="银行卡号:"
-                      maxlength="30"
-                      label-width="65px"
-                      type="number"
-                      rows="1"
-                      placeholder="请输入银行卡号"
-                      clearable
-                    />
-                    <van-field
-                      v-model="newCustomName"
-                      label="真实姓名:"
-                      maxlength="30"
-                      label-width="65px"
-                      rows="1"
-                      placeholder="请输入银行卡用户姓名"
-                      clearable
-                    />
-                    <van-field
-                      v-model="mTelphoneNumber"
-                      label="电话号码:"
-                      maxlength="30"
-                      label-width="65px"
-                      type="tel"
-                      rows="1"
-                      placeholder="请输入银行预留电话号码"
-                      clearable
-                    />
-                    <van-field
-                      v-model="mIdNo"
-                      label="身份证号:"
-                      maxlength="30"
-                      label-width="65px"
-                      rows="1"
-                      placeholder="请输入用户身份证号码"
-                      clearable
-                    />
-                    <van-field
-                      v-model="mExpiredDate"
-                      label="有效日期:"
-                      maxlength="4"
-                      label-width="65px"
-                      rows="1"
-                      placeholder="请输入信用卡有效期(MMYY)"
-                      clearable
-                    />
-                    <van-field
-                      v-model="mCvv2"
-                      label="验证码:"
-                      maxlength="3"
-                      label-width="65px"
-                      rows="1"
-                      placeholder="请输入信用卡3位验证码"
-                      clearable
-                    />
+                    <van-field v-model="newCardNumber" label="银行卡号:" maxlength="30" label-width="65px" type="number"
+                      rows="1" placeholder="请输入银行卡号" clearable />
+                    <van-field v-model="newCustomName" label="真实姓名:" maxlength="30" label-width="65px" rows="1"
+                      placeholder="请输入银行卡用户姓名" clearable />
+                    <van-field v-model="mTelphoneNumber" label="电话号码:" maxlength="30" label-width="65px" type="tel"
+                      rows="1" placeholder="请输入银行预留电话号码" clearable />
+                    <van-field v-model="mIdNo" label="身份证号:" maxlength="30" label-width="65px" rows="1"
+                      placeholder="请输入用户身份证号码" clearable />
+                    <van-field v-model="mExpiredDate" label="有效日期:" maxlength="4" label-width="65px" rows="1"
+                      placeholder="请输入信用卡有效期(MMYY)" clearable />
+                    <van-field v-model="mCvv2" label="验证码:" maxlength="3" label-width="65px" rows="1"
+                      placeholder="请输入信用卡3位验证码" clearable />
                   </div>
 
                 </van-dialog>
@@ -380,120 +241,43 @@
                     <div class="cardTypeBox">
                       <van-radio-group v-model="newCardRadioNotSaved" style="display: flex">
                         <van-cell title="储蓄卡" clickable @click="newCardRadioNotSaved = '1'">
-                          <van-radio slot="right-icon" name="1"/>
+                          <van-radio slot="right-icon" name="1" />
                         </van-cell>
                         <van-cell title="信用卡" @click="newCardRadioNotSaved = '2'">
-                          <van-radio slot="right-icon" name="2"/>
+                          <van-radio slot="right-icon" name="2" />
                         </van-cell>
                       </van-radio-group>
                     </div>
                     <div v-if="newCardRadioNotSaved == '1'">
-                      <van-field
-                        v-model="newCardNumberNotSaved"
-                        label="银行卡号:"
-                        maxlength="32"
-                        label-width="65px"
-                        type="number"
-                        rows="1"
-                        placeholder="请输入银行卡号"
-                        clearable
-                      />
-                      <van-field
-                        v-model="newCustomNameNotSaved"
-                        label="真实姓名:"
-                        maxlength="30"
-                        label-width="65px"
-                        rows="1"
-                        placeholder="请输入银行卡用户姓名"
-                        clearable
-                      />
-                      <van-field
-                        v-model="mTelphoneNumber"
-                        label="电话号码:"
-                        maxlength="30"
-                        label-width="65px"
-                        type="tel"
-                        rows="1"
-                        placeholder="请输入银行预留电话号码"
-                        clearable
-                      />
-                      <van-field
-                        v-model="mIdNoNotSaved"
-                        label="身份证号:"
-                        maxlength="30"
-                        label-width="65px"
-                        rows="1"
-                        placeholder="请输入用户身份证号码"
-                        clearable
-                      />
+                      <van-field v-model="newCardNumberNotSaved" label="银行卡号:" maxlength="32" label-width="65px"
+                        type="number" rows="1" placeholder="请输入银行卡号" clearable />
+                      <van-field v-model="newCustomNameNotSaved" label="真实姓名:" maxlength="30" label-width="65px"
+                        rows="1" placeholder="请输入银行卡用户姓名" clearable />
+                      <van-field v-model="mTelphoneNumber" label="电话号码:" maxlength="30" label-width="65px" type="tel"
+                        rows="1" placeholder="请输入银行预留电话号码" clearable />
+                      <van-field v-model="mIdNoNotSaved" label="身份证号:" maxlength="30" label-width="65px" rows="1"
+                        placeholder="请输入用户身份证号码" clearable />
                     </div>
                     <div v-if="newCardRadioNotSaved == '2'">
-                      <van-field
-                        v-model="newCardNumberNotSaved"
-                        label="银行卡号:"
-                        maxlength="30"
-                        label-width="65px"
-                        type="number"
-                        rows="1"
-                        placeholder="请输入银行卡号"
-                        clearable
-                      />
-                      <van-field
-                        v-model="newCustomNameNotSaved"
-                        label="真实姓名:"
-                        maxlength="30"
-                        label-width="65px"
-                        rows="1"
-                        placeholder="请输入银行卡用户姓名"
-                        clearable
-                      />
-                      <van-field
-                        v-model="mTelphoneNumber"
-                        label="电话号码:"
-                        maxlength="30"
-                        label-width="65px"
-                        type="tel"
-                        rows="1"
-                        placeholder="请输入银行预留电话号码"
-                        clearable
-                      />
-                      <van-field
-                        v-model="mIdNoNotSaved"
-                        label="身份证号:"
-                        maxlength="30"
-                        label-width="65px"
-                        rows="1"
-                        placeholder="请输入用户身份证号码"
-                        clearable
-                      />
-                      <van-field
-                        v-model="mExpiredDateNotSaved"
-                        label="有效日期:"
-                        maxlength="4"
-                        label-width="65px"
-                        rows="1"
-                        placeholder="请输入信用卡有效期(MMYY)"
-                        clearable
-                      />
-                      <van-field
-                        v-model="mCvv2NotSaved"
-                        label="验证码:"
-                        maxlength="3"
-                        label-width="65px"
-                        rows="1"
-                        placeholder="请输入信用卡3位验证码"
-                        clearable
-                      />
+                      <van-field v-model="newCardNumberNotSaved" label="银行卡号:" maxlength="30" label-width="65px"
+                        type="number" rows="1" placeholder="请输入银行卡号" clearable />
+                      <van-field v-model="newCustomNameNotSaved" label="真实姓名:" maxlength="30" label-width="65px"
+                        rows="1" placeholder="请输入银行卡用户姓名" clearable />
+                      <van-field v-model="mTelphoneNumber" label="电话号码:" maxlength="30" label-width="65px" type="tel"
+                        rows="1" placeholder="请输入银行预留电话号码" clearable />
+                      <van-field v-model="mIdNoNotSaved" label="身份证号:" maxlength="30" label-width="65px" rows="1"
+                        placeholder="请输入用户身份证号码" clearable />
+                      <van-field v-model="mExpiredDateNotSaved" label="有效日期:" maxlength="4" label-width="65px" rows="1"
+                        placeholder="请输入信用卡有效期(MMYY)" clearable />
+                      <van-field v-model="mCvv2NotSaved" label="验证码:" maxlength="3" label-width="65px" rows="1"
+                        placeholder="请输入信用卡3位验证码" clearable />
                     </div>
                   </div>
                   <div class="queryBanckSupportList">
                     <span @click="onQuerySupportBListClick()">查看支持的银行卡</span>
                   </div>
                 </div>
-                <van-dialog
-                  v-model="showSupportList"
-                  title="快捷支付银行卡列表"
-                >
+                <van-dialog v-model="showSupportList" title="快捷支付银行卡列表">
                   <div class="supportBankList">
                     <img :src="icon_support_bank_list">
                   </div>
@@ -502,32 +286,22 @@
             </div>
             <div v-if="this.$api.APP_ID == '01'">
               <van-cell title="微信支付" :icon="icon_wechatpay" clickable @click="radio = '4'">
-                <van-radio slot="right-icon" name="4" checked-color="#FF4444"/>
+                <van-radio slot="right-icon" name="4" checked-color="#FF4444" />
               </van-cell>
             </div>
             <div v-if="(this.$api.APP_ID != '01') && this.$api.APP_SOURCE == '00'">
               <van-cell title="支付宝支付" :icon="icon_alipay" clickable @click="radio = '5'">
-                <van-radio slot="right-icon" name="5" checked-color="#FF4444"/>
+                <van-radio slot="right-icon" name="5" checked-color="#FF4444" />
               </van-cell>
             </div>
           </van-radio-group>
         </div>
-        <van-dialog
-          v-model="quickPayDlgShow"
-          title="快捷支付银行卡验证"
-          show-cancel-button="true"
-          confirm-button-text="去支付"
-          :beforeClose="beforeCloseQuickPayDlg"
-        >
+        <van-dialog v-model="quickPayDlgShow" title="快捷支付银行卡验证" show-cancel-button="true" confirm-button-text="去支付"
+          :beforeClose="beforeCloseQuickPayDlg">
           <div class="verifyCodeBox">
-            <van-field
-              v-model="quickPayVerifyCode"
-              maxlength="10"
-              clearable
-              placeholder="请输入短信验证码"
-            />
-            <van-button :disabled="isVerifyCodeBtnDisabled" type="danger"
-                        @click="onGetVerifyCodeBtnClick">{{verifyBtnText}}
+            <van-field v-model="quickPayVerifyCode" maxlength="10" clearable placeholder="请输入短信验证码" />
+            <van-button :disabled="isVerifyCodeBtnDisabled" type="danger" @click="onGetVerifyCodeBtnClick">
+              {{verifyBtnText}}
             </van-button>
           </div>
         </van-dialog>
@@ -546,7 +320,9 @@
   import Header from '@/common/_header.vue'
   import Util from '@/util/common'
   import BANKUtil from '@/util/bank'
-  import {configWechat} from '@/util/wechat'
+  import {
+    configWechat
+  } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
 
   export default {
@@ -569,10 +345,17 @@
         linkPayPwd: "",
         linkPayAmount: 0,
         isLinkPwdVisable: false,
-        userDetail: {},
+        userDetail: null,
         mCoinBalance: {
           title: "余额支付",
           icon: require('@/assets/icons/ico_coin_balance.png'),
+          amount: 0,
+          checked: false,
+          payAmount: 0,
+        },
+        mHuiyuBalance: {
+          title: "惠余支付",
+          icon: require('@/assets/icons/ico_huiyu.png'),
           amount: 0,
           checked: false,
           payAmount: 0,
@@ -641,7 +424,25 @@
 
       remainPayAmount() {
         this.$log("remainPayAmount Enter")
-        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mOptCards.payAmount - this.mLinkPay.payAmount) / 100).toFixed(2)
+        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mOptCards.payAmount - this.mLinkPay
+          .payAmount) / 100).toFixed(2)
+      },
+
+      huiyuBalanceValue: {
+        get() {
+          return this.mHuiyuBalance.checked
+        },
+        set(value) {
+          if (this.mHuiyuBalance.amount == 0 && !this.mHuiyuBalance.checked ||
+            this.remainPayAmount == 0 && !this.mHuiyuBalance.checked || this.hasVirtualGoods) {
+            if (this.hasVirtualGoods) {
+              this.mHuiyuBalance.checked = false
+              //   this.$toast("订单含有卡券类商品，不能使用余额!")
+            }
+          } else {
+            this.mHuiyuBalance.checked = value
+          }
+        }
       },
 
       coinBalanceValue: {
@@ -650,10 +451,10 @@
         },
         set(value) {
           if (this.mCoinBalance.amount == 0 && !this.mCoinBalance.checked ||
-            this.remainPayAmount == 0 && !this.mCoinBalance.checked  || this.hasVirtualGoods) {
-            if(this.hasVirtualGoods) {
+            this.remainPayAmount == 0 && !this.mCoinBalance.checked || this.hasVirtualGoods) {
+            if (this.hasVirtualGoods) {
               this.mCoinBalance.checked = false
-           //   this.$toast("订单含有卡券类商品，不能使用余额!")
+              //   this.$toast("订单含有卡券类商品，不能使用余额!")
             }
           } else {
             this.mCoinBalance.checked = value
@@ -666,7 +467,7 @@
           return this.mOptCards.result
         },
         set(value) {
-          if (value.length > this.mOptCards.result.length) {//添加
+          if (value.length > this.mOptCards.result.length) { //添加
             if (this.remainPayAmount > 0) {
               this.mOptCards.result = value
             }
@@ -683,10 +484,15 @@
       this.orderInfo = this.$route.params.orderInfo;
       this.$log(this.orderInfo);
       if (this.orderInfo != undefined) {
-        this.updateOptCardInfo();
+        this.obtainUserDetail();
+        if (this.userDetail != null) {
+          this.getOptCardList(this.userDetail);
+          this.updateHuiyuAmount(this.userDetail);
+        }
         this.udateBankcardList();
         this.updateBalanceAmount();
         this.updateLinkPayAccount();
+
         if (this.$api.APP_ID == '11') {
           this.$log("######################")
           if (this.orderInfo.hasVirtualGoods != undefined)
@@ -699,7 +505,7 @@
             this.isSupportUnionPay = false
           } else {
             this.$log("支持统一支付")
-            this.isSupportUnionPay = false//true
+            this.isSupportUnionPay = false //true
           }
           /*sc.isExistApi({
             path:'pay'
@@ -714,7 +520,9 @@
         }
       } else {
         this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-        this.$router.replace({path: '/car/orderList'})
+        this.$router.replace({
+          path: '/car/orderList'
+        })
       }
 
     },
@@ -760,7 +568,7 @@
             this.mLinkPay.amount = response.data.data
             Util.setLocal(this.linkPayAccount, 'linkPayAccount', false);
             if (this.mLinkPay.amount < this.mLinkPay.payAmount) {
-              this.linkPayAmount = parseFloat((this.mLinkPay.amount/100).toFixed(2))
+              this.linkPayAmount = parseFloat((this.mLinkPay.amount / 100).toFixed(2))
               this.mLinkPay.payAmount = parseInt((this.linkPayAmount * 100).toFixed(0))
               for (let i = this.mPaylist.length - 1; i >= 0; i--) {
                 if (this.mPaylist[i].payType == 'linkPay')
@@ -775,7 +583,7 @@
             }
           } else {
             if (response.data.message != null && response.data.message.length > 0)
-             // this.$toast(response.data.message)
+              // this.$toast(response.data.message)
               this.$toast("余额查询失败，请确认卡号密码信息。")
           }
         } catch (e) {
@@ -785,22 +593,24 @@
       },
       onLinkPayPayAmountChange() {
         this.$log("onLinkPayPayAmountChange Enter")
-        this.linkPayAmount  =  this.linkPayAmount.replace(/[^\d.]/g, "")
+        this.linkPayAmount = this.linkPayAmount.replace(/[^\d.]/g, "")
           .replace(/\.{2,}/g, ".").replace(".", "$#$")
           .replace(/\./g, "").replace("$#$", ".")
-          .replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3')
-          .replace(/^\./g,"");
-/*        /!*        this.linkPayAmount  = this.linkPayAmount .replace(/^\./g,""); //验证第一个字符是数字
-                this.linkPayAmount  = this.linkPayAmount .replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的*!/
-        this.linkPayAmount  = this.linkPayAmount.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数*/
+          .replace(/^(\-)*(\d+)\.(\d\d).*$/, '$1$2.$3')
+          .replace(/^\./g, "");
+        /*        /!*        this.linkPayAmount  = this.linkPayAmount .replace(/^\./g,""); //验证第一个字符是数字
+                        this.linkPayAmount  = this.linkPayAmount .replace(/\.{2,}/g,"."); //只保留第一个, 清除多余的*!/
+                this.linkPayAmount  = this.linkPayAmount.replace(/^(\-)*(\d+)\.(\d\d).*$/,'$1$2.$3'); //只能输入两个小数*/
 
         for (let i = this.mPaylist.length - 1; i >= 0; i--) {
           if (this.mPaylist[i].payType == 'linkPay')
             this.mPaylist.splice(i, 1);
         }
         let remainPayAmount = this.remainPayAmount;
-        if (parseInt((this.linkPayAmount * 100).toFixed(0)) > (parseInt(this.mLinkPay.payAmount) + parseInt((remainPayAmount * 100).toFixed(0)))) {
-          this.linkPayAmount = parseFloat(((parseInt(this.mLinkPay.payAmount) + parseInt((remainPayAmount * 100).toFixed(0)))/100).toFixed(2));
+        if (parseInt((this.linkPayAmount * 100).toFixed(0)) > (parseInt(this.mLinkPay.payAmount) + parseInt((
+            remainPayAmount * 100).toFixed(0)))) {
+          this.linkPayAmount = parseFloat(((parseInt(this.mLinkPay.payAmount) + parseInt((remainPayAmount * 100)
+            .toFixed(0))) / 100).toFixed(2));
         }
         if (this.mLinkPay.amount == null) {
           if (this.linkPayAmount > 5000) {
@@ -810,8 +620,8 @@
           if (this.linkPayAmount > 5000) {
             this.linkPayAmount = 5000
           }
-          if (this.linkPayAmount >  parseFloat((this.mLinkPay.amount/100).toFixed(2))) {
-            this.linkPayAmount = parseFloat((this.mLinkPay.amount/100).toFixed(2))
+          if (this.linkPayAmount > parseFloat((this.mLinkPay.amount / 100).toFixed(2))) {
+            this.linkPayAmount = parseFloat((this.mLinkPay.amount / 100).toFixed(2))
           }
         }
         this.mLinkPay.payAmount = parseInt((this.linkPayAmount * 100).toFixed(0))
@@ -1065,7 +875,8 @@
 
         })
       },
-      updateOptCardInfo() {
+
+      getUserDetail() {
         let userInfo = this.$store.state.appconf.userInfo;
         let that = this
         if (!Util.isUserEmpty(userInfo)) {
@@ -1078,19 +889,23 @@
               iAppId: this.$api.APP_ID,
               openId: user.openId,
             }
-          }).then((response) => {
-            let user = response.data.data.user;
+          })
+        } else {
+          return null
+        }
+      },
+
+      async obtainUserDetail() {
+        let resp = await this.getUserDetail()
+        if (resp != null) {
+          if (resp.status == 200) {
+            let user = resp.data.data.user;
             if (user != null) {
               this.userDetail = user;
               this.mTelphoneNumber = this.userDetail.telephone;
               this.updateUserDetail(this.userDetail);
-              this.getOptCardList(this.userDetail);
             }
-          }).catch(function (error) {
-            that.$log(error)
-          })
-        } else {
-          return null
+          }
         }
       },
 
@@ -1119,13 +934,16 @@
               done(false) //不关闭弹框
               return
             }
-            if (this.mTelphoneNumber == null || !this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+            if (this.mTelphoneNumber == null || !this.mTelphoneNumber.match(
+                "^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
               this.$toast("请输入正确的电话号码")
               done(false) //不关闭弹框
               return
             }
             if (this.mIdNo.length == 0 ||
-              !this.mIdNo.match("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$")) {
+              !this.mIdNo.match(
+                "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$"
+              )) {
               this.$toast("请输入正确的身份证号码")
               done(false) //不关闭弹框
               return
@@ -1383,6 +1201,10 @@
           }
         }
       },
+      onHuiyuBalanceSelector() {
+        this.$log("onHuiyuBalanceSelector Enter")
+      },
+
       onCoinBalanceSelector() {
         this.$log("onCoinBalanceSelector Enter")
         if (this.mCoinBalance.amount == 0 && !this.mCoinBalance.checked ||
@@ -1412,6 +1234,13 @@
         }
 
       },
+
+      updateHuiyuAmount(userDetail) {
+        this.$log("updateHuiyuAmount Enter")
+        
+
+      },
+
       updateBalanceAmount() {
         let that = this
         let userInfo = this.$store.state.appconf.userInfo;
@@ -1497,7 +1326,7 @@
           }
           this.mPaylist.forEach(item => {
             switch (item.payType) {
-              case  'coinBalance':
+              case 'coinBalance':
                 balancePay = {
                   actPayFee: "" + item.payAmount,
                   openId: user.openId,
@@ -1576,12 +1405,15 @@
                     this.$toast("请输入真实姓名")
                     return
                   }
-                  if (this.mTelphoneNumber == null || !this.mTelphoneNumber.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
+                  if (this.mTelphoneNumber == null || !this.mTelphoneNumber.match(
+                      "^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
                     this.$toast("请输入正确的电话号码")
                     return
                   }
                   if (this.mIdNoNotSaved.length == 0 ||
-                    !this.mIdNoNotSaved.match("^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$")) {
+                    !this.mIdNoNotSaved.match(
+                      "^[1-9]\\d{7}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}$|^[1-9]\\d{5}[1-9]\\d{3}((0\\d)|(1[0-2]))(([0|1|2]\\d)|3[0-1])\\d{3}([0-9]|X)$"
+                    )) {
                     this.$toast("请输入正确的身份证号码")
                     return
                   }
@@ -1635,7 +1467,7 @@
               fcWxPay = {
                 "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
                 "body": "凤巢商品",
-                "openId": user.openId,//微信openId
+                "openId": user.openId, //微信openId
                 "orderNo": this.orderInfo.orderNo,
                 "payType": "fcwx"
               }
@@ -1658,7 +1490,7 @@
                 "returnUrl": url,
               }
             } else {
-              let warning = "还需支付"+this.remainPayAmount+"元，请选择其它支付方式补充"
+              let warning = "还需支付" + this.remainPayAmount + "元，请选择其它支付方式补充"
               this.$toast(warning)
               return;
             }
@@ -1729,7 +1561,7 @@
                   let ret = JSON.parse(response.data.data);
                   this.$log("统一支付")
                   this.$log(ret)
-                  if (ret != null) {//统一支付
+                  if (ret != null) { //统一支付
                     sc.pay({
                       mchOrderNo: ret.mchOrderNo,
                       payId: ret.payId,
@@ -1746,7 +1578,9 @@
                       } else {
                         that.$log("统一支付失败")
                         that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                        that.$router.replace({path: '/car/orderList'})
+                        that.$router.replace({
+                          path: '/car/orderList'
+                        })
                       }
                     })
                   } else {
@@ -1786,7 +1620,7 @@
                     this.$log(ret.packageStr)
                     this.$log(ret.signType)
                     this.$log(ret.paySign)
-                    if (ret != null) {//公众号支付
+                    if (ret != null) { //公众号支付
                       wx.chooseWXPay({
                         // 支付签名时间戳，注意微信jssdk中的所有使用timestamp字段均为小写。
                         // 但最新版的支付后台生成签名使用的timeStamp字段名需大写其中的S字符
@@ -1809,13 +1643,17 @@
                         fail: function (res) {
                           console.log('公众号支付失败')
                           that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                          that.$router.replace({path: '/car/orderList'})
+                          that.$router.replace({
+                            path: '/car/orderList'
+                          })
                         },
                         complete: function (res) {
                           console.log(res, '公众号支付 complete')
                           if (res.errMsg == 'chooseWXPay:cancel') {
                             that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                            that.$router.replace({path: '/car/orderList'})
+                            that.$router.replace({
+                              path: '/car/orderList'
+                            })
                           }
                         }
                       })
@@ -1850,7 +1688,7 @@
                   let ret = response.data.data;
                   this.$log("支付宝支付")
                   const div = document.createElement('div')
-                  div.innerHTML = ret//此处form就是后台返回接收到的数据
+                  div.innerHTML = ret //此处form就是后台返回接收到的数据
                   document.body.appendChild(div)
                   document.forms[0].submit()
                   this.payBtnSubmitLoading = false;
@@ -1864,7 +1702,9 @@
                 that.$toast("请求支付失败")
                 that.payBtnSubmitLoading = false;
                 that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                that.$router.replace({path: '/car/orderList'})
+                that.$router.replace({
+                  path: '/car/orderList'
+                })
               })
             } else {
               this.$api.xapi({
@@ -1901,6 +1741,7 @@
       }
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -1918,6 +1759,7 @@
       width: 100%;
       height: 100%;
       background-color: #f8f8f8;
+
       .quickPayDialog {
         width: 100%;
         align-items: center;
@@ -2010,6 +1852,20 @@
         .wuxipayBox {
           width: 96%;
 
+          .huiyuBalanceBox {
+            margin-top: 10px;
+            padding: 10px 0px;
+            background-color: white;
+            border-radius: 5px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+
+            .van-cell {
+              margin-top: -1px;
+            }
+          }
+
           .coinBalanceBox {
             margin-top: 10px;
             padding: 10px 0px;
@@ -2037,7 +1893,7 @@
               margin-top: -1px;
             }
 
-/*            .payAmountBox {
+            /*            .payAmountBox {
               display: flex;
               margin-top: -1px;
               background-color: white;
@@ -2261,4 +2117,5 @@
       }
     }
   }
+
 </style>
