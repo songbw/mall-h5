@@ -336,6 +336,7 @@
     configWechat
   } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
+import huiyuVue from '../../user/huiyu.vue'
 
   export default {
     components: {
@@ -1372,6 +1373,7 @@
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
           let balancePay = null
+          let huiyuPay  = null
           let wocPays = []
           let woaPay = null
           let bankPay = null
@@ -1390,6 +1392,16 @@
                   openId: user.openId,
                   orderNo: this.orderInfo.orderNo,
                   payType: "balance"
+                }
+                break;
+              case 'huiyuBalance':
+                huiyuPay = {
+                  actPayFee: "" + item.payAmount,
+                  openId: user.openId,
+                  orderNo: this.orderInfo.orderNo,
+                  cardNo: item.accountNo,
+                  cardPwd: item.password,
+                  payType: "huiyu"
                 }
                 break;
               case 'optCard':
@@ -1557,6 +1569,8 @@
           }
           if (balancePay != null)
             this.payOptions['balancePay'] = balancePay
+          if(huiyuPay != null)
+            this.payOptions['huiYuPay'] = huiyuPay
           if (wocPays.length > 0)
             this.payOptions['wocPays'] = wocPays
           if (woaPay != null) {
