@@ -478,13 +478,23 @@
       }
     },
 
-    created() {
+    async created() {
       this.$log("cashser created Enter")
       this.showHeader = this.$api.HAS_HEADER;
       this.orderInfo = this.$route.params.orderInfo;
       this.$log(this.orderInfo);
       if (this.orderInfo != undefined) {
-        this.obtainUserDetail();
+        let resp = await this.getUserDetail()
+        if (resp != null) {
+          if (resp.status == 200) {
+            let user = resp.data.data.user;
+            if (user != null) {
+              this.userDetail = user;
+              this.mTelphoneNumber = this.userDetail.telephone;
+              this.updateUserDetail(this.userDetail);
+            }
+          }
+        }
         if (this.userDetail != null) {
           this.getOptCardList(this.userDetail);
           this.updateHuiyuAmount(this.userDetail);
@@ -895,20 +905,6 @@
         }
       },
 
-      async obtainUserDetail() {
-        let resp = await this.getUserDetail()
-        if (resp != null) {
-          if (resp.status == 200) {
-            let user = resp.data.data.user;
-            if (user != null) {
-              this.userDetail = user;
-              this.mTelphoneNumber = this.userDetail.telephone;
-              this.updateUserDetail(this.userDetail);
-            }
-          }
-        }
-      },
-
       /*      saveUserInfo() {
               return this.$api.xapi({
                 method: 'put',
@@ -1236,8 +1232,24 @@
       },
 
       updateHuiyuAmount(userDetail) {
-        this.$log("updateHuiyuAmount Enter")
-        
+        this.$log("updateHuiyuAmount Enter @@@@@@@@@@@@@@@@@@@@@@@@@")
+        let that = this
+        this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.VENDOR_URL,
+          url: '/welfare/employees/accounts/byPhone',
+          params: {
+            phone: this.userDetail.telephone,
+            type: 4
+          }
+        }).then((response) => {
+          that.$log(response.data)
+          if (response.data.code == 200) {
+            this.mHuiyuBalance.amount = parseInt((response.data.data.amount*100).toFixed(0))
+          } else {
+          }
+        }).catch(function (error) {
+        })
 
       },
 
