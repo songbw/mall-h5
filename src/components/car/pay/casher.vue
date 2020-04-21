@@ -60,6 +60,13 @@
               <van-checkbox slot="right-icon" v-model="huiyuBalanceValue" checked-color="#FF4444"></van-checkbox>
               <span slot="label" style="color:black">可用惠余: ￥{{(mHuiyuBalance.amount/100).toFixed(2)}}</span>
             </van-cell>
+            <div v-if="mHuiyuBalance.checked">
+              <div>
+                <van-field v-model="mHuiyuBalance.password" :type="mHuiyuBalance.isPwdVisable?'number':'password'" maxlength="30" clearable
+                  label="密码" label-width="40px" placeholder="请输入支付密码" :right-icon="mHuiyuBalance.isPwdVisable?'eye-o':'closed-eye'"
+                  required @click-right-icon="togHuiyuPwdVisable()" />
+              </div>
+            </div>
           </div>
           <div class="optCardBox">
             <van-cell :title="mOptCards.title" :icon="mOptCards.icon" :value="this.mOptCards.show?'点击隐藏优选卡':'点击查看优选卡'"
@@ -365,6 +372,8 @@
           accountNo: "",
           checked: false,
           payAmount: 0,
+          password: "",
+          isPwdVisable: false,
         },
         mOptCards: {
           title: "惠民优选卡支付",
@@ -1347,6 +1356,11 @@
 
         })
       },
+
+      togHuiyuPwdVisable() {
+        this.mHuiyuBalance.isPwdVisable = !this.mHuiyuBalance.isPwdVisable
+      },
+
       togLinkPayPwdVisable() {
         this.isLinkPwdVisable = !this.isLinkPwdVisable
       },
