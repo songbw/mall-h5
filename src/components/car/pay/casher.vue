@@ -1395,12 +1395,14 @@ import huiyuVue from '../../user/huiyu.vue'
                 }
                 break;
               case 'huiyuBalance':
+                this.$log("###########@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
+                this.$log(item)
                 huiyuPay = {
                   actPayFee: "" + item.payAmount,
                   openId: user.openId,
                   orderNo: this.orderInfo.orderNo,
-                  cardNo: item.accountNo,
-                  cardPwd: item.password,
+                  cardNo: this.mHuiyuBalance.accountNo,
+                  cardPwd: this.mHuiyuBalance.password,
                   payType: "huiyu"
                 }
                 break;
