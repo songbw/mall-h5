@@ -43,6 +43,8 @@ const WECHAT_CONFIG_URL = SERVICE_URL + "v2/guanaitong-client"
 
 const AOYIS_CONFIG_URL = SERVICE_URL + "/v2/aoyis"
 
+const COMMISSION_CONFIG_URL = SERVICE_URL + "/v2/commission"
+
 const xapi = axios.create();
 //xapi.defaults.baseURL = SERVER_BASE_URL;
 xapi.defaults.timeout = 20000;

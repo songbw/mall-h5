@@ -60,12 +60,33 @@
               <van-checkbox slot="right-icon" v-model="huiyuBalanceValue" checked-color="#FF4444"></van-checkbox>
               <span slot="label" style="color:black">可用惠余: ￥{{(mHuiyuBalance.amount/100).toFixed(2)}}</span>
             </van-cell>
-            <div v-if="mHuiyuBalance.checked">
+            <div v-if="mHuiyuBalance.checked && mHuiyuBalance.accountNo.length > 0">
               <div>
-                <van-field v-model="mHuiyuBalance.password" :type="mHuiyuBalance.isPwdVisable?'number':'password'" maxlength="30" clearable
-                  label="密码" label-width="40px" placeholder="请输入支付密码" :right-icon="mHuiyuBalance.isPwdVisable?'eye-o':'closed-eye'"
-                  required @click-right-icon="togHuiyuPwdVisable()" />
+                <van-field v-model="mHuiyuBalance.password" :type="mHuiyuBalance.isPwdVisable?'number':'password'"
+                  maxlength="30" clearable label="密码" label-width="40px" placeholder="请输入支付密码"
+                  :right-icon="mHuiyuBalance.isPwdVisable?'eye-o':'closed-eye'" required
+                  @click-right-icon="togHuiyuPwdVisable()" />
               </div>
+              <div class="huiyuForgotPwdBox">
+                <span @click="onHuiyuForgotPwdBtnClick()">忘记密码</span>
+              </div>
+              <van-dialog v-model="showHuiyuSetPwdDlg" title="设置惠余支付密码" show-cancel-button="true"
+                confirm-button-text="设置" :beforeClose="beforeCloseHuiyuSetPwdDlg">
+                <div style="padding:10px;text-align:center">
+                  <span>用户需设置支付密码，请设置支付密码</span>
+                </div>
+                <van-field v-model="mTelphoneNumber" type="tel" rows="1" maxlength="20" placeholder="请输入电话号码"
+                  disabled />
+                <div class="verifyCodeBox" style="padding: 10px 0px">
+                  <van-field v-model="mHuiyuBalance.verifyCode" maxlength="10" clearable placeholder="请输入短信验证码" />
+                  <van-button :disabled="mHuiyuBalance.isVerifyCodeBtnDisabled" type="danger"
+                    @click="onHuiyuGetVerifyCodeBtnClick">
+                    {{mHuiyuBalance.verifyBtnText}}
+                  </van-button>
+                </div>
+                <van-field v-model="mHuiyuBalance.newHuiyuPwd" rows="1" maxlength="6" placeholder="请输入6位支付密码"
+                  clearable />
+              </van-dialog>
             </div>
           </div>
           <div class="optCardBox">
@@ -133,35 +154,6 @@
         <div class="pathBox">
           <van-radio-group v-model="radio">
             <div v-if="this.$api.APP_ID == '11'">
-              <!--              <van-cell title="联机账户" :icon="icon_linkpay" clickable @click="radio = '1'">
-                              <van-radio slot="right-icon" name="1" checked-color="#FF4444"/>
-                            </van-cell>-->
-              <!--              <div class="linkPayDialog" v-if="radio == '1'">
-                              &lt;!&ndash;              <span class="tip">温馨提示:联机账户支付不能低于1角</span>&ndash;&gt;
-                              <van-field
-                                v-model="linkPayAccount"
-                                type="number"
-                                required
-                                clearable
-                                label="卡号"
-                                maxlength="30"
-                                label-width="40px"
-                                placeholder="请输入卡号"
-                              />
-
-                              <van-field
-                                v-model="linkPayPwd"
-                                :type="isLinkPwdVisable?'number':'password'"
-                                maxlength="30"
-                                clearable
-                                label="密码"
-                                label-width="40px"
-                                placeholder="请输入密码"
-                                :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
-                                required
-                                @click-right-icon="togLinkPayPwdVisable()"
-                              />
-                            </div>-->
               <van-cell title="统一支付" :icon="icon_unionpay" clickable @click="radio = '3'" v-if="isSupportUnionPay">
                 <van-radio slot="right-icon" name="3" checked-color="#FF4444" />
               </van-cell>
@@ -336,7 +328,7 @@
     configWechat
   } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
-import huiyuVue from '../../user/huiyu.vue'
+  import huiyuVue from '../../user/huiyu.vue'
 
   export default {
     components: {
@@ -375,6 +367,13 @@ import huiyuVue from '../../user/huiyu.vue'
           payAmount: 0,
           password: "",
           isPwdVisable: false,
+          verifyCode: "",
+          isVerifyCodeBtnDisabled: false,
+          verifyBtnText: '获取验证码',
+          verifyCodeCount: 0,
+          verifyCodeTimer: 0,
+          verifyBtnTextClicked: false,
+          newHuiyuPwd: ""
         },
         mOptCards: {
           title: "惠民优选卡支付",
@@ -399,6 +398,7 @@ import huiyuVue from '../../user/huiyu.vue'
         },
         mBankcardList: [],
         mPaylist: [],
+        showHuiyuSetPwdDlg: false,
         addNewOptCardDlgShow: false,
         newOptCardNumber: "",
         newOptCardPwd: "",
@@ -433,6 +433,15 @@ import huiyuVue from '../../user/huiyu.vue'
       }
     },
 
+    watch: {
+      huiyuBalanceValue(newVal, oldVal) {
+        this.$log("huiyuBalanceValue changed", newVal)
+        if (newVal) {
+          this.checkIfHuiyuNeedSetPwd()
+        }
+      }
+    },
+
     computed: {
       amount() {
         return (this.orderInfo.orderAmount / 100).toFixed(2)
@@ -440,7 +449,8 @@ import huiyuVue from '../../user/huiyu.vue'
 
       remainPayAmount() {
         this.$log("remainPayAmount Enter")
-        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount  -  this.mHuiyuBalance.payAmount - this.mOptCards.payAmount - this.mLinkPay
+        return ((this.orderInfo.orderAmount - this.mCoinBalance.payAmount - this.mHuiyuBalance.payAmount - this
+          .mOptCards.payAmount - this.mLinkPay
           .payAmount) / 100).toFixed(2)
       },
 
@@ -565,6 +575,35 @@ import huiyuVue from '../../user/huiyu.vue'
     },
 
     methods: {
+      onHuiyuForgotPwdBtnClick() {
+        this.$log("onHuiyuForgotPwdBtnClick Enter")
+        this.mHuiyuBalance.newHuiyuPwd = ""
+        this.mHuiyuBalance.verifyCode = ""
+        this.showHuiyuSetPwdDlg = true
+      },
+      checkIfHuiyuNeedSetPwd() {
+        if (this.mHuiyuBalance.accountNo.length > 0) {
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.COMMISSION_CONFIG_URL,
+            url: '/fl/personal/check/password',
+            params: {
+              accountNo: this.mHuiyuBalance.accountNo
+            }
+          }).then((response) => {
+            this.$log(response)
+            if (response.status == 200 && response.data.code == 200) {
+              if (response.data.data === false) {
+                this.mHuiyuBalance.newHuiyuPwd = ""
+                this.mHuiyuBalance.verifyCode = ""
+                this.showHuiyuSetPwdDlg = true
+              }
+            }
+          }).catch(function (error) {
+
+          })
+        }
+      },
       queryLinkPayBalance() {
         let options = {
           "cardNo": this.linkPayAccount,
@@ -695,6 +734,19 @@ import huiyuVue from '../../user/huiyu.vue'
       formatBankNumber(bankNumber) {
         return bankNumber.substr(0, 4) + " **** **** " + bankNumber.substr(-4);
       },
+
+      HuiyuBtnCountDown() {
+        this.mHuiyuBalance.verifyCodeCount--;
+        if (this.mHuiyuBalance.verifyCodeCount <= 0) {
+          clearInterval(this.mHuiyuBalance.verifyCodeTimer)
+          this.mHuiyuBalance.verifyCodeTimer = 0
+          this.mHuiyuBalance.verifyCodeCount = 0
+          this.mHuiyuBalance.verifyBtnText = '获取验证码'
+          this.mHuiyuBalance.isVerifyCodeBtnDisabled = false;
+        } else {
+          this.mHuiyuBalance.verifyBtnText = this.mHuiyuBalance.verifyCodeCount + ' s'
+        }
+      },
       QPayBtnCountDown() {
         this.quickPayVerifyCodeCount--;
         if (this.quickPayVerifyCodeCount <= 0) {
@@ -707,6 +759,30 @@ import huiyuVue from '../../user/huiyu.vue'
         } else {
           this.verifyBtnText = this.quickPayVerifyCodeCount + ' s'
         }
+      },
+      onHuiyuGetVerifyCodeBtnClick() {
+        this.$log("onHuiyuGetVerifyCodeBtnClick Enter")
+        if (!this.mHuiyuBalance.isVerifyCodeBtnDisabled) {
+          this.mHuiyuBalance.isVerifyCodeBtnDisabled = true;
+          this.mHuiyuBalance.verifyCodeCount = 60
+          this.mHuiyuBalance.verifyCodeTimer = setInterval(this.HuiyuBtnCountDown, 1000);
+          let options = {
+            "mobile": this.mTelphoneNumber,
+          }
+          this.$log(options)
+          this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.COMMISSION_CONFIG_URL,
+            url: '/fl/send/captcha',
+            params: options,
+          }).then((response) => {
+
+          }).catch(function (error) {
+            //
+          })
+        }
+
+
       },
       onGetVerifyCodeBtnClick() {
         this.$log("onGetVerifyCodeBtnClick Enter")
@@ -1081,6 +1157,50 @@ import huiyuVue from '../../user/huiyu.vue'
         }
       },
 
+      beforeCloseHuiyuSetPwdDlg(action, done) {
+        let that = this
+        this.$log("beforeCloseHuiyuSetPwdDlg Enter")
+        if (action === 'confirm') {
+          if (this.mHuiyuBalance.verifyCode.length === 0) {
+            this.$toast("请输入验证码")
+            done(false)
+            return
+          }
+          if (this.mHuiyuBalance.newHuiyuPwd.length != 6) {
+            this.$toast("支付密码必须是6位数")
+            done(false)
+            return
+          }
+          let options = {
+            mobile: this.mTelphoneNumber,
+            captcha: this.mHuiyuBalance.verifyCode,
+            password: this.mHuiyuBalance.newHuiyuPwd,
+            accountNo: this.mHuiyuBalance.accountNo
+          }
+          this.$api.xapi({
+            method: 'post',
+            baseURL: this.$api.COMMISSION_CONFIG_URL,
+            url: '/fl/set/personal/password',
+            data: options
+          }).then((response) => {
+            this.$log(response)
+            if (response.status == 200) {
+              if (response.data.code == 200) {
+                this.$toast("设置支付密码成功")
+              } else {
+                this.$toast(response.data.msg)
+              }
+            }
+            done()
+          }).catch(function (error) {
+            that.$toast("网络错误,设置密码失败!")
+            done()
+          })
+        } else {
+          done()
+        }
+      },
+
       async beforeCloseAddNewOptCardDlg(action, done) {
         this.$log("beforeCloseAddNewOptCardDlg Enter");
         if (action === 'confirm') {
@@ -1120,6 +1240,7 @@ import huiyuVue from '../../user/huiyu.vue'
             url: '/woc/cardbind/dobind',
             data: options
           }).then((response) => {
+            post
             that.$log(response.data.data)
             that.$toast(response.data.message)
             that.getOptCardList(this.userDetail);
@@ -1286,12 +1407,10 @@ import huiyuVue from '../../user/huiyu.vue'
         }).then((response) => {
           that.$log(response.data)
           if (response.data.code == 200) {
-            this.mHuiyuBalance.amount = parseInt((response.data.data.amount*100).toFixed(0))
+            this.mHuiyuBalance.amount = parseInt((response.data.data.amount * 100).toFixed(0))
             this.mHuiyuBalance.accountNo = response.data.data.accountNo
-          } else {
-          }
-        }).catch(function (error) {
-        })
+          } else {}
+        }).catch(function (error) {})
 
       },
 
@@ -1373,7 +1492,7 @@ import huiyuVue from '../../user/huiyu.vue'
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
           let balancePay = null
-          let huiyuPay  = null
+          let huiyuPay = null
           let wocPays = []
           let woaPay = null
           let bankPay = null
@@ -1571,7 +1690,7 @@ import huiyuVue from '../../user/huiyu.vue'
           }
           if (balancePay != null)
             this.payOptions['balancePay'] = balancePay
-          if(huiyuPay != null)
+          if (huiyuPay != null)
             this.payOptions['huiYuPay'] = huiyuPay
           if (wocPays.length > 0)
             this.payOptions['wocPays'] = wocPays
@@ -1937,6 +2056,18 @@ import huiyuVue from '../../user/huiyu.vue'
 
             .van-cell {
               margin-top: -1px;
+            }
+
+            .huiyuForgotPwdBox {
+              width: 100%;
+              text-align: left;
+              color: #1989fa;
+              padding: 0px 15px;
+              .fz(font-size, 25px);
+
+              span {
+                text-decoration: underline
+              }
             }
           }
 

@@ -104,6 +104,7 @@
         this.$api.QUICKLY_PAY_URL = serverUrl + "/v2/cardpayment/"
         this.$api.WECHAT_CONFIG_URL = serverUrl + "/v2/guanaitong-client/"
         this.$api.AOYIS_CONFIG_URL = serverUrl + "/v2/aoyis"
+        this.$api.COMMISSION_CONFIG_URL = serverUrl + "/v2/commission"
         this.$api.IS_SUPPORTED_MULTI_POINT = false;
         if (result.data.IS_SUPPORTED_MULTI_POINT != undefined) {
           this.$api.IS_SUPPORTED_MULTI_POINT = result.data.IS_SUPPORTED_MULTI_POINT;
