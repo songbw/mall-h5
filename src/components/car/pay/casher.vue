@@ -68,7 +68,7 @@
                   @click-right-icon="togHuiyuPwdVisable()" />
               </div>
               <div class="huiyuForgotPwdBox">
-                <span @click="onHuiyuForgotPwdBtnClick()">忘记密码</span>
+                <span @click="onHuiyuForgotPwdBtnClick()">修改密码</span>
               </div>
               <van-dialog v-model="showHuiyuSetPwdDlg" title="设置惠余支付密码" show-cancel-button="true"
                 confirm-button-text="设置" :beforeClose="beforeCloseHuiyuSetPwdDlg">
