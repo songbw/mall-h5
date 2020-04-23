@@ -22,6 +22,7 @@
       return {
         icon_record: require('@/assets/icons/ico_huiyuRecord.png'),
         accountBalance: 0,
+        accountNo: "",
         accountLoaded: false,
       }
     },
@@ -41,7 +42,7 @@
           url: '/welfare/employees/accounts/byPhone',
           params: {
             phone: mobile,
-          /*
+            /*
 UNKNOWN(0, "UNKNOWN", "未知"),
 NORMAL(1, "NORMAL", "普通虚户"),
 OFFLINE(2, "OFFLINE", "线下充值账户"),
@@ -53,8 +54,9 @@ HUIMI(5, "HUIMI", "惠米");
           }
         }).then((response) => {
           that.$log(response.data)
-          if(response.data.code == 200) {
+          if (response.data.code == 200) {
             this.accountBalance = parseFloat(response.data.data.amount).toFixed(2)
+            this.accountNo = response.data.data.accountNo
             this.accountLoaded = true
           } else {
             this.$log("1xxxxxxxxxxxxxxxx")
@@ -79,7 +81,7 @@ HUIMI(5, "HUIMI", "惠米");
               if (userDetail.telephone != undefined && userDetail.telephone.length > 0) {
                 that.getAccountBalace(userDetail.telephone)
               } else {
-                
+
               }
             }
           } catch (error) {
@@ -101,6 +103,14 @@ HUIMI(5, "HUIMI", "惠米");
       },
       onAccountRecordBtnClick() {
         this.$log("onAccountRecordBtnClick Enter")
+        if (this.accountNo.length > 0) {
+          this.$router.push({
+            name: '惠余交易记录页',
+            query: {
+              accountNo: this.accountNo
+            }
+          })
+        }
       }
     },
   }

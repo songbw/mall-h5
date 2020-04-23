@@ -45,6 +45,7 @@ const HistoryOrder = resolve => require(['@/components/user/historyOrderList.vue
 const HistoryOrderDetail = resolve => require(['@/components/user/historyOrderDetail.vue'], resolve)
 const ShangHaiProtocol = resolve => require(['@/components/user/shanghaiBankProtcol.vue'], resolve)
 const Huiyu = resolve => require(['@/components/user/huiyu.vue'], resolve)
+const HuiyuRecords = resolve => require(['@/components/user/huiyuRecords.vue'], resolve)
 const FcLogin = resolve => require(['@/views/fcLogin.vue'], resolve)
 const FcRegister = resolve => require(['@/views/fcRegister.vue'], resolve)
 const FcResetPwd = resolve => require(['@/views/fcResetPwd.vue'], resolve)
@@ -463,6 +464,14 @@ export default new VueRouter({
       component: Huiyu,
       meta: {
         title: '我的惠余',
+      }
+    },
+    {
+      path: '/user/huiyuRecords',
+      name: '惠余交易记录页',
+      component: HuiyuRecords,
+      meta: {
+        title: '惠余交易记录',
       }
     }
   ]
