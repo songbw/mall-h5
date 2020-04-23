@@ -1,6 +1,6 @@
 <template lang="html">
   <div class="huiyu">
-    <div class="cousumeListTitle">我的消费记录</div>
+    <div class="cousumeListTitle">我的交易记录</div>
     <div class="huyuOrderList">
       <van-list v-model="loading" :finished="finished" @load="onLoad">
         <div v-if="launchedLoaded && list.length > 0">
