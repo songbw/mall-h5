@@ -9,7 +9,7 @@
               <div>
                 <span>{{k.transactionTypeDesc}}</span>
                 <p style="float: right;color: #ff4444">
-                  <span v-if="k.type==0">-</span>
+                  <span v-if="k.transactionType==1">-</span>
                   <span v-else>+</span>
                   <span>{{parseFloat(k.amount).toFixed(2)}}元</span>
                 </p>
