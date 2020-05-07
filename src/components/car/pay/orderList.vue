@@ -307,7 +307,7 @@
                 let skuId = goods.skuId
                 let purchaseQty = 1
                 if (skuId === undefined || skuId === null) {
-                    skuId = goods.skuid
+                  skuId = goods.skuid
                 }
                 if (cartItem == null) {
                   let baseInfo = {
@@ -363,8 +363,10 @@
       },
       getClientName() {
         switch (this.$api.APP_ID) {
+          case "08":
+            return "关爱通唯品会";
           case "09":
-            return "关爱通品牌直供";
+            return "关爱通慧聚品牌馆";
           case "10":
             return "关爱通苏宁易购";
           case "11":
@@ -527,18 +529,16 @@
         }
       },
       getMerchantName(merchantNo) {
-        return "惠民优选"
-        /*        if (merchantNo == 20) {
-                  return "苏宁易购"
-                } else if (merchantNo == 30) {
-                  return "唯品会"
-                } else if (merchantNo == 50) {
-                  return "天猫精选"
-                } else if (merchantNo == 60) {
-                  return "京东"
-                } else {
-                  return "商城自营"
-                }*/
+        switch (this.$api.APP_ID) {
+          case "08":
+            return "唯品会";
+          case "09":
+            return "慧聚品牌馆";
+          case "10":
+            return "苏宁易购";
+          default:
+            return "惠民优选"
+        }
       },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;

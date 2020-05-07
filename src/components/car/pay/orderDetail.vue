@@ -744,18 +744,16 @@
 
 
       getMerchantName(merchantNo) {
-        return "惠民优选"
-        /*        if (merchantNo == 20) {
-                  return "苏宁易购"
-                } else if (merchantNo == 30) {
-                  return "唯品会"
-                } else if (merchantNo == 50) {
-                  return "天猫精选"
-                } else if (merchantNo == 60) {
-                  return "京东"
-                } else {
-                  return "商城自营"
-                }*/
+        switch (this.$api.APP_ID) {
+          case "08":
+            return "唯品会";
+          case "09":
+            return "慧聚品牌馆";
+          case "10":
+            return "苏宁易购";
+          default:
+            return "惠民优选"
+        }
       },
     }
   }
