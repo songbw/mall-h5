@@ -245,7 +245,7 @@
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
                           <div class="coupon-price">
-                            <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                            <span v-if="k.couponInfo.rules.couponRules.type <2 || k.couponInfo.rules.couponRules.type === 5" style="margin-right: -7px">￥</span>
                             {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
                             <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
                           </div>
@@ -918,7 +918,6 @@
 
       upDatefreightPay() {
         if (this.platformFreight != -1) {
-          this.$log("xxxxxxxxxxxxxxxxxxx")
           this.freightPay = this.platformFreight;
         } else {
           this.freightPay = 0;
@@ -939,8 +938,8 @@
       isCouponActivied(coupon) {
         let ret = false;
         if (coupon.status === 1) {
-          let startTime = new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g, '/')).getTime()
-          let endTime = new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
+          let startTime = new Date(this.$moment(coupon.couponInfo.effectiveStartDate).format('YYYY/MM/DD HH:mm:ss')).getTime() //new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g, '/')).getTime()
+          let endTime = new Date(this.$moment(coupon.couponInfo.effectiveEndDate).format('YYYY/MM/DD HH:mm:ss')).getTime()//new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
           let current = new Date().getTime()
           if (current < startTime) {
             ret = false //券活动未开始
@@ -956,7 +955,8 @@
         switch (rules.type) {
           case 0: //满减券
             return rules.fullReduceCoupon.reducePrice;
-          case 1: //代金券
+          case 1:
+          case 5:
             return rules.cashCoupon.amount;
           case 2: //折扣券
             return (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折';
@@ -967,11 +967,11 @@
 
       formateCouponDescription(couponInfo) {
         switch (couponInfo.rules.scenario.type) {
-          case 1: //满减券
+          case 1: 
             return "仅限某些指定的商品可用";
-          case 2: //代金券
+          case 2:
             return "全场商品可用";
-          case 3: //折扣券
+          case 3:
             return "仅限定某些品牌类商品可用";
           default:
             return "限提供所描述特定的服务可用"
@@ -984,6 +984,8 @@
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
           case 1: //代金券
             return '代金券';
+          case 5: //提货代金券
+            return '提货代金券';
           case 2: //折扣券
             if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
@@ -1196,6 +1198,7 @@
                 reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
                 break;
               case 1:
+              case 5:
                 reducePrice = coupon.couponInfo.rules.couponRules.cashCoupon.amount;
                 break;
               case 2:

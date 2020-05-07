@@ -1,0 +1,594 @@
+<template lang="html">
+  <section class="main">
+    <div style="margin:20px 10px">
+      <p style="margin:5pt 0pt; text-align:center"><span style="font-family:宋体; font-size:12pt">惠民优选</span><span
+          style="font-family:宋体; font-size:12pt">服务协议</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">【首部及导言】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">欢迎您使用惠民优选的服务！</span></p>
+      <p style="margin:5pt 0pt"><span
+          style="font-family:宋体; font-size:12pt">为使用惠民优选的服务，您应当阅读并遵守《惠民优选服务协议》（以下简称“本协议”）和《惠民优选隐私政策》。请您务必审慎阅读、充分理解各条款内容，特别是免除或者限制惠民优选责任的条款、对用户权利进行限制的条款、约定争议解决方式和司法管辖的条款等，以及开通或使用某项服务的单独协议或规则。限制、免责条款或者其他涉及</span><span
+          style="font-family:宋体; font-size:12pt">您重大</span><span
+          style="font-family:宋体; font-size:12pt">权益的条款可能以加粗、加下划线等形式提示</span><span
+          style="font-family:宋体; font-size:12pt">您重点</span><span style="font-family:宋体; font-size:12pt">注意。</span></p>
+      <p style="margin:5pt 0pt"><span
+          style="font-family:宋体; font-size:12pt">除非您已充分阅读、完全理解并接受本协议所有条款，否则您无权使用惠民优选服务。您点击“同意”或“下一步”，或您使用惠民优选服务，或者以其他任何明示或者默示方式表示接受本协议的，均视为您已阅读并同意签署本协议。本协议即在您与惠民优选之间产生法律效力，成为对双方均具有约束力的法律文件。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span
+          style="font-family:宋体; font-size:12pt">如果您因年龄、智力等因素而不具有完全民事行为能力，请在法定监护人（以下简称&quot;监护人&quot;）的陪同下阅读和判断是否同意本协议，并特别注意未成年人使用条款。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span
+          style="font-family:宋体; font-size:12pt">如果您是中国大陆地区以外的用户，您订立或履行本协议还需要同时遵守您所属和/或所处国家或地区的法律。</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">一、【协议的范围】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">
+          1.1本协议是用户与惠民优选之间关于其使用惠民优选的服务所订立的协议。“惠民优选”是指惠民优选和/或其相关服务可能存在的运营关联单位。“用户”是指惠民优选的服务的使用人，在本协议中更多地称为“您”。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> 1.2惠民优选的服务是指惠民优选向用户提供的，包括但不限于互联网增值、</span><span
+          style="font-family:宋体; font-size:12pt">网上商城</span><span
+          style="font-family:宋体; font-size:12pt">、等产品及服务，具体服务以惠民优选实际提供的为准（以下简称“本服务”）。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">1.3本协议内容同时包括《惠民优选隐私政策》,且您在使用惠民优选某一特定服务时，该服务可能会另有单独的协议、相关业务规则等（以下统称为“单独协议”）。上述内容一经正式发布，即为本协议不可分割的组成部分，</span><span
+          style="font-family:宋体; font-size:12pt">您同样</span><span
+          style="font-family:宋体; font-size:12pt">应当遵守。您对前述任何单独协议的接受，即视为您对本协议全部的接受。您对本协议的接受，即视为您对《惠民优选隐私政策》的接受。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">二、【</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span style="font-family:宋体; font-size:12pt">与密码安全】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">2.1您在使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">时可能需要注册一个</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span
+          style="font-family:宋体; font-size:12pt">。关于您使用</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span
+          style="font-family:宋体; font-size:12pt">的具体规则，请仔细阅读并遵守相关单独协议。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">2.2惠民优选特别提醒您应妥善</span><span
+          style="font-family:宋体; font-size:12pt">保管您</span><span style="font-family:宋体; font-size:12pt">的</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span
+          style="font-family:宋体; font-size:12pt">和密码。当您使用完毕后，应安全退出。因您保管不善可能导致遭受被盗号或密码失窃，责任由您自行承担。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">2.3为增强用户体验和/或技术便利，</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span style="font-family:宋体; font-size:12pt">的</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span
+          style="font-family:宋体; font-size:12pt">可能包括数字、字母或者其组合，以及手机号码、电子信箱等多种形式。在</span><span
+          style="font-family:宋体; font-size:12pt">您注册某</span><span
+          style="font-family:宋体; font-size:12pt">一形式的</span><span style="font-family:宋体; font-size:12pt">帐号</span><span
+          style="font-family:宋体; font-size:12pt">时，惠民优选可能附赠</span><span
+          style="font-family:宋体; font-size:12pt">该帐</span><span
+          style="font-family:宋体; font-size:12pt">号的另一表现形式。具体的</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span style="font-family:宋体; font-size:12pt">形式、</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span style="font-family:宋体; font-size:12pt">体系及</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span
+          style="font-family:宋体; font-size:12pt">之间的关联关系等，以惠民优选实际提供的为准</span><span
+          style="font-family:宋体; font-size:12pt">。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">2.4您在使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">过程中，可能可以为您使用的</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span
+          style="font-family:宋体; font-size:12pt">设置昵称、头像、签名、留言等信息。您应当保证这些信息的内容和形式符合法律法规（本协议中的“法律法规”指用户所属/所处地区、国家现行有效的法律、行政法规、司法解释、地方法规、地方规章、部门规章及其他规范性文件以及对于该等法律法规的不时修改和补充，以及相关政策规定等，下同。）、公序良俗、社会公德以及惠民优选平台规则，且不会侵害任何主体的合法权益。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">2.5部分第三方网站或者服务可能可以用微信</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span
+          style="font-family:宋体; font-size:12pt">等作为其登录途径之一。您知晓，除非惠民优选特别说明外，这些网站或者服务并非惠民优选运营，您应自行判断此类第三方网站或者服务的安全性和可用性，并自行承担相关风险和责任。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">三、【用户个人信息保护】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">3.1保护用户个人信息是惠民优选的一项基本原则。惠民优选将按照本协议及《惠民优选隐私政策》的规定收集、使用、储存和分享您的个人信息。本协议对个人信息保护相关内容未作明确规定的，均应以《惠民优选隐私政策》的内容为准。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">3.2您在注册</span><span
+          style="font-family:宋体; font-size:12pt">帐号</span><span style="font-family:宋体; font-size:12pt">或使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">的过程中，可能需要填写一些必要的信息。若国家法律法规有特殊规定的，您需要填写真实的身份信息。若您填写的信息不完整，则可能无法使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">或在使用过程中受到限制。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">3.3一般情况下，您可根据相关产品规则浏览、修改自己提交的信息，但出于安全性和身份识别（如号码申诉服务等）的考虑，您可能无法修改注册时提供的初始注册信息及其他验证信息。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">3.4惠民优选将尽可能运用各种安全技术和程序建立完善的管理制度来保护您的个人信息，以免遭受未经授权的访问、使用或披露。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">3.5惠民优选不会将您的个人信息转移或披露给任何第三方，除非：</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（1）相关法律法规或司法机关、行政机关要求。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（2）为完成合并、分立、收购或资产转让而转移。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（3）为提供您要求的服务所必需。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（4）依据《惠民优选隐私政策》或其他相关协议规则可以转移或披露给任何第三方的情形。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt"> </span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">3.6惠民优选非常重视对未成年人个人信息的保护。若您不具备完全民事行为能力，在使用惠民优选的服务前，应事先取得您的监护人的同意。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">四、【使用本服务的方式】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt"> </span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">4.1本服务仅为您个人非商业性质的使用，除非您与惠民优选另有约定。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt"> </span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">4.2</span><span style="font-family:宋体; font-size:12pt">您依本</span><span
+          style="font-family:宋体; font-size:12pt">协议条款所取得的权利不可转让。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt"> </span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">4.3</span><span style="font-family:宋体; font-size:12pt">您不得</span><span
+          style="font-family:宋体; font-size:12pt">使用任何方式（包括但不限于第三方软件、插件、外挂、系统、设备等）对</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">进行干扰、破坏、修改或施加其他影响。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt"> </span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">4.4您应当通过惠民优选提供或认可的方式使用本服务，不得通过任何第三方软件、插件、外挂、系统、设备等登录或使用本服务。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt"> </span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">4.5任何人未经惠民优选授权不得使用任何第三方软件、插件、外挂、系统等查看、获取</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">中所包含的惠民优选、惠民优选合作伙伴或用户的任何相关信息、数据等内容，同时，应当严格遵守惠民优选发布的Robots协议等相关协议规则。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">五、【按现状提供服务】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">您理解并同意：</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt"> </span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">5.1本服务是按照现有技术和条件所能达到的现状提供的。惠民优选会尽最大努力保障服务的连贯性和安全性，但惠民优选不能随时预见和防范法律、技术以及其他风险，惠民优选对此类风险在法律允许的范围内免责，包括但不限于不可抗力、病毒、木马、黑客攻击、系统不稳定、第三</span><span
+          style="font-family:宋体; font-size:12pt">方服务</span><span
+          style="font-family:宋体; font-size:12pt">瑕疵、政府行为等原因可能导致的服务中断、数据丢失以及其他的损失和风险。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt"> </span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">5.2因经营策略安排或调整等原因,不同地区的用户可使用的具体惠民优选服务的内容可能会存在差异，具体以惠民优选实际提供的为准。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">六、【自备设备】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">6.1您应当理解，您使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">需自行准备与相关服务有关的终端设备（如电脑、移动终端和必要的网络接入设备等装置），并承担所需的费用（如电话费、上网费等费用）。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">6.2您理解并同意，您使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span style="font-family:宋体; font-size:12pt">时会</span><span
+          style="font-family:宋体; font-size:12pt">耗用您</span><span
+          style="font-family:宋体; font-size:12pt">的终端设备和带宽等资源。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">七、【广告】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">7.1您同意惠民优选可以自行或由第三方通过短信、电子邮件或电子信息等多种方式向您发送</span><span
+          style="font-family:宋体; font-size:12pt">营销</span><span
+          style="font-family:宋体; font-size:12pt">他信息（包括商业与非商业信息），具体发送及展示形式、频次及内容等以惠民优选实际提供为准。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">7.2惠民优选将依照相关法律法规要求开展广告业务。您同意，对</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">中出现的广告，您应审慎判断其真实性和可靠性，除法律明确规定外，您应对因该广告而实施的行为负责。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">八、【服务费用】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">8.1惠民优选的部分服务是以收费方式提供的，如您使用收费服务，请遵守相关的协议。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">8.2惠民优选可能根据实际需要对收费服务的收费标准、方式进行修改和变更，惠民优选也可能会对部分免费服务开始收费。前述修改、变更或开始收费前，惠民优选将在相应服务页面进行通知或公告。如果您不同意上述修改、变更或付费内容，则应停止使用该服务。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">8.3在惠民优选降低收费服务的收费标准或者将收费服务改为免费服务提供时，惠民优选保留不对原付费用户提供退费或者费用调整之权利。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">九、</span><span
+          style="font-family:宋体; font-size:12pt">【知识产权声明】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">9.</span><span
+          style="font-family:宋体; font-size:12pt">1惠民优选在</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">中提供的内容（包括但不限于网页、文字、图片、音频、视频等）的知识产权归惠民优选所有，用户在使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">中所产生内容的知识产权归用户或相关权利人所有，除非您与惠民优选另有约定。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">9</span><span
+          style="font-family:宋体; font-size:12pt">.2除另有特别声明外，惠民优选提供</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">时所依托软件的著作权、专利权及其他知识产权</span><span
+          style="font-family:宋体; font-size:12pt">、慧民优选商标</span><span
+          style="font-family:宋体; font-size:12pt">均归惠民优选所有。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">9</span><span style="font-family:宋体; font-size:12pt">.</span><span
+          style="font-family:宋体; font-size:12pt">3</span><span
+          style="font-family:宋体; font-size:12pt">上述及其他任何</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">包含的内容的知识产权均受到法律法规保护，未经惠民优选、用户或相关权利人书面许可，任何人不得以任何形式进行使用或创造相关衍生作品。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">十、【用户违法违规行为】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">1</span><span style="font-family:宋体; font-size:12pt">0</span><span
+          style="font-family:宋体; font-size:12pt">.1您在使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">时须遵守法律法规，不得制作、复制、发布、传播含有下列内容的信息或从事相关行为，也不得为制作、复制、发布、传播含有下列内容的信息或从事相关行为提供便利：</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（1）反对宪法所确定的基本原则的。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（2）危害国家安全，泄露国家秘密，颠覆国家政权，破坏国家统一的。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（3）损害国家荣誉和利益的。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（4）煽动民族仇恨、民族歧视，破坏民族团结的。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（5）破坏国家宗教政策，宣扬邪教和封建迷信的。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（6）散布谣言，扰乱社会秩序，破坏社会稳定的。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（7）散布淫秽、色情、赌博、暴力、凶杀、恐怖或者教唆犯罪的。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（8）侮辱或者诽谤他人，侵害他人合法权益的。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（9）违反法律法规底线、社会主义制度底线、国家利益底线、公民合法权益底线、社会公共秩序底线、道德风尚底线和信息真实性底线的“七条底线”要求的。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（10）相关法律法规或本协议、相关协议、规则等禁止的。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">1</span><span style="font-family:宋体; font-size:12pt">0</span><span
+          style="font-family:宋体; font-size:12pt">.2如果您在使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">过程中违反了相关法律法规或本协议约定，相关国家机关或机构可能会对您提起诉讼、罚款或采取其他制裁措施，并要求惠民优选给予协助。</span><span
+          style="font-family:宋体; font-size:12pt">因此给您或者他人造成损害的，您应自行承担全部责任，惠民优选不承担任何责任。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">1</span><span style="font-family:宋体; font-size:12pt">0</span><span
+          style="font-family:宋体; font-size:12pt">.3如果您违反本协议约定，惠民优选有权进行独立判断并采取相应措施，包括但不限于通过技术手段删除、屏蔽相关内容或断开链接等。同时，惠民优选有权视用户的行为性质，采取包括但不限于暂停或终止向您提供服务，限制、中止、冻结或终止您的使用，追究法律责任等措施。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">0</span><span
+          style="font-family:宋体; font-size:12pt">.4您违反本协议约定，导致任何主体损失的，您应当独立承担责任；惠民优选因此遭受损失的，您也应当一并赔偿。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">十</span><span
+          style="font-family:宋体; font-size:12pt">一</span><span style="font-family:宋体; font-size:12pt">、【遵守当地法律监管】</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">1</span><span style="font-family:宋体; font-size:12pt">.1您在使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">过程中应当遵守当地相关的法律法规，并尊重当地的道德和风俗习惯。</span><span
+          style="font-family:宋体; font-size:12pt">如果您的行为违反了当地法律法规或道德风俗，您应当为此独立承担责任。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">.2您应避免因使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">而使惠民优选违反法律法规或卷入政治和公共事件，否则惠民优选有权暂停或终止对您的服务。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">十</span><span
+          style="font-family:宋体; font-size:12pt">二</span><span
+          style="font-family:宋体; font-size:12pt">、【用户发送、传播的内容与投诉处理】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">2</span><span style="font-family:宋体; font-size:12pt">.1您通过</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">发送或传播的内容（包括但不限于网页、文字、图片、音频、视频、图表等）均由您自行承担责任。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">2</span><span
+          style="font-family:宋体; font-size:12pt">.2您发送或传播的内容应有合法来源，相关内容为您所有或您已获得必要的授权。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">2</span><span
+          style="font-family:宋体; font-size:12pt">.3如果您发送或传播的内容违法违规或侵犯他人权利的，惠民优选有权进行独立判断并采取删除、屏蔽或断开链接等措施。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">2</span><span
+          style="font-family:宋体; font-size:12pt">.4如您被他人投诉或您投诉他人，惠民优选有权将争议中相关方的主体信息、联系方式、投诉相关内容等必要信息提供给相关当事方或相关部门，以便及时解决投诉纠纷，保护各方合法权益。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">2</span><span
+          style="font-family:宋体; font-size:12pt">.5您保证对您在投诉处理程序中提供的信息、材料、证据等的真实性、合法性、有效性负责。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">十</span><span
+          style="font-family:宋体; font-size:12pt">三</span><span
+          style="font-family:宋体; font-size:12pt">、【不可抗力及其他免责事由】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">3</span><span
+          style="font-family:宋体; font-size:12pt">.1您理解并同意，在使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">的过程中，可能会遇到不可抗力等风险因素，使</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">受到影响。不可抗力是指不能预见、不能克服并不能避免且对一方或双方造成重大影响的客观事件，包括但不限于自然灾害如洪水、地震、瘟疫流行和风暴等以及社会事件如战争、动乱、政府行为等。出现上述情况时，惠民优选将努力在第一时间与相关单位配合，争取及时进行处理，但是由此给您造成的损失惠民优选在法律允许的范围内免责。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">3</span><span
+          style="font-family:宋体; font-size:12pt">.2在法律允许的范围内，惠民优选对以下情形导致的服务中断或受阻不承担责任：</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（1）受到计算机病毒、木马或其他恶意程序、黑客攻击的破坏。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（2）用户或惠民优选的电脑软件、系统、硬件和通信线路出现故障。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（3）用户操作不当或用户通过非惠民优选授权的方式使用本服务。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（4）程序版本过时、设备的老化和/或其兼容性问题。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（5）其他惠民优选无法控制或合理预见的情形。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">3</span><span
+          style="font-family:宋体; font-size:12pt">.3您理解并同意，在使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">的过程中，可能会遇到网络信息或其他用户行为带来的风险，惠民优选不对任何信息的真实性、适用性、合法性承担责任，也不对因侵权行为给您造成的损害负责。这些风险包括但不限于：</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（1）来自他人匿名或冒名的含有威胁、诽谤、令人反感或非法内容的信息。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（2）遭受他人误导、欺骗或其他导致或可能导致的任何心理、生理上的伤害以及经济上的损失。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（3）其他因网络信息或用户行为引起的风险。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">3</span><span
+          style="font-family:宋体; font-size:12pt">.4惠民优选依据本协议约定获得处理违法违规内容的权利，该权利不构成惠民优选的义务或承诺，惠民优选不能保证及时发现违法行为或进行相应处理。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">3</span><span
+          style="font-family:宋体; font-size:12pt">.5在任何情况下，您不应轻信借款、索要密码或其他涉及财产的信息。涉及财产操作的，请一定先核实对方身份，并请经常留意惠民优选有关防范诈骗犯罪的提示。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">十</span><span
+          style="font-family:宋体; font-size:12pt">四</span><span style="font-family:宋体; font-size:12pt">、【协议的生效与变更】</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">4</span><span style="font-family:宋体; font-size:12pt">.1您使用</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">即视为您已阅读本协议并接受本协议的约束。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">4</span><span
+          style="font-family:宋体; font-size:12pt">.2惠民优选有权在必要时修改本协议条款。您可以在相关服务页面查阅最新版本的协议条款。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">4.</span><span
+          style="font-family:宋体; font-size:12pt">3本协议条款变更后，如果您继续使用惠民优选提供的软件或服务，即视为您已接受变更后的协议。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">十</span><span
+          style="font-family:宋体; font-size:12pt">五</span><span
+          style="font-family:宋体; font-size:12pt">、【服务的变更、中断、终止】</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">5</span><span
+          style="font-family:宋体; font-size:12pt">.1您理解并同意，惠民优选基于经营策略的调整，可能会对服务内容进行变更，也可能会中断、中止或终止服务。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">5</span><span style="font-family:宋体; font-size:12pt">.</span><span
+          style="font-family:宋体; font-size:12pt">2</span><span
+          style="font-family:宋体; font-size:12pt">如发生下列任何一种情形，惠民优选有权不经通知而中断或终止向您提供服务：</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（1）根据法律法规</span><span
+          style="font-family:宋体; font-size:12pt">规定您</span><span
+          style="font-family:宋体; font-size:12pt">应提交真实信息，而您提供的个人资料不真实、或与注册时信息不一致又未能提供合理证明。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（2）您违反相关法律法规的规定或违反本协议的约定。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（3）按照法律法规规定，司法机关或主管部门的要求。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">（4）出于安全的原因或其他必要的情形</span><span
+          style="font-family:宋体; font-size:12pt">。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">5</span><span style="font-family:宋体; font-size:12pt">.</span><span
+          style="font-family:宋体; font-size:12pt">3</span><span
+          style="font-family:宋体; font-size:12pt">惠民优选有权按本协议8.2条的约定进行收费。</span><span
+          style="font-family:宋体; font-size:12pt">若您未按时</span><span
+          style="font-family:宋体; font-size:12pt">足额付费，惠民优选有权中断、中止或终止提供服务。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">5</span><span style="font-family:宋体; font-size:12pt">.</span><span
+          style="font-family:宋体; font-size:12pt">4</span><span
+          style="font-family:宋体; font-size:12pt">您有责任自行备份存储在</span><span
+          style="font-family:宋体; font-size:12pt">本服务</span><span
+          style="font-family:宋体; font-size:12pt">中的数据。如果您的服务被终止，惠民优选有权从服务器上永久地</span><span
+          style="font-family:宋体; font-size:12pt">删除您</span><span
+          style="font-family:宋体; font-size:12pt">的数据,法律法规另有规定的除外。服务中止或终止后，惠民优选没有义务向您提供或返还数据。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">十</span><span
+          style="font-family:宋体; font-size:12pt">六</span><span style="font-family:宋体; font-size:12pt">、【管辖与法律适用】</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">6</span><span
+          style="font-family:宋体; font-size:12pt">.1本协议的成立、生效、履行、解释及纠纷解决等相关事宜，均适用中华人民共和国大陆地区法律（不包括冲突法）。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">6</span><span
+          style="font-family:宋体; font-size:12pt">.2本协议签订地为中华人民共和国广东省深圳市南山区。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">6</span><span
+          style="font-family:宋体; font-size:12pt">.3若您和惠民优选之间发生任何纠纷或争议，首先应友好协商解决；协商不成的，您同意将纠纷或争议提交本协议签订地（即中国广东省深圳市南山区）有管辖权的人民法院管辖。</span>
+      </p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">1</span><span
+          style="font-family:宋体; font-size:12pt">6</span><span
+          style="font-family:宋体; font-size:12pt">.4本协议所有条款的标题仅为阅读方便，本身并无实际涵义，不能作为本协议涵义解释的依据。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt"> </span><span style="font-family:宋体; font-size:12pt">&nbsp;</span><span
+          style="font-family:宋体; font-size:12pt">&nbsp;</span><span style="font-family:宋体; font-size:12pt">6</span><span
+          style="font-family:宋体; font-size:12pt">.5本协议条款无论因何种原因部分无效或不可执行，其余条款仍有效，对双方具有约束力。</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">（正文完）</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">深圳凤巢信息科技有限</span><span
+          style="font-family:宋体; font-size:12pt">公司</span></p>
+      <p style="margin:5pt 0pt"><span style="font-family:宋体; font-size:12pt">&nbsp;</span></p>
+      <p style="margin:0pt; orphans:0; text-align:justify; widows:0"><span
+          style="font-family:等线; font-size:10.5pt">&nbsp;</span></p>
+    </div>
+  </section>
+</template>
+
+<script>
+  export default {
+    data() {
+      return {}
+    },
+
+    created() {
+
+    },
+
+    methods: {}
+  }
+
+</script>
+
+<style lang="less" scoped>
+  .main {
+    width: 100%;
+    height: 100%;
+    top: 0px;
+
+
+  }
+
+</style>

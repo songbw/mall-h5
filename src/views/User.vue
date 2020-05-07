@@ -79,6 +79,9 @@
         <van-cell title="在线客服" is-link @click="showMeqiaPanel">
           <img slot="icon" :src="customServiceIcon" />
         </van-cell>
+        <van-cell title="购物须知" is-link @click="onMallBulletinBtnClick">
+          <img slot="icon" :src="customBulletinIcon" />
+        </van-cell>
         <van-cell title="客服电话" :value="this.$api.SERVR_PHONE_NUM">
           <img slot="icon" :src="servicePhoneIcon" />
         </van-cell>
@@ -255,6 +258,7 @@
         receriverAddressIcon: require('@/assets/icons/ico_receiveraddress.png'),
         aboutIcon: require('@/assets/icons/ico_info.png'),
         customServiceIcon: require('@/assets/icons/ico_customService.png'),
+        customBulletinIcon: require('@/assets/icons/ico_mallbulletin.png'),
         servicePhoneIcon: require('@/assets/icons/ico_phone.png'),
         icon_linkPayCard: require('@/assets/icons/ico_linkPayCard.png'),
         icon_ladingCard: require('@/assets/icons/ico_ladingCoupon.png'),
@@ -270,6 +274,11 @@
       }
     },
     methods: {
+      onMallBulletinBtnClick() {
+        this.$router.push({
+          name: '商城公告页',
+        })
+      },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
         if (this.$api.APP_ID === '01') {

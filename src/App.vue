@@ -339,12 +339,12 @@
               }
             } else {
               that.$log("获取用户授权失败!")
-              that.$toast("获取用户授权失败!")
+              //that.$toast("获取用户授权失败!")
               that.configured = true
             }
           } catch (e) {
             that.$log(e)
-            that.$toast("获取用户授权失败!")
+            //that.$toast("获取用户授权失败!")
             that.configured = true
           }
         }
@@ -384,7 +384,7 @@
             } else {
               //获取用户信息失败
               that.$log("获取用户授权失败!")
-              that.$toast("获取用户授权失败!")
+             // that.$toast("获取用户授权失败!")
               that.configured = true
             }
           } catch (e) {
@@ -447,7 +447,7 @@
                 that.thirdPartLogined(openId, accessToken)
               }
             } else {
-              that.$toast("获取用户授权失败!")
+              //that.$toast("获取用户授权失败!")
             }
           }
         }

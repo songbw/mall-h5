@@ -38,7 +38,9 @@ const Qrcode = resolve => require(['@/views/qrcode.vue'], resolve)
 const ShangHaiCardList = resolve => require(['@/components/user/shanghaiBankCardList.vue'], resolve)
 const QuickPayCardList = resolve => require(['@/components/user/quickpayCardList.vue'], resolve)
 const LinkPayAccount = resolve => require(['@/components/user/linkPayAccount.vue'], resolve)
-
+const MallBulletin = resolve => require(['@/components/user/mallBulletin.vue'], resolve)
+const PolicyService = resolve => require(['@/components/user/policyService.vue'], resolve)
+const PolicySecurity = resolve => require(['@/components/user/policySecurity.vue'], resolve)
 const HistoryOrder = resolve => require(['@/components/user/historyOrderList.vue'], resolve)
 const HistoryOrderDetail = resolve => require(['@/components/user/historyOrderDetail.vue'], resolve)
 const ShangHaiProtocol = resolve => require(['@/components/user/shanghaiBankProtcol.vue'], resolve)
@@ -428,6 +430,30 @@ export default new VueRouter({
       component: BillOfLadingGoods,
       meta: {
         title: '提货券商品',
+      }
+    },
+    {
+      path: '/user/mallBulletin',
+      name: '商城公告页',
+      component: MallBulletin,
+      meta: {
+        title: '商城公告',
+      }
+    },
+    {
+      path: '/user/policyService',
+      name: '商城服务协议',
+      component: PolicyService,
+      meta: {
+        title: '商城服务协议',
+      }
+    },
+    {
+      path: '/user/policySecurity',
+      name: '商城服务协议',
+      component: PolicySecurity,
+      meta: {
+        title: '商城隐私保护协议',
       }
     },
   ]

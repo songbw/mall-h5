@@ -7,7 +7,7 @@
       <van-tabs v-model="active" sticky :swipe-threshold=swipeThreshold swipeabl>
         <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
           <div v-for="(k,index) in currentCardList" :key="index" v-if="currentCardList.length > 0" class="cardlistBody">
-            <div style="margin:10px">
+            <div style="margin:10px" v-if="k.cardInfo != null">
               <v-coupon :config="couponStyleConfig">
                 <div class="content">
                   <div class="upper">
@@ -101,6 +101,7 @@
       return {
         loading: true,
         cardList: [],
+        userDetail: null,
         active: 0,
         swipeThreshold: 5,
         empty_bg: require('@/assets/icons/ico_noCoupon.png'),
@@ -139,17 +140,33 @@
     },
 
     async created() {
+      let that = this
       let userInfo = this.$store.state.appconf.userInfo;
       if (!Util.isUserEmpty(userInfo)) {
         try {
           let user = JSON.parse(userInfo);
-          let response = await this.getCardList(user.userId)
+          let response = await this.getUserDetail(user)
+          this.$log(response.data)
           if (response.data.code == 200) {
-            this.cardList = response.data.data.result;
-            //this.$log(this.cardList)
+            let userDetail = response.data.data.user
+            this.$log(userDetail.telephone)
+            if (userDetail.telephone != undefined && userDetail.telephone.length > 0) {
+              try {
+                response = await this.askWelwareCardList(user.userId, userDetail.telephone)
+                this.$log(response)
+                if (response.data.code == 200) {
+                } 
+              }catch (error) {
+                that.$log(error.response)
+              }
+              response = await this.getCardList(user.userId)
+              if (response.data.code == 200) {
+                this.cardList = response.data.data.result;
+              }
+            } else {
+            }
           }
         } catch (e) {
-
         }
       }
       this.$log("xxxxxxxxxxxxxxxxxx")
@@ -238,6 +255,30 @@
           url: '/card/find',
           params: {
             openId: userId,
+          }
+        })
+      },
+      getUserDetail(user) {
+        this.$log("getUserDetail Enter")
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/user',
+          params: {
+            iAppId: this.$api.APP_ID,
+            openId: user.openId,
+          }
+        })
+      },
+      askWelwareCardList(userId, telephone) {
+        this.$log("askWelwareCardList Enter")
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.EQUITY_BASE_URL,
+          url: '/card/openIdByPhone',
+          data: {
+            openId: userId,
+            phone: telephone
           }
         })
       },
@@ -334,7 +375,7 @@
             width: 100%;
             margin-top: 10px;
             .fz(font-size, 24);
-            color:#999999
+            color: #999999
           }
         }
 

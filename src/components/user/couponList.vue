@@ -442,8 +442,8 @@
         this.$log(coupon)
         let ret = "";
         if (coupon.status === 1) {
-          let startTime = new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
-          let endTime = new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
+          let startTime = new Date(this.$moment(coupon.couponInfo.effectiveStartDate).format('YYYY/MM/DD HH:mm:ss')).getTime() //new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
+          let endTime = new Date(this.$moment(coupon.couponInfo.effectiveEndDate).format('YYYY/MM/DD HH:mm:ss')).getTime() //new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
           let current = new Date().getTime()
           if (current < startTime) {
             ret =  "优惠券活动未开始"//券活动未开始
@@ -475,6 +475,7 @@
           case 0://满减券
             return rules.fullReduceCoupon.reducePrice;
           case 1://代金券
+          case 5://提货代金券
             return rules.cashCoupon.amount;
           case 2://折扣券
             return (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折';
