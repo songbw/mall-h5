@@ -109,6 +109,7 @@
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/code',
           params: {
+            appSrc: this.$api.APP_SOURCE,
             telephone: telephone,
             type: "zc"
           }

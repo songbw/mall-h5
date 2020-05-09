@@ -245,7 +245,7 @@
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
                           <div class="coupon-price">
-                            <span v-if="k.couponInfo.rules.couponRules.type <2" style="margin-right: -7px">￥</span>
+                            <span v-if="k.couponInfo.rules.couponRules.type <2 || k.couponInfo.rules.couponRules.type === 5" style="margin-right: -7px">￥</span>
                             {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
                             <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
                           </div>
@@ -310,6 +310,7 @@
     },
     data() {
       return {
+        platformFreight: -1,
         hasVirtualGoods: false,
         freightPay: 0,
         payway: '现金支付',
@@ -985,24 +986,31 @@
 
 
       },
+
       upDatefreightPay() {
-        this.freightPay = 0;
-        try {
-          this.arregationList.forEach(item => {
-            if (item.freight > 0) {
-              this.freightPay += item.freight;
-            }
-          })
-        } catch (e) {}
+        if (this.platformFreight != -1) {
+          this.freightPay = this.platformFreight;
+        } else {
+          this.freightPay = 0;
+          try {
+            this.arregationList.forEach(item => {
+              if (item.freight > 0) {
+                this.freightPay += item.freight;
+              }
+            })
+          } catch (e) {}
+        }
+        this.$log("upDatefreightPay freightPay:"+ this.freightPay)
       },
+
       getDateTime(time) {
         return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },
       isCouponActivied(coupon) {
         let ret = false;
         if (coupon.status === 1) {
-          let startTime = new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g, '/')).getTime()
-          let endTime = new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
+          let startTime = new Date(this.$moment(coupon.couponInfo.effectiveStartDate).format('YYYY/MM/DD HH:mm:ss')).getTime() //new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g, '/')).getTime()
+          let endTime = new Date(this.$moment(coupon.couponInfo.effectiveEndDate).format('YYYY/MM/DD HH:mm:ss')).getTime()//new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
           let current = new Date().getTime()
           if (current < startTime) {
             ret = false //券活动未开始
@@ -1018,7 +1026,8 @@
         switch (rules.type) {
           case 0: //满减券
             return rules.fullReduceCoupon.reducePrice;
-          case 1: //代金券
+          case 1:
+          case 5:
             return rules.cashCoupon.amount;
           case 2: //折扣券
             return (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折';
@@ -1029,11 +1038,11 @@
 
       formateCouponDescription(couponInfo) {
         switch (couponInfo.rules.scenario.type) {
-          case 1: //满减券
+          case 1: 
             return "仅限某些指定的商品可用";
-          case 2: //代金券
+          case 2:
             return "全场商品可用";
-          case 3: //折扣券
+          case 3:
             return "仅限定某些品牌类商品可用";
           default:
             return "限提供所描述特定的服务可用"
@@ -1046,6 +1055,8 @@
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
           case 1: //代金券
             return '代金券';
+          case 5: //提货代金券
+            return '提货代金券';
           case 2: //折扣券
             if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
@@ -1258,6 +1269,7 @@
                 reducePrice = coupon.couponInfo.rules.couponRules.fullReduceCoupon.reducePrice;
                 break;
               case 1:
+              case 5:
                 reducePrice = coupon.couponInfo.rules.couponRules.cashCoupon.amount;
                 break;
               case 2:
@@ -2214,7 +2226,7 @@
                 this.$log("奥弋库存 result is:" + JSON.stringify(result));
                 result.forEach(item => {
                   for (let i = 0; i < this.payCarList.length; i++) {
-                    if (this.payCarList[i].product.baseInfo.mpu === item.mpu) {
+                    if (this.payCarList[i].product.baseInfo.skuId === item.skuId) {
                       if ("1" === item.state) {
                         this.payCarList[i].valid = true
                       } else {
@@ -2280,6 +2292,7 @@
               this.$log(ret)
               if (ret.data.code == 200) {
                 let result = ret.data.data.result
+                this.platformFreight = result.totalPrice
                 if (result.totalPrice > 0) {
                   result.priceBeans.forEach(iFreight => {
                     this.arregationList.forEach(item => {
@@ -3202,9 +3215,10 @@
 
             .van-card {
               background-color: #ffffff;
+              
 
               &__price {
-                margin-top: 0.5em;
+                margin-top: 0.6em;
                 .fz(font-size, 40);
               }
 

@@ -23,9 +23,7 @@
       </div>
       <div class="couponActivityList">
         <div>
-          <van-list v-model="loading"
-                    :finished="finished"
-                    @load="onLoad">
+          <van-list v-model="loading" :finished="finished" @load="onLoad">
             <li v-for="(k,index) in list" :key="index">
               <div class="goodsCard" @click="onGoodCardClick(k)">
                 <div class="card-layout">
@@ -35,12 +33,9 @@
                   <van-col span="16" class="cardInfo">
                     <div class="promotionBox" v-if="k.promotion!= undefined &&  k.promotionState != -1">
                       <span class="promotionTitle">{{k.promotion[0].tag}}</span>
-                      <v-countdown class="promotionCountDown"
-                                   @start_callback="countDownS_cb(index,k)"
-                                   @end_callback="countDownE_cb(index,k)"
-                                   :startTime="getDateTime(k.promotion[0].startDate)"
-                                   :endTime="getDateTime(k.promotion[0].endDate)"
-                                   :secondsTxt="''">
+                      <v-countdown class="promotionCountDown" @start_callback="countDownS_cb(index,k)"
+                        @end_callback="countDownE_cb(index,k)" :startTime="getDateTime(k.promotion[0].startDate)"
+                        :endTime="getDateTime(k.promotion[0].endDate)" :secondsTxt="''">
                       </v-countdown>
                     </div>
                     <div class="cardTitle">
@@ -50,11 +45,11 @@
                       <span></span>
                     </div>
                     <div class="cardFooter">
-                      <div  class="priceBox">
+                      <div class="priceBox">
                         <div class="salePrice">￥{{k.dprice}}</div>
                       </div>
                       <div class="goodsBuyBox">
-                          <van-button size="mini" @click.stop="" @click="onBuyBtnClick(k)"></van-button>
+                        <van-button size="mini" @click.stop="" @click="onBuyBtnClick(k)"></van-button>
                       </div>
                     </div>
                   </van-col>
@@ -140,8 +135,8 @@
             this.$log(item)
             if (item.baseInfo.userId == user.userId) {
               let found = -1
-              for (let i = 0; i < item.couponList.length; i++) {
-                if (item.couponList[i].id == this.coupon.couponInfo.id) {
+              for (let i = 0; i < this.list.length; i++) {
+                if (this.list[i].mpu == item.baseInfo.mpu) {
                   found = i;
                   break;
                 }
@@ -164,7 +159,7 @@
         else {
           let rules = this.coupon.couponInfo.rules.couponRules
           switch (rules.type) {
-            case 0://满减券
+            case 0: //满减券
               // return '￥' + rules.fullReduceCoupon.fullPrice;
               if (rules.fullReduceCoupon.fullPrice > this.allPay) {
                 let amount = rules.fullReduceCoupon.fullPrice - this.allPay
@@ -172,18 +167,19 @@
               } else {
                 return "已满足优惠条件，下单使用该券可立减￥" + rules.fullReduceCoupon.reducePrice
               }
-            case 1://代金券
-              return "已满足优惠条件，下单使用该券可立减￥" + rules.cashCoupon.amount
-            case 2://折扣券
-              //return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折'+"优惠"
-              if (rules.discountCoupon.fullPrice > this.allPay) {
-                let amount = rules.discountCoupon.fullPrice - this.allPay
-                return "再买￥" + amount + "可享受优惠"
-              } else {
-                return "已满足优惠条件，下单使用该券可" + (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折' + "优惠"
-              }
-            default:
-              return ""
+              case 1: //代金券
+              case 5:
+                return "已满足优惠条件，下单使用该券可立减￥" + rules.cashCoupon.amount
+              case 2: //折扣券
+                //return "已满足优惠条件，下单使用该券可" + rules.discountCoupon.discountRatio * 10 + ' 折'+"优惠"
+                if (rules.discountCoupon.fullPrice > this.allPay) {
+                  let amount = rules.discountCoupon.fullPrice - this.allPay
+                  return "再买￥" + amount + "可享受优惠"
+                } else {
+                  return "已满足优惠条件，下单使用该券可" + (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折' + "优惠"
+                }
+                default:
+                  return ""
           }
         }
       },
@@ -196,20 +192,19 @@
           this.onLoad()
         }
       }, 1000);
-    }
-    ,
+    },
 
     methods: {
       getDateTime(time) {
-        return   new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
+        return new Date(this.$moment(time).format('YYYY/MM/DD HH:mm:ss')).getTime()
       },
       countDownS_cb(index, k) {
-        k['promotionState'] = Util.getPromotionState(this,k)
-        k['dprice']=Util.getDisplayPrice(this,k.price,k)
+        k['promotionState'] = Util.getPromotionState(this, k)
+        k['dprice'] = Util.getDisplayPrice(this, k.price, k)
       },
       countDownE_cb(index, k) {
-        k['promotionState'] = Util.getPromotionState(this,k)
-        k['dprice']=Util.getDisplayPrice(this,k.price,k)
+        k['promotionState'] = Util.getPromotionState(this, k)
+        k['dprice'] = Util.getDisplayPrice(this, k.price, k)
       },
 
       updateCurrentGoods(goods) {
@@ -217,13 +212,17 @@
       },
       onGoodCardClick(goods) {
         this.$log("onGoodCardClick Enter")
-        this.$router.push({path:"/detail",query:{
-            mpu:goods.mpu
-          }});
+        this.$router.push({
+          path: "/detail",
+          query: {
+            mpu: goods.mpu
+          }
+        });
       },
       gotoGoodsPage(mpu) {
         this.$router.push({
-          path: "/detail", query: {
+          path: "/detail",
+          query: {
             mpu: mpu
           }
         });
@@ -231,12 +230,12 @@
       add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
-        let mpu = goods.mpu;
         let that = this
-        if (mpu == null) {
-          mpu = goods.skuid;
-        }
-        if(mpu != goods.skuid) {
+        let mpu = goods.mpu;
+        let skuId = goods.skuId
+        if (goods.skuid != undefined)
+          skuId = goods.skuid
+        if (mpu != skuId || goods.merchantId == 2 && goods.mpu.startsWith("30")) {
           this.gotoGoodsPage(mpu)
         } else {
           let addtoCar = {
@@ -250,13 +249,13 @@
             data: addtoCar,
           }).then((response) => {
             this.result = response.data.data.result;
-            if(response.data.code  == 200) {
+            if (response.data.code == 200) {
               this.$toast("添加到购物车成功！")
               let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
               if (cartItem == null) {
                 let baseInfo = {
                   "userId": user.userId,
-                  "skuId": goods.skuid,
+                  "skuId": skuId,
                   "mpu": goods.mpu,
                   "merchantId": goods.merchantId,
                   "count": 1,
@@ -265,7 +264,7 @@
                 }
                 let goodsInfo = {
                   "id": goods.id,
-                  "skuId": goods.skuid,
+                  "skuId": skuId,
                   "mpu": goods.mpu,
                   "merchantId": goods.merchantId,
                   "image": goods.image,
@@ -275,7 +274,7 @@
                   "model": goods.model,
                   "price": goods.price,
                   "checkedPrice": goods.price,
-                  "type":  goods.type == undefined? 0:goods.type
+                  "type": goods.type == undefined ? 0 : goods.type
                 }
                 let couponList = []
                 let promotionInfo = {}
@@ -288,7 +287,7 @@
                 cartItem.couponList.push(this.coupon.couponInfo)
               } else {
                 cartItem.baseInfo.count++;
-                cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
+                cartItem.goodsInfo.type = (goods.type == undefined ? 0 : goods.type)
                 let found = -1;
                 for (let i = 0; i < cartItem.couponList.length; i++) {
                   if (cartItem.couponList[i].id == this.coupon.couponInfo.id) {
@@ -313,7 +312,9 @@
       },
 
       onGotoCarClick() {
-        this.$router.push({name: '购物车页'})
+        this.$router.push({
+          name: '购物车页'
+        })
       },
 
       onBuyBtnClick(goods) {
@@ -324,8 +325,7 @@
         } else {
           this.$toast("没有用户信息，请先登录,再添加购物车")
         }
-      }
-      ,
+      },
       onLoad() {
         let that = this;
         this.launchedLoading = true
@@ -350,8 +350,8 @@
                 that.finished = true;
               } else {
                 result.couponSkus.list.forEach(item => {
-                  item['promotionState'] = Util.getPromotionState(this,item)
-                  item['dprice']=Util.getDisplayPrice(this,item.price,item)
+                  item['promotionState'] = Util.getPromotionState(this, item)
+                  item['dprice'] = Util.getDisplayPrice(this, item.price, item)
                   that.list.push(item);
                 })
                 that.loading = false;
@@ -372,53 +372,53 @@
             that.finished = true;
           }
         }
-      }
-      ,
+      },
       formateCouponPrice(rules) {
         switch (rules.type) {
-          case 0://满减券
+          case 0: //满减券
             return '￥' + rules.fullReduceCoupon.reducePrice;
-          case 1://代金券
+          case 1: //代金券
+          case 5:
             return '￥' + rules.cashCoupon.amount;
-          case 2://折扣券
+          case 2: //折扣券
             return (rules.discountCoupon.discountRatio * 10).toFixed(1) + ' 折';
           default:
             return ""
         }
-      }
-      ,
+      },
       formateReleasePercentage(coupon) {
         if (coupon.releaseTotal == 0)
           return 100;
         let percentage = (Math.round(coupon.releaseNum / coupon.releaseTotal * 10000) / 100.00);
         return percentage;
-      }
-      ,
+      },
       formateCouponDescription(rules) {
         switch (rules.type) {
-          case 0://满减券
+          case 0: //满减券
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
-          case 1://代金券
+          case 1: //代金券
             return '代金券';
-          case 2://折扣券
+          case 5:
+            return '提货代金券';
+          case 2: //折扣券
             if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
             } else {
               return '折扣券 ';
             }
-          default:
-            return ""
+            default:
+              return ""
         }
 
-      }
-      ,
+      },
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
-        return this.$moment(effectiveStartDate).format('YYYY.MM.DD HH:MM:ss') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD HH:MM:ss' +
-          '');
-      }
-      ,
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate)
+          .format('YYYY.MM.DD' +
+            '');
+      },
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -433,6 +433,7 @@
 
     .couponActivityMain {
       width: 100%;
+
       .couponActivityInfo {
         background-color: #FFAA00;
         width: 100%;
@@ -462,7 +463,8 @@
 
           /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
 
-          .coupon-hole::before, .coupon-hole::after {
+          .coupon-hole::before,
+          .coupon-hole::after {
             content: '';
             width: 1rem;
             height: 1rem;
@@ -491,7 +493,7 @@
             .fz(font-size, 25);
           }
 
-          .coupon-get > .coupon-desc {
+          .coupon-get>.coupon-desc {
             font-size: 150%;
             margin-bottom: .5rem;
             font-weight: bold;
@@ -538,7 +540,7 @@
             bottom: -.5rem;
           }
 
-          .coupon-info > div {
+          .coupon-info>div {
             margin-bottom: .2rem;
           }
 
@@ -546,6 +548,9 @@
             font-size: 150%;
             font-weight: bold;
             display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
           }
 
           .coupon-expire-date {
@@ -569,7 +574,8 @@
 
         /* 左边框的波浪 */
 
-        .coupon-wave-left::before, .coupon-wave-right::after {
+        .coupon-wave-left::before,
+        .coupon-wave-right::after {
           content: '';
           position: absolute;
           top: 0;
@@ -599,15 +605,19 @@
         display: flex;
         flex-direction: column;
         margin-bottom: 3em;
+
         li {
           list-style: none;
           border-radius: 10px;
           margin: 5px;
+
           .goodsCard {
             width: 100%;
-            .card-layout{
-              height:8rem;
+
+            .card-layout {
+              height: 8rem;
               justify-content: center;
+
               .promotionBox {
                 display: flex;
                 .fz(font-size, 25);
@@ -617,12 +627,14 @@
                   color: #ff4444;
                   font-weight: bold;
                 }
+
                 .promotionCountDown {
                   margin-left: 10px;
                   color: black;
                   .fz(font-size, 25);
                 }
               }
+
               .cardImg {
                 height: 100%;
                 text-align: center;
@@ -634,6 +646,7 @@
                   border-bottom-left-radius: 10px;
                 }
               }
+
               .cardInfo {
                 height: 100%;
                 padding: 5px;
@@ -658,10 +671,12 @@
                   padding: 5px 2px;
                   width: 100%;
                   display: flex;
+
                   .priceBox {
                     width: 80%;
                     text-align: left;
                     margin-top: 4px;
+
                     .salePrice {
                       color: #ff4444;
                       .fz(font-size, 32);
@@ -732,4 +747,5 @@
       }
     }
   }
+
 </style>

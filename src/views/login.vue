@@ -31,11 +31,6 @@
         <div style="width:95%;margin: 10px;display: flex; flex-direction:column;text-align: center;align-items: center">
           <van-button size="large" type="danger" round @click="onBindBtnClick" :disabled="!isBindBtnEnable">绑定
           </van-button>
-          <div style="margin: 10px 2px">
-            <p style="font-size: 10pt">
-              <span style=" color: #1989fa;">{{getBindInfo()}}</span>
-            </p>
-          </div>
         </div>
 
       </div>
@@ -145,7 +140,7 @@
           telephone: this.mobilePhone,
           openId: wxOpenId,
           code: this.verifyCode,
-          appId: this.$api.APP_ID
+          appSrc: this.$api.APP_SOURCE
         }
         this.$api.xapi({
           method: 'put',
@@ -187,6 +182,7 @@
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/code',
           params: {
+            appSrc: this.$api.APP_SOURCE,
             telephone: telephone,
             type: "wx"
           }

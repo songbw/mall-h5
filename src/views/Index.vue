@@ -44,6 +44,9 @@
             <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
               <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
+            <div v-else-if="item.type==='10'">
+              <v-horizontalGoods :datas="item.data" :mBackgroundColor="mBackgroundColor" />
+            </div>
           </div>
         </div>
         <v-baseline v-if="this.showFooter" :datas="this.footerText" :style="{'background-color': mBackgroundColor}">
@@ -72,6 +75,7 @@
   import sectionGoods from '@/components/index/sectionGoods.vue'
   import sectionImgMap from '@/components/index/sectionImgMap.vue'
   import sectionCompBox from '@/components/index/sectionCompBox.vue'
+  import horizontalGoods from '@/components/index/horizontalGoods.vue'
   import Baseline from '@/common/_baseline.vue'
   import Splash from '@/common/splash.vue'
   import Footer from '@/common/_footer.vue'
@@ -82,6 +86,7 @@
   } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
 
+
   export default {
     components: {
       'v-header': Header,
@@ -91,6 +96,7 @@
       'v-sectionSlide': sectionSlide,
       'v-sectionListSlide': sectionListSilde,
       'v-sectionGoods': sectionGoods,
+      'v-horizontalGoods': horizontalGoods,
       'v-imgmap': sectionImgMap,
       'v-sectionCompBox': sectionCompBox,
       'v-baseline': Baseline,
@@ -419,30 +425,44 @@
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/wx/bind/verify',
           params: {
-            appId: appId,
+            appSrc: this.$api.APP_SOURCE,
             openId: wxOpenId
           }
         })
       },
 
       upDateSkuInfo(item, couponAndProms, user) {
-        let cartItem = Util.getCartItem(this, user.userId, item.mpu)
+        let cartItem = Util.getCartItem(this, user.userId, item.mpu, item.skuId)
+        let skuId = item.skuId
+        let price = item.price
+        let image = item.image
+        let purchaseQty = 1
+        if (skuId === undefined || skuId === null) {
+          skuId = item.skuid
+        }
+        if (item.starSku != undefined) {
+          purchaseQty = item.starSku.purchaseQty
+          price = (item.starSku.price / 100).toFixed(2)
+          if (item.starSku.goodsLogo != undefined && item.starSku.goodsLogo.length > 0)
+            image = item.starSku.goodsLogo
+        }
         if (cartItem == null) {
           let baseInfo = {
             "userId": user.userId,
-            "skuId": item.skuid,
+            "skuId": skuId,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
             "count": item.count,
             "choosed": false,
-            "cartId": item.id
+            "cartId": item.id,
+            "purchaseQty": purchaseQty
           }
           let goodsInfo = {
             "id": item.id,
-            "skuId": item.skuid,
+            "skuId": skuId,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
-            "image": item.image,
+            "image": image,
             "category": item.category,
             "name": item.name,
             "brand": item.brand,
@@ -474,10 +494,15 @@
             "promotionInfo": promotionInfo,
           }
         } else {
+          cartItem.baseInfo.skuId = skuId
           cartItem.baseInfo.count = item.count
           cartItem.baseInfo.cartId = item.id
           cartItem.baseInfo.merchantId = item.merchantId
+          cartItem.baseInfo.purchaseQty = purchaseQty
           cartItem.goodsInfo.merchantId = item.merchantId
+          cartItem.goodsInfo.price = price
+          cartItem.goodsInfo.type = (item.type == undefined ? 0 : item.type)
+          cartItem.goodsInfo.image = image
           let couponList = []
           let promotion = []
           if (couponAndProms != null) {
@@ -562,11 +587,10 @@
           this.thirdPartLogined(openId, accessToken);
         }
       },
-      test() {
+      async test() {
         // let openId = "44391000fd194ab888b1aa81c03c3740"
         // let openId = "d6c88055c3ab42a39d605ed2767a8b9d"
-        // let openId = "ace1c1722b834309a59fad302fe357b2"
-        //let openId = "4a742681f23b4d45b13a78bd99c0bf46"
+        // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         // let openId = "5c8314363cea49de925bfaa39d4c4ebb"
         // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         let openId = "ace1c1722b834309a59fad302fe357b2"
@@ -578,7 +602,30 @@
           openId = "5c8314363cea49de925bfaa39d4c4ebb" //最珠海
           payId = ""
         } else if (this.$api.APP_ID == '14') {
-         // openId = "2a984f9270aafb236cc7c0c74b21ff38" //万科云城
+          // openId = "2a984f9270aafb236cc7c0c74b21ff38" //万科云城
+        } else if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
+          //  let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc" //13810864380
+          let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6bb" //18612794815
+          let accessToken = "TTTTTTTTTTTTTTTTTTTTTTTT"
+          this.$store.commit('SET_WX_OPENID', wxOpenId);
+          let resp = await this.isWxOpendBinded(this.$api.APP_ID, wxOpenId)
+          this.$log(resp)
+          if (resp.data.code == 200) {
+            let userDetail = resp.data.data
+            if (userDetail != null) {
+              openId = userDetail.openId
+            } else {
+              //未绑定用户
+              // this.$toast("未绑定用户")
+              this.userTokenLoading = false;
+              this.$router.replace({
+                path: '/login'
+              })
+              return;
+            }
+          }
+        } else if (this.$api.APP_ID == '11') {
+          //only for debug
         }
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER

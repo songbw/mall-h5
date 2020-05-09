@@ -25,13 +25,8 @@
               </van-col>
               <van-col span="16" class="promotionBox">
                 <v-countdown v-if="PromotionStatus < 5 && PromotionStartTime != 0 && PromotionEndTime !=0"
-                             @start_callback="countDownS_cb"
-                             @end_callback="countDownE_cb"
-                             :startTime="PromotionStartTime"
-                             :endTime="PromotionEndTime"
-                             backgroundColor="#FFFFFF"
-                             textColor="#FF4444"
-                             :secondsTxt="''">
+                  @start_callback="countDownS_cb" @end_callback="countDownE_cb" :startTime="PromotionStartTime"
+                  :endTime="PromotionEndTime" backgroundColor="#FFFFFF" textColor="#FF4444" :secondsTxt="''">
                 </v-countdown>
                 <div class="promotionStatusText" v-if="PromotionStatus === 5">
                   <span style="color: white">已结束</span>
@@ -42,20 +37,20 @@
               <span>￥</span>{{parseFloat(this.goods.price).toFixed(2)}}
             </p>
             <div class="goods-detail">
-        <span class="goods-disciption">
-          {{this.goods.name}}
-        </span>
+              <span class="goods-disciption">
+                {{this.goods.name}}
+              </span>
             </div>
           </div>
           <div class="couponBox" v-if="this.userCouponList.length > 0 || this.avaliableCouponList.length > 0">
             <van-cell>
               <div slot="title">
-             <span style="font-size: medium;margin-left: -3px">
-               领券
-             </span>
+                <span style="font-size: medium;margin-left: -3px">
+                  领券
+                </span>
               </div>
               <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
-                        @click="showCouponSelector()"/>
+                @click="showCouponSelector()" />
             </van-cell>
             <van-actionsheet v-model="showCoupon" title="优惠券" style="background-color: white">
               <div class="couponLayout">
@@ -84,20 +79,13 @@
                         </div>
                         <div v-else class="coupon-get" @click="onAvaliableCouponClick(k,index)">
                           <div>
-                            <van-circle
-                              :value="formateReleasePercentage(k)"
-                              color="#FF4444"
-                              fill="#fff"
-                              size="55px"
-                              layer-color="#cccccc"
-                              :text="formateReleasePercentageText(k)"
-                              :rate="100"
-                              :speed="100"
-                              :stroke-width="50"/>
+                            <van-circle :value="formateReleasePercentage(k)" color="#FF4444" fill="#fff" size="55px"
+                              layer-color="#cccccc" :text="formateReleasePercentageText(k)" :rate="100" :speed="100"
+                              :stroke-width="50" />
                           </div>
                           <div>
                             <span class="coupon-action" v-if="formateReleasePercentage(k) < 100"
-                                  style="margin-top:5px;">立即领取</span>
+                              style="margin-top:5px;">立即领取</span>
                           </div>
                         </div>
                       </div>
@@ -120,7 +108,7 @@
                                                     </div>-->
                             <div class="coupon-price">
                               <span v-if="coupon.couponInfo.rules.couponRules.type <2"
-                                    style="margin-right: -7px">￥</span>
+                                style="margin-right: -7px">￥</span>
                               {{formateCouponPrice(coupon.couponInfo.rules.couponRules)}}
                               <span>{{formateCouponDetail(coupon.couponInfo.rules.couponRules)}}</span>
                             </div>
@@ -166,7 +154,7 @@
 
                 <p style="color: black">
                   <span>送至:</span>
-                  <van-icon name="location" size="14px" color="#FF4444"/>
+                  <van-icon name="location" size="14px" color="#FF4444" />
                   <span style="color: #8c8c8c ">{{addressCode.provinceName}}</span>
                   <span style="color: #8c8c8c ">{{addressCode.cityName}}</span>
                   <span style="color: #8c8c8c ">{{addressCode.countyName}}</span>
@@ -174,14 +162,14 @@
               </div>
               <div style="width: 10%;">
                 <van-icon style="float: right;padding: 3px;margin-right: 7px;margin-top: 3px" name="weapp-nav"
-                          class="custom-icon" size="14px" color="#000000"
-                          @click="showAddressSelector()"></van-icon>
+                  class="custom-icon" size="14px" color="#000000" @click="showAddressSelector()"></van-icon>
               </div>
             </div>
             <div style="padding: 1px">
               <span v-if="!updatedInventor" style="color: #ff4444;font-size: medium;">获取库存...</span>
               <span v-else style="color: #ff4444;font-size: medium;">{{hasInventory?'有货':'无货'}}</span>
-              <span style="color: #8c8c8c;font-size: medium;" v-if="this.goods != null"> {{this.goods.state == 0?'已下架':''}}</span>
+              <span style="color: #8c8c8c;font-size: medium;" v-if="this.goods != null">
+                {{this.goods.state == 0?'已下架':''}}</span>
             </div>
           </div>
           <div class="serviceBox" v-if="showServiceBox">
@@ -204,22 +192,22 @@
               <span>商品详情</span>
             </div>
             <v-content :contentData=contentUrls v-if="contentUrls != undefined && contentUrls.length > 0"></v-content>
-            <div  v-else class="contentDetail" v-html="this.goods.introduction" />
+            <div v-else class="contentDetail" v-html="this.goods.introduction" />
           </div>
           <div v-if="bulletinInfo !=null && bulletinInfo.position == 'bottom'" class="bulletin">
             <img v-lazy="bulletinInfo.imageUrl">
           </div>
-          <v-baseline/>
+          <v-baseline />
         </div>
         <div v-else>
           <div class="noContext">
             <img :src="icon_noContext">
             <span class="noContext_line1">亲,没有查询到商品!</span>
           </div>
-          <v-baseline/>
+          <v-baseline />
         </div>
       </div>
-      <v-action :datas="this.goods"/>
+      <v-action :datas="this.goods" />
     </div>
 
   </div>
@@ -236,7 +224,9 @@
   import Loading from '@/common/_loading.vue'
   import Util from '@/util/common'
 
-  import {configWechat} from '@/util/wechat'
+  import {
+    configWechat
+  } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
 
   export default {
@@ -272,7 +262,7 @@
         } else {
           this.redirectOrNot();
         }
-      } else if (this.$api.IS_WX_GZH) {//微信公众号端登录
+      } else if (this.$api.IS_WX_GZH) { //微信公众号端登录
         let authCode = this.$route.query.code;
         let state = this.$route.query.state;
         this.$log("authCode:" + authCode)
@@ -305,7 +295,7 @@
         let imagesUrls = this.goods.imagesUrl;
         if (imagesUrls != null && imagesUrls.length > 0) {
           let ulsArray = null
-          if(imagesUrls.startsWith("https")) {
+          if (imagesUrls.startsWith("https")) {
             ulsArray = imagesUrls.split(";");
           } else {
             ulsArray = imagesUrls.split(":");
@@ -314,10 +304,14 @@
             ulsArray.forEach(items => {
               if (items != null && items.length > 0) {
                 this.$log(items)
-                if(items.startsWith("https")) {
-                  this.swiperUrls.push({"imgPath":  items})
+                if (items.startsWith("https")) {
+                  this.swiperUrls.push({
+                    "imgPath": items
+                  })
                 } else {
-                  this.swiperUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+                  this.swiperUrls.push({
+                    "imgPath": this.$api.GOODS_URL_PREFIX + items
+                  })
                 }
               }
             })
@@ -330,14 +324,18 @@
           if (ulsArray.length > 0) {
             ulsArray.forEach(items => {
               if (items != null && items.length > 0) {
-                this.contentUrls.push({"imgPath": this.$api.GOODS_URL_PREFIX + items})
+                this.contentUrls.push({
+                  "imgPath": this.$api.GOODS_URL_PREFIX + items
+                })
               }
             })
           }
         }
         if (this.goods.promotion != undefined && this.goods.promotion.length > 0) {
-          this.PromotionStartTime = new Date(this.$moment(this.goods.promotion[0].startDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
-          this.PromotionEndTime = new Date(this.$moment(this.goods.promotion[0].endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+          this.PromotionStartTime = new Date(this.$moment(this.goods.promotion[0].startDate).format(
+            'YYYY/MM/DD HH:mm:ss')).getTime()
+          this.PromotionEndTime = new Date(this.$moment(this.goods.promotion[0].endDate).format(
+            'YYYY/MM/DD HH:mm:ss')).getTime()
           this.promotionType = this.goods.promotion[0].promotionType
           this.discount = this.goods.promotion[0].discount
           this.promotionId = this.goods.promotion[0].id
@@ -486,7 +484,7 @@
               })
             }
           } else {
-            if(resp.data.code == 40163) {
+            if (resp.data.code == 40163) {
               //nothing to do
             } else {
               this.$router.replace({
@@ -518,7 +516,7 @@
           baseURL: this.$api.SSO_BASE_URL,
           url: '/sso/wx/bind/verify',
           params: {
-            appId: appId,
+            appSrc: this.$api.APP_SOURCE,
             openId: wxOpenId
           }
         })
@@ -713,7 +711,9 @@
       showAddressSelector() {
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
-          this.$router.push({"name": "地址列表页"})
+          this.$router.push({
+            "name": "地址列表页"
+          })
         } else {
           this.$toast("没有用户信息，请先登录")
         }
@@ -809,8 +809,7 @@
                 address = addressList[0]
               }
             }
-          } catch (e) {
-          }
+          } catch (e) {}
           this.addressCode = address
 
           let inventorySkus = [];
@@ -819,12 +818,34 @@
 
 
           if (goods.merchantId === 2) {
-            this.$log(goods)
-            inventorySkus.push({"skuId": goods.mpu, "remainNum": 1, "price": goods.price})
-          } else if(goods.merchantId === 4) {
-            inventorySkusOfYyt.push({"skuId": goods.mpu, "remainNum": 1, "price": goods.price})
+            let skuId = goods.mpu
+            if (skuId.startsWith("30")) {
+              this.goods.skuList.forEach(sku => {
+                inventorySkus.push({
+                  "skuId": sku.skuId,
+                  "remainNum": 1,
+                  "price": goods.price
+                })
+              })
+            } else {
+              inventorySkus.push({
+                "skuId": skuId,
+                "remainNum": 1,
+                "price": goods.price
+              })
+            }
+
+          } else if (goods.merchantId === 4) {
+            inventorySkusOfYyt.push({
+              "skuId": goods.mpu,
+              "remainNum": 1,
+              "price": goods.price
+            })
           } else {
-            inventorySkusOfZy.push({"mpu": goods.mpu, "remainNum": 1})
+            inventorySkusOfZy.push({
+              "mpu": goods.mpu,
+              "remainNum": 1
+            })
           }
 
           if (inventorySkus.length > 0) {
@@ -832,8 +853,14 @@
             let inventoryListOfAoyi = resp.data.data.result
             this.$log(inventoryListOfAoyi)
             inventoryListOfAoyi.forEach(item => {
-              if (item.skuId === goods.skuid && item.state === '1') {
-                this.hasInventory = true;
+              if (goods.mpu.startsWith("30")) {
+                if(item.state === '1') {
+                  this.hasInventory = true;
+                }
+              } else {
+                if (item.skuId === goods.skuid && item.state === '1') {
+                  this.hasInventory = true;
+                }
               }
             })
           }
@@ -847,14 +874,14 @@
             })
           }
 
-          if(inventorySkusOfYyt.length > 0) {
+          if (inventorySkusOfYyt.length > 0) {
             let total_stock_num = 0
             try {
               let response = await this.getYytInventory()
               if (response.data.code === 200) {
                 let ret = response.data.data.skuInvList;
                 this.goods.skuList.forEach(sku => {
-                  if(sku.status == 1) {
+                  if (sku.status == 1) {
                     for (let i = 0; i < ret.length; i++) {
                       if (ret[i].code === sku.code) {
                         total_stock_num += ret[i].inventoryCount
@@ -864,11 +891,10 @@
                   }
                 })
               }
-              if(total_stock_num > 0) {
+              if (total_stock_num > 0) {
                 this.hasInventory = true;
               }
-            } catch (e) {
-            }
+            } catch (e) {}
           }
           this.updateFreightInfo(goods);
         }
@@ -941,11 +967,11 @@
       },
       formateCouponPrice(rules) {
         switch (rules.type) {
-          case 0://满减券
+          case 0: //满减券
             return rules.fullReduceCoupon.reducePrice;
-          case 1://代金券
+          case 1: //代金券
             return rules.cashCoupon.amount;
-          case 2://折扣券
+          case 2: //折扣券
             return (rules.discountCoupon.discountRatio * 10).toFixed(1) + '折';
           default:
             return ""
@@ -955,18 +981,18 @@
 
       formateCouponDetail(rules) {
         switch (rules.type) {
-          case 0://满减券
+          case 0: //满减券
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
-          case 1://代金券
+          case 1: //代金券
             return '代金券';
-          case 2://折扣券
+          case 2: //折扣券
             if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
             } else {
               return '折扣券 ';
             }
-          default:
-            return ""
+            default:
+              return ""
         }
       },
 
@@ -1009,23 +1035,24 @@
 
       formateCouponDescription(rules) {
         switch (rules.type) {
-          case 0://满减券
+          case 0: //满减券
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
-          case 1://代金券
+          case 1: //代金券
             return '代金券';
-          case 2://折扣券
+          case 2: //折扣券
             if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
             } else {
               return '折扣券 ';
             }
-          default:
-            return ""
+            default:
+              return ""
         }
       },
 
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
-        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format(
+          'YYYY.MM.DD');
       },
 
       confirmedCouponSeletor() {
@@ -1048,10 +1075,11 @@
 </script>
 
 <style>
-  .contentDetail img{
-     width: 100%;
-     display: block;
+  .contentDetail img {
+    width: 100%;
+    display: block;
   }
+
 </style>
 
 <style lang="less" scoped>
@@ -1204,7 +1232,8 @@
 
                 /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
 
-                .coupon-hole::before, .coupon-hole::after {
+                .coupon-hole::before,
+                .coupon-hole::after {
                   content: '';
                   width: 1rem;
                   height: 1rem;
@@ -1228,7 +1257,7 @@
                   bottom: -.5rem;
                 }
 
-                .coupon-info > div {
+                .coupon-info>div {
                   margin-bottom: .2rem;
                 }
 
@@ -1341,7 +1370,7 @@
                 }
               }
 
-              .coupon-get > .coupon-desc {
+              .coupon-get>.coupon-desc {
                 margin-left: 3px;
                 min-height: 1em;
                 .fz(font-size, 25);
@@ -1390,7 +1419,8 @@
 
             /* 左边框的波浪 */
 
-            .coupon-wave-left::before, .coupon-wave-right::after {
+            .coupon-wave-left::before,
+            .coupon-wave-right::after {
               content: '';
               position: absolute;
               top: 0;
@@ -1494,7 +1524,8 @@
 
                 /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
 
-                .coupon-hole::before, .coupon-hole::after {
+                .coupon-hole::before,
+                .coupon-hole::after {
                   content: '';
                   width: 1rem;
                   height: 1rem;
@@ -1518,7 +1549,7 @@
                   bottom: -.5rem;
                 }
 
-                .coupon-info > div {
+                .coupon-info>div {
                   margin-bottom: .2rem;
                 }
 
@@ -1624,7 +1655,7 @@
                 }
               }
 
-              .coupon-get > .coupon-desc {
+              .coupon-get>.coupon-desc {
                 margin-left: 3px;
                 min-height: 1em;
                 .fz(font-size, 25);
@@ -1669,7 +1700,8 @@
 
             /* 左边框的波浪 */
 
-            .coupon-wave-left::before, .coupon-wave-right::after {
+            .coupon-wave-left::before,
+            .coupon-wave-right::after {
               content: '';
               position: absolute;
               top: 0;
@@ -1804,7 +1836,7 @@
         background-color: white;
         line-height: 100%;
 
-        > span {
+        >span {
           .fz(font-size, 25);
         }
       }
@@ -1844,7 +1876,7 @@
             .fz(font-size, 40);
             font-weight: bold;
 
-            > span {
+            >span {
               .fz(font-size, 20);
             }
           }
@@ -1886,4 +1918,5 @@
       }
     }
   }
+
 </style>

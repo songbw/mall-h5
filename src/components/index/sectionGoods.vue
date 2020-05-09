@@ -412,10 +412,11 @@
         this.$log(goods)
         let userId = user.userId;
         let mpu = goods.mpu;
-        if (mpu == null) {
-          mpu = goods.skuid;
-        }
-        if (mpu != goods.skuid) {
+        let skuId = goods.skuId
+        let purchaseQty = 1
+        if(goods.skuid != undefined)
+           skuId = goods.skuid
+        if (mpu != skuId) {
           this.gotoGoodsPage(mpu)
         } else {
           let addtoCar = {
@@ -442,10 +443,11 @@
                 "count": 1,
                 "choosed": true,
                 "cartId": this.result,
+                "purchaseQty": purchaseQty
               }
               let goodsInfo = {
                 "id": goods.id,
-                "skuId": goods.skuid,
+                "skuId": skuId,
                 "mpu": goods.mpu,
                 "merchantId": goods.merchantId,
                 "image": goods.imagePath,
@@ -539,7 +541,7 @@
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 2;
-                
+
                 color: #000000;
                 text-shadow: 0px 0px #000;
               }
@@ -557,7 +559,7 @@
                   display: -webkit-box;
                   -webkit-box-orient: vertical;
                   -webkit-line-clamp: 1;
-                  
+
                 }
               }
 
@@ -655,7 +657,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 2;
-              
+
               bottom: 0;
               left: 0;
               width: 100%;
@@ -679,7 +681,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
-              
+
             }
           }
         }
@@ -708,7 +710,7 @@
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
-                
+
                 bottom: 0;
                 left: 0;
                 color: #ff4444;
@@ -783,7 +785,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 2;
-              
+
               bottom: 0;
               left: 0;
               width: 100%;
@@ -807,7 +809,7 @@
               display: -webkit-box;
               -webkit-box-orient: vertical;
               -webkit-line-clamp: 1;
-              
+
             }
           }
         }
@@ -838,7 +840,7 @@
                 display: -webkit-box;
                 -webkit-box-orient: vertical;
                 -webkit-line-clamp: 1;
-                
+
                 bottom: 0;
                 left: 0;
                 color: #ff4444;

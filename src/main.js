@@ -1,9 +1,10 @@
 import App from './App'
 import router from './router'
-import store from '@/vuex/store.js'   //vuex
-import services from '@/http/api.js'       //http请求
+import store from '@/vuex/store.js' //vuex
+import services from '@/http/api.js' //http请求
 import vueLogger from "vue-logger";
 import LyTab from 'ly-tab'
+import coupon from 'v-coupon'
 //import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueQRCodeComponent from 'vue-qrcode-component'
@@ -81,7 +82,7 @@ if (process.env.NODE_ENV === 'production') {
       second = second < 10 ? ('0' + second) : second;
       return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
     },
-    dev: true,
+    dev: false,
     levels: ["log", "warn", "debug", "error", "dir"],
     forceLevels: []
   })
@@ -152,6 +153,8 @@ Vue.use(Button)
   .use(Picker);
 
 
+Vue.use(coupon);
+
 ///////////////////////////////////////////////////////////////////////
 Vue.config.productionTip = false
 //增加全局Service变量
@@ -169,14 +172,17 @@ Vue.prototype.$moment = moment;
 router.beforeEach((to, from, next) => {
   console.log("vue route:" + from.fullPath + "-->" + to.fullPath)
   console.log(to)
-  if( from.fullPath ==='/' && to.fullPath === '/car/pay') {
-    store.commit("SET_BACK_FROME_OUTERLINK",true)
-    next({path: '/user',replace: true})
-  } else if ( from.fullPath === '/' && to.name != '首页') {
-    store.commit("SET_BACK_FROME_OUTERLINK",true)
+  if (from.fullPath === '/' && to.fullPath === '/car/pay') {
+    store.commit("SET_BACK_FROME_OUTERLINK", true)
+    next({
+      path: '/user',
+      replace: true
+    })
+  } else if (from.fullPath === '/' && to.name != '首页') {
+    store.commit("SET_BACK_FROME_OUTERLINK", true)
     next()
-  } else if ( from.fullPath ==='/' && to.name === '首页') {
-    store.commit("SET_BACK_FROME_OUTERLINK",false)
+  } else if (from.fullPath === '/' && to.name === '首页') {
+    store.commit("SET_BACK_FROME_OUTERLINK", false)
     next()
   } else {
     next();
@@ -185,8 +191,8 @@ router.beforeEach((to, from, next) => {
 
 
 router.afterEach((to, from) => {
-//  let allowShare = !!to.meta.allowShare;
-  if (!!window.__wxjs_is_wkwebview) {// IOS
+  //  let allowShare = !!to.meta.allowShare;
+  if (!!window.__wxjs_is_wkwebview) { // IOS
     if (window.entryUrl == "" || window.entryUrl == undefined) {
       let authUrl = `${window.location.origin}${to.fullPath}`;
       window.entryUrl = authUrl; // 将后面的参数去除
@@ -203,5 +209,7 @@ new Vue({
   router,
   store,
   template: '<App/>',
-  components: {App}
+  components: {
+    App
+  }
 })

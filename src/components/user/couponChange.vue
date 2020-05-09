@@ -8,7 +8,8 @@
         <van-tab v-for="(item, type) in couponTypes" :title="item.title" :key="type">
           <div v-if="active == 0" class="cardBody">
             <div class="cardTitle">
-              <span class="TitleText">兑换提货券</span>
+              <!--               <span class="TitleText">兑换提货券</span> -->
+              <img :src=mall_logo>
             </div>
             <div class="cardForm">
               <van-field v-model="cardNumber" type="number" clearable maxlength="30" placeholder="请输入券码" />
@@ -53,6 +54,7 @@
         active: 0,
         cardNumber: "",
         cardPwd: "",
+        mall_logo: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_logo.png',
         couponTypes: [{
             title: "提货券"
           },
@@ -175,7 +177,10 @@
   @import "../../assets/index/style.css";
 
   .cardBody {
-    display: flex;
+    width: 100%;
+    height: 100%;
+    top: 0px;
+    background-color: #f8f8f8;
     flex-direction: column;
     width: 100%;
     padding-top: 20px;
@@ -191,17 +196,27 @@
       .TitleText {
         font-weight: bold;
         margin-left: 12px;
+        margin-bottom: 10px;
         .fz(font-size, 45);
         color: #333333;
+      }
+
+      img {
+        margin: 0 auto;
+        height: 82px;
+        width: 100px;
       }
     }
 
     .cardForm {
       display: flex;
       flex-direction: column;
-      width: 100%;
-      margin: 10px 0px;
+      margin: 10px;
 
+      .van-field {
+        margin-top: 10px;
+        font-weight: 500;
+      }
     }
 
     .cardConfirmBox {
@@ -211,23 +226,6 @@
       flex-direction: column;
       text-align: center;
       align-items: center;
-    }
-
-    .van-button {
-      background: linear-gradient(to right, #FFC000, #FF5D01);
-      ;
-      border: none;
-
-      &--large {
-        width: 100%;
-        height: 40px;
-        line-height: 40px;
-      }
-    }
-
-    .van-field {
-      padding: 10pt 10pt;
-      font-weight: 500;
     }
   }
 
@@ -251,6 +249,19 @@
           margin-top: 10px;
         }
       }
+    }
+  }
+
+  .van-button {
+    background: linear-gradient(to right, #EF3949, #EF3949);
+    border: none;
+    font-weight: 600;
+    margin-top: 10px;
+
+    &--large {
+      width: 100%;
+      height: 50px;
+      line-height: 40px;
     }
   }
 

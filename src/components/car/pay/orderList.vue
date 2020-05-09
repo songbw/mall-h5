@@ -344,10 +344,14 @@
       add2Car(user, goods) {
         let userId = user.userId;
         let mpu = goods.mpu;
+        let selectSkuId = goods.skuId
         let addtoCar = {
           "openId": userId,
-          "mpu": mpu
+          "mpu": mpu,
+          "skuId": selectSkuId,
+          "count": 1
         }
+
         return this.$api.xapi({
           method: 'post',
           baseURL: this.$api.ORDER_BASE_URL,
@@ -369,20 +373,27 @@
               this.$log("#######################################")
               this.$log(resp)
               if (resp.data.code == 200) {
-                let cartItem = Util.getCartItem(this, user.userId, goods.mpu)
+                let cartItem = Util.getCartItem(this, user.userId, goods.mpu, goods.skuId)
+                this.$log(goods)
+                let skuId = goods.skuId
+                let purchaseQty = 1
+                if (skuId === undefined || skuId === null) {
+                    skuId = goods.skuid
+                }
                 if (cartItem == null) {
                   let baseInfo = {
                     "userId": user.userId,
-                    "skuId": goods.skuid,
+                    "skuId": skuId,
                     "mpu": goods.mpu,
                     "merchantId": goods.merchantId,
                     "count": 1,
                     "choosed": true,
                     "cartId": this.result,
+                    "purchaseQty": purchaseQty
                   }
                   let goodsInfo = {
                     "id": goods.id,
-                    "skuId": goods.skuid,
+                    "skuId": skuId,
                     "mpu": goods.mpu,
                     "merchantId": goods.merchantId,
                     "image": goods.image,
@@ -587,7 +598,7 @@
         }
       },
       getMerchantName(merchantNo) {
-        return "慧聚品牌馆"
+        return "惠民优选"
         /*        if (merchantNo == 20) {
                   return "苏宁易购"
                 } else if (merchantNo == 30) {
@@ -903,12 +914,21 @@
 
       onLogisticsBtnClick(listItem, i) {
         this.$log("onLogisticsBtnClick Enter")
-        this.$router.push({
-          name: "物流信息页",
-          params: {
-            detail: listItem
-          }
-        })
+        if (listItem.merchantId === 4) {
+          this.$router.push({
+            name: "怡亚通物流信息页",
+            params: {
+              detail: listItem
+            }
+          })
+        } else {
+          this.$router.push({
+            name: "物流信息页",
+            params: {
+              detail: listItem
+            }
+          })
+        }
       },
 
       onClick(index, title) {

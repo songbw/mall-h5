@@ -249,10 +249,10 @@
         this.$log(goods)
         let userId = user.userId;
         let mpu = goods.mpu;
-        if (mpu == null) {
-          mpu = goods.skuid;
-        }
-        if(mpu != goods.skuid) {
+        let skuId = goods.skuId
+        if(goods.skuid != undefined)
+           skuId = goods.skuid
+        if(mpu != skuId) {
           this.gotoGoodsPage(mpu)
         } else {
           let addtoCar = {
@@ -273,7 +273,7 @@
               if (cartItem == null) {
                 let baseInfo = {
                   "userId": user.userId,
-                  "skuId": goods.skuid,
+                  "skuId": skuId,
                   "mpu": goods.mpu,
                   "merchantId": goods.merchantId,
                   "count": 1,
@@ -282,7 +282,7 @@
                 }
                 let goodsInfo = {
                   "id": goods.id,
-                  "skuId": goods.skuid,
+                  "skuId": skuId,
                   "mpu": goods.mpu,
                   "merchantId": goods.merchantId,
                   "image": goods.image,

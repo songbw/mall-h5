@@ -4,20 +4,19 @@
       <v-loading></v-loading>
     </div>
     <div v-else class="cardBody">
+      <div class="title">
+        <span>-{{cardDetail.cardInfo.name}}-</span>
+      </div>
       <div class="card" v-if="cardDetail != null">
         <div class="header">
-          <div class="title">
-            <span>{{cardDetail.cardInfo.name}}</span>
+          <div class="Number">
+            <span>券码:{{cardDetail.card}}</span>
           </div>
           <div class="price">
-            <p><span>￥</span>{{cardDetail.cardInfo.amount}}</p>
+            <p><span>￥</span>{{parseFloat(cardDetail.cardInfo.amount).toFixed(2)}}</p>
           </div>
-          <div class="Number">
-            <span></span>{{cardDetail.card}}</span>
-          </div>
-
           <div class="validDate">
-            <span>截至日期: {{formatTime(cardDetail.endTime)}}</span>
+            <span>有效期:{{formatTime(cardDetail.activateTime)}} - {{formatTime(cardDetail.endTime)}}</span>
           </div>
         </div>
 
@@ -41,22 +40,31 @@
                           <span v-if="item.rules.couponRules.type == 4">
                             {{item.name}}
                           </span>
-                          <span
-                            v-else-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
-                            style="margin-right: -7px">{{formateCouponDetail(item.rules.couponRules)}}</span>
+                          <span v-if="item.rules.couponRules.type == 5">
+                            {{formateCouponDetail(item.rules.couponRules)}}
+                          </span>
                         </div>
                         <div class="coupon-desc">
                           <span>{{formateCouponDescription(item)}}</span>
-                          <span style="color:#4CAF50;float:right;margin-right: 1px"
-                            v-if="item.rules.couponRules.type == 4" @click="gotoCouponDetail(item)" @click.stop="">详情
-                            ></span>
                         </div>
                         <div class="coupon-expire-date">
-                          {{formatEffectiveDateTime(item.effectiveStartDate,item.effectiveEndDate)}}
+                          <span style="color:#ef3949;" v-if="item.rules.couponRules.type == 4"
+                            @click="gotoCouponDetail(item)" @click.stop="">查看详情
+                            ></span>
+                          <div v-if="item.rules.couponRules.type == 5">
+                            <span v-if="item.rules.scenario.type == 1 || item.rules.scenario.type == 3"
+                              style="color:#ef3949;" @click="gotoCouponDetail(item)" @click.stop="">
+                              查看详情
+                            </span>
+                            <span v-else style="color:#888888;">
+                              {{formatEffectiveDateTime(item.effectiveStartDate,item.effectiveEndDate)}}
+                            </span>
+                          </div>
+
                         </div>
                       </van-col>
                     </div>
-                    <div slot="right-icon" class="couponBoxCheckBox" v-if="cardDetail.status == 3">
+                    <div slot="icon" class="couponBoxCheckBox" v-if="cardDetail.status == 3">
                       <van-radio :name="item.id" @click="onRadioBtnClick(item)" @click.stop="" checked-color="#4CAF50"
                         ref="couponBoxsCheckboxes" />
                     </div>
@@ -65,10 +73,10 @@
               </van-radio-group>
             </div>
           </div>
-          <div style="margin-top:10px">
-            <van-button size="large" type="primary" @click="onBuyBtnClick">下单提货
-            </van-button>
-          </div>
+        </div>
+        <div style="padding-top:10px;background-color: #f6f6f6;width=100%;font-weight:600">
+          <van-button size="large" type="primary" @click="onBuyBtnClick">下单提货
+          </van-button>
         </div>
       </div>
     </div>
@@ -123,7 +131,7 @@
         this.$log("isCardActivied Enter")
         this.$log(this.cardDetail)
         if (this.cardDetail.status === 3 || this.cardDetail.status === 4) {
-           let startTime = new Date(this.$moment(this.cardDetail.activateTime).format('YYYY/MM/DD HH:mm:ss')).getTime()
+          let startTime = new Date(this.$moment(this.cardDetail.activateTime).format('YYYY/MM/DD HH:mm:ss')).getTime()
           let endTime = new Date(this.$moment(this.cardDetail.endTime).format('YYYY/MM/DD HH:mm:ss')).getTime()
           let current = new Date().getTime()
           this.$log(startTime)
@@ -135,7 +143,7 @@
             ret = "success" //活动开始
           } else {
             ret = "提货券已过期" // 活动已经结束
-          } 
+          }
         }
         this.$log(ret)
         return ret
@@ -197,6 +205,60 @@
         });
       },
 
+      isCouponActivied(coupon) {
+        this.$log(coupon)
+        let ret = "";
+        let startTime = new Date(this.$moment(coupon.couponInfo.effectiveStartDate).format('YYYY/MM/DD HH:mm:ss'))
+          .getTime() //new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g,'/')).getTime()
+        let endTime = new Date(this.$moment(coupon.couponInfo.effectiveEndDate).format('YYYY/MM/DD HH:mm:ss'))
+          .getTime() //new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g,'/')).getTime()
+        let current = new Date().getTime()
+        if (current < startTime) {
+          ret = "优惠券活动未开始" //券活动未开始
+        } else if (current <= endTime) {
+          ret = "success" //活动开始
+        } else {
+          ret = "优惠券已无效" // 活动已经结束
+        }
+        return ret
+      },
+
+      useConpon(coupon) {
+        this.$log("useConpon Enter")
+        let ret = this.isCouponActivied(coupon);
+        if (ret == "success") { //未使用
+          let couponInfo = coupon.couponInfo;
+          switch (couponInfo.rules.scenario.type) {
+            case 1: {
+              this.$store.commit('SET_CURRENT_COUPON_PAGE_INFO', JSON.stringify(coupon));
+              this.$router.push("/user/couponListActivity");
+              return;
+            }
+            case 2: {
+              this.$router.push({
+                path: "/category"
+              });
+              return
+            }
+            case 3: {
+              //this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
+              if (couponInfo.rules.scenario.categories.length > 0) {
+                let categeries = couponInfo.rules.scenario.categories[0]
+                for (let i = 1; i < couponInfo.rules.scenario.categories.length; i++) {
+                  categeries += "_" + couponInfo.rules.scenario.categories[i]
+                }
+                this.$router.push({
+                  path: "/category/goods/list?category=" + categeries
+                });
+              }
+
+              return
+            }
+          }
+
+        }
+      },
+
       getCardStatusDesc(status) {
         switch (status) {
           case 1:
@@ -238,16 +300,16 @@
         }
 
         let ret = this.isCardActivied()
-        if(ret != "success" && ret.length > 0) {
+        if (ret != "success" && ret.length > 0) {
           this.$toast(ret)
-          return 
+          return
         }
 
         let user = JSON.parse(userInfo)
 
         if (this.cardDetail.status === 3) {
           if (this.couponRadio.length == 0) {
-            this.$toast("请选择提货礼包")
+            this.$toast("请选择你要兑换的券")
             return
           }
         }
@@ -286,111 +348,120 @@
               couponInfo: this.cardDetail.coupons[0]
             }
           }
-          this.$log(coupon)
-          let response = await this.getGoodsList(coupon.couponInfo.id)
-          this.$log(response)
-          if (response.data.code === 200) {
-            this.amount = this.cardDetail.cardInfo.amount
-            let goodsList = response.data.data.result.couponSkus.list
-            //开始下单
-            let list = []
+          if (coupon.couponInfo.rules.couponRules.type === 4) {
+            //提货礼包券
+            let response = await this.getGoodsList(coupon.couponInfo.id)
+            this.$log(response)
+            if (response.data.code === 200) {
+              this.amount = this.cardDetail.cardInfo.amount
+              let goodsList = response.data.data.result.couponSkus.list
+              //开始下单
+              let list = []
 
-            //处理price
-            goodsList.forEach(goods => {
-              if (goods.merchantId == 4) {
-                if (goods.skuList.length > 0) {
-                  goods.price = parseFloat((goods.skuList[0].price / 100).toFixed(2))
-                }
-              }
-              goods['dprice'] = 0;
-              this.totalPrice = this.totalPrice + parseFloat(goods.price)
-            })
-
-            if (this.totalPrice > this.amount) {
-              let tmpAmount = 0
-              for (let i = 0; i < goodsList.length; i++) {
-                goodsList[i].dprice = Math.floor((goodsList[i].price * this.amount / this.totalPrice) *
-                  100) / 100;
-                this.$log(goodsList[i].dprice)
-                tmpAmount = parseFloat((tmpAmount + goodsList[i].dprice).toFixed(2))
-              }
-              this.$log(tmpAmount)
-              let diff = parseFloat((this.amount - tmpAmount).toFixed(2))
-              this.$log("diff:" + diff)
-              if (diff > 0) {
-                for (let i = 0; i < goodsList.length; i++) {
-                  let temptPrice = parseFloat((diff + goodsList[i].dprice).toFixed(2))
-                  this.$log(temptPrice)
-                  if (goodsList[i].price >= temptPrice) {
-                    goodsList[i].dprice = temptPrice
-                    this.$log(goodsList[i].dprice)
-                    break;
+              //处理price
+              goodsList.forEach(goods => {
+                if (goods.merchantId == 4) {
+                  if (goods.skuList.length > 0) {
+                    goods.price = parseFloat((goods.skuList[0].price / 100).toFixed(2))
                   }
                 }
-              }
-            } else {
-              for (let i = 0; i < goodsList.length; i++) {
-                goodsList[i].dprice = goodsList[i].price
-              }
-            }
+                goods['dprice'] = 0;
+                this.totalPrice = this.totalPrice + parseFloat(goods.price)
+              })
 
-            goodsList.forEach(goods => {
-              let skuId = goods.skuid
-              if (goods.merchantId == 4) {
-                if (goods.skuList.length > 0) {
-                  skuId = goods.skuList[0].code
+              if (this.totalPrice > this.amount) {
+                let tmpAmount = 0
+                for (let i = 0; i < goodsList.length; i++) {
+                  goodsList[i].dprice = Math.floor((goodsList[i].price * this.amount / this.totalPrice) *
+                    100) / 100;
+                  this.$log(goodsList[i].dprice)
+                  tmpAmount = parseFloat((tmpAmount + goodsList[i].dprice).toFixed(2))
+                }
+                this.$log(tmpAmount)
+                let diff = parseFloat((this.amount - tmpAmount).toFixed(2))
+                this.$log("diff:" + diff)
+                if (diff > 0) {
+                  for (let i = 0; i < goodsList.length; i++) {
+                    let temptPrice = parseFloat((diff + goodsList[i].dprice).toFixed(2))
+                    this.$log(temptPrice)
+                    if (goodsList[i].price >= temptPrice) {
+                      goodsList[i].dprice = temptPrice
+                      this.$log(goodsList[i].dprice)
+                      break;
+                    }
+                  }
+                }
+              } else {
+                for (let i = 0; i < goodsList.length; i++) {
+                  goodsList[i].dprice = goodsList[i].price
                 }
               }
-              let baseInfo = {
-                "userId": user.userId,
-                "skuId": skuId,
-                "mpu": goods.mpu,
-                "merchantId": goods.merchantId,
-                "count": 1,
-                "choosed": true,
-                "cartId": -1,
-              }
 
-              let goodsInfo = {
-                "id": goods.id,
-                "skuId": skuId,
-                "mpu": goods.mpu,
-                "merchantId": goods.merchantId,
-                "image": goods.image,
-                "category": goods.category,
-                "name": goods.name,
-                "brand": goods.brand,
-                "model": goods.model,
-                "dprice": goods.dprice,
-                "price": goods.price,
-                "checkedPrice": goods.price,
-                "type": goods.type == undefined ? 0 : goods.type
+              goodsList.forEach(goods => {
+                let skuId = goods.skuid
+                if (goods.merchantId == 4) {
+                  if (goods.skuList.length > 0) {
+                    skuId = goods.skuList[0].code
+                  }
+                }
+                let baseInfo = {
+                  "userId": user.userId,
+                  "skuId": skuId,
+                  "mpu": goods.mpu,
+                  "merchantId": goods.merchantId,
+                  "count": 1,
+                  "choosed": true,
+                  "cartId": -1,
+                }
+
+                let goodsInfo = {
+                  "id": goods.id,
+                  "skuId": skuId,
+                  "mpu": goods.mpu,
+                  "merchantId": goods.merchantId,
+                  "image": goods.image,
+                  "category": goods.category,
+                  "name": goods.name,
+                  "brand": goods.brand,
+                  "model": goods.model,
+                  "dprice": goods.dprice,
+                  "price": goods.price,
+                  "checkedPrice": goods.price,
+                  "type": goods.type == undefined ? 0 : goods.type
+                }
+                let couponList = []
+                let promotionInfo = {
+                  "promotion": [],
+                  "promotionState": -1
+                }
+                let product = {
+                  "baseInfo": baseInfo,
+                  "goodsInfo": goodsInfo,
+                  "couponList": couponList,
+                  "promotionInfo": promotionInfo,
+                }
+                this.$log(product)
+                list.push(product)
+              })
+              this.$log(list)
+              let pickupProdInfo = {
+                list: list,
+                coupon: coupon
               }
-              let couponList = []
-              let promotionInfo = {
-                "promotion": [],
-                "promotionState": -1
-              }
-              let product = {
-                "baseInfo": baseInfo,
-                "goodsInfo": goodsInfo,
-                "couponList": couponList,
-                "promotionInfo": promotionInfo,
-              }
-              this.$log(product)
-              list.push(product)
-            })
-            this.$log(list)
-            let pickupProdInfo = {
-              list: list,
-              coupon: coupon
+              this.$store.commit('SET_PICKUP_PRODUCTS_INFO', pickupProdInfo);
+              this.$log(pickupProdInfo)
+              this.$router.push({
+                path: '/car/pay/pickupGoods'
+              })
             }
-            this.$store.commit('SET_PICKUP_PRODUCTS_INFO', pickupProdInfo);
-            this.$log(pickupProdInfo)
-            this.$router.push({
-              path: '/car/pay/pickupGoods'
-            })
+          } else if (coupon.couponInfo.rules.couponRules.type === 5) {
+            //提货代金券
+            this.$log("提货代金券")
+            this.useConpon(coupon)
+          } else {
+            this.$toast("未识别的提货券类型")
           }
+
         } catch (e) {
           that.$log(e)
           that.$toast("下单提货失败")
@@ -398,8 +469,9 @@
       },
 
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
-        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format(
-          'YYYY.MM.DD');
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate)
+          .format(
+            'YYYY.MM.DD');
       },
       formateCouponPrice(rules) {
         switch (rules.type) {
@@ -436,6 +508,7 @@
       },
 
       formateCouponDetail(rules) {
+        this.$log(rules)
         switch (rules.type) {
           case 0: //满减券
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
@@ -449,6 +522,8 @@
             }
             case 4:
               return '礼包套餐'
+            case 5:
+              return "代金券"
             default:
               return ""
         }
@@ -457,7 +532,7 @@
       formatTime(timeString) {
         if (timeString == null)
           return null
-        return this.$moment(timeString).format('YYYY/MM/DD HH:mm:ss')
+        return this.$moment(timeString).format('YYYY年MM月DD日')
       },
 
       getCardInfo(userId) {
@@ -500,6 +575,7 @@
     width: 100%;
     height: 100%;
     top: 0px;
+    background-color: #f6f6f6;
 
     .noneInfo {
       display: flex;
@@ -518,31 +594,34 @@
 
     .cardBody {
       .card {
-        margin: 10px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); //设置两层阴影
+        padding: 10px;
+      }
+
+      .title {
+        padding: 20px 20px 10px 20px;
+        text-align: center;
+        .fz(font-size, 30)
       }
 
       .header {
-        background-color: #4CAF50;
+        background: url('https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_pickupcard_bg.png') no-repeat;
+        background-size: 100% 100%;
         color: white;
-        padding: 10px;
-
-        .title {
-          text-align: center;
-          .fz(font-size, 40)
-        }
+        padding: 10px 10px 0px 10px;
 
         .Number {
-          text-align: center;
-          letter-spacing: 2px;
+          text-align: left;
+          letter-spacing: .5px;
           padding: 0px 0px 10px 0px;
-          .fz(font-size, 35);
+          font-weight: 300;
+          .fz(font-size, 25);
         }
 
         .price {
-          text-align: center;
-          padding: 10px 0px 10px 0px;
+          text-align: left;
+          padding: 0px 0px 10px 0px;
           .fz(font-size, 80);
+          font-weight: 600;
 
           span {
             .fz(font-size, 30);
@@ -551,25 +630,30 @@
         }
 
         .validDate {
-          text-align: right;
-          .fz(font-size, 24)
+          text-align: left;
+          .fz(font-size, 24);
+          padding: 0px 0px 3px 0px;
+
+          >span {
+            padding-top: 10px;
+          }
         }
       }
 
       .container {
-        padding: 10px;
-        background-color: #f8f8f8;
+        padding-bottom: 5px;
+        background-color: white;
+        border-bottom-left-radius: 5px;
+        border-bottom-right-radius: 5px;
 
         .couponListCheckBox {
           .van-cell {
-            margin-top: -1px;
             background: white;
-            border-radius: 5px;
           }
 
           .couponBox {
             height: 100px;
-            margin: 2px 10px 2px 0px;
+            margin-left: 10px;
             display: flex;
             line-height: 30px;
             color: #333333;
@@ -592,7 +676,8 @@
 
               .coupon-desc {
                 margin-left: 3px;
-                .fz(font-size, 22);
+                .fz(font-size, 28);
+                color: #999999;
               }
 
               .coupon-price {
@@ -608,13 +693,9 @@
                 word-break: break-all;
               }
 
-              .coupon-price>span {
-                font-weight: normal;
-              }
-
               .coupon-expire-date {
                 margin-left: 5px;
-                .fz(font-size, 22);
+                .fz(font-size, 28);
               }
 
             }
@@ -632,7 +713,7 @@
     }
 
     .van-button {
-      background: linear-gradient(to right, rgb(91, 230, 186), #4CAF50);
+      background: #ef3949;
       border: none;
 
       &--large {

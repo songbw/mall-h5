@@ -35,7 +35,7 @@ module.exports = {
       {
         test: /\.js$/,
         loader: 'babel-loader',
-        include: [resolve('src'), resolve('test'),resolve('node_modules/ly-tab')],
+        include: [resolve('src'), resolve('test'),resolve('node_modules/ly-tab'),resolve('node_modules/v-coupon')],
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
