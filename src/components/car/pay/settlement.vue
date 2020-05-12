@@ -785,13 +785,15 @@
           this.$log(response)
           if (response.data.code == 200) {
             let ret = JSON.parse(response.data.data);
-            this.$log("平安统一支付")
+            this.$log("@@@ 平安统一支付 @@@ ")
             this.$log(ret)
             if (ret != null) { //统一支付
               sc.pay({
                 mchOrderNo: ret.mchOrderNo,
                 merchantNo: ret.merchantNo
               }, function (res) {
+                that.$log("@@@ sc.pay 返回：")
+                that.$log(res)
                 if (res.code == 0) {
                   that.$log("统一支付成功")
                   that.$router.replace({
