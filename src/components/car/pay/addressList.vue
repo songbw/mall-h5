@@ -10,7 +10,12 @@
         @add="onAdd"
         @edit="onEdit"
         @select="onSelect"
-      />
+      >
+      <div class="noContext" slot="top" v-if="loadedAddressList && addresslist.length == 0">
+        <img :src="icon_noContext" alt="">
+        <span class="noContext_line1">您还没有收货地址!</span>
+      </div>
+      </van-address-list>
     </div>
   </div>
 </template>
@@ -26,7 +31,9 @@
       return {
         showHeader: true,
         chosenAddressId: '-1',
-        disabledList: []
+        disabledList: [],
+        loadedAddressList: false,
+        icon_noContext: require('@/assets/icons/ico_empty_box.png'),
       }
     },
     computed: {
@@ -100,6 +107,7 @@
           this.$store.commit('SET_USED_ADDRESS_ID', this.chosenAddressId);
         }
         this.$log(list)
+        this.loadedAddressList = true
         return list;
       },
     },
@@ -167,13 +175,38 @@
 </script>
 
 <style lang="less" scoped>
+  @import "../../../assets/fz.less";
   .addressList {
     width: 100%;
     height: 100%;
     .header{
       width:100%;
     }
+    
     .list-body{
+            .noContext {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
+        height: 500px;
+
+        img {
+          height: 130px;
+          width: 130px;
+        }
+
+        span {
+          margin: 2vw;
+        }
+
+        .noContext_line1 {
+          font-weight: lighter;
+          color: black;
+          .fz(font-size, 35);
+        }
+      }
     }
   }
 </style>
