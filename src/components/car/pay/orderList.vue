@@ -191,7 +191,7 @@
 
     methods: {
       gatCasher(url) {
-        this.$router.push({
+        this.$router.replace({
           name: "关爱通收银台页",
           params: {
             url: url
@@ -581,7 +581,7 @@
             that.$log("预下单返回 :" + JSON.stringify(response.data))
             if (response.data.data.result != undefined) {
               let urlEncode = response.data.data.result.urlEncode;
-             // this.See(urlEncode)
+              // this.See(urlEncode)
               this.gatCasher(urlEncode)
             }
           }).catch(function (error) {
