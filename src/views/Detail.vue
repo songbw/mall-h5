@@ -207,7 +207,7 @@
           <v-baseline />
         </div>
       </div>
-      <v-action :datas="this.goods" />
+      <v-action :datas="this.goods"/>
     </div>
 
   </div>

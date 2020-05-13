@@ -297,7 +297,7 @@
             p.sectionSlide-list-sales-price {
               margin: 2px;
               color: #ff4444;
-              .fz(font-size, 20);
+              .fz(font-size, 28);
 
               span {
                 .fz(font-size, 12);

@@ -301,6 +301,9 @@
           font-weight: bold;
           margin: 10px 0px;
         }
+        .workerOrderDetailBox{
+          margin-top:15px;
+        }
 
         .noContext {
           width: 100%;
