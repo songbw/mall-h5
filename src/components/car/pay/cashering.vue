@@ -42,8 +42,12 @@
 
     created() {
       this.$log("cashser created Enter")
-      this.$log(this.$route.query)
-      this.payInfo = this.$route.query
+      if (top.location !== self.location) { 
+        top.location=self.location; 
+      } else {
+        this.$log(this.$route.query)
+        this.payInfo = this.$route.query
+      }
     },
 
     methods: {
