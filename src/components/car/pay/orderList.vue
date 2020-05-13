@@ -190,6 +190,14 @@
     },
 
     methods: {
+      gatCasher(url) {
+        this.$router.push({
+          name: "关爱通收银台页",
+          params: {
+            url: url
+          }
+        })
+      },
       wkycCasher(user, orderInfo) {
         this.$log("wkycCasher Enter")
         let that = this
@@ -548,7 +556,7 @@
           if (this.$api.APP_ID === '10') {
             returnUrl = "https://gatsn.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '09') {
-            returnUrl = "https://gatzy.weesharing.com/pay/cashering";
+            returnUrl = "https://testgatzy.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '08') {
             returnUrl = "https://testgatwph.weesharing.com/pay/cashering";
           }
@@ -573,7 +581,8 @@
             that.$log("预下单返回 :" + JSON.stringify(response.data))
             if (response.data.data.result != undefined) {
               let urlEncode = response.data.data.result.urlEncode;
-              this.See(urlEncode)
+             // this.See(urlEncode)
+              this.gatCasher(urlEncode)
             }
           }).catch(function (error) {
             that.$log(error)
