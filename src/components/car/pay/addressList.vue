@@ -4,17 +4,11 @@
       <h1 slot="title">用户地址</h1>
     </v-header>
     <div class="list-body">
-      <van-address-list
-        v-model="chosenAddressId"
-        :list="addresslist"
-        @add="onAdd"
-        @edit="onEdit"
-        @select="onSelect"
-      >
-      <div class="noContext" slot="top" v-if="loadedAddressList && addresslist.length == 0">
-        <img :src="icon_noContext" alt="">
-        <span class="noContext_line1">您还没有收货地址!</span>
-      </div>
+      <van-address-list v-model="chosenAddressId" :list="addresslist" @add="onAdd" @edit="onEdit" @select="onSelect">
+        <div class="noContext" slot="top" v-if="loadedAddressList && addresslist.length == 0">
+          <img :src="icon_noContext" alt="">
+          <span class="noContext_line1">您还没有收货地址!</span>
+        </div>
       </van-address-list>
     </div>
   </div>
@@ -41,7 +35,7 @@
         this.$log("addresslist Enter")
         let list = []
         let id = this.$store.state.appconf.usedAddressId;
-        if(id == undefined) {
+        if (id == undefined) {
           id = -1
         }
         this.$log(this.$store.state.appconf.usedAddressId)
@@ -100,8 +94,7 @@
               }
             })
           }
-        } catch (e) {
-        }
+        } catch (e) {}
         if (list.length > 0 && this.chosenAddressId == -1) {
           this.chosenAddressId = list[0].id
           this.$store.commit('SET_USED_ADDRESS_ID', this.chosenAddressId);
@@ -150,11 +143,15 @@
     methods: {
       onAdd() {
         // Toast('新增地址');
-        this.$router.push({name: '地址页'})
+        this.$router.push({
+          name: '地址页'
+        })
       },
 
       onEdit(item, index) {
-        this.$router.push({path: '/car/address/' + item.id})
+        this.$router.push({
+          path: '/car/address/' + item.id
+        })
       },
 
       onSelect(item, index) {
@@ -172,19 +169,22 @@
       }
     }
   }
+
 </script>
 
 <style lang="less" scoped>
   @import "../../../assets/fz.less";
+
   .addressList {
     width: 100%;
     height: 100%;
-    .header{
-      width:100%;
+
+    .header {
+      width: 100%;
     }
-    
-    .list-body{
-            .noContext {
+
+    .list-body {
+      .noContext {
         width: 100%;
         display: flex;
         flex-direction: column;
@@ -209,4 +209,5 @@
       }
     }
   }
+
 </style>
