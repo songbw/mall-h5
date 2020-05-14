@@ -576,7 +576,7 @@
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
         let openId = "b720d31ebd4c1d148da24ebf5660031f"
         if(this.$api.APP_ID == '08') {
-            openId = "b720d31ebd4c1d148da24ebf5660031f"
+            openId = "f810533184a1dc8e460e56bb6da3dcde"
         }
         this.$log("openId:" + openId);
         if (openId != undefined) {

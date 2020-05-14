@@ -726,7 +726,9 @@
   .goodsAction {
     background-color: white;
     width: 100%;
-
+    //box-shadow: 10px 10px 10px 10px rgba(255,0,0,0.5);
+    box-shadow: 8px 8px 8px 8px rgba(243, 37, 37, 0.5);;  
+ 
     .contactServiceBtn {
       width: 10%;
       margin-top: 5px;

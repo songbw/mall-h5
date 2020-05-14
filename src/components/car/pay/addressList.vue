@@ -4,13 +4,12 @@
       <h1 slot="title">用户地址</h1>
     </v-header>
     <div class="list-body">
-      <van-address-list
-        v-model="chosenAddressId"
-        :list="addresslist"
-        @add="onAdd"
-        @edit="onEdit"
-        @select="onSelect"
-      />
+      <van-address-list v-model="chosenAddressId" :list="addresslist" @add="onAdd" @edit="onEdit" @select="onSelect">
+        <div class="noContext" slot="top" v-if="loadedAddressList && addresslist.length == 0">
+          <img :src="icon_noContext" alt="">
+          <span class="noContext_line1">您还没有收货地址!</span>
+        </div>
+      </van-address-list>
     </div>
   </div>
 </template>
@@ -26,7 +25,9 @@
       return {
         showHeader: true,
         chosenAddressId: '-1',
-        disabledList: []
+        disabledList: [],
+        loadedAddressList: false,
+        icon_noContext: require('@/assets/icons/ico_empty_box.png'),
       }
     },
     computed: {
@@ -34,7 +35,7 @@
         this.$log("addresslist Enter")
         let list = []
         let id = this.$store.state.appconf.usedAddressId;
-        if(id == undefined) {
+        if (id == undefined) {
           id = -1
         }
         this.$log(this.$store.state.appconf.usedAddressId)
@@ -93,13 +94,13 @@
               }
             })
           }
-        } catch (e) {
-        }
+        } catch (e) {}
         if (list.length > 0 && this.chosenAddressId == -1) {
           this.chosenAddressId = list[0].id
           this.$store.commit('SET_USED_ADDRESS_ID', this.chosenAddressId);
         }
         this.$log(list)
+        this.loadedAddressList = true
         return list;
       },
     },
@@ -142,11 +143,15 @@
     methods: {
       onAdd() {
         // Toast('新增地址');
-        this.$router.push({name: '地址页'})
+        this.$router.push({
+          name: '地址页'
+        })
       },
 
       onEdit(item, index) {
-        this.$router.push({path: '/car/address/' + item.id})
+        this.$router.push({
+          path: '/car/address/' + item.id
+        })
       },
 
       onSelect(item, index) {
@@ -164,16 +169,45 @@
       }
     }
   }
+
 </script>
 
 <style lang="less" scoped>
+  @import "../../../assets/fz.less";
+
   .addressList {
     width: 100%;
     height: 100%;
-    .header{
-      width:100%;
+
+    .header {
+      width: 100%;
     }
-    .list-body{
+
+    .list-body {
+      .noContext {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: Center;
+        height: 500px;
+
+        img {
+          height: 130px;
+          width: 130px;
+        }
+
+        span {
+          margin: 2vw;
+        }
+
+        .noContext_line1 {
+          font-weight: lighter;
+          color: black;
+          .fz(font-size, 35);
+        }
+      }
     }
   }
+
 </style>

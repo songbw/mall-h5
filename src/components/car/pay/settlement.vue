@@ -245,7 +245,9 @@
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
                           <div class="coupon-price">
-                            <span v-if="k.couponInfo.rules.couponRules.type <2 || k.couponInfo.rules.couponRules.type === 5" style="margin-right: -7px">￥</span>
+                            <span
+                              v-if="k.couponInfo.rules.couponRules.type <2 || k.couponInfo.rules.couponRules.type === 5"
+                              style="margin-right: -7px">￥</span>
                             {{formateCouponPrice(k.couponInfo.rules.couponRules)}}
                             <span>{{formateCouponDetail(k.couponInfo.rules.couponRules)}}</span>
                           </div>
@@ -761,6 +763,14 @@
     },
 
     methods: {
+      gatCasher(url) {
+        this.$router.replace({
+          name: "关爱通收银台页",
+          params: {
+            url: url
+          }
+        })
+      },
       wkycCasher(user, orderInfo) {
         this.$log("wkycCasher Enter")
         let that = this
@@ -929,7 +939,7 @@
             })
           } catch (e) {}
         }
-        this.$log("upDatefreightPay freightPay:"+ this.freightPay)
+        this.$log("upDatefreightPay freightPay:" + this.freightPay)
       },
 
       getDateTime(time) {
@@ -938,8 +948,10 @@
       isCouponActivied(coupon) {
         let ret = false;
         if (coupon.status === 1) {
-          let startTime = new Date(this.$moment(coupon.couponInfo.effectiveStartDate).format('YYYY/MM/DD HH:mm:ss')).getTime() //new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g, '/')).getTime()
-          let endTime = new Date(this.$moment(coupon.couponInfo.effectiveEndDate).format('YYYY/MM/DD HH:mm:ss')).getTime()//new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
+          let startTime = new Date(this.$moment(coupon.couponInfo.effectiveStartDate).format('YYYY/MM/DD HH:mm:ss'))
+            .getTime() //new Date(coupon.couponInfo.effectiveStartDate.replace(/-/g, '/')).getTime()
+          let endTime = new Date(this.$moment(coupon.couponInfo.effectiveEndDate).format('YYYY/MM/DD HH:mm:ss'))
+            .getTime() //new Date(coupon.couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
           let current = new Date().getTime()
           if (current < startTime) {
             ret = false //券活动未开始
@@ -967,7 +979,7 @@
 
       formateCouponDescription(couponInfo) {
         switch (couponInfo.rules.scenario.type) {
-          case 1: 
+          case 1:
             return "仅限某些指定的商品可用";
           case 2:
             return "全场商品可用";
@@ -1613,7 +1625,8 @@
           if (this.$api.APP_ID === '10') {
             returnUrl = "https://gatsn.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '09') {
-            returnUrl = "https://gatzy.weesharing.com/pay/cashering";
+            returnUrl =
+            "https://testgatzy.weesharing.com/pay/cashering"; //"https://gatzy.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '08') {
             returnUrl = "https://testgatwph.weesharing.com/pay/cashering";
           }
@@ -1640,7 +1653,8 @@
             that.$log("预下单返回 :" + JSON.stringify(response.data))
             if (response.data.data.result != undefined) {
               let urlEncode = response.data.data.result.urlEncode;
-              this.See(urlEncode)
+              //this.See(urlEncode)
+              this.gatCasher(urlEncode)
             }
           }).catch(function (error) {
             that.$log(error)
@@ -3144,7 +3158,7 @@
 
             .van-card {
               background-color: #ffffff;
-              
+
 
               &__price {
                 margin-top: 0.6em;

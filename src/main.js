@@ -58,7 +58,7 @@ import {
 
 /* if (process.env.NODE_ENV === 'production') {
   new VConsole()
-} */  
+}  */
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)
@@ -82,7 +82,7 @@ if (process.env.NODE_ENV === 'production') {
       second = second < 10 ? ('0' + second) : second;
       return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
     },
-    dev: true,
+    dev: false,
     levels: ["log", "warn", "debug", "error", "dir"],
     forceLevels: []
   })

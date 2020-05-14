@@ -60,11 +60,6 @@
                       确认收货
                     </van-button>
                     <van-button plain round size="small" type="primary"
-                      style="background-color: #ff4444;color: white ;border-color: #ff4444" @click="onDelBtnClick(k,i)"
-                      v-show="k.status==2||k.status==3">
-                      删除订单
-                    </van-button>
-                    <van-button plain round size="small" type="primary"
                       style="background-color: white;color: black ;border-color: #dedede" @click="onCancelBtnClick(k,i)"
                       v-show="k.status==0">
                       取消订单
@@ -78,7 +73,6 @@
                       v-show="k.status==0">
                       去支付
                     </van-button>
-
                     <van-button plain round size="small" type="primary"
                       style="background-color: white;color: #ff4444;border-color: #dedede "
                       @click="onLogisticsBtnClick(k,i)" v-show="k.status==1">
@@ -88,6 +82,11 @@
                       style="background-color: white;color: #ff4444;border-color: #dedede " @click="onBuyBtnClick(k,i)"
                       v-show="k.status==2||k.status==3">
                       再次购买
+                    </van-button>
+                    <van-button plain round size="small" type="primary"
+                      style="background-color: #ff4444;color: white ;border-color: #ff4444" @click="onDelBtnClick(k,i)"
+                      v-show="k.status==2||k.status==3">
+                      删除订单
                     </van-button>
                   </div>
                 </div>
@@ -190,6 +189,14 @@
     },
 
     methods: {
+      gatCasher(url) {
+        this.$router.replace({
+          name: "关爱通收银台页",
+          params: {
+            url: url
+          }
+        })
+      },
       wkycCasher(user, orderInfo) {
         this.$log("wkycCasher Enter")
         let that = this
@@ -548,7 +555,7 @@
           if (this.$api.APP_ID === '10') {
             returnUrl = "https://gatsn.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '09') {
-            returnUrl = "https://gatzy.weesharing.com/pay/cashering";
+            returnUrl = "https://testgatzy.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '08') {
             returnUrl = "https://testgatwph.weesharing.com/pay/cashering";
           }
@@ -573,7 +580,8 @@
             that.$log("预下单返回 :" + JSON.stringify(response.data))
             if (response.data.data.result != undefined) {
               let urlEncode = response.data.data.result.urlEncode;
-              this.See(urlEncode)
+              // this.See(urlEncode)
+              this.gatCasher(urlEncode)
             }
           }).catch(function (error) {
             that.$log(error)

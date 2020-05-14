@@ -1,5 +1,5 @@
 <template lang="html">
-  <div class="cashering">
+  <div class="cashering" v-if="showPage">
     <v-header v-if="showHeader">
       <h1 slot="title">订单确认中...</h1>
     </v-header>
@@ -24,6 +24,7 @@
     data() {
       return {
         showHeader: false,
+        showPage: false,
         payInfo: {},
         ico_clock: require('@/assets/icons/ico_clock.png'),
         timer: '',
@@ -42,8 +43,14 @@
 
     created() {
       this.$log("cashser created Enter")
-      this.$log(this.$route.query)
-      this.payInfo = this.$route.query
+      if (top.location !== self.location) {
+        top.location.replace(self.location.href);
+      } else {
+        this.$log(this.$route.query)
+        this.payInfo = this.$route.query
+        this.showPage = true;
+      }
+
     },
 
     methods: {
