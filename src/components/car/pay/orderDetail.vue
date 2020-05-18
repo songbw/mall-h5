@@ -211,6 +211,60 @@
           }
         })
       },
+      pingAnCasher(user, orderInfo) {
+        this.$log("pingAnCasher Enter")
+        let that = this
+        let payOptions = {
+          appId: this.$api.APP_ID,
+          orderNo: orderInfo.orderNo
+        }
+        let pingAnPay = {
+          "actPayFee": "" + orderInfo.orderAmount,
+          "memberNo": user.payId,
+          "orderNo": orderInfo.orderNo,
+          "payType": "pingan"
+        }
+
+        payOptions['pingAnPay'] = pingAnPay;
+        this.$log(user.payId)
+        this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.AGGREGATE_PAY_URL,
+          url: '/wspay/pay',
+          data: payOptions,
+        }).then((response) => {
+          this.$log(response)
+          if (response.data.code == 200) {
+            let ret = JSON.parse(response.data.data);
+            this.$log("平安统一支付")
+            this.$log(ret)
+            if (ret != null) { //统一支付
+              sc.pay({
+                mchOrderNo: ret.mchOrderNo,
+                merchantNo: ret.merchantNo
+              }, function (res) {
+                if (res.code == 0) {
+                  that.$log("统一支付成功")
+                  that.$router.replace({
+                    path: '/pay/cashering',
+                    query: {
+                      outer_trade_no: orderInfo.orderNo
+                    }
+                  })
+                } else {
+                  that.$log("统一支付失败")
+                }
+              })
+            } else {
+              that.$toast("请求支付失败")
+            }
+          } else {
+            this.$toast(response.data.message)
+          }
+        }).catch(function (error) {
+          that.$toast("请求支付失败")
+        })
+      },
       wkycCasher(user, orderInfo) {
         this.$log("wkycCasher Enter")
         let that = this
@@ -565,6 +619,8 @@
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
                   if (this.$api.APP_ID == '14') {
                     this.wkycCasher(user, pAnOrderInfo);
+                  } else if (this.$api.APP_ID == '12') {
+                    this.pingAnCasher(user,pAnOrderInfo);
                   } else {
                     this.$router.replace({
                       name: "收银台页",

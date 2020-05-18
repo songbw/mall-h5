@@ -28,7 +28,7 @@
             <div v-else-if="item.type==='2'" style="margin-left: 5px;margin-right: 5px;">
               <v-sectionSquared :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
-            <div v-else-if="item.type==='3'" style="margin-left: 5px;margin-right: 5px;">
+            <div v-else-if="item.type==='3'">
               <v-sectionSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='7'"
@@ -41,7 +41,7 @@
             <div v-else-if="item.type==='8'">
               <v-sectionCompBox :datas="item.data" :mBackgroundColor="mBackgroundColor"></v-sectionCompBox>
             </div>
-            <div v-else-if="item.type==='9'" style="margin-left: 5px;margin-right: 5px;">
+            <div v-else-if="item.type==='9'">
               <v-sectionListSlide :datas="item.data" :mBackgroundColor="mBackgroundColor" />
             </div>
             <div v-else-if="item.type==='10'">
@@ -597,16 +597,17 @@
       async test() {
         // let openId = "44391000fd194ab888b1aa81c03c3740"
         // let openId = "d6c88055c3ab42a39d605ed2767a8b9d"
-         let openId = "ace1c1722b834309a59fad302fe357b2"
         // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
         // let openId = "5c8314363cea49de925bfaa39d4c4ebb"
         // let openId = "4a742681f23b4d45b13a78bd99c0bf46"
-        //let openId = "ace1c1722b834309a59fad302fe357b2"
+        let openId = "ace1c1722b834309a59fad302fe357b2"
+        let payId = "0041900110127"
         if (this.$api.APP_ID == '01') {
           openId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc"
           // openId = "o_sjNjk5EQVlNuo3G2KoWfCKgR0A"
         } else if (this.$api.APP_ID == '12') {
           openId = "5c8314363cea49de925bfaa39d4c4ebb" //最珠海
+          payId = ""
         } else if (this.$api.APP_ID == '14') {
           // openId = "2a984f9270aafb236cc7c0c74b21ff38" //万科云城
         } else if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
@@ -636,7 +637,7 @@
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         this.$log("openId:" + openId);
-        let payId = "0041900110127"
+        
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
           let accessToken = "3622c97b-a878-422f-879c-5b31709f1ea5"
