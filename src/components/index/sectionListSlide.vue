@@ -1,5 +1,5 @@
 <template>
-  <section :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}" v-if="show">
+  <section :style="getBoxStyle()" v-if="show">
     <div class="wrap">
       <div class='box' :style="{'background-color': decorateBgColor}">
         <van-cell v-if="datas.settings.title.textValue.length > 0" @click="gotoTargetUrl()"
@@ -41,7 +41,7 @@
           <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
         </div>
       </div>
-      <div class="listBox">
+      <div class="listBox" :style="getListStyle()">
         <div v-if="isDailySchedule" class="slidelistBox">
           <div class="sectionSlide-list">
             <ul>
@@ -177,6 +177,27 @@
     },
 
     methods: {
+      getListStyle() {
+        let skuBackgroundColor = '#FFFFFF'
+        if (this.datas.settings.skuBackgroundColor != undefined)
+          skuBackgroundColor = this.datas.settings.skuBackgroundColor
+        let style = {
+          'background-color': skuBackgroundColor
+        }
+        return style
+      },
+      getBoxStyle() {
+        let marginX = 0;
+        if (this.datas.settings.marginX != undefined)
+          marginX = this.datas.settings.marginX
+        let style = {
+          'margin-left': marginX + 'px',
+          'margin-right': marginX + 'px',
+          'margin-bottom': this.datas.settings.marginBottom + 'px',
+          'background-color': this.mBackgroundColor
+        }
+        return style;
+      },
       getPromotionsStatus() {
         let ids = []
         if (this.datas.list != null && this.datas.list.length > 0) {
