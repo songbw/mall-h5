@@ -475,7 +475,6 @@
   .wrap {
     border-radius: 10px;
     background-color: transparent;
-    padding-bottom: 5px;
 
     .box {
       position: relative;
