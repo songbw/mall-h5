@@ -561,35 +561,24 @@
               color: #323233;
             }
 
-            p.sectionSlide-list-origin-price {
-              margin: 2px;
-              color: #707070;
-              .fz(font-size, 15);
-              text-decoration: line-through;
-
-              span {
-                .fz(font-size, 10);
-              }
-            }
-
             p.sectionSlide-list-sales-price {
               margin: 2px;
               color: #ff4444;
-              .fz(font-size, 20);
+              .fz(font-size, 25);
 
               span {
-                .fz(font-size, 12);
+                .fz(font-size, 15);
               }
             }
 
             p.sectionSlide-list-origin-price {
               margin: 2px;
               color: #707070;
-              .fz(font-size, 15);
+              .fz(font-size, 25);
               text-decoration: line-through;
 
               span {
-                .fz(font-size, 10);
+                .fz(font-size, 15);
               }
             }
           }
