@@ -35,7 +35,7 @@
       <p style="font-size:10.5pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; widows:0"><span
           style="font-family:微软雅黑; font-size:10.5pt; font-weight:bold">4.下述商品不享受“无理由”退货：</span></p>
       <p style="font-size:10.5pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; widows:0"><span
-          style="font-family:微软雅黑; font-size:10.5pt">1）</span><span
+          style="color:#ff0000; font-family:微软雅黑; font-size:10.5pt">1）</span><span
           style="color:#ff0000; font-family:微软雅黑; font-size:10.5pt">私人订制商品；</span></p>
       <p style="font-size:10.5pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; widows:0"><span
           style="color:#ff0000; font-family:微软雅黑; font-size:10.5pt">2）鲜活易腐类商品，如已开封食用的零食、罐头因口味主观因素的无理由；</span></p>

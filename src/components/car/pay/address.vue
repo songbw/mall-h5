@@ -4,15 +4,8 @@
     <v-header v-if="showHeader">
       <h1 slot="title">地址编辑</h1>
     </v-header>
-    <van-address-edit
-      :area-list="areaList"
-      :address-info="addressInfo"
-      show-set-default
-      :show-delete="this.$route.params.id != 'new'"
-      save-button-text="保存并使用"
-      @save="onSave"
-      @delete="onDelete"
-    />
+    <van-address-edit :area-list="areaList" :address-info="addressInfo" show-set-default
+      :show-delete="this.$route.params.id != 'new'" save-button-text="保存并使用" @save="onSave" @delete="onDelete" />
   </div>
 </template>
 
@@ -35,8 +28,8 @@
       }
     },
     created() {
-     // this.test1();
-     // this.test();
+      // this.test1();
+      // this.test();
       this.showHeader = this.$api.HAS_HEADER;
       let id = this.$route.params.id
       if (id != "new") {
@@ -65,95 +58,95 @@
         for (var province_key_wph in areaListWph.province_list) {
           let found = -1;
           for (var province_key in areaList.province_list) {
-            if(areaList.province_list[province_key] == areaListWph.province_list[province_key_wph]) {
+            if (areaList.province_list[province_key] == areaListWph.province_list[province_key_wph]) {
               found = 1;
               break;
             }
           }
-          if(found == -1) {
-            this.$log("省:"+ areaListWph.province_list[province_key_wph])
+          if (found == -1) {
+            this.$log("省:" + areaListWph.province_list[province_key_wph])
           }
         }
 
         for (var city_key_wph in areaListWph.city_list) {
           let found = -1;
           for (var city_key in areaList.city_list) {
-            if(areaList.city_list[city_key] == areaListWph.city_list[city_key_wph]) {
+            if (areaList.city_list[city_key] == areaListWph.city_list[city_key_wph]) {
               found = 1;
               break;
             }
           }
-          if(found == -1) {
-            this.$log("市:"+ areaListWph.city_list[city_key_wph])
+          if (found == -1) {
+            this.$log("市:" + areaListWph.city_list[city_key_wph])
           }
         }
 
         for (var county_key_wph in areaListWph.county_list) {
           let found = -1;
           for (var county_key in areaList.city_list) {
-            if(areaList.county_list[county_key] == areaListWph.county_list[county_key_wph]) {
+            if (areaList.county_list[county_key] == areaListWph.county_list[county_key_wph]) {
               found = 1;
               break;
             }
           }
-          if(found == -1) {
-            this.$log("县:"+ areaListWph.county_list[county_key_wph])
+          if (found == -1) {
+            this.$log("县:" + areaListWph.county_list[county_key_wph])
           }
         }
 
       },
-/*       testGetCode(province,city,county) {
-       // this.$log("省:"+province+",市:"+city+",县:"+county)
-        let options = {
-          "country": "中国",
-          "province": province,
-          "city": city,
-          "county": county
-        }
-        return  this.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.ORDER_BASE_URL,
-          url: '/address/code',
-          data: options,
-        })
-      },
-      async test() {
-       // this.$log(areaList.city_list)
-       // this.$log(areaList.county_list)
-       // this.$log(areaList.province_list)
-        let province_name = "";
-        let city_name = "";
-        let county_name = "";
-        for (var province_key in areaList.province_list) {
-          let code = province_key
-          province_name = areaList.province_list[province_key]
-          for (var city_key in areaList.city_list) {
-            if (city_key.substr(0, 2) == code.substr(0, 2)) {
-              code = city_key
-              city_name = areaList.city_list[city_key]
-              for (var county_key in areaList.county_list) {
-                if (county_key.substr(0, 4) == code.substr(0, 4) ) {
-                  code = county_key
-                  county_name = areaList.county_list[county_key];
-                  try{
-                   // this.$log("省ID:"+province_key+",省:"+province_name+",市ID:"+city_key+",市:"+city_name+",县ID:"+county_key+",县:"+county_name)
-                    this.$log(county_key+" "+county_name+" "+city_key+" "+city_name+" "+province_key+" "+province_name)
-                    let result =  await  this.testGetCode(province_name,city_name,county_name)
-                    let code = result.data.data.code
-                 //   this.$log(code)
-                    if(code.countyId.length == 0) {
-                      this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+      /*       testGetCode(province,city,county) {
+             // this.$log("省:"+province+",市:"+city+",县:"+county)
+              let options = {
+                "country": "中国",
+                "province": province,
+                "city": city,
+                "county": county
+              }
+              return  this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.ORDER_BASE_URL,
+                url: '/address/code',
+                data: options,
+              })
+            },
+            async test() {
+             // this.$log(areaList.city_list)
+             // this.$log(areaList.county_list)
+             // this.$log(areaList.province_list)
+              let province_name = "";
+              let city_name = "";
+              let county_name = "";
+              for (var province_key in areaList.province_list) {
+                let code = province_key
+                province_name = areaList.province_list[province_key]
+                for (var city_key in areaList.city_list) {
+                  if (city_key.substr(0, 2) == code.substr(0, 2)) {
+                    code = city_key
+                    city_name = areaList.city_list[city_key]
+                    for (var county_key in areaList.county_list) {
+                      if (county_key.substr(0, 4) == code.substr(0, 4) ) {
+                        code = county_key
+                        county_name = areaList.county_list[county_key];
+                        try{
+                         // this.$log("省ID:"+province_key+",省:"+province_name+",市ID:"+city_key+",市:"+city_name+",县ID:"+county_key+",县:"+county_name)
+                          this.$log(county_key+" "+county_name+" "+city_key+" "+city_name+" "+province_key+" "+province_name)
+                          let result =  await  this.testGetCode(province_name,city_name,county_name)
+                          let code = result.data.data.code
+                       //   this.$log(code)
+                          if(code.countyId.length == 0) {
+                            this.$log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+                          }
+                        } catch (e) {
+                          console.log("################################")
+                          console.log(e)
+                        }
+                      }
                     }
-                  } catch (e) {
-                    console.log("################################")
-                    console.log(e)
                   }
                 }
               }
-            }
-          }
-        }
-      },*/
+            },*/
       getAddressCode(province, city, county) {
         let code = ""
         for (var key in areaList.province_list) {
@@ -236,8 +229,7 @@
                 console.log(error)
               })
             }
-          } catch (e) {
-          }
+          } catch (e) {}
         } else {
           try {
             let userInfo = this.$store.state.appconf.userInfo
@@ -324,7 +316,7 @@
           }
         }
         if (found != -1) {
-          list.splice(found, 1);//如果是删除选中地址，怎么办？
+          list.splice(found, 1); //如果是删除选中地址，怎么办？
           this.$store.commit('SET_ADDRESS_LIST', list);
           this.$api.xapi({
             method: 'delete',
@@ -342,25 +334,26 @@
       },
       onSave(recerverInfo) {
         //首先获取地址编码
+        let that = this
         if (!recerverInfo.tel.match("^((\\\\+86)|(86))?[1][3456789][0-9]{9}$")) {
           this.$toast("请输入正确的电话号码")
           return
         }
-        this.$log("receiverInfo.name.length:"+recerverInfo.name.length)
-        if(recerverInfo.name.length > 8) {
+        this.$log("receiverInfo.name.length:" + recerverInfo.name.length)
+        if (recerverInfo.name.length > 8) {
           this.$toast("收件人姓名长度不要超过8个字")
           return
         }
-        if( !recerverInfo.name.match("^[\u4e00-\u9fa5_a-zA-Z0-9]+$")) {
+        if (!recerverInfo.name.match("^[\u4e00-\u9fa5_a-zA-Z0-9]+$")) {
           this.$toast("请输入正确的姓名")
           return
         }
-        this.$log("receiverInfo.addressDetail:"+recerverInfo.addressDetail)
-        if(recerverInfo.addressDetail.match("^[0-9]*$")) {
+        this.$log("receiverInfo.addressDetail:" + recerverInfo.addressDetail)
+        if (recerverInfo.addressDetail.match("^[0-9]*$")) {
           this.$toast("收件人地址不能全是数字")
           return
         }
-        if(recerverInfo.addressDetail.length > 100) {
+        if (recerverInfo.addressDetail.length > 100) {
           this.$toast("收件人详细地址不能超过100字")
           return
         }
@@ -382,10 +375,14 @@
           this.saveReceiverAddress(recerverInfo, code);
         }).catch(function (error) {
           console.log(error)
+          if (error.response.status == 401) {
+            that.$toast("用户未登录，请先登录")
+          }
         })
       },
     }
   }
+
 </script>
 
 <style lang="less" scoped>
