@@ -17,6 +17,7 @@
 
 <script>
   import Header from '@/common/_header.vue'
+  import Util from '@/util/common'
 
   export default {
     components: {
@@ -142,7 +143,12 @@
     methods: {
       onAdd() {
         // Toast('新增地址');
-        this.$router.push({name: '地址页'})
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          this.$router.push({name: '地址页'})
+        } else {
+          this.$toast("没有用户信息，请先登录")
+        }
       },
 
       onEdit(item, index) {
