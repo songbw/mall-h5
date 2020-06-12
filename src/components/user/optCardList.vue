@@ -177,7 +177,12 @@
       },
       onAddOptCardBtnClick() {
         this.$log("onAddOptCardBtnClick Enter")
-        this.addNewOptCardDlgShow = true
+        let userInfo = this.$store.state.appconf.userInfo;
+        if (!Util.isUserEmpty(userInfo)) {
+          this.addNewOptCardDlgShow = true
+        } else {
+          this.$toast("没有用户信息，请先登录")
+        }
       },
 
        async beforeCloseAddNewOptCardDlg(action, done) {
