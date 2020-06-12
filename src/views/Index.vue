@@ -312,15 +312,6 @@
       },
     },
     methods: {
-      probeMonitorInit () {
-        let userInfo = this.$store.state.appconf.userInfo;
-        this.$log("start loading cartlist number ....")
-        let userId = 0
-        if (!Util.isUserEmpty(userInfo)) {
-          userId = userInfo.userId
-        }
-        window.webfunny && webfunny.wmInitUser(userId, "3.0")
-      },
       getHomePage() {
         return this.$api.xapi({
           method: 'get',
@@ -660,7 +651,6 @@
 
       thirdPartLogined(openId, accessToken) {
         let that = this;
-        this.probeMonitorInit();
         this.$api.xapi({
           method: 'post',
           baseURL: this.$api.SSO_BASE_URL,
