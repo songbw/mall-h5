@@ -41,9 +41,9 @@
                               {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                             </p>
                           </div>
-                          <div class="goodsBuyBox">
+<!--                           <div class="goodsBuyBox">
                             <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
-                          </div>
+                          </div> -->
                         </div>
                       </van-col>
                     </div>
@@ -78,9 +78,6 @@
                         <span style="font-size: x-small;margin-right: -3px;">￥</span>
                         {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                       </p>
-                    </div>
-                    <div class="goodsBuyBox">
-                      <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
                     </div>
                   </div>
                 </div>
@@ -137,9 +134,6 @@
                                 <span style="font-size: x-small;margin-right: -3px;">￥</span>
                                 {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                               </p>
-                            </div>
-                            <div class="goodsBuyBox">
-                              <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
                             </div>
                           </div>
                         </van-col>
