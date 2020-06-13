@@ -626,7 +626,7 @@
           }
         } else if (this.$api.APP_ID == '11') {
           //only for debug
-          openId = '13802aa921ca47d295b47c7016ff9137'
+          //openId = '13802aa921ca47d295b47c7016ff9137'
         }
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
