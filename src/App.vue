@@ -115,7 +115,8 @@
         if (isQpayCardSaved != undefined && isQpayCardSaved == '0') {
           this.$api.IS_QUICKPAY_CAN_SAVE = false;
         }
-        if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09" || this.$api.APP_ID === "08"  ) {
+        this.loadExternalJs()
+        if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09" || this.$api.APP_ID === "08") {
           this.$api.IS_GAT_APP = true;
           this.clearStorage();
           this.configured = true
@@ -149,6 +150,12 @@
             that.configured = true
           }
           this.configured = true
+        } else if (this.$api.APP_ID == "15") {
+            this.$log("LinXiApp")
+            if (this.shouldLogin()) {
+                this.getLinXiLoginAuthInfo();
+            }
+            this.configured = true
         } else {
           this.configured = true
         }
@@ -158,6 +165,20 @@
     },
 
     methods: {
+      loadExternalJs() {
+        if (this.$api.APP_ID == "11" || this.$api.APP_ID == "12") {
+          let script = document.createElement('script')
+          script.type = 'text/javascript'
+          script.src = '//smk-static.oss-cn-hangzhou.aliyuncs.com/js/jpasc-0.4.0.js'
+          document.getElementsByTagName('head')[0].appendChild(script)
+        } else if (this.$api.APP_ID == "15") {
+          //TODO: do somthing
+          let script = document.createElement('script')
+          script.type = 'text/javascript'
+          script.src = '//mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/js/ls-sdk/ls-sdk.js'
+          document.getElementsByTagName('head')[0].appendChild(script)
+        }
+      },
       shouldLogin() {
         this.$log(this.$route)
         if (this.$route.fullPath == '/pay/cashering' || this.$route.fullPath == '/pay/casher') {
@@ -210,6 +231,13 @@
         })
       },
       getInitCode() {
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.PINGAN_AUTH_URL,
+          url: '/pingan/initCode',
+        })
+      },
+      getLinXiInitCode() {
         return this.$api.xapi({
           method: 'get',
           baseURL: this.$api.PINGAN_AUTH_URL,
@@ -298,6 +326,56 @@
           })
         } catch (e) {}
       },
+      async getLinXiLoginAuthInfo() {
+        this.$log("getLinXiLoginAuthInfo Enter @@@@@@@@@@@@@@@@@@@@@@@")
+        try {
+          let that = this
+          let ret = await this.getLinXiInitCode()
+          let initCode = ret.data.data.initCode
+          if (!initCode)
+            return
+          ls.config({
+            debug: false, // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
+            appId: this.$api.T_APP_ID, // 在统一 APP 开放平台服务器申请的 appId
+            initCode,
+            nativeApis: ['userAuth']
+          })
+
+          ls.ready(() => {
+            ls.userAuth({
+                appId: this.$api.T_APP_ID
+              },
+              res => {
+                /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
+                if (res.code === 0) { //    用户同意授权
+                  const requestCode = res.data.requestCode;
+                 // this.getPingAnThirdPartyAccessTokenInfo(requestCode);
+                } else {
+                  /* 用户拒绝授权或其它失败情况
+                                               code: - 1 默认失败
+                                               code: - 10001    没有初始化 JSSDK
+                                               code: - 10002    用户点击拒绝授权
+                                                code: - 10003    用户未登录 */
+                  //this.$toast("用户拒绝授权登录")
+                  console.error(res.code)
+                  console.error(res.message)
+                  ls.close();
+                }
+              });
+            ls.setToolBar({
+              leftBtns: [{
+                iconType: 0
+              }]
+            });
+          })
+          ls.error((res) => {
+            console.error({
+              res
+            })
+            ls.close();
+          })
+        } catch (e) {}
+      },
       wkycLogin() {
         let that = this
         that.$log("wkycLogin Enter")
@@ -380,7 +458,7 @@
             } else {
               //获取用户信息失败
               that.$log("获取用户授权失败!")
-             // that.$toast("获取用户授权失败!")
+              // that.$toast("获取用户授权失败!")
               that.configured = true
             }
           } catch (e) {
