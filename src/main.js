@@ -8,7 +8,7 @@ import coupon from 'v-coupon'
 //import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueQRCodeComponent from 'vue-qrcode-component'
-//import VConsole from 'vconsole'
+import VConsole from 'vconsole'
 import md5 from 'js-md5';
 import {
   Button,
@@ -56,9 +56,9 @@ import {
   Picker
 } from 'vant';
 
-/* if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV === 'production') {
   new VConsole()
-}  */
+} 
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)
@@ -82,7 +82,7 @@ if (process.env.NODE_ENV === 'production') {
       second = second < 10 ? ('0' + second) : second;
       return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
     },
-    dev: false,
+    dev: true,
     levels: ["log", "warn", "debug", "error", "dir"],
     forceLevels: []
   })

@@ -151,11 +151,11 @@
           }
           this.configured = true
         } else if (this.$api.APP_ID == "15") {
-            this.$log("LinXiApp")
-            if (this.shouldLogin()) {
-                this.getLinXiLoginAuthInfo();
-            }
-            this.configured = true
+          this.$log("LinXiApp")
+          if (this.shouldLogin()) {
+            this.getLinXiLoginAuthInfo();
+          }
+          this.configured = true
         } else {
           this.configured = true
         }
@@ -173,9 +173,11 @@
           document.getElementsByTagName('head')[0].appendChild(script)
         } else if (this.$api.APP_ID == "15") {
           //TODO: do somthing
+          this.$log("loadExternalJs ls sdk")
           let script = document.createElement('script')
           script.type = 'text/javascript'
-          script.src = '//mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/js/ls-sdk/ls-sdk.js'
+          //  script.src = '//mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/js/ls-sdk/ls-sdk.js'
+          script.src = '//smk-static.oss-cn-hangzhou.aliyuncs.com/js/ls-sdk-0617.js?v=3.0'
           document.getElementsByTagName('head')[0].appendChild(script)
         }
       },
@@ -237,15 +239,8 @@
           url: '/pingan/initCode',
         })
       },
-      getLinXiInitCode() {
-        return this.$api.xapi({
-          method: 'get',
-          baseURL: this.$api.PINGAN_AUTH_URL,
-          url: '/pingan/initCode',
-        })
-      },
       getPingAnThirdPartyAccessTokenInfo(requestCode) {
-        //  this.$toast("requestCode:"+requestCode)
+        this.$log("getPingAnThirdPartyAccessTokenInfo Enter")
         let that = this;
         that.$api.xapi({
           method: 'get',
@@ -279,7 +274,6 @@
       },
       async getLoginAuthInfo() {
         try {
-          let that = this
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
           if (!initCode)
@@ -327,18 +321,16 @@
         } catch (e) {}
       },
       async getLinXiLoginAuthInfo() {
-        this.$log("getLinXiLoginAuthInfo Enter @@@@@@@@@@@@@@@@@@@@@@@")
+        this.$log("getLinXiLoginAuthInfo Enter")
         try {
-          let that = this
-          let ret = await this.getLinXiInitCode()
+          let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
           if (!initCode)
             return
           ls.config({
             debug: false, // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
             appId: this.$api.T_APP_ID, // 在统一 APP 开放平台服务器申请的 appId
-            initCode,
-            nativeApis: ['userAuth']
+            initCode: initCode
           })
 
           ls.ready(() => {
@@ -347,9 +339,9 @@
               },
               res => {
                 /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
-                if (res.code === 0) { //    用户同意授权
+                if (res.code === 200) { //    用户同意授权
                   const requestCode = res.data.requestCode;
-                 // this.getPingAnThirdPartyAccessTokenInfo(requestCode);
+                  this.getPingAnThirdPartyAccessTokenInfo(requestCode);
                 } else {
                   /* 用户拒绝授权或其它失败情况
                                                code: - 1 默认失败
@@ -362,11 +354,6 @@
                   ls.close();
                 }
               });
-            ls.setToolBar({
-              leftBtns: [{
-                iconType: 0
-              }]
-            });
           })
           ls.error((res) => {
             console.error({
@@ -374,7 +361,9 @@
             })
             ls.close();
           })
-        } catch (e) {}
+        } catch (e) {
+          console.log("getLinXiLoginAuthInfo:", e)
+        }
       },
       wkycLogin() {
         let that = this
