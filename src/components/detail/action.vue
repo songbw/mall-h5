@@ -436,7 +436,7 @@
                 "brand": goods.brand,
                 "model": goods.model,
                 "price": selectPrice,
-                "checkedPrice": goods.price,
+                "checkedPrice": selectPrice,
                 "type": goods.type == undefined ? 0 : goods.type
               }
               let couponList = goods.coupon

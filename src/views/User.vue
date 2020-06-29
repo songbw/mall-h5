@@ -21,7 +21,7 @@
       </div>
       <div class="wealth-box">
         <div class="coupon-info">
-          <div class="my-coupon" @click="onMyCoinAccountClick" v-if="this.$api.APP_ID == '11'">
+          <div class="my-coupon" @click="onMyCoinAccountClick" v-if="this.$api.APP_ID == '11' || this.$api.APP_ID == '15'">
             <img :src="myCoinAccountIcon" />
             <span>我的余额</span>
           </div>

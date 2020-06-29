@@ -25,7 +25,7 @@
             </div>
           </div>
         </div>
-        <div v-if="this.$api.APP_ID == '11'" class="wuxipayBox">
+        <div v-if="this.$api.APP_ID == '11' || this.$api.APP_ID == '15'" class="wuxipayBox">
           <div class="linkPayBox">
             <van-cell :title="mLinkPay.title" :icon="mLinkPay.icon" clickable @click="onLinkPaySelector()">
               <van-checkbox slot="right-icon"  v-model="mLinkPay.checked" checked-color="#FF4444"></van-checkbox>
@@ -1649,6 +1649,8 @@
                 appName = "无锡惠民优选"
               } else if (this.$api.APP_ID == '13') {
                 appName = "羊城通惠民优选"
+              } else if (this.$api.APP_ID == '15') {
+                appName = "灵锡惠民优选"
               }
               fcAlipayPay = {
                 "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
