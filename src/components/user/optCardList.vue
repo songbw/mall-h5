@@ -117,8 +117,9 @@
         url: '/woc/cardinfo/getcardlist',
         data: options
       }).then((response) => {
-        that.$log(response.data.data)
-        that.optCardList = response.data.data
+        if(response.data.data != null) {
+          that.optCardList = response.data.data
+        }
         that.launchedLoaded = true
       }).catch(function (error) {
 
