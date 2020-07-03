@@ -181,7 +181,7 @@
             id = '013c2a67e96a8b835c219320ff617fac'
             break;
         }
-        console.log("loadMonitorJS:"+id)
+        //console.log("loadMonitorJS:"+id)
         if(id.length > 0) {
           setTimeout(()=>{
             var _hmt = _hmt || [];
