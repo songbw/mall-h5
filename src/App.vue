@@ -115,6 +115,8 @@
         if (isQpayCardSaved != undefined && isQpayCardSaved == '0') {
           this.$api.IS_QUICKPAY_CAN_SAVE = false;
         }
+        this.loadMonitorJS()
+
         if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09") {
           this.$api.IS_GAT_APP = true;
           this.clearStorage();
@@ -158,6 +160,37 @@
     },
 
     methods: {
+      loadMonitorJS() {
+        let id = '';
+        switch(this.$api.APP_ID) {
+          case '08':
+            break;
+          case '09':
+            id = '489c1d4ef77566d573266c21b816cbca'
+            break;
+          case '10':
+            break;
+          case '11':
+            id = 'e5999c4dd415c039d4682ccd929d3374'
+            break;
+          case '12':
+            id = '5cb98b7dc7f3fe90a73f9363f6c4d67f'
+            break;
+          case '14':
+            id = '013c2a67e96a8b835c219320ff617fac'
+            break;
+        }
+        if(id.length > 0) {
+          var _hmt = _hmt || [];
+          window._hmt = _hmt; 
+          (function() {
+            var hm = document.createElement("script");
+            hm.src = "https://hm.baidu.com/hm.js?"+id;
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+          })();
+        }
+      },
       shouldLogin() {
         this.$log(this.$route)
         if (this.$route.fullPath == '/pay/cashering' || this.$route.fullPath == '/pay/casher') {
