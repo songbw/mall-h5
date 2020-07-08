@@ -70,13 +70,13 @@
               </div>
             </div>
           </div>
-          <div class="coinBalanceBox">
+          <div class="coinBalanceBox" v-if="this.$api.APP_ID == '11'">
             <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
               <van-checkbox slot="right-icon" v-model="coinBalanceValue" checked-color="#FF4444"></van-checkbox>
               <span slot="label" style="color:black">可用余额: ￥{{(mCoinBalance.amount/100).toFixed(2)}}</span>
             </van-cell>
           </div>
-          <div class="optCardBox">
+          <div class="optCardBox" v-if="this.$api.APP_ID == '11'">
             <van-cell :title="mOptCards.title" :icon="mOptCards.icon"
                       :value="this.mOptCards.show?'点击隐藏优选卡':'点击查看优选卡'"
                       clickable
@@ -170,35 +170,6 @@
         <div class="pathBox">
           <van-radio-group v-model="radio">
             <div v-if="this.$api.APP_ID == '11'">
-              <!--              <van-cell title="联机账户" :icon="icon_linkpay" clickable @click="radio = '1'">
-                              <van-radio slot="right-icon" name="1" checked-color="#FF4444"/>
-                            </van-cell>-->
-              <!--              <div class="linkPayDialog" v-if="radio == '1'">
-                              &lt;!&ndash;              <span class="tip">温馨提示:联机账户支付不能低于1角</span>&ndash;&gt;
-                              <van-field
-                                v-model="linkPayAccount"
-                                type="number"
-                                required
-                                clearable
-                                label="卡号"
-                                maxlength="30"
-                                label-width="40px"
-                                placeholder="请输入卡号"
-                              />
-
-                              <van-field
-                                v-model="linkPayPwd"
-                                :type="isLinkPwdVisable?'number':'password'"
-                                maxlength="30"
-                                clearable
-                                label="密码"
-                                label-width="40px"
-                                placeholder="请输入密码"
-                                :right-icon="isLinkPwdVisable?'eye-o':'closed-eye'"
-                                required
-                                @click-right-icon="togLinkPayPwdVisable()"
-                              />
-                            </div>-->
               <van-cell title="统一支付" :icon="icon_unionpay" clickable @click="radio = '3'" v-if="isSupportUnionPay">
                 <van-radio slot="right-icon" name="3" checked-color="#FF4444"/>
               </van-cell>
@@ -505,11 +476,17 @@
                 <van-radio slot="right-icon" name="4" checked-color="#FF4444"/>
               </van-cell>
             </div>
-            <div v-if="(this.$api.APP_ID != '01') && this.$api.APP_SOURCE == '00'">
+            <div v-if="this.$api.APP_ID == '15' && this.$api.APP_SOURCE == '00'">
+              <van-cell title="支付宝支付" :icon="icon_alipay" clickable @click="radio = '6'">
+                <van-radio slot="right-icon" name="6" checked-color="#FF4444"/>
+              </van-cell>
+            </div>
+            <div v-else-if="(this.$api.APP_ID != '01') && this.$api.APP_SOURCE == '00'">
               <van-cell title="支付宝支付" :icon="icon_alipay" clickable @click="radio = '5'">
                 <van-radio slot="right-icon" name="5" checked-color="#FF4444"/>
               </van-cell>
             </div>
+
           </van-radio-group>
         </div>
         <van-dialog
@@ -1491,6 +1468,7 @@
           let pingAnPay = null
           let fcWxPay = null
           let fcAlipayPay = null
+          let fcAliPayJsSdkPay = null
           this.payOptions = {
             appId: this.$api.APP_ID,
             orderNo: this.orderInfo.orderNo
@@ -1659,6 +1637,18 @@
                 "payType": "fcalipay",
                 "returnUrl": url,
               }
+            } else if (this.radio == '6') {
+              let url = window.location.protocol + "//" + window.location.host + "/pay/cashering"
+              this.$log(url)
+              let appName = "灵锡惠民优选"
+              fcAliPayJsSdkPay = {
+                "actPayFee": parseInt((this.remainPayAmount * 100).toFixed(0)) + "",
+                "body": appName + "-商城商品",
+                "orderNo": this.orderInfo.orderNo,
+                "payType": "fcalijssdk",
+                "returnUrl": url,
+              }
+
             } else {
               let warning = "还需支付"+this.remainPayAmount+"元，请选择其它支付方式补充"
               this.$toast(warning)
@@ -1712,6 +1702,8 @@
             this.payOptions['fcWxPay'] = fcWxPay
           if (fcAlipayPay != null)
             this.payOptions['fcAlipayPay'] = fcAlipayPay
+          if (fcAliPayJsSdkPay != null)
+            this.payOptions['fcAliPayJsSdkPay'] = fcAliPayJsSdkPay
           if (bankPay != null) {
             this.payOptions['bankPay'] = bankPay
             this.quickPayDlgShow = true
@@ -1860,6 +1852,36 @@
                   this.$toast(response.data.message)
                   this.payBtnSubmitLoading = false;
                 }
+                //  that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                //  that.$router.replace({path: '/car/orderList'})
+              }).catch(function (error) {
+                that.$toast("请求支付失败")
+                that.payBtnSubmitLoading = false;
+                that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                that.$router.replace({path: '/car/orderList'})
+              })
+            } else if (fcAliPayJsSdkPay != null) {
+              this.$log("fcAliPayJsSdkPay Enter")
+              this.$api.xapi({
+                method: 'post',
+                baseURL: this.$api.AGGREGATE_PAY_URL,
+                url: '/wspay/pay',
+                data: this.payOptions,
+              }).then((response) => {
+                this.$log("灵锡支付宝SDK支付")
+                this.$log(response)
+/*                 if (response.data.code == 200) {
+                  let ret = response.data.data;
+                  this.$log("支付宝支付")
+                  const div = document.createElement('div')
+                  div.innerHTML = ret//此处form就是后台返回接收到的数据
+                  document.body.appendChild(div)
+                  document.forms[0].submit()
+                  this.payBtnSubmitLoading = false;
+                } else {
+                  this.$toast(response.data.message)
+                  this.payBtnSubmitLoading = false;
+                } */
                 //  that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
                 //  that.$router.replace({path: '/car/orderList'})
               }).catch(function (error) {
