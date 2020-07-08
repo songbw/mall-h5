@@ -21,7 +21,7 @@
       </div>
       <div class="wealth-box">
         <div class="coupon-info">
-          <div class="my-coupon" @click="onMyCoinAccountClick" v-if="this.$api.APP_ID == '11' || this.$api.APP_ID == '15'">
+          <div class="my-coupon" @click="onMyCoinAccountClick" v-if="this.$api.APP_ID == '11'">
             <img :src="myCoinAccountIcon" />
             <span>我的余额</span>
           </div>
@@ -60,7 +60,7 @@
           <img slot="icon" :src="icon_ladingCard" />
         </van-cell>
         <div v-if="this.$api.APP_ID == '11' || this.$api.APP_ID == '15'">
-          <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
+          <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick" v-if="this.$api.APP_ID == '11'">
             <img slot="icon" :src="icon_optCard" />
           </van-cell>
           <van-cell title="市民卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
@@ -162,7 +162,14 @@
     created() {
       let userInfo = this.$store.state.appconf.userInfo;
       let that = this
-
+      if  (this.$api.APP_ID == '11') {
+          let item = {
+            title: "历史订单",
+            key: 5,
+            img: require('@/assets/icons/ico_history_order.png')
+          }
+          this.orderbars.push(item)
+      }
       this.wechatShareConfig()
       this.showHeader = this.$api.HAS_HEADER;
       if (this.$store.state.appconf.userDetail.length > 0) {
@@ -245,11 +252,6 @@
             key: 4,
             img: require('@/assets/icons/ico_order_cancel.png')
           },
-          {
-            title: "历史订单",
-            key: 5,
-            img: require('@/assets/icons/ico_history_order.png')
-          }
         ],
 
         avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),
