@@ -174,9 +174,9 @@
                 <van-radio slot="right-icon" name="3" checked-color="#FF4444"/>
               </van-cell>
             </div>
-            <van-cell title="快捷支付" :icon="icon_quicklypay" clickable @click="radio = '2'">
+<!--        <van-cell title="快捷支付" :icon="icon_quicklypay" clickable @click="radio = '2'">
               <van-radio slot="right-icon" name="2" checked-color="#FF4444"/>
-            </van-cell>
+            </van-cell> 
             <div class="quickPayDialog" v-if="radio == '2'">
               <div v-if="this.$api.IS_QUICKPAY_CAN_SAVE">
                 <div class="bankListCheckBox">
@@ -470,7 +470,7 @@
                   </div>
                 </van-dialog>
               </div>
-            </div>
+            </div>-->
             <div v-if="this.$api.APP_ID == '01'">
               <van-cell title="微信支付" :icon="icon_wechatpay" clickable @click="radio = '4'">
                 <van-radio slot="right-icon" name="4" checked-color="#FF4444"/>
@@ -1870,21 +1870,47 @@
               }).then((response) => {
                 this.$log("灵锡支付宝SDK支付")
                 this.$log(response)
-/*                 if (response.data.code == 200) {
+                if (response.data.code == 200) {
                   let ret = response.data.data;
-                  this.$log("支付宝支付")
-                  const div = document.createElement('div')
-                  div.innerHTML = ret//此处form就是后台返回接收到的数据
-                  document.body.appendChild(div)
-                  document.forms[0].submit()
+                  let options = {
+                    appId: this.$api.T_APP_ID,
+                    type: 1,
+                    orderInfo: ret,
+                  //  cost: '0.01'    
+                  }
+                  this.$log("ls入参:",options)
+                  ls.aliPay(options,res =>{                    
+                    try {
+                      this.$log("灵锡支付宝支付返回")
+                      this.$log(res)
+                      if (res.code === '10000') {
+                        that.$log("灵锡支付宝支付成功")
+                        that.$router.replace({
+                          path: '/pay/cashering',
+                          query: {
+                            outer_trade_no: that.orderInfo.orderNo
+                          }
+                        })
+                      } else {
+                        that.$log("灵锡支付宝支付失败")
+                        that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                        that.$router.replace({path: '/car/orderList'})
+                      }
+                    } catch(e) {
+                      that.$log("灵锡支付宝支付失败")
+                      that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                      that.$router.replace({path: '/car/orderList'})
+                    }
+                  })
                   this.payBtnSubmitLoading = false;
                 } else {
                   this.$toast(response.data.message)
                   this.payBtnSubmitLoading = false;
-                } */
-                //  that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
-                //  that.$router.replace({path: '/car/orderList'})
+                }
+/*                 that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
+                that.$router.replace({path: '/car/orderList'}) */
               }).catch(function (error) {
+                that.$log("支付error:",error)
                 that.$toast("请求支付失败")
                 that.payBtnSubmitLoading = false;
                 that.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);

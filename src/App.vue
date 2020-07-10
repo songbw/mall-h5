@@ -115,7 +115,7 @@
         if (isQpayCardSaved != undefined && isQpayCardSaved == '0') {
           this.$api.IS_QUICKPAY_CAN_SAVE = false;
         }
-        this.loadExternalJs()
+        //this.loadExternalJs()
         this.loadMonitorJS()
         if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09" || this.$api.APP_ID === "08") {
           this.$api.IS_GAT_APP = true;
