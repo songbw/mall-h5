@@ -154,7 +154,7 @@
         } else if (this.$api.APP_ID == "15") {
           this.$log("LinXiApp")
           if (this.shouldLogin()) {
-            this.getLinXiLoginAuthInfo();
+            this.getLingXiLoginAuthInfo();
           }
           this.configured = true
         } else {
@@ -362,8 +362,8 @@
           })
         } catch (e) {}
       },
-      async getLinXiLoginAuthInfo() {
-        this.$log("getLinXiLoginAuthInfo Enter")
+      async getLingXiLoginAuthInfo() {
+        this.$log("getLingXiLoginAuthInfo Enter")
         try {
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
@@ -404,7 +404,7 @@
             ls.close();
           })
         } catch (e) {
-          console.log("getLinXiLoginAuthInfo:", e)
+          console.log("getLingXiLoginAuthInfo:", e)
         }
       },
       wkycLogin() {

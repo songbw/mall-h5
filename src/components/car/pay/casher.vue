@@ -1881,9 +1881,10 @@
                   this.$log("ls入参:",options)
                   ls.aliPay(options,res =>{                    
                     try {
-                      this.$log("灵锡支付宝支付返回")
-                      this.$log(res)
-                      if (res.code === '10000') {
+                      this.$log("灵锡支付宝支付返回:")
+                      let resp = res.alipay_trade_app_pay_response
+                      this.$log(resp)
+                      if (resp.code === '10000') {
                         that.$log("灵锡支付宝支付成功")
                         that.$router.replace({
                           path: '/pay/cashering',
