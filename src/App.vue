@@ -154,9 +154,11 @@
         } else if (this.$api.APP_ID == "15") {
           this.$log("LinXiApp")
           if (this.shouldLogin()) {
-            this.getLingXiLoginAuthInfo();
+            //this.getLingXiLoginAuthInfo();
+            setTimeout(() => {
+              this.getLingXiLoginAuthInfo();
+            },20);
           }
-          this.configured = true
         } else {
           this.configured = true
         }
@@ -364,11 +366,15 @@
       },
       async getLingXiLoginAuthInfo() {
         this.$log("getLingXiLoginAuthInfo Enter")
+        let that = this
         try {
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
-          if (!initCode)
+          if (!initCode) {
+           that.configured = true
             return
+          }
+            
           ls.config({
             debug: false, // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
             appId: this.$api.T_APP_ID, // 在统一 APP 开放平台服务器申请的 appId
@@ -395,6 +401,7 @@
                   console.error(res.message)
                   ls.close();
                 }
+                that.configured = true
               });
           })
           ls.error((res) => {
@@ -402,9 +409,11 @@
               res
             })
             ls.close();
+            that.configured = true
           })
         } catch (e) {
-          console.log("getLingXiLoginAuthInfo:", e)
+          console.log("getLingXiLoginAuthInfo:", e.message)
+          that.configured = true
         }
       },
       wkycLogin() {
