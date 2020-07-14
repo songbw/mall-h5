@@ -157,7 +157,7 @@
             //this.getLingXiLoginAuthInfo();
             setTimeout(() => {
               this.getLingXiLoginAuthInfo();
-            },100);
+            },50);
           }
         } else {
           this.configured = true
