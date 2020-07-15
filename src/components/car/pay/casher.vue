@@ -716,7 +716,6 @@
         this.$store.commit('SET_CURRENT_ORDER_LIST_INDEX', 0);
         this.$router.replace({path: '/car/orderList'})
       }
-
     },
 
     beforeDestroy() {

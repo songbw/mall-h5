@@ -347,6 +347,7 @@
         let telephone = this.$route.query.telephone
         let sign = this.$route.query.sign
         let appKey = this.$route.query.appKey
+        let timestamp = this.$router.query.timestamp
         return this.$api.xapi({
           method: 'post',
           baseURL: this.$api.SSO_BASE_URL,
@@ -355,7 +356,8 @@
             appKey: appKey,
             telephone: telephone,
             sign: sign,
-            appId: this.$api.APP_ID
+            appId: this.$api.APP_ID,
+            timestamp: timestamp
           }
         })
       },
@@ -649,7 +651,7 @@
           openId = "5c8314363cea49de925bfaa39d4c4ebb" //最珠海
           payId = ""
         } else if (this.$api.APP_ID == '14') {
-          // openId = "2a984f9270aafb236cc7c0c74b21ff38" //万科云城
+         // openId = "b8ca4ec08e9c2b632e0720b65aa2402a" //万科云城
         } else if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
           //  let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc" //13810864380
           let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6bb" //18612794815
