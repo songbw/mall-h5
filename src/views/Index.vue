@@ -347,7 +347,7 @@
         let telephone = this.$route.query.telephone
         let sign = this.$route.query.sign
         let appKey = this.$route.query.appKey
-        let timestamp = this.$router.query.timestamp
+        let timestamp = this.$route.query.timestamp
         return this.$api.xapi({
           method: 'post',
           baseURL: this.$api.SSO_BASE_URL,
@@ -358,6 +358,7 @@
             sign: sign,
             appId: this.$api.APP_ID,
             timestamp: timestamp
+
           }
         })
       },
