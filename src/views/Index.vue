@@ -344,22 +344,25 @@
     },
     methods: {
       userLogin() {
+        //this.$log("window.location.href:"+window.location.href)
+        //this.$log("userLogin:",this.$route.query)
         let telephone = this.$route.query.telephone
         let sign = this.$route.query.sign
         let appKey = this.$route.query.appKey
         let timestamp = this.$route.query.timestamp
-        return this.$api.xapi({
-          method: 'post',
-          baseURL: this.$api.SSO_BASE_URL,
-          url: '/sso/login/tel',
-          data: {
+        let options = {
             appKey: appKey,
             telephone: telephone,
             sign: sign,
             appId: this.$api.APP_ID,
             timestamp: timestamp
-
-          }
+        }
+       // this.$log("options:",options)
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/login/tel',
+          data: options
         })
       },
       getHomePage() {
