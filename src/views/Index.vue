@@ -217,7 +217,7 @@
 
       } else { //非关爱通App
         if (process.env.NODE_ENV === 'development') {
-          if (this.$api.APP_ID != '13' && this.$api.APP_ID != '16')
+          if (this.$api.APP_ID != '13' && this.$api.APP_ID != '16'  && this.$api.APP_ID != '17')
             this.test();
         }
         if (this.userToken != undefined && this.userToken.length > 0) {
@@ -238,7 +238,7 @@
           } else {
             this.userTokenLoading = false;
           }
-        } else if (this.$api.APP_ID == '16') {
+        } else if (this.$api.APP_ID == '16' || this.$api.APP_ID == '17') {
           try {
             let response = await this.userLogin();
             if (response.data.code === 200) {

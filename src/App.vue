@@ -183,6 +183,9 @@
           case '16':
             id = '8dd797d94ca011d1344614257090f118'
             break;
+          case '17':
+            id = '56051a56e7fd9a20b07fef556058003a'
+            break;
         }
         //console.log("loadMonitorJS:"+id)
         if(id.length > 0) {
