@@ -221,7 +221,7 @@
 
       } else { //非关爱通App
         if (process.env.NODE_ENV === 'development') {
-          if (this.$api.APP_ID != '13')
+          if (this.$api.APP_ID != '13' && this.$api.APP_ID != '16'  && this.$api.APP_ID != '17')
             this.test();
         }
         if (this.userToken != undefined && this.userToken.length > 0) {
@@ -242,6 +242,37 @@
           } else {
             this.userTokenLoading = false;
           }
+        } else if (this.$api.APP_ID == '16' || this.$api.APP_ID == '17') {
+          try {
+            let response = await this.userLogin();
+            if (response.data.code === 200) {
+              let ret = response.data.data.result;
+              let openId = ret.openId;
+              let userId = this.$api.APP_ID + openId;
+              let token = ret.token;
+              let thirdToken = ret.thirdToken;
+              let userInfo = {
+                openId: openId,
+                accessToken: thirdToken,
+                userId: userId,
+                payId: ""
+              }
+              this.$store.commit('SET_USER', JSON.stringify(userInfo));
+              this.$store.commit('SET_TOKEN', token);
+              let data = this.$md5(token)
+              if (ret.newUser) {
+                data = "1" + data
+              } else {
+                data = "0" + data
+              }
+              this.$store.commit('SET_GUYS_INFO', data);
+            } else {
+              this.$toast(response.data.msg)
+            }
+          } catch (e) {
+            //do nothing
+          }
+
         } else {
           if (this.$api.IS_WX_GZH) { //微信公众号端登录
             let authCode = this.$route.query.code;
@@ -316,6 +347,28 @@
       },
     },
     methods: {
+      userLogin() {
+        //this.$log("window.location.href:"+window.location.href)
+        //this.$log("userLogin:",this.$route.query)
+        let telephone = this.$route.query.telephone
+        let sign = this.$route.query.sign
+        let appKey = this.$route.query.appKey
+        let timestamp = this.$route.query.timestamp
+        let options = {
+            appKey: appKey,
+            telephone: telephone,
+            sign: sign,
+            appId: this.$api.APP_ID,
+            timestamp: timestamp
+        }
+       // this.$log("options:",options)
+        return this.$api.xapi({
+          method: 'post',
+          baseURL: this.$api.SSO_BASE_URL,
+          url: '/sso/login/tel',
+          data: options
+        })
+      },
       getHomePage() {
         return this.$api.xapi({
           method: 'get',
@@ -609,7 +662,7 @@
           openId = "5c8314363cea49de925bfaa39d4c4ebb" //最珠海
           payId = ""
         } else if (this.$api.APP_ID == '14') {
-          // openId = "2a984f9270aafb236cc7c0c74b21ff38" //万科云城
+          //openId = "b8ca4ec08e9c2b632e0720b65aa2402a" //万科云城
         } else if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
           //  let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc" //13810864380
           let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6bb" //18612794815
@@ -640,7 +693,7 @@
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER
         this.$log("openId:" + openId);
-        
+
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
           let accessToken = "3622c97b-a878-422f-879c-5b31709f1ea5"

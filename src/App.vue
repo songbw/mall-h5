@@ -208,6 +208,12 @@
           case '15':
             id = '5eff62f2be27f69f4f6fd5dc9ffb3617'
             break;
+          case '16':
+            id = '8dd797d94ca011d1344614257090f118'
+            break;
+          case '17':
+            id = '56051a56e7fd9a20b07fef556058003a'
+            break;
         }
         //console.log("loadMonitorJS:"+id)
         if(id.length > 0) {
