@@ -56,6 +56,10 @@ import {
   Picker
 } from 'vant';
 
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+import 'swiper/dist/css/swiper.css'
+Vue.use(VueAwesomeSwiper)
+
 /* if (process.env.NODE_ENV === 'production') {
   new VConsole()
 }  */

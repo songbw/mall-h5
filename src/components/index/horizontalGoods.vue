@@ -26,11 +26,33 @@
         </div>
       </div>
       <div class="listBox" :style="getListStyle()">
+        <swiper :options="swiperOption">
+          <swiper-slide v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
+            <div class="cardItem">
+              <div style="width:7.2rem">
+                <img v-lazy="k.imagePath" alt="">
+                <p class="sectionSlide-list-intro">
+                  {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
+                </p>
+                <div>
+                  <p class="sectionSlide-list-sales-price">
+                    <span>￥</span>{{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
+                  </p>
+                </div>
+              </div>
+            </div>
+
+          </swiper-slide>
+          <!-- Add Arrows -->
+          <div class="swiper-button-next"></div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-pagination"></div>
+        </swiper>
         <div class="sectionSlide-list">
           <ul>
             <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
               <div style="width:7.2rem">
-                <img v-lazy="k.imagePath">
+                <img v-lazy="k.imagePath" alt="">
                 <p class="sectionSlide-list-intro">
                   {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
                 </p>
@@ -50,6 +72,11 @@
 
 <script>
   import CountDown from '@/common/_vue2-countdown.vue'
+  import 'swiper/dist/css/swiper.css'
+  import {
+    swiper,
+    swiperSlide
+  } from 'vue-awesome-swiper'
 
   export default {
     components: {
@@ -60,6 +87,12 @@
     data() {
       return {
         decorateBgColor: '#FFFFFF',
+        swiperOption: {
+          slidesPerView: 3.2,
+          spaceBetween: 15,
+          //     centeredSlides : true,
+          //     watchSlidesProgress : true,
+        }
       }
     },
 
@@ -239,6 +272,81 @@
       width: 100%;
       justify-content: center;
 
+      .swiper-slide {
+        text-align: center;
+        background-color: transparent;
+
+        /* Center slide text vertically */
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: -webkit-flex;
+        display: flex;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        -webkit-justify-content: center;
+        justify-content: center;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        -webkit-align-items: center;
+        align-items: center;
+        transition-property: all;
+
+        .cardItem {
+          margin-right: .5vw;
+          margin-left: .5vw;
+          border-radius: 5px;
+          z-index: 1;
+          width: 7.2rem;
+          background: white;
+
+          a,
+          img {
+            display: block;
+            width: 100%;
+            height: 7.2rem;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+          }
+
+          p {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            padding: 2px;
+          }
+
+          p.sectionSlide-list-intro {
+            padding-top: 1vw;
+            .fz(font-size, 23);
+            color: #323233;
+          }
+
+          p.sectionSlide-list-sales-price {
+            margin: 2px;
+            color: #ff4444;
+            .fz(font-size, 25);
+
+            span {
+              .fz(font-size, 15);
+            }
+          }
+
+          p.sectionSlide-list-origin-price {
+            margin: 2px;
+            color: #707070;
+            .fz(font-size, 25);
+            text-decoration: line-through;
+
+            span {
+              .fz(font-size, 15);
+            }
+          }
+
+        }
+      }
+
+
+
       .sectionSlide-list {
         width: 100%;
         overflow-x: auto;
@@ -279,12 +387,13 @@
               text-overflow: ellipsis;
               padding: 2px;
             }
+
             p.sectionSlide-list-intro {
               padding-top: 1vw;
               .fz(font-size, 23);
               color: #323233;
             }
-            
+
             p.sectionSlide-list-sales-price {
               margin: 2px;
               color: #ff4444;
@@ -294,6 +403,7 @@
                 .fz(font-size, 15);
               }
             }
+
             p.sectionSlide-list-origin-price {
               margin: 2px;
               color: #707070;
