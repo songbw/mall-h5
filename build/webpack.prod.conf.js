@@ -23,7 +23,7 @@ var createServerConfig = function (compilation) {
   return JSON.stringify(parseEnv, null, 2);
 }
 
-
+const Version = new Date().getTime(); //版本控制
 
 var webpackConfig = merge(baseWebpackConfig, {
   module: {
@@ -35,8 +35,10 @@ var webpackConfig = merge(baseWebpackConfig, {
   devtool: config.build.productionSourceMap ? '#source-map' : false,
   output: {
     path: config.build.assetsRoot,
-    filename: utils.assetsPath('js/[name].[chunkhash].js'),
-    chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
+    filename: utils.assetsPath("js/[name].[chunkhash]." + Version + ".js"),
+    chunkFilename: utils.assetsPath("js/[id].[chunkhash]." + Version + ".js"),
+ //   filename: utils.assetsPath('js/[name].[chunkhash].js'),
+ //   chunkFilename: utils.assetsPath('js/[id].[chunkhash].js')
   },
   plugins: [
     // http://vuejs.github.io/vue-loader/en/workflow/production.html
