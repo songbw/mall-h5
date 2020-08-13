@@ -688,7 +688,7 @@
           //only for debug
           //openId = '13802aa921ca47d295b47c7016ff9137'
         } else if (this.$api.APP_ID == '15') {
-          openId = 'X217233682866176J'
+          openId = 'X226585714099328O'
         }
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER

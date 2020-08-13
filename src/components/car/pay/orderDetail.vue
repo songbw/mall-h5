@@ -702,7 +702,7 @@
         let pAnOrderInfo = {
           "accessToken": user.accessToken,
           "orderNo": orderNo,
-          "orderAmount": listItem.saleAmount * 100, //分
+          "orderAmount": parseInt((listItem.saleAmount * 100).toFixed(0)),//分
           "openId": user.openId,
           "businessType": "11",
           "hasVirtualGoods": hasVirtualGoods

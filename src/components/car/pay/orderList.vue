@@ -825,10 +825,12 @@
         let pAnOrderInfo = {
           "accessToken": user.accessToken,
           "orderNo": orderNo,
-          "orderAmount": listItem.saleAmount * 100, //分
+          "orderAmount": parseInt((listItem.saleAmount * 100).toFixed(0)), //分
           "openId": user.openId,
           "businessType": "11"
         }
+        this.$log("listItem.saleAmount:"+listItem.saleAmount)
+        this.$log("pAnOrderInfo:",pAnOrderInfo)
         let merchantNo = ""
         if (listItem.merchantNo != null) {
           merchantNo = listItem.merchantNo
