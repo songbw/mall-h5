@@ -23,25 +23,20 @@
       </div>
     </div>
     <div class="productList" :style="{'padding-top':showHeader? '4em':'1.5em'}">
-      <van-list v-model="loading"
-                :finished="finished"
-                @load="onLoad">
+      <van-list v-model="loading" :finished="finished" @load="onLoad">
         <div v-if="list.length > 0">
           <li v-for="k in list" :key="k.id" style="list-style: none;margin: 5px">
             <div class="goods-detail" @click="onListClick(k)">
-              <van-card
-                :price="k.price"
-                :thumb="k.image"
-                centered>
+              <van-card :price="k.price" :thumb="k.image" centered>
                 <div slot="title">
-                    <span class="cartTitle">
-                     {{composeGoodsTitle(k)}}
-                   </span>
+                  <span class="cartTitle">
+                    {{composeGoodsTitle(k)}}
+                  </span>
                 </div>
                 <div slot="desc" v-if="k.promotion != undefined && k.promotion.length > 0">
-                   <span class="description">
-                     {{getPromtionPrice(k)}}
-                   </span>
+                  <span class="description">
+                    {{getPromtionPrice(k)}}
+                  </span>
                 </div>
               </van-card>
             </div>
@@ -60,9 +55,8 @@
       </van-list>
     </div>
     <div>
-      <img :src="icon_shopCart"
-           @click="gotoCart()"
-           style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;"/>
+      <img :src="icon_shopCart" @click="gotoCart()"
+        style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;" />
     </div>
   </div>
 </template>
@@ -113,23 +107,27 @@
     methods: {
       getPromtionPrice(k) {
         let promotionPrice = ""
-        if(k.promotion != undefined && k.promotion.length > 0) {
+        if (k.promotion != undefined && k.promotion.length > 0) {
           promotionPrice = "活动价: ￥" + k.promotion[0].discount
         }
         return promotionPrice
       },
       reOrderList() {
         this.list.sort(function (a, b) {
-          try {
-            if (a.merchantId == 2 && b.merchantId != 2) {
-              return 1
-            } else if (a.merchantId != 2 && b.merchantId == 2) {
-              return -1
-            } else if ((a.merchantId != 2 && b.merchantId != 2) || (a.merchantId == 2 && b.merchantId == 2)) {
+          if (this.$api.APP_ID == '10' || this.$api.APP_ID == '08') {
+            return 0
+          } else {
+            try {
+              if (a.merchantId == 2 && b.merchantId != 2) {
+                return 1
+              } else if (a.merchantId != 2 && b.merchantId == 2) {
+                return -1
+              } else if ((a.merchantId != 2 && b.merchantId != 2) || (a.merchantId == 2 && b.merchantId == 2)) {
+                return 0
+              }
+            } catch (e) {
               return 0
             }
-          } catch (e) {
-            return 0
           }
         })
       },
@@ -166,7 +164,9 @@
         }
       },
       gotoCart() {
-        this.$router.push({name: '购物车页'})
+        this.$router.push({
+          name: '购物车页'
+        })
       },
       onLoadByOrder() {
         let categories = this.$route.query.category;
@@ -490,7 +490,8 @@
           mpu = goods.skuid;
         }
         this.$router.push({
-          path: "/detail", query: {
+          path: "/detail",
+          query: {
             mpu: mpu
           }
         });
@@ -524,7 +525,8 @@
       },
       gotoGoodsPage(mpu) {
         this.$router.push({
-          path: "/detail", query: {
+          path: "/detail",
+          query: {
             mpu: mpu
           }
         });
@@ -535,9 +537,9 @@
         let that = this
         let mpu = goods.mpu;
         let skuId = goods.skuId
-        if(goods.skuid != undefined)
-           skuId = goods.skuid
-        if(mpu != skuId) {
+        if (goods.skuid != undefined)
+          skuId = goods.skuid
+        if (mpu != skuId) {
           this.gotoGoodsPage(mpu)
         } else {
           let addtoCar = {
@@ -576,7 +578,7 @@
                   "model": goods.model,
                   "price": goods.price,
                   "checkedPrice": goods.price,
-                  "type": goods.type == undefined? 0:goods.type
+                  "type": goods.type == undefined ? 0 : goods.type
                 }
                 let couponList = []
                 let promotionInfo = {}
@@ -588,7 +590,7 @@
                 }
               } else {
                 cartItem.baseInfo.count++;
-                cartItem.goodsInfo.type =  (goods.type == undefined? 0:goods.type)
+                cartItem.goodsInfo.type = (goods.type == undefined ? 0 : goods.type)
               }
               Util.updateCartItem(this, cartItem)
             }
@@ -599,6 +601,7 @@
       }
     },
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -698,7 +701,7 @@
             .fz(font-size, 35);
           }
 
-          .cartTitle{
+          .cartTitle {
             .fz(font-size, 25);
             min-height: 2rem;
             overflow: hidden;
@@ -716,13 +719,14 @@
             color: #000000;
             text-shadow: 0px 0px #000;
           }
+
           .description {
             margin-left: -2px;
             color: #ff4444;
             background-color: #fff1f1;
             border: 1px solid #f2b6b8;
             border-radius: 3px;
-            padding:2px 5px;
+            padding: 2px 5px;
             font-size: xx-small;
           }
         }
@@ -758,4 +762,5 @@
 
 
   }
+
 </style>
