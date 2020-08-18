@@ -586,66 +586,6 @@
               }
             }
           }
-
-          >ul {
-            display: -ms-flex;
-            display: -webkit-box;
-            display: -ms-flexbox;
-            display: flex;
-            padding-left: 0vw;
-            width: 0px;
-
-            li {
-              margin-right: .5vw;
-              margin-left: .5vw;
-              border-radius: 5px;
-              z-index: 1;
-              width: 7.2rem;
-
-              a,
-              img {
-                display: block;
-                width: 100%;
-                height: 7.2rem;
-                border-top-right-radius: 5px;
-                border-top-left-radius: 5px;
-              }
-
-              p {
-                overflow: hidden;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                padding: 2px;
-              }
-
-              p.sectionSlide-list-intro {
-                padding-top: 1vw;
-                .fz(font-size, 23);
-                color: #323233;
-              }
-
-              p.sectionSlide-list-sales-price {
-                margin: 2px;
-                color: #ff4444;
-                .fz(font-size, 25);
-
-                span {
-                  .fz(font-size, 15);
-                }
-              }
-
-              p.sectionSlide-list-origin-price {
-                margin: 2px;
-                color: #707070;
-                .fz(font-size, 25);
-                text-decoration: line-through;
-
-                span {
-                  .fz(font-size, 15);
-                }
-              }
-            }
-          }
         }
       }
     }

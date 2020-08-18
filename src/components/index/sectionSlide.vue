@@ -39,11 +39,11 @@
         </div>
       </div>
       <div class="listBox" :style="getListStyle()">
-        <div class="sectionSlide-list">
-          <ul>
-            <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
-              <div style="width:7.2rem;">
-                <img v-lazy="k.imagePath">
+        <swiper :options="swiperOption" class="swiper">
+          <swiper-slide class="swiper-slide" v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
+            <div class="cardItem">
+              <div style="width:100%">
+                <img v-lazy="k.imagePath" alt="">
                 <p class="sectionSlide-list-intro">
                   {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
                 </p>
@@ -63,9 +63,10 @@
                   </p>
                 </div>
               </div>
-            </li>
-          </ul>
-        </div>
+            </div>
+          </swiper-slide>
+          <div class="swiper-pagination" slot="pagination"></div>
+        </swiper>
       </div>
     </div>
   </section>
@@ -73,6 +74,11 @@
 
 <script>
   import CountDown from '@/common/_vue2-countdown.vue'
+  import 'swiper/swiper-bundle.css'
+  import {
+    swiper,
+    swiperSlide
+  } from 'vue-awesome-swiper'
 
   export default {
     components: {
@@ -102,7 +108,24 @@
           seconds: "",
         },
         show: false,
-
+        swiperOption: {
+          speed: 800, //滑动速度
+          direction: "horizontal", //滑动方向
+          slidesPerView: 3.1,
+          slidesPerGroup: 3,
+          spaceBetween: 5,
+          freeModeFluid: true,
+          scrollContainer: true,
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          },
+          loop: false,
+          pagination: {
+            el: ".swiper-pagination",
+            type: "bullets",
+          },
+        }
       }
     },
     watch: {
@@ -514,36 +537,23 @@
       width: 100%;
       justify-content: center;
 
-      .sectionSlide-list {
-        width: 100%;
-        overflow-x: auto;
-        padding-top: 2px;
-        padding-bottom: 2px;
+      .swiper {
 
-
-        /*原生滑动*/
-        -webkit-overflow-scrolling: touch;
-
-        >ul {
-          display: -ms-flex;
-          display: -webkit-box;
-          display: -ms-flexbox;
-          display: flex;
-          padding-left: 0vw;
-          width: 0px;
-
-          li {
-            margin-right: .5vw;
-            margin-left: .5vw;
+        .swiper-slide {
+          .cardItem {
             border-radius: 5px;
-            z-index: 1;
-            width: 7.2rem;
+            background: white;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: Center;
 
             a,
             img {
               display: block;
               width: 100%;
-              height: 7.2rem;
+              height: 7.1em;
               border-top-right-radius: 5px;
               border-top-left-radius: 5px;
             }
