@@ -26,10 +26,10 @@
         </div>
       </div>
       <div class="listBox" :style="getListStyle()">
-        <swiper :options="swiperOption">
-          <swiper-slide v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
+        <swiper :options="swiperOption" class="swiper">
+          <swiper-slide class="swiper-slide" v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
             <div class="cardItem">
-              <div style="width:7.2rem">
+              <div style="width:100%">
                 <img v-lazy="k.imagePath" alt="">
                 <p class="sectionSlide-list-intro">
                   {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
@@ -41,14 +41,10 @@
                 </div>
               </div>
             </div>
-
           </swiper-slide>
-          <!-- Add Arrows -->
-          <div class="swiper-button-next"></div>
-          <div class="swiper-button-prev"></div>
-          <div class="swiper-pagination"></div>
+          <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
-        <div class="sectionSlide-list">
+        <!--         <div class="sectionSlide-list">
           <ul>
             <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
               <div style="width:7.2rem">
@@ -64,7 +60,7 @@
               </div>
             </li>
           </ul>
-        </div>
+        </div> -->
       </div>
     </div>
   </section>
@@ -72,7 +68,9 @@
 
 <script>
   import CountDown from '@/common/_vue2-countdown.vue'
-  import 'swiper/dist/css/swiper.css'
+  // import style
+  //import 'swiper/css/swiper.css'
+  import 'swiper/swiper-bundle.css'
   import {
     swiper,
     swiperSlide
@@ -88,10 +86,22 @@
       return {
         decorateBgColor: '#FFFFFF',
         swiperOption: {
-          slidesPerView: 3.2,
-          spaceBetween: 15,
-          //     centeredSlides : true,
-          //     watchSlidesProgress : true,
+          speed: 800, //滑动速度
+          direction: "horizontal", //滑动方向
+          slidesPerView: 3.1,
+          slidesPerGroup: 3,
+          spaceBetween: 5,
+          freeModeFluid: true,
+          scrollContainer: true,
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          },
+          loop: false,
+          pagination: {
+            el: ".swiper-pagination",
+            type: "bullets",
+          },
         }
       }
     },
@@ -255,57 +265,34 @@
       }
     }
 
-    /*    .box:after {
-      position: absolute;
-      left: 0;
-      right: 0;
-      bottom: -60px;
-      content: ' ';
-      height: 60px;
-      width: 100%;
-      border-radius: 0 0 30% 30%;
-      background: linear-gradient(#ffffff, #ffcccc);
-      overflow: hidden;
-    }*/
 
     .listBox {
       width: 100%;
       justify-content: center;
+      height: auto;
+
+      margin-left: auto;
+      margin-right: auto;
+
+      .swiper {
+        padding: 5px;
+      }
 
       .swiper-slide {
-        text-align: center;
-        background-color: transparent;
-
-        /* Center slide text vertically */
-        display: -webkit-box;
-        display: -ms-flexbox;
-        display: -webkit-flex;
-        display: flex;
-        -webkit-box-pack: center;
-        -ms-flex-pack: center;
-        -webkit-justify-content: center;
-        justify-content: center;
-        -webkit-box-align: center;
-        -ms-flex-align: center;
-        -webkit-align-items: center;
-        align-items: center;
-        transition-property: all;
-
         .cardItem {
-          margin-right: .5vw;
-          margin-left: .5vw;
           border-radius: 5px;
-          z-index: 1;
-          width: 7.2rem;
           background: white;
-
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: Center;
           a,
           img {
             display: block;
             width: 100%;
-            height: 7.2rem;
             border-top-right-radius: 5px;
-            border-top-left-radius: 5px;
+            border-top-left-radius: 5px; 
           }
 
           p {
@@ -344,6 +331,30 @@
 
         }
       }
+
+      /* Arrows */
+      .swiper-button-prev,
+      .swiper-button-next {
+        position: absolute;
+        top: 50%;
+        width: 17px;
+        height: 24px;
+        z-index: 10;
+        cursor: pointer;
+        -moz-background-size: 17px 24px;
+        -webkit-background-size: 17px 24px;
+        background-size: 17px 24px;
+        background-position: center;
+        background-repeat: no-repeat;
+
+        &.swiper-button-disabled {
+          opacity: 0.35;
+          cursor: auto;
+          pointer-events: none;
+        }
+      }
+
+
 
 
 
