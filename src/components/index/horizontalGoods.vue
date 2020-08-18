@@ -44,23 +44,6 @@
           </swiper-slide>
           <div class="swiper-pagination" slot="pagination"></div>
         </swiper>
-        <!--         <div class="sectionSlide-list">
-          <ul>
-            <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
-              <div style="width:7.2rem">
-                <img v-lazy="k.imagePath" alt="">
-                <p class="sectionSlide-list-intro">
-                  {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
-                </p>
-                <div>
-                  <p class="sectionSlide-list-sales-price">
-                    <span>￥</span>{{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
-                  </p>
-                </div>
-              </div>
-            </li>
-          </ul>
-        </div> -->
       </div>
     </div>
   </section>
@@ -293,6 +276,7 @@
           img {
             display: block;
             width: 100%;
+            height: 7.1em;
             border-top-right-radius: 5px;
             border-top-left-radius: 5px;
           }
@@ -356,81 +340,6 @@
         }
       }
 
-
-
-
-
-      .sectionSlide-list {
-        width: 100%;
-        overflow-x: auto;
-        padding-top: 2px;
-        padding-bottom: 2px;
-
-        /*原生滑动*/
-        -webkit-overflow-scrolling: touch;
-
-        >ul {
-          display: -ms-flex;
-          display: -webkit-box;
-          display: -ms-flexbox;
-          display: flex;
-          padding-left: 0vw;
-          width: 0px;
-          background-color: #3dd5c8;
-
-          li {
-            margin-right: .5vw;
-            margin-left: .5vw;
-            border-radius: 5px;
-            z-index: 1;
-            width: 7.2rem;
-
-            a,
-            img {
-              display: block;
-              width: 100%;
-              height: 7.2rem;
-              border-top-right-radius: 5px;
-              border-top-left-radius: 5px;
-            }
-
-            p {
-              overflow: hidden;
-              white-space: nowrap;
-              text-overflow: ellipsis;
-              padding: 2px;
-            }
-
-            p.sectionSlide-list-intro {
-              padding-top: 1vw;
-              .fz(font-size, 23);
-              color: #323233;
-            }
-
-            p.sectionSlide-list-sales-price {
-              margin: 2px;
-              color: #ff4444;
-              .fz(font-size, 25);
-
-              span {
-                .fz(font-size, 15);
-              }
-            }
-
-            p.sectionSlide-list-origin-price {
-              margin: 2px;
-              color: #707070;
-              .fz(font-size, 25);
-              text-decoration: line-through;
-
-              span {
-                .fz(font-size, 15);
-              }
-            }
-
-          }
-        }
-      }
     }
 
   

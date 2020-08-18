@@ -43,11 +43,11 @@
       </div>
       <div class="listBox" :style="getListStyle()">
         <div v-if="isDailySchedule" class="slidelistBox">
-          <div class="sectionSlide-list">
-            <ul>
-              <li v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
-                <div style="width:7.2rem;">
-                  <img v-lazy="k.imagePath">
+          <swiper :options="swiperOption" class="swiper">
+            <swiper-slide class="swiper-slide" v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
+              <div class="cardItem">
+                <div style="width:100%">
+                  <img v-lazy="k.imagePath" alt="">
                   <p class="sectionSlide-list-intro">
                     {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
                   </p>
@@ -67,16 +67,17 @@
                     </p>
                   </div>
                 </div>
-              </li>
-            </ul>
-          </div>
+              </div>
+            </swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
         </div>
         <div v-else class="slidelistBox">
-          <div class="sectionSlide-list">
-            <ul>
-              <li v-for="(k,index) in skuList" @click="onGoodsClick(k)" :key="index">
-                <div style="width:7.2rem;">
-                  <img v-lazy="k.imagePath">
+          <swiper :options="swiperOption" class="swiper">
+            <swiper-slide class="swiper-slide" v-for="(k,index) in skuList" @click="onGoodsClick(k)" :key="index">
+              <div class="cardItem">
+                <div style="width:100%">
+                  <img v-lazy="k.imagePath" alt="">
                   <p class="sectionSlide-list-intro">
                     {{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}
                   </p>
@@ -96,12 +97,11 @@
                     </p>
                   </div>
                 </div>
-
-              </li>
-            </ul>
-          </div>
+              </div>
+            </swiper-slide>
+            <div class="swiper-pagination" slot="pagination"></div>
+          </swiper>
         </div>
-
       </div>
     </div>
   </section>
@@ -109,6 +109,11 @@
 
 <script>
   import CountDown from '@/common/_vue2-countdown.vue'
+  import 'swiper/swiper-bundle.css'
+  import {
+    swiper,
+    swiperSlide
+  } from 'vue-awesome-swiper'
 
   export default {
     components: {
@@ -140,7 +145,25 @@
         show: false,
         skuList: [],
         titleName: "",
-        activePromotion: null
+        activePromotion: null,
+        swiperOption: {
+          speed: 800, //滑动速度
+          direction: "horizontal", //滑动方向
+          slidesPerView: 3.1,
+          slidesPerGroup: 3,
+          spaceBetween: 5,
+          freeModeFluid: true,
+          scrollContainer: true,
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev'
+          },
+          loop: false,
+          pagination: {
+            el: ".swiper-pagination",
+            type: "bullets",
+          },
+        }
       }
     },
     watch: {
@@ -477,7 +500,7 @@
   .wrap {
     border-radius: 10px;
     background-color: transparent;
-  
+
 
     .box {
       position: relative;
@@ -503,18 +526,66 @@
     .listBox {
       width: 100%;
       justify-content: center;
-      
+
 
       .slidelistBox {
 
-        .sectionSlide-list {
-          width: 100%;
-          overflow-x: auto;
-          padding-top: 2px;
-          padding-bottom: 2px;
+        .swiper {
 
-          /*原生滑动*/
-          -webkit-overflow-scrolling: touch;
+          .swiper-slide {
+            .cardItem {
+              border-radius: 5px;
+              background: white;
+              width: 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: Center;
+
+              a,
+              img {
+                display: block;
+                width: 100%;
+                height: 7.1em;
+                border-top-right-radius: 5px;
+                border-top-left-radius: 5px;
+              }
+
+              p {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                padding: 2px;
+              }
+
+              p.sectionSlide-list-intro {
+                padding-top: 1vw;
+                .fz(font-size, 23);
+                color: #323233;
+              }
+
+              p.sectionSlide-list-sales-price {
+                margin: 2px;
+                color: #ff4444;
+                .fz(font-size, 25);
+
+                span {
+                  .fz(font-size, 15);
+                }
+              }
+
+              p.sectionSlide-list-origin-price {
+                margin: 2px;
+                color: #707070;
+                .fz(font-size, 25);
+                text-decoration: line-through;
+
+                span {
+                  .fz(font-size, 15);
+                }
+              }
+            }
+          }
 
           >ul {
             display: -ms-flex;
@@ -577,8 +648,6 @@
           }
         }
       }
-
-
     }
 
     .sectionSlide-banner {
