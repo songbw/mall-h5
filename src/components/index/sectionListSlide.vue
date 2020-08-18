@@ -44,8 +44,8 @@
       <div class="listBox" :style="getListStyle()">
         <div v-if="isDailySchedule" class="slidelistBox">
           <swiper :options="swiperOption" class="swiper">
-            <swiper-slide class="swiper-slide" v-for="(k,index) in datas.list" @click="onGoodsClick(k)" :key="index">
-              <div class="cardItem">
+            <swiper-slide class="swiper-slide" v-for="(k,index) in datas.list"  :key="index">
+              <div class="cardItem" @click="onGoodsClick(k)">
                 <div style="width:100%">
                   <img v-lazy="k.imagePath" alt="">
                   <p class="sectionSlide-list-intro">
@@ -74,8 +74,8 @@
         </div>
         <div v-else class="slidelistBox">
           <swiper :options="swiperOption" class="swiper">
-            <swiper-slide class="swiper-slide" v-for="(k,index) in skuList" @click="onGoodsClick(k)" :key="index">
-              <div class="cardItem">
+            <swiper-slide class="swiper-slide" v-for="(k,index) in skuList" :key="index">
+              <div class="cardItem" @click="onGoodsClick(k)">
                 <div style="width:100%">
                   <img v-lazy="k.imagePath" alt="">
                   <p class="sectionSlide-list-intro">
