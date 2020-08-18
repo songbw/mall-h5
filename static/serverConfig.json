@@ -1,10 +1,10 @@
 {
   "NODE_ENV": "development",
-  "iAppID": "15",
-  "tAppID": "B65152531570432ED",
-  "SERVICE_URL":"https://api.weesharing.com",
+  "iAppID": "10",
+  "tAppID": "20091390",
+  "SERVICE_URL":"https://openapi.weesharing.com/gatzy",
   "TESTSTUB_PAYMENT_URL": "http://119.3.111.161:8088",
-  "SERVR_PHONE_NUM": "18751554642",
+  "SERVR_PHONE_NUM": "4008516516",
   "GOODS_URL_PREFIX": "https://iwallet-1258175138.image.myqcloud.com",
-  "MALL_TITLE" : "灵锡惠民优选"
+  "MALL_TITLE" : "苏宁易购"
 }
