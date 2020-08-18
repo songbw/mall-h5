@@ -278,6 +278,7 @@
         padding: 5px;
       }
 
+
       .swiper-slide {
         .cardItem {
           border-radius: 5px;
@@ -287,12 +288,13 @@
           flex-direction: column;
           justify-content: center;
           align-items: Center;
+
           a,
           img {
             display: block;
             width: 100%;
             border-top-right-radius: 5px;
-            border-top-left-radius: 5px; 
+            border-top-left-radius: 5px;
           }
 
           p {
@@ -431,6 +433,7 @@
       }
     }
 
+  
     .sectionSlide-banner {
       display: block;
       width: 100%;
