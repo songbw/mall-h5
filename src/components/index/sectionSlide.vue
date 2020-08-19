@@ -538,7 +538,7 @@
       justify-content: center;
 
       .swiper {
-
+         padding: 5px;
         .swiper-slide {
           .cardItem {
             border-radius: 5px;
