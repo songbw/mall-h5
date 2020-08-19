@@ -190,6 +190,7 @@
         let id = '';
         switch(this.$api.APP_ID) {
           case '08':
+            id = 'b4c5eb949e4363a0438053b58ed73643'
             break;
           case '09':
             id = '489c1d4ef77566d573266c21b816cbca'
