@@ -197,7 +197,7 @@
           }
         })
       },
-      
+
       pingAnCasher(user, orderInfo) {
         this.$log("pingAnCasher Enter")
         let that = this
@@ -225,11 +225,17 @@
             let ret = JSON.parse(response.data.data);
             this.$log("平安统一支付")
             this.$log(ret)
+
             if (ret != null) { //统一支付
-              sc.pay({
+              let options = {
                 mchOrderNo: ret.mchOrderNo,
-                merchantNo: ret.merchantNo
-              }, function (res) {
+                merchantNo: ret.merchantNo,
+              }
+              if (ret.payId != undefined && ret.payId.length > 0) {
+                options['payId'] = ret.payId
+              }
+              this.$log("options:", options)
+              sc.pay(options, function (res) {
                 if (res.code == 0) {
                   that.$log("统一支付成功")
                   that.$router.replace({
@@ -719,7 +725,7 @@
                   if (this.$api.APP_ID == '14') {
                     this.wkycCasher(user, pAnOrderInfo);
                   } else if (this.$api.APP_ID == '12') {
-                    this.pingAnCasher(user,pAnOrderInfo);
+                    this.pingAnCasher(user, pAnOrderInfo);
                   } else {
                     this.$router.push({
                       name: "收银台页",
@@ -829,8 +835,8 @@
           "openId": user.openId,
           "businessType": "11"
         }
-        this.$log("listItem.saleAmount:"+listItem.saleAmount)
-        this.$log("pAnOrderInfo:",pAnOrderInfo)
+        this.$log("listItem.saleAmount:" + listItem.saleAmount)
+        this.$log("pAnOrderInfo:", pAnOrderInfo)
         let merchantNo = ""
         if (listItem.merchantNo != null) {
           merchantNo = listItem.merchantNo

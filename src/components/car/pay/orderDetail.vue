@@ -239,10 +239,15 @@
             this.$log("平安统一支付")
             this.$log(ret)
             if (ret != null) { //统一支付
-              sc.pay({
+              let options = {
                 mchOrderNo: ret.mchOrderNo,
-                merchantNo: ret.merchantNo
-              }, function (res) {
+                merchantNo: ret.merchantNo,
+              }
+              if (ret.payId != undefined && ret.payId.length > 0) {
+                options['payId'] = ret.payId
+              }
+              this.$log("options:", options)
+              sc.pay(options, function (res) {
                 if (res.code == 0) {
                   that.$log("统一支付成功")
                   that.$router.replace({
