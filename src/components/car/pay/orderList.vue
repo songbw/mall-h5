@@ -236,7 +236,7 @@
               }
               this.$log("options:", options)
               sc.pay(options, function (res) {
-                if (res.code == 0) {
+                if (res.code == 0 || res.code == 1) {
                   that.$log("统一支付成功")
                   that.$router.replace({
                     path: '/pay/cashering',

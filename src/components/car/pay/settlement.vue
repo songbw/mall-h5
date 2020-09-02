@@ -810,7 +810,7 @@
               sc.pay(options, function (res) {
                 that.$log("@@@ sc.pay 返回：")
                 that.$log(res)
-                if (res.code == 0) {
+                if (res.code == 0 || res.code == 1) {
                   that.$log("统一支付成功")
                   that.$router.replace({
                     path: '/pay/cashering',
