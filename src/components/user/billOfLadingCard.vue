@@ -197,7 +197,7 @@
 
         this.$router.push({
           name: "提货券商品页",
-          params: {
+          query: {
             id: coupon.id,
             amount: this.cardDetail.cardInfo.amount
           },
