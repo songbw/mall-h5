@@ -203,6 +203,14 @@
     },
 
     methods: {
+      gatCasher(url) {
+        this.$router.push({
+          name: "关爱通收银台页",
+          params: {
+            url: url
+          }
+        })
+      },
       pingAnCasher(user, orderInfo) {
         this.$log("pingAnCasher Enter")
         let that = this
@@ -520,6 +528,8 @@
             returnUrl = "https://gatsn.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '09') {
             returnUrl = "https://gatzy.weesharing.com/pay/cashering";
+          } else if (this.$api.APP_ID === '08') {
+            returnUrl = "https://testgatwph.weesharing.com/pay/cashering";
           }
           let options = {
             "iAppId": this.$api.APP_ID,
@@ -542,7 +552,8 @@
             that.$log("预下单返回 :" + JSON.stringify(response.data))
             if (response.data.data.result != undefined) {
               let urlEncode = response.data.data.result.urlEncode;
-              this.See(urlEncode)
+              //this.See(urlEncode)
+              this.gatCasher(urlEncode)
             }
           }).catch(function (error) {
             that.$log(error)
@@ -691,7 +702,7 @@
         let pAnOrderInfo = {
           "accessToken": user.accessToken,
           "orderNo": orderNo,
-          "orderAmount": listItem.saleAmount * 100, //分
+          "orderAmount": parseInt((listItem.saleAmount * 100).toFixed(0)),//分
           "openId": user.openId,
           "businessType": "11",
           "hasVirtualGoods": hasVirtualGoods
@@ -798,18 +809,16 @@
 
 
       getMerchantName(merchantNo) {
-        return "惠民优选"
-        /*        if (merchantNo == 20) {
-                  return "苏宁易购"
-                } else if (merchantNo == 30) {
-                  return "唯品会"
-                } else if (merchantNo == 50) {
-                  return "天猫精选"
-                } else if (merchantNo == 60) {
-                  return "京东"
-                } else {
-                  return "商城自营"
-                }*/
+        switch (this.$api.APP_ID) {
+          case "08":
+            return "唯品会";
+          case "09":
+            return "慧聚品牌馆";
+          case "10":
+            return "苏宁易购";
+          default:
+            return "惠民优选"
+        }
       },
     }
   }

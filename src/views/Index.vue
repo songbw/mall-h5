@@ -200,6 +200,10 @@
       this.wechatShareConfig()
 
       if (this.$api.IS_GAT_APP) {
+       if (process.env.NODE_ENV === 'development') {
+            this.testGAT();
+            return 
+        }
         // this.testGAT();
         let auth_code = this.$route.query.auth_code;
         if (auth_code != undefined) {
@@ -217,7 +221,7 @@
 
       } else { //非关爱通App
         if (process.env.NODE_ENV === 'development') {
-          if (this.$api.APP_ID != '13' && this.$api.APP_ID != '16')
+          if (this.$api.APP_ID != '13' && this.$api.APP_ID != '16'  && this.$api.APP_ID != '17')
             this.test();
         }
         if (this.userToken != undefined && this.userToken.length > 0) {
@@ -238,7 +242,7 @@
           } else {
             this.userTokenLoading = false;
           }
-        } else if (this.$api.APP_ID == '16') {
+        } else if (this.$api.APP_ID == '16' || this.$api.APP_ID == '17') {
           try {
             let response = await this.userLogin();
             if (response.data.code === 200) {
@@ -624,6 +628,9 @@
         //let openId = "52d7fd1f46e55ac6a2435818a00c06c0"
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
         let openId = "b720d31ebd4c1d148da24ebf5660031f"
+        if(this.$api.APP_ID == '08') {
+            openId = "f810533184a1dc8e460e56bb6da3dcde"
+        }
         this.$log("openId:" + openId);
         if (openId != undefined) {
           let userId = this.$api.APP_ID + openId;
@@ -680,6 +687,8 @@
         } else if (this.$api.APP_ID == '11') {
           //only for debug
           //openId = '13802aa921ca47d295b47c7016ff9137'
+        } else if (this.$api.APP_ID == '15') {
+          openId = 'X226585714099328O'
         }
         if (this.$api.TEST_USER.length > 0)
           openId = this.$api.TEST_USER

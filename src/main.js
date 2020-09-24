@@ -56,9 +56,15 @@ import {
   Picker
 } from 'vant';
 
+import VueAwesomeSwiper from 'vue-awesome-swiper'
+//import 'swiper/css/swiper.css'
+// If you use Swiper 6.0.0 or higher
+import 'swiper/swiper-bundle.css'
+Vue.use(VueAwesomeSwiper)
+
 /* if (process.env.NODE_ENV === 'production') {
   new VConsole()
-} */
+}  */
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)

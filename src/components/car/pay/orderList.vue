@@ -60,11 +60,6 @@
                       确认收货
                     </van-button>
                     <van-button plain round size="small" type="primary"
-                      style="background-color: #ff4444;color: white ;border-color: #ff4444" @click="onDelBtnClick(k,i)"
-                      v-show="k.status==2||k.status==3">
-                      删除订单
-                    </van-button>
-                    <van-button plain round size="small" type="primary"
                       style="background-color: white;color: black ;border-color: #dedede" @click="onCancelBtnClick(k,i)"
                       v-show="k.status==0">
                       取消订单
@@ -78,7 +73,6 @@
                       v-show="k.status==0">
                       去支付
                     </van-button>
-
                     <van-button plain round size="small" type="primary"
                       style="background-color: white;color: #ff4444;border-color: #dedede "
                       @click="onLogisticsBtnClick(k,i)" v-show="k.status==1">
@@ -88,6 +82,11 @@
                       style="background-color: white;color: #ff4444;border-color: #dedede " @click="onBuyBtnClick(k,i)"
                       v-show="k.status==2||k.status==3">
                       再次购买
+                    </van-button>
+                    <van-button plain round size="small" type="primary"
+                      style="background-color: #ff4444;color: white ;border-color: #ff4444" @click="onDelBtnClick(k,i)"
+                      v-show="k.status==2||k.status==3">
+                      删除订单
                     </van-button>
                   </div>
                 </div>
@@ -190,6 +189,15 @@
     },
 
     methods: {
+      gatCasher(url) {
+        this.$router.replace({
+          name: "关爱通收银台页",
+          params: {
+            url: url
+          }
+        })
+      },
+      
       pingAnCasher(user, orderInfo) {
         this.$log("pingAnCasher Enter")
         let that = this
@@ -378,7 +386,7 @@
                 let skuId = goods.skuId
                 let purchaseQty = 1
                 if (skuId === undefined || skuId === null) {
-                    skuId = goods.skuid
+                  skuId = goods.skuid
                 }
                 if (cartItem == null) {
                   let baseInfo = {
@@ -434,8 +442,10 @@
       },
       getClientName() {
         switch (this.$api.APP_ID) {
+          case "08":
+            return "关爱通唯品会";
           case "09":
-            return "关爱通品牌直供";
+            return "关爱通慧聚品牌馆";
           case "10":
             return "关爱通苏宁易购";
           case "11":
@@ -598,27 +608,28 @@
         }
       },
       getMerchantName(merchantNo) {
-        return "惠民优选"
-        /*        if (merchantNo == 20) {
-                  return "苏宁易购"
-                } else if (merchantNo == 30) {
-                  return "唯品会"
-                } else if (merchantNo == 50) {
-                  return "天猫精选"
-                } else if (merchantNo == 60) {
-                  return "京东"
-                } else {
-                  return "商城自营"
-                }*/
+        switch (this.$api.APP_ID) {
+          case "08":
+            return "唯品会";
+          case "09":
+            return "慧聚品牌馆";
+          case "10":
+            return "苏宁易购";
+          default:
+            return "惠民优选"
+        }
       },
       openCashPage(user, merchantNo, orderNos, pAnOrderInfo, listItem) {
         let that = this;
         let returnUrl = ""
         if (this.$api.IS_GAT_APP) {
+          this.$log("IS_GAT_APP Enter")
           if (this.$api.APP_ID === '10') {
             returnUrl = "https://gatsn.weesharing.com/pay/cashering";
           } else if (this.$api.APP_ID === '09') {
-            returnUrl = "https://gatzy.weesharing.com/pay/cashering";
+            returnUrl = "https://testgatzy.weesharing.com/pay/cashering";
+          } else if (this.$api.APP_ID === '08') {
+            returnUrl = "https://testgatwph.weesharing.com/pay/cashering";
           }
           let options = {
             "iAppId": this.$api.APP_ID,
@@ -641,7 +652,8 @@
             that.$log("预下单返回 :" + JSON.stringify(response.data))
             if (response.data.data.result != undefined) {
               let urlEncode = response.data.data.result.urlEncode;
-              this.See(urlEncode)
+              // this.See(urlEncode)
+              this.gatCasher(urlEncode)
             }
           }).catch(function (error) {
             that.$log(error)
@@ -813,10 +825,12 @@
         let pAnOrderInfo = {
           "accessToken": user.accessToken,
           "orderNo": orderNo,
-          "orderAmount": listItem.saleAmount * 100, //分
+          "orderAmount": parseInt((listItem.saleAmount * 100).toFixed(0)), //分
           "openId": user.openId,
           "businessType": "11"
         }
+        this.$log("listItem.saleAmount:"+listItem.saleAmount)
+        this.$log("pAnOrderInfo:",pAnOrderInfo)
         let merchantNo = ""
         if (listItem.merchantNo != null) {
           merchantNo = listItem.merchantNo

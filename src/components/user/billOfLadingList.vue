@@ -154,8 +154,8 @@
               try {
                 response = await this.askWelwareCardList(user.userId, userDetail.telephone)
                 this.$log(response)
-                if (response.data.code == 200) {
-                } 
+                //if (response.data.code == 200) {
+                //} 
               }catch (error) {
                 that.$log(error.response)
               }
@@ -163,7 +163,6 @@
               if (response.data.code == 200) {
                 this.cardList = response.data.data.result;
               }
-            } else {
             }
           }
         } catch (e) {

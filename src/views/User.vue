@@ -59,19 +59,21 @@
         <van-cell title="我的提货券" is-link @click="onLadingCardBtnClick">
           <img slot="icon" :src="icon_ladingCard" />
         </van-cell>
-        <div v-if="this.$api.APP_ID == '11'">
-          <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick">
+        <div v-if="this.$api.APP_ID == '11' || this.$api.APP_ID == '15'">
+          <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick" v-if="this.$api.APP_ID == '11'">
             <img slot="icon" :src="icon_optCard" />
           </van-cell>
           <van-cell title="市民卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
             <img slot="icon" :src="icon_linkPayCard" />
           </van-cell>
-          <!--        <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
-                    <img slot="icon" :src="icon_quickPayCard"/>
-                  </van-cell>-->
+          <!--        
+          <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
+            <img slot="icon" :src="icon_quickPayCard"/>
+          </van-cell>
           <van-cell title="我的钱包" is-link @click="onShangHaiBankBtnClick">
             <img slot="icon" :src="icon_bankCard" />
-          </van-cell>
+          </van-cell> 
+          -->
         </div>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
           <img slot="icon" :src="receriverAddressIcon" />
@@ -160,7 +162,14 @@
     created() {
       let userInfo = this.$store.state.appconf.userInfo;
       let that = this
-
+      if  (this.$api.APP_ID == '11') {
+          let item = {
+            title: "历史订单",
+            key: 5,
+            img: require('@/assets/icons/ico_history_order.png')
+          }
+          this.orderbars.push(item)
+      }
       this.wechatShareConfig()
       this.showHeader = this.$api.HAS_HEADER;
       if (this.$store.state.appconf.userDetail.length > 0) {
@@ -243,11 +252,6 @@
             key: 4,
             img: require('@/assets/icons/ico_order_cancel.png')
           },
-          {
-            title: "历史订单",
-            key: 5,
-            img: require('@/assets/icons/ico_history_order.png')
-          }
         ],
 
         avatarDefaultImg: require('@/assets/icons/ico_avatar.png'),

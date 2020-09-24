@@ -73,9 +73,9 @@
           style="font-family:微软雅黑; font-size:10.5pt">工作时间：工作日早上9：00-晚上6：00（法定节假日除外）</span></p>
       <p style="font-size:10.5pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; widows:0"><span
           style="font-family:微软雅黑; font-size:10.5pt">客服电话：</span><span
-          style="font-family:微软雅黑; font-size:10.5pt">18751554642</span></p>
+          style="font-family:微软雅黑; font-size:10.5pt">4000797717</span></p>
       <p style="font-size:10.5pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; widows:0"><span
-          style="font-family:微软雅黑; font-size:10.5pt">客服微信：f18682047961</span></p>
+          style="font-family:微软雅黑; font-size:10.5pt">客服微信：18121351162</span></p>
       <p style="font-size:10.5pt; line-height:115%; margin:0pt 0pt 10pt; orphans:0; widows:0"><span
           style="font-family:微软雅黑; font-size:10.5pt; font-weight:bold">以上条款最终解释权归商城所有。</span></p>
     </div>

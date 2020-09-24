@@ -187,7 +187,7 @@
         display: flex;
         flex-direction: column;
         justify-content: center;
-        align-items: Center;
+        align-items: Center;Co
         height: 500px;
 
         img {

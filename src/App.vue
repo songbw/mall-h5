@@ -115,9 +115,9 @@
         if (isQpayCardSaved != undefined && isQpayCardSaved == '0') {
           this.$api.IS_QUICKPAY_CAN_SAVE = false;
         }
+        //this.loadExternalJs()
         this.loadMonitorJS()
-
-        if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09") {
+        if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09" || this.$api.APP_ID === "08") {
           this.$api.IS_GAT_APP = true;
           this.clearStorage();
           this.configured = true
@@ -151,6 +151,14 @@
             that.configured = true
           }
           this.configured = true
+        } else if (this.$api.APP_ID == "15") {
+          this.$log("LinXiApp")
+          if (this.shouldLogin()) {
+            //this.getLingXiLoginAuthInfo();
+            setTimeout(() => {
+              this.getLingXiLoginAuthInfo();
+            },50);
+          }
         } else {
           this.configured = true
         }
@@ -160,11 +168,29 @@
     },
 
     methods: {
+      loadExternalJs() {
+        if (this.$api.APP_ID == "11" || this.$api.APP_ID == "12") {
+          let script = document.createElement('script')
+          script.type = 'text/javascript'
+          script.src = '//smk-static.oss-cn-hangzhou.aliyuncs.com/js/jpasc-0.4.0.js'
+          document.getElementsByTagName('head')[0].appendChild(script)
+        } else if (this.$api.APP_ID == "15") {
+          //TODO: do somthing
+          this.$log("loadExternalJs ls sdk")
+          let script = document.createElement('script')
+          script.type = 'text/javascript'
+          //  script.src = '//mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/js/ls-sdk/ls-sdk.js'
+          script.src = '//smk-static.oss-cn-hangzhou.aliyuncs.com/js/ls-sdk-0617.js?v=3.0'
+          document.getElementsByTagName('head')[0].appendChild(script)
+        }
+      },
+
       loadMonitorJS() {
         console.log("loadMonitorJS Enter")
         let id = '';
         switch(this.$api.APP_ID) {
           case '08':
+            id = 'b4c5eb949e4363a0438053b58ed73643'
             break;
           case '09':
             id = '489c1d4ef77566d573266c21b816cbca'
@@ -180,8 +206,14 @@
           case '14':
             id = '013c2a67e96a8b835c219320ff617fac'
             break;
+          case '15':
+            id = '5eff62f2be27f69f4f6fd5dc9ffb3617'
+            break;
           case '16':
             id = '8dd797d94ca011d1344614257090f118'
+            break;
+          case '17':
+            id = '56051a56e7fd9a20b07fef556058003a'
             break;
         }
         //console.log("loadMonitorJS:"+id)
@@ -199,6 +231,7 @@
           },0);  
         }
       },
+
       shouldLogin() {
         this.$log(this.$route)
         if (this.$route.fullPath == '/pay/cashering' || this.$route.fullPath == '/pay/casher') {
@@ -258,7 +291,7 @@
         })
       },
       getPingAnThirdPartyAccessTokenInfo(requestCode) {
-        //  this.$toast("requestCode:"+requestCode)
+        this.$log("getPingAnThirdPartyAccessTokenInfo Enter")
         let that = this;
         that.$api.xapi({
           method: 'get',
@@ -292,7 +325,6 @@
       },
       async getLoginAuthInfo() {
         try {
-          let that = this
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
           if (!initCode)
@@ -338,6 +370,58 @@
             sc.close();
           })
         } catch (e) {}
+      },
+      async getLingXiLoginAuthInfo() {
+        this.$log("getLingXiLoginAuthInfo Enter")
+        let that = this
+        try {
+          let ret = await this.getInitCode()
+          let initCode = ret.data.data.initCode
+          if (!initCode) {
+           that.configured = true
+            return
+          }
+            
+          ls.config({
+            debug: false, // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
+            appId: this.$api.T_APP_ID, // 在统一 APP 开放平台服务器申请的 appId
+            initCode: initCode
+          })
+
+          ls.ready(() => {
+            ls.userAuth({
+                appId: this.$api.T_APP_ID
+              },
+              res => {
+                /* sc.userAuth 会首先判断用户是否登录，若没有登录，则会主动 调起登录窗口，无需在此调用 isLogin 和 login 接口             */
+                if (res.code === 200) { //    用户同意授权
+                  const requestCode = res.data.requestCode;
+                  this.getPingAnThirdPartyAccessTokenInfo(requestCode);
+                } else {
+                  /* 用户拒绝授权或其它失败情况
+                                               code: - 1 默认失败
+                                               code: - 10001    没有初始化 JSSDK
+                                               code: - 10002    用户点击拒绝授权
+                                                code: - 10003    用户未登录 */
+                  //this.$toast("用户拒绝授权登录")
+                  console.error(res.code)
+                  console.error(res.message)
+                  ls.close();
+                }
+                that.configured = true
+              });
+          })
+          ls.error((res) => {
+            console.error({
+              res
+            })
+            ls.close();
+            that.configured = true
+          })
+        } catch (e) {
+          console.log("getLingXiLoginAuthInfo:", e.message)
+          that.configured = true
+        }
       },
       wkycLogin() {
         let that = this
@@ -421,7 +505,7 @@
             } else {
               //获取用户信息失败
               that.$log("获取用户授权失败!")
-             // that.$toast("获取用户授权失败!")
+              // that.$toast("获取用户授权失败!")
               that.configured = true
             }
           } catch (e) {
