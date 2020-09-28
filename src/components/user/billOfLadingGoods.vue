@@ -5,7 +5,7 @@
     </div>
     <div v-else class="goodslistBody">
       <li v-for="(k,index) in goodsList" :key="index">
-        <div class="goodsCard">
+        <div class="goodsCard" @click="onClickGoods(k)">
           <div class="card-layout">
             <van-col span="8" class="cardImg">
               <img v-lazy="k.image">
@@ -57,8 +57,8 @@
       let that = this
       this.$log("created Enter")
       try {
-        let id = this.$route.params.id;
-        this.amount = this.$route.params.amount
+        let id = this.$route.query.id;
+        this.amount = this.$route.query.amount
         if (id != undefined) {
           let repsonse = await this.getGoodsList(id)
           this.$log(repsonse)
@@ -112,6 +112,15 @@
     },
 
     methods: {
+      onClickGoods(k) {
+        this.$log("goods clicked:",k)
+        this.$router.push({
+          path: "/detail",
+          query: {
+            mpu: k.mpu
+          }
+        });
+      },
       getGoodsList(couponId) {
         return this.$api.xapi({
           method: 'get',
