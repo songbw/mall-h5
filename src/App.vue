@@ -66,33 +66,33 @@
       let that = this
       this.$api.xapi({
         method: 'get',
-        url: '/static/serverConfig.json'
-      }).then((result) => {
+        url: '/decision/getAppConfig'
+      })
+      .then((result) => {
         //用一个全局字段保存ApiUrl 也可以用sessionStorage存储
-        console.log("getConfigJson" + JSON.stringify(result.data))
-        let serverUrl = result.data.SERVICE_URL;
-        let testPaymentUrl = result.data.TESTSTUB_PAYMENT_URL
-        let testUser = result.data.TEST_USER
-        let title = result.data.MALL_TITLE
-        let isQpayCardSaved = result.data.IS_QUICKPAY_CARD_SAVED
-        this.$api.GOODS_URL_PREFIX = result.data.GOODS_URL_PREFIX
-        this.$api.APP_ID = result.data.iAppID
+      
+        let appConfig = result.data.data
+        console.log("appConfig" , appConfig)
+        let serverUrl = appConfig.serverUrl
+        let testUser = appConfig.TEST_USER
+        let title = appConfig.mallTitle
+        this.$api.GOODS_URL_PREFIX = appConfig.goodsUrlPrefix
+        this.$api.APP_ID = appConfig.iAppId
         this.$store.commit('SET_APPID', this.$api.APP_ID);
-        this.$api.T_APP_ID = result.data.tAppID
+        this.$api.T_APP_ID = appConfig.tAppId
+        this.$api.SERVICE_URL = serverUrl;
+        this.$api.SERVR_PHONE_NUM = appConfig.servicePhone
         this.$api.APP_SOURCE = "00"
-        if (result.data.APP_SOURCE != undefined) {
-          this.$api.APP_SOURCE = result.data.APP_SOURCE
+        if (appConfig.APP_SOURCE != undefined) {
+          this.$api.APP_SOURCE = appConfig.APP_SOURCE
         }
         this.$store.commit('SET_APP_SOURCE', this.$api.APP_SOURCE);
-        this.$api.SERVICE_URL = serverUrl;
-        this.$api.SERVR_PHONE_NUM = result.data.SERVR_PHONE_NUM
         this.$api.PRODUCT_BASE_URL = serverUrl + "/v2/products/"
         this.$api.AGGREGATION_BASE_URL = serverUrl + "/v2/aggregations/"
         this.$api.ORDER_BASE_URL = serverUrl + "/v2/orders/"
         this.$api.EQUITY_BASE_URL = serverUrl + "/v2/equities/"
         this.$api.SSO_BASE_URL = serverUrl + "/v2/ssoes/"
         this.$api.WORKER_ORDER_BASE_URL = serverUrl + "/v2/workorders"
-        this.$api.TESTSTUB_PAYMENT_BASE_URL = testPaymentUrl + "/v1/"
         this.$api.BASE_BASE_URL = serverUrl + "/v2/bases/"
         this.$api.ES_BASE_URL = serverUrl + "/v2/elasticsearches/"
         this.$api.AGGREGATE_PAY_URL = serverUrl + "/v2/aggpays/"
@@ -112,9 +112,6 @@
           this.$api.TEST_USER = testUser
         if (title != undefined && title.length > 0)
           this.title = title
-        if (isQpayCardSaved != undefined && isQpayCardSaved == '0') {
-          this.$api.IS_QUICKPAY_CAN_SAVE = false;
-        }
         //this.loadExternalJs()
         this.loadMonitorJS()
         if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09" || this.$api.APP_ID === "08") {
@@ -162,7 +159,8 @@
         } else {
           this.configured = true
         }
-      }).catch((error) => {
+      })
+      .catch((error) => {
         console.log(error)
       });
     },

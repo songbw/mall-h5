@@ -10,6 +10,8 @@ import VueWechatTitle from 'vue-wechat-title'
 import VueQRCodeComponent from 'vue-qrcode-component'
 import VConsole from 'vconsole'
 import md5 from 'js-md5';
+import './mock/index.js'
+
 import {
   Button,
   Tab,

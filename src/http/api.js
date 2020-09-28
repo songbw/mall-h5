@@ -53,6 +53,7 @@ xapi.interceptors.request.use(function (config) {
   if (store.state.appconf.token.length > 0) {
     config.headers.Authorization = `token ${store.state.appconf.token}`;
   }
+  console.log("xxxxxxxxxxxxxxxxxxxx:",store.state.appconf.appId)
   if (store.state.appconf.appId.length > 0) {
     config.headers.appId = store.state.appconf.appId
   }
