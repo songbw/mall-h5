@@ -62,8 +62,10 @@
         configured: false
       }
     },
-    beforeCreate() {
+    created() {
       let that = this
+      // this.getAppConfig()
+
       this.$api.xapi({
         method: 'get',
         url: '/decision/getAppConfig'
@@ -166,6 +168,19 @@
     },
 
     methods: {
+      getAppConfig() {
+        this.$api.APP_CONFIG_URL = process.env.CONFIG_URL
+        let url = '/v2/vendors/renter/api/appConfig'
+        let appId = this.getAppId()
+        return this.$api.xapi({
+          method: 'get',
+          baseURL: this.$api.APP_CONFIG_URL,
+          url: url,
+          params: {
+            appId: appId
+          }
+        })
+      },
       loadExternalJs() {
         if (this.$api.APP_ID == "11" || this.$api.APP_ID == "12") {
           let script = document.createElement('script')

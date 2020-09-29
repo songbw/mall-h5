@@ -8,7 +8,7 @@ import coupon from 'v-coupon'
 //import ba from 'vue-ba'
 import VueWechatTitle from 'vue-wechat-title'
 import VueQRCodeComponent from 'vue-qrcode-component'
-import VConsole from 'vconsole'
+// import VConsole from 'vconsole'
 import md5 from 'js-md5';
 import './mock/index.js'
 
@@ -64,9 +64,9 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 import 'swiper/swiper-bundle.css'
 Vue.use(VueAwesomeSwiper)
 
-if (process.env.NODE_ENV === 'production') {
+/* if (process.env.NODE_ENV === 'production') {
   new VConsole()
-}
+} */
 
 Vue.component('qr-code', VueQRCodeComponent)
 Vue.use(VueWechatTitle)
@@ -90,7 +90,7 @@ if (process.env.NODE_ENV === 'production') {
       second = second < 10 ? ('0' + second) : second;
       return y + '-' + m + '-' + d + ' ' + h + ':' + minute + ':' + second;
     },
-    dev: true,
+    dev: false,
     levels: ["log", "warn", "debug", "error", "dir"],
     forceLevels: []
   })
@@ -169,6 +169,7 @@ Vue.config.productionTip = false
 Vue.prototype.$api = services;
 Vue.prototype.$md5 = md5;
 Vue.prototype.$moment = moment;
+
 ////////////////////////////////////////////////////////////////////////
 //增加Android/ios bridge 全局变量
 //let dsBridge = require("dsbridge");
