@@ -92,8 +92,7 @@
 
 
     created() {
-      this.$log("horizontal goods enter @@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
-      this.$log(this.datas)
+      // this.$log(this.datas)
     },
 
     methods: {

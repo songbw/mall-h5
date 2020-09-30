@@ -96,7 +96,8 @@
             isFcWxPub: 3,
             isZZHApp: 4,
             isWKYCApp: 5,
-            isWxGZH: 6
+            isWxGZH: 6,
+            isUrlRgApp: 7,
           }
           if (configRsp.data.data != undefined) {
             appConfig = configRsp.data.data
@@ -122,9 +123,9 @@
             tAppId = appConfig.tAppID
             servicePhone = appConfig.SERVR_PHONE_NUM
             goodsUrlPrefix = appConfig.GOODS_URL_PREFIX
-            switch(iAppId) {
+            switch (iAppId) {
               case '01':
-                platformId = this.$api.PLATFORM_TYPE.isWxGZH 
+                platformId = this.$api.PLATFORM_TYPE.isFcWxPub
                 break;
               case '08':
               case '09':
@@ -142,6 +143,10 @@
                 break;
               case '15':
                 platformId = this.$api.PLATFORM_TYPE.isLingXiApp
+                break;
+              case '16':
+              case '17':
+                platformId = this.$api.PLATFORM_TYPE.isUrlRgApp
                 break;
               default:
                 platformId = 0
@@ -184,12 +189,12 @@
             this.title = title
 
           this.loadMonitorJS()
-          if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isGATApp) {//关爱通APP
+          if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isGATApp) { //关爱通APP
             this.$api.IS_GAT_APP = true;
             this.clearStorage();
             this.configured = true
-          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isWuxiCardApp || 
-                  this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isZZHApp) {//无锡市民卡App 或 最珠海App
+          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isWuxiCardApp ||
+            this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isZZHApp) { //无锡市民卡App 或 最珠海App
             switch (this.$api.APP_SOURCE) { //APP
               case "00": {
                 this.$log("App")
@@ -211,7 +216,7 @@
                 this.configured = true
                 break;
             }
-          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isWKYCApp) {//万科云城App
+          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isWKYCApp) { //万科云城App
             try {
               this.wkycLogin()
             } catch (e) {
@@ -278,7 +283,6 @@
           document.getElementsByTagName('head')[0].appendChild(script)
         }
       },
-
       loadMonitorJS() {
         console.log("loadMonitorJS Enter")
         let id = '';
@@ -325,7 +329,6 @@
           }, 0);
         }
       },
-
       shouldLogin() {
         this.$log(this.$route)
         if (this.$route.fullPath == '/pay/cashering' || this.$route.fullPath == '/pay/casher') {

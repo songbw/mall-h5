@@ -200,9 +200,9 @@
       this.wechatShareConfig()
 
       if (this.$api.IS_GAT_APP) {
-       if (process.env.NODE_ENV === 'development') {
-            this.testGAT();
-            return 
+        if (process.env.NODE_ENV === 'development') {
+          this.testGAT();
+          return
         }
         // this.testGAT();
         let auth_code = this.$route.query.auth_code;
@@ -221,7 +221,9 @@
 
       } else { //非关爱通App
         if (process.env.NODE_ENV === 'development') {
-          if (this.$api.APP_ID != '13' && this.$api.APP_ID != '16'  && this.$api.APP_ID != '17')
+          //if (this.$api.APP_ID != '13' && this.$api.APP_ID != '16'  && this.$api.APP_ID != '17')
+          if (this.$api.PLATFOMR_ID != this.$api.PLATFORM_TYPE.isCommon &&
+            this.$api.PLATFOMR_ID != this.$api.PLATFORM_TYPE.isUrlRgApp)
             this.test();
         }
         if (this.userToken != undefined && this.userToken.length > 0) {
@@ -235,14 +237,14 @@
           }, 3000);
         }
 
-        if (this.$api.APP_ID == '01') {
+        if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isFcWxPub) { //凤巢公众号平台
           let code = this.$route.query.code;
           if (code != undefined) {
             this.thirdPartyLogin(code)
           } else {
             this.userTokenLoading = false;
           }
-        } else if (this.$api.APP_ID == '16' || this.$api.APP_ID == '17') {
+        } else if (this.$api.PLATFOMR_ID = this.$api.PLATFORM_TYPE.isUrlRgApp) { //从URL导入用户
           try {
             let response = await this.userLogin();
             if (response.data.code === 200) {
@@ -327,7 +329,6 @@
                 }
               }
             }
-            this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
             this.$log(this.mHeader)
             if (this.icon_gift != null && this.icon_gift.length > 0) {
               this.showDialog = true
@@ -355,13 +356,13 @@
         let appKey = this.$route.query.appKey
         let timestamp = this.$route.query.timestamp
         let options = {
-            appKey: appKey,
-            telephone: telephone,
-            sign: sign,
-            appId: this.$api.APP_ID,
-            timestamp: timestamp
+          appKey: appKey,
+          telephone: telephone,
+          sign: sign,
+          appId: this.$api.APP_ID,
+          timestamp: timestamp
         }
-       // this.$log("options:",options)
+        // this.$log("options:",options)
         return this.$api.xapi({
           method: 'post',
           baseURL: this.$api.SSO_BASE_URL,
@@ -378,7 +379,8 @@
       },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if (this.$api.APP_ID === '01') {
+        //if (this.$api.APP_ID === '01') {
+        if (this.$api.PLATFOMR_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  //凤巢公众号
           try {
             configWechat(this, () => {
               wx.hideOptionMenu()
@@ -627,8 +629,8 @@
         //let openId = "52d7fd1f46e55ac6a2435818a00c06c0"
         //let openId = "46e794551c9144be82cc86c25703b936" //贺总
         let openId = "b720d31ebd4c1d148da24ebf5660031f"
-        if(this.$api.APP_ID == '08') {
-            openId = "f810533184a1dc8e460e56bb6da3dcde"
+        if (this.$api.APP_ID == '08') {
+          openId = "f810533184a1dc8e460e56bb6da3dcde"
         }
         this.$log("openId:" + openId);
         if (openId != undefined) {
@@ -747,7 +749,8 @@
         let that = this;
         let url = ""
         let params = null
-        if (this.$api.APP_ID == '01') {
+       // if (this.$api.APP_ID == '01') {
+        if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isFcWxPub) { //凤巢公众号
           url = '/sso/thirdParty/token/wx';
           params = {
             iAppId: this.$api.APP_ID,
