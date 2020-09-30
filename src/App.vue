@@ -88,6 +88,16 @@
           let tAppId = ''
           let servicePhone = ''
           let goodsUrlPrefix = ''
+          let platformId = 0
+          this.$api.PLATFORM_TYPE = {
+            isCommon: 0,
+            isWuxiCardApp: 1,
+            isLingXiApp: 2,
+            isFcWxPub: 3,
+            isZZHApp: 4,
+            isWKYCApp: 5,
+            isWxGZH: 6
+          }
           if (configRsp.data.data != undefined) {
             appConfig = configRsp.data.data
             this.$log("appConfig:", appConfig)
@@ -98,6 +108,10 @@
             tAppId = appConfig.tappId
             servicePhone = appConfig.servicePhone
             goodsUrlPrefix = appConfig.goodsUrlPrefix
+            if (appConfig.platformId != undefined) {
+              platformId = appConfig.platformId
+            }
+            this.$api.PLATFOMR_ID = platformId
           } else {
             appConfig = configRsp.data
             this.$log("appConfig:", appConfig)
@@ -108,6 +122,32 @@
             tAppId = appConfig.tAppID
             servicePhone = appConfig.SERVR_PHONE_NUM
             goodsUrlPrefix = appConfig.GOODS_URL_PREFIX
+            switch(iAppId) {
+              case '01':
+                platformId = this.$api.PLATFORM_TYPE.isWxGZH 
+                break;
+              case '08':
+              case '09':
+              case '10':
+                platformId = this.$api.PLATFORM_TYPE.isGATApp
+                break;
+              case '11':
+                platformId = this.$api.PLATFORM_TYPE.isWuxiCardApp
+                break;
+              case '12':
+                platformId = this.$api.PLATFORM_TYPE.isZZHApp
+                break;
+              case '14':
+                platformId = this.$api.PLATFORM_TYPE.isWKYCApp
+                break;
+              case '15':
+                platformId = this.$api.PLATFORM_TYPE.isLingXiApp
+                break;
+              default:
+                platformId = 0
+                break;
+            }
+            this.$api.PLATFOMR_ID = platformId
           }
           this.$api.GOODS_URL_PREFIX = goodsUrlPrefix
           this.$api.APP_ID = iAppId
@@ -142,12 +182,14 @@
             this.$api.TEST_USER = testUser
           if (title != undefined && title.length > 0)
             this.title = title
+
           this.loadMonitorJS()
-          if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09" || this.$api.APP_ID === "08") {
+          if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isGATApp) {//关爱通APP
             this.$api.IS_GAT_APP = true;
             this.clearStorage();
             this.configured = true
-          } else if (this.$api.APP_ID == "11" || this.$api.APP_ID == "12") {
+          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isWuxiCardApp || 
+                  this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isZZHApp) {//无锡市民卡App 或 最珠海App
             switch (this.$api.APP_SOURCE) { //APP
               case "00": {
                 this.$log("App")
@@ -169,7 +211,7 @@
                 this.configured = true
                 break;
             }
-          } else if (this.$api.APP_ID == "14") {
+          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isWKYCApp) {//万科云城App
             try {
               this.wkycLogin()
             } catch (e) {
@@ -177,19 +219,18 @@
               that.configured = true
             }
             this.configured = true
-          } else if (this.$api.APP_ID == "15") {
+          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isLingXiApp) { //灵锡App
             this.$log("LinXiApp")
             if (this.shouldLogin()) {
-              //this.getLingXiLoginAuthInfo();
               setTimeout(() => {
                 this.getLingXiLoginAuthInfo();
-              }, 50);
+              }, 100);
             }
           } else {
             this.configured = true
           }
         } catch (error) {
-          this.$log("error:",error.response.statusText)
+          this.$log("error:", error.response.statusText)
           this.$toast(error.response.status + ":" + error.response.statusText)
         }
       },
