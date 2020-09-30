@@ -169,14 +169,14 @@
         this.pageloading = false;
       } else {
         if (!Util.isUserEmpty(userInfo)) {
-          let user = JSON.parse(userInfo);
+          let userInf = JSON.parse(userInfo);
           this.$api.xapi({
             method: 'get',
             baseURL: this.$api.SSO_BASE_URL,
             url: '/user',
             params: {
               iAppId: this.$api.APP_ID,
-              openId: user.openId,
+              openId: userInf.openId,
             }
           }).then((response) => {
             let user = response.data.data.user;
