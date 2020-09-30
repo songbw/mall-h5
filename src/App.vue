@@ -90,14 +90,14 @@
           let goodsUrlPrefix = ''
           let platformId = 0
           this.$api.PLATFORM_TYPE = {
-            isCommon: 0,
-            isWuxiCardApp: 1,
-            isLingXiApp: 2,
-            isFcWxPub: 3,
-            isZZHApp: 4,
-            isWKYCApp: 5,
-            isWxGZH: 6,
-            isUrlRgApp: 7,
+            isCommon: 0, // 自注册 
+            isWuxiCardApp: 1, //无锡市民卡App
+            isLingXiApp: 2, //灵锡App
+            isFcWxPub: 3, //凤巢公众号
+            isZZHApp: 4, //最珠海App
+            isWKYCApp: 5, //万科云城App
+            isGATApp: 6, //关爱通App
+            isUrlRgApp: 7, //URL导入用户
           }
           if (configRsp.data.data != undefined) {
             appConfig = configRsp.data.data
@@ -112,7 +112,7 @@
             if (appConfig.platformId != undefined) {
               platformId = appConfig.platformId
             }
-            this.$api.PLATFOMR_ID = platformId
+            this.$api.PLATFORM_ID = platformId
           } else {
             appConfig = configRsp.data
             this.$log("appConfig:", appConfig)
@@ -152,7 +152,7 @@
                 platformId = 0
                 break;
             }
-            this.$api.PLATFOMR_ID = platformId
+            this.$api.PLATFORM_ID = platformId
           }
           this.$api.GOODS_URL_PREFIX = goodsUrlPrefix
           this.$api.APP_ID = iAppId
@@ -189,12 +189,12 @@
             this.title = title
 
           this.loadMonitorJS()
-          if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isGATApp) { //关爱通APP
+          if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isGATApp) { //关爱通APP
             this.$api.IS_GAT_APP = true;
             this.clearStorage();
             this.configured = true
-          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isWuxiCardApp ||
-            this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isZZHApp) { //无锡市民卡App 或 最珠海App
+          } else if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWuxiCardApp ||
+            this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isZZHApp) { //无锡市民卡App 或 最珠海App
             switch (this.$api.APP_SOURCE) { //APP
               case "00": {
                 this.$log("App")
@@ -216,7 +216,7 @@
                 this.configured = true
                 break;
             }
-          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isWKYCApp) { //万科云城App
+          } else if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWKYCApp) { //万科云城App
             try {
               this.wkycLogin()
             } catch (e) {
@@ -224,7 +224,7 @@
               that.configured = true
             }
             this.configured = true
-          } else if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isLingXiApp) { //灵锡App
+          } else if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isLingXiApp) { //灵锡App
             this.$log("LinXiApp")
             if (this.shouldLogin()) {
               setTimeout(() => {
@@ -249,14 +249,25 @@
       getAppConfig() {
         let appId = this.getAppId()
         this.$log("appId:", appId)
-        if (appId.length == 0) {
+        if (appId == null || appId.length == 0) {
           return this.$api.xapi({
             method: 'get',
+            headers: {
+              //当只设置cacahe-control: 'no-cache'时，IE浏览器始终返回304，抓包工具抓不到包，请求不和服务器确认
+              //当只设置cacahe-control: 'no-cache'时，google浏览器始终返回200，抓包工具可以抓取包，请求重新从服务器获取数据，没有利用到浏览器的缓存功能
+              'cache-control': 'no-cache',
+              //当只设置Pragma: 'no-cache'时，IE浏览器始终返回200，抓包工具可以抓到所有包，请求重新从服务器获取数据，没有利用到浏览器的缓存功能
+              //当只设置Pragma: 'no-cache'时，google浏览器始终返回200，抓包工具可以抓到所有包，请求重新从服务器获取数据，没有利用到浏览器的缓存功能
+              'Pragma': 'no-cache'
+              //两个参数同时不设置时，IE浏览器始终返回304，抓包工具抓不到包，请求不和服务器确认
+              //两个参数同时不设置时，google浏览器首次返回200，之后始终返回304，并且有和服务器确认
+              //两个参数同时设置时，IE浏览器始终返回200，抓包工具可以抓到所有包，请求重新从服务器获取数据，没有利用到浏览器的缓存功能
+              //两个参数同时设置时，google浏览器始终返回200，抓包工具可以抓到所有包，请求重新从服务器获取数据，没有利用到浏览器的缓存功能
+            },
             url: '/static/serverConfig.json'
           })
         } else {
           this.$api.APP_CONFIG_URL = process.env.CONFIG_URL
-          this.$log("this.$api.APP_CONFIG_URL:", process.env)
           return this.$api.xapi({
             method: 'get',
             baseURL: this.$api.APP_CONFIG_URL,

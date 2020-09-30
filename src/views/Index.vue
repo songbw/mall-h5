@@ -188,7 +188,6 @@
     },
 
     async created() {
-      let that = this;
       this.pageloading = true;
       if (this.isBackFromOuterLink)
         this.showSplash = false
@@ -222,8 +221,8 @@
       } else { //非关爱通App
         if (process.env.NODE_ENV === 'development') {
           //if (this.$api.APP_ID != '13' && this.$api.APP_ID != '16'  && this.$api.APP_ID != '17')
-          if (this.$api.PLATFOMR_ID != this.$api.PLATFORM_TYPE.isCommon &&
-            this.$api.PLATFOMR_ID != this.$api.PLATFORM_TYPE.isUrlRgApp)
+          if (this.$api.PLATFORM_ID != this.$api.PLATFORM_TYPE.isCommon &&
+            this.$api.PLATFORM_ID != this.$api.PLATFORM_TYPE.isUrlRgApp)
             this.test();
         }
         if (this.userToken != undefined && this.userToken.length > 0) {
@@ -237,14 +236,14 @@
           }, 3000);
         }
 
-        if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isFcWxPub) { //凤巢公众号平台
+        if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) { //凤巢公众号平台
           let code = this.$route.query.code;
           if (code != undefined) {
             this.thirdPartyLogin(code)
           } else {
             this.userTokenLoading = false;
           }
-        } else if (this.$api.PLATFOMR_ID === this.$api.PLATFORM_TYPE.isUrlRgApp) { //从URL导入用户
+        } else if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isUrlRgApp) { //从URL导入用户
           try {
             let response = await this.userLogin();
             if (response.data.code === 200) {
@@ -380,7 +379,7 @@
       wechatShareConfig() {
         this.$log('shareConfig Enter')
         //if (this.$api.APP_ID === '01') {
-        if (this.$api.PLATFOMR_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  //凤巢公众号
+        if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  //凤巢公众号
           try {
             configWechat(this, () => {
               wx.hideOptionMenu()
@@ -750,7 +749,7 @@
         let url = ""
         let params = null
        // if (this.$api.APP_ID == '01') {
-        if (this.$api.PLATFOMR_ID == this.$api.PLATFORM_TYPE.isFcWxPub) { //凤巢公众号
+        if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isFcWxPub) { //凤巢公众号
           url = '/sso/thirdParty/token/wx';
           params = {
             iAppId: this.$api.APP_ID,

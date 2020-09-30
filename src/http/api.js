@@ -13,7 +13,7 @@ const IS_WX_GZH =  false
 const HAS_HEADER = false
 const IS_QUICKPAY_CAN_SAVE = true
 const APP_SOURCE = "00"
-const PLATFOMR_ID = 0 //平台ID：1. 无锡市民卡App 2. 灵锡App 3. 凤巢公众号 4. 最珠海 5. 万科云城 6. 关爱通'
+const PLATFORM_ID = 0 //平台ID：1. 无锡市民卡App 2. 灵锡App 3. 凤巢公众号 4. 最珠海 5. 万科云城 6. 关爱通'
 const APP_CONFIG_URL = ''
 
 /*let SERVICE_URL = "http://192.168.200.37:8000";
@@ -52,10 +52,10 @@ xapi.defaults.headers.post['Content-Type'] = 'application/json';
 // 请求拦截
 xapi.interceptors.request.use(function (config) {
   // 在发送请求之前做些什么
-  if (store.state.appconf.token.length > 0) {
+  if (store.state.appconf.token != null && store.state.appconf.token.length > 0) {
     config.headers.Authorization = `token ${store.state.appconf.token}`;
   }
-  if (store.state.appconf.appId.length > 0) {
+  if (store.state.appconf.appId != null && store.state.appconf.appId.length > 0) {
     config.headers.appId = store.state.appconf.appId
   }
   return config;

@@ -9,7 +9,7 @@
         <header class="userHeader" @click="onUserInfoClick()">
           <div class="headerTitle">
             <div class="header-icon">
-              <img :src="(user.headImg !=null && user.headImg.length > 0) ? user.headImg : avatarDefaultImg">
+              <img :src="(user.headImg !=null && user.headImg.length > 0) ? user.headImg : avatarDefaultImg" alt="">
             </div>
             <span v-if="user.nickname !=undefined && user.nickname.length > 0">{{user.nickname}}</span>
             <span v-else-if="this.$api.IS_WX_GZH && pageloading == false">登录</span>
@@ -21,16 +21,16 @@
       </div>
       <div class="wealth-box">
         <div class="coupon-info">
-          <div class="my-coupon" @click="onMyCoinAccountClick" v-if="this.$api.APP_ID == '11'">
-            <img :src="myCoinAccountIcon" />
+          <div class="my-coupon" @click="onMyCoinAccountClick" v-if="this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWuxiCardApp">
+            <img :src="myCoinAccountIcon" alt=""/>
             <span>我的余额</span>
           </div>
           <div class="my-coupon" @click="onMyCouponClick">
-            <img :src="myCouponIcon" />
+            <img :src="myCouponIcon" alt=""/>
             <span>我的优惠券</span>
           </div>
           <div class="coupon-change" @click="onChangeCouponClick">
-            <img :src="chCouponIcon" />
+            <img :src="chCouponIcon" alt=""/>
             <span>兑换卡券</span>
           </div>
         </div>
@@ -48,7 +48,7 @@
           <van-row type="flex" justify="space-between">
             <van-col v-for="(item,index) in orderbars" :key="index">
               <div class="orderCategoryBar" @click=onOrderListBarClick(item.key)>
-                <img :src=" item.img">
+                <img :src=" item.img" alt="">
                 <span>{{item.title}}</span>
               </div>
             </van-col>
@@ -57,38 +57,30 @@
       </div>
       <div class="settingsBox">
         <van-cell title="我的提货券" is-link @click="onLadingCardBtnClick">
-          <img slot="icon" :src="icon_ladingCard" />
+          <img slot="icon" :src="icon_ladingCard" alt=""/>
         </van-cell>
-        <div v-if="this.$api.APP_ID == '11' || this.$api.APP_ID == '15'">
-          <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick" v-if="this.$api.APP_ID == '11'">
-            <img slot="icon" :src="icon_optCard" />
+        <div v-if= "this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWuxiCardApp || this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isLingXiApp">
+          <van-cell title="惠民优选卡" is-link @click="onOptCardBtnClick" v-if="this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWuxiCardApp">
+            <img slot="icon" :src="icon_optCard" alt=""/>
           </van-cell>
           <van-cell title="市民卡联机账户余额" is-link @click="onQueryLinkPayBtnClick">
-            <img slot="icon" :src="icon_linkPayCard" />
+            <img slot="icon" :src="icon_linkPayCard" alt=""/>
           </van-cell>
-          <!--        
-          <van-cell title="我的快捷支付卡" is-link @click="onQuickPayCardBtnClick">
-            <img slot="icon" :src="icon_quickPayCard"/>
-          </van-cell>
-          <van-cell title="我的钱包" is-link @click="onShangHaiBankBtnClick">
-            <img slot="icon" :src="icon_bankCard" />
-          </van-cell> 
-          -->
         </div>
         <van-cell title="收货地址" is-link :to="{ name: '地址列表页'}">
-          <img slot="icon" :src="receriverAddressIcon" />
+          <img slot="icon" :src="receriverAddressIcon" alt=""/>
         </van-cell>
         <van-cell title="在线客服" is-link @click="showMeqiaPanel">
-          <img slot="icon" :src="customServiceIcon" />
+          <img slot="icon" :src="customServiceIcon" alt=""/>
         </van-cell>
         <van-cell title="购物须知" is-link @click="onMallBulletinBtnClick">
-          <img slot="icon" :src="customBulletinIcon" />
+          <img slot="icon" :src="customBulletinIcon" alt=""/>
         </van-cell>
         <van-cell title="客服电话" :value="this.$api.SERVR_PHONE_NUM">
-          <img slot="icon" :src="servicePhoneIcon" />
+          <img slot="icon" :src="servicePhoneIcon" alt=""/>
         </van-cell>
         <van-cell title="关于我们" value="版本号 V3.0">
-          <img slot="icon" :src="aboutIcon" />
+          <img slot="icon" :src="aboutIcon" alt=""/>
         </van-cell>
       </div>
     </div>
