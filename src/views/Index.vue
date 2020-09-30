@@ -244,7 +244,7 @@
           } else {
             this.userTokenLoading = false;
           }
-        } else if (this.$api.PLATFOMR_ID = this.$api.PLATFORM_TYPE.isUrlRgApp) { //从URL导入用户
+        } else if (this.$api.PLATFOMR_ID === this.$api.PLATFORM_TYPE.isUrlRgApp) { //从URL导入用户
           try {
             let response = await this.userLogin();
             if (response.data.code === 200) {
