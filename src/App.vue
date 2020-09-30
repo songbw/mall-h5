@@ -63,123 +63,163 @@
       }
     },
     created() {
-      let that = this
-      // this.getAppConfig()
-
-      this.$api.xapi({
-        method: 'get',
-        url: '/decision/getAppConfig'
-      })
-      .then((result) => {
-        //用一个全局字段保存ApiUrl 也可以用sessionStorage存储
-      
-        let appConfig = result.data.data
-        console.log("appConfig" , appConfig)
-        let serverUrl = appConfig.serverUrl
-        let testUser = appConfig.TEST_USER
-        let title = appConfig.mallTitle
-        this.$api.GOODS_URL_PREFIX = appConfig.goodsUrlPrefix
-        this.$api.APP_ID = appConfig.iAppId
-        this.$store.commit('SET_APPID', this.$api.APP_ID);
-        this.$api.T_APP_ID = appConfig.tAppId
-        this.$api.SERVICE_URL = serverUrl;
-        this.$api.SERVR_PHONE_NUM = appConfig.servicePhone
-        this.$api.APP_SOURCE = "00"
-        if (appConfig.APP_SOURCE != undefined) {
-          this.$api.APP_SOURCE = appConfig.APP_SOURCE
-        }
-        this.$store.commit('SET_APP_SOURCE', this.$api.APP_SOURCE);
-        this.$api.PRODUCT_BASE_URL = serverUrl + "/v2/products/"
-        this.$api.AGGREGATION_BASE_URL = serverUrl + "/v2/aggregations/"
-        this.$api.ORDER_BASE_URL = serverUrl + "/v2/orders/"
-        this.$api.EQUITY_BASE_URL = serverUrl + "/v2/equities/"
-        this.$api.SSO_BASE_URL = serverUrl + "/v2/ssoes/"
-        this.$api.WORKER_ORDER_BASE_URL = serverUrl + "/v2/workorders"
-        this.$api.BASE_BASE_URL = serverUrl + "/v2/bases/"
-        this.$api.ES_BASE_URL = serverUrl + "/v2/elasticsearches/"
-        this.$api.AGGREGATE_PAY_URL = serverUrl + "/v2/aggpays/"
-        this.$api.LINKPAY_ACCOUNT_URL = serverUrl + "/v2/woas/"
-        this.$api.PINGAN_AUTH_URL = serverUrl + "/v2/pingans/"
-        this.$api.FREIGHTS_URL = serverUrl + "/v2/freights/"
-        this.$api.OPTCARDS_URL = serverUrl + "/v2/wocs/"
-        this.$api.VENDOR_URL = serverUrl + "/v2/vendors/"
-        this.$api.QUICKLY_PAY_URL = serverUrl + "/v2/cardpayment/"
-        this.$api.WECHAT_CONFIG_URL = serverUrl + "/v2/guanaitong-client/"
-        this.$api.AOYIS_CONFIG_URL = serverUrl + "/v2/aoyis"
-        this.$api.IS_SUPPORTED_MULTI_POINT = false;
-        if (result.data.IS_SUPPORTED_MULTI_POINT != undefined) {
-          this.$api.IS_SUPPORTED_MULTI_POINT = result.data.IS_SUPPORTED_MULTI_POINT;
-        }
-        if (testUser != undefined && testUser.length > 0)
-          this.$api.TEST_USER = testUser
-        if (title != undefined && title.length > 0)
-          this.title = title
-        //this.loadExternalJs()
-        this.loadMonitorJS()
-        if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09" || this.$api.APP_ID === "08") {
-          this.$api.IS_GAT_APP = true;
-          this.clearStorage();
-          this.configured = true
-        } else if (this.$api.APP_ID == "11" || this.$api.APP_ID == "12") {
-          switch (this.$api.APP_SOURCE) { //APP
-            case "00": {
-              this.$log("App")
-              if (this.shouldLogin()) {
-                this.getLoginAuthInfo();
-              }
-              this.configured = true
-              break;
-            }
-            case "01": { //微信公众号
-              this.$log("公众号")
-              this.$api.IS_WX_GZH = true;
-              this.clearStorage();
-              this.configured = true
-              break;
-            }
-            default: //nothing to do
-              this.$log("其它")
-              this.configured = true
-              break;
-          }
-        } else if (this.$api.APP_ID == "14") {
-          try {
-            this.wkycLogin()
-          } catch (e) {
-            that.$log(e)
-            that.configured = true
-          }
-          this.configured = true
-        } else if (this.$api.APP_ID == "15") {
-          this.$log("LinXiApp")
-          if (this.shouldLogin()) {
-            //this.getLingXiLoginAuthInfo();
-            setTimeout(() => {
-              this.getLingXiLoginAuthInfo();
-            },50);
-          }
-        } else {
-          this.configured = true
-        }
-      })
-      .catch((error) => {
-        console.log(error)
-      });
+      this.appInited()
     },
 
     methods: {
-      getAppConfig() {
-        this.$api.APP_CONFIG_URL = process.env.CONFIG_URL
-        let url = '/v2/vendors/renter/api/appConfig'
-        let appId = this.getAppId()
-        return this.$api.xapi({
-          method: 'get',
-          baseURL: this.$api.APP_CONFIG_URL,
-          url: url,
-          params: {
-            appId: appId
+      getUrlParams(url) {
+        const _url = url || window.location.href
+        const _urlParams = _url.match(/([?&])(.+?=[^&]+)/igm)
+        return _urlParams ? _urlParams.reduce((a, b) => {
+          const value = b.slice(1).split('=')
+          a[value[0]] = value[1]
+          return a
+        }, {}) : {}
+      },
+      async appInited() {
+        this.$log("appInited Enter")
+        try {
+          let configRsp = await this.getAppConfig();
+          let appConfig = null;
+          let serverUrl = ''
+          let testUser = ''
+          let title = ''
+          let iAppId = ''
+          let tAppId = ''
+          let servicePhone = ''
+          let goodsUrlPrefix = ''
+          if (configRsp.data.data != undefined) {
+            appConfig = configRsp.data.data
+            this.$log("appConfig:", appConfig)
+            serverUrl = appConfig.serverUrl
+            testUser = appConfig.TEST_USER
+            title = appConfig.mallTitle
+            iAppId = appConfig.appId
+            tAppId = appConfig.tappId
+            servicePhone = appConfig.servicePhone
+            goodsUrlPrefix = appConfig.goodsUrlPrefix
+          } else {
+            appConfig = configRsp.data
+            this.$log("appConfig:", appConfig)
+            serverUrl = appConfig.SERVICE_URL
+            testUser = appConfig.TEST_USER
+            title = appConfig.MALL_TITLE
+            iAppId = appConfig.iAppID
+            tAppId = appConfig.tAppID
+            servicePhone = appConfig.SERVR_PHONE_NUM
+            goodsUrlPrefix = appConfig.GOODS_URL_PREFIX
           }
-        })
+          this.$api.GOODS_URL_PREFIX = goodsUrlPrefix
+          this.$api.APP_ID = iAppId
+          this.$store.commit('SET_APPID', this.$api.APP_ID);
+          this.$api.T_APP_ID = tAppId
+          this.$api.SERVICE_URL = serverUrl;
+          this.$api.SERVR_PHONE_NUM = servicePhone
+          this.$api.APP_SOURCE = "00"
+          if (appConfig.APP_SOURCE != undefined) {
+            this.$api.APP_SOURCE = appConfig.APP_SOURCE
+          }
+          this.$store.commit('SET_APP_SOURCE', this.$api.APP_SOURCE);
+          this.$api.PRODUCT_BASE_URL = serverUrl + "/v2/products/"
+          this.$api.AGGREGATION_BASE_URL = serverUrl + "/v2/aggregations/"
+          this.$api.ORDER_BASE_URL = serverUrl + "/v2/orders/"
+          this.$api.EQUITY_BASE_URL = serverUrl + "/v2/equities/"
+          this.$api.SSO_BASE_URL = serverUrl + "/v2/ssoes/"
+          this.$api.WORKER_ORDER_BASE_URL = serverUrl + "/v2/workorders"
+          this.$api.BASE_BASE_URL = serverUrl + "/v2/bases/"
+          this.$api.ES_BASE_URL = serverUrl + "/v2/elasticsearches/"
+          this.$api.AGGREGATE_PAY_URL = serverUrl + "/v2/aggpays/"
+          this.$api.LINKPAY_ACCOUNT_URL = serverUrl + "/v2/woas/"
+          this.$api.PINGAN_AUTH_URL = serverUrl + "/v2/pingans/"
+          this.$api.FREIGHTS_URL = serverUrl + "/v2/freights/"
+          this.$api.OPTCARDS_URL = serverUrl + "/v2/wocs/"
+          this.$api.VENDOR_URL = serverUrl + "/v2/vendors/"
+          this.$api.QUICKLY_PAY_URL = serverUrl + "/v2/cardpayment/"
+          this.$api.WECHAT_CONFIG_URL = serverUrl + "/v2/guanaitong-client/"
+          this.$api.AOYIS_CONFIG_URL = serverUrl + "/v2/aoyis"
+          this.$api.IS_SUPPORTED_MULTI_POINT = false;
+          if (testUser != undefined && testUser.length > 0)
+            this.$api.TEST_USER = testUser
+          if (title != undefined && title.length > 0)
+            this.title = title
+          this.loadMonitorJS()
+          if (this.$api.APP_ID === "10" || this.$api.APP_ID === "09" || this.$api.APP_ID === "08") {
+            this.$api.IS_GAT_APP = true;
+            this.clearStorage();
+            this.configured = true
+          } else if (this.$api.APP_ID == "11" || this.$api.APP_ID == "12") {
+            switch (this.$api.APP_SOURCE) { //APP
+              case "00": {
+                this.$log("App")
+                if (this.shouldLogin()) {
+                  this.getLoginAuthInfo();
+                }
+                this.configured = true
+                break;
+              }
+              case "01": { //微信公众号
+                this.$log("公众号")
+                this.$api.IS_WX_GZH = true;
+                this.clearStorage();
+                this.configured = true
+                break;
+              }
+              default: //nothing to do
+                this.$log("其它")
+                this.configured = true
+                break;
+            }
+          } else if (this.$api.APP_ID == "14") {
+            try {
+              this.wkycLogin()
+            } catch (e) {
+              that.$log(e)
+              that.configured = true
+            }
+            this.configured = true
+          } else if (this.$api.APP_ID == "15") {
+            this.$log("LinXiApp")
+            if (this.shouldLogin()) {
+              //this.getLingXiLoginAuthInfo();
+              setTimeout(() => {
+                this.getLingXiLoginAuthInfo();
+              }, 50);
+            }
+          } else {
+            this.configured = true
+          }
+        } catch (error) {
+          this.$log("error:",error.response.statusText)
+          this.$toast(error.response.status + ":" + error.response.statusText)
+        }
+      },
+      getAppId() {
+        let urlParams = this.getUrlParams(window.location.href)
+        if (urlParams.appId !== undefined) {
+          return urlParams.appId
+        }
+        return ""
+      },
+      getAppConfig() {
+        let appId = this.getAppId()
+        this.$log("appId:", appId)
+        if (appId.length == 0) {
+          return this.$api.xapi({
+            method: 'get',
+            url: '/static/serverConfig.json'
+          })
+        } else {
+          this.$api.APP_CONFIG_URL = process.env.CONFIG_URL
+          this.$log("this.$api.APP_CONFIG_URL:", process.env)
+          return this.$api.xapi({
+            method: 'get',
+            baseURL: this.$api.APP_CONFIG_URL,
+            url: '/v2/vendors/renter/api/appConfig',
+            params: {
+              appId: appId
+            }
+          })
+        }
       },
       loadExternalJs() {
         if (this.$api.APP_ID == "11" || this.$api.APP_ID == "12") {
@@ -201,7 +241,7 @@
       loadMonitorJS() {
         console.log("loadMonitorJS Enter")
         let id = '';
-        switch(this.$api.APP_ID) {
+        switch (this.$api.APP_ID) {
           case '08':
             id = 'b4c5eb949e4363a0438053b58ed73643'
             break;
@@ -230,18 +270,18 @@
             break;
         }
         //console.log("loadMonitorJS:"+id)
-        if(id.length > 0) {
-          setTimeout(()=>{
+        if (id.length > 0) {
+          setTimeout(() => {
             var _hmt = _hmt || [];
-            window._hmt = _hmt; 
-            (function() {
+            window._hmt = _hmt;
+            (function () {
               var hm = document.createElement("script");
-              hm.src = "https://hm.baidu.com/hm.js?"+id;
-              var s = document.getElementsByTagName("script")[0]; 
+              hm.src = "https://hm.baidu.com/hm.js?" + id;
+              var s = document.getElementsByTagName("script")[0];
               s.parentNode.insertBefore(hm, s);
             })();
             console.log("loadMonitorJS complete")
-          },0);  
+          }, 0);
         }
       },
 
@@ -391,10 +431,10 @@
           let ret = await this.getInitCode()
           let initCode = ret.data.data.initCode
           if (!initCode) {
-           that.configured = true
+            that.configured = true
             return
           }
-            
+
           ls.config({
             debug: false, // 是否开启调试模式 , 调用的所有 api 的返回值会 在客户端 alert 出来
             appId: this.$api.T_APP_ID, // 在统一 APP 开放平台服务器申请的 appId

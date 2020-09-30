@@ -588,7 +588,6 @@
         this.$log("start loading cartlist number ....")
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
-          let that = this
           let options = {
             "openId": user.userId,
             "pageNo": 1,
