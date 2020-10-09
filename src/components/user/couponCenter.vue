@@ -23,7 +23,7 @@
                     <div class="coupon coupon-white" v-for="(k,i) in item.list" :key="i">
                       <div class="coupon-main">
                         <div class="coupon-img">
-                          <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+                          <img :src="k.imageUrl.length?k.imageUrl: couponImg" alt="">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
                           <div class="coupon-price">
@@ -35,12 +35,6 @@
                           <div class="coupon-expire-date">
                             {{formatEffectiveDateTime(k.effectiveStartDate,k.effectiveEndDate)}}
                           </div>
-<!--                          <div class="coupon-progress">
-                            <van-progress
-                              color="#f44"
-                              :percentage=formateReleasePercentage(k)
-                            />
-                          </div>-->
                         </div>
                       </div>
                       <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
@@ -74,7 +68,7 @@
             </van-tabs>
           </div>
           <div class="noCoupon" v-else>
-            <img :src="icon_noCoupon">
+            <img :src="icon_noCoupon" alt="">
             <span class="noCoupon_line1">很遗憾</span>
             <span class="noCoupon_line2">暂时还没有可领取优惠券</span>
           </div>

@@ -1,6 +1,6 @@
 <template lang="html">
   <section class="imgMap">
-    <img :src="this.datas.settings.imageUrl" :usemap=mapName :ref="this.datas.settings.imageKey" @load="imgload">
+    <img :src="this.datas.settings.imageUrl" :usemap=mapName :ref="this.datas.settings.imageKey" @load="imgload" alt="">
     <map :name="this.datas.settings.imageKey">
       <div v-for="(k,index) in this.datas.list" :key="index">
           <area shape="rect" :coords=getCoords(k) @click="onClick(k)" alt="Sun">
@@ -49,24 +49,6 @@
         this.$router.push({path:"/detail",query:{
             mpu:mpu
           }});
-/*        try {
-          //获取goods信息，update current googds
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
-
-        }*/
       },
       imgload(){
         this.$log(this.datas.settings.imageKey)

@@ -4,7 +4,7 @@
       <div class="section0-list">
         <ul>
           <li v-for="(k,index) in datas.list.slice(0,this.lineNume)" :key="index" @click="onClick(k.targetUrl)" :style="{'width': listWidth}">
-            <img v-lazy="k.imageUrl">
+            <img v-lazy="k.imageUrl" alt="">
             <h2 :style="isDeepColor(cardBgClr)? 'color:white':'color:blank'">
               {{k.name}}
             </h2>
@@ -14,7 +14,7 @@
       <div class="section1-list" v-if="datas.list.length > this.lineNume">
         <ul>
           <li v-for="(k,index) in datas.list.slice(this.lineNume,datas.list.length)" :key="index" @click="onClick(k.targetUrl)" :style="{'width':listWidth}">
-            <img v-lazy="k.imageUrl">
+            <img v-lazy="k.imageUrl" alt="">
             <h2 :style="isDeepColor(cardBgClr)? 'color:white':'color:blank'">
               {{k.name}}
             </h2>
@@ -38,14 +38,12 @@
     created() {
       this.$log(this.datas)
       if(this.datas.list.length > 8) {
-          this.listWidth =  '20%',
+          this.listWidth =  '20%'
           this.lineNume = 5
       } else {
-          this.listWidth =  '25%',
+          this.listWidth =  '25%'
           this.lineNume = 4
       }
-/*      this.$log(this.lineNume)
-      this.$log(this.listWidth)*/
     },
     methods: {
       See(e) {
@@ -63,10 +61,7 @@
           b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
         }
         let grayLevel  =  b[20] * 0.299 +  b[21] * 0.587 +  b[22]* 0.114
-        if(grayLevel >= 192)
-          return false
-        else
-          return true;
+        return (grayLevel >= 192)? false : true 
       },
       gotoPromotionPage(promotionId) {
         this.$router.push({path: '/category/goods/promotion/' + promotionId});
@@ -75,23 +70,6 @@
         this.$router.push({path:"/detail",query:{
             mpu:mpu
           }});
-/*        try {
-          //获取goods信息，update current googds
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
-        }*/
       },
       onClick(targetId) {
         if (targetId.startsWith("aggregation://")) {

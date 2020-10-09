@@ -9,7 +9,7 @@
           <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i">
             <div class="coupon-main">
               <div class="coupon-img">
-                <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+                <img :src="k.imageUrl.length?k.imageUrl: couponImg" alt="">
               </div>
               <div class="coupon-info coupon-hole coupon-info-right-dashed">
                 <div class="coupon-price">
@@ -50,7 +50,7 @@
         </div>
         <div v-else>
           <div class="noContext">
-            <img :src="icon_noContext">
+            <img :src="icon_noContext" alt="">
             <span class="noContext_line1">亲，礼包还是空的!</span>
           </div>
         </div>

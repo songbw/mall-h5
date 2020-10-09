@@ -52,7 +52,7 @@
               </div>
             </div>
             <div v-else  class="noCoupon">
-                <img :src="icon_noCoupon">
+                <img :src="icon_noCoupon" alt="">
                 <span class="noCoupon_line1">还没有发布优惠券</span>
             </div>
           </div>

@@ -35,7 +35,7 @@
           </div>
         </van-cell>
         <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
-          <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
+          <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl()" alt="">
         </div>
       </div>
       <div class="listBox" :style="getListStyle()">

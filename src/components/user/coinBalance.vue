@@ -7,7 +7,7 @@
       <div class="box"></div>
       <div class="balanceAmountBox" >
         <div class="infoBox" style="z-index: 1">
-          <img :src="icon_coin_amount">
+          <img :src="icon_coin_amount" alt="">
           <span>我的余额</span>
           <div class="amountInfo">
             <p v-if="this.amountLoaded == -1" style="font-size: medium;margin: 10px">查询中...</p>
@@ -42,7 +42,7 @@
             </div>
             <div v-else-if="finished">
               <div class="noContext">
-                <img :src="icon_noContext">
+                <img :src="icon_noContext" alt="">
                 <span class="noContext_line1">亲，还没有消费记录!</span>
               </div>
             </div>
@@ -124,7 +124,6 @@
                   response.data.data.list.forEach(item => {
                     this.list.push(item);
                   })
-                  this.$log("#################")
                   this.$log(this.list);
                   this.$log(this.total)
                   this.loading = false;

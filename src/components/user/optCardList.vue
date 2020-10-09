@@ -9,7 +9,7 @@
           <div v-for="(k,index) in optCardList" :key="index" class="optCard">
             <div class="cardMain">
               <van-col span="8" class="cardImg">
-                <img :src="icon_optCardsReal">
+                <img :src="icon_optCardsReal" alt="">
               </van-col>
               <van-col span="16" class="cardInfo">
                 <span>卡号: {{k.cardnum}}</span>

@@ -28,14 +28,9 @@
                   <van-cell clickable :key="index" @click="couponItemClick(item)">
                     <div slot="default" class="couponBox">
                       <van-col span="8" class="couponImage">
-                        <img v-lazy="item.imageUrl.length?item.imageUrl: couponImg">
+                        <img v-lazy="item.imageUrl.length?item.imageUrl: couponImg" alt="">
                       </van-col>
                       <van-col span="16" class="couponInfo">
-                        <!--                         <span
-                          v-if="item.rules.couponRules.type !=2 && formateCouponPrice(item.rules.couponRules).length > 0"
-                          style="margin-right: -7px">￥</span>
-                        {{formateCouponPrice(item.rules.couponRules)}}
-                        <span>{{formateCouponDetail(item.rules.couponRules)}}</span> -->
                         <div class="coupon-price">
                           <span v-if="item.rules.couponRules.type == 4">
                             {{item.name}}

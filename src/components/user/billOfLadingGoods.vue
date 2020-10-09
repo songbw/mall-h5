@@ -8,7 +8,7 @@
         <div class="goodsCard" @click="onClickGoods(k)">
           <div class="card-layout">
             <van-col span="8" class="cardImg">
-              <img v-lazy="k.image">
+              <img v-lazy="k.image" alt="">
             </van-col>
             <van-col span="16" class="cardInfo">
               <div class="cardTitle">

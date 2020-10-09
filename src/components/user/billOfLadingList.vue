@@ -29,8 +29,8 @@
                     </van-col>
                     <van-col span="5">
                       <div class="action">
-                        <img v-if="k.status == 6" :src="cardUsed">
-                        <img v-else-if="k.status == 7" :src="cardOvertime">
+                        <img v-if="k.status == 6" :src="cardUsed" alt="">
+                        <img v-else-if="k.status == 7" :src="cardOvertime" alt="">
                         <van-button v-else size="mini" type="danger" round :disabled="k.status == 5"
                           @click="onUseBtnClick(k)">
                           立即使用</van-button>
@@ -47,7 +47,7 @@
             </div>
           </div>
           <div class="emptyBox" v-if="currentCardList.length == 0">
-            <img :src=empty_bg>
+            <img :src=empty_bg alt="">
             <span>您还没有相关记录</span>
           </div>
         </van-tab>

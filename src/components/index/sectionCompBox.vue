@@ -5,7 +5,7 @@
         <div v-if="datas.settings.left.textValue.length" @click="gotoLeftTargetUrl()" class="boxTitle">
           <div slot="title" class="titleText">
             <span>
-               {{datas.settings.left.textValue}}
+              {{datas.settings.left.textValue}}
             </span>
           </div>
           <div v-if="datas.settings.left.hasPromotionActivity && left.PromotionStatus != -1" class="titleDetail">
@@ -23,17 +23,9 @@
             </div>
             <div v-else style="margin-top: 2px;float: right;margin-right: 2px">
               <v-countdown v-if="left.PromotionStatus  < 5 && left.PromotionStartTime != 0 && left.PromotionEndTime !=0"
-                           class="countdownBox"
-                           @start_callback="countDownS_cb"
-                           @end_callback="countDownE_cb"
-                           :startTime="left.PromotionStartTime"
-                           :endTime="left.PromotionEndTime"
-                           :secondsTxt="''"
-                           tipText=""
-                           tipTextEnd=""
-                           backgroundColor="#FF4444"
-                           textColor="#FFFFFF"
-                           style="font-size:10%;;font-weight: lighter">
+                class="countdownBox" @start_callback="countDownS_cb" @end_callback="countDownE_cb"
+                :startTime="left.PromotionStartTime" :endTime="left.PromotionEndTime" :secondsTxt="''" tipText=""
+                tipTextEnd="" backgroundColor="#FF4444" textColor="#FFFFFF" style="font-size:10%;;font-weight: lighter">
               </v-countdown>
               <div class="promotionStatusText" v-if="left.PromotionStatus  === 5">
                 <span>已结束</span>
@@ -42,12 +34,12 @@
           </div>
         </div>
         <div class="sectionSlide-banner" v-if="datas.settings.left.hasImage">
-          <img v-lazy="datas.settings.left.imageUrl" @click="gotoLeftTargetUrl() ">
+          <img v-lazy="datas.settings.left.imageUrl" @click="gotoLeftTargetUrl()" alt="">
         </div>
         <div>
           <ul class="sectionGoods-list2">
             <li v-for="(k,index) in left.list" @click="onGoodsClick(k)" :key="index">
-              <img v-lazy="k.imagePath || k.image">
+              <img v-lazy="k.imagePath || k.image" alt="">
               <div class="goodsFooter">
                 <div v-if="k.discount != undefined">
                   <div class="goodsPriceBox">
@@ -82,7 +74,7 @@
         <div v-if="datas.settings.right.textValue.length" @click="gotoRightTargetUrl()" class="boxTitle">
           <div slot="title" class="titleText">
             <span>
-               {{datas.settings.right.textValue}}
+              {{datas.settings.right.textValue}}
             </span>
           </div>
           <div v-if="datas.settings.right.hasPromotionActivity && right.PromotionStatus != -1" class="titleDetail">
@@ -98,33 +90,15 @@
                 <span>{{right.msTime.seconds}}</span>
               </div>
             </div>
-<!--            <div v-else style="margin-top: 2px;float: right;margin-right: 2px">
-              <v-countdown v-if="right.PromotionStatus < 5 && right.PromotionStartTime != 0 && right.PromotionEndTime !=0"
-                           class="countdownBox"
-                           @start_callback="countDownS_cb"
-                           @end_callback="countDownE_cb"
-                           :startTime="right.PromotionStartTime"
-                           :endTime="right.PromotionEndTime"
-                           :secondsTxt="''"
-                           tipText=""
-                           tipTextEnd=""
-                           backgroundColor="#FF4444"
-                           textColor="#FFFFFF"
-                           style="font-size:10%;;font-weight: lighter">
-              </v-countdown>
-              <div class="promotionStatusText" v-if="right.PromotionStatus === 5">
-                <span>已结束</span>
-              </div>
-            </div>-->
           </div>
         </div>
         <div class="sectionSlide-banner" v-if="datas.settings.right.hasImage">
-          <img v-lazy="datas.settings.right.imageUrl" @click="gotoLeftTargetUrl() ">
+          <img v-lazy="datas.settings.right.imageUrl" @click="gotoLeftTargetUrl()" alt="">
         </div>
         <div>
           <ul class="sectionGoods-list2">
             <li v-for="(k,index) in right.list" @click="onGoodsClick(k)" :key="index">
-              <img v-lazy="k.imagePath || k.image">
+              <img v-lazy="k.imagePath || k.image" alt="">
               <div class="goodsFooter">
                 <div v-if="k.discount != undefined">
                   <div class="goodsPriceBox">
@@ -170,7 +144,7 @@
 
     computed: {
       show() {
-        this.$log("left show:"+this.left.show+",right show:"+this.right.show)
+        this.$log("left show:" + this.left.show + ",right show:" + this.right.show)
         return this.left.show && this.right.show
       },
       leftIsDailySchedule() {
@@ -305,33 +279,20 @@
         this.$log("onGoodsClick Enter")
         this.$log(goods)
         let mpu = goods.mpu
-        if(mpu == null) {
+        if (mpu == null) {
           mpu = goods.skuid;
         }
-        this.$router.push({path:"/detail",query:{
-            mpu:mpu
-          }});
-/*        try {
-          //获取goods信息，update current googds
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.push("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
-
-        }*/
+        this.$router.push({
+          path: "/detail",
+          query: {
+            mpu: mpu
+          }
+        });
       },
       gotoPromotionPage(promotionId) {
-        this.$router.push({path: '/category/goods/promotion/' + promotionId});
+        this.$router.push({
+          path: '/category/goods/promotion/' + promotionId
+        });
       },
       See(e) {
         window.location.href = e
@@ -345,34 +306,37 @@
         this.$log(this.datas.settings.left)
         if (targetId.startsWith("aggregation://")) {
           let id = targetId.substr(14);
-          this.$router.push({path: '/index/' + id});
+          this.$router.push({
+            path: '/index/' + id
+          });
         } else if (targetId.startsWith("route://")) {
           let target = targetId.substr(8);
           let paths = target.split("/");
           this.$log(paths);
           if (paths[0] === 'category') {
-            this.$router.push({path: '/category'})
+            this.$router.push({
+              path: '/category'
+            })
           } else if (paths[0] === 'coupon_center') {
-            this.$router.push({path: '/user/couponCenter'})
+            this.$router.push({
+              path: '/user/couponCenter'
+            })
           } else if (paths[0] === 'commodity') {
             try {
               if (paths[1] != null)
                 this.gotoGoodsPage(paths[1]);
-            } catch (e) {
-            }
+            } catch (e) {}
           } else if (paths[0] === 'promotion') {
             try {
               if (paths[1] != null) {
                 this.gotoPromotionPage(this.left.promotionActivityId)
               }
-            } catch (e) {
-            }
+            } catch (e) {}
           }
-        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+        } else if (targetId.startsWith("https://") || targetId.startsWith("http://")) {
           this.See(targetId);
         } else {
-          if(this.left.isDailySchedule && this.left.promotionActivityId != undefined)
-          {
+          if (this.left.isDailySchedule && this.left.promotionActivityId != undefined) {
             this.gotoPromotionPage(this.left.promotionActivityId)
           }
         }
@@ -382,34 +346,37 @@
         this.$log(this.datas.settings.right)
         if (targetId.startsWith("aggregation://")) {
           let id = targetId.substr(14);
-          this.$router.push({path: '/index/' + id});
+          this.$router.push({
+            path: '/index/' + id
+          });
         } else if (targetId.startsWith("route://")) {
           let target = targetId.substr(8);
           let paths = target.split("/");
           this.$log(paths);
           if (paths[0] === 'category') {
-            this.$router.push({path: '/category'})
+            this.$router.push({
+              path: '/category'
+            })
           } else if (paths[0] === 'coupon_center') {
-            this.$router.push({path: '/user/couponCenter'})
+            this.$router.push({
+              path: '/user/couponCenter'
+            })
           } else if (paths[0] === 'commodity') {
             try {
               if (paths[1] != null)
                 this.gotoGoodsPage(paths[1]);
-            } catch (e) {
-            }
+            } catch (e) {}
           } else if (paths[0] === 'promotion') {
             try {
               if (paths[1] != null) {
                 this.gotoPromotionPage(this.right.promotionActivityId)
               }
-            } catch (e) {
-            }
+            } catch (e) {}
           }
         } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
           this.See(targetId);
         } else {
-          if(this.right.isDailySchedule && this.right.promotionActivityId != undefined)
-          {
+          if (this.right.isDailySchedule && this.right.promotionActivityId != undefined) {
             this.gotoPromotionPage(this.right.promotionActivityId)
           }
         }
@@ -490,13 +457,13 @@
               }
             } else {
               if (currentTime > this.left.dailyScheduleInfo[this.left.dailyScheduleInfo.length - 1].starTime) {
-                this.left.dailyScheduleText = this.getClockString(this.left.dailyScheduleInfo[this.left.dailyScheduleInfo.length - 1].schedule)
+                this.left.dailyScheduleText = this.getClockString(this.left.dailyScheduleInfo[this.left
+                  .dailyScheduleInfo.length - 1].schedule)
                 this.updateLeftTimer(currentTime, this.left.dailyEndTime - 1)
                 if (this.left.msTime.show) {
                   this.left.dailyScheduleDetail = " 距结束 "
                 }
-              } else {
-              }
+              } else {}
             }
           }
         } else {
@@ -531,13 +498,13 @@
               }
             } else {
               if (currentTime > this.right.dailyScheduleInfo[this.right.dailyScheduleInfo.length - 1].starTime) {
-                this.right.dailyScheduleText = this.getClockString(this.right.dailyScheduleInfo[this.right.dailyScheduleInfo.length - 1].schedule)
+                this.right.dailyScheduleText = this.getClockString(this.right.dailyScheduleInfo[this.right
+                  .dailyScheduleInfo.length - 1].schedule)
                 this.updateRightTimer(currentTime, this.right.dailyEndTime - 1)
                 if (this.right.msTime.show) {
                   this.right.dailyScheduleDetail = " 距结束 "
                 }
-              } else {
-              }
+              } else {}
             }
           }
         } else {
@@ -546,7 +513,8 @@
       },
       updateLeftPromotionInfo() {
         this.left.targetUrl = this.datas.settings.left.targetUrl
-        if (this.datas.settings.left.promotionDailySchedule != undefined && this.datas.settings.left.promotionDailySchedule) {
+        if (this.datas.settings.left.promotionDailySchedule != undefined && this.datas.settings.left
+          .promotionDailySchedule) {
           let that = this
           this.$api.xapi({
             method: 'get',
@@ -564,12 +532,13 @@
               this.$log(detail.dailySchedule)
               if (detail.dailySchedule != undefined) {
                 this.left.isDailySchedule = detail.dailySchedule
-                this.left.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+                this.left.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss'))
+                  .getTime()
               }
               if (this.left.isDailySchedule) {
                 this.left.targetUrl = "route://promotion/" + this.left.promotionActivityId
                 this.left.list = [];
-                if(detail.promotionSkus != null)  {
+                if (detail.promotionSkus != null) {
                   detail.promotionSkus.forEach(item => {
                     let product = {
                       brand: item.brand,
@@ -623,7 +592,7 @@
                 this.left.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
                 this.left.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
                 this.left.PromotionStatus = detail.status;
-                if(detail.promotionSkus != null)  {
+                if (detail.promotionSkus != null) {
                   this.left.list = [];
                   detail.promotionSkus.forEach(item => {
                     let product = {
@@ -652,7 +621,7 @@
               that.left.show = false;
             })
           } else {
-            if(this.left.list.length > 0) {
+            if (this.left.list.length > 0) {
               this.left.show = true;
             }
           }
@@ -660,7 +629,8 @@
       },
       updateRightPromotionInfo() {
         this.right.targetUrl = this.datas.settings.right.targetUrl
-        if (this.datas.settings.right.promotionDailySchedule != undefined && this.datas.settings.right.promotionDailySchedule) {
+        if (this.datas.settings.right.promotionDailySchedule != undefined && this.datas.settings.right
+          .promotionDailySchedule) {
           let that = this
           this.$api.xapi({
             method: 'get',
@@ -678,12 +648,13 @@
               this.$log(detail.dailySchedule)
               if (detail.dailySchedule != undefined) {
                 this.right.isDailySchedule = detail.dailySchedule
-                this.right.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss')).getTime()
+                this.right.dailyEndTime = new Date(this.$moment(detail.endDate).format('YYYY/MM/DD HH:mm:ss'))
+                  .getTime()
               }
               if (this.right.isDailySchedule) {
                 this.right.targetUrl = "route://promotion/" + this.right.promotionActivityId
                 this.right.list = [];
-                if(detail.promotionSkus != null)  {
+                if (detail.promotionSkus != null) {
                   detail.promotionSkus.forEach(item => {
                     let product = {
                       brand: item.brand,
@@ -737,7 +708,7 @@
                 this.right.PromotionStartTime = new Date(detail.startDate.replace(/-/g, '/')).getTime()
                 this.right.PromotionEndTime = new Date(detail.endDate.replace(/-/g, '/')).getTime()
                 this.right.PromotionStatus = detail.status;
-                if(detail.promotionSkus != null)  {
+                if (detail.promotionSkus != null) {
                   this.right.list = [];
                   detail.promotionSkus.forEach(item => {
                     let product = {
@@ -766,7 +737,7 @@
               that.right.show = false;
             })
           } else {
-            if(this.right.list.length > 0) {
+            if (this.right.list.length > 0) {
               this.right.show = true;
             }
           }
@@ -774,6 +745,7 @@
       },
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -831,11 +803,13 @@
 
       }
     }
-    .promotionStatusText{
-      .fz(font-size,10)
+
+    .promotionStatusText {
+      .fz(font-size, 10)
     }
-    .countdownStyle{
-       .fz(font-size,10)
+
+    .countdownStyle {
+      .fz(font-size, 10)
     }
 
 
@@ -852,6 +826,7 @@
     .left {
       width: 50%;
       height: 100%;
+
       .sectionGoods-list2 {
         width: 100%;
         display: -ms-flex;
@@ -878,6 +853,7 @@
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
           }
+
           .goodsFooter {
             display: flex;
             flex-direction: column;
@@ -890,7 +866,8 @@
 
             .goodsPriceBox {
               color: #ff4444;
-              > span {
+
+              >span {
                 display: inline-block;
                 align-content: center;
                 overflow: hidden;
@@ -908,7 +885,8 @@
               color: #8c8c8c;
               text-decoration: line-through;
               .fz(font-size, 28);
-              > span {
+
+              >span {
                 display: inline-block;
                 align-content: center;
                 overflow: hidden;
@@ -928,6 +906,7 @@
       width: 50%;
       height: 100%;
       border-left: 1px solid #f0f0f0;
+
       .sectionGoods-list2 {
         width: 100%;
         display: -ms-flex;
@@ -954,6 +933,7 @@
             border-top-left-radius: 10px;
             border-top-right-radius: 10px;
           }
+
           .goodsFooter {
             display: flex;
             flex-direction: column;
@@ -966,7 +946,8 @@
 
             .goodsPriceBox {
               color: #ff4444;
-              > span {
+
+              >span {
                 display: inline-block;
                 align-content: center;
                 overflow: hidden;
@@ -984,7 +965,8 @@
               color: #8c8c8c;
               text-decoration: line-through;
               .fz(font-size, 28);
-              > span {
+
+              >span {
                 display: inline-block;
                 align-content: center;
                 overflow: hidden;

@@ -19,7 +19,7 @@
               </div>
             </div>
             <div v-else class="noContext">
-                <img :src="icon_noContext">
+                <img :src="icon_noContext" alt="">
                 <span class="noContext_line1">还没有消费记录</span>
             </div>
           </van-tab>
@@ -36,7 +36,7 @@
               </div>
             </div>
             <div v-else class="noContext">
-              <img :src="icon_noContext">
+              <img :src="icon_noContext" alt="">
               <span class="noContext_line1">还没有退款记录</span>
             </div>
           </van-tab>

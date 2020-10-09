@@ -9,7 +9,7 @@
           <div v-for="(k,index) in bankcardList" :key="index" class="bankCard">
             <div class="cardMain">
               <div class="cardTitle">
-                <img :src="icon_ic_chip">
+                <img :src="icon_ic_chip" alt="">
                 <span>{{getBankNameByAccountId(k.accountId)}}</span>
                 <van-icon  style="float: right" name="delete" @click="onDeleteCardBtnClick(k,index)"></van-icon>
               </div>

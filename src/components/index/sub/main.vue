@@ -217,7 +217,8 @@
     created() {
       this.showHeader = this.$api.HAS_HEADER;
       //this.wechatShareConfig()
-      if (this.$api.APP_ID == '01') {
+      // if (this.$api.APP_ID == '01') {
+      if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  //凤巢公众号
         let code = this.$route.query.code;
         if (code != undefined) {
           this.thirdPartyLogin(code)
@@ -265,7 +266,8 @@
         let that = this;
         let url = ""
         let params = null
-        if (this.$api.APP_ID == '01') {
+        //if (this.$api.APP_ID == '01') {
+        if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  //凤巢公众号
           url = '/sso/thirdParty/token/wx';
           params = {
             iAppId: this.$api.APP_ID,
@@ -334,7 +336,8 @@
       },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if (this.$api.APP_ID === '01') {
+        //if (this.$api.APP_ID === '01') {
+        if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  //凤巢公众号
           try {
             configWechat(this, () => {
               wx.hideOptionMenu()

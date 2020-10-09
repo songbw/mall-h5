@@ -13,11 +13,6 @@
             <img :src="(user.headImg !=null && user.headImg.length > 0) ? user.headImg : avatarDefaultImg">
           </div>
         </van-cell>
-<!--        <van-cell title="用户ID" v-if="user.openId != null">
-          <div slot="label">
-            <span>{{user.openId}}</span>
-          </div>
-        </van-cell>-->
         <van-cell title="手机号" :value=user.telephone></van-cell>
         <van-cell title="昵称" :value=user.nickname isLink="true" @click="onNickNameClick()"></van-cell>
         <van-dialog
@@ -34,22 +29,6 @@
             clearable
           />
         </van-dialog>
-
-        <!--<van-dialog
-          v-model="telDlgShow"
-          maxlength="30"
-          title="修改手机号"
-          show-cancel-button="true"
-          :beforeClose="beforeCloseTelDialog"
-        >
-          <van-field
-            v-model="inputTel"
-            type="tel"
-            rows="1"
-            placeholder="请输入您的电话号码"
-            clearable>
-          </van-field>
-        </van-dialog>-->
         <van-cell title="性别" :value=user.sex isLink="true" @click="onSexClick()"></van-cell>
         <van-dialog
           v-model="sexDlgShow"
@@ -80,7 +59,6 @@
 
       </van-cell-group>
     </div>
-
   </section>
 </template>
 

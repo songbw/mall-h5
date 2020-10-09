@@ -1,9 +1,4 @@
 <template>
-  <!--   <section
-    :style="{'margin-left':datas.settings.marginX+'px',
-    'margin-right':datas.settings.marginX+'px',
-    'margin-bottom': datas.settings.marginBottom+'px',
-    'background-color':mBackgroundColor}"> -->
   <section :style="getBoxStyle()">
     <div class="wrap">
       <div class='box' :style="{'background-color': decorateBgColor}">
@@ -22,7 +17,7 @@
           </div>
         </van-cell>
         <div class="sectionSlide-banner" v-if="datas.settings.title.hasImage">
-          <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl() ">
+          <img v-lazy="datas.settings.title.imageUrl" @click="gotoTargetUrl()" alt="">
         </div>
       </div>
       <div class="listBox" :style="getListStyle()">
@@ -51,8 +46,6 @@
 
 <script>
   import CountDown from '@/common/_vue2-countdown.vue'
-  // import style
-  //import 'swiper/css/swiper.css'
   import 'swiper/swiper-bundle.css'
   import {
     swiper,
@@ -134,10 +127,7 @@
           b[20 + x] = b[3].indexOf(b[1]) * 16 + b[3].indexOf(b[2])
         }
         let grayLevel = b[20] * 0.299 + b[21] * 0.587 + b[22] * 0.114
-        if (grayLevel >= 192)
-          return false
-        else
-          return true;
+        return (grayLevel >= 192)? false : true
       },
 
       updateCurrentGoods(goods) {
@@ -193,7 +183,7 @@
               }
             } catch (e) {}
           }
-        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+        } else if (targetId.startsWith("https://") || targetId.startsWith("http://")) {
           this.See(targetId);
         } else {
           if (this.promotionActivityId != undefined && this.isDailySchedule) {

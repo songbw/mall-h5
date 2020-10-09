@@ -66,8 +66,6 @@
   import Baseline from '@/common/_baseline.vue'
   import Footer from '@/common/_footer.vue'
 
-  import Util from '@/util/common'
-
   export default {
     components: {
       'v-header': Header,

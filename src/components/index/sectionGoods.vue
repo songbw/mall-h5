@@ -15,7 +15,7 @@
                   <div class="goodsCard" @click="onGoodsClick(k)">
                     <div class="card-layout">
                       <van-col span="8" class="cardImg">
-                        <img v-lazy="k.imagePath || k.image">
+                        <img v-lazy="k.imagePath || k.image" alt="">
                       </van-col>
                       <van-col span="16" class="cardInfo">
                         <div class="cardTitle">
@@ -41,9 +41,6 @@
                               {{(k.discount != undefined?parseFloat(k.discount).toFixed(2):k.price)}}
                             </p>
                           </div>
-<!--                           <div class="goodsBuyBox">
-                            <van-button size="mini" @click.stop="" @click="onAdd2carBtnClick(k)"></van-button>
-                          </div> -->
                         </div>
                       </van-col>
                     </div>
@@ -52,7 +49,7 @@
               </div>
               <li v-else v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
                 <div class="upperLayout">
-                  <img v-lazy="k.imagePath || k.image">
+                  <img v-lazy="k.imagePath || k.image" alt="">
                   <div class="goodsComment">
                     <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
                   </div>
@@ -92,7 +89,7 @@
             <div v-if="datas.settings.showFloorTitle" @click="onGoodsTitleClick(category)">
               <div class="sectionGoods-titleImg"
                 v-if="category.titleImageUrl != undefined && category.titleImageUrl.length > 0">
-                <img v-lazy="category.titleImageUrl">
+                <img v-lazy="category.titleImageUrl" alt="">
               </div>
               <div v-else class="sectionGoods-title" :style="{'background-color':datas.settings.floorTitleColor}">
                 <span
@@ -109,7 +106,7 @@
                     <div class="goodsCard" @click="onGoodsClick(k)">
                       <div class="card-layout">
                         <van-col span="8" class="cardImg">
-                          <img v-lazy="k.imagePath || k.image">
+                          <img v-lazy="k.imagePath || k.image" alt="">
                         </van-col>
                         <van-col span="16" class="cardInfo">
                           <div class="cardTitle">
@@ -143,7 +140,7 @@
                 </div>
                 <li v-else v-for="(k,index) in category.skus" @click="onGoodsClick(k)" :key="index">
                   <div class="upperLayout">
-                    <img v-lazy="k.imagePath || k.image">
+                    <img v-lazy="k.imagePath || k.image" alt="">
                     <div class="goodsComment">
                       <p>{{(k.intro != undefined && k.intro.length > 0)? k.intro : k.name}}</p>
                     </div>
@@ -285,13 +282,11 @@
             } else if (paths[0] === 'promotion') {
               try {
                 if (paths[1] != null) {
-                  //this.gotoGoodsPage(paths[1]);
-                  //this.$log("promotion:"+paths[1])
                   this.gotoPromotionPage(paths[1]);
                 }
               } catch (e) {}
             }
-          } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+          } else if (targetId.startsWith("https://") || targetId.startsWith("http://")) {
             this.See(targetId);
           }
         } catch (e) {}
@@ -373,24 +368,6 @@
             mpu: mpu
           }
         });
-        /*        try {
-                  //获取goods信息，update current googds
-                  this.$api.xapi({
-                    method: 'get',
-                    baseURL: this.$api.PRODUCT_BASE_URL,
-                    url: '/prod',
-                    params: {
-                      mpu: mpu,
-                    }
-                  }).then((res) => {
-                    this.updateCurrentGoods(res.data.data.result);
-                    this.$router.push("/detail");
-                  }).catch((error) => {
-                    console.log(error)
-                  })
-                } catch (e) {
-
-                }*/
       },
       onAdd2carBtnClick(goods) {
         let userInfo = this.$store.state.appconf.userInfo;

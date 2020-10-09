@@ -28,7 +28,7 @@
               <div class="goodsCard" @click="onGoodCardClick(k)">
                 <div class="card-layout">
                   <van-col span="8" class="cardImg">
-                    <img v-lazy="k.image">
+                    <img v-lazy="k.image" alt="">
                   </van-col>
                   <van-col span="16" class="cardInfo">
                     <div class="promotionBox" v-if="k.promotion!= undefined &&  k.promotionState != -1">
@@ -130,7 +130,6 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
-          this.$log("##########################")
           cartList.forEach(item => {
             this.$log(item)
             if (item.baseInfo.userId == user.userId) {
@@ -142,7 +141,6 @@
                 }
               }
               if (found != -1) {
-                this.$log("@@@@@@@@@@@@@@@@@@@@@@@@@@")
                 if (item.baseInfo.choosed)
                   payAmount += item.goodsInfo.dprice * item.baseInfo.count
               }

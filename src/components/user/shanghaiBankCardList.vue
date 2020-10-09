@@ -7,7 +7,7 @@
       <div v-if="launchedLoaded">
         <div class="bankCardBind"  v-if="!hasBindedCard">
           <div class="bindBankTitle">
-            <img :src="icon_color_card">
+            <img :src="icon_color_card" alt="">
             <span class="bindBankText">请输入银行卡信息</span>
           </div>
           <van-field

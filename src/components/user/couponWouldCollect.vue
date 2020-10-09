@@ -9,7 +9,7 @@
           <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i">
             <div class="coupon-main">
               <div class="coupon-img">
-                <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+                <img :src="k.imageUrl.length?k.imageUrl: couponImg" alt="">
               </div>
               <div class="coupon-info coupon-hole coupon-info-right-dashed">
                 <div class="coupon-price">
@@ -23,25 +23,17 @@
                 </div>
               </div>
             </div>
-            <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already"
-                 @click="onConponUseClick(k,i)">
+            <div v-if="isCouponUptoLimited(k,i)" class="coupon-get  coupon-get-already" @click="onConponUseClick(k,i)">
               <div>
-                        <span class="coupon-action" style="margin-top:50px;"
-                              v-if="k.url != undefined && k.url.length > 0">立即使用</span>
+                <span class="coupon-action" style="margin-top:50px;"
+                  v-if="k.url != undefined && k.url.length > 0">立即使用</span>
               </div>
             </div>
             <div v-else class="coupon-get" @click="onConponCollectClick(k,i)">
               <div>
-                <van-circle
-                  :value="formateReleasePercentage(k)"
-                  color="#FF4444"
-                  fill="#fff"
-                  size="55px"
-                  layer-color="#cccccc"
-                  :text="formateReleasePercentageText(k)"
-                  :rate="100"
-                  :speed="100"
-                  :stroke-width="50"/>
+                <van-circle :value="formateReleasePercentage(k)" color="#FF4444" fill="#fff" size="55px"
+                  layer-color="#cccccc" :text="formateReleasePercentageText(k)" :rate="100" :speed="100"
+                  :stroke-width="50" />
               </div>
               <div>
                 <span class="coupon-action" v-if="formateReleasePercentage(k) < 100" style="margin-top:5px;">立即领取</span>
@@ -80,7 +72,7 @@
     created() {
       this.showHeader = this.$api.HAS_HEADER;
       this.couponList = this.$route.params.grantCoupons;
-     // this.$log(this.couponList)
+      // this.$log(this.couponList)
     },
 
     methods: {
@@ -88,27 +80,12 @@
         window.location.href = e
       },
       gotoGoodsPage(mpu) {
-        this.$router.push({path:"/detail",query:{
-            mpu:mpu
-          }});
-/*        try {
-          //获取goods信息，update current googds
-          this.$api.xapi({
-            method: 'get',
-            baseURL: this.$api.PRODUCT_BASE_URL,
-            url: '/prod',
-            params: {
-              mpu: mpu,
-            }
-          }).then((res) => {
-            this.updateCurrentGoods(res.data.data.result);
-            this.$router.replace("/detail");
-          }).catch((error) => {
-            console.log(error)
-          })
-        } catch (e) {
-
-        }*/
+        this.$router.push({
+          path: "/detail",
+          query: {
+            mpu: mpu
+          }
+        });
       },
 
       isCouponUptoLimited(k, i) {
@@ -124,11 +101,11 @@
         let endTime = new Date(couponInfo.effectiveEndDate.replace(/-/g, '/')).getTime()
         let current = new Date().getTime()
         if (current < startTime) {
-          ret = "优惠券活动未开始"//券活动未开始
+          ret = "优惠券活动未开始" //券活动未开始
         } else if (current <= endTime) {
           ret = "success" //活动开始
         } else {
-          ret = "优惠券已无效"// 活动已经结束
+          ret = "优惠券已无效" // 活动已经结束
         }
         return ret
       },
@@ -140,19 +117,22 @@
           let url = couponInfo.url;
           if (url.startsWith("aggregation://")) {
             let id = url.substr(14);
-            this.$router.replace({path: '/index/' + id});
+            this.$router.replace({
+              path: '/index/' + id
+            });
           } else if (url.startsWith("route://")) {
             let target = url.substr(8);
             let paths = target.split("/");
             this.$log(paths);
             if (paths[0] === 'category') {
-              this.$router.replace({path: '/category'})
+              this.$router.replace({
+                path: '/category'
+              })
             } else if (paths[0] === 'commodity') {
               try {
                 if (paths[1] != null)
                   this.gotoGoodsPage(paths[1]);
-              } catch (e) {
-              }
+              } catch (e) {}
             } else if (paths[0] === 'listing') {
               switch (couponInfo.rules.scenario.type) {
                 case 1: {
@@ -164,11 +144,15 @@
                   return;
                 }
                 case 2: {
-                  this.$router.replace({path: "/category"});
+                  this.$router.replace({
+                    path: "/category"
+                  });
                   return
                 }
                 case 3: {
-                  this.$router.replace({path: "/category/" + couponInfo.rules.scenario.categories[0]});
+                  this.$router.replace({
+                    path: "/category/" + couponInfo.rules.scenario.categories[0]
+                  });
                   return
                 }
                 default: {
@@ -211,9 +195,9 @@
           }).then((response) => {
             let result = response.data.data;
             that.$log(result)
-           // that.$log(that.couponTypes[that.active].list[i])
-           // that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
-           // that.couponTypes[that.active].list[i].releaseNum++;
+            // that.$log(that.couponTypes[that.active].list[i])
+            // that.couponTypes[that.active].list[i].userCollectNum = result.couponCollectNum;
+            // that.couponTypes[that.active].list[i].releaseNum++;
             that.couponList[i].userCollectNum = result.couponCollectNum;
             that.couponList[i].releaseNum++;
             that.$log(that.couponList[i].userCollectNum)
@@ -225,13 +209,13 @@
       },
       formateCouponPrice(rules) {
         switch (rules.type) {
-          case 0://满减券
+          case 0: //满减券
             return rules.fullReduceCoupon.reducePrice.toFixed(2);
-          case 1://代金券
+          case 1: //代金券
             return rules.cashCoupon.amount.toFixed(2);
-          case 2://折扣券
+          case 2: //折扣券
             return rules.discountCoupon.discountRatio * 10 + ' 折';
-          case 3://服务券
+          case 3: //服务券
             this.$log(rules)
             return rules.serviceCoupon.price.toFixed(2)
           default:
@@ -254,18 +238,18 @@
 
       formateCouponDetail(rules) {
         switch (rules.type) {
-          case 0://满减券
+          case 0: //满减券
             return '满' + rules.fullReduceCoupon.fullPrice + '元可用';
-          case 1://代金券
+          case 1: //代金券
             return '代金券';
-          case 2://折扣券
+          case 2: //折扣券
             if (rules.discountCoupon.fullPrice > 0) {
               return '满' + rules.discountCoupon.fullPrice + '元可用';
             } else {
               return '折扣券 ';
             }
-          default:
-            return ""
+            default:
+              return ""
         }
       },
       formateReleasePercentage(coupon) {
@@ -285,10 +269,12 @@
         return '已领取' + percentage + '%';
       },
       formatEffectiveDateTime(effectiveStartDate, effectiveEndDate) {
-        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format('YYYY.MM.DD');
+        return this.$moment(effectiveStartDate).format('YYYY.MM.DD') + ' - ' + this.$moment(effectiveEndDate).format(
+          'YYYY.MM.DD');
       },
     }
   }
+
 </script>
 
 <style lang="less" scoped>
@@ -431,7 +417,8 @@
 
               /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
 
-              .coupon-hole::before, .coupon-hole::after {
+              .coupon-hole::before,
+              .coupon-hole::after {
                 content: '';
                 width: 1rem;
                 height: 1rem;
@@ -455,7 +442,7 @@
                 bottom: -.5rem;
               }
 
-              .coupon-info > div {
+              .coupon-info>div {
                 margin-bottom: .2rem;
               }
 
@@ -479,7 +466,7 @@
                 word-break: break-all;
               }
 
-              .coupon-price > span {
+              .coupon-price>span {
                 font-size: 60%;
                 margin-left: .5rem;
                 font-weight: normal;
@@ -562,7 +549,7 @@
               }
             }
 
-            .coupon-get > .coupon-desc {
+            .coupon-get>.coupon-desc {
               font-size: 150%;
               margin-bottom: .5rem;
               font-weight: bold;
@@ -582,7 +569,8 @@
 
           /* 左边框的波浪 */
 
-          .coupon-wave-left::before, .coupon-wave-right::after {
+          .coupon-wave-left::before,
+          .coupon-wave-right::after {
             content: '';
             position: absolute;
             top: 0;
@@ -603,126 +591,10 @@
           .coupon-wave-right::after {
             right: -7px;
           }
-
-
-          /*.coupon-item {
-            margin: 5px;
-          }
-
-          .coupon-item .nick {
-            color: #fff;
-          }
-
-          .coupon-item .validDate {
-            color: #fff;
-            .fz(font-size, 25);
-          }
-
-          .coupon-item .coupon-money {
-            width: 100%;
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: flex;
-            font-size: 1.2rem;
-            align-items: center;
-          }
-
-          .coupon-item .coupon-money em {
-            font-size: 3.8rem;
-          }
-
-          .coupon-item .coupon-money .lay:last-child {
-            flex: 1;
-            padding: 0 3%;
-            line-height: 1.66rem;
-          }
-
-          .couponStyle {
-            width: 100%;
-            height: 8rem;
-            position: relative;
-            margin: 5% 0;
-            display: -webkit-box;
-            display: -webkit-flex;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #fff;
-            border: 1px solid #E5004F;
-          }
-
-          .couponStyle .info-box {
-            -webkit-box: 1;
-            -webkit-flex: 1;
-            flex: 1;
-            padding: 0 2% 0 6%;
-            position: relative;
-          }
-
-          .couponStyle {
-            background-color: #FFAA00;
-            -webkit-border-radius: 1rem;
-            border-radius: 1rem;
-            border: none;
-            color: #fff;
-          }
-
-          .couponStyle .get-btn {
-            width: 28%;
-            height: 7rem;
-            position: relative;
-            -webkit-perspective: 180;
-            perspective: 180;
-          }
-
-          .couponStyle .get-btn:after {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: #F8B551;
-            transform: rotateY(-28deg);
-            z-index: 1;
-            -webkit-border-radius: .66rem;
-            border-radius: .66rem;
-            -webkit-box-shadow: -3px 0 8px #793030;
-            box-shadow: -3px 0 8px #793030;
-          }
-
-          .couponStyle .get-btn span {
-            width: 4rem;
-            word-break: break-all;
-            font-size: 1.8rem;
-            color: #454545;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            -webkit-transform: translate(-30%, -50%);
-            transform: translate(-30%, -50%);
-            z-index: 3;
-          }
-
-          !* 已领取 *!
-
-          .couponStyle.have, .couponStyle.have .get-btn:after, .style-six.have, .style-seven.have {
-            background-color: #c1c1c1;
-          }
-
-          .couponStyle.have .get-btn:after {
-            -webkit-box-shadow: -3px 0 8px #8c8c8c;
-            box-shadow: -3px 0 8px #8c8c8c;
-          }
-
-          .couponStyle.have .get-btn span {
-            width: 5rem;
-            font-size: 1.5rem;
-            color: #fff;
-          }*/
         }
 
       }
     }
   }
+
 </style>

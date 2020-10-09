@@ -13,7 +13,7 @@
           <van-tab v-for="(item,type) in couponTypes" :title=item.title :key="type">
             <div style="margin: .5rem;">
               <van-cell  icon="coupon-o"  is-link @click="onGrantCounponClick" v-if="avaliableGrantCouponNumber > 0 && active === 0">您有
-                <i style="color: #ff4444">{{avaliableGrantCouponNumber}}</i>张待领取的优惠券哦</van-cell>
+                <em style="color: #ff4444">{{avaliableGrantCouponNumber}}</em>张待领取的优惠券哦</van-cell>
             </div>
             <van-list v-model="item.loading"
                       :finished="item.finished"
@@ -26,25 +26,9 @@
                            class="coupon-main">
                         <div class="coupon-img">
                           <img
-                            :src="(k.couponInfo.imageUrl != undefined && k.couponInfo.imageUrl.length > 0)?k.couponInfo.imageUrl : couponImg">
+                            :src="(k.couponInfo.imageUrl != undefined && k.couponInfo.imageUrl.length > 0)?k.couponInfo.imageUrl : couponImg" alt="">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
-<!--                          <div class="coupon-suppler" v-if="type === 0">
-                            <div class="coupon-name">
-                              <i>{{k.couponInfo.name}}</i>
-                            </div>
-                            <div class="supply-name">
-                              <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                            </div>
-                          </div>-->
-<!--                          <div class="coupon-suppler-deactive" v-else>
-                            <div class="coupon-name">
-                              <i>{{k.couponInfo.name}}</i>
-                            </div>
-                            <div class="supply-name">
-                              <span>{{k.couponInfo.supplierMerchantName !=null && k.couponInfo.supplierMerchantName.length > 0? k.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                            </div>
-                          </div>-->
                           <div v-if="k.type === 0">
                             <div class="coupon-price" v-if="type === 0" >
                               <span v-if="k.couponInfo.rules.couponRules.type != 2" style="margin-right: -7px">￥</span>
@@ -85,7 +69,7 @@
               </div>
               <div v-else>
                 <div v-if="launchedLoaded && !item.loading"  class="noCoupon">
-                  <img :src="icon_noCoupon">
+                  <img :src="icon_noCoupon" alt="">
                   <span class="noCoupon_line1">没有券?</span>
                   <span class="noCoupon_line2">去领券中心看看吧</span>
                 </div>
