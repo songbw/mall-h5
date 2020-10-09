@@ -73,7 +73,7 @@
           <li v-for="(k,index) in detail.promotionSkus" :key="index">
             <div class="goodsCard" @click="onGoodsClick(k)">
               <van-col span="8" class="cardImg">
-                <img v-lazy="k.image">
+                <img v-lazy="k.image" alt="">
               </van-col>
               <van-col span="16" class="cardInfo">
                 <div class="cardTitle">
@@ -101,7 +101,7 @@
     <div>
       <img :src="icon_shopCart"
            @click="gotoCart()"
-           style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;"/>
+           style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;" alt=""/>
     </div>
   </section>
 </template>

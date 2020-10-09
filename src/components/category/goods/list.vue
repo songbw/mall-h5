@@ -9,7 +9,7 @@
       </div>
       <div class="orderByPrice" @click="onPriceBtnClick">
         <span>按价格排序</span>
-        <img :src="icon_select_none">
+        <img :src="icon_select_none" alt="">
       </div>
     </div>
     <div class="box" :style="{'top':showHeader? '2.6em':'0px'}" v-else>
@@ -18,8 +18,8 @@
       </div>
       <div class="orderByPrice actived" @click="onPriceBtnClick">
         <span>按价格排序</span>
-        <img :src="icon_select_top" v-if="tagPrice === 0">
-        <img :src="icon_select_btm" v-else>
+        <img :src="icon_select_top" v-if="tagPrice === 0" alt="">
+        <img :src="icon_select_btm" alt="" v-else>
       </div>
     </div>
     <div class="productList" :style="{'padding-top':showHeader? '4em':'1.5em'}">
@@ -47,7 +47,7 @@
         </div>
         <div v-else>
           <div v-if="finished && !loading" class="noGoodsList">
-            <img :src="icon_empty_search">
+            <img :src="icon_empty_search" alt="">
             <span class="noGoodsList_text">暂无搜索结果...</span>
           </div>
         </div>
@@ -56,7 +56,7 @@
     </div>
     <div>
       <img :src="icon_shopCart" @click="gotoCart()"
-        style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;" />
+        style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;" alt=""/>
     </div>
   </div>
 </template>
@@ -114,7 +114,8 @@
       },
       reOrderList() {
         this.list.sort(function (a, b) {
-          if (this.$api.APP_ID == '10' || this.$api.APP_ID == '08') {
+          return 0
+/*           if (this.$api.APP_ID == '10' || this.$api.APP_ID == '08') {
             return 0
           } else {
             try {
@@ -128,7 +129,7 @@
             } catch (e) {
               return 0
             }
-          }
+          } */
         })
       },
       resetList() {

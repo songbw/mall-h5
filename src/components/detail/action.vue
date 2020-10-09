@@ -491,8 +491,7 @@
           case "11":
             return "无锡市民卡";
           default:
-            return "凤巢商城"
-
+            return this.$api.MALL_TITLE
         }
       },
       showMeqiaPanel() {

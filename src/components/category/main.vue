@@ -12,7 +12,7 @@
         <ul class="class3-list">
           <li v-for="(k,i) in item.subs" :key='i'>
             <router-link :to="{name:'商品列表页',query: {'category': k.categoryId.toString()}}">
-              <img v-lazy="k.categoryIcon">
+              <img v-lazy="k.categoryIcon" alt="">
             </router-link>
             <span>
             {{k.categoryName}}

@@ -1,11 +1,11 @@
 <template lang="html">
   <div class="swiper">
     <div class="shareBox" @click="onShareBtnClick" v-if="showShare">
-      <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_share.png">
+      <img src="https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_share.png"  alt="">
     </div>
     <van-swipe :autoplay="4000">
       <van-swipe-item v-for="(k,index) in swiperData" :key="index">
-        <img v-lazy="k.imgPath">
+        <img v-lazy="k.imgPath" alt="">
       </van-swipe-item>
     </van-swipe>
   </div>
