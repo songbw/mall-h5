@@ -57,7 +57,8 @@
     methods: {
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if(this.$api.APP_ID === '01') {
+        // if(this.$api.APP_ID === '01') {
+        if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {
           try{
             configWechat(this, () => {
               wx.hideOptionMenu()

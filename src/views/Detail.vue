@@ -61,7 +61,7 @@
                       <div class="coupon coupon-white" v-for="(k,index) in avaliableCouponList" :key="index">
                         <div class="coupon-main">
                           <div class="coupon-img">
-                            <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+                            <img :src="k.imageUrl.length?k.imageUrl: couponImg" alt="">
                           </div>
                           <div class="coupon-info coupon-hole coupon-info-right-dashed">
                             <div class="coupon-price">
@@ -99,13 +99,9 @@
                       <div class="coupon coupon-white" v-for="(coupon,index) in userCouponList" :key="index">
                         <div class="coupon-main">
                           <div class="coupon-img">
-                            <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg">
+                            <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg" alt="">
                           </div>
                           <div class="coupon-info coupon-hole coupon-info-right-dashed">
-                            <!--                        <div class="coupon-suppler">
-                                                      <span>{{(coupon.couponInfo.supplierMerchantName!=undefined &&  coupon.couponInfo.supplierMerchantName.length) > 0? coupon.couponInfo.supplierMerchantName:'凤巢'}}</span>
-                                                      <i>{{coupon.couponInfo.name}}</i>
-                                                    </div>-->
                             <div class="coupon-price">
                               <span v-if="coupon.couponInfo.rules.couponRules.type <2"
                                 style="margin-right: -7px">￥</span>
@@ -141,12 +137,6 @@
                     <span>满{{freeShippingTemplate.regions[0].fullAmount}}件享包邮</span>
                   </div>
                 </div>
-                <!--              <div v-if="shippingTemplate != null">
-                                <div v-if="shippingTemplate.regions[0].basePrice != 0 && shippingTemplate.regions[0].cumulativePrice != 0">
-                                  <span>购买数量低于{{shippingTemplate.regions[0].baseAmount}}件，运费{{shippingTemplate.regions[0].basePrice}}元</span>
-                                  <span>超过最低购买数量后,每购买{{shippingTemplate.regions[0].cumulativeUnit}}件，运费增加:{{shippingTemplate.regions[0].cumulativePrice}}元</span>
-                                </div>
-                              </div>-->
               </div>
             </div>
             <div style="display: flex">
@@ -172,20 +162,8 @@
                 {{this.goods.state == 0?'已下架':''}}</span>
             </div>
           </div>
-          <div class="serviceBox" v-if="showServiceBox">
-            <div class="serviceTitle">
-              <span>店铺公告</span>
-              <img :src="seriviceIcon">
-            </div>
-            <div class="serviceDetail">
-              <span>1、本商品由苏宁易购发货并提供售后服务，苏宁易购服务电话4008516516</span>
-              <span>2、退货完成后，积分会在3个工作日内退回，如有延误，请联络关爱通客服进行处理。</span>
-              <span>3、关爱通苏宁易购的商品不享受价保服务，不享受苏宁官网活动或优惠。请谨慎下单。</span>
-              <span>4、若该商品主图或详情包含赠品信息,赠品赠完即止，不保证您的订单一定有赠品,请知悉。</span>
-            </div>
-          </div>
           <div v-if="bulletinInfo !=null && bulletinInfo.position == 'top'" class="bulletin">
-            <img v-lazy="bulletinInfo.imageUrl">
+            <img v-lazy="bulletinInfo.imageUrl" alt="">
           </div>
           <div class="contentBox">
             <div class="contentTitle">
@@ -195,13 +173,13 @@
             <div v-else class="contentDetail" v-html="this.goods.introduction" />
           </div>
           <div v-if="bulletinInfo !=null && bulletinInfo.position == 'bottom'" class="bulletin">
-            <img v-lazy="bulletinInfo.imageUrl">
+            <img v-lazy="bulletinInfo.imageUrl" alt="">
           </div>
           <v-baseline />
         </div>
         <div v-else>
           <div class="noContext">
-            <img :src="icon_noContext">
+            <img :src="icon_noContext" alt="">
             <span class="noContext_line1">亲,没有查询到商品!</span>
           </div>
           <v-baseline />
@@ -252,11 +230,8 @@
       this.showHeader = this.$api.HAS_HEADER;
       this.loadCartList()
       if (this.$api.IS_GAT_APP) {
-        if (this.$api.APP_ID === '10') {
-          this.showServiceBox = true;
-        }
         this.showDetail = true;
-      } else if (this.$api.APP_ID == '01') {
+      } else  if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  /*if (this.$api.APP_ID == '01') {*/   
         let code = this.$route.query.code;
         if (code != undefined) {
           this.thirdPartyLogin(code)
@@ -397,7 +372,7 @@
         }
         this.updateServiceBoxInfo(this.goods);
         this.updateInventor(this.goods)
-        if (this.$api.APP_ID === '01' ||
+        if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub ||
           (this.$api.APP_ID === '11' && this.$api.APP_SOURCE == '01')) {
           this.wechatShareConfig()
         }
@@ -437,7 +412,6 @@
         couponImg: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_coupon.png',
         seriviceIcon: 'https://mall-h5-1258175138.cos.ap-chengdu.myqcloud.com/ico_prod_service.jpg',
         icon_noContext: require('@/assets/icons/ico_empty_box.png'),
-        showServiceBox: false,
         bulletinInfo: null,
         freeShippingTemplate: null,
         shippingTemplate: null,
@@ -756,7 +730,8 @@
         let that = this;
         let url = ""
         let params = null
-        if (this.$api.APP_ID == '01') {
+        // if (this.$api.APP_ID == '01') {
+        if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {
           url = '/sso/thirdParty/token/wx';
           params = {
             iAppId: this.$api.APP_ID,

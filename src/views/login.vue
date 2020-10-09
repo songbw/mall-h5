@@ -107,7 +107,8 @@
       },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        if (this.$api.APP_ID === '01') {
+       // if (this.$api.APP_ID === '01') {
+        if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {
           try {
             configWechat(this, () => {
               wx.hideOptionMenu()
@@ -118,15 +119,10 @@
         }
       },
       toastNoAppUser() {
-        switch (this.$api.APP_ID) {
-          case '11': {
-            this.$toast("绑定失败! 请先登录无锡市民卡APP后再绑定。")
-            break;
-          }
-          default: {
-            this.$toast("无法找到App用户，绑定失败!")
-            break;
-          }
+        if(this.$api.APP_ID == '11') {
+           this.$toast("绑定失败! 请先登录无锡市民卡APP后再绑定。")
+        } else {
+          this.$toast("无法找到App用户，绑定失败!")
         }
       },
       onBindBtnClick() {
@@ -217,12 +213,10 @@
         }
       },
       getBindInfo() {
-        switch (this.$api.APP_ID) {
-          case '11': {
-            return "注意:用户必须登录过无锡市民卡App才能绑定,"
-          }
-          default:
-            return ""
+        if(this.$api.APP_ID == '11') {
+          return "注意:用户必须登录过无锡市民卡App才能绑定,"
+        } else {
+          return ""
         }
       }
     }

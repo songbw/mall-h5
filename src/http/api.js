@@ -15,6 +15,7 @@ const IS_QUICKPAY_CAN_SAVE = true
 const APP_SOURCE = "00"
 const PLATFORM_ID = 0 //平台ID：1. 无锡市民卡App 2. 灵锡App 3. 凤巢公众号 4. 最珠海 5. 万科云城 6. 关爱通'
 const APP_CONFIG_URL = ''
+const MALL_TITLE = ''
 
 /*let SERVICE_URL = "http://192.168.200.37:8000";
 let TESTSTUB_PAYMENT_URL = "http://192.168.200.122:8088"*/

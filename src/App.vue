@@ -185,8 +185,11 @@
           this.$api.IS_SUPPORTED_MULTI_POINT = false;
           if (testUser != undefined && testUser.length > 0)
             this.$api.TEST_USER = testUser
-          if (title != undefined && title.length > 0)
+          if (title != undefined && title.length > 0) {
             this.title = title
+            this.$api.MALL_TITLE = title
+          }
+            
 
           this.loadMonitorJS()
           if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isGATApp) { //关爱通APP
