@@ -163,14 +163,14 @@
                   return
                 }
                 default: {
-                  if (url.startsWith("http://") || url.startsWith("http://")) {
+                  if (url.startsWith("https://") || url.startsWith("http://")) {
                     this.See(url);
                   }
                   return
                 }
               }
             }
-          } else if (url.startsWith("http://") || url.startsWith("http://")) {
+          } else if (url.startsWith("https://") || url.startsWith("http://")) {
             this.See(url);
           }
         } else {

@@ -384,16 +384,15 @@
                   //this.$router.push({path: "/category/" + couponInfo.rules.scenario.categories[0]});
                   if( couponInfo.rules.scenario.categories.length > 0) {
                     let categeries = couponInfo.rules.scenario.categories[0]
-                    for( let i = 1; i < couponInfo.rules.scenario.categories.length; i++) {
-                      categeries += "_"+couponInfo.rules.scenario.categories[i]
+                    for( let j = 1; j < couponInfo.rules.scenario.categories.length; j++) {
+                      categeries += "_"+couponInfo.rules.scenario.categories[j]
                     }
                     this.$router.push({path: "/category/goods/list?category=" + categeries});
                   }
-
                   return
                 }
                 default: {
-                  if (url.startsWith("http://") || url.startsWith("http://")) {
+                  if (url.startsWith("https://") || url.startsWith("http://")) {
                     let userInfo = this.$store.state.appconf.userInfo;
                     if (!Util.isUserEmpty(userInfo)) {
                       let user = JSON.parse(userInfo);
@@ -406,8 +405,7 @@
               }
 
             }
-          } else if (url.startsWith("http://") || url.startsWith("http://")) {
-
+          } else if (url.startsWith("https://") || url.startsWith("http://")) {
             let userInfo = this.$store.state.appconf.userInfo;
             if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);

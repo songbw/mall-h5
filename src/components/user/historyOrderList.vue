@@ -151,7 +151,7 @@
         let that = this
         let userInfo = this.$store.state.appconf.userInfo
         if (!Util.isUserEmpty(userInfo)) {
-          let user = JSON.parse(userInfo);
+          // let user = JSON.parse(userInfo);
           if (this.total == -1 || this.total > this.list.length) {
             let options = {
               "pageNo": this.pageNo++,

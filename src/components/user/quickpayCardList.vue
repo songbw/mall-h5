@@ -207,7 +207,6 @@
 
     created() {
       this.showHeader = this.$api.HAS_HEADER;
-      let that = this
       let userDetail = this.$store.state.appconf.userDetail;
       if (userDetail.length > 0) {
         this.user = JSON.parse(userDetail)

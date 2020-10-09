@@ -112,10 +112,10 @@
       this.currentCouponPageInfo = this.$store.state.appconf.currentCouponPageInfo;
       if (this.currentCouponPageInfo.length) {
         this.coupon = JSON.parse(this.currentCouponPageInfo);
-        let couponInfo = this.coupon.couponInfo;
-        let rules = couponInfo.rules;
-        let scenario = rules.scenario;
-        let couponRules = rules.couponRules;
+       // let couponInfo = this.coupon.couponInfo;
+       // let rules = couponInfo.rules;
+       // let scenario = rules.scenario;
+       // let couponRules = rules.couponRules;
       }
     },
 
@@ -228,7 +228,7 @@
       add2Car(userInfo, goods) {
         let user = JSON.parse(userInfo);
         let userId = user.userId;
-        let that = this
+       // let that = this
         let mpu = goods.mpu;
         let skuId = goods.skuId
         if (goods.skuid != undefined)

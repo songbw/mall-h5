@@ -151,7 +151,7 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
-
+          this.$log("user is:",user)
         } else {
           this.$toast("没有用户信息，请先登录")
           that.launchedLoaded = true

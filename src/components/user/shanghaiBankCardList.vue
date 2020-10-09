@@ -183,7 +183,6 @@
             }
           }).catch(function (error) {
           })
-        } else {
         }
       },
       onBCardBindBtnClick() {
