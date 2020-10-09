@@ -373,7 +373,7 @@
               }
             } catch (e) {}
           }
-        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+        } else if (targetId.startsWith("https://") || targetId.startsWith("http://")) {
           this.See(targetId);
         } else {
           if (this.right.isDailySchedule && this.right.promotionActivityId != undefined) {

@@ -2,7 +2,7 @@
   <section class="sectionCoupon" :style="{'margin-bottom': datas.settings.marginBottom+'px','background-color':mBackgroundColor}">
     <div class="wrap">
         <div v-if="datas.settings.title.show" class="couponBoxTitle">
-          <img :src="datas.settings.title.imageUrl">
+          <img :src="datas.settings.title.imageUrl" alt="">
         </div>
         <div>
           <div v-if="dataloaded">
@@ -11,7 +11,7 @@
                 <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i">
                   <div class="coupon-main">
                     <div class="coupon-img">
-                      <img :src="k.imageUrl.length?k.imageUrl: couponImg">
+                      <img :src="k.imageUrl.length?k.imageUrl: couponImg" alt="">
                     </div>
                     <div class="coupon-info coupon-hole coupon-info-right-dashed">
                       <div class="coupon-price">
@@ -185,14 +185,14 @@
                   return
                 }
                 default: {
-                  if (url.startsWith("http://") || url.startsWith("http://")) {
+                  if (url.startsWith("https://") || url.startsWith("http://")) {
                     this.See(url);
                   }
                   return
                 }
               }
             }
-          } else if (url.startsWith("http://") || url.startsWith("http://")) {
+          } else if (url.startsWith("https://") || url.startsWith("http://")) {
             this.See(url);
           }
         } else {
@@ -421,18 +421,6 @@
             .coupon-info-right-solid {
               border-right: 2px solid white;
             }
-
-            /* 使用两个边框为圆角的白色div制造半圆缺角，有个缺点是这个缺角必须与背景色相同（clip-path不好弄） */
-
-/*            .coupon-hole::before, .coupon-hole::after {
-              content: '';
-              width: 1rem;
-              height: 1rem;
-              background-color: #ff4444;
-              border-radius: 50%;
-              position: absolute;
-              right: -.5rem;
-            }*/
 
             .coupon-info {
               padding: 0.5rem 0.5rem 0.5rem;

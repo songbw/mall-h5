@@ -93,7 +93,7 @@
             } catch (e) {
             }
           }
-        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+        } else if (targetId.startsWith("https://") || targetId.startsWith("http://")) {
           this.See(targetId);
         }
       }

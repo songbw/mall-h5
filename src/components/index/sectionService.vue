@@ -92,14 +92,12 @@
           } else if (paths[0] === 'promotion') {
             try {
               if (paths[1] != null) {
-                //this.gotoGoodsPage(paths[1]);
-                //this.$log("promotion:"+paths[1])
                 this.gotoPromotionPage(paths[1]);
               }
             } catch (e) {
             }
           }
-        } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+        } else if (targetId.startsWith("https://") || targetId.startsWith("http://")) {
           this.See(targetId);
         }
       }

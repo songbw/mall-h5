@@ -255,7 +255,7 @@
                 if (this.msTime.show) {
                   this.dailyScheduleDetail = " 距结束 "
                 }
-              } else {}
+              }
             }
           }
         } else {
