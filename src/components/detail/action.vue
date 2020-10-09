@@ -16,20 +16,6 @@
         :close-on-click-overlay="closeOnClickOverlay" :custom-sku-validator="customSkuValidator"
         @buy-clicked="onBuyClicked" @add-cart="onAddCartClicked" @stepper-change="onStepperChanged"
         @sku-selected="onSkuSelectedChanged">
-        <!--        &lt;!&ndash; 自定义 sku-header-price &ndash;&gt;
-        <template slot="sku-header-price" slot-scope="props">
-          <div class="van-sku__goods-price">
-            <div v-if="datas.promotion.length == 0">
-              <span class="van-sku__price-symbol">￥</span><span class="van-sku__price-num">{{ props.price }}</span>
-            </div>
-            <div v-else>
-              <span class="van-sku__price-symbol">￥</span><span class="van-sku__price-num">{{ props.price }}</span>
-              <div>
-                <span style="margin-left:2px;font-size: smaller;color: #5a5a5a; text-decoration: line-through">￥{{ props.price }}</span>
-              </div>
-            </div>
-          </div>
-        </template>-->
       </van-sku>
     </div>
 
@@ -84,7 +70,6 @@
           this.cartNumber = newValue
       },
       async datas(newValue, oldVal) {
-        this.$log("datas changed @@@@@@@@@@@@@@@@@@@")
         this.$log(newValue)
         if (newValue != null) {
           this.goods_info = {
@@ -326,7 +311,6 @@
                   none_sku: false, // 是否无规格商品 false正常显示那些可供选择的标准，此处是颜色和尺寸
                   hide_stock: true, // 是否隐藏剩余库存 false正常显示剩余多少件的那个库存
                 }
-                this.$log("xxxxxxxxxxxxxxxxxxxxxxxxxx")
                 this.$log(this.sku)
                 if (list.length > 0) {
                   this.initialSku = {
@@ -357,22 +341,6 @@
     },
 
     methods: {
-      getWphInventory() {
-        this.$log("getWphInventory Enter")
-        let codesArray = []
-        /*         this.datas.skuList.forEach(sku => {
-                  codesArray.push(sku.code)
-                })
-                let codes = codesArray.join(",");
-                return this.$api.xapi({
-                  method: 'post',
-                  baseURL: this.$api.AOYIS_CONFIG_URL,
-                  url: '/star/product/inventory',
-                  data: {
-                    codes: codes
-                  },
-                }) */
-      },
       getInventory() {
         this.$log("getInventory Enter")
         let codesArray = []
