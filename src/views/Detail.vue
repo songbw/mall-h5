@@ -518,7 +518,6 @@
         this.$log("start loading cartlist number ....")
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo);
-          let that = this
           let options = {
             "openId": user.userId,
             "pageNo": 1,
@@ -624,7 +623,6 @@
 
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-        let that = this
         this.$log(this.goods)
         let _url = ''
         if (window.__wxjs_is_wkwebview === true) {
@@ -820,7 +818,6 @@
         }
       },
       getAdressList() {
-        this.$log("########################")
         let userInfo = this.$store.state.appconf.userInfo;
         if (!Util.isUserEmpty(userInfo)) {
           let user = JSON.parse(userInfo)
@@ -891,7 +888,7 @@
                   }
                 }
                 if (id == -1) {
-                  id = addressList[0].id;
+                //  id = addressList[0].id;
                   address = addressList[0]
                 }
               }
@@ -906,7 +903,7 @@
               if (found != -1) {
                 address = addressList[found]
               } else {
-                id = addressList[0].id
+               // id = addressList[0].id
                 address = addressList[0]
               }
             }

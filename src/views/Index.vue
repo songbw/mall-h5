@@ -666,7 +666,7 @@
         } else if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
           //  let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc" //13810864380
           let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6bb" //18612794815
-          let accessToken = "TTTTTTTTTTTTTTTTTTTTTTTT"
+         // let accessToken = "TTTTTTTTTTTTTTTTTTTTTTTT"
           this.$store.commit('SET_WX_OPENID', wxOpenId);
           let resp = await this.isWxOpendBinded(this.$api.APP_ID, wxOpenId)
           this.$log(resp)
@@ -884,7 +884,7 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (this.icon_gift_type == 0) {
           if (!Util.isUserEmpty(userInfo)) {
-            let user = JSON.parse(userInfo)
+         //   let user = JSON.parse(userInfo)
             this.$router.push({
               name: "新人礼包页"
             })
@@ -923,7 +923,7 @@
                   }
                 } catch (e) {}
               }
-            } else if (targetId.startsWith("http://") || targetId.startsWith("http://")) {
+            } else if (targetId.startsWith("https://") || targetId.startsWith("http://")) {
               this.See(targetId);
             }
           }

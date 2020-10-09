@@ -291,7 +291,7 @@
                 }
               }
               if (id == -1) {
-                id = addressList[0].id;
+              //  id = addressList[0].id;
                 address = addressList[0]
               }
             }
@@ -306,7 +306,7 @@
             if (found != -1) {
               address = addressList[found]
             } else {
-              id = addressList[0].id
+             // id = addressList[0].id
               address = addressList[0]
             }
           }
@@ -499,6 +499,7 @@
               let couponsAndProms = this.result.object.couponProm
               //let couponList = this.result.object.
               let res = await this.updateInventorList(cartList)
+              this.$log("updateInventorList:",res)
               this.result.object.cart.forEach(item => {
                 this.list.push(item);
                 this.upDateSkuInfo(item, couponsAndProms, userInfo)
