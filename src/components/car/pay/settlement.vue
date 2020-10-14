@@ -1767,7 +1767,8 @@
                 pAnOrderInfo['orderNo'] = orderNo
                 pAnOrderInfo['outTradeNo'] = outTradeNo
                 that.$log("openCashPage:" + JSON.stringify(pAnOrderInfo))
-                if (this.$api.APP_ID == '14') {
+                //if (this.$api.APP_ID == '14') {
+                if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWKYCApp) {
                   this.wkycCasher(user, pAnOrderInfo);
                 } else if (this.$api.APP_ID == '12') {
                   this.pingAnCasher(user, pAnOrderInfo);

@@ -78,6 +78,7 @@
       },
       async appInited() {
         this.$log("appInited Enter")
+        let that = this
         try {
           let configRsp = await this.getAppConfig();
           let appConfig = null;
@@ -238,8 +239,8 @@
             this.configured = true
           }
         } catch (error) {
-          this.$log("error:", error.response.statusText)
-          this.$toast(error.response.status + ":" + error.response.statusText)
+          that.$log("error:", error.response.statusText)
+          that.$toast(error.response.status + ":" + error.response.statusText)
         }
       },
       getAppId() {
