@@ -140,6 +140,8 @@
                 platformId = this.$api.PLATFORM_TYPE.isZZHApp
                 break;
               case '14':
+              case '20':
+              case '21':
                 platformId = this.$api.PLATFORM_TYPE.isWKYCApp
                 break;
               case '15':
