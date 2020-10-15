@@ -274,6 +274,7 @@
           })
         } else {
           this.$api.APP_CONFIG_URL = process.env.CONFIG_URL
+          //for test
           return this.$api.xapi({
             method: 'get',
             baseURL: this.$api.APP_CONFIG_URL,
