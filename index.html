@@ -66,7 +66,22 @@
   <script src="https://lib.baomitu.com/moment.js/2.24.0/locale/zh-cn.js"></script>
 </head>
 
-<script type='text/javascript' defer>
+<script type='text/javascript'>
+    (function(a, b, c, d, e, j, s) {
+        a[d] = a[d] || function() {
+            (a[d].a = a[d].a || []).push(arguments)
+        };
+        j = b.createElement(c),
+            s = b.getElementsByTagName(c)[0];
+        j.async = true;
+        j.charset = 'UTF-8';
+        j.src = 'https://static.meiqia.com/widget/loader.js';
+        s.parentNode.insertBefore(j, s);
+    })(window, document, 'script', '_MEIQIA');
+    _MEIQIA('entId', '7294d2f3fb647e0ebd3264a986232b77');
+</script>
+
+<!-- <script type='text/javascript' defer>
   (function(m, ei, q, i, a, j, s) {
     m[i] = m[i] || function() {
       (m[i].a = m[i].a || []).push(arguments)
@@ -81,7 +96,7 @@
   _MEIQIA('entId', 168003);
   _MEIQIA('withoutBtn');
   _MEIQIA('init');
-</script>
+</script> -->
 
 <body ontouchstart="">
   <div id="app"></div>
