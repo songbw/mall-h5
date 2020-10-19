@@ -637,6 +637,7 @@
               }
             }
           })
+         // this.$log("xxxxxxxx arregationPayList:",arregationPayList)
 
           arregationPayList.forEach(merchant => {
             let all = 0;
