@@ -616,11 +616,25 @@
                 })
               }
             } else {
+              let isUnknownMerchant = true
               arregationPayList.forEach(merchant => {
                 if (item.product.baseInfo.merchantId === merchant.merchantId) {
                   merchant.goods.push(item)
+                  isUnknownMerchant = false
                 }
               })
+              if(isUnknownMerchant) {
+                let newMerchant = {
+                  "merchantCode": "",
+                  "merchantName": "",
+                  "merchantId": item.product.baseInfo.merchantId,
+                  "goods": [],
+                  price: 0,
+                  freight: 0
+                }
+                newMerchant.goods.push(item)
+                arregationPayList.push (newMerchant)
+              }
             }
           })
 
