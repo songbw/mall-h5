@@ -20,7 +20,7 @@
         </div>
         <div v-else-if="launchedLoaded && list.length == 0">
           <div class="noContext">
-            <img :src="icon_noContext">
+            <img :src="icon_noContext" alt="">
             <span class="noContext_line1">亲，没有任何内容!</span>
           </div>
         </div>
