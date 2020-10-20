@@ -197,7 +197,7 @@
           }
         })
       },
-      
+
       pingAnCasher(user, orderInfo) {
         this.$log("pingAnCasher Enter")
         let that = this
@@ -719,7 +719,7 @@
                   if (this.$api.APP_ID == '14') {
                     this.wkycCasher(user, pAnOrderInfo);
                   } else if (this.$api.APP_ID == '12') {
-                    this.pingAnCasher(user,pAnOrderInfo);
+                    this.pingAnCasher(user, pAnOrderInfo);
                   } else {
                     this.$router.push({
                       name: "收银台页",
@@ -829,8 +829,8 @@
           "openId": user.openId,
           "businessType": "11"
         }
-        this.$log("listItem.saleAmount:"+listItem.saleAmount)
-        this.$log("pAnOrderInfo:",pAnOrderInfo)
+        this.$log("listItem.saleAmount:" + listItem.saleAmount)
+        this.$log("pAnOrderInfo:", pAnOrderInfo)
         let merchantNo = ""
         if (listItem.merchantNo != null) {
           merchantNo = listItem.merchantNo
@@ -1028,7 +1028,18 @@
                       this.$log(item)
                       that.orderTypes[index].list.push(item);
                     })
+
+                    //reorder orderTypes[index].list
+                    if (that.orderTypes[index].list.length > 0) {
+                      //reorder
+                      that.orderTypes[index].list.sort(function (a, b) {
+                        let aTime = new Date(that.$moment(a.createdAt).format('YYYY/MM/DD HH:mm:ss')).getTime()
+                        let bTime = new Date(that.$moment(b.createdAt).format('YYYY/MM/DD HH:mm:ss')).getTime()
+                        return bTime - aTime
+                      })
+                    }
                   }
+
                 }
               }
               let result = response.data.data.result
@@ -1095,6 +1106,15 @@
                   this.$log(item)
                   that.orderTypes[index].list.push(item);
                 })
+                //reorder orderTypes[index].list
+                if (that.orderTypes[index].list.length > 0) {
+                  //reorder
+                  that.orderTypes[index].list.sort(function (a, b) {
+                    let aTime = new Date(that.$moment(a.createdAt).format('YYYY/MM/DD HH:mm:ss')).getTime()
+                    let bTime = new Date(that.$moment(b.createdAt).format('YYYY/MM/DD HH:mm:ss')).getTime()
+                    return bTime - aTime
+                  })
+                }
               } else {
                 that.orderTypes[index].total = 0;
               }
