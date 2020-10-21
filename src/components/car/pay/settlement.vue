@@ -1785,7 +1785,7 @@
                 //if (this.$api.APP_ID == '14') {
                 if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWKYCApp) {
                   this.wkycCasher(user, pAnOrderInfo);
-                } else if (this.$api.PLATFORM_ID == this.$api.isZZHApp) {
+                } else if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isZZHApp) {
                   this.pingAnCasher(user, pAnOrderInfo);
                 } else {
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
