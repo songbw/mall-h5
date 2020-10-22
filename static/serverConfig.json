@@ -1,10 +1,10 @@
 {
   "NODE_ENV": "development",
-  "iAppID": "11",
-  "tAppID": "ea70244ca3604a4ebc1c2fd8e48756d5",
-  "SERVICE_URL":"https://testapi.weesharing.com",
+  "iAppID": "14",
+  "tAppID": "5447f17c85",
+  "SERVICE_URL":"https://api.weesharing.com",
   "TESTSTUB_PAYMENT_URL": "http://119.3.111.161:8088",
-  "SERVR_PHONE_NUM": "010-58695954",
+  "SERVR_PHONE_NUM": "15861660130",
   "GOODS_URL_PREFIX": "https://iwallet-1258175138.image.myqcloud.com",
   "MALL_TITLE" : "惠民优选"
 }
