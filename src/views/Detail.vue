@@ -14,12 +14,12 @@
             <div class="promotion-price" v-if="hasPromotion">
               <van-col span="8" class="priceBox">
                 <p class="sales-price">
-                  <span>￥</span>{{parseFloat(this.goods.dprice).toFixed(2)}}
+                  <span>￥</span>{{parseFloat(displayPrice).toFixed(2)}}
                 </p>
                 <div>
                   <p>
                     <span class="origin-price-title">原价</span>
-                    <span class="origin-price">￥{{parseFloat(this.goods.price).toFixed(2)}}</span>
+                    <span class="origin-price">￥{{parseFloat(originPrice).toFixed(2)}}</span>
                   </p>
                 </div>
               </van-col>
@@ -34,7 +34,7 @@
               </van-col>
             </div>
             <p class="price-title" v-else>
-              <span>￥</span>{{parseFloat(this.goods.price).toFixed(2)}}
+              <span>￥</span>{{parseFloat(displayPrice).toFixed(2)}}
             </p>
             <div class="goods-detail">
               <span class="goods-disciption">
@@ -99,7 +99,8 @@
                       <div class="coupon coupon-white" v-for="(coupon,index) in userCouponList" :key="index">
                         <div class="coupon-main">
                           <div class="coupon-img">
-                            <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg" alt="">
+                            <img :src="coupon.couponInfo.imageUrl.length? coupon.couponInfo.imageUrl : couponImg"
+                              alt="">
                           </div>
                           <div class="coupon-info coupon-hole coupon-info-right-dashed">
                             <div class="coupon-price">
@@ -122,6 +123,17 @@
                 </div>
               </div>
             </van-actionsheet>
+          </div>
+          <div class="spuSelectBox" v-if="showSpuSelected">
+            <div class="spuSelectContext">
+              <div class="spuSelectTitle">
+                <span>已选:</span>
+              </div>
+              <div class="spuSelectDetail">
+                <span>{{selectedSkuDetail}}</span>
+              </div>
+            </div>
+
           </div>
           <div class="inventoryBox">
             <div style="display: flex" v-if="(freeShippingTemplate != null || shippingTemplate != null)">
@@ -156,8 +168,10 @@
               </div>
             </div>
             <div style="padding: 1px">
-              <span v-if="this.goods != null && this.goods.state != 0 && !updatedInventor" style="color: #ff4444;font-size: medium;">获取库存...</span>
-              <span v-else style="color: #ff4444;font-size: medium;">{{(this.goods != null && this.goods.state != 0  && hasInventory )?'有货':'无货'}}</span>
+              <span v-if="this.goods != null && this.goods.state != 0 && !updatedInventor"
+                style="color: #ff4444;font-size: medium;">获取库存...</span>
+              <span v-else
+                style="color: #ff4444;font-size: medium;">{{(this.goods != null && this.goods.state != 0  && hasInventory )?'有货':'无货'}}</span>
               <span style="color: #8c8c8c;font-size: medium;" v-if="this.goods != null">
                 {{this.goods.state == 0?'已下架':''}}</span>
             </div>
@@ -185,7 +199,7 @@
           <v-baseline />
         </div>
       </div>
-      <v-action :datas="this.goods"/>
+      <v-action :datas="this.goods"  @spu_select_changed="selectedSkuChanged" />
     </div>
 
   </div>
@@ -226,12 +240,65 @@
       })
     },
 
+    computed: {
+      displayPrice() {
+        let price = this.goods.dprice
+        if(this.goods.skuList != null && this.goods.skuList.length > 1) { //SPU 且包含多个sku
+          if(this.selectedSku != null && !this.hasPromotion) { //已选 sku，并且不是discount 折扣价，显示选中sku价格
+            for(let i = 0 ;i < this.goods.skuList.length; i++) {
+              if(this.selectedSku === this.goods.skuList[i].code) {
+                price = this.goods.skuList[i].price/100
+                break;
+              }
+            }
+          }
+        }
+        return price
+      },
+      originPrice() {
+        let price = this.goods.price
+        if(this.goods.skuList != null && this.goods.skuList.length > 1) { //SPU 且包含多个sku
+          if(this.selectedSku != null && this.hasPromotion) { //已选 sku，并且有discount 折扣价，显示选中sku价格
+            for(let i = 0 ;i < this.goods.skuList.length; i++) {
+              if(this.selectedSku === this.goods.skuList[i].code) {
+                price = this.goods.skuList[i].price/100
+                break;
+              }
+            }
+          }
+        }
+        return price
+      },
+      selectedSkuDetail() {
+        let detail = ""
+        if (this.selectedSku != null && this.goods.skuList != null) {
+          for (let i = 0; i < this.goods.skuList.length; i++) {
+            this.$log(this.goods.skuList[i])
+            if (this.goods.skuList[i].code === this.selectedSku) {
+              this.goods.skuList[i].propertyList.forEach(item => {
+                detail += item.val + " "
+              })
+              break;
+            }
+          }
+        }
+        return detail
+      },
+      showSpuSelected() {
+        if (this.goods != null && this.goods.skuList != null) {
+          return (this.goods.skuList.length > 1) ? true : false
+        }
+        return false
+      }
+    },
+
     created() {
       this.showHeader = this.$api.HAS_HEADER;
       this.loadCartList()
       if (this.$api.IS_GAT_APP) {
         this.showDetail = true;
-      } else  if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  /*if (this.$api.APP_ID == '01') {*/   
+      } else if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {
+        /*if (this.$api.APP_ID == '01') {*/
         let code = this.$route.query.code;
         if (code != undefined) {
           this.thirdPartyLogin(code)
@@ -386,6 +453,7 @@
         showHeader: true,
         updatedInventor: false,
         goods: {},
+        selectedSku: null,
         swiperUrls: [],
         contentUrls: [],
         hasPromotion: false,
@@ -418,6 +486,9 @@
       }
     },
     methods: {
+      selectedSkuChanged(data) {
+        this.selectedSku = data
+      },
       upDateSkuInfo(item, couponAndProms, user) {
         let cartItem = Util.getCartItem(this, user.userId, item.mpu, item.skuId)
         let skuId = item.skuId
@@ -888,7 +959,7 @@
                   }
                 }
                 if (id == -1) {
-                //  id = addressList[0].id;
+                  //  id = addressList[0].id;
                   address = addressList[0]
                 }
               }
@@ -903,7 +974,7 @@
               if (found != -1) {
                 address = addressList[found]
               } else {
-               // id = addressList[0].id
+                // id = addressList[0].id
                 address = addressList[0]
               }
             }
@@ -952,7 +1023,7 @@
             this.$log(inventoryListOfAoyi)
             inventoryListOfAoyi.forEach(item => {
               if (goods.mpu.startsWith("30")) {
-                if(item.state === '1') {
+                if (item.state === '1') {
                   this.hasInventory = true;
                 }
               } else {
@@ -1859,6 +1930,38 @@
           }
         }
 
+      }
+
+      .spuSelectBox {
+        margin-top: 10px;
+        padding: 10px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        background-color: white;
+
+        .spuSelectContext {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          text-align: center;
+
+          .spuSelectTitle {
+            width: 2.5em;
+            color:#000000
+          }
+
+          .spuSelectDetail {
+            margin: auto 1px;
+            text-align: left;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            -webkit-line-clamp: 2;
+            word-break: break-all;
+            width: 80%;
+          }
+        }
       }
 
       .inventoryBox {

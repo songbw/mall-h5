@@ -51,7 +51,8 @@
         closeOnClickOverlay: true, //点击空白处关闭购物框
         customSkuValidator: () => '请正确选择商品规格',
         hasPromotion: false,
-        PromotionStatus: -1
+        PromotionStatus: -1,
+        selectedSku: null
       }
     },
 
@@ -84,6 +85,18 @@
           }
           this.goods_id = this.datas.mpu
           if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
+            if (this.datas.skuList != null && this.datas.skuList.length > 1) {
+              let minPrice = this.datas.skuList[0].price
+              let found = 0
+              for (let i = 1; i < this.datas.skuList.length; i++) {
+                if (this.datas.skuList[i].price < minPrice) {
+                  minPrice = this.datas.skuList[i].price
+                  found = i;
+                }
+              }
+              this.selectedSku = this.datas.skuList[found].code
+              this.$emit('spu_select_changed', this.selectedSku)
+            }
             if (this.datas.merchantId == 4) {
               let tree = [];
               let list = [];
@@ -199,13 +212,23 @@
               }
               this.$log(this.sku)
               if (list.length > 0) {
+                let found = 0;
+                if (this.selectedSku != null) {
+                  for (let i = 0; i < list.length; i++) {
+                    if (list[i].id === this.selectedSku) {
+                      found = i;
+                      break;
+                    }
+                  }
+                }
+
                 this.initialSku = {
-                  s1: list[0].s1,
-                  s2: list[0].s2,
-                  s3: list[0].s3,
-                  s4: list[0].s4,
-                  s5: list[0].s5,
-                  selectedNum: list[0].purchaseQty //下面的数字选择框的数字即买了多少件
+                  s1: list[found].s1,
+                  s2: list[found].s2,
+                  s3: list[found].s3,
+                  s4: list[found].s4,
+                  s5: list[found].s5,
+                  selectedNum: list[found].purchaseQty //下面的数字选择框的数字即买了多少件
                 }
                 this.$log(this.initialSku)
               }
@@ -213,12 +236,12 @@
               if (/^(30)/.test(this.datas.mpu)) {
                 let tree = [];
                 let list = [];
-
+                this.datas.skuList.forEach(sku => {
+                  sku['stock_num'] = 999999
+                })
                 this.datas.skuList.forEach(sku => {
                   this.$log(sku)
-                  this.datas.skuList.forEach(sku => {
-                    sku['stock_num'] = 999999
-                  })
+
                   sku.propertyList.forEach(property => {
                     let foundKey = -1;
                     for (let i = 0; i < tree.length; i++) {
@@ -259,7 +282,7 @@
                 })
 
                 this.$log(tree)
-                
+
                 let total_stock_num = 0
                 this.$log(this.datas.skuList)
                 this.datas.skuList.forEach(sku => {
@@ -313,13 +336,22 @@
                 }
                 this.$log(this.sku)
                 if (list.length > 0) {
+                  let found = 0;
+                  if (this.selectedSku != null) {
+                    for (let i = 0; i < list.length; i++) {
+                      if (list[i].id === this.selectedSku) {
+                        found = i;
+                        break;
+                      }
+                    }
+                  }
                   this.initialSku = {
-                    s1: list[0].s1,
-                    s2: list[0].s2,
-                    s3: list[0].s3,
-                    s4: list[0].s4,
-                    s5: list[0].s5,
-                    selectedNum: list[0].purchaseQty //下面的数字选择框的数字即买了多少件
+                    s1: list[found].s1,
+                    s2: list[found].s2,
+                    s3: list[found].s3,
+                    s4: list[found].s4,
+                    s5: list[found].s5,
+                    selectedNum: list[found].purchaseQty //下面的数字选择框的数字即买了多少件
                   }
                   this.$log(this.initialSku)
                 }
@@ -365,6 +397,29 @@
       onSkuSelectedChanged(data) {
         this.$log("onSkuSelectedChanged Enter")
         this.$log(data)
+        if (data.selectedSkuComb != null) {
+          this.selectedSku = data.selectedSkuComb.id
+          this.$emit('spu_select_changed', this.selectedSku)
+          if (this.selectedSku != null) {
+            let found = 0;
+            let list = this.sku.list
+            this.$log("list:", list)
+            for (let i = 0; i < list.length; i++) {
+              if (list[i].id === this.selectedSku) {
+                found = i;
+                break;
+              }
+            }
+            this.initialSku = {
+              s1: list[found].s1,
+              s2: list[found].s2,
+              s3: list[found].s3,
+              s4: list[found].s4,
+              s5: list[found].s5,
+              selectedNum: list[found].purchaseQty //下面的数字选择框的数字即买了多少件
+            }
+          }
+        }
       },
 
       onBuyClicked(skuData) {
@@ -379,7 +434,7 @@
           }
           if (stock_num > 0) {
             let selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
-            this.$log("selectPrice:"+selectPrice)
+            this.$log("selectPrice:" + selectPrice)
             let userInfo = this.$store.state.appconf.userInfo;
             if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
@@ -549,7 +604,7 @@
         if (skuData != undefined) {
           selectSkuId = skuData.selectedSkuComb.id
           selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
-          this.$log("selectPrice:"+selectPrice)
+          this.$log("selectPrice:" + selectPrice)
           count = skuData.selectedNum
         }
         let addtoCar = {
@@ -567,7 +622,7 @@
           this.result = response.data.data.result;
           if (response.data.code == 200) {
             this.$toast("添加到购物车成功！")
-            let cartItem = Util.getCartItem(this, user.userId, goods.mpu,selectSkuId)
+            let cartItem = Util.getCartItem(this, user.userId, goods.mpu, selectSkuId)
             if (cartItem == null) {
               let baseInfo = {
                 "userId": user.userId,
@@ -694,8 +749,9 @@
     background-color: white;
     width: 100%;
     //box-shadow: 10px 10px 10px 10px rgba(255,0,0,0.5);
-    box-shadow: 8px 8px 8px 8px rgba(243, 37, 37, 0.5);;  
- 
+    box-shadow: 8px 8px 8px 8px rgba(243, 37, 37, 0.5);
+    ;
+
     .contactServiceBtn {
       width: 10%;
       margin-top: 5px;
