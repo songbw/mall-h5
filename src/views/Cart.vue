@@ -45,8 +45,8 @@
                       </v-countdown>
                     </div>
                     <div class="goodsValid" v-if="k.valid">
-                      <van-card :desc="addressCode.cityName != undefined ? addressCode.cityName: '南京'"
-                        :price="k.goodsInfo.dprice" :title="k.goodsInfo.name" :thumb="k.goodsInfo.image"
+                      <van-card  :desc="getSkuDesc(k)"
+                        :price="k.goodsInfo.dprice" :title="k.goodsInfo.name"  :thumb="k.goodsInfo.image"
                         @click="gotoDetailPage(k)">
                         <div slot="footer" @click.stop="">
                           <van-stepper v-model="k.baseInfo.count" @click.stop="" @change="onCountChange(k)" />
@@ -201,6 +201,19 @@
     },
 
     methods: {
+      getSkuDesc(sku) {
+        this.$log("xxxxxxxxxxx getSkuDesc,sku:",sku)
+        let desc = this.addressCode.cityName != undefined ? this.addressCode.cityName: '南京'
+        try {
+          if(sku.goodsInfo.propertyList != undefined) {
+            sku.goodsInfo.propertyList.forEach(prop=> {
+              desc = desc + " " + prop.val 
+            })
+          }
+        } catch (e) {
+        }
+        return desc
+      },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
         // if (this.$api.APP_ID === '01') {
@@ -555,6 +568,7 @@
         let price = item.price
         let image = item.image
         let purchaseQty = 1
+        let propertyList = []
         if (skuId === undefined || skuId === null) {
           skuId = item.skuid
         }
@@ -563,6 +577,9 @@
           price = (item.starSku.price/100).toFixed(2)
           if(item.starSku.goodsLogo != undefined && item.starSku.goodsLogo.length > 0)
               image = item.starSku.goodsLogo
+          if(item.starSku.propertyList != null) {
+            propertyList = item.starSku.propertyList 
+          }
         }
         if (cartItem == null) {
           let baseInfo = {
@@ -578,6 +595,7 @@
           let goodsInfo = {
             "id": item.id,
             "skuId": skuId,
+            "propertyList": propertyList,
             "mpu": item.mpu,
             "merchantId": item.merchantId,
             "image": image,
@@ -622,6 +640,8 @@
           cartItem.goodsInfo.price = price
           cartItem.goodsInfo.type = (item.type == undefined ? 0 : item.type)
           cartItem.goodsInfo.image = image
+          cartItem.goodsInfo['propertyList'] = propertyList
+          
           let couponList = []
           let promotion = []
           if (couponAndProms != null) {
