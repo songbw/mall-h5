@@ -50,7 +50,7 @@
                     </div>
                     <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
                       :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
-                      :origin-price="k.checkedPrice" :desc="getSkuDesc(k)">
+                      :origin-price="k.checkedPrice" :desc="getSkuDesc(k.product)">
 <!--                       <div slot="desc" style="display: flex">
                         <span style="font-size: small">{{locationCity}}</span>
                       </div> -->
@@ -65,18 +65,18 @@
                       <div v-if="k.checkedPrice > k.product.goodsInfo.dprice">
                         <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
                           :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
-                          :origin-price="k.checkedPrice">
-                          <div slot="desc">
+                          :origin-price="k.checkedPrice" :desc="getSkuDesc(k.product)">
+<!--                           <div slot="desc">
                             <span style="font-size: small">{{locationCity}}</span>
-                          </div>
+                          </div> -->
                         </van-card>
                       </div>
                       <div v-else>
                         <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
-                          :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image">
-                          <div slot="desc">
+                          :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image" :desc="getSkuDesc(k.product)">
+<!--                           <div slot="desc">
                             <span style="font-size: small">{{locationCity}}</span>
-                          </div>
+                          </div> -->
                         </van-card>
 
                       </div>
@@ -84,10 +84,10 @@
                     </div>
                     <div v-else>
                       <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
-                        :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image">
-                        <div slot="desc">
+                        :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image" :desc="getSkuDesc(k.product)">
+<!--                         <div slot="desc">
                           <span style="font-size: small">{{locationCity}}</span>
-                        </div>
+                        </div> -->
                       </van-card>
                     </div>
 
@@ -713,6 +713,18 @@
     },
 
     methods: {
+      getSkuDesc(sku) {
+        let desc = this.locationCity // this.addressCode.cityName != undefined ? this.addressCode.cityName: '南京'
+        try {
+          if(sku.goodsInfo.propertyList != undefined) {
+            sku.goodsInfo.propertyList.forEach(prop=> {
+              desc = desc + " " + prop.val 
+            })
+          }
+        } catch (e) {
+        }
+        return desc
+      },
       gatCasher(url) {
         this.$router.replace({
           name: "关爱通收银台页",
@@ -3185,9 +3197,9 @@
             .van-card {
               background-color: #ffffff;
 
-
+              
               &__price {
-                margin-top: 0.6em;
+                margin-top: 0.8em;
                 .fz(font-size, 40);
               }
 
