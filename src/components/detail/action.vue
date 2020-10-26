@@ -85,18 +85,6 @@
           }
           this.goods_id = this.datas.mpu
           if (this.datas.skuList != undefined && this.datas.skuList.length > 0) {
-            if (this.datas.skuList != null && this.datas.skuList.length > 1) {
-              let minPrice = this.datas.skuList[0].price
-              let found = 0
-              for (let i = 1; i < this.datas.skuList.length; i++) {
-                if (this.datas.skuList[i].price < minPrice) {
-                  minPrice = this.datas.skuList[i].price
-                  found = i;
-                }
-              }
-              this.selectedSku = this.datas.skuList[found].code
-              this.$emit('spu_select_changed', this.selectedSku)
-            }
             if (this.datas.merchantId == 4) {
               let tree = [];
               let list = [];
@@ -211,6 +199,18 @@
                 hide_stock: false, // 是否隐藏剩余库存 false正常显示剩余多少件的那个库存
               }
               this.$log(this.sku)
+              if (this.datas.skuList != null && this.datas.skuList.length > 1) {
+                let minPrice = this.datas.skuList[0].price
+                let found = 0
+                for (let i = 1; i < this.datas.skuList.length; i++) {
+                  if (this.datas.skuList.stock_num > 0 && this.datas.skuList[i].price < minPrice ) {
+                    minPrice = this.datas.skuList[i].price
+                    found = i;
+                  }
+                }
+                this.selectedSku = this.datas.skuList[found].code
+                this.$emit('spu_select_changed', this.selectedSku)
+              }
               if (list.length > 0) {
                 let found = 0;
                 if (this.selectedSku != null) {
@@ -335,6 +335,18 @@
                   hide_stock: true, // 是否隐藏剩余库存 false正常显示剩余多少件的那个库存
                 }
                 this.$log(this.sku)
+                if (this.datas.skuList != null && this.datas.skuList.length > 1) {
+                  let minPrice = this.datas.skuList[0].price
+                  let found = 0
+                  for (let i = 1; i < this.datas.skuList.length; i++) {
+                    if (this.datas.skuList.stock_num > 0 && this.datas.skuList[i].price < minPrice) {
+                      minPrice = this.datas.skuList[i].price
+                      found = i;
+                    }
+                  }
+                  this.selectedSku = this.datas.skuList[found].code
+                  this.$emit('spu_select_changed', this.selectedSku)
+                }
                 if (list.length > 0) {
                   let found = 0;
                   if (this.selectedSku != null) {

@@ -29,61 +29,8 @@
           </div>
         </div>
         <div class="pay-list">
-          <!--关爱通平台-->
-          <div class="pay-product" v-if="false">
-            <li v-for="item in arregationList" style="list-style: none">
-              <div v-if="item.goods.length > 0" class="supplyer">
-                <van-cell :title=item.merchantName icon="shop" />
-                <ul>
-                  <li v-for="(k,index) in item.goods" :key='index' style="border-bottom: 1px solid #f8f8f8;">
-                    <div class="promotionBox"
-                      v-if="k.product.promotionInfo.promotion!= undefined && k.product.promotionInfo.promotionState != -1">
-                      <span class="promotionTitle">{{k.product.promotionInfo.promotion[0].tag}}</span>
-                      <v-countdown class="promotionCountDown" @start_callback="countDownS_cb(index,k)"
-                        @end_callback="countDownE_cb(index,k)"
-                        :startTime="getDateTime(k.product.promotionInfo.promotion[0].startDate)"
-                        :endTime="getDateTime(k.product.promotionInfo.promotion[0].endDate)" :secondsTxt="''">
-                      </v-countdown>
-                    </div>
-                    <!--商品有活动的布局-->
-                    <div v-if="k.product.promotionInfo.promotionState === 1">
-                      <div v-if="!k.valid">
-                        <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444" />
-                      </div>
-                      <van-card :desc="locationCity" :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
-                        :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
-                        :origin-price="k.checkedPrice">
-                        <!--                        <div slot="footer" @click.stop="" class="cardStepper">
-                          <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
-                        </div>-->
-                      </van-card>
-                    </div>
-                    <!--商品无活动的布局-->
-                    <div v-else>
-                      <div v-if="!k.valid">
-                        <van-cell title="商品库存不足，不计入订单" icon="info" style="color: #ff4444" />
-                      </div>
-                      <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
-                        :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image">
-                        <div slot="desc">
-                          <span class="prodDesc">{{locationCity}}</span>
-                        </div>
-                        <!--                        <div slot="footer" @click.stop="" class="cardStepper">
-                          <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
-                        </div>-->
-                      </van-card>
-                    </div>
-                  </li>
-                </ul>
-                <div class="supplyerSummery">
-                  <span style="margin-left: 1em">商品合计: ￥{{item.price.toFixed(2)}}元 ， 运费￥{{item.freight.toFixed(2)}}元
-                  </span>
-                </div>
-              </div>
-            </li>
-          </div>
           <!--其它平台-->
-          <div class="pay-product" v-else>
+          <div class="pay-product">
             <div v-for="item in arregationList" style="list-style: none">
               <div v-if="item.goods.length > 0" class="supplyer">
                 <div v-for="(k,index) in item.goods" :key='index'>
@@ -103,13 +50,10 @@
                     </div>
                     <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
                       :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
-                      :origin-price="k.checkedPrice">
-                      <div slot="desc">
+                      :origin-price="k.checkedPrice" :desc="getSkuDesc(k)">
+<!--                       <div slot="desc" style="display: flex">
                         <span style="font-size: small">{{locationCity}}</span>
-                      </div>
-                      <!--                      <div slot="footer" @click.stop="" class="cardStepper">
-                        <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
-                      </div>-->
+                      </div> -->
                     </van-card>
                   </div>
                   <!--商品无活动的布局-->
@@ -144,9 +88,6 @@
                         <div slot="desc">
                           <span style="font-size: small">{{locationCity}}</span>
                         </div>
-                        <!--                      <div slot="footer" @click.stop="" class="cardStepper">
-                        <van-stepper v-model="k.product.baseInfo.count" integer @click.stop="" @change="onCountChange(k)"/>
-                      </div>-->
                       </van-card>
                     </div>
 
@@ -159,12 +100,6 @@
           <van-submit-bar :loading="isOnSummitting" :price="allpay" button-text="提交订单" @submit="onSubmit" :tip=tip />
         </div>
         <div class="pay-info">
-          <!--          <van-cell title="支付方式:" :value="payway">
-                    </van-cell>-->
-          <!--          <van-cell title="发票:" :value="invoiceDetail">
-                      <van-icon style="margin: 5px;" slot="right-icon" name="weapp-nav" class="custom-icon"
-                                @click="showInvoiceSelector()"/>
-                    </van-cell>-->
           <van-cell title="优惠券:" v-if="pageAction != 'pickupGoods'">
             <div slot="default">
               <span>{{couponUsedTip}}</span>
@@ -241,7 +176,7 @@
                     <div class="coupon coupon-white" v-for="(k,i) in couponList" :key="i" @click=onCouponListClick(k)>
                       <div class="coupon-main">
                         <div class="coupon-img">
-                          <img :src="k.couponInfo.imageUrl.length?k.couponInfo.imageUrl: couponImg">
+                          <img :src="k.couponInfo.imageUrl.length?k.couponInfo.imageUrl: couponImg" alt="">
                         </div>
                         <div class="coupon-info coupon-hole coupon-info-right-dashed">
                           <div class="coupon-price">
@@ -268,7 +203,7 @@
             </div>
             <div v-else>
               <div class="noCoupon">
-                <img :src="icon_noCoupon">
+                <img :src="icon_noCoupon" alt="">
                 <span class="noCoupon_line1">很遗憾</span>
                 <span class="noCoupon_line2">您暂时还没有可用的优惠券</span>
               </div>
@@ -623,7 +558,7 @@
                   isUnknownMerchant = false
                 }
               })
-              if(isUnknownMerchant) {
+              if (isUnknownMerchant) {
                 let newMerchant = {
                   "merchantCode": "",
                   "merchantName": "",
@@ -633,11 +568,11 @@
                   freight: 0
                 }
                 newMerchant.goods.push(item)
-                arregationPayList.push (newMerchant)
+                arregationPayList.push(newMerchant)
               }
             }
           })
-         // this.$log("xxxxxxxx arregationPayList:",arregationPayList)
+          // this.$log("xxxxxxxx arregationPayList:",arregationPayList)
 
           arregationPayList.forEach(merchant => {
             let all = 0;
