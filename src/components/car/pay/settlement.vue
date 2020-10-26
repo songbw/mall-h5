@@ -13,7 +13,7 @@
       <div class="pay-body">
         <div class="contact-address-card" @click="editAddressOrList">
           <div class="contact-card-left-icon">
-            <img :src="icon_conatct_address">
+            <img :src="icon_conatct_address" alt="">
           </div>
           <div class="contact-card-detail">
             <div v-if="addressCount == 0" class="contact-edit">
@@ -51,9 +51,6 @@
                     <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
                       :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
                       :origin-price="k.checkedPrice" :desc="getSkuDesc(k.product)">
-<!--                       <div slot="desc" style="display: flex">
-                        <span style="font-size: small">{{locationCity}}</span>
-                      </div> -->
                     </van-card>
                   </div>
                   <!--商品无活动的布局-->
@@ -66,31 +63,19 @@
                         <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
                           :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image"
                           :origin-price="k.checkedPrice" :desc="getSkuDesc(k.product)">
-<!--                           <div slot="desc">
-                            <span style="font-size: small">{{locationCity}}</span>
-                          </div> -->
                         </van-card>
                       </div>
                       <div v-else>
                         <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
                           :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image" :desc="getSkuDesc(k.product)">
-<!--                           <div slot="desc">
-                            <span style="font-size: small">{{locationCity}}</span>
-                          </div> -->
                         </van-card>
-
                       </div>
-
                     </div>
                     <div v-else>
                       <van-card :num="k.product.baseInfo.count" :price="k.product.goodsInfo.dprice"
                         :title="k.product.goodsInfo.name" :thumb="k.product.goodsInfo.image" :desc="getSkuDesc(k.product)">
-<!--                         <div slot="desc">
-                          <span style="font-size: small">{{locationCity}}</span>
-                        </div> -->
                       </van-card>
                     </div>
-
                   </div>
                 </div>
               </div>

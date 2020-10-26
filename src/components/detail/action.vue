@@ -203,7 +203,7 @@
                 let minPrice = this.datas.skuList[0].price
                 let found = 0
                 for (let i = 1; i < this.datas.skuList.length; i++) {
-                  if (this.datas.skuList.stock_num > 0 && this.datas.skuList[i].price < minPrice ) {
+                  if (this.datas.skuList[i].stock_num > 0 && this.datas.skuList[i].price < minPrice) {
                     minPrice = this.datas.skuList[i].price
                     found = i;
                   }
@@ -339,7 +339,7 @@
                   let minPrice = this.datas.skuList[0].price
                   let found = 0
                   for (let i = 1; i < this.datas.skuList.length; i++) {
-                    if (this.datas.skuList.stock_num > 0 && this.datas.skuList[i].price < minPrice) {
+                    if (this.datas.skuList[i].stock_num > 0 && this.datas.skuList[i].price < minPrice) {
                       minPrice = this.datas.skuList[i].price
                       found = i;
                     }
@@ -446,11 +446,24 @@
           }
           if (stock_num > 0) {
             let selectPrice = parseFloat((skuData.selectedSkuComb.price / 100).toFixed(2))
+            let propertyList = []
             this.$log("selectPrice:" + selectPrice)
             let userInfo = this.$store.state.appconf.userInfo;
             if (!Util.isUserEmpty(userInfo)) {
               let user = JSON.parse(userInfo);
               let goods = this.datas
+              if(goods.skuList != null) {
+                let found = -1;
+                for (let index = 0; index < goods.skuList.length; index++) {
+                  if(goods.skuList[index].code === skuData.selectedSkuComb.id) {
+                    found = index;
+                    break;
+                  } 
+                }
+                if(found != -1) {
+                  propertyList = goods.skuList[found].propertyList
+                }
+              }
               let baseInfo = {
                 "userId": user.userId,
                 "skuId": selectSkuId,
@@ -463,6 +476,7 @@
               let goodsInfo = {
                 "id": goods.id,
                 "skuId": selectSkuId,
+                "propertyList": propertyList,
                 "mpu": goods.mpu,
                 "merchantId": goods.merchantId,
                 "image": goods.image,
