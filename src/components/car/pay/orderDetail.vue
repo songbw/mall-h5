@@ -23,7 +23,7 @@
         <van-cell :title=getMerchantName(detail.merchantNo) icon="shop" />
         <ul>
           <li v-for="(sku,i)  in detail.skus" :key='i' style="list-style: none">
-            <van-card :price="sku.unitPrice" :title="sku.name" :num="sku.num" :thumb="sku.image"
+            <van-card :desc="getSkuDesc(sku)" :price="sku.unitPrice" :title="sku.name" :num="sku.num" :thumb="sku.image"
               @click="gotoDetailPage(sku)">
               <div slot="tags" v-if="sku.salePrice != sku.unitPrice" class="cardtags">
                 <img :src="tag_promotion" v-if="sku.promotionDiscount > 0" />
@@ -203,6 +203,13 @@
     },
 
     methods: {
+      getSkuDesc(sku) {
+        let desc = ""
+        if(sku.model != null) {
+          desc = sku.model
+        }
+        return desc
+      },
       gatCasher(url) {
         this.$router.push({
           name: "关爱通收银台页",

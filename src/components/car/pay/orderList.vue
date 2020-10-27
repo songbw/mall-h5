@@ -20,7 +20,8 @@
                   </div>
                   <ul @click="onListClick(k,i)">
                     <li v-for="(sku,i)  in k.skus" :key='i' style="list-style: none">
-                      <van-card :price="sku.unitPrice" :title="sku.name" :num="sku.num" :thumb="sku.image">
+                      <van-card :desc="getSkuDesc(sku)" :price="sku.unitPrice" :title="sku.name" :num="sku.num"
+                        :thumb="sku.image">
                         <div slot="tags" v-if="sku.salePrice != sku.unitPrice" class="cardtags">
                           <img :src="tag_promotion" v-if="sku.promotionDiscount > 0" />
                           <img :src="tag_coupon" v-if="sku.unitPrice - sku.salePrice - sku.promotionDiscount > 0" />
@@ -187,8 +188,14 @@
     beforeDestroy() {
       this.hideMeqiaPanel()
     },
-
     methods: {
+      getSkuDesc(sku) {
+        let desc = ""
+        if(sku.model != null) {
+          desc = sku.model
+        }
+        return desc
+      },
       gatCasher(url) {
         this.$router.replace({
           name: "关爱通收银台页",
@@ -719,7 +726,7 @@
                   if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWKYCApp) {
                     this.wkycCasher(user, pAnOrderInfo);
                   } else if (this.$api.PLATFORM_ID == this.$api.isZZHApp) {
-                    this.pingAnCasher(user,pAnOrderInfo);
+                    this.pingAnCasher(user, pAnOrderInfo);
                   } else {
                     this.$router.push({
                       name: "收银台页",
