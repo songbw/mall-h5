@@ -219,12 +219,12 @@
         }
 
       } else { //非关爱通App
-        //if (process.env.NODE_ENV === 'development') {
+        if (process.env.NODE_ENV === 'development') {
           //if (this.$api.APP_ID != '13' && this.$api.APP_ID != '16'  && this.$api.APP_ID != '17')
           if (this.$api.PLATFORM_ID != this.$api.PLATFORM_TYPE.isCommon &&
             this.$api.PLATFORM_ID != this.$api.PLATFORM_TYPE.isUrlRgApp)
             this.test();
-        //}
+        }
         if (this.userToken != undefined && this.userToken.length > 0) {
           this.userTokenLoading = false;
         } else {
