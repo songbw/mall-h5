@@ -63,8 +63,8 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 // If you use Swiper 6.0.0 or higher
 import 'swiper/swiper-bundle.css'
 Vue.use(VueAwesomeSwiper)
-
-/* if (process.env.NODE_ENV === 'production') {
+/*
+if (process.env.NODE_ENV === 'production') {
   new VConsole()
 } */
 
