@@ -731,7 +731,7 @@
                   // that.$jsbridge.call("openCashPage", pAnOrderInfo);
                   if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWKYCApp) {
                     this.wkycCasher(user, pAnOrderInfo);
-                  } else if (this.$api.PLATFORM_ID == this.$api.isZZHApp) {
+                  } else if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isZZHApp) {
                     this.pingAnCasher(user, pAnOrderInfo);
                   } else {
                     this.$router.push({
