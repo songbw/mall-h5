@@ -26,8 +26,8 @@
       </li>
     </ul>
 
-    <div class="hotSchHeader">
-      <h1 class="Searchtitle" v-if="hotSearch.length > 0">
+    <div class="hotSchHeader" v-if="hotSearch.length > 0">
+      <h1 class="Searchtitle">
         热搜榜
       </h1>  
       <img :src="icon_hotFire" alt="">
@@ -36,7 +36,7 @@
 
     <ul class="hotContaner" v-if="hotSearch.length > 0">
       <li class="hotItem" v-for="(k,index) in hotSearch" @click="onClick(k)" :key="index">
-        {{k}}
+        <span>{{k}}</span>
       </li>
     </ul>
 
@@ -67,12 +67,12 @@
     beforeCreate() {
       this.$api.xapi({
         method: 'get',
-        baseURL: this.$api.BASE_BASE_URL,
-        url: '/tags'
+        baseURL: this.$api.ES_BASE_URL,
+        url: '/es/prod/top'
       }).then((response) => {
         this.$log(response)
-        if (response.data.data.cdnUrl != null) {
-          let words = response.data.data.cdnUrl.work;
+        if (response.data.data != null) {
+          let words = response.data.data;
           this.extractWord(words);
         }
       }).catch(function (error) {
@@ -111,14 +111,17 @@
       },
       extractWord(words) {
         if (words != null && words.length > 0) {
-          let wordArray = words.split(":");
-          if (wordArray.length > 0) {
-            wordArray.forEach(word => {
-              if (word != null && word.length > 0) {
-                this.hotSearch.push(word)
-              }
-            })
-          }
+          words.forEach(item => {
+            this.hotSearch.push(item.work)
+          })
+          /*           let wordArray = words.split(":");
+                    if (wordArray.length > 0) {
+                      wordArray.forEach(word => {
+                        if (word != null && word.length > 0) {
+                          this.hotSearch.push(word)
+                        }
+                      })
+                    } */
         }
       },
 
@@ -256,15 +259,16 @@
       .hotItem {
         width: 47%;
         .fz(font-size, 30);
-        -webkit-box-sizing: border-box;
-        box-sizing: border-box;
         color: #000000;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-box-orient: vertical;
-        -webkit-line-clamp: 1;
-        padding: 5px;
+        span {
+          margin: 5px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-box-orient: vertical;
+          -webkit-line-clamp: 1;
+          word-break: break-all;
+        }
       }
     }
 
