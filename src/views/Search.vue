@@ -5,22 +5,42 @@
         v-if="showBackArrow" />
       <form action="" style="width: 100%">
         <van-search background=#ffffff v-model="value" placeholder="请输入搜索关键词" show-action @search="onSearch"
-          slot="Title" type="search">
+          slot="Title" type="search" maxlength="16">
           <div slot="action" @click="onSearch">搜索</div>
         </van-search>
       </form>
     </header>
-    <h1 class="hotSearchtitle">
-      热门搜索
-    </h1>  
 
-    <ul class="contaner">
-      <li class="item" v-for="(k,index) in hotSearch" @click="onClick(k)" :key="index">
+    <div v-if="historyList.length > 0" class="historySchHeader">
+      <h1 class="Searchtitle" style="width:100%">
+        搜索历史
+      </h1>
+    </div>
+
+
+    <ul class="contaner" v-if="historyList.length > 0">
+      <li class="item" v-for="(k,index) in historyList" @click="onClick(k)" :key="index">
         <van-button round type="default">
-          {{k}}
+          {{k.keyword}}
         </van-button>
       </li>
     </ul>
+
+    <div class="hotSchHeader">
+      <h1 class="Searchtitle" v-if="hotSearch.length > 0">
+        热搜榜
+      </h1>  
+      <img :src="icon_hotFire" alt="">
+    </div>
+
+
+    <ul class="hotContaner" v-if="hotSearch.length > 0">
+      <li class="hotItem" v-for="(k,index) in hotSearch" @click="onClick(k)" :key="index">
+        {{k}}
+      </li>
+    </ul>
+
+    <div style="padding:10px"></div>
 
   </section>
 
@@ -31,14 +51,17 @@
     configWechat
   } from '@/util/wechat'
   import wx from 'weixin-js-sdk'
+  import Util from '@/util/common'
 
   export default {
     data() {
       return {
         value: "",
         hotSearch: [],
+        historyList: [],
         showHeader: true,
-        showBackArrow: false
+        showBackArrow: false,
+        icon_hotFire: require('@/assets/icons/ico_hotFire.png'),
       }
     },
     beforeCreate() {
@@ -62,12 +85,20 @@
         this.showBackArrow = false;
       }
       this.wechatShareConfig()
+      let historyList = Util.getLocal("searchHistory")
+      if (historyList != undefined) {
+        this.historyList = historyList
+      }
     },
 
     methods: {
+      deleteAllHistory() {
+        this.historyList = []
+        Util.setLocal(this.historyList, 'searchHistory', false);
+      },
       wechatShareConfig() {
         this.$log('shareConfig Enter')
-       // if (this.$api.APP_ID === '01') {
+        // if (this.$api.APP_ID === '01') {
         if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {
           try {
             configWechat(this, () => {
@@ -97,13 +128,42 @@
       },
 
       requestSearch(word) {
-        if (word != null && word.length > 0)
-          this.$router.replace({
-            path: "/category/goods/list",
-            query: {
-              'search': word
+        if (word != null && word.length > 0) {
+          let found = -1
+          for (let i = 0; i < this.historyList.length; i++) {
+            if (this.historyList[i].keyword === word) {
+              found = i;
+              break;
             }
-          })
+          }
+          if (found != -1) {
+            this.historyList.splice(found, 1)
+          }
+          if (this.historyList.length < 10) {
+            let item = {
+              keyword: word,
+              updateTime: new Date().getTime()
+            }
+            this.historyList.push(item)
+            this.historyList.sort(function (a, b) {
+              return b.updateTime - a.updateTime
+            })
+          } else {
+            this.$log("history:", this.historyList)
+            this.historyList[9].keyword = word
+            this.historyList[9].updateTime = new Date().getTime()
+            this.historyList.sort(function (a, b) {
+              return b.updateTime - a.updateTime
+            })
+          }
+        }
+        Util.setLocal(this.historyList, 'searchHistory', false);
+        this.$router.replace({
+          path: "/category/goods/list",
+          query: {
+            'search': word
+          }
+        })
       },
 
       onClick(word) {
@@ -140,26 +200,75 @@
       }
     }
 
-    .hotSearchtitle {
-      .bt();
+    .historySchHeader {
+      display: flex;
+      width: 100%;
+
+      .deleteBox {
+        position: relative;
+        top: 10px;
+        right: 10px;
+      }
+    }
+
+    .hotSchHeader {
+      display: flex;
+
+      img {
+        padding: 10px 5px;
+        width: 20px;
+        height: 20px;
+      }
+    }
+
+    .Searchtitle {
       text-align: left;
       .fz(font-size, 30);
       font-weight: bold;
       position: relative;
+      color: #000000;
       background-color: #ffffff;
-      padding-left: 10px;
+      padding-left: 15px;
       padding-top: 10px;
     }
 
-    hotSearch {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .contaner {
+      padding-left: 10px;
 
-      .van-search {
-        width: 100%;
+      li {
+        text-decoration: none;
+        list-style: none;
       }
     }
+
+    .hotContaner {
+      width: 100%;
+      display: -ms-flex;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: flex-start;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      overflow: hidden;
+
+      .hotItem {
+        width: 47%;
+        .fz(font-size, 30);
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        color: #000000;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 1;
+        padding: 5px;
+      }
+    }
+
+
 
     .item {
       font-size: 40px;
@@ -167,8 +276,14 @@
       -webkit-box-sizing: border-box;
       -moz-box-sizing: border-box;
       box-sizing: border-box;
-      margin-top: 8px;
       margin-left: 5px;
+
+      .van-button {
+        background-color: #F5F5F5;
+        border: none;
+        height: 30px;
+        line-height: 20px;
+      }
     }
   }
 
