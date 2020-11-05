@@ -15,6 +15,9 @@
       <h1 class="Searchtitle" style="width:100%">
         搜索历史
       </h1>
+      <div class="deleteBox">
+        <van-icon name="delete" @click="deleteAllHistory()"></van-icon>
+      </div>
     </div>
 
 
@@ -260,6 +263,7 @@
         width: 47%;
         .fz(font-size, 30);
         color: #000000;
+
         span {
           margin: 5px;
           overflow: hidden;
