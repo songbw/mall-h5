@@ -37,11 +37,14 @@
     </div>
 
 
-    <ul class="hotContaner" v-if="hotSearch.length > 0">
-      <li class="hotItem" v-for="(k,index) in hotSearch" @click="onClick(k)" :key="index">
-        <span>{{k}}</span>
+    <ul class="contaner" v-if="hotSearch.length > 0">
+      <li class="item" v-for="(k,index) in hotSearch" @click="onClick(k)" :key="index">
+        <van-button round type="default">
+          {{k}}
+        </van-button>
       </li>
     </ul>
+
 
     <div style="padding:10px"></div>
 
@@ -248,21 +251,15 @@
     }
 
     .hotContaner {
+      display: flex;
       width: 100%;
-      display: -ms-flex;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      -webkit-box-pack: center;
-      -ms-flex-pack: center;
-      justify-content: flex-start;
-      -ms-flex-wrap: wrap;
       flex-wrap: wrap;
-      overflow: hidden;
 
       .hotItem {
-        width: 47%;
+        width: 50%;
         .fz(font-size, 30);
         color: #000000;
+        background-color: red;
 
         span {
           margin: 5px;
