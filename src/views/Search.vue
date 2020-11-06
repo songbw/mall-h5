@@ -70,11 +70,22 @@
         icon_hotFire: require('@/assets/icons/ico_hotFire.png'),
       }
     },
-    beforeCreate() {
+
+    created() {
+      if (this.$api.IS_GAT_APP) {
+        this.showBackArrow = false;
+      }
+      let today = new Date()
+      let endTime = this.$moment(today).format('YYYY-MM-DD')
+      let startTime = this.$moment(new Date(today - 1000 * 60 * 60 * 24 * 30)).format('YYYY-MM-DD')
       this.$api.xapi({
         method: 'get',
         baseURL: this.$api.ES_BASE_URL,
-        url: '/es/prod/top'
+        url: '/es/prod/top',
+        params:{
+          startTime: startTime,
+          endTime: endTime
+        }
       }).then((response) => {
         this.$log(response)
         if (response.data.data != null) {
@@ -84,12 +95,6 @@
       }).catch(function (error) {
         alert(error)
       })
-    },
-
-    created() {
-      if (this.$api.IS_GAT_APP) {
-        this.showBackArrow = false;
-      }
       this.wechatShareConfig()
       let historyList = Util.getLocal("searchHistory")
       if (historyList != undefined) {
