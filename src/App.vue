@@ -126,6 +126,8 @@
             goodsUrlPrefix = appConfig.GOODS_URL_PREFIX
             switch (iAppId) {
               case '01':
+              case '03':
+              case '04':
                 platformId = this.$api.PLATFORM_TYPE.isFcWxPub
                 break;
               case '08':
