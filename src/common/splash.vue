@@ -71,8 +71,9 @@
       align-items: Center;
       background-color:#ca273a;
       img{
-         width: 100%;
-         height: 100vh;
+        object-fit: cover;
+        width: 100%;
+        height: 100vh;
       }
     }
   }
