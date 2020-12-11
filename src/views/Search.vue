@@ -22,7 +22,7 @@
 
 
     <ul class="contaner" v-if="historyList.length > 0">
-      <li class="item" v-for="(k,index) in historyList" @click="onClick(k)" :key="index">
+      <li class="item" v-for="(k,index) in historyList" @click="onClick(k.keyword)" :key="index">
         <van-button round type="default">
           {{k.keyword}}
         </van-button>
