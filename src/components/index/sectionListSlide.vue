@@ -169,7 +169,7 @@
     watch: {
       isDailySchedule(newValue, oldvalue) {
         if (this.timer) {
-          clearInterval(this.timer)
+          clearinterval(this.timer)
         }
         if (newValue) {
           this.timer = setInterval(this.updateDailyScheduleText, 1000);
