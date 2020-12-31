@@ -137,6 +137,7 @@
           showSearchBar: false
         },
         pageloading: true,
+        isNewCustomer: false,
         showHeader: true,
         showPackage: false,
         showDialog: false,
@@ -168,6 +169,7 @@
         if (response.data.data.result.header != undefined) {
           let header = JSON.parse(response.data.data.result.header)
           this.mHeader = header
+          this.$log("@@@@@@@@@@@@##################", this.mHeader)
           if (this.mHeader.showPackage != undefined) {
             this.showPackage = this.mHeader.showPackage
           }
@@ -303,34 +305,56 @@
       }
     },
     watch: {
+      showPackage(newValue, oldVal) {
+        if (newValue && !this.$api.IS_GAT_APP) {
+          if (this.isNewCustomer) {
+            if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
+              this.icon_gift = this.mHeader.novicePackUrl
+              this.icon_gift_type = 0 // 新人礼券
+            } else {
+              this.icon_gift = this.mHeader.commonPackUrl
+              this.icon_gift_type = 1 // 普通促销
+              this.icon_gift_targeUrl = this.mHeader.commonPackTargetUrl
+            }
+          } else {
+            if (this.mHeader.commonPackUrl != undefined && this.mHeader.commonPackUrl.length > 0) {
+              this.icon_gift = this.mHeader.commonPackUrl
+              this.icon_gift_type = 1 // 普通促销
+              this.icon_gift_targeUrl = this.mHeader.commonPackTargetUrl
+            }
+          }
+          if (this.icon_gift != null && this.icon_gift.length > 0) {
+            this.showDialog = true
+          }
+        }
+      },
       guysinfo(newValue, oldVal) {
         if (newValue.length > 1) {
           let flag = newValue.substr(0, 1)
           let data = flag + this.$md5(this.$store.state.appconf.token)
           if (data == newValue) {
-            if (flag == '1' && !this.$api.IS_GAT_APP) {
-              if (this.showPackage) {
-                if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
-                  this.icon_gift = this.mHeader.novicePackUrl
-                  this.icon_gift_type = 0 // 新人礼券
-                } else {
-                  this.icon_gift = this.mHeader.commonPackUrl
-                  this.icon_gift_type = 1 // 普通促销
-                  this.icon_gift_targeUrl = this.mHeader.commonPackTargetUrl
-                }
+            if (flag == '1') {
+              this.isNewCustomer = true
+              if (this.mHeader.novicePackUrl != undefined && this.mHeader.novicePackUrl.length > 0) {
+                this.icon_gift = this.mHeader.novicePackUrl
+                this.icon_gift_type = 0 // 新人礼券
+              } else {
+                this.icon_gift = this.mHeader.commonPackUrl
+                this.icon_gift_type = 1 // 普通促销
+                this.icon_gift_targeUrl = this.mHeader.commonPackTargetUrl
               }
-            } else if (flag == '0' && !this.$api.IS_GAT_APP) {
-              if (this.showPackage) {
-                if (this.mHeader.commonPackUrl != undefined && this.mHeader.commonPackUrl.length > 0) {
-                  this.icon_gift = this.mHeader.commonPackUrl
-                  this.icon_gift_type = 1 // 普通促销
-                  this.icon_gift_targeUrl = this.mHeader.commonPackTargetUrl
-                }
+            } else {
+              this.isNewCustomer = false
+              if (this.mHeader.commonPackUrl != undefined && this.mHeader.commonPackUrl.length > 0) {
+                this.icon_gift = this.mHeader.commonPackUrl
+                this.icon_gift_type = 1 // 普通促销
+                this.icon_gift_targeUrl = this.mHeader.commonPackTargetUrl
               }
             }
-            this.$log(this.mHeader)
-            if (this.icon_gift != null && this.icon_gift.length > 0) {
-              this.showDialog = true
+            if (this.showPackage && !this.$api.IS_GAT_APP) {
+              if (this.icon_gift != null && this.icon_gift.length > 0) {
+                this.showDialog = true
+              }
             }
           }
         }
@@ -379,13 +403,13 @@
       wechatShareConfig() {
         this.$log('shareConfig Enter')
         //if (this.$api.APP_ID === '01') {
-/*         if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  //凤巢公众号
-          try {
-            configWechat(this, () => {
-              wx.hideOptionMenu()
-            })
-          } catch (e) {}
-        } */
+        /*         if (this.$api.PLATFORM_ID === this.$api.PLATFORM_TYPE.isFcWxPub) {  //凤巢公众号
+                  try {
+                    configWechat(this, () => {
+                      wx.hideOptionMenu()
+                    })
+                  } catch (e) {}
+                } */
       },
 
       See(e) {
@@ -666,7 +690,7 @@
         } else if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
           //  let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc" //13810864380
           let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6bb" //18612794815
-         // let accessToken = "TTTTTTTTTTTTTTTTTTTTTTTT"
+          // let accessToken = "TTTTTTTTTTTTTTTTTTTTTTTT"
           this.$store.commit('SET_WX_OPENID', wxOpenId);
           let resp = await this.isWxOpendBinded(this.$api.APP_ID, wxOpenId)
           this.$log(resp)
@@ -748,7 +772,7 @@
         let that = this;
         let url = ""
         let params = null
-       // if (this.$api.APP_ID == '01') {
+        // if (this.$api.APP_ID == '01') {
         if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isFcWxPub) { //凤巢公众号
           url = '/sso/thirdParty/token/wx';
           params = {
@@ -884,7 +908,7 @@
         let userInfo = this.$store.state.appconf.userInfo;
         if (this.icon_gift_type == 0) {
           if (!Util.isUserEmpty(userInfo)) {
-         //   let user = JSON.parse(userInfo)
+            //   let user = JSON.parse(userInfo)
             this.$router.push({
               name: "新人礼包页"
             })
