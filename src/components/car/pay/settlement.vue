@@ -1461,7 +1461,7 @@
             let promotionDiscountOfMerchant = 0;
             item.goods.forEach(sku => {
               if (sku.valid) {
-                if (sku.product.goodsInfo.type != undefined && sku.product.goodsInfo.type != 0) {
+                if (sku.product.goodsInfo.type != undefined && sku.product.goodsInfo.type == 1) {
                   this.hasVirtualGoods = true
                 }
                 let promotionId = 0
