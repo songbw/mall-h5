@@ -56,7 +56,7 @@
     </div>
     <div>
       <img :src="icon_shopCart" @click="gotoCart()"
-        style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;" alt=""/>
+        style="width: 3rem;height: 3rem;position: fixed;bottom: 2rem;right: .5rem;z-index: 9999;" alt="" />
     </div>
   </div>
 </template>
@@ -114,8 +114,8 @@
       },
       reOrderList() {
         this.list.sort(function (a, b) {
-          return 0
-/*           if (this.$api.APP_ID == '10' || this.$api.APP_ID == '08') {
+          // return 0
+          if (this.$api.APP_ID == '10' || this.$api.APP_ID == '08' || this.$api.APP_ID == '09') {
             return 0
           } else {
             try {
@@ -129,7 +129,7 @@
             } catch (e) {
               return 0
             }
-          } */
+          }
         })
       },
       resetList() {

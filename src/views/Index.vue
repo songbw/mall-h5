@@ -710,7 +710,7 @@
           }
         } else if (this.$api.APP_ID == '11') {
           //only for debug
-          //openId = '13802aa921ca47d295b47c7016ff9137'
+          //openId = '36549daa15769e9db583deb0a5a5e353'
         } else if (this.$api.APP_ID == '15') {
           openId = 'X226585714099328O'
         }
