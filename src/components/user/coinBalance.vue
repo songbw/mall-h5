@@ -11,7 +11,7 @@
           <span>我的余额</span>
           <div class="amountInfo">
             <p v-if="this.amountLoaded == -1" style="font-size: medium;margin: 10px">查询中...</p>
-            <p v-else-if="this.amountLoaded == 0" style="font-size: medium;margin: 10px">查询失败，请检查网络</p>
+            <p v-else-if="this.amountLoaded == 0" style="font-size: medium;margin: 10px">亲,未查询到余额</p>
             <p v-else-if="this.amountLoaded == 1"><span>￥</span>{{(amount/100).toFixed(2)}}</p>
           </div>
         </div>
@@ -174,10 +174,11 @@
             if(response.data.code == 200) {
               if(response.data.data != null) {
                 this.amount = response.data.data.amount
+                this.amountLoaded = 1
               } else {
                 this.amount = 0
+                this.amountLoaded = 0
               }
-              this.amountLoaded = 1;
             } else {
               this.amountLoaded = 0;
             }

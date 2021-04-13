@@ -70,13 +70,13 @@
               </div>
             </div>
           </div>
-          <div class="coinBalanceBox" v-if="this.$api.APP_ID == '11'">
+          <!-- <div class="coinBalanceBox" v-if="this.$api.APP_ID == '11'">
             <van-cell :title="mCoinBalance.title" :icon="mCoinBalance.icon" clickable @click="onCoinBalanceSelector()">
               <van-checkbox slot="right-icon" v-model="coinBalanceValue" checked-color="#FF4444"></van-checkbox>
               <span slot="label" style="color:black">可用余额: ￥{{(mCoinBalance.amount/100).toFixed(2)}}</span>
             </van-cell>
-          </div>
-          <div class="optCardBox" v-if="this.$api.APP_ID == '11'">
+          </div> -->
+          <!-- <div class="optCardBox" v-if="this.$api.APP_ID == '11'">
             <van-cell :title="mOptCards.title" :icon="mOptCards.icon"
                       :value="this.mOptCards.show?'点击隐藏优选卡':'点击查看优选卡'"
                       clickable
@@ -142,7 +142,7 @@
                 clearable
               />
             </van-dialog>
-          </div>
+          </div> -->
 
           <div class="composePayBox">
             <van-cell :title="mComposePay.title" :icon="mComposePay.icon">

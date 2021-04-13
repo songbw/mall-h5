@@ -686,7 +686,7 @@
           openId = "5c8314363cea49de925bfaa39d4c4ebb" //最珠海
           payId = ""
         } else if (this.$api.PLATFORM_ID == this.$api.PLATFORM_TYPE.isWKYCApp) {
-          openId = "b8ca4ec08e9c2b632e0720b65aa2402a" //万科云城
+          openId = "b87c8ae0b3941d7b1361d2f60518409f" //万科云城
         } else if (this.$api.APP_ID == '11' && this.$api.APP_SOURCE == '01') {
           //  let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6Zc" //13810864380
           let wxOpenId = "o_sjNjgzWDKFLcPMZGw7q7xRQ6bb" //18612794815
@@ -710,7 +710,7 @@
           }
         } else if (this.$api.APP_ID == '11') {
           //only for debug
-          //openId = '36549daa15769e9db583deb0a5a5e353'
+           openId = '01d52a96fb8f43e5a942682db97a42d4'
         } else if (this.$api.APP_ID == '15') {
           openId = 'X226585714099328O'
         }
